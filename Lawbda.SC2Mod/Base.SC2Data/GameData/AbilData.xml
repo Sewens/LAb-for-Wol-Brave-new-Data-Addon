@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CAbilEffectTarget id="FillMarine">
+        <Alignment value="Positive"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DataCollection value="Feedback"/>
+        <Effect index="0" value="UnknownEffect"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Charge Link=""/>
+            <Cooldown Link=""/>
+        </Cost>
+        <Range value="9"/>
+        <AutoCastAcquireLevel value="None"/>
+        <AutoCastFilters value="Visible;Enemy"/>
+        <AINotifyEffect value=""/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AddSquad"/>
+    </CAbilEffectTarget>
+    <CAbilQueue id="QueueMarineMagazine">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <SharedFlags index="RegisterChargeEvent" value="1"/>
+        <QueueSize value="1"/>
+        <Flags index="Hidden" value="1"/>
+        <Flags index="Passive" value="1"/>
+    </CAbilQueue>
+    <CAbilEffectTarget id="Repair2">
+        <Alignment value="Positive"/>
+        <AbilSetId value="Repair"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOffOwnerLeave" value="1"/>
+        <Flags index="BestUnit" value="0"/>
+        <Flags index="ReExecutable" value="1"/>
+        <Flags index="Smart" value="1"/>
+        <Flags index="PassengerAcquirePassengers" value="1"/>
+        <TargetFilters value="Mechanical,Visible;Self,Enemy,Missile,Stasis,UnderConstruction,Dead,Hidden"/>
+        <RangeSlop value="0.2"/>
+        <AutoCastAcquireLevel value="Defensive"/>
+        <AutoCastFilters value="Visible;Neutral,Enemy"/>
+        <AutoCastRange value="7"/>
+        <Marker>
+            <MatchFlags index="Link" value="0"/>
+            <MismatchFlags index="Id" value="0"/>
+        </Marker>
+        <UseMarkerArray index="Approach" value="0"/>
+        <UseMarkerArray index="Prep" value="0"/>
+        <UseMarkerArray index="Cast" value="0"/>
+        <UseMarkerArray index="Channel" value="0"/>
+        <InheritAttackPriorityArray index="Prep" value="1"/>
+        <InheritAttackPriorityArray index="Cast" value="1"/>
+        <InheritAttackPriorityArray index="Channel" value="1"/>
+        <DefaultError value="RequiresRepairTarget"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Repair">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectTarget>
+    <CAbilHarvest id="SCVHarvest2">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+    </CAbilHarvest>
+    <CAbilArmMagazine id="SquadMagMarine">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <SharedFlags index="RegisterChargeEvent" value="1"/>
+        <Flags index="IgnoreUnitCost" value="1"/>
+        <Flags index="Retarget" value="1"/>
+        <Flags index="ShowStatus" value="0"/>
+        <Flags index="Transient" value="1"/>
+        <Flags index="WaitForFood" value="0"/>
+        <Leash value="2"/>
+        <InfoArray index="Ammo1" Manage="Recall" Unit="SquadMarine">
+            <Charge>
+                <CountMax value="1"/>
+                <CountUse value="1"/>
+                <Link value="Abil/##id##"/>
+                <Location value="Unit"/>
+            </Charge>
+            <Cooldown Link="Abil/##id##" Location="Behavior"/>
+            <Button DefaultButtonFace="MarineMagazine" State="Suppressed"/>
+            <Flags index="AutoBuild" value="1"/>
+            <Flags index="AutoBuildOn" value="1"/>
+            <Flags index="External" value="1"/>
+            <Flags index="LeashRetarget" value="1"/>
+        </InfoArray>
+        <ReturnLifeFraction value="1"/>
+        <ExternalAngle value="45"/>
+        <ExternalAngle value="225"/>
+        <ExternalAngle value="135"/>
+        <ExternalAngle value="315"/>
+        <MaxCount value="4"/>
+    </CAbilArmMagazine>
+    <CAbilEffectInstant id="Stimpack2">
+        <AbilSetId value="Stimpack"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoTooltipPriority value="1"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Vital index="Life" value="10"/>
+        </Cost>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Stim" Requirements="UseStimpack">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
+    <CAbilBuild id="TerranBuild2">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <FlagArray index="Interruptible" value="1"/>
+        <FlagArray index="PeonDisableCollision" value="1"/>
+        <InfoArray index="Build1" Unit="CommandCenter2" Time="100">
+            <Button DefaultButtonFace="CommandCenter" State="Suppressed"/>
+        </InfoArray>
+        <InfoArray index="Build2" Unit="SupplyDepot2" Time="30">
+            <Button DefaultButtonFace="SupplyDepot"/>
+        </InfoArray>
+        <InfoArray index="Build3" Unit="Refinery2" Time="30">
+            <Button DefaultButtonFace="Refinery"/>
+            <ValidatorArray value="HasVespene"/>
+        </InfoArray>
+        <InfoArray index="Build4" Unit="Barracks2" Time="65">
+            <Button DefaultButtonFace="Barracks" State="Suppressed" Requirements="HaveSupplyDepot"/>
+        </InfoArray>
+        <InfoArray index="Build5" Unit="EngineeringBay2" Time="35">
+            <Button DefaultButtonFace="EngineeringBay" State="Suppressed" Requirements="HaveCommandCenter"/>
+        </InfoArray>
+        <InfoArray index="Build6" Unit="MissileTurret2" Time="25">
+            <Button DefaultButtonFace="MissileTurret" State="Restricted" Requirements="HaveEngineeringBay"/>
+        </InfoArray>
+        <InfoArray index="Build7" Unit="Bunker2" Time="40">
+            <Button DefaultButtonFace="Bunker" State="Restricted" Requirements="HaveBarracks"/>
+        </InfoArray>
+        <InfoArray index="Build8" Unit="RefineryRich2" Time="30">
+            <Button DefaultButtonFace="Refinery"/>
+            <ValidatorArray value="HasVespene"/>
+        </InfoArray>
+        <InfoArray index="Build9" Unit="SensorTower2" Time="25">
+            <Button DefaultButtonFace="SensorTower" State="Restricted" Requirements="HaveEngineeringBay"/>
+        </InfoArray>
+        <InfoArray index="Build10" Unit="GhostAcademy2" Time="40">
+            <Button DefaultButtonFace="GhostAcademy" State="Suppressed" Requirements="HaveBarracks"/>
+        </InfoArray>
+        <InfoArray index="Build11" Unit="Factory2" Time="60">
+            <Button DefaultButtonFace="Factory" State="Suppressed" Requirements="HaveBarracks"/>
+        </InfoArray>
+        <InfoArray index="Build12" Unit="Starport2" Time="50">
+            <Button DefaultButtonFace="Starport" State="Suppressed" Requirements="HaveFactory"/>
+        </InfoArray>
+        <InfoArray index="Build13" Time="50">
+            <Button State="Suppressed" Requirements="HaveBarracks"/>
+        </InfoArray>
+        <InfoArray index="Build14" Unit="Armory2" Time="65">
+            <Button DefaultButtonFace="Armory" State="Suppressed" Requirements="HaveFactory"/>
+        </InfoArray>
+        <InfoArray index="Build16" Unit="FusionCore2" Time="65">
+            <Button DefaultButtonFace="FusionCore" State="Suppressed" Requirements="HaveStarport"/>
+        </InfoArray>
+        <InfoArray index="Build30" Unit="BomberLaunchPad" Time="30">
+            <Button DefaultButtonFace="BuildBomberLaunchPad" Requirements="HaveFactory"/>
+        </InfoArray>
+        <FidgetDelayMin value="5"/>
+        <FidgetDelayMax value="10"/>
+        <ConstructionMover value="Construction"/>
+    </CAbilBuild>
+</Catalog>

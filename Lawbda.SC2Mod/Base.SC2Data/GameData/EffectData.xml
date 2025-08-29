@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CEffectModifyUnit id="EffectAddMarine">
+        <EditorCategories value="Race:Terran"/>
+        <Cost Abil="SquadMagMarine,Ammo1" ChargeCountUse="-0.5"/>
+        <VitalArray index="Life">
+            <Change value="25"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectDamage id="FusionCutter2" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Amount value="5"/>
+    </CEffectDamage>
+    <CEffectDamage id="GuassRifle2" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Ranged"/>
+        <Amount value="6"/>
+    </CEffectDamage>
+    <CEffectLoadContainer id="LoadContainerMarine">
+        <EditorCategories value="Race:Terran"/>
+        <ContainerType value="Magazine"/>
+        <ContainerAbil value="SquadMagMarine"/>
+    </CEffectLoadContainer>
+    <CEffectDamage id="RemoveUnit">
+        <EditorCategories value="Race:Terran"/>
+        <DamageModifierSource Value="Caster"/>
+        <ImpactLocation Value="CasterUnit"/>
+        <Flags index="Kill" value="1"/>
+        <Death value="Remove"/>
+    </CEffectDamage>
+    <CEffectCreateHealer id="Repair2">
+        <ValidatorArray value="NotWarpingIn"/>
+        <ValidatorArray value="HiddenCompareBA"/>
+        <ValidatorArray value="HiddenCompareAB"/>
+        <ValidatorArray value="NotVortexd"/>
+        <ValidatorArray value="NotStasis"/>
+        <EditorCategories value="Race:Terran"/>
+        <DrainResourceCostFactor index="Minerals" value="0.25"/>
+        <DrainResourceCostFactor index="Vespene" value="0.25"/>
+        <DrainResourceCostFactor index="Terrazine" value="0.25"/>
+        <DrainResourceCostFactor index="Custom" value="0.25"/>
+        <RechargeVitalRate value="1"/>
+        <TimeFactor value="1"/>
+    </CEffectCreateHealer>
+    <CEffectApplyBehavior id="Stimpack2">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="UnknownEffect">
+        <EditorCategories value=""/>
+        <EffectArray value="EffectAddMarine"/>
+        <EffectArray value="RemoveUnit"/>
+    </CEffectSet>
+</Catalog>
