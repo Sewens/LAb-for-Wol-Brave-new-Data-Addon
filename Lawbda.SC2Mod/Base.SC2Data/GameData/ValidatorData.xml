@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CValidatorUnitCompareCargo id="IsMagazineNotFull">
+        <ResultFailed value="NotEnoughRoomToLoadUnit"/>
+        <ResultNoUnit value="NotEnoughRoomToLoadUnit"/>
+        <Compare value="LE"/>
+        <Type value="Load"/>
+        <Value value="3"/>
+    </CValidatorUnitCompareCargo>
+    <CValidatorUnitState id="IsMagazineUnit">
+        <Enabled value="1"/>
+        <State value="Magazine"/>
+    </CValidatorUnitState>
+    <CValidatorUnitCompareBehaviorCount id="IsMagazineFull">
+        <ResultFailed value="NotEnoughRoomToLoadUnit"/>
+        <Compare value="LE"/>
+        <Value value="4"/>
+        <Behavior value="MagazineUnitTracker"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitType id="IsMineral">
+        <Value value="MineralField"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsResource">
+        <CombineArray value="IsMineral"/>
+        <CombineArray value="IsVespene"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="IsVespene">
+        <Value value="VespeneGeyser"/>
+    </CValidatorUnitType>
+    <CValidatorUnitAbil id="IsWorker">
+        <AbilClass value="CAbilHarvest"/>
+    </CValidatorUnitAbil>
+    <CValidatorUnitFilters id="TargetNotSelf">
+        <Filters value="-;Self"/>
+    </CValidatorUnitFilters>
+</Catalog>

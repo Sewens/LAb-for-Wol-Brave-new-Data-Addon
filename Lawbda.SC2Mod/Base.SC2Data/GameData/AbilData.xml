@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
-    <CAbilEffectTarget id="FillMarine">
+    <CAbilEffectTarget id="AddGhostToSquad">
         <Alignment value="Positive"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <DataCollection value="Feedback"/>
-        <Effect index="0" value="UnknownEffect"/>
+        <Effect index="0" value="AddGhostChain"/>
         <Flags index="AllowMovement" value="1"/>
         <Cost>
             <Charge Link=""/>
@@ -14,16 +14,504 @@
         <AutoCastAcquireLevel value="None"/>
         <AutoCastFilters value="Visible;Enemy"/>
         <AINotifyEffect value=""/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="AddSquad"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Enband"/>
     </CAbilEffectTarget>
-    <CAbilQueue id="QueueMarineMagazine">
+    <CAbilEffectTarget id="AddSpectreToSquad">
+        <Alignment value="Positive"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DataCollection value="Feedback"/>
+        <Effect index="0" value="AddSpectreChain"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Charge Link=""/>
+            <Cooldown Link=""/>
+        </Cost>
+        <Range value="9"/>
+        <AutoCastAcquireLevel value="None"/>
+        <AutoCastFilters value="Visible;Enemy"/>
+        <AINotifyEffect value=""/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Enband"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AddReaperToSquad">
+        <Alignment value="Positive"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DataCollection value="Feedback"/>
+        <Effect index="0" value="AddReaperChain"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Charge Link=""/>
+            <Cooldown Link=""/>
+        </Cost>
+        <Range value="9"/>
+        <AutoCastAcquireLevel value="None"/>
+        <AutoCastFilters value="Visible;Enemy"/>
+        <AINotifyEffect value=""/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Enband"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AddMarauderToSquad">
+        <Alignment value="Positive"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DataCollection value="Feedback"/>
+        <Effect index="0" value="AddMarauderChain"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Charge Link=""/>
+            <Cooldown Link=""/>
+        </Cost>
+        <Range value="9"/>
+        <AutoCastAcquireLevel value="None"/>
+        <AutoCastFilters value="Visible;Enemy"/>
+        <AINotifyEffect value=""/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Enband"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AddFirebatToSquad">
+        <Alignment value="Positive"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DataCollection value="Feedback"/>
+        <Effect index="0" value="AddFirebatChain"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Charge Link=""/>
+            <Cooldown Link=""/>
+        </Cost>
+        <Range value="9"/>
+        <AutoCastAcquireLevel value="None"/>
+        <AutoCastFilters value="Visible;Enemy"/>
+        <AINotifyEffect value=""/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Enband"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AddMedicToSquad">
+        <Alignment value="Positive"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DataCollection value="Feedback"/>
+        <Effect index="0" value="AddMedicChain"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Charge Link=""/>
+            <Cooldown Link=""/>
+        </Cost>
+        <Range value="9"/>
+        <AutoCastAcquireLevel value="None"/>
+        <AutoCastFilters value="Visible;Enemy"/>
+        <AINotifyEffect value=""/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Enband"/>
+    </CAbilEffectTarget>
+    <CAbilBuildable id="BuildInProgress2"/>
+    <CAbilEffectTarget id="D8Charge2">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Cost>
+            <Cooldown Link="D8ChargeD8Charge2" TimeUse="60"/>
+        </Cost>
+        <TargetFilters value="Ground,Visible;-"/>
+        <Range value="5"/>
+        <CastOutroTime value="0.35"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="D8Charge" Requirements="UseG4ClusterBombs"/>
+    </CAbilEffectTarget>
+    <CAbilEffectInstant id="DisbandSquad">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <DebugTrace value="1"/>
+        <Effect index="0" value="Disband"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Marker>
+            <MatchFlags index="Link" value="0"/>
+            <MismatchFlags index="Id" value="0"/>
+        </Marker>
+        <UseMarkerArray index="Approach" value="0"/>
+        <UseMarkerArray index="Cast" value="0"/>
+        <UseMarkerArray index="Channel" value="0"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Disband"/>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="DukesRevengeDefensiveMatrix2">
+        <Alignment value="Positive"/>
+        <AbilSetId value="dmatrix"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="DefensiveMatrixSet2"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="100"/>
+            <Cooldown TimeUse="20"/>
+        </Cost>
+        <Marker Link="Abil/DefensiveMatrix"/>
+        <AINotifyEffect value="BattlecruiserDefensiveMatrix"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="DefensiveMatrix" State="Restricted" Requirements="UseDefensiveMatrix">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
+    <CAbilEffectTarget id="DukesRevengeMissilePods2">
+        <Alignment value="Negative"/>
+        <AbilSetId value="missilepods"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="HurricaneMissile2"/>
+        <Cost>
+            <Vital index="Energy" value="125"/>
+            <Cooldown TimeUse="0.8332"/>
+        </Cost>
+        <Range value="7"/>
+        <Marker Link="Abil/MissilePods"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <CursorEffect value="HurricaneMissileDamage"/>
+        <AINotifyEffect value="MissilePods"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="MissilePods" State="Restricted" Requirements="UseHurricaneMissiles">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="DukesRevengeYamato2">
+        <Alignment value="Negative"/>
+        <AbilSetId value="yamato"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="Yamato2"/>
+        <Cost>
+            <Vital index="Energy" value="125"/>
+            <Cooldown TimeUse="0.8332"/>
+        </Cost>
+        <Range value="10"/>
+        <RangeSlop value="10"/>
+        <PrepTime value="3"/>
+        <Marker Link="Abil/Yamato"/>
+        <ShowProgressArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <AINotifyEffect value="Yamato"/>
+        <ProgressButtonArray index="Prep" value="YamatoGun"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="YamatoGun" Requirements="UseYamato">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="EMP2">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="EMPLaunchMissile2"/>
+        <Cost>
+            <Vital index="Energy" value="75"/>
+        </Cost>
+        <Range value="10"/>
+        <PrepTime value="0.01"/>
+        <FinishTime value="0.0625"/>
+        <UninterruptibleArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <CursorEffect value="EMPSearch"/>
+        <AINotifyEffect value="EMPLaunchMissile"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="EMP" State="Restricted">
+            <Flags index="ShowInGlossary" value="0"/>
+        </CmdButtonArray>
+    </CAbilEffectTarget>
+    <CAbilBehavior id="GhostCloak2">
+        <AbilSetId value="Clok"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="On" DefaultButtonFace="CloakOnGhost">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="Off" DefaultButtonFace="CloakOff">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Flags index="Toggle" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="25"/>
+        </Cost>
+        <BehaviorArray value="GhostCloak"/>
+    </CAbilBehavior>
+    <CAbilEffectInstant id="GhostHoldFire2">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Flags index="Transient" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="HoldFire" Requirements="GhostNotHoldingFire">
+            <Flags index="ShowInGlossary" value="0"/>
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="GhostWeaponsFree2">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Flags index="Transient" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="WeaponsFree" Requirements="GhostHoldingFire">
+            <Flags index="ShowInGlossary" value="0"/>
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
+    <CAbilEffectTarget id="KD8Charge2">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="KD8Charge"/>
+        <Cost>
+            <Cooldown Link="KD8ChargeKD8Charge2" TimeUse="10"/>
+        </Cost>
+        <TargetFilters value="Ground,Visible;-"/>
+        <Range value="5"/>
+        <CastOutroTime value="0.35"/>
+        <AINotifyEffect value="KD8Charge"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="KD8Charge"/>
+    </CAbilEffectTarget>
+    <CAbilResearch id="MercCompoundResearch2">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <InfoArray index="Research1" Time="110">
+            <Resource index="Minerals" value="100"/>
+            <Resource index="Vespene" value="100"/>
+            <Button Requirements="LearnStimpack"/>
+        </InfoArray>
+        <InfoArray index="Research4" Time="100" Upgrade="ReaperSpeed2">
+            <Resource index="Minerals" value="50"/>
+            <Resource index="Vespene" value="50"/>
+            <Button DefaultButtonFace="ReaperSpeed" State="Restricted" Requirements="LearnReaperSpeed"/>
+        </InfoArray>
+    </CAbilResearch>
+    <CAbilEffectTarget id="MedicFlashBangGrenade">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Effect index="0" value="MedicFlashBangGrenadeLaunchMissile"/>
+        <Cost>
+            <Vital index="Energy" value="25"/>
+            <Cooldown TimeUse="5"/>
+        </Cost>
+        <Range value="7"/>
+        <Arc value="9.9975"/>
+        <PrepTime value="0.1"/>
+        <UninterruptibleArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <CursorEffect value="MedicFlashBangGrenadeSearch"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="NovaGadgetFlashBangGrenades2"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="Obliterate2">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Cost>
+            <Vital index="Energy" value="150"/>
+            <Charge Link=""/>
+            <Cooldown Link=""/>
+        </Cost>
+        <TargetFilters value="Visible;Self,Missile,Stasis,Dead,Invulnerable"/>
+        <Range value="8"/>
+        <RangeSlop value="8"/>
+        <PrepTime value="3"/>
+        <ShowProgressArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <AINotifyEffect value=""/>
+        <ProgressButtonArray index="Prep" value="Obliterate"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Obliterate" Requirements="UseUltrasonicPulse">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectTarget>
+    <CAbilBehavior id="RogueGhostCloak2">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="On" DefaultButtonFace="CloakOnSpectre">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="Off" DefaultButtonFace="CloakOff">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Flags index="Toggle" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="25"/>
+        </Cost>
+        <BehaviorArray value="SpectreCloaking"/>
+    </CAbilBehavior>
+    <CAbilHarvest id="SCVGather">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+    </CAbilHarvest>
+    <CAbilEffectTarget id="Snipe2">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SnipeDamage2"/>
+        <Cost>
+            <Vital index="Energy" value="25"/>
+        </Cost>
+        <TargetFilters value="Biological,Visible;Self,Structure,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="10"/>
+        <CastIntroTime value="0.5"/>
+        <Marker>
+            <MatchFlags index="Link" value="0"/>
+            <MatchFlags index="CasterUnit" value="1"/>
+        </Marker>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SniperBotSnipe"/>
+    </CAbilEffectTarget>
+    <CAbilEffectInstant id="SpectreHoldFire2">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SpectreHoldFireSet2"/>
+        <Flags index="Transient" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SpectreHoldFire" Requirements="SpectreNotHoldingFire">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
+    <CAbilEffectTarget id="SpectreNuke2">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Range value="12"/>
+        <FinishTime value="2.5"/>
+        <CancelableArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <ValidatedArray index="Channel" value="0"/>
+        <AlertArray index="Cast" value="CalldownLaunch"/>
+        <CursorEffect value="SpectreNukeDamage"/>
+        <CalldownEffect value="SpectreNuke"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SpectreNukeCalldown" Requirements="SpectreHaveNuke"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+    </CAbilEffectTarget>
+    <CAbilEffectInstant id="SpectreWeaponsFree2">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Flags index="Transient" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="WeaponsFree" Requirements="SpectreHoldingFire">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
+    <CAbilArmMagazine id="SquadInfantry">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Flags index="IgnoreUnitCost" value="1"/>
+        <Flags index="Retarget" value="1"/>
+        <Flags index="ShowStatus" value="0"/>
+        <Flags index="Transient" value="1"/>
+        <Flags index="WaitForFood" value="0"/>
+        <Leash value="2"/>
+        <InfoArray index="Ammo1" Distance="0.55" Manage="Recall" Unit="SquadSCV">
+            <Charge>
+                <CountMax value="4"/>
+                <CountUse value="1"/>
+                <Link value="Abil/AddSCVToSquad"/>
+                <Location value="Unit"/>
+            </Charge>
+            <Cooldown Link="Abil/##id##"/>
+            <Button DefaultButtonFace="SquadSCV"/>
+            <Flags index="AutoBuild" value="1"/>
+            <Flags index="AutoBuildOn" value="1"/>
+            <Flags index="External" value="1"/>
+            <Flags index="LeashRetarget" value="1"/>
+        </InfoArray>
+        <InfoArray index="Ammo2" Distance="0.55" Manage="Recall" Unit="SquadMarine">
+            <Charge>
+                <CountMax value="4"/>
+                <CountUse value="1"/>
+                <Link value="Abil/AddMarineToSquad"/>
+                <Location value="Unit"/>
+            </Charge>
+            <Cooldown Link="Abil/##id##"/>
+            <Button DefaultButtonFace="SquadMarine"/>
+            <Flags index="AutoBuild" value="1"/>
+            <Flags index="AutoBuildOn" value="1"/>
+            <Flags index="External" value="1"/>
+            <Flags index="LeashRetarget" value="1"/>
+        </InfoArray>
+        <InfoArray index="Ammo3" Distance="0.55" Manage="Recall" Unit="SquadMedic">
+            <Charge>
+                <CountMax value="4"/>
+                <CountUse value="1"/>
+                <Link value="Abil/AddMedicToSquad"/>
+                <Location value="Unit"/>
+            </Charge>
+            <Cooldown Link="Abil/##id##"/>
+            <Button DefaultButtonFace="SquadMedic"/>
+            <Flags index="AutoBuild" value="1"/>
+            <Flags index="AutoBuildOn" value="1"/>
+            <Flags index="External" value="1"/>
+            <Flags index="LeashRetarget" value="1"/>
+        </InfoArray>
+        <InfoArray index="Ammo4" Distance="0.55" Manage="Recall" Unit="SquadFirebat">
+            <Charge>
+                <CountMax value="4"/>
+                <CountUse value="1"/>
+                <Link value="Abil/AddFirebatToSquad"/>
+                <Location value="Unit"/>
+            </Charge>
+            <Cooldown Link="Abil/##id##"/>
+            <Button DefaultButtonFace="SquadFirebat"/>
+            <Flags index="AutoBuild" value="1"/>
+            <Flags index="AutoBuildOn" value="1"/>
+            <Flags index="External" value="1"/>
+            <Flags index="LeashRetarget" value="1"/>
+        </InfoArray>
+        <InfoArray index="Ammo5" Distance="0.55" Manage="Recall" Unit="SquadMarauder">
+            <Charge>
+                <CountMax value="4"/>
+                <CountUse value="1"/>
+                <Link value="Abil/AddMarauderToSquad"/>
+                <Location value="Unit"/>
+            </Charge>
+            <Cooldown Link="Abil/##id##"/>
+            <Button DefaultButtonFace="SquadMarauder"/>
+            <Flags index="AutoBuild" value="1"/>
+            <Flags index="AutoBuildOn" value="1"/>
+            <Flags index="External" value="1"/>
+            <Flags index="LeashRetarget" value="1"/>
+        </InfoArray>
+        <InfoArray index="Ammo6" Distance="0.55" Manage="Recall" Unit="SquadReaper">
+            <Charge>
+                <CountMax value="4"/>
+                <CountUse value="1"/>
+                <Link value="Abil/AddReaperToSquad"/>
+                <Location value="Unit"/>
+            </Charge>
+            <Cooldown Link="Abil/##id##"/>
+            <Button DefaultButtonFace="SquadReaper"/>
+            <Flags index="AutoBuild" value="1"/>
+            <Flags index="AutoBuildOn" value="1"/>
+            <Flags index="External" value="1"/>
+            <Flags index="LeashRetarget" value="1"/>
+        </InfoArray>
+        <InfoArray index="Ammo7" Manage="Recall" Unit="SquadGhost">
+            <Charge>
+                <CountMax value="4"/>
+                <CountUse value="1"/>
+                <Link value="Abil/AddGhostToSquad"/>
+                <Location value="Unit"/>
+            </Charge>
+            <Cooldown Link="Abil/##id##"/>
+            <Button DefaultButtonFace="SquadGhost"/>
+            <Flags index="AutoBuild" value="1"/>
+            <Flags index="AutoBuildOn" value="1"/>
+            <Flags index="External" value="1"/>
+            <Flags index="LeashRetarget" value="1"/>
+        </InfoArray>
+        <InfoArray index="Ammo8" Distance="0.55" Manage="Recall" Unit="SquadSpectre">
+            <Charge>
+                <CountMax value="4"/>
+                <CountUse value="1"/>
+                <Link value="Abil/AddSpectreToSquad"/>
+                <Location value="Unit"/>
+            </Charge>
+            <Cooldown Link="Abil/##id##"/>
+            <Button DefaultButtonFace="SquadSpectre"/>
+            <Flags index="AutoBuild" value="1"/>
+            <Flags index="AutoBuildOn" value="1"/>
+            <Flags index="External" value="1"/>
+            <Flags index="LeashRetarget" value="1"/>
+        </InfoArray>
+        <EffectArray index="Create" value="OnMagazineAdded"/>
+        <EffectArray index="Release" value="OnMagazineRelease"/>
+        <ExternalAngle value="225"/>
+        <ExternalAngle value="45"/>
+        <ExternalAngle value="315"/>
+        <ExternalAngle value="135"/>
+        <MaxCount value="4"/>
+    </CAbilArmMagazine>
+    <CAbilEffectTarget id="AddMarineToSquad">
+        <Alignment value="Positive"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DataCollection value="Feedback"/>
+        <Effect index="0" value="AddMarineChain"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Charge Link=""/>
+            <Cooldown Link=""/>
+        </Cost>
+        <Range value="9"/>
+        <AutoCastAcquireLevel value="None"/>
+        <AutoCastFilters value="Visible;Enemy"/>
+        <AINotifyEffect value=""/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Enband"/>
+    </CAbilEffectTarget>
+    <CAbilQueue id="QueueMagazine">
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <SharedFlags index="RegisterChargeEvent" value="1"/>
         <QueueSize value="1"/>
         <Flags index="Hidden" value="1"/>
         <Flags index="Passive" value="1"/>
     </CAbilQueue>
-    <CAbilEffectTarget id="Repair2">
+    <CAbilEffectTarget id="SCVRepair">
         <Alignment value="Positive"/>
         <AbilSetId value="Repair"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -54,39 +542,22 @@
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectTarget>
-    <CAbilHarvest id="SCVHarvest2">
+    <CAbilEffectTarget id="AddSCVToSquad">
+        <Alignment value="Positive"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-    </CAbilHarvest>
-    <CAbilArmMagazine id="SquadMagMarine">
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <SharedFlags index="RegisterChargeEvent" value="1"/>
-        <Flags index="IgnoreUnitCost" value="1"/>
-        <Flags index="Retarget" value="1"/>
-        <Flags index="ShowStatus" value="0"/>
-        <Flags index="Transient" value="1"/>
-        <Flags index="WaitForFood" value="0"/>
-        <Leash value="2"/>
-        <InfoArray index="Ammo1" Manage="Recall" Unit="SquadMarine">
-            <Charge>
-                <CountMax value="1"/>
-                <CountUse value="1"/>
-                <Link value="Abil/##id##"/>
-                <Location value="Unit"/>
-            </Charge>
-            <Cooldown Link="Abil/##id##" Location="Behavior"/>
-            <Button DefaultButtonFace="MarineMagazine" State="Suppressed"/>
-            <Flags index="AutoBuild" value="1"/>
-            <Flags index="AutoBuildOn" value="1"/>
-            <Flags index="External" value="1"/>
-            <Flags index="LeashRetarget" value="1"/>
-        </InfoArray>
-        <ReturnLifeFraction value="1"/>
-        <ExternalAngle value="45"/>
-        <ExternalAngle value="225"/>
-        <ExternalAngle value="135"/>
-        <ExternalAngle value="315"/>
-        <MaxCount value="4"/>
-    </CAbilArmMagazine>
+        <DataCollection value="Feedback"/>
+        <Effect index="0" value="AddSCVChain"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Charge Link=""/>
+            <Cooldown Link=""/>
+        </Cost>
+        <Range value="9"/>
+        <AutoCastAcquireLevel value="None"/>
+        <AutoCastFilters value="Visible;Enemy"/>
+        <AINotifyEffect value=""/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Enband"/>
+    </CAbilEffectTarget>
     <CAbilEffectInstant id="Stimpack2">
         <AbilSetId value="Stimpack"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -99,55 +570,274 @@
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectInstant>
+    <CAbilTrain id="SummonKorhalMercenaries2">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoArray index="Train1" Time="5" Effect="MercGroundDrop2">
+            <Button DefaultButtonFace="HireKelmorianMiners"/>
+            <Unit value="WarPig"/>
+        </InfoArray>
+        <InfoArray index="Train2" Time="5" Effect="MercGroundDrop2">
+            <Button DefaultButtonFace="HireDevilDogs"/>
+            <Unit value="DevilDog"/>
+        </InfoArray>
+        <InfoArray index="Train3" Time="5" Effect="MercGroundDrop2">
+            <Button DefaultButtonFace="HireSpartanCompany"/>
+            <Unit value="SpartanCompany"/>
+        </InfoArray>
+        <InfoArray index="Train4" Time="5" Effect="MercGroundDrop2">
+            <Button DefaultButtonFace="HireHammerSecurities"/>
+            <Unit value="HammerSecurity"/>
+        </InfoArray>
+        <InfoArray index="Train5" Time="5" Effect="MercGroundDrop2">
+            <Button DefaultButtonFace="HireSiegeBreakers"/>
+            <Unit value="SiegeBreaker"/>
+        </InfoArray>
+        <InfoArray index="Train6" Time="5" Effect="MercAirDrop2">
+            <Button DefaultButtonFace="HireHelsAngels"/>
+            <Unit value="HelsAngelFighter"/>
+        </InfoArray>
+        <InfoArray index="Train7" Time="5" Effect="MercAirDrop2">
+            <Button DefaultButtonFace="HireDuskWing"/>
+            <Unit value="DuskWing"/>
+        </InfoArray>
+        <InfoArray index="Train8" Time="5" Effect="MercAirDrop2">
+            <Button DefaultButtonFace="HireDukesRevenge"/>
+            <Unit value="DukesRevenge"/>
+        </InfoArray>
+        <InfoArray index="Train9" Time="5" Effect="MercGroundDrop2">
+            <Button DefaultButtonFace="MercHellion"/>
+            <Unit value="MercHellion"/>
+        </InfoArray>
+        <InfoArray index="Train10" Time="5" Effect="MercGroundDrop2">
+            <Button DefaultButtonFace="MercMedic"/>
+            <Unit value="MercMedic"/>
+        </InfoArray>
+        <InfoArray index="Train11" Time="5" Effect="MercGroundDrop2">
+            <Button DefaultButtonFace="MercReaper"/>
+            <Unit value="MercReaper"/>
+        </InfoArray>
+    </CAbilTrain>
+    <CAbilTrain id="SummonMercenaries2">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoArray index="Train1" Effect="MercGroundDrop2">
+            <Resource index="Minerals" value="50"/>
+            <Charge>
+                <CountMax value="3"/>
+                <CountStart value="3"/>
+                <CountUse value="1"/>
+                <Link value="KelMorianMercs"/>
+                <Location value="Global"/>
+            </Charge>
+            <Cooldown>
+                <Link value="KelMorianMercs"/>
+                <Location value="Global"/>
+                <TimeStart value="300"/>
+                <TimeUse value="300"/>
+            </Cooldown>
+            <Button DefaultButtonFace="HireKelmorianMiners"/>
+            <Unit value="WarPig"/>
+            <Unit value="WarPig"/>
+            <Unit value="WarPig"/>
+            <Unit value="WarPig"/>
+        </InfoArray>
+        <InfoArray index="Train2" Effect="MercGroundDrop2">
+            <Resource index="Minerals" value="100"/>
+            <Resource index="Vespene" value="75"/>
+            <Charge>
+                <CountMax value="2"/>
+                <CountStart value="2"/>
+                <CountUse value="1"/>
+                <Link value="DevilDogs"/>
+                <Location value="Global"/>
+            </Charge>
+            <Cooldown>
+                <Link value="DevilDogs"/>
+                <Location value="Global"/>
+                <TimeStart value="300"/>
+                <TimeUse value="300"/>
+            </Cooldown>
+            <Button DefaultButtonFace="HireDevilDogs"/>
+            <Unit value="DevilDog"/>
+            <Unit value="DevilDog"/>
+        </InfoArray>
+        <InfoArray index="Train3" Effect="MercGroundDrop2">
+            <Resource index="Vespene" value="25"/>
+            <Charge>
+                <CountMax value="2"/>
+                <CountStart value="2"/>
+                <CountUse value="1"/>
+                <Link value="SpartanCompany"/>
+                <Location value="Global"/>
+            </Charge>
+            <Cooldown>
+                <Link value="SpartanCompany"/>
+                <Location value="Global"/>
+                <TimeStart value="360"/>
+                <TimeUse value="360"/>
+            </Cooldown>
+            <Button DefaultButtonFace="HireSpartanCompany"/>
+            <Unit value="SpartanCompany"/>
+            <Unit value="SpartanCompany"/>
+        </InfoArray>
+        <InfoArray index="Train4" Effect="MercGroundDrop2">
+            <Resource index="Vespene" value="25"/>
+            <Charge>
+                <CountMax value="2"/>
+                <CountStart value="2"/>
+                <CountUse value="1"/>
+                <Link value="HammerSecurities"/>
+                <Location value="Global"/>
+            </Charge>
+            <Cooldown>
+                <Link value="HammerSecurities"/>
+                <Location value="Global"/>
+                <TimeStart value="360"/>
+                <TimeUse value="360"/>
+            </Cooldown>
+            <Button DefaultButtonFace="HireHammerSecurities"/>
+            <Unit value="HammerSecurity"/>
+            <Unit value="HammerSecurity"/>
+        </InfoArray>
+        <InfoArray index="Train5" Effect="MercGroundDrop2">
+            <Charge>
+                <CountMax value="2"/>
+                <CountStart value="2"/>
+                <CountUse value="1"/>
+                <Link value="SiegeBreakers"/>
+                <Location value="Global"/>
+            </Charge>
+            <Cooldown>
+                <Link value="SiegeBreakers"/>
+                <Location value="Global"/>
+                <TimeStart value="420"/>
+                <TimeUse value="420"/>
+            </Cooldown>
+            <Button DefaultButtonFace="HireSiegeBreakers"/>
+            <Unit value="SiegeBreaker"/>
+            <Unit value="SiegeBreaker"/>
+        </InfoArray>
+        <InfoArray index="Train6" Effect="MercAirDrop2">
+            <Resource index="Minerals" value="25"/>
+            <Charge>
+                <CountMax value="2"/>
+                <CountStart value="2"/>
+                <CountUse value="1"/>
+                <Link value="HelsAngels"/>
+                <Location value="Global"/>
+            </Charge>
+            <Cooldown>
+                <Link value="HelsAngels"/>
+                <Location value="Global"/>
+                <TimeStart value="300"/>
+                <TimeUse value="300"/>
+            </Cooldown>
+            <Button DefaultButtonFace="HireHelsAngels"/>
+            <Unit value="HelsAngelFighter"/>
+            <Unit value="HelsAngelFighter"/>
+            <Unit value="HelsAngelFighter"/>
+        </InfoArray>
+        <InfoArray index="Train7" Effect="MercAirDrop2">
+            <Charge>
+                <CountMax value="2"/>
+                <CountStart value="2"/>
+                <CountUse value="1"/>
+                <Link value="DuskWing"/>
+                <Location value="Global"/>
+            </Charge>
+            <Cooldown>
+                <Link value="DuskWing"/>
+                <Location value="Global"/>
+                <TimeStart value="420"/>
+                <TimeUse value="420"/>
+            </Cooldown>
+            <Button DefaultButtonFace="HireDuskWing"/>
+            <Unit value="DuskWing"/>
+            <Unit value="DuskWing"/>
+        </InfoArray>
+        <InfoArray index="Train8" Effect="MercAirDrop2">
+            <Charge>
+                <CountMax value="1"/>
+                <CountStart value="1"/>
+                <CountUse value="1"/>
+                <Link value="DukesRevenge"/>
+                <Location value="Global"/>
+            </Charge>
+            <Cooldown>
+                <Link value="DukesRevenge"/>
+                <Location value="Global"/>
+                <TimeStart value="420"/>
+                <TimeUse value="420"/>
+            </Cooldown>
+            <Button DefaultButtonFace="HireDukesRevenge"/>
+            <Unit value="DukesRevenge"/>
+        </InfoArray>
+    </CAbilTrain>
+    <CAbilEffectTarget id="TacNukeStrike2">
+        <TechPlayer value="Owner"/>
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="Nuke2"/>
+        <Range value="12"/>
+        <FinishTime value="2.5"/>
+        <CancelableArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <ValidatedArray index="Channel" value="0"/>
+        <AlertArray index="Cast" value="CalldownLaunch"/>
+        <CursorEffect value="NukeDamage"/>
+        <CalldownEffect value="Nuke"/>
+        <AINotifyEffect value="Nuke"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="NukeCalldown" Requirements="HaveNuke"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+    </CAbilEffectTarget>
     <CAbilBuild id="TerranBuild2">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <FlagArray index="Interruptible" value="1"/>
         <FlagArray index="PeonDisableCollision" value="1"/>
-        <InfoArray index="Build1" Unit="CommandCenter2" Time="100">
+        <InfoArray index="Build1" Unit="SquadCommandCenter" Time="100">
             <Button DefaultButtonFace="CommandCenter" State="Suppressed"/>
         </InfoArray>
-        <InfoArray index="Build2" Unit="SupplyDepot2" Time="30">
+        <InfoArray index="Build2" Unit="SquadSupplyDepot" Time="30">
             <Button DefaultButtonFace="SupplyDepot"/>
         </InfoArray>
-        <InfoArray index="Build3" Unit="Refinery2" Time="30">
+        <InfoArray index="Build3" Unit="SquadRefinery" Time="30">
             <Button DefaultButtonFace="Refinery"/>
             <ValidatorArray value="HasVespene"/>
         </InfoArray>
-        <InfoArray index="Build4" Unit="Barracks2" Time="65">
+        <InfoArray index="Build4" Unit="SquadBarracks" Time="65">
             <Button DefaultButtonFace="Barracks" State="Suppressed" Requirements="HaveSupplyDepot"/>
         </InfoArray>
-        <InfoArray index="Build5" Unit="EngineeringBay2" Time="35">
+        <InfoArray index="Build5" Unit="SquadEngineeringBay" Time="35">
             <Button DefaultButtonFace="EngineeringBay" State="Suppressed" Requirements="HaveCommandCenter"/>
         </InfoArray>
-        <InfoArray index="Build6" Unit="MissileTurret2" Time="25">
+        <InfoArray index="Build6" Unit="SquadMissileTurret" Time="25">
             <Button DefaultButtonFace="MissileTurret" State="Restricted" Requirements="HaveEngineeringBay"/>
         </InfoArray>
-        <InfoArray index="Build7" Unit="Bunker2" Time="40">
+        <InfoArray index="Build7" Unit="SquadBunker" Time="40">
             <Button DefaultButtonFace="Bunker" State="Restricted" Requirements="HaveBarracks"/>
         </InfoArray>
-        <InfoArray index="Build8" Unit="RefineryRich2" Time="30">
+        <InfoArray index="Build8" Unit="SquadRefineryRich" Time="30">
             <Button DefaultButtonFace="Refinery"/>
             <ValidatorArray value="HasVespene"/>
         </InfoArray>
-        <InfoArray index="Build9" Unit="SensorTower2" Time="25">
+        <InfoArray index="Build9" Unit="SquadSensorTower" Time="25">
             <Button DefaultButtonFace="SensorTower" State="Restricted" Requirements="HaveEngineeringBay"/>
         </InfoArray>
-        <InfoArray index="Build10" Unit="GhostAcademy2" Time="40">
+        <InfoArray index="Build10" Unit="SquadGhostAcademy" Time="40">
             <Button DefaultButtonFace="GhostAcademy" State="Suppressed" Requirements="HaveBarracks"/>
         </InfoArray>
-        <InfoArray index="Build11" Unit="Factory2" Time="60">
+        <InfoArray index="Build11" Unit="SquadFactory" Time="60">
             <Button DefaultButtonFace="Factory" State="Suppressed" Requirements="HaveBarracks"/>
         </InfoArray>
-        <InfoArray index="Build12" Unit="Starport2" Time="50">
+        <InfoArray index="Build12" Unit="SquadStarport" Time="50">
             <Button DefaultButtonFace="Starport" State="Suppressed" Requirements="HaveFactory"/>
         </InfoArray>
         <InfoArray index="Build13" Time="50">
             <Button State="Suppressed" Requirements="HaveBarracks"/>
         </InfoArray>
-        <InfoArray index="Build14" Unit="Armory2" Time="65">
+        <InfoArray index="Build14" Unit="SquadArmory" Time="65">
             <Button DefaultButtonFace="Armory" State="Suppressed" Requirements="HaveFactory"/>
         </InfoArray>
-        <InfoArray index="Build16" Unit="FusionCore2" Time="65">
+        <InfoArray index="Build16" Unit="SquadFusionCore" Time="65">
             <Button DefaultButtonFace="FusionCore" State="Suppressed" Requirements="HaveStarport"/>
         </InfoArray>
         <InfoArray index="Build30" Unit="BomberLaunchPad" Time="30">
@@ -157,4 +847,57 @@
         <FidgetDelayMax value="10"/>
         <ConstructionMover value="Construction"/>
     </CAbilBuild>
+    <CAbilEffectTarget id="UltrasonicPulse2">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="UltrasonicPulseLaunchMissile2"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+            <Charge Link="Abil/PsiStorm"/>
+            <Cooldown Link="Abil/PsiStorm" TimeUse="2.5"/>
+        </Cost>
+        <Range value="9"/>
+        <PrepTime value="0.01"/>
+        <FinishTime value="2.5"/>
+        <CursorEffect value="UltrasonicPulseSearchArea"/>
+        <AINotifyEffect value="UltrasonicPulseLaunchMissile"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="UltrasonicPulse"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadMedicHeal">
+        <Alignment value="Positive"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Flags index="ReExecutable" value="1"/>
+        <Flags index="Smart" value="1"/>
+        <Flags index="PassengerAcquirePassengers" value="1"/>
+        <TargetFilters value="Ground,Biological,Visible;Self,Enemy,Air,Structure,Missile,UnderConstruction,Dead,Hidden,Invulnerable"/>
+        <TargetSorts RequestCount="1">
+            <SortArray value="TSAlliancePassive"/>
+            <SortArray value="TSDistance"/>
+            <SortArray value="TSLifeFraction"/>
+        </TargetSorts>
+        <Range value="2"/>
+        <SmartValidatorArray value="healSmartTargetFilters"/>
+        <SmartValidatorArray value="NotWarpingIn"/>
+        <SmartValidatorArray value="DisableMedicHealing"/>
+        <AutoCastAcquireLevel value="Defensive"/>
+        <AutoCastFilters value="Visible;Neutral,Enemy"/>
+        <AutoCastRange value="6"/>
+        <AutoCastValidatorArray value="healCasterMinEnergy"/>
+        <AutoCastValidatorArray value="NotWarpingIn"/>
+        <AutoCastValidatorArray value="DisableMedicHealing"/>
+        <Marker Link="Abil/MedivacHeal"/>
+        <UseMarkerArray index="Approach" value="0"/>
+        <UseMarkerArray index="Prep" value="0"/>
+        <DefaultError value="RequiresHealTarget"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="MedicHeal"/>
+        <AcquireAttackers value="1"/>
+        <FollowRange value="1.5"/>
+    </CAbilEffectTarget>
+    <CAbilQueue id="que52">
+        <EditorCategories value="Race:Neutral,AbilityorEffectType:Structures"/>
+        <QueueSize value="5"/>
+    </CAbilQueue>
 </Catalog>
