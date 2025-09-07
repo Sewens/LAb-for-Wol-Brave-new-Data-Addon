@@ -17,3 +17,12 @@
 
 * 验证器对于compare cargo在magazine部分有神秘的问题，检测的load、free值都不对
 * 一个弹仓多个弹药的情况下，给不同弹药补充充能，只能作用于第一个弹药
+
+## Buff套用和移除
+
+* 所有通过小队充能（Charge）给予队长的行为（behavior），分为两个类别
+  * 基础属性修改：这类行为的类别使用既定类别中的（user10 equipment-gadget）
+  * 个性化buff增益（如采集速率增加等）：使用既定类别中的（user9 equipment-weapon）
+* 套用增益部分每个兵种独立使用一个apply behavior进行buff的套用（因为user类别只有1-15个可以由玩家自由使用，为了避免冲突，在套用增益时候写独立的setter）
+* 通过验证器验证当前单位类型（是否为采集者，通过是否具有harvest类技能来识别；是否为步兵/载具/飞行器之后再写验证器），当验证器满足时当前buff则可用
+* 而在disband技能触发之后，通过一个remove behavior将user 9和user10类别下的buff全部移除，用来确保行为一致性
