@@ -1,5 +1,5 @@
-# Wings-of-Combination
-组合体之翼
+# Project-LAWBDA
+对原本《星际争霸2》战役mod的大修。
 
 ## 1 总体设计
 
