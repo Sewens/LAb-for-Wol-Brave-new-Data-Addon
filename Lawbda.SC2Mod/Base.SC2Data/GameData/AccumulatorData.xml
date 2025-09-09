@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CAccumulatorBehavior id="DamageBufferDamageResponseReceiver">
+        <UnitSource Effect="DamageBufferPersistent" Value="Source"/>
+        <Type value="DamageModifyRemaining"/>
+    </CAccumulatorBehavior>
+    <CAccumulatorArithmetic id="DamageBufferDistributDamage">
+        <ApplicationRule value="Multiply"/>
+        <Parameters value="0.1">
+            <AccumulatorArray value="DamageBufferDamageResponseReceiver"/>
+        </Parameters>
+        <Operation value="Multiply"/>
+    </CAccumulatorArithmetic>
+</Catalog>

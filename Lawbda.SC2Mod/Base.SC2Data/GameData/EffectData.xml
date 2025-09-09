@@ -2,7 +2,7 @@
 <Catalog>
     <CEffectModifyUnit id="AddGhost2">
         <EditorCategories value="Race:Terran"/>
-        <Cost Abil="SquadInfantry,Ammo8" ChargeCountUse="-0.25"/>
+        <Cost Abil="SquadInfantry,Ammo8" ChargeCountUse="-1"/>
     </CEffectModifyUnit>
     <CEffectSet id="AddFirebatChain">
         <ValidatorArray value="IsMagazineFull"/>
@@ -10,26 +10,29 @@
         <EditorCategories value="Race:Terran"/>
         <DamageModifierSource Value="Outer"/>
         <EffectArray value="AddFirebat"/>
-        <EffectArray value="RemoveUnit"/>
-        <EffectArray value="DisableJoinAbility"/>
-        <EffectArray value="AddMagazineTracker"/>
+        <EffectArray value="InfantryBasicChain"/>
+        <EffectArray value="UnitMediumAddMaxLife"/>
         <EffectArray value="ResourceFragile"/>
-        <EffectArray value="InfantryEnlargeRadius"/>
     </CEffectSet>
     <CEffectModifyUnit id="AddFirebat">
         <EditorCategories value="Race:Terran"/>
-        <Cost Abil="SquadInfantry,Ammo4" ChargeCountUse="-0.25"/>
+        <Cost Abil="SquadInfantry,Ammo4" ChargeCountUse="-1"/>
     </CEffectModifyUnit>
+    <CEffectApplyBehavior id="DistributeAddBuffTracker">
+        <ValidatorArray index="0" removed="1"/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SpriteLinkTracker"/>
+    </CEffectApplyBehavior>
     <CEffectSet id="AddSpectreChain">
         <ValidatorArray value="IsMagazineFull"/>
         <ValidatorArray value="TargetNotSelf"/>
         <EditorCategories value="Race:Terran"/>
         <DamageModifierSource Value="Outer"/>
+        <EffectArray value="InfantryBasicChain"/>
         <EffectArray value="AddGhost2"/>
-        <EffectArray value="RemoveUnit"/>
-        <EffectArray value="DisableJoinAbility"/>
-        <EffectArray value="AddMagazineTracker"/>
-        <EffectArray value="InfantryEnlargeRadius"/>
+        <EffectArray value="UnitSmallAddMaxLife"/>
+        <EffectArray value="EnergyHugeMaxandMediumRegeneration"/>
+        <EffectArray value="ResourceTerrazineCrazy"/>
     </CEffectSet>
     <CEffectApplyBehavior id="AddMagazineTracker">
         <ValidatorArray index="0" removed="1"/>
@@ -38,11 +41,11 @@
     </CEffectApplyBehavior>
     <CEffectModifyUnit id="AddMarauder">
         <EditorCategories value="Race:Terran"/>
-        <Cost Abil="SquadInfantry,Ammo5" ChargeCountUse="-0.25"/>
+        <Cost Abil="SquadInfantry,Ammo5" ChargeCountUse="-1"/>
     </CEffectModifyUnit>
     <CEffectModifyUnit id="AddGhost">
         <EditorCategories value="Race:Terran"/>
-        <Cost Abil="SquadInfantry,Ammo7" ChargeCountUse="-0.25"/>
+        <Cost Abil="SquadInfantry,Ammo7" ChargeCountUse="-1"/>
     </CEffectModifyUnit>
     <CEffectSet id="AddGhostChain">
         <ValidatorArray value="IsMagazineFull"/>
@@ -50,10 +53,10 @@
         <EditorCategories value="Race:Terran"/>
         <DamageModifierSource Value="Outer"/>
         <EffectArray value="AddGhost"/>
-        <EffectArray value="RemoveUnit"/>
-        <EffectArray value="DisableJoinAbility"/>
-        <EffectArray value="AddMagazineTracker"/>
-        <EffectArray value="InfantryEnlargeRadius"/>
+        <EffectArray value="InfantryBasicChain"/>
+        <EffectArray value="UnitSmallAddMaxLife"/>
+        <EffectArray value="EnergyMediumMaxandHugeRegeneration"/>
+        <EffectArray value="ResourceVespenseCrazy"/>
     </CEffectSet>
     <CEffectSet id="AddReaperChain">
         <ValidatorArray value="IsMagazineFull"/>
@@ -61,14 +64,14 @@
         <EditorCategories value="Race:Terran"/>
         <DamageModifierSource Value="Outer"/>
         <EffectArray value="AddReaper"/>
-        <EffectArray value="RemoveUnit"/>
-        <EffectArray value="DisableJoinAbility"/>
-        <EffectArray value="AddMagazineTracker"/>
-        <EffectArray value="InfantryEnlargeRadius"/>
+        <EffectArray value="InfantryBasicChain"/>
+        <EffectArray value="UnitAddMoveSpeedTier3"/>
+        <EffectArray value="UnitSmallAddMaxLife"/>
+        <EffectArray value="ResourceMineralAssassin"/>
     </CEffectSet>
     <CEffectModifyUnit id="AddReaper">
         <EditorCategories value="Race:Terran"/>
-        <Cost Abil="SquadInfantry,Ammo6" ChargeCountUse="-0.25"/>
+        <Cost Abil="SquadInfantry,Ammo6" ChargeCountUse="-1"/>
     </CEffectModifyUnit>
     <CEffectSet id="AddMedicChain">
         <ValidatorArray value="IsMagazineFull"/>
@@ -76,15 +79,13 @@
         <EditorCategories value="Race:Terran"/>
         <DamageModifierSource Value="Outer"/>
         <EffectArray value="AddMedic"/>
-        <EffectArray value="RemoveUnit"/>
-        <EffectArray value="DisableJoinAbility"/>
-        <EffectArray value="AddMagazineTracker"/>
-        <EffectArray value="InfantryEnlargeRadius"/>
+        <EffectArray value="InfantryBasicChain"/>
+        <EffectArray value="UnitHugeAddMaxLife"/>
         <EffectArray value="ResourceRegenAura"/>
     </CEffectSet>
     <CEffectModifyUnit id="AddMedic">
         <EditorCategories value="Race:Terran"/>
-        <Cost Abil="SquadInfantry,Ammo3" ChargeCountUse="-0.25"/>
+        <Cost Abil="SquadInfantry,Ammo3" ChargeCountUse="-1"/>
     </CEffectModifyUnit>
     <CEffectSet id="AddMarauderChain">
         <ValidatorArray value="IsMagazineFull"/>
@@ -92,14 +93,106 @@
         <EditorCategories value="Race:Terran"/>
         <DamageModifierSource Value="Outer"/>
         <EffectArray value="AddMarauder"/>
+        <EffectArray value="InfantryBasicChain"/>
+        <EffectArray value="UnitMediumAddMaxLife"/>
+        <EffectArray value="MultiMineralAutoHarvestAura"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="ApplyAutoMineralHarvest">
+        <ValidatorArray index="0" removed="1"/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="MultiMineralAutoHarvest"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="DamageBuffer">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="DamageBufferDamage">
+        <EditorCategories value="Race:Terran"/>
+        <OwningPlayer Effect="DamageBufferPersistent" Value="Source"/>
+        <Amount value="10">
+            <AccumulatorArray value="DamageBufferDistributDamage"/>
+        </Amount>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="DamageBufferPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <OwningPlayer Effect="DamageBufferDamage" Value="Source"/>
+        <PeriodCount value="10"/>
+        <PeriodicPeriodArray value="1"/>
+        <OffsetVectorStartLocation Value="TargetUnit"/>
+    </CEffectCreatePersistent>
+    <CEffectAddTrackedUnit id="DistributeAddTrackMagazineUnit">
+        <EditorCategories value="Race:Terran"/>
+        <OwningPlayer Value="Source"/>
+        <BehaviorLink value="SpriteLinkTracker"/>
+        <TrackerUnit Value="Source"/>
+        <TrackedUnit Value="Target"/>
+    </CEffectAddTrackedUnit>
+    <CEffectEnumTrackedUnits id="DistributeDamageCalculation">
+        <EditorCategories value="Race:Terran"/>
+        <BehaviorLink value="SpriteLinkTracker"/>
+        <TrackerUnit Value="Source"/>
+        <Effect value="DistributedDamage"/>
+        <TrackedUnitFilters value="-;Dead"/>
+        <DistributDamage value="1"/>
+    </CEffectEnumTrackedUnits>
+    <CEffectAddTrackedUnit id="DistributeAddTrackCaptainUnit">
+        <EditorCategories value="Race:Terran"/>
+        <OwningPlayer Value="Source"/>
+        <BehaviorLink value="SpriteLinkTracker"/>
+        <TrackerUnit Value="Target"/>
+        <TrackedUnit Value="Target"/>
+    </CEffectAddTrackedUnit>
+    <CEffectClearTrackedUnits id="DistributeClearTrackUnit">
+        <EditorCategories value="Race:Terran"/>
+        <BehaviorLink value="SpriteLinkTracker"/>
+        <TrackerUnit Value="Target"/>
+    </CEffectClearTrackedUnits>
+    <CEffectUserData id="DistributeTargetHitCount">
+        <EditorCategories value="Race:Terran"/>
+        <Key value="numTargets"/>
+        <SourceKey value="numTargets"/>
+        <SourceFailBackValue value="1"/>
+        <ValidateMax value="50"/>
+    </CEffectUserData>
+    <CEffectDamage id="DistributedDamage">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Flags index="Live" value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Type value="SpiritLink"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="OffsetAreaByAngle" value="1"/>
+        <SearchFlags index="SameCliff" value="0"/>
+    </CEffectDamage>
+    <CEffectApplyBehavior id="EnergyHugeMaxandMediumRegeneration">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="InfantryBasicChain">
+        <EditorCategories value="Race:Terran"/>
         <EffectArray value="RemoveUnit"/>
-        <EffectArray value="DisableJoinAbility"/>
         <EffectArray value="AddMagazineTracker"/>
         <EffectArray value="InfantryEnlargeRadius"/>
+        <EffectArray value="DisableJoinAbility"/>
+        <EffectArray value="DistributeAddBuffTracker"/>
+        <EffectArray value="SpriteLink"/>
     </CEffectSet>
+    <CEffectModifyUnit id="MultiMineralAutoHarvest">
+        <EditorCategories value="Race:Terran"/>
+        <Resources value="-5"/>
+        <ResourcesHarvestedFraction value="1"/>
+    </CEffectModifyUnit>
+    <CEffectApplyBehavior id="MultiMineralAutoHarvestAura">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
     <CEffectRemoveBehavior id="RemoveBasicModification">
         <EditorCategories value="Race:Terran"/>
         <BehaviorCategories index="User10" value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="RemoveMagazineTracker">
+        <EditorCategories value="Race:Terran"/>
+        <BehaviorCategories index="User9" value="1"/>
+        <BehaviorLink value=""/>
     </CEffectRemoveBehavior>
     <CEffectApplyBehavior id="ResourceFragile">
         <EditorCategories value="Race:Terran"/>
@@ -137,9 +230,8 @@
         <SearchFilters value="-;Self,Player,Ally,Neutral,Massive,Missile,Destructible,Item,Stasis,Dead,Hidden,Invulnerable,Unstoppable"/>
         <AreaArray Radius="3" Effect="MedicFlashBangGrenadeApplyBehavior"/>
     </CEffectEnumArea>
-    <CEffectApplyBehavior id="ResourceRobbery">
+    <CEffectApplyBehavior id="ResourceMineralAssassin">
         <EditorCategories value="Race:Terran"/>
-        <Behavior value="ResourceMineralRobbery"/>
     </CEffectApplyBehavior>
     <CEffectModifyUnit id="ResourceMessage">
         <Resources value="1"/>
@@ -244,7 +336,7 @@
     </CEffectSet>
     <CEffectModifyUnit id="AddSCV">
         <EditorCategories value="Race:Terran"/>
-        <Cost Abil="SquadInfantry,Ammo1" ChargeCountUse="-0.25"/>
+        <Cost Abil="SquadInfantry,Ammo1" ChargeCountUse="-1"/>
     </CEffectModifyUnit>
     <CEffectApplyBehavior id="EMPApplyDecloakBehavior2">
         <EditorCategories value="Race:Terran"/>
@@ -292,7 +384,7 @@
     <CEffectApplyBehavior id="EnableNoCollision">
         <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
-        <Behavior value="SquadRemoveCollision"/>
+        <Behavior value="InfantryReduceRadius"/>
     </CEffectApplyBehavior>
     <CEffectApplyBehavior id="DisableJoinAbility">
         <ValidatorArray index="0" removed="1"/>
@@ -306,7 +398,7 @@
     <CEffectRemoveBehavior id="DisableNoCollision">
         <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
-        <BehaviorLink value="SquadRemoveCollision"/>
+        <BehaviorLink value="InfantryReduceRadius"/>
     </CEffectRemoveBehavior>
     <CEffectCreatePersistent id="Firebat2">
         <EditorCategories value="Race:Terran"/>
@@ -465,14 +557,46 @@
     </CEffectEnumMagazine>
     <CEffectModifyUnit id="AddMarine">
         <EditorCategories value="Race:Terran"/>
-        <Cost Abil="SquadInfantry,Ammo2" ChargeCountUse="-0.25"/>
+        <Cost Abil="SquadInfantry,Ammo2" ChargeCountUse="-1"/>
     </CEffectModifyUnit>
+    <CEffectApplyBehavior id="ResourceTerrazineCrazy">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
     <CEffectApplyBehavior id="ResourceRegenAura">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="ResourceRobbery2">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="ResourceMineralRobbery"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumArea id="MultiAutoMineralHarvestSearch">
+        <SearchFilters value="Structure;Player,Ally,Enemy,Worker"/>
+        <AreaArray Radius="2" Effect="ApplyAutoMineralHarvest"/>
+        <MaxCount value="1"/>
+    </CEffectEnumArea>
+    <CEffectApplyBehavior id="ResourceVespenseCrazy">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SpriteLink">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumMagazine id="SpriteLinkIterMagazine">
+        <EditorCategories value="Race:Terran"/>
+        <OwningPlayer Value="Caster"/>
+        <EffectExternal value="DistributeAddTrackMagazineUnit"/>
+    </CEffectEnumMagazine>
+    <CEffectApplyBehavior id="UnitAddMoveSpeedTier5">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="UnitHugeAddMaxLife">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="UnitSmallAddMaxLife">
         <EditorCategories value="Race:Terran"/>
     </CEffectApplyBehavior>
     <CEffectDamage id="SCVFusionCutter" parent="DU_WEAP">
         <EditorCategories value="Race:Terran"/>
-        <Amount value="5"/>
+        <Amount value="200"/>
     </CEffectDamage>
     <CEffectDamage id="GuassRifle2" parent="DU_WEAP">
         <EditorCategories value="Race:Terran"/>
@@ -607,9 +731,10 @@
         <EditorCategories value="Race:Terran"/>
         <EffectArray value="EnableNoCollision"/>
         <EffectArray value="DisableMagazine"/>
+        <EffectArray value="DistributeAddBuffTracker"/>
     </CEffectSet>
     <CEffectSet id="OnMagazineRelease">
-        <EditorCategories value=""/>
+        <EditorCategories value="Race:Terran"/>
         <EffectArray value="DisableNoCollision"/>
         <EffectArray value="EnableMagazine"/>
     </CEffectSet>
@@ -702,11 +827,6 @@
         <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="Target"/>
     </CEffectReleaseMagazine>
-    <CEffectRemoveBehavior id="RemoveMagazineTracker">
-        <EditorCategories value="Race:Terran"/>
-        <BehaviorCategories index="User9" value="1"/>
-        <BehaviorLink value=""/>
-    </CEffectRemoveBehavior>
     <CEffectRemoveBehavior id="RemovePrecursor2">
         <BehaviorLink value="Precursor"/>
     </CEffectRemoveBehavior>
@@ -740,10 +860,8 @@
         <EditorCategories value="Race:Terran"/>
         <DamageModifierSource Value="Outer"/>
         <EffectArray value="AddSCV"/>
-        <EffectArray value="RemoveUnit"/>
-        <EffectArray value="DisableJoinAbility"/>
-        <EffectArray value="AddMagazineTracker"/>
-        <EffectArray value="InfantryEnlargeRadius"/>
+        <EffectArray value="InfantryBasicChain"/>
+        <EffectArray value="UnitHugeAddMaxLife"/>
     </CEffectSet>
     <CEffectDamage id="RetributionFieldDamage2">
         <EditorCategories value="Race:Terran"/>
@@ -761,7 +879,7 @@
         <EffectArray value="Predator2"/>
         <EffectArray value="RetributionFieldSearch2"/>
     </CEffectSet>
-    <CEffectEnumArea id="SearchResource">
+    <CEffectEnumArea id="RsourceMessageSearch">
         <SearchFilters value="-;Player,Ally,Enemy,Worker"/>
         <AreaArray Radius="1.5" Effect="ApplyResourceMessage"/>
     </CEffectEnumArea>
@@ -845,11 +963,9 @@
         <EditorCategories value="Race:Terran"/>
         <DamageModifierSource Value="Outer"/>
         <EffectArray value="AddMarine"/>
-        <EffectArray value="RemoveUnit"/>
-        <EffectArray value="DisableJoinAbility"/>
-        <EffectArray value="AddMagazineTracker"/>
-        <EffectArray value="InfantryEnlargeRadius"/>
-        <EffectArray value="ResourceRobbery"/>
+        <EffectArray value="InfantryBasicChain"/>
+        <EffectArray value="UnitSmallAddMaxLife"/>
+        <EffectArray value="ResourceMineralAssassin"/>
     </CEffectSet>
     <CEffectSet id="ReleaseMagazinePack">
         <EditorCategories value="Race:Terran"/>
@@ -884,6 +1000,16 @@
         <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
         <Behavior value="ResourceMessage2"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="UnitAddMoveSpeedTier3">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="UnitMediumAddMaxLife">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="EnergyMediumMaxandHugeRegeneration">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="EnergyMediumMaxandLargeRegeneration"/>
     </CEffectApplyBehavior>
     <CEffectLaunchMissile id="Yamato2">
         <ValidatorArray index="0" value="YamatoTargetFilters"/>

@@ -5,6 +5,24 @@ include "Lib991D22EF_h"
 //--------------------------------------------------------------------------------------------------
 // Library: Debug
 //--------------------------------------------------------------------------------------------------
+// Triggers
+//--------------------------------------------------------------------------------------------------
+// Trigger: Untitled Trigger 001
+//--------------------------------------------------------------------------------------------------
+bool lib991D22EF_gt_DebugUnitTracker_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib991D22EF_gt_DebugUnitTracker_Init () {
+    lib991D22EF_gt_DebugUnitTracker = TriggerCreate("lib991D22EF_gt_DebugUnitTracker_Func");
+}
+
+void lib991D22EF_InitTriggers () {
+    lib991D22EF_gt_DebugUnitTracker_Init();
+}
+
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
 //--------------------------------------------------------------------------------------------------
@@ -17,5 +35,6 @@ void lib991D22EF_InitLib () {
 
     lib991D22EF_InitLib_completed = true;
 
+    lib991D22EF_InitTriggers();
 }
 

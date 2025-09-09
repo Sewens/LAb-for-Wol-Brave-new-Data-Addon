@@ -1,5 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CValidatorUnitCompareBehaviorCount id="NoSpriteLink">
+        <ResultFailed value="NotEnoughRoomToLoadUnit"/>
+        <Compare value="LE"/>
+        <Behavior value="SpriteLinkTracker"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="IsVespenCombine">
+        <CombineArray value="IsVespeneCommon"/>
+        <CombineArray value="IsVespeneP"/>
+        <CombineArray value="IsVespeneP2"/>
+        <CombineArray value="IsVespeneP3"/>
+        <CombineArray value="IsVespeneRich"/>
+        <CombineArray value="IsVespeneT"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="NotVespenCombine">
+        <CombineArray value="IsVespeneCommon"/>
+        <CombineArray value="IsVespeneP"/>
+        <CombineArray value="IsVespeneP2"/>
+        <CombineArray value="IsVespeneP3"/>
+        <CombineArray value="IsVespeneRich"/>
+        <CombineArray value="IsVespeneT"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="IsVespeneP">
+        <Value value="ProtossVespeneGeyser"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="IsVespeneP2">
+        <Value value="PurifierVespeneGeyser"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="IsVespeneP3">
+        <Value value="ShakurasVespeneGeyser"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="IsVespeneT">
+        <Value value="SpacePlatformGeyser"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="IsVespeneRich">
+        <Value value="RichVespeneGeyser"/>
+    </CValidatorUnitType>
+    <CValidatorUnitCompareResourceContents id="MultiMineralAutoHarvesterFinish">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GT"/>
+    </CValidatorUnitCompareResourceContents>
     <CValidatorUnitCompareCargo id="IsMagazineNotFull">
         <ResultFailed value="NotEnoughRoomToLoadUnit"/>
         <ResultNoUnit value="NotEnoughRoomToLoadUnit"/>
@@ -13,7 +54,7 @@
     </CValidatorUnitState>
     <CValidatorUnitCompareBehaviorCount id="IsMagazineFull">
         <ResultFailed value="NotEnoughRoomToLoadUnit"/>
-        <Compare value="LE"/>
+        <Compare value="LT"/>
         <Value value="4"/>
         <Behavior value="MagazineUnitTracker"/>
     </CValidatorUnitCompareBehaviorCount>
@@ -22,9 +63,8 @@
     </CValidatorUnitType>
     <CValidatorCombine id="IsResource">
         <CombineArray value="IsMineral"/>
-        <CombineArray value="IsVespene"/>
     </CValidatorCombine>
-    <CValidatorUnitType id="IsVespene">
+    <CValidatorUnitType id="IsVespeneCommon">
         <Value value="VespeneGeyser"/>
     </CValidatorUnitType>
     <CValidatorUnitAbil id="IsWorker">

@@ -124,6 +124,11 @@
             </Visuals>
         </TerrainSquibs>
     </CActorMissile>
+    <CActorModel id="DistributeDamageImpactModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="ActorCreation" Send="SetTintColor 255,0,0"/>
+        <On Terms="Effect.DistributedDamage.Start; At Target" Send="Create"/>
+        <Model value="ConsumeImpactModel"/>
+    </CActorModel>
     <CActorAction id="DRBattlecruiserAirAttack2" parent="GenericAttack" effectImpact="DRBattlecruiserAU2" effectLaunch="DRBattlecruiserALM2">
         <LaunchAttachQuery Methods="AMFilterWeaponSetA0 AMRandomUniform"/>
         <LaunchAssets Sound="Battlecruiser_AirAttackLaunch2"/>
@@ -287,16 +292,16 @@
         <HostSiteOps Ops="SOpAttachCenter"/>
         <Model value="FireSuppressionBots"/>
     </CActorModel>
-    <CActorUnit id="Firebat2" parent="GenericUnitStandard" unitName="SquadFirebat">
+    <CActorUnit id="SquadFirebat" parent="GenericUnitStandard" unitName="SquadFirebat">
         <Aliases value="_UnitMedium"/>
         <Macros value="UnloadDropAnim"/>
         <On Terms="Abil.attack.ReadyStop" Target="FirebatAttackModel" Send="SetOpacity 0.000000 0.250000"/>
         <On Terms="UnitDeathCustomize; ValidateUnit HaveVoidShade" Send="DeathCustomize Shadow"/>
         <On Terms="UnitDeathCustomize; ValidateUnit HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
-        <Model value="Firebat2"/>
+        <Model value="DevilDog"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
-        <BuildModel value="Firebat2"/>
-        <DeathArray index="Normal" ModelLink="FirebatDeath2" SoundLink="Firebat_Explode2"/>
+        <BuildModel value="DevilDog"/>
+        <DeathArray index="Normal" ModelLink="DevilDogDeath" SoundLink="Firebat_Explode2"/>
         <DeathCustoms index="0" ModelLink="ZergSmallUnitDeathLow9" Name="AntiGravGeneric"/>
         <DeathCustoms index="1" ModelLink="ProtossSmallUnitDeathLow9" Name="AntiGravProtoss"/>
         <DeathCustoms index="2" ModelLink="TerranSmallUnitDeathLow9" Name="AntiGravTerran"/>
@@ -308,7 +313,7 @@
             <VoiceLink value="ShadowUnit_DeathVox"/>
             <Name value="Shadow"/>
         </DeathCustoms>
-        <PlacementModel value="Firebat2"/>
+        <PlacementModel value="DevilDog"/>
         <PortraitModel value="FirebatPortrait2"/>
         <WalkAnimMoveSpeed value="1.875"/>
         <BarOffset value="77"/>
@@ -317,7 +322,6 @@
             <Image value="Assets\Textures\Wireframe-Terran-firebat.dds"/>
         </GroupIcon>
         <HeroIcon value="Assets\Textures\btn-unit-terran-firebat.dds"/>
-        <HighlightTooltip value="Unit/Name/Firebat2"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
         <SoundArray index="Ready" value="Firebat_Ready2"/>
         <SoundArray index="Help" value="Firebat_Help2"/>
@@ -423,17 +427,30 @@
     <CActorSound id="GenericAttackSound4" parent="SoundOneShot">
         <Flags index="SuppressCreationErrors" value="1"/>
     </CActorSound>
-    <CActorUnit id="SquadGhost" parent="GenericUnitBase" unitName="Ghost2">
+    <CActorModel id="MultiMineralAutoHarvestBeamPickup" parent="ModelAnimationStyleContinuous">
+        <On Terms="Effect.MultiMineralAutoHarvest.Start; At Target" Send="Create"/>
+        <On Terms="ActorCreation" Send="Create SOAResourceBeamMover"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.000000 1.000000"/>
+        <On Terms="ActorCreation" Send="TimerSet 1.000000 Die"/>
+        <On Terms="ActorCreation" Send="HostSiteOpsSet ::Host SOAResourceBeamVespeneRotator"/>
+        <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
+        <Model value="SOAMineralBeamMinerals"/>
+        <Scale value="1.500000"/>
+    </CActorModel>
+    <CActorModel id="MultiMineralAutoHarvestBeam" parent="ModelAddition">
+        <On Terms="Effect.MultiMineralAutoHarvest" Send="Create"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart GL_BSD GLbirth GLstand GLdeath"/>
+        <On Terms="Effect.MultiMineralAutoHarvest.Start" Send="TimerSet 1.000000 DelayDestroy"/>
+        <On Terms="TimerExpired; TimerName DelayDestroy" Send="AnimBracketStop BSD"/>
+        <On Terms="Effect.DamageBufferDamage" Send="TimerSet 1.000000 DelatDestroy"/>
+        <On Terms="TimerExpired; TimerName DelayDestroy" Send="AnimBracketStop BSD"/>
+        <Model value="SOAMineralBeam"/>
+    </CActorModel>
+    <CActorUnit id="SquadGhost" parent="GenericUnitBase" unitName="SquadGhost">
         <Aliases value="_UnitSmall"/>
         <Macros value="UnloadDropAnim"/>
         <Macros value="PhysicsDeathsSwarmGround"/>
         <Macros value="PhysicsDeathsVoidGround"/>
-        <On index="0" Terms="UnitBirth.SquadGhost"/>
-        <On index="1" Terms="UnitBirth.SquadGhost"/>
-        <On index="2" Terms="UnitRevive.SquadGhost"/>
-        <On index="3" Terms="UnitRevive.SquadGhost"/>
-        <On index="4" Terms="UnitConstruction.SquadGhost"/>
-        <On index="5" Terms="UnitConstruction.SquadGhost"/>
         <On Terms="Abil.TacNukeStrike.SourceCastStart" Send="AnimPlay SpellA Spell,A"/>
         <On Terms="Abil.TacNukeStrike.SourceCastStop" Send="AnimClear SpellA"/>
         <On Terms="Abil.TacNukeStrike.SourceChannelStart" Send="AnimPlay SpellB Spell,B PlayForever"/>
@@ -482,18 +499,19 @@
         <Model value="Ghost_Umojan"/>
         <AnimBlendTime value="-0.800000"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
-        <DeathArray index="Normal" ModelLink="GhostDeath2" SoundLink="Ghost_Explode2"/>
-        <DeathArray index="Blast" ModelLink="GhostDeathBlast2"/>
-        <DeathArray index="Disintegrate" ModelLink="GhostDeathAcid2" SoundLink="Uni_DeathFXAcid3"/>
-        <DeathArray index="Eviscerate" ModelLink="GhostDeathEviscerate2" SoundLink="Uni_DeathFXEviscerate3"/>
-        <DeathArray index="Fire" ModelLink="GhostDeathFire2" SoundLink="Uni_DeathFXFire2"/>
+        <BuildModel value="Ghost_Umojan"/>
+        <DeathArray index="Normal" ModelLink="Ghost_Umojan_Death" SoundLink="Ghost_Explode2"/>
+        <DeathArray index="Blast" ModelLink="Ghost_Umojan_DeathBlast"/>
+        <DeathArray index="Disintegrate" ModelLink="Ghost_Umojan_DeathAcid" SoundLink="Uni_DeathFXAcid3"/>
+        <DeathArray index="Eviscerate" ModelLink="Ghost_Umojan_DeathEviscerate" SoundLink="Uni_DeathFXEviscerate3"/>
+        <DeathArray index="Fire" ModelLink="Ghost_Umojan_DeathFire" SoundLink="Uni_DeathFXFire2"/>
         <DeathCustoms index="0" ModelLink="ZergSmallUnitDeathLow11" Name="AntiGravGeneric"/>
         <DeathCustoms index="1" ModelLink="ProtossSmallUnitDeathLow11" Name="AntiGravProtoss"/>
         <DeathCustoms index="2" ModelLink="TerranSmallUnitDeathLow11" Name="AntiGravTerran"/>
         <DeathCustoms index="3" ModelLink="ZergSmallUnitDeathLow11" Name="AntiGravZerg"/>
         <DeathCustoms index="4" ModelLink="Invisible11" Name="Vortex"/>
         <DeathCustoms ModelLink="TerranSmallBiologicalUnitDeathLow3" Name="AntiGravTerran"/>
-        <DeathCustoms ActorModel="UnitDeathRagdollBloodPrevent" ModelLink="GhostDeathRagdoll2" Name="RagdollBasic">
+        <DeathCustoms ActorModel="UnitDeathRagdollBloodPrevent" ModelLink="GhostDeathRagdoll" Name="RagdollBasic">
             <BodySquibs Name="None"/>
         </DeathCustoms>
         <DeathCustoms Name="RagdollSiegeTank" InheritsFrom="RagdollBasic"/>
@@ -510,13 +528,13 @@
             <BodySquibs Name="Acid"/>
         </DeathCustoms>
         <DeathCustoms Name="RagdollUltraUnburrow" InheritsFrom="RagdollBasic"/>
-        <DeathCustoms ActorModel="SpineCrawlerHurlDeathRagdollBloodPrevent" ModelLink="GhostDeathRagdoll2" Name="RagdollSpineCrawlerHurl">
+        <DeathCustoms ActorModel="SpineCrawlerHurlDeathRagdollBloodPrevent" ModelLink="GhostDeathRagdoll" Name="RagdollSpineCrawlerHurl">
             <BodySquibs Name="None"/>
         </DeathCustoms>
         <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
         <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
         <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
-        <DeathCustoms ModelLink="GhostDeathFire2" Name="Variation17"/>
+        <DeathCustoms ModelLink="Ghost_Umojan_DeathFire" Name="Variation17"/>
         <DeathCustoms>
             <ModelLink value="DeathVoidShadowSmall5"/>
             <SoundLink value="ShadowUnit_DeathFX7"/>
@@ -524,7 +542,8 @@
             <Name value="Shadow"/>
         </DeathCustoms>
         <DeathActorModel value="UnitDeathModelWithDeathMotionGround"/>
-        <PortraitModel value="GhostPortrait2"/>
+        <PlacementModel value="Ghost_Umojan"/>
+        <PortraitModel value="Ghost_Umojan_Portrait"/>
         <TerrainSquibs>
             <MovementDistance value="0.150000,0.150000"/>
             <IdlePeriod value="0.100000,0.250000"/>
@@ -543,7 +562,6 @@
             <Image value="Assets\Textures\Wireframe-Terran-Ghost.dds"/>
         </GroupIcon>
         <HeroIcon value="Assets\Textures\btn-unit-terran-ghost.dds"/>
-        <HighlightTooltip value="Unit/Name/SquadGhost"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
         <SelectAbilCmd value="EMP,Execute"/>
         <SoundArray index="Ready" value="Ghost_Ready2"/>
@@ -764,7 +782,7 @@
         <DamageModel value="GenericAttackDamageModel4"/>
         <DamageSound value="GenericAttackDamageSound4"/>
     </CActorAction>
-    <CActorUnit id="Marauder2" parent="GenericUnitBase" unitName="SquadMarauder">
+    <CActorUnit id="SquadMarauder" parent="GenericUnitBase" unitName="SquadMarauder">
         <Aliases value="_UnitMedium"/>
         <Macros value="UnloadDropAnim"/>
         <Macros value="TerrainSquibAnimations"/>
@@ -789,7 +807,7 @@
         <On Terms="UnitDeathCustomize; PassChance 10.000000; !ValidateUnit IsNotNeuralParasited" Send="Create Marauder_Death_NP"/>
         <On Terms="UnitDeathCustomize; ValidateUnit HaveVoidShade" Send="DeathCustomize Shadow"/>
         <On Terms="UnitDeathCustomize; ValidateUnit HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
-        <Model value="Marauder2"/>
+        <Model value="Marauder_Umojan"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
         <BuildModel value="Marauder2"/>
         <DeathArray index="Normal" ModelLink="MarauderDeath2" SoundLink="Marauder_Explode2"/>
@@ -844,7 +862,6 @@
             <Image value="Assets\Textures\Wireframe-Terran-Marauder.dds"/>
         </GroupIcon>
         <HeroIcon value="Assets\Textures\btn-unit-terran-marauder.dds"/>
-        <HighlightTooltip value="Unit/Name/Marauder2"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
         <SoundArray index="Ready" value="Marauder_Ready2"/>
         <SoundArray index="Help" value="Marauder_Help2"/>
@@ -894,7 +911,7 @@
         <DamageModel value="GenericAttackDamageModel6"/>
         <DamageSound value="GenericAttackDamageSound6"/>
     </CActorAction>
-    <CActorUnit id="Marine2" parent="GenericUnitBase" unitName="SquadMarine">
+    <CActorUnit id="SquadMarine" parent="GenericUnitBase" unitName="SquadMarine">
         <Aliases value="_UnitSmall"/>
         <Macros value="UnloadDropAnim"/>
         <Macros value="PhysicsDeathsSwarmGround"/>
@@ -926,7 +943,7 @@
         <On Terms="UnitBirth; ValidateUnit HaveDarkMarineArmor" Send="ModelSwap Shadow_MarineEX2"/>
         <On Terms="UnitDeathCustomize; ValidateUnit HaveVoidShade" Send="DeathCustomize Shadow"/>
         <On Terms="UnitDeathCustomize; ValidateUnit HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
-        <Model value="Marine2"/>
+        <Model value="Marine_Junker_Collection"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
         <BuildModel value="Marine2"/>
         <DeathArray index="Normal" ModelLink="MarineDeath2" SoundLink="Marine_DeathFXBloodSpray2"/>
@@ -994,7 +1011,6 @@
             <Image value="Assets\Textures\Wireframe-Terran-Marine.dds"/>
         </GroupIcon>
         <HeroIcon value="Assets\Textures\btn-unit-terran-marine.dds"/>
-        <HighlightTooltip value="Unit/Name/Marine2"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
         <SoundArray index="Ready" value="Marine_Ready2"/>
         <SoundArray index="Help" value="Marine_Help2"/>
@@ -1059,7 +1075,7 @@
         <On Terms="UnitDeathCustomize; CanApplyActionPhysics RagdollUltraUnburrow" Send="DeathCustomize RagdollUltraUnburrow"/>
         <On Terms="UnitDeathCustomize; ValidateUnit HaveVoidShade" Send="DeathCustomize Shadow"/>
         <On Terms="UnitDeathCustomize; ValidateUnit HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
-        <Model value="Medic2"/>
+        <Model value="MedicKillSquad"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
         <BuildModel value="Medic2"/>
         <DeathArray index="Normal" ModelLink="MedicDeath2" SoundLink="Medic_Explode2"/>
@@ -1131,7 +1147,7 @@
     <CActorSound id="Medic_Death2" parent="SoundOneShot">
         <On Terms="UnitDeath.SquadMedic; PassChance 25.000000" Send="Create"/>
     </CActorSound>
-    <CActorUnit id="MercCompound2" parent="TerranBuilding" unitName="SquadMercCompound">
+    <CActorUnit id="SquadMercCompound" parent="TerranBuilding" unitName="SquadMercCompound">
         <Aliases value="_UnitHuge"/>
         <Macros value="QueueAnim"/>
         <On Terms="Behavior.ColonyInfestation.On" Send="Create InfestationMercCompound"/>
@@ -1150,7 +1166,6 @@
             <Image value="Assets\Textures\wireframe-terran-merccompound.dds"/>
         </GroupIcon>
         <HeroIcon value="Assets\Textures\btn-building-terran-merccompound.dds"/>
-        <HighlightTooltip value="Unit/Name/MercCompound2"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-buildingarmor.dds"/>
         <NameOffset value="150"/>
         <SoundArray index="Ready" value="MercCompound_What"/>
@@ -1162,7 +1177,7 @@
             <Image value="Assets\Textures\wireframe-terran-merccompound.dds"/>
         </Wireframe>
     </CActorUnit>
-    <CActorSplat id="MercCompoundSplat2" parent="GenericUnitSplat" unitName="SquadMercCompound">
+    <CActorSplat id="SquadMercCompoundSplat" parent="GenericUnitSplat" unitName="SquadMercCompound">
         <Model value="MercCompoundSplat"/>
     </CActorSplat>
     <CActorModel id="MindBlastStun2" parent="ModelAnimationStyleContinuous">

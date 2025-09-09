@@ -1,10 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorBuff id="DamageBuffer">
+        <InfoIcon value="Assets\Textures\btn-progression-hornerhan-15-mysignificantother.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <DamageResponse Handled="DamageBufferPersistent" ModifyMinimumDamage="1" HandledValue="Absorbed">
+            <ExcludeEffectArray value="DamageBufferDamage"/>
+            <Chance value="1"/>
+        </DamageResponse>
+        <BehaviorCategories index="User9" value="1"/>
+        <MaxStackCount value="8"/>
+        <Alignment value="Positive"/>
+        <BehaviorFlags index="Permanent" value="1"/>
+        <DebugTrace value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="EnergyHugeMaxandMediumRegeneration">
+        <InfoFlags index="Hidden" value="1"/>
+        <BehaviorCategories index="User10" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <MaxStackCount value="8"/>
+        <Modification>
+            <VitalMaxAdditiveMultiplierArray index="Energy" value="0.25"/>
+            <VitalRegenArray index="Energy" value="0.75"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorUnitTracker id="SpriteLinkTracker">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <BehaviorCategories index="User9" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <MaxTrackedUnits value="8"/>
+    </CBehaviorUnitTracker>
+    <CBehaviorBuff id="MultiMineralAutoHarvest">
+        <InfoIcon value="Assets\Textures\btn-tips-resourcecaches.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <Duration value="8"/>
+        <Period value="2"/>
+        <PeriodicEffect value="MultiMineralAutoHarvest"/>
+        <DisableValidatorArray value="NotVespenCombine"/>
+        <Player Value="Origin"/>
+    </CBehaviorBuff>
     <CBehaviorBuff id="InfantryEnlargeRadius">
         <InfoFlags index="Hidden" value="1"/>
         <BehaviorCategories index="User10" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Modification RadiusMultiplier="2.5"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="ResourceMineralAssassin">
+        <InfoIcon value="Assets\Textures\btn-tips-resourcecaches.dds"/>
+        <BehaviorCategories index="User9" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <MaxStackCount value="8"/>
+        <Modification>
+            <ResourceHarvestAmountMultiplier index="Minerals" value="2"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="MultiMineralAutoHarvestAura">
+        <InfoIcon value="Assets\Textures\btn-tips-resourcecaches.dds"/>
+        <BehaviorCategories index="User9" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <MaxStackCount value="8"/>
+        <Period value="4"/>
+        <PeriodicEffect value="MultiAutoMineralHarvestSearch"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="ResourceTerrazineCrazy">
+        <InfoIcon value="Assets\Textures\btn-tips-droppedterrazine.dds"/>
+        <BehaviorCategories index="User9" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <MaxStackCount value="8"/>
+        <Modification>
+            <ResourceHarvestAmountMultiplier index="Vespene" value="4"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="ResourceVespenseCrazy">
+        <InfoIcon value="Assets\Textures\btn-tips-droppedterrazine.dds"/>
+        <BehaviorCategories index="User9" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <MaxStackCount value="8"/>
+        <Modification>
+            <ResourceHarvestAmountMultiplier index="Vespene" value="2"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SpriteLink">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-sprite.dds"/>
+        <BehaviorCategories index="User9" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <PeriodicEffect value="SpriteLinkIterMagazine"/>
+        <DamageResponse>
+            <Handled value="DistributeDamageCalculation"/>
+            <ModifyFraction value="0.5"/>
+            <ModifyMinimumDamage value="1"/>
+            <HandledValue value="Absorbed"/>
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="UnitAddMoveSpeedTier3">
+        <InfoFlags index="Hidden" value="1"/>
+        <BehaviorCategories index="User10" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <MaxStackCount value="8"/>
+        <Modification MoveSpeedBonus="0.25" AccelerationBonus="0.5">
+            <AdditiveMoveSpeedFactor value="0.15"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="UnitAddMoveSpeedTier5">
+        <InfoFlags index="Hidden" value="1"/>
+        <BehaviorCategories index="User10" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <MaxStackCount value="8"/>
+        <Modification MoveSpeedBonus="0.5" AccelerationBonus="0.25">
+            <AdditiveMoveSpeedFactor value="0.25"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="UnitSmallAddMaxLife">
+        <InfoFlags index="Hidden" value="1"/>
+        <BehaviorCategories index="User10" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <MaxStackCount value="8"/>
+        <Modification>
+            <VitalMaxArray index="Life" value="5"/>
+            <VitalMaxFractionArray index="Life" value="0.05"/>
+        </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="MedicFlashbangGrenade">
         <Alignment value="Negative"/>
@@ -239,7 +356,7 @@
             <StateFlags index="Passive" value="1"/>
         </Modification>
     </CBehaviorBuff>
-    <CBehaviorBuff id="SquadRemoveCollision">
+    <CBehaviorBuff id="InfantryReduceRadius">
         <BehaviorFlags index="Permanent" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <BuffFlags index="Countdown" value="0"/>
@@ -250,9 +367,7 @@
         <DurationBonusMax value="0"/>
         <Player Value="Origin"/>
         <AcquirePlayer Value="Origin"/>
-        <Modification>
-            <StateFlags index="Invulnerable" value="1"/>
-            <StateFlags index="SuppressCollision" value="1"/>
+        <Modification RadiusMultiplier="0.33">
             <StateFlags index="SuppressFoodUsed" value="1"/>
             <StateFlags index="SuppressArmySelect" value="1"/>
             <StateFlags index="Uncommandable" value="1"/>
@@ -261,7 +376,6 @@
             <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
             <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
             <VitalMaxIncreaseAffectsCurrentArray index="Energy" value="0"/>
-            <AbilLinkDisableArray value="SquadMarine"/>
         </Modification>
         <DamageResponse Location="Attacker">
             <Cost>
@@ -289,7 +403,7 @@
     <CBehaviorBuff id="ResourceRegenAura">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Period value="4"/>
-        <PeriodicEffect value="SearchResource"/>
+        <PeriodicEffect value="RsourceMessageSearch"/>
         <InfoIcon value="Assets\Textures\btn-upgrade-zerg-stukov-regenrate.dds"/>
         <BehaviorCategories index="User9" value="1"/>
         <MaxStackCount value="8"/>
@@ -328,10 +442,40 @@
         <DisableValidatorArray value=""/>
         <MaxStackCount value="8"/>
         <Modification>
-            <ResourceHarvestTimeBonus index="Minerals" value="-2"/>
-            <ResourceHarvestTimeBonus index="Vespene" value="-2"/>
-            <ResourceHarvestTimeBonus index="Terrazine" value="-2"/>
-            <ResourceHarvestTimeBonus index="Custom" value="-2"/>
+            <ResourceHarvestTimeBonus index="Minerals" value="-0.75"/>
+            <ResourceHarvestTimeBonus index="Vespene" value="-0.75"/>
+            <ResourceHarvestTimeBonus index="Terrazine" value="-0.75"/>
+            <ResourceHarvestTimeBonus index="Custom" value="-0.75"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="UnitMediumAddMaxLife">
+        <InfoFlags index="Hidden" value="1"/>
+        <BehaviorCategories index="User10" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <MaxStackCount value="8"/>
+        <Modification>
+            <VitalMaxArray index="Life" value="15"/>
+            <VitalMaxFractionArray index="Life" value="0.1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="UnitHugeAddMaxLife">
+        <InfoFlags index="Hidden" value="1"/>
+        <BehaviorCategories index="User10" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <MaxStackCount value="8"/>
+        <Modification>
+            <VitalMaxArray index="Life" value="25"/>
+            <VitalMaxFractionArray index="Life" value="0.25"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="EnergyMediumMaxandLargeRegeneration">
+        <InfoFlags index="Hidden" value="1"/>
+        <BehaviorCategories index="User10" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <MaxStackCount value="8"/>
+        <Modification>
+            <VitalMaxAdditiveMultiplierArray index="Energy" value="0.15"/>
+            <VitalRegenArray index="Energy" value="2"/>
         </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="ViralPlasma2">
