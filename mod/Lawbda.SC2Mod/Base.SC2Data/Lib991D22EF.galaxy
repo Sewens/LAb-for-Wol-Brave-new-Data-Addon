@@ -1,10 +1,22 @@
-include "TriggerLibs/natives"
+include "TriggerLibs/NativeLib"
 
 include "Lib991D22EF_h"
 
 //--------------------------------------------------------------------------------------------------
 // Library: Debug
 //--------------------------------------------------------------------------------------------------
+// External Library Initialization
+void lib991D22EF_InitLibraries () {
+    libNtve_InitVariables();
+}
+
+// Functions
+int lib991D22EF_gf_GetAllUnit (string lp_unitType) {
+    // Automatic Variable Declarations
+    // Implementation
+    return TechTreeUnitCount(1, lp_unitType, c_techCountQueuedOrBetter);
+}
+
 // Triggers
 //--------------------------------------------------------------------------------------------------
 // Trigger: Untitled Trigger 001
@@ -35,6 +47,7 @@ void lib991D22EF_InitLib () {
 
     lib991D22EF_InitLib_completed = true;
 
+    lib991D22EF_InitLibraries();
     lib991D22EF_InitTriggers();
 }
 

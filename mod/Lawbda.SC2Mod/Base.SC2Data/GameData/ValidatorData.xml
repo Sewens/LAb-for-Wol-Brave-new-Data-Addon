@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CValidatorUnitComparePowerUserLevel id="IsInReactorPowerFeild">
+        <Compare value="GE"/>
+        <Behavior value="SquadReactorPowerSource"/>
+    </CValidatorUnitComparePowerUserLevel>
+    <CValidatorUnitType id="IsSquadSupplyDepotEitherFlavor">
+        <ResultFailed value="MustTargetStructures,Error/MustTargetSupplyDepot"/>
+        <Value value="SquadSupplyDepot2"/>
+        <Type value="SelectAlias"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="IsSquadSupplyDepotLowered">
+        <Value value="SquadSupplyDepot"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="IsSupplyDepotEitherFlavor2">
+        <ResultFailed value="MustTargetStructures,Error/MustTargetSupplyDepot"/>
+        <Value value="SupplyDepot"/>
+        <Type value="SelectAlias"/>
+    </CValidatorUnitType>
     <CValidatorUnitCompareBehaviorCount id="NoSpriteLink">
         <ResultFailed value="NotEnoughRoomToLoadUnit"/>
         <Compare value="LE"/>
@@ -13,6 +30,14 @@
         <CombineArray value="IsVespeneRich"/>
         <CombineArray value="IsVespeneT"/>
     </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="NotSquadSupplyDrop">
+        <ResultFailed value="MustTargetStructures,Error/AlreadyHasExtraSupplies"/>
+        <Behavior value="SquadSupplydrop"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="NotSquadSupplyDropEnRoute">
+        <ResultFailed value="MustTargetStructures,Error/AlreadyHasExtraSupplies"/>
+        <Behavior value="SquadSupplyDropEnRoute"/>
+    </CValidatorUnitCompareBehaviorCount>
     <CValidatorCombine id="NotVespenCombine">
         <CombineArray value="IsVespeneCommon"/>
         <CombineArray value="IsVespeneP"/>
@@ -67,9 +92,10 @@
     <CValidatorUnitType id="IsVespeneCommon">
         <Value value="VespeneGeyser"/>
     </CValidatorUnitType>
-    <CValidatorUnitAbil id="IsWorker">
-        <AbilClass value="CAbilHarvest"/>
-    </CValidatorUnitAbil>
+    <CValidatorUnitFilters id="IsWorker">
+        <ResultNoUnit value="MustTargetUnit,MustWorker"/>
+        <Filters value="Worker;Enemy"/>
+    </CValidatorUnitFilters>
     <CValidatorUnitFilters id="TargetNotSelf">
         <Filters value="-;Self"/>
     </CValidatorUnitFilters>

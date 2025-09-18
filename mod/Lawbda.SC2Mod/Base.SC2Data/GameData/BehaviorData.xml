@@ -1,5 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorBuff id="AutoTrackMagazine">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Period value="1"/>
+        <PeriodicEffect value="PeriodMagazineIterate"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="CarryHarvestableRichVespeneGeyserGas2">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+    </CBehaviorBuff>
+    <CBehaviorResource id="HarvestableRichVespeneGeyserGas2">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\icon-gas.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Capacity value="32000"/>
+        <HarvestTime value="1.981"/>
+        <HarvestAmount value="4"/>
+        <Flags index="HideHarvesters" value="1"/>
+        <RequiredAlliance value="Control"/>
+        <ExhaustedAlert value="ResourceExhausted_Vespene"/>
+        <IdealHarvesterCount value="3"/>
+    </CBehaviorResource>
+    <CBehaviorBuff id="MorphToTechReactor2">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Requirements value="UseTechReactor"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <Duration value="0.1"/>
+        <ExpireEffect value="MorphToTechReactor"/>
+    </CBehaviorBuff>
+    <CBehaviorPowerSource id="PowerSource2">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-building-protoss-pylon.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Structures"/>
+        <Radius value="6.5"/>
+        <CliffLevelFlags index="Higher" value="0"/>
+    </CBehaviorPowerSource>
+    <CBehaviorBuff id="SensorTowerRadar2">
+        <Alignment value="Positive"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-status-radar.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <Modification Radar="30" RadarFilters="-;Neutral,RawResource,HarvestableResource,Missile,Destructible,Buried,Cloaked"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadBunkerNotJumbo">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="NeosteelFrameNotPurchased"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadBunkerWeaponRangeBonus">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <InitialEffect value="ProjectileAccelerators2"/>
+        <FinalEffect value="ProjectileAcceleratorsRemove2"/>
+        <Modification WeaponRange="1">
+            <AbilLinkEnableArray value="Stimpack"/>
+            <AbilLinkEnableArray value="heal"/>
+            <AbilLinkEnableArray value="stop"/>
+            <AbilLinkEnableArray value="HoldFire"/>
+            <WeaponDisableArray value="FusionCutter"/>
+        </Modification>
+    </CBehaviorBuff>
     <CBehaviorBuff id="BurrowChargeMPKnockback2">
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
@@ -15,6 +79,17 @@
             <StateFlags index="SuppressCollision" value="1"/>
             <WeaponDisableArray value="KaiserBlades"/>
         </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="CCTransportDummy2">
+        <InfoFlags index="Hidden" value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="CarryHarvestableVespeneGeyserGas2">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="CarryHarvestableVespeneGeyserGas3">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="DamageBuffer">
         <InfoIcon value="Assets\Textures\btn-progression-hornerhan-15-mysignificantother.dds"/>
@@ -32,6 +107,12 @@
         <Alignment value="Positive"/>
         <BehaviorFlags index="Permanent" value="1"/>
         <DebugTrace value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="Detector112" parent="Detector">
+        <Alignment value="Positive"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-status-detector.dds"/>
+        <Modification Detect="11"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="EnergyHugeMaxandMediumRegeneration">
         <InfoFlags index="Hidden" value="1"/>
@@ -53,6 +134,139 @@
             <VitalRegenArray index="Life" value="4"/>
         </Modification>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AlphaScannerInvisible">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-permanentlycloaked-darktemplar-color.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <MaxStackCount value="99"/>
+        <MaxStackCountPerCaster value="99"/>
+        <Duration value="1"/>
+        <Period value="1"/>
+        <Modification>
+            <StateFlags index="Cloak" value="1"/>
+            <StateFlags index="Unradarable" value="1"/>
+            <AdditiveMoveSpeedFactor value="0.05"/>
+            <AdditiveAttackSpeedFactor value="0.01"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="FirebatOrb">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <InfoIcon value="Assets\Textures\ui_tipicon_campaign_zerus03-yagdrafireball.dds"/>
+        <BehaviorCategories index="User15" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+    </CBehaviorBuff>
+    <CBehaviorResource id="HarvestableVespeneGeyserGas2">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\icon-gas.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Capacity value="32000"/>
+        <HarvestTime value="1.981"/>
+        <HarvestAmount value="4"/>
+        <Flags index="HideHarvesters" value="1"/>
+        <RequiredAlliance value="Control"/>
+        <ExhaustedAlert value="ResourceExhausted_Vespene"/>
+        <IdealHarvesterCount value="3"/>
+    </CBehaviorResource>
+    <CBehaviorResource id="HarvestableVespeneGeyserGas3">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\icon-gas.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Capacity value="32000"/>
+        <HarvestTime value="1.981"/>
+        <HarvestAmount value="4"/>
+        <Flags index="HideHarvesters" value="1"/>
+        <RequiredAlliance value="Control"/>
+        <ExhaustedAlert value="ResourceExhausted_Vespene"/>
+        <IdealHarvesterCount value="3"/>
+    </CBehaviorResource>
+    <CBehaviorBuff id="HellstormMissiles2">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Requirements value="HellstormMissilesResearched"/>
+        <Modification>
+            <WeaponEnableArray value="MissileTurret"/>
+            <WeaponEnableArray value="HailstormMissilePods"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorVeterancy id="InfantryLevelUpto10">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <VeterancyLevelArray MinVeterancyXP="200"/>
+        <VeterancyLevelArray MinVeterancyXP="200">
+            <Modification>
+                <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Energy" value="0"/>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="200">
+            <Modification>
+                <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Energy" value="0"/>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="200">
+            <Modification>
+                <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Energy" value="0"/>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="200">
+            <Modification>
+                <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Energy" value="0"/>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="200">
+            <Modification>
+                <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Energy" value="0"/>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="400">
+            <Modification>
+                <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Energy" value="0"/>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="600">
+            <Modification>
+                <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Energy" value="0"/>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="600">
+            <Modification>
+                <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Energy" value="0"/>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="600">
+            <Modification>
+                <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Energy" value="0"/>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="600">
+            <Modification>
+                <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Energy" value="0"/>
+            </Modification>
+        </VeterancyLevelArray>
+    </CBehaviorVeterancy>
+    <CBehaviorBuff id="GiveKillsToCaster">
+        <InfoFlags index="Hidden" value="1"/>
+        <BehaviorCategories index="User10" value="1"/>
+        <KillCredit Value="Caster"/>
+    </CBehaviorBuff>
     <CBehaviorBuff id="LootOnDealDamage">
         <BehaviorFlags index="Permanent" value="1"/>
         <BehaviorCategories index="User10" value="1"/>
@@ -69,6 +283,15 @@
                 <Cost>
                     <Charge Link="Behavior/##id##"/>
                 </Cost>
+            </DeathResponse>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="MagazineDeathResponse">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Modification>
+            <DeathResponse Chance="1" Effect="RemoveMagazineTracker1Stack">
+                <Type index="Remove" value="0"/>
             </DeathResponse>
         </Modification>
     </CBehaviorBuff>
@@ -95,36 +318,93 @@
             <StateFlags index="Untargetable" value="1"/>
         </Modification>
     </CBehaviorBuff>
-    <CBehaviorBuff id="ReactorQueue2">
+    <CBehaviorPowerUser id="SquadPowerUser">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <PowerLink value="SquadReactorPowerSource"/>
+        <PlacementMinPowerLevel value="1"/>
+        <PowerStageArray/>
+        <PowerStageArray>
+            <Modification>
+                <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Energy" value="0"/>
+            </Modification>
+            <AbilReplace Origin="que5" New="SquadQueue8"/>
+        </PowerStageArray>
+    </CBehaviorPowerUser>
+    <CBehaviorBuff id="SquadProjectileAccelerators">
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
-        <Requirements value="HaveAttachedNuclearReactor"/>
+        <DisableValidatorArray value="ProjectileAcceleratorsPurchased"/>
+        <Modification WeaponRange="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadReactorQueueBuff">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <RemoveValidatorArray value="IsInReactorPowerFeild"/>
         <Modification QueueCount="1" QueueSize="3"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="RedScannerFireDOT">
         <Alignment value="Negative"/>
         <InfoIcon value="Assets\Textures\btn-upgrade-tychus-firebat-wildflamefuel.dds"/>
-        <EditorCategories value="Race:Undead,AbilityorEffectType:Units"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <MaxStackCount value="99"/>
         <MaxStackCountPerCaster value="99"/>
         <Duration value="5"/>
         <Period value="1"/>
         <PeriodicEffect value="RedScannerFlameThrowerDamage"/>
+        <DeathType value="Fire"/>
+        <DamageResponse TargetFilters="-;Player,Ally,Neutral"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="GreenScannerHeal">
         <Alignment value="Positive"/>
         <InfoIcon value="Assets\Textures\btn-ability-stetmann-garypersonalstetzone-health.dds"/>
-        <EditorCategories value="Race:Undead,AbilityorEffectType:Units"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <MaxStackCount value="99"/>
         <MaxStackCountPerCaster value="99"/>
         <Duration value="13"/>
         <DurationVitalArray index="Life" value="5"/>
         <DurationVitalMaxArray index="Life" value="5"/>
         <Period value="1"/>
-        <Modification>
+        <Modification XPScaledBonus="1">
             <VitalMaxArray index="Life" value="5"/>
             <VitalMaxArray index="Energy" value="1"/>
+            <VitalDamageLeechArray index="Life">
+                <KindArray index="Spell" value="0.5"/>
+                <KindArray index="Melee" value="1"/>
+                <KindArray index="Ranged" value="0.5"/>
+                <KindArray index="NoProc" value="1"/>
+            </VitalDamageLeechArray>
         </Modification>
+        <VitalRegenVitalsRemainPercent index="Life" AmountMissing="0.1" RegenModification="0.0703"/>
+        <VitalRegenVitalsRemainPercent index="Shields" AmountMissing="0.1" RegenModification="0.0703"/>
+        <VitalRegenVitalsRemainPercent index="Energy" AmountMissing="0.1" RegenModification="0.0703"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="BlueScannerEMPDOT">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-mengsk-ghost-staticempblast.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <MaxStackCount value="99"/>
+        <MaxStackCountPerCaster value="99"/>
+        <Duration value="5"/>
+        <Period value="1"/>
+        <PeriodicEffect value="BlueScannerDamageSet"/>
+        <DeathType value="Fire"/>
+        <DamageResponse TargetFilters="-;Player,Ally,Neutral"/>
+    </CBehaviorBuff>
+    <CBehaviorPowerSource id="SquadReactorPowerSource">
+        <InfoIcon value="Assets\Textures\btn-building-terran-reactor-silver.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Radius value="5"/>
+    </CBehaviorPowerSource>
+    <CBehaviorBuff id="SquadRefineryMorph">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Requirements value="UseAutomatedRefinery"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <Duration value="0.1"/>
+        <ExpireEffect value="RefineryMorph2"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="ScavengingSystemsMechDeath2">
         <InfoFlags index="Hidden" value="1"/>
@@ -134,11 +414,23 @@
             <DeathResponse Chance="1" Effect="ScavengingSystemsSearchArea"/>
         </Modification>
     </CBehaviorBuff>
-    <CBehaviorBuff id="SpectreNuclearReactorQueue2">
+    <CBehaviorBuff id="SuqadShrikeTurret">
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
-        <Requirements value="HaveAttachedNuclearReactor"/>
-        <Modification QueueCount="1" QueueSize="3"/>
+        <Requirements value="ShrikeTurretResearched"/>
+        <Modification>
+            <WeaponEnableArray value="ShrikeTurret"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadMarauderSlow">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-slow.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="HasPsiStrike"/>
+        <RemoveValidatorArray value="NoPurificationNova"/>
+        <RemoveValidatorArray value="HasNovaPsiStrikeWalkSpeed"/>
+        <Duration value="1.5"/>
+        <Modification MoveSpeedMultiplier="0.5"/>
     </CBehaviorBuff>
     <CBehaviorUnitTracker id="SpriteLinkTracker">
         <BehaviorFlags index="Permanent" value="1"/>
@@ -151,11 +443,12 @@
         <InfoIcon value="Assets\Textures\btn-tips-resourcecaches.dds"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
-        <Duration value="8"/>
+        <Duration value="4"/>
         <Period value="2"/>
         <PeriodicEffect value="MultiMineralAutoHarvest"/>
         <DisableValidatorArray value="NotVespenCombine"/>
         <Player Value="Origin"/>
+        <BehaviorCategories index="User9" value="1"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="InfantryEnlargeRadius">
         <InfoFlags index="Hidden" value="1"/>
@@ -177,7 +470,7 @@
         <BehaviorCategories index="User9" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <MaxStackCount value="8"/>
-        <Period value="4"/>
+        <Period value="8"/>
         <PeriodicEffect value="MultiAutoMineralHarvestSearch"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="ResourceTerrazineCrazy">
@@ -211,6 +504,46 @@
             <HandledValue value="Absorbed"/>
             <Chance value="1"/>
         </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SuperStim2">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-upgrade-terran-superstimppack.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="SourceIsNotHellion"/>
+        <Duration value="15"/>
+        <Modification MoveSpeedMultiplier="1.5" AttackSpeedMultiplier="1.5"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SuperStim3">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-upgrade-terran-superstimppack.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="SourceIsNotHellion"/>
+        <Duration value="15"/>
+        <Modification MoveSpeedMultiplier="1.5" AttackSpeedMultiplier="1.5"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadSupplydrop">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\BTN-Building-Terran-SupplyDepot.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <DisableValidatorArray value="NotBuildingStasis"/>
+        <Modification Food="8"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadSupplyDropEnRoute">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <Duration value="4"/>
+        <ExpireEffect value="SquadSupplyDropApplyBehavior"/>
+        <Modification>
+            <AbilClassDisableArray index="CAbilMorph" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="TerranBuildingBurnDown3">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <Requirements value="FireSuppressionSystemsNotResearched"/>
+        <DisableValidatorArray value="BurnDownFire"/>
+        <Period value="0.3332"/>
+        <PeriodicEffect value="BurndownDamage"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="TransportDummy2">
         <InfoFlags index="Hidden" value="1"/>
@@ -350,8 +683,6 @@
     </CBehaviorBuff>
     <CBehaviorBuff id="MagazineUnitTracker">
         <BehaviorFlags index="Permanent" value="1"/>
-        <InfoFlags index="Hidden" value="1"/>
-        <BehaviorCategories index="User9" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <BuffFlags index="RefreshStack" value="1"/>
         <MaxStackCount value="8"/>
@@ -461,16 +792,6 @@
             <ResourceHarvestAmountBonus index="Minerals" value="5"/>
         </Modification>
     </CBehaviorBuff>
-    <CBehaviorBuff id="Slow2">
-        <Alignment value="Negative"/>
-        <InfoIcon value="Assets\Textures\btn-ability-terran-slow.dds"/>
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <RemoveValidatorArray value="HasPsiStrike"/>
-        <RemoveValidatorArray value="NoPurificationNova"/>
-        <RemoveValidatorArray value="HasNovaPsiStrikeWalkSpeed"/>
-        <Duration value="1.5"/>
-        <Modification MoveSpeedMultiplier="0.5"/>
-    </CBehaviorBuff>
     <CBehaviorBuff id="SpectreHoldFire2">
         <InfoIcon value="Assets\Textures\btn-ability-terran-holdfire.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -504,7 +825,6 @@
             <StateFlags index="SuppressFoodUsed" value="1"/>
             <StateFlags index="SuppressArmySelect" value="1"/>
             <StateFlags index="Uncommandable" value="1"/>
-            <StateFlags index="Unselectable" value="1"/>
             <StateFlags index="Untargetable" value="1"/>
             <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
             <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
@@ -629,5 +949,16 @@
         <Duration value="4"/>
         <Period value="1"/>
         <PeriodicEffect value="RedNuclearFlameThrowerDamage"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="DefenderCoreAnimationController">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <DisableValidatorArray value="NotStasis"/>
+        <DisableValidatorArray value="NotVortexd"/>
+        <DisableValidatorArray value="NotGravitonBeamd"/>
+        <DisableValidatorArray value="NotThunderCannond"/>
+        <Duration value="40"/>
     </CBehaviorBuff>
 </Catalog>
