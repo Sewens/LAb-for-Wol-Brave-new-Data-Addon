@@ -286,6 +286,81 @@
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilRedirectTarget>
+    <CAbilMorph id="BurrowUltraliskDown2">
+        <AbilSetId value="BrwD"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="BurrowDown">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <ActorKey value="BurrowDown"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="IgnorePlacement" value="0"/>
+        <Flags index="SuppressMovement" value="1"/>
+        <InfoArray Unit="UltraliskBurrowed" RandomDelayMax="0.25">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="2"/>
+            </SectionArray>
+            <SectionArray index="Collide">
+                <DurationArray index="Delay" value="1.5"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="1.8332"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilBuild id="SquadBuildNydusCanal">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:MorphsandBurrows"/>
+        <FlagArray index="Cancelable" value="0"/>
+        <InfoArray index="Build1" Unit="SquadGreaterNydusWorm" Time="5">
+            <Button DefaultButtonFace="NydusCanal"/>
+        </InfoArray>
+        <InfoArray index="Build2" Time="20">
+            <Button State="Restricted"/>
+        </InfoArray>
+        <InfoArray index="Build3">
+            <Button State="Restricted"/>
+        </InfoArray>
+        <Range value="500"/>
+        <EffectArray index="Start" value="NydusAlertDummy"/>
+        <EffectArray index="Finish" value="SquadBurrowChargePointSet"/>
+    </CAbilBuild>
+    <CAbilTransport id="SquadNydusCanalTransport">
+        <AbilSetId value="ULdS"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Load" DefaultButtonFace="NydusCanalLoad"/>
+        <CmdButtonArray index="UnloadAll" DefaultButtonFace="NydusCanalUnloadAll">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="UnloadAt">
+            <Flags index="Hidden" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="UnloadUnit">
+            <Flags index="Hidden" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="LoadAll">
+            <Flags index="Hidden" value="1"/>
+        </CmdButtonArray>
+        <Flags index="CargoDeath" value="1"/>
+        <Flags index="PlayerHold" value="1"/>
+        <Flags index="ShowCargoSize" value="0"/>
+        <Range value="0.5"/>
+        <MaxCargoCount value="255"/>
+        <MaxCargoSize value="8"/>
+        <TotalCargoSpace value="1020"/>
+        <InitialUnloadDelay value="0.5"/>
+        <LoadPeriod value="0.25"/>
+        <UnloadPeriod value="0.5"/>
+        <LoadValidatorArray value="NotSpawnling"/>
+        <LoadValidatorArray value="NotWidowMineTarget"/>
+    </CAbilTransport>
+    <CAbilMorphPlacement id="SquadBarracksLand" parent="TerranBuildingLand" unit="Barracks">
+        <Name value="Abil/Name/SquadBarracksLand"/>
+        <InfoArray index="0" Unit="SquadBarracks" CollideRange="0">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="2"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorphPlacement>
     <CAbilMorph id="BarracksReactorMorph2">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="Reactor" Requirements="ShowIfHaveBarrAddOnParent"/>
@@ -453,14 +528,13 @@
             <Flags index="AllowMinimap" value="0"/>
         </CmdButtonArray>
     </CAbilRedirectTarget>
-    <CAbilQueue id="SquadQueue8">
-        <EditorCategories value="Race:Neutral,AbilityorEffectType:Structures"/>
-        <QueueCount value="2"/>
-        <QueueSize value="8"/>
+    <CAbilQueue id="SquadQueue5">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <QueueSize value="5"/>
     </CAbilQueue>
     <CAbilEffectInstant id="SquadSalvageBunkerRefund" parent="Refund">
         <Name value="Abil/Name/SquadSalvageBunkerRefund"/>
-        <Effect index="0" value="SalvageDeath2"/>
+        <Effect index="0" value="SquadSalvageDeath"/>
         <Cost>
             <Resource index="Minerals" value="-75"/>
         </Cost>
@@ -497,7 +571,7 @@
         <MaxCargoCount value="8"/>
         <MaxCargoSize value="1"/>
         <TotalCargoSpace value="8"/>
-        <LoadCargoBehavior value="CCTransportDummy2"/>
+        <LoadCargoBehavior value="SquadCommandCenterTransportDummy"/>
         <LoadCargoEffect value="CCLoadDummy"/>
         <UnloadCargoEffect value="CCUnloadDummy"/>
         <SearchRadius value="8"/>
@@ -522,7 +596,7 @@
         </InfoArray>
         <InfoArray index="Train3" Time="40">
             <Button DefaultButtonFace="SquadGhost" State="Restricted" Requirements="HaveAttachedBarrTechLabOrAttachedTechReactorAndShadowOps"/>
-            <Unit value="SquadGhostAcademy"/>
+            <Unit value="SquadGhost"/>
         </InfoArray>
         <InfoArray index="Train4" Time="30">
             <Button DefaultButtonFace="SquadMarauder" State="Restricted" Requirements="HaveAttachedTechLab"/>
@@ -833,6 +907,41 @@
         <Activity value="UI/Upgrading"/>
         <ValidatorArray value="HasNoCargo"/>
     </CAbilMorph>
+    <CAbilEffectTarget id="SquadUltraliskBurrowCharge">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadBurrowChargeSwitch"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="RangeUsePathing" value="1"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Flags index="Smart" value="1"/>
+        <Cost>
+            <Cooldown Link="UltraliskBurrowChargeUltraliskBurrowCharge2UltraliskBurrowChargeSquadUltraliskBurrowCharge" Location="Unit" TimeUse="10"/>
+        </Cost>
+        <Range value="9"/>
+        <Arc value="360"/>
+        <SmartValidatorArray value="TargetIsEnemy"/>
+        <AutoCastFilters value="Ground,Visible;Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AutoCastRange value="9"/>
+        <AutoCastValidatorArray value="CasterNotHoldingPosition"/>
+        <AutoCastValidatorArray value="UltraliskHasntRecentlyAttacked"/>
+        <AutoCastValidatorArray value="TargetNotHarmless"/>
+        <AutoCastValidatorArray value="UltraliskBurrowChargeRangeFinder"/>
+        <AutoCastValidatorArray value="BurrowChargeMinimumRange"/>
+        <CastIntroTime value="0.5"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <CursorEffect value="SquadBurrowChargeTargetSearch"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="UltraliskBurrowCharge"/>
+    </CAbilEffectTarget>
+    <CAbilEffectInstant id="UltraliskWeaponCooldown2">
+        <Flags index="RequireTargetVision" value="0"/>
+        <Cost>
+            <Cooldown Location="Unit" TimeUse="1"/>
+        </Cost>
+        <CmdButtonArray index="Execute" DefaultButtonFace="UltraliskWeaponCooldown"/>
+    </CAbilEffectInstant>
     <CAbilEffectTarget id="VanillaScannerSweep">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Effect index="0" value="RedScannerSweep"/>
@@ -996,7 +1105,7 @@
         <MaxCargoCount value="30"/>
         <MaxCargoSize value="8"/>
         <TotalCargoSpace value="30"/>
-        <LoadCargoBehavior value="TransportDummy2"/>
+        <LoadCargoBehavior value="SquadHerculesTransportDummy"/>
         <UnloadPeriod value="0.2"/>
         <CalldownEffect value="TerranInstantJustice"/>
         <DeathUnloadEffect value="RescuePodsSet"/>
@@ -1043,10 +1152,10 @@
         <UseMarkerArray index="Channel" value="0"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="Disband"/>
     </CAbilEffectInstant>
-    <CAbilEffectTarget id="EMP2">
+    <CAbilEffectTarget id="SquadGhostEMP">
         <Alignment value="Negative"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Effect index="0" value="EMPLaunchMissile2"/>
+        <Effect index="0" value="EMPLaunchMissile"/>
         <Cost>
             <Vital index="Energy" value="75"/>
         </Cost>
@@ -1061,38 +1170,6 @@
             <Flags index="ShowInGlossary" value="0"/>
         </CmdButtonArray>
     </CAbilEffectTarget>
-    <CAbilBehavior id="GhostCloak2">
-        <AbilSetId value="Clok"/>
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <CmdButtonArray index="On" DefaultButtonFace="CloakOnGhost">
-            <Flags index="ToSelection" value="1"/>
-        </CmdButtonArray>
-        <CmdButtonArray index="Off" DefaultButtonFace="CloakOff">
-            <Flags index="ToSelection" value="1"/>
-        </CmdButtonArray>
-        <Flags index="Toggle" value="1"/>
-        <Flags index="Transient" value="1"/>
-        <Cost>
-            <Vital index="Energy" value="25"/>
-        </Cost>
-        <BehaviorArray value="GhostCloak"/>
-    </CAbilBehavior>
-    <CAbilEffectInstant id="GhostHoldFire2">
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Flags index="Transient" value="1"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="HoldFire" Requirements="GhostNotHoldingFire">
-            <Flags index="ShowInGlossary" value="0"/>
-            <Flags index="ToSelection" value="1"/>
-        </CmdButtonArray>
-    </CAbilEffectInstant>
-    <CAbilEffectInstant id="GhostWeaponsFree2">
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Flags index="Transient" value="1"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="WeaponsFree" Requirements="GhostHoldingFire">
-            <Flags index="ShowInGlossary" value="0"/>
-            <Flags index="ToSelection" value="1"/>
-        </CmdButtonArray>
-    </CAbilEffectInstant>
     <CAbilArmMagazine id="HeroArmNuke2">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <Launch value="ReleaseAtSource"/>
@@ -1146,7 +1223,7 @@
         <CursorEffect value="MedicFlashBangGrenadeSearch"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="NovaGadgetFlashBangGrenades2"/>
     </CAbilEffectTarget>
-    <CAbilEffectTarget id="Obliterate2">
+    <CAbilEffectTarget id="SquadSpectreObliterate">
         <Alignment value="Negative"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Cost>
@@ -1165,32 +1242,17 @@
         <UninterruptibleArray index="Finish" value="1"/>
         <AINotifyEffect value=""/>
         <ProgressButtonArray index="Prep" value="Obliterate"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="Obliterate" Requirements="UseUltrasonicPulse">
+        <CmdButtonArray index="Execute" DefaultButtonFace="Obliterate">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectTarget>
-    <CAbilBehavior id="RogueGhostCloak2">
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <CmdButtonArray index="On" DefaultButtonFace="CloakOnSpectre">
-            <Flags index="ToSelection" value="1"/>
-        </CmdButtonArray>
-        <CmdButtonArray index="Off" DefaultButtonFace="CloakOff">
-            <Flags index="ToSelection" value="1"/>
-        </CmdButtonArray>
-        <Flags index="Toggle" value="1"/>
-        <Flags index="Transient" value="1"/>
-        <Cost>
-            <Vital index="Energy" value="25"/>
-        </Cost>
-        <BehaviorArray value="SpectreCloaking"/>
-    </CAbilBehavior>
     <CAbilHarvest id="SCVGather">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
     </CAbilHarvest>
-    <CAbilEffectTarget id="Snipe2">
+    <CAbilEffectTarget id="SquadGhostSnipe">
         <Alignment value="Negative"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Effect index="0" value="SnipeDamage2"/>
+        <Effect index="0" value="SquadSnipeDamage"/>
         <Cost>
             <Vital index="Energy" value="25"/>
         </Cost>
@@ -1203,43 +1265,6 @@
         </Marker>
         <CmdButtonArray index="Execute" DefaultButtonFace="SniperBotSnipe"/>
     </CAbilEffectTarget>
-    <CAbilEffectInstant id="SpectreHoldFire2">
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Effect index="0" value="SpectreHoldFireSet2"/>
-        <Flags index="Transient" value="1"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="SpectreHoldFire" Requirements="SpectreNotHoldingFire">
-            <Flags index="ToSelection" value="1"/>
-        </CmdButtonArray>
-    </CAbilEffectInstant>
-    <CAbilEffectTarget id="SpectreNuke2">
-        <Alignment value="Negative"/>
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Range value="12"/>
-        <FinishTime value="2.5"/>
-        <CancelableArray index="Channel" value="1"/>
-        <UninterruptibleArray index="Channel" value="1"/>
-        <ValidatedArray index="Channel" value="0"/>
-        <AlertArray index="Cast" value="CalldownLaunch"/>
-        <CursorEffect value="SpectreNukeDamage"/>
-        <CalldownEffect value="SpectreNuke"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="SpectreNukeCalldown" Requirements="SpectreHaveNuke"/>
-        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
-    </CAbilEffectTarget>
-    <CAbilArmMagazine id="SpectreNukeSiloArmMagazine2">
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
-        <Launch value="ReleaseAtSource"/>
-        <InfoArray index="Ammo2" Time="60" Unit="SpectreNuke">
-            <Button DefaultButtonFace="SpectreNukeArm" Requirements="SpectreTrainNuke"/>
-        </InfoArray>
-        <CalldownEffect value="SpectreNuke"/>
-    </CAbilArmMagazine>
-    <CAbilEffectInstant id="SpectreWeaponsFree2">
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Flags index="Transient" value="1"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="WeaponsFree" Requirements="SpectreHoldingFire">
-            <Flags index="ToSelection" value="1"/>
-        </CmdButtonArray>
-    </CAbilEffectInstant>
     <CAbilArmMagazine id="SquadInfantry">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Flags index="IgnoreUnitCost" value="1"/>
@@ -1332,7 +1357,7 @@
             <Flags index="External" value="1"/>
             <Flags index="LeashRetarget" value="1"/>
         </InfoArray>
-        <InfoArray index="Ammo7" Manage="Recall" Unit="SquadGhostAcademy">
+        <InfoArray index="Ammo7" Manage="Recall" Unit="SquadGhost">
             <Charge>
                 <CountMax value="1"/>
                 <CountUse value="1"/>
@@ -1708,7 +1733,7 @@
             </SectionArray>
         </InfoArray>
     </CAbilMorph>
-    <CAbilEffectTarget id="TacNukeStrike2">
+    <CAbilEffectTarget id="GreenNuclearStrike">
         <TechPlayer value="Owner"/>
         <Alignment value="Negative"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -1775,7 +1800,7 @@
         <InfoArray index="Build9" Unit="SquadSensorTower" Time="25">
             <Button DefaultButtonFace="SensorTower" State="Restricted" Requirements="HaveEngineeringBay"/>
         </InfoArray>
-        <InfoArray index="Build10" Unit="SquadGhostAcademy" Time="40">
+        <InfoArray index="Build10" Unit="SquadGhost" Time="40">
             <Button DefaultButtonFace="GhostAcademy" State="Suppressed" Requirements="HaveBarracks"/>
         </InfoArray>
         <InfoArray index="Build11" Unit="SquadFactory" Time="60">
@@ -1820,39 +1845,9 @@
             <MismatchFlags index="Id" value="0"/>
         </Marker>
     </CAbilEffectTarget>
-    <CAbilEffectTarget id="SupplyPodUndergroundCharge">
-        <Alignment value="Negative"/>
+    <CAbilEffectTarget id="SquadSpectreUltrasonicPulse">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <DataCollection value="UltraliskBurrowCharge"/>
-        <Effect index="0" value="BurrowChargeSwitch"/>
-        <Flags index="AutoCast" value="1"/>
-        <Flags index="AutoCastOn" value="1"/>
-        <Flags index="RangeUsePathing" value="1"/>
-        <Flags index="RequireTargetVision" value="0"/>
-        <Flags index="Smart" value="1"/>
-        <Cost>
-            <Cooldown Link="UltraliskBurrowChargeUltraliskBurrowCharge2UltraliskBurrowChargeSupplyPodUndergroundCharge" Location="Unit" TimeUse="10"/>
-        </Cost>
-        <Range value="9"/>
-        <Arc value="360"/>
-        <SmartValidatorArray value="TargetIsEnemy"/>
-        <AutoCastFilters value="Ground,Visible;Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
-        <AutoCastRange value="9"/>
-        <AutoCastValidatorArray value="CasterNotHoldingPosition"/>
-        <AutoCastValidatorArray value="UltraliskHasntRecentlyAttacked"/>
-        <AutoCastValidatorArray value="TargetNotHarmless"/>
-        <AutoCastValidatorArray value="UltraliskBurrowChargeRangeFinder"/>
-        <AutoCastValidatorArray value="BurrowChargeMinimumRange"/>
-        <CastIntroTime value="0.5"/>
-        <UninterruptibleArray index="Cast" value="1"/>
-        <UninterruptibleArray index="Channel" value="1"/>
-        <UninterruptibleArray index="Finish" value="1"/>
-        <CursorEffect value="BurrowChargeTargetSearch"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="UltraliskBurrowCharge" Requirements="HaveHotSUltraliskBurrowCharge"/>
-    </CAbilEffectTarget>
-    <CAbilEffectTarget id="UltrasonicPulse2">
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Effect index="0" value="UltrasonicPulseLaunchMissile2"/>
+        <Effect index="0" value="SquadSpectreUltrasonicPulseLaunchMissile"/>
         <Cost>
             <Vital index="Energy" value="50"/>
             <Charge Link="Abil/PsiStorm"/>
@@ -1945,13 +1940,14 @@
             </SectionArray>
         </InfoArray>
     </CAbilMorph>
-    <CAbilQueue id="SquadQueue5">
-        <EditorCategories value="Race:Neutral,AbilityorEffectType:Structures"/>
-        <QueueSize value="5"/>
-    </CAbilQueue>
     <CAbilRedirectTarget id="healRedirect2"/>
     <CAbilQueue id="que12">
         <EditorCategories value="Race:Neutral,AbilityorEffectType:Structures"/>
         <QueueSize value="1"/>
+    </CAbilQueue>
+    <CAbilQueue id="SquadQueue8">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <QueueCount value="2"/>
+        <QueueSize value="8"/>
     </CAbilQueue>
 </Catalog>
