@@ -66,6 +66,9 @@ Abil/Name/SquadHerculesTransport=Squad Hercules Transport
 Abil/Name/SquadInfantry=Squad Infantry Magazine
 Abil/Name/SquadMedicHeal=Squad Medic Heal
 Abil/Name/SquadNydusCanalTransport=Squad Nydus Canal Transport
+Abil/Name/SquadPickupScrapLarge=Squad Pickup Scrap Large
+Abil/Name/SquadPickupScrapMedium=Squad Pickup Scrap Medium
+Abil/Name/SquadPickupScrapSmall=Squad Pickup Scrap Small
 Abil/Name/SquadQueue5=Squad Queue 5
 Abil/Name/SquadQueue8=Squad Queue 8
 Abil/Name/SquadSalvageBunkerRefund=Squad Salvage Bunker Refund
@@ -104,6 +107,7 @@ Actor/AddonIndicator/SquadTechReactor=TR
 Actor/AddonIndicator/TechLab2=T
 Behavior/Name/AlphaScannerInvisible=Alpha Scanner Invisible
 Behavior/Name/BlueScannerEMPDOT=Blue Scanner EMP DOT
+Behavior/Name/BurstSquadDiamondbackCapacitors=Burst Squad Diamondback Capacitors
 Behavior/Name/DamageBuffer=Damage Buffer
 Behavior/Name/DefensiveMatrix2=Defensive Matrix
 Behavior/Name/DisableMagazine=DisableMagazine
@@ -128,6 +132,8 @@ Behavior/Name/MultiMineralAutoHarvestAura=Multi Mineral Auto Harvest Aura
 Behavior/Name/PassengerAutoFire=Passenger Auto Fire
 Behavior/Name/PredatorUnitTracker=PredatorUnitTracker
 Behavior/Name/ReaperUnitTracker=Reaper Unit Tracker
+Behavior/Name/RecycleStructureCauseDropPickup=Recycle Structure Cause Drop Pickup
+Behavior/Name/RecycleStructureDropPickup=Recycle Structure Drop Pickup
 Behavior/Name/RedNuclearFireDOT=Red Nuclear Fire DOT
 Behavior/Name/RedScannerFireDOT=Red Scanner Fire DOT
 Behavior/Name/ResourceFragile=Resource Fragile
@@ -173,7 +179,7 @@ Behavior/Tooltip/SquadInfantrySuperStimpack=This unit moves and attacks more qui
 Behavior/Tooltip/SquadMarauderSlow=Target's movement speed is reduced for a short period of time.
 Behavior/Tooltip/SquadSupplydrop=This Supply Depot is providing an additional 8 supply.
 Behavior/Tooltip/StimpackMarauder2=This unit moves and attacks more quickly while under the effects of Stimpack.
-Behavior/Tooltip/UnitSmallAddMaxLife=<c val="F0F50A"></c>Current stack: </c><d ref="$BehaviorStackCount:Unit Smal lAdd Max Life$"/>
+Behavior/Tooltip/UnitSmallAddMaxLife=<c val="F0F50A"></c>Current Magazine unit: </c><d ref="$BehaviorStackCount:Unit Small Add Max Life$"/>
 Button/Name/AblativeScales2=Kinetic Foam
 Button/Name/BuildDefenceStructure=Build Defence Structure
 Button/Name/BulletTime=Bullet Time
@@ -188,6 +194,7 @@ Button/Name/D8Charge2=G-4 Cluster Bombs
 Button/Name/DefenderCoreSentinelMissiles=Defender Core Sentinel Missiles
 Button/Name/DefensiveMatrix2=Defensive Matrix
 Button/Name/EMP2=EMP Round
+Button/Name/HarvestDropPoint=Harvest Drop Point
 Button/Name/HireSpartanCompany2=Spartan Company
 Button/Name/IncineratorNozzles2=Incinerator Gauntlets
 Button/Name/InfantrySquadCover=Infantry Squad Cover
@@ -233,6 +240,7 @@ Button/Name/SquadMedic=Squad Medic
 Button/Name/SquadPredator=Squad Predator
 Button/Name/SquadReaper=Squad Reaper
 Button/Name/SquadSCV=Squad SCV
+Button/Name/SquadSCVGather=Squad SCV Gather
 Button/Name/SquadSiegeTank=Squad Siege Tank
 Button/Name/SquadSpectre=Squad Spectre
 Button/Name/SquadVikin=Squad Vikin
@@ -324,6 +332,7 @@ Button/Tooltip/SquadBarracksFlying=Infantry-production facility.<n/><n/><c val="
 Button/Tooltip/SquadBunker=Defensive structure. Able to protect up to <d ref="Abil,BunkerTransport,TotalCargoSpace"/> infantry unit slots. Units inside the Bunker have +1 range to their attacks. Bunkers can be salvaged.
 Button/Tooltip/SquadCommandCenter=Primary structure. Used to receive gathered resources. Can use the Lift Off ability and can upgrade into an Orbital Command.<n/><n/><c val="ffff8a">Enables:</c><n/>- SCVs
 Button/Tooltip/SquadCommandCenterFlying=Primary structure. Used to train SCVs and receive gathered resources. Can upgrade into an Orbital Command or Planetary Fortress.
+Button/Tooltip/SquadDiamondback=Fast, high-damage hovertank. Rail Gun can fire while the Diamondback is moving.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/SquadEngineeringBay=Contains upgrades for Terran infantry and structures. <n/><n/><c val="ffff8a">Enables:</c><n/>- Missile Turrets from SCVs
 Button/Tooltip/SquadFactory=Vehicle-production facility. <n/><n/><c val="ffff8a">Enables:</c><n/>- Hellbats
 Button/Tooltip/SquadFactoryFactory=Factory must land to start unit production.
@@ -340,6 +349,9 @@ Button/Tooltip/SquadMercCompound=Trains Mercenary units.
 Button/Tooltip/SquadMissileTurret=Primary anti-air defensive structure. <n/><n/><c val="#ColorAttackInfo">Can attack air units.</c><n/><c val="FFE303">Detector</c>
 Button/Tooltip/SquadOrbitalCommandFlying=Primary structure. Must land to receive resources, produce units, or use abilities.
 Button/Tooltip/SquadOrbitalCommandUnit=Primary structure. Used to train SCVs and receive gathered resources. Can use the Scanner Sweep and Calldown: Extra Supplies abilities.
+Button/Tooltip/SquadPickupScrapLargeText=<s val="Kicker_Minerals">+<d ref="Effect,SquadPickupScrapLargeResources,Resources[0]"/> </s><n/><s val="Kicker_Gas">+<d ref="Effect,SquadPickupScrapLargeResources,Resources[1]"/> </s>
+Button/Tooltip/SquadPickupScrapMediumText=<s val="Kicker_Minerals">+<d ref="Effect,SquadPickupScrapMediumResources,Resources[0]"/> </s><n/><s val="Kicker_Gas">+<d ref="Effect,SquadPickupScrapMediumResources,Resources[1]"/> </s>
+Button/Tooltip/SquadPickupScrapSmallText=<s val="Kicker_Minerals">+<d ref="Effect,SquadPickupScrapSmallResources,Resources[0]"/> </s><n/><s val="Kicker_Gas">+<d ref="Effect,SquadPickupScrapSmallResources,Resources[1]"/> </s>
 Button/Tooltip/SquadPlanetaryFortress=Primary structure. Used to train SCVs and receive gathered resources. Has exceptional combat capabilities that are extremely potent against swarms of small units.<n/><n/><c val="ffff8a">Can attack ground units.</c>
 Button/Tooltip/SquadPredator=Anti-infantry specialist that deals area damage with each attack.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/SquadPylon=Provides supply.<n/>Supply allows you to warp in more units.<n/>Creates power for nearby structures.
@@ -348,6 +360,7 @@ Button/Tooltip/SquadReaper=Raider. Capable of jumping up and down cliffs. Throws
 Button/Tooltip/SquadRefinery=Built over a Vespene Geyser to allow harvesting of vespene gas.
 Button/Tooltip/SquadRefineryRich=Built over a Vespene Geyser to allow harvesting of vespene gas.
 Button/Tooltip/SquadSCV=Basic worker unit. Can gather resources, build Terran structures, and repair.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/SquadSCVGather=Orders unit to gather resources from a selected Mineral Field or Vespene Geyser.
 Button/Tooltip/SquadSCVJumper=Basic worker unit. Can gather resources, build Terran structures, and repair.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/SquadSensorTower=Reveals the locations of enemy units at long range. The Sensor Tower's detection area is visible to the enemy.
 Button/Tooltip/SquadSiegeTank=Request 2 Siege Breaker Mercenaries.<n/><n/>Elite unit of ex-confederate Siege Tanks.
@@ -547,6 +560,12 @@ Effect/Name/PunisherGrenadesLM2=Punisher Grenades
 Effect/Name/PunisherGrenadesSet2=Punisher Grenades
 Effect/Name/PunisherGrenadesSlow2=Punisher Grenades
 Effect/Name/PunisherGrenadesU2=Punisher Grenades
+Effect/Name/RecycleDropPickupSwitch=Recycle Drop Pickup Switch
+Effect/Name/RecycleStructureCauseDropPickup=Recycle Structure Cause Drop Pickup
+Effect/Name/RecycleStructureDropPickup=Recycle Structure Drop Pickup
+Effect/Name/RecycleonKillLargeDropPickup=Recycle on Kill Large Drop Pickup
+Effect/Name/RecycleonKillMediumDropPickup=Recycle on Kill Medium Drop Pickup
+Effect/Name/RecycleonKillSmallDropPickup=Recycle on Kill Small Drop Pickup
 Effect/Name/RedNuclear=Red Nuclear
 Effect/Name/RedNuclearDamage=Red Nuclear Damage
 Effect/Name/RedNuclearDetonate=Red Nuclear Detonate
@@ -611,6 +630,11 @@ Effect/Name/SquadBurrowChargeTargetSearch=Squad Burrow Charge Target Search
 Effect/Name/SquadBurrowChargeTargetSearchAlly=Squad Burrow Charge Target Search Ally
 Effect/Name/SquadBurrowChargeTargetSet=Squad Burrow Charge Target Set
 Effect/Name/SquadC10CanisterRifle=Squad C-10 Canister Rifle
+Effect/Name/SquadDiamondbackBurstCapacitorsApplyAttackingBehavior=Squad Diamondback Burst Capacitors Apply Attacking Behavior
+Effect/Name/SquadDiamondbackBurstCapacitorsApplyChargeBehavior=Squad Diamondback Burst Capacitors Apply Charge Behavior
+Effect/Name/SquadDiamondbackBurstCapacitorsApplyDamageBuff=Squad Diamondback Burst Capacitors Apply Damage Buff
+Effect/Name/SquadDiamondbackEvisceratorBeam=Squad Diamondback Eviscerator Beam
+Effect/Name/SquadDiamondbackEvisceratorSet=Squad Diamondback Eviscerator Set
 Effect/Name/SquadFirebatFlameThrowerApplyDoTBehavior=Squad Firebat Flame Thrower Apply DoT Behavior
 Effect/Name/SquadFirebatFlameThrowerDamage=Squad Firebat Flame Thrower Damage
 Effect/Name/SquadFirebatFlameThrowerDamageSet=Squad Firebat Flame Thrower Damage Set
@@ -623,6 +647,14 @@ Effect/Name/SquadMedicHeal=Squad Medic Heal
 Effect/Name/SquadNukePersistent=Squad Nuke Persistent
 Effect/Name/SquadNukeSuicide=Squad Nuke Suicide
 Effect/Name/SquadP38ScytheGuassPistol=Squad P-38 Scythe Guass Pistol
+Effect/Name/SquadPickupKill=Squad Pickup Kill
+Effect/Name/SquadPickupKillDelay=Squad Pickup Kill Delay
+Effect/Name/SquadPickupScrapLargeResources=Squad Pickup Scrap Large Resources
+Effect/Name/SquadPickupScrapLargeSet=Squad Pickup Scrap Large Set
+Effect/Name/SquadPickupScrapMediumResources=Squad Pickup Scrap Medium Resources
+Effect/Name/SquadPickupScrapMediumSet=Squad Pickup Scrap Medium Set
+Effect/Name/SquadPickupScrapSmallResources=Squad Pickup Scrap Small Resources
+Effect/Name/SquadPickupScrapSmallSet=Squad Pickup Scrap Small Set
 Effect/Name/SquadPredatorRetributionFieldDamage=Squad Predator Retribution Field Damage
 Effect/Name/SquadPredatorRetributionFieldSearch=Squad Predator Retribution Field Search
 Effect/Name/SquadPredatorRetributionFieldSet=Squad Predator Retribution Field Set
@@ -667,15 +699,17 @@ Effect/Name/UnitSmallMaxLifeApply=Unit Small Max Life Apply
 Effect/Name/UnitSmallMaxLifeRemove=Unit Small Max Life Remove
 Effect/Name/Yamato2=Yamato Cannon (Missile)
 Effect/Name/YamatoU2=Yamato Cannon (Damage)
+Lawbda=
 MustWorker=Target Must be worker
 Reward/Name/AddSquad=AddSquad
 Reward/Name/Decal_Terran_0062_012=Enband
 Reward/Name/Disband=DisbandSquad
+SimpleDisplay/SquadSCVGather=<IMG path="Assets\Textures\tutorialmouserightbuttondown.dds" alignment="absolutemiddle"/> <s val="@@@SimpleCommandRow">to Gather Resources</s>
 Unit/Name/AdvanceEngineBay=Advance EngineBay
 Unit/Name/ArtanisDummy=Artanis Dummy
 Unit/Name/Barracks=Squad Barracks Flying
 Unit/Name/CaptainDukesRevenge=Captain Dukes Revenge
-Unit/Name/CaptainExcavator=Captain Excavator
+Unit/Name/CaptainExcavator=Mobile Destruction Vehicle
 Unit/Name/CaptainFreeman=Captain Freeman
 Unit/Name/CaptainPredator=Captain Predator
 Unit/Name/CommandCenter=Command Center Flying
@@ -695,12 +729,15 @@ Unit/Name/HammerSecurity2=Hammer Securities
 Unit/Name/HerculesDropCallDownTest=Hercules Drop Call Down Test
 Unit/Name/HurricaneMissileLeft2=Hurricane Missile Left
 Unit/Name/HurricaneMissileRight2=Hurricane Missile Right
+Unit/Name/LargeScrapSalvagex33=Large Scrap Salvagex33
 Unit/Name/LongboltMissileWeapon2=Longbolt Missile
 Unit/Name/Medic3=Medic
 Unit/Name/MedicFlashbangGrenades=Medic Flashbang Grenades
+Unit/Name/MediumScrapSalvagex22=Medium Scrap Salvagex22
 Unit/Name/Mulelisk=Mulelisk
 Unit/Name/NucolorAcademy=Nucolor Academy
 Unit/Name/PunisherGrenadesLMWeapon2=Punisher Grenades
+Unit/Name/SmallScrapSalvagex11=Small Scrap Salvagex11
 Unit/Name/SquadArmory=Squad Armory
 Unit/Name/SquadAutomatedRefinery=Squad Automated Refinery
 Unit/Name/SquadBarracks=Squad Barracks
@@ -708,6 +745,7 @@ Unit/Name/SquadBarracksFlying=Squad Barracks Flying
 Unit/Name/SquadBulletTimeWarpUnit=Squad Bullet Time Warp Unit
 Unit/Name/SquadBunker=Squad Bunker
 Unit/Name/SquadCommandCenter=Squad Command Center
+Unit/Name/SquadDiamondback=Squad Diamondback
 Unit/Name/SquadEngineeringBay=Squad Engineering Bay
 Unit/Name/SquadFactory=Squad Factory
 Unit/Name/SquadFirebat=Squad Firebat
@@ -813,6 +851,7 @@ Weapon/Name/LongboltMissile2=Longbolt Missile
 Weapon/Name/MedicFlashGrenade=Medic Flash Grenade
 Weapon/Name/SCVFusionCutter=SCV Fusion Cutter
 Weapon/Name/ShrikeTurret2=Shrike Turret
+Weapon/Name/SquadDiamondbackEvisceratorRailGun=Squad Diamondback Eviscerator Rail Gun
 Weapon/Name/SquadFirebatPerditionFlamethrower=Squad Firebat Perdition Flamethrower
 Weapon/Name/SquadGhostC10CanisterRifle=Squad Ghost C-10 Canister Rifle
 Weapon/Name/SquadMarauderPunisherGrenades=Squad Marauder Punisher Grenades

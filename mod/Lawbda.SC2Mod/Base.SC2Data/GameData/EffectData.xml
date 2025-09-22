@@ -18,6 +18,20 @@
         <EditorCategories value="Race:Terran"/>
         <Cost Abil="SquadInfantry,Ammo4" ChargeCountUse="-1"/>
     </CEffectModifyUnit>
+    <CEffectApplyBehavior id="SquadDiamondbackBurstCapacitorsApplyAttackingBehavior">
+        <ValidatorArray index="0" value="BurstCapacitorsPurchased"/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="SquadDiamondbackBurstCapacitorsAttacking"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadDiamondbackBurstCapacitorsApplyChargeBehavior">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadDiamondbackBurstCapacitorsCharging"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadDiamondbackBurstCapacitorsApplyDamageBuff">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="BurstSquadDiamondbackCapacitors"/>
+    </CEffectApplyBehavior>
     <CEffectSet id="DeathMarineChain">
         <EditorCategories value="Race:Terran"/>
         <DamageModifierSource Value="CasterOuter"/>
@@ -38,6 +52,19 @@
         <EffectArray value="UnitHugeMaxLifeApply"/>
         <EffectArray value="LootOnDealDamage"/>
     </CEffectSet>
+    <CEffectSet id="SquadDiamondbackEvisceratorSet">
+        <ValidatorArray value="CasterIsNotHidden"/>
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadDiamondbackEvisceratorBeam"/>
+        <EffectArray value="SquadDiamondbackBurstCapacitorsApplyAttackingBehavior"/>
+    </CEffectSet>
+    <CEffectDamage id="SquadDiamondbackEvisceratorBeam" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <AttributeBonus index="Armored" value="20"/>
+        <Kind value="Ranged"/>
+        <Amount value="20"/>
+        <Death value="Blast"/>
+    </CEffectDamage>
     <CEffectRemoveBehavior id="EnergyHugeMaxandMediumRegenerationRemove">
         <EditorCategories value="Race:Terran"/>
         <BehaviorLink value="EnergyHugeMaxandMediumRegeneration"/>
@@ -104,10 +131,75 @@
         <EditorCategories value="Race:Terran"/>
         <BehaviorLink value="UnitAddMoveSpeedTier5"/>
     </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="RecycleStructureCauseDropPickup">
+        <ValidatorArray index="0" removed="1"/>
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="RecycleStructureDropPickup">
+        <ValidatorArray index="0" removed="1"/>
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="SquadPickupKill">
+        <EditorCategories value=""/>
+        <ImpactLocation Value="SourceUnit"/>
+        <Flags index="Kill" value="1"/>
+        <Flags index="NoKillCredit" value="1"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="SquadPickupKillDelay">
+        <PeriodCount value="1"/>
+        <PeriodicEffectArray value="SquadPickupKill"/>
+        <PeriodicPeriodArray value="0.1"/>
+    </CEffectCreatePersistent>
+    <CEffectModifyPlayer id="SquadPickupScrapLargeResources">
+        <EditorCategories value=""/>
+        <Resources index="Minerals" value="400"/>
+        <Resources index="Vespene" value="125"/>
+    </CEffectModifyPlayer>
+    <CEffectSet id="SquadPickupScrapLargeSet">
+        <EditorCategories value=""/>
+        <EffectArray value="SquadPickupScrapLargeResources"/>
+        <EffectArray value="SquadPickupKillDelay"/>
+    </CEffectSet>
+    <CEffectModifyPlayer id="SquadPickupScrapSmallResources">
+        <EditorCategories value=""/>
+        <Resources index="Minerals" value="100"/>
+        <Resources index="Vespene" value="25"/>
+    </CEffectModifyPlayer>
+    <CEffectModifyPlayer id="SquadPickupScrapMediumResources">
+        <EditorCategories value=""/>
+        <Resources index="Minerals" value="200"/>
+        <Resources index="Vespene" value="75"/>
+    </CEffectModifyPlayer>
+    <CEffectSet id="SquadPickupScrapSmallSet">
+        <EditorCategories value=""/>
+        <EffectArray value="SquadPickupScrapSmallResources"/>
+        <EffectArray value="SquadPickupKillDelay"/>
+    </CEffectSet>
+    <CEffectSwitch id="RecycleDropPickupSwitch">
+        <EditorCategories value="Race:Terran"/>
+        <CaseArray Validator="StructureLifeBelow400" Effect="RecycleonKillSmallDropPickup"/>
+        <CaseArray Validator="StructureLifeBelow1000" Effect="RecycleonKillMediumDropPickup"/>
+        <CaseArray Validator="StructureLifeBelow1500" Effect="RecycleonKillLargeDropPickup"/>
+        <ValidatorArray value="IsStructure"/>
+    </CEffectSwitch>
+    <CEffectCreateUnit id="RecycleonKillLargeDropPickup">
+        <EditorCategories value="Race:Terran"/>
+        <SpawnUnit value="LargeScrapSalvagex33"/>
+    </CEffectCreateUnit>
+    <CEffectCreateUnit id="RecycleonKillSmallDropPickup">
+        <EditorCategories value="Race:Terran"/>
+        <SpawnUnit value="SmallScrapSalvagex11"/>
+    </CEffectCreateUnit>
+    <CEffectCreateUnit id="RecycleonKillMediumDropPickup">
+        <EditorCategories value="Race:Terran"/>
+        <SpawnUnit value="MediumScrapSalvagex22"/>
+    </CEffectCreateUnit>
     <CEffectRemoveBehavior id="ResourceMineralAssassinRemove">
-        <ValidatorArray index="0" value="IsWorker"/>
+        <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
         <BehaviorLink value="ResourceMineralAssassin"/>
+        <WhichUnit Value="CasterOuter"/>
+        <Count value="1"/>
     </CEffectRemoveBehavior>
     <CEffectApplyBehavior id="SquadBurrowChargeCasterApplyBehavior">
         <EditorCategories value="Race:Zerg"/>
@@ -288,6 +380,11 @@
         <WhichLocation Value="TargetUnit"/>
         <PeriodicPeriodArray value="0.2"/>
     </CEffectCreatePersistent>
+    <CEffectSet id="SquadPickupScrapMediumSet">
+        <EditorCategories value=""/>
+        <EffectArray value="SquadPickupScrapMediumResources"/>
+        <EffectArray value="SquadPickupKillDelay"/>
+    </CEffectSet>
     <CEffectDamage id="SquadReaperD8ChargeDamage">
         <EditorCategories value="Race:Terran"/>
         <ResponseFlags index="Acquire" value="1"/>
@@ -412,7 +509,7 @@
         <EffectArray value="MultiMineralAutoHarvestAura"/>
     </CEffectSet>
     <CEffectApplyBehavior id="AddDeathResponseSquad">
-        <EditorCategories value=""/>
+        <EditorCategories value="Race:Terran"/>
         <Behavior value="MagazineDeathResponse"/>
     </CEffectApplyBehavior>
     <CEffectRemoveBehavior id="DeathResponseRemoveSquad">
@@ -1696,6 +1793,7 @@
         <EffectArray value="AddSCV"/>
         <EffectArray value="InfantryBasicChain"/>
         <EffectArray value="UnitHugeMaxLifeApply"/>
+        <EffectArray value="RecycleStructureCauseDropPickup"/>
     </CEffectSet>
     <CEffectDamage id="SquadPredatorRetributionFieldDamage">
         <EditorCategories value="Race:Terran"/>
@@ -1862,6 +1960,7 @@
         <BehaviorLink value="UnitSmallAddMaxLife"/>
         <ValidatorArray index="0" removed="1"/>
         <WhichUnit Value="CasterOuter"/>
+        <Count value="1"/>
     </CEffectRemoveBehavior>
     <CEffectLaunchMissile id="Yamato2">
         <ValidatorArray index="0" value="YamatoTargetFilters"/>

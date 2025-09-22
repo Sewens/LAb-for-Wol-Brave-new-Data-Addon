@@ -308,6 +308,40 @@
             </SectionArray>
         </InfoArray>
     </CAbilMorph>
+    <CAbilEffectTarget id="SquadPickupScrapLarge">
+        <Effect index="0" value="SquadPickupScrapLargeSet"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="ReExecutable" value="1"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Cost>
+            <Cooldown TimeUse="0.5"/>
+        </Cost>
+        <Range value="1"/>
+        <Arc value="360"/>
+        <AutoCastFilters value="Ground;Structure,Missile,Destructible,Stasis,Dead,Hidden,Invulnerable,Benign"/>
+        <AutoCastRange value="1"/>
+        <AutoCastValidatorArray value="PickupCheck"/>
+        <FinishTime value="3"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="PickupScrapLarge"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadPickupScrapSmall">
+        <Effect index="0" value="SquadPickupScrapSmallSet"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="ReExecutable" value="1"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Cost>
+            <Cooldown TimeUse="0.5"/>
+        </Cost>
+        <Range value="1"/>
+        <Arc value="360"/>
+        <AutoCastFilters value="Ground;Structure,Missile,Destructible,Stasis,Dead,Hidden,Invulnerable,Benign"/>
+        <AutoCastRange value="1"/>
+        <AutoCastValidatorArray value="PickupCheck"/>
+        <FinishTime value="3"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="PickupScrapSmall"/>
+    </CAbilEffectTarget>
     <CAbilBuild id="SquadBuildNydusCanal">
         <EditorCategories value="Race:Zerg,AbilityorEffectType:MorphsandBurrows"/>
         <FlagArray index="Cancelable" value="0"/>
@@ -528,6 +562,23 @@
             <Flags index="AllowMinimap" value="0"/>
         </CmdButtonArray>
     </CAbilRedirectTarget>
+    <CAbilEffectTarget id="SquadPickupScrapMedium">
+        <Effect index="0" value="SquadPickupScrapMediumSet"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="ReExecutable" value="1"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Cost>
+            <Cooldown TimeUse="0.5"/>
+        </Cost>
+        <Range value="1"/>
+        <Arc value="360"/>
+        <AutoCastFilters value="Ground;Structure,Missile,Destructible,Stasis,Dead,Hidden,Invulnerable,Benign"/>
+        <AutoCastRange value="1"/>
+        <AutoCastValidatorArray value="PickupCheck"/>
+        <FinishTime value="3"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="PickupScrapMedium"/>
+    </CAbilEffectTarget>
     <CAbilQueue id="SquadQueue5">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <QueueSize value="5"/>
@@ -1272,8 +1323,8 @@
         <Flags index="ShowStatus" value="0"/>
         <Flags index="Transient" value="1"/>
         <Flags index="WaitForFood" value="0"/>
-        <Leash value="1.5"/>
-        <InfoArray index="Ammo1" Distance="0.55" Manage="Recall" Unit="SquadSCV">
+        <Leash value="1"/>
+        <InfoArray index="Ammo1" Manage="Recall" Unit="SquadSCV">
             <Charge>
                 <CountMax value="1"/>
                 <CountUse value="1"/>
@@ -1287,7 +1338,7 @@
             <Flags index="External" value="1"/>
             <Flags index="LeashRetarget" value="1"/>
         </InfoArray>
-        <InfoArray index="Ammo2" Distance="0.55" Manage="Recall" Unit="SquadMarine">
+        <InfoArray index="Ammo2" Manage="Recall" Unit="SquadMarine">
             <Charge>
                 <CountMax value="1"/>
                 <CountUse value="1"/>
@@ -1301,7 +1352,7 @@
             <Flags index="External" value="1"/>
             <Flags index="LeashRetarget" value="1"/>
         </InfoArray>
-        <InfoArray index="Ammo3" Distance="0.55" Manage="Recall" Unit="SquadMedic">
+        <InfoArray index="Ammo3" Manage="Recall" Unit="SquadMedic">
             <Charge>
                 <CountMax value="1"/>
                 <CountUse value="1"/>
@@ -1315,7 +1366,7 @@
             <Flags index="External" value="1"/>
             <Flags index="LeashRetarget" value="1"/>
         </InfoArray>
-        <InfoArray index="Ammo4" Distance="0.55" Manage="Recall" Unit="SquadFirebat">
+        <InfoArray index="Ammo4" Manage="Recall" Unit="SquadFirebat">
             <Charge>
                 <CountMax value="1"/>
                 <CountUse value="1"/>
@@ -1329,7 +1380,7 @@
             <Flags index="External" value="1"/>
             <Flags index="LeashRetarget" value="1"/>
         </InfoArray>
-        <InfoArray index="Ammo5" Distance="0.55" Manage="Recall" Unit="SquadMarauder">
+        <InfoArray index="Ammo5" Manage="Recall" Unit="SquadMarauder">
             <Charge>
                 <CountMax value="1"/>
                 <CountUse value="1"/>
@@ -1343,7 +1394,7 @@
             <Flags index="External" value="1"/>
             <Flags index="LeashRetarget" value="1"/>
         </InfoArray>
-        <InfoArray index="Ammo6" Distance="0.55" Manage="Recall" Unit="SquadReaper">
+        <InfoArray index="Ammo6" Manage="Recall" Unit="SquadReaper">
             <Charge>
                 <CountMax value="1"/>
                 <CountUse value="1"/>
@@ -1371,7 +1422,7 @@
             <Flags index="External" value="1"/>
             <Flags index="LeashRetarget" value="1"/>
         </InfoArray>
-        <InfoArray index="Ammo8" Distance="0.55" Manage="Recall" Unit="SquadSpectre">
+        <InfoArray index="Ammo8" Manage="Recall" Unit="SquadSpectre">
             <Charge>
                 <CountMax value="1"/>
                 <CountUse value="1"/>
@@ -1406,6 +1457,7 @@
         <ExternalAngle value="315"/>
         <ExternalAngle value="135"/>
         <MaxCount value="4"/>
+        <SharedFlags index="TargetSnapToUnitRadius" value="1"/>
     </CAbilArmMagazine>
     <CAbilEffectTarget id="AddMarineToSquad">
         <Alignment value="Positive"/>

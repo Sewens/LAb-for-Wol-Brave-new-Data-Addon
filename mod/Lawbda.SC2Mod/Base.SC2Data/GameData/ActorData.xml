@@ -100,6 +100,120 @@
     <CActorSplat id="ArmorySplat2" parent="GenericUnitSplat" unitName="SquadArmory">
         <Model value="ArmorySplat"/>
     </CActorSplat>
+    <CActorTurret id="SquadDiamondbackTurret">
+        <On Terms="TurretEnable.SquadDiamondback" Send="Create"/>
+    </CActorTurret>
+    <CActorUnit id="SquadDiamondback" parent="GenericUnitStandard" unitName="SquadDiamondback">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="UnloadDropAnim"/>
+        <On Terms="Abil.attack.ReadyStop" Target="SquadDiamondbackAttackBeam" Send="SetOpacity 0.000000 0.250000"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create Diamondback_Land"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit HaveVoidShade" Send="DeathCustomize Shadow"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
+        <Model value="MengskDiamondback"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="MengskDiamondback"/>
+        <DeathArray index="Normal" ModelLink="MengskDiamondbackDeath" SoundLink="Diamondback_Explode"/>
+        <DeathCustoms>
+            <ModelLink value="DeathVoidShadowMedium"/>
+            <SoundLink value="ShadowUnit_DeathFX"/>
+            <VoiceLink value="ShadowUnit_DeathVox"/>
+            <Name value="Shadow"/>
+        </DeathCustoms>
+        <PlacementModel value="MengskDiamondback"/>
+        <PortraitModel value="DiamondbackPortrait"/>
+        <BarOffset value="80"/>
+        <BarWidth value="102"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Diamondback.dds"/>
+        </GroupIcon>
+        <GroupSoundArray index="Birth" value="Diamondback_Birth"/>
+        <GroupSoundArray index="Ready" value="Diamondback_Ready"/>
+        <GroupSoundArray index="Help" value="Diamondback_Help"/>
+        <GroupSoundArray index="What" value="Diamondback_What"/>
+        <GroupSoundArray index="Yes" value="Diamondback_Yes"/>
+        <GroupSoundArray index="Attack" value="Diamondback_Attack"/>
+        <GroupSoundArray index="Pissed" value="SpiderMinePissed"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <NameOffset value="40"/>
+        <SoundArray index="Ready" value="Diamondback_Ready"/>
+        <SoundArray index="Help" value="Diamondback_Help"/>
+        <SoundArray index="What" value="Diamondback_What"/>
+        <SoundArray index="Yes" value="Diamondback_Yes"/>
+        <SoundArray index="Attack" value="Diamondback_Attack"/>
+        <SoundArray index="Pissed" value="Diamondback_Pissed"/>
+        <SoundArray index="Movement" value="Diamondback_Movement"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-diamondback.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Diamondback.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="SquadDiamondbackAttack" parent="GenericAttack" effectAttack="SquadDiamondbackEvisceratorBeam">
+        <LaunchAttachQuery Methods="AMFilterWeapon"/>
+        <LaunchAssets Sound="Diamondback_AttackImpact"/>
+        <ImpactPhysics Name="RailgunImpact" MatchKeys="Basic" Physics="MengskDiamondbackAttackDeathForce"/>
+    </CActorAction>
+    <CActorBeamSimple id="SquadDiamondbackAttackBeam" parent="GenericAttackBeam">
+        <On Terms="ActorCreation; ValidateEffect DiamondbackCharged" Send="ModelSwap DiamondbackAttackBeamCharged"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Model value="DiamondbackAttackBeam"/>
+    </CActorBeamSimple>
+    <CActorModel id="SquadDiamondbackCharged2" parent="ModelAddition">
+        <On Terms="Behavior.BurstSquadDiamondbackCapacitors.On" Send="Create"/>
+        <On Terms="Behavior.BurstSquadDiamondbackCapacitors.Off" Send="Destroy"/>
+        <HostSiteOps Ops="SOpAttachWeapon02"/>
+        <Model value="DiamondbackCharged"/>
+    </CActorModel>
+    <CActorModel id="SquadDiamondbackCharged" parent="ModelAddition">
+        <On Terms="Behavior.BurstSquadDiamondbackCapacitors.On" Send="Create"/>
+        <On Terms="Behavior.BurstSquadDiamondbackCapacitors.Off" Send="Destroy"/>
+        <HostSiteOps Ops="SOpAttachWeapon01"/>
+        <Model value="DiamondbackCharged"/>
+    </CActorModel>
+    <CActorModel id="SquadFloatingTextScrapMedium" parent="FloatingTextActorDefault" effectPickup="SquadPickupScrapMediumResources" actorCreate="PickupScrapMediumText">
+        <On index="1" Terms="ActorCreation" Send="Create SquadPickupScrapMediumText"/>
+    </CActorModel>
+    <CActorModel id="SquadFloatingTextScrapLarge" parent="FloatingTextActorDefault" effectPickup="SquadPickupScrapLargeResources" actorCreate="PickupScrapLargeText">
+        <On index="1" Terms="ActorCreation" Send="Create SquadPickupScrapLargeText"/>
+    </CActorModel>
+    <CActorText id="SquadPickupScrapMediumText" parent="PickupTextDefault"/>
+    <CActorText id="SquadPickupScrapLargeText" parent="PickupTextDefault"/>
+    <CActorTurret id="SquadReaperTurret">
+        <On Terms="TurretEnable.SquadReaperTurret" Send="Create"/>
+    </CActorTurret>
+    <CActorText id="SquadPickupScrapSmallText" parent="PickupTextDefault"/>
+    <CActorModel id="SquadFloatingTextScrapSmall" parent="FloatingTextActorDefault" effectPickup="SquadPickupScrapSmallResources" actorCreate="PickupScrapSmallText">
+        <On index="1" Terms="ActorCreation" Send="Create SquadPickupScrapSmallText"/>
+    </CActorModel>
+    <CActorSound id="SquadPickupScrapImpactSound" parent="SoundOneShot">
+        <On Terms="Abil.PickupScrapSmall.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.PickupStructureScrapSmall.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.PickupScrapLarge.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.PickupPalletGas.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.PickupPalletMinerals.SourceCastStart" Send="Create"/>
+        <Sound value="UI_ResourcePickup"/>
+    </CActorSound>
+    <CActorUnit id="StructurePickupScrapSalvage1x1" parent="GenericUnitStandardNoAutoSoundLinks" unitName="SmallScrapSalvagex11">
+        <Macros value="AntiGravDeathRemoveMacro"/>
+        <On Terms="ActorCreation" Send="Create PickupMineralCrystalGlow"/>
+        <On Terms="ActorCreation" Send="Create PickupGasCanisterGlow"/>
+        <Model value="PickupScrapSalvage1x1"/>
+        <BuildModel value="PickupScrapSalvage1x1"/>
+        <DeathArray index="Normal" ModelLink="PickupScrapSalvage1x1Death"/>
+        <PlacementModel value="PickupScrapSalvage1x1"/>
+        <HighlightTooltip value="Unit/Name/StructurePickupScrapSalvage1x1"/>
+        <StatusBarFlags index="Shields" value="0"/>
+        <StatusBarFlags index="Life" value="0"/>
+        <StatusBarFlags index="Energy" value="0"/>
+        <StatusBarFlags index="Cargo" value="0"/>
+        <StatusBarFlags index="Progress" value="0"/>
+        <StatusBarFlags index="Duration" value="0"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\btn-tips-scrap.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-tips-scrap.dds"/>
+        <UnitIcon value="Assets\Textures\btn-tips-scrap.dds"/>
+    </CActorUnit>
     <CActorSimple id="SquadBurrowChargeImpactAnim">
         <On Terms="Behavior.SquadBurrowChargeMPKnockback.On" Send="Create"/>
         <On Terms="ActorCreation" Target="_Unit" Send="AnimClear Attack"/>
@@ -3118,6 +3232,42 @@
     <CActorSplat id="SquadSupplyDepotSplat" parent="GenericUnitSplat" unitName="SquadSupplyDepot2">
         <Model value="SupplyDepotSplat"/>
     </CActorSplat>
+    <CActorUnit id="StructurePickupScrapSalvage2x2" parent="GenericUnitStandardNoAutoSoundLinks" unitName="MediumScrapSalvagex22">
+        <Macros value="AntiGravDeathRemoveMacro"/>
+        <On Terms="ActorCreation" Send="Create PickupMineralCrystalGlow"/>
+        <On Terms="ActorCreation" Send="Create PickupGasCanisterGlow"/>
+        <Model value="PickupScrapSalvage2x2"/>
+        <BuildModel value="PickupScrapSalvage2x2"/>
+        <DeathArray index="Normal" ModelLink="PickupScrapSalvage1x1Death"/>
+        <PlacementModel value="PickupScrapSalvage2x2"/>
+        <HeroIcon value="Assets\Textures\btn-tips-scrap.dds"/>
+        <HighlightTooltip value="Unit/Name/StructurePickupScrapSalvage2x2"/>
+        <StatusBarFlags index="Shields" value="0"/>
+        <StatusBarFlags index="Life" value="0"/>
+        <StatusBarFlags index="Energy" value="0"/>
+        <StatusBarFlags index="Cargo" value="0"/>
+        <StatusBarFlags index="Progress" value="0"/>
+        <StatusBarFlags index="Duration" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-tips-scrap.dds"/>
+    </CActorUnit>
+    <CActorUnit id="StructurePickupScrapSalvage3x3" parent="GenericUnitStandardNoAutoSoundLinks" unitName="LargeScrapSalvagex33">
+        <Macros value="AntiGravDeathRemoveMacro"/>
+        <On Terms="ActorCreation" Send="Create PickupMineralCrystalGlow"/>
+        <On Terms="ActorCreation" Send="Create PickupGasCanisterGlow"/>
+        <Model value="PickupScrapSalvage3x3"/>
+        <BuildModel value="PickupScrapSalvage3x3"/>
+        <DeathArray index="Normal" ModelLink="PickupScrapSalvage1x1Death"/>
+        <PlacementModel value="PickupScrapSalvage3x3"/>
+        <HeroIcon value="Assets\Textures\btn-tips-scrap.dds"/>
+        <HighlightTooltip value="Unit/Name/StructurePickupScrapSalvage3x3"/>
+        <StatusBarFlags index="Shields" value="0"/>
+        <StatusBarFlags index="Life" value="0"/>
+        <StatusBarFlags index="Energy" value="0"/>
+        <StatusBarFlags index="Cargo" value="0"/>
+        <StatusBarFlags index="Progress" value="0"/>
+        <StatusBarFlags index="Duration" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-tips-scrap.dds"/>
+    </CActorUnit>
     <CActorModel id="SuperStimpackEndImpact2" parent="ModelAnimationStyleOneShot">
         <Inherits index="CloakEffect" value="1"/>
         <On Terms="Behavior.SquadInfantrySuperStimpack.Off; ValidateUnit NotDead" Send="Create"/>

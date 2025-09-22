@@ -7,6 +7,76 @@
         <Period value="1"/>
         <PeriodicEffect value="PeriodMagazineIterate"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="SquadDiamondbackBurstCapacitorsAttacking">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="BurstCapacitorsPurchased"/>
+        <Duration value="2"/>
+        <FinalEffect value="SquadDiamondbackBurstCapacitorsApplyChargeBehavior"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadDiamondbackBurstCapacitorsCharging">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <RemoveValidatorArray value="DiamondbackNotAttacking"/>
+        <Duration value="5"/>
+        <FinalEffect value="SquadDiamondbackBurstCapacitorsApplyDamageBuff"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="BurstSquadDiamondbackCapacitors">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="DiamondbackNotAttacking"/>
+        <Modification>
+            <DamageDealtScaled index="Spell" value="10"/>
+            <DamageDealtScaled index="Melee" value="10"/>
+            <DamageDealtScaled index="Ranged" value="10"/>
+            <DamageDealtScaled index="Splash" value="10"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="RecycleStructureCauseDropPickup">
+        <InfoIcon value="Assets\Textures\btn-ability-stetmann-scrapdrop.dds"/>
+        <BehaviorCategories index="User9" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <BuffFlags index="RefreshStack" value="1"/>
+        <MaxStackCountPerCaster value="1"/>
+        <Modification>
+            <DeathResponse>
+                <Cost>
+                    <Cooldown Location="Behavior"/>
+                </Cost>
+            </DeathResponse>
+        </Modification>
+        <DamageResponse Handled="RecycleStructureDropPickup" Location="Attacker">
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="RecycleStructureDropPickup">
+        <InfoIcon value="Assets\Textures\btn-tips-scrap.dds"/>
+        <BehaviorCategories index="User9" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <BuffFlags index="RefreshStack" value="1"/>
+        <MaxStackCountPerCaster value="1"/>
+        <Duration value="15"/>
+        <Modification>
+            <DeathResponse Chance="1" Effect="RecycleDropPickupSwitch"/>
+        </Modification>
+        <DamageResponse>
+            <Chance value="1"/>
+        </DamageResponse>
+        <RemoveValidatorArray value="IsStructure"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="UnitSmallAddMaxLife">
+        <InfoIcon value="Assets\Textures\btn-upgrade-zerg-regenerativebile.dds"/>
+        <BehaviorCategories index="User10" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <BuffFlags index="RefreshStack" value="1"/>
+        <MaxStackCount value="8"/>
+        <MaxStackCountPerCaster value="1"/>
+        <Modification>
+            <VitalMaxArray index="Life" value="15"/>
+            <VitalMaxFractionArray index="Life" value="0.05"/>
+            <VitalRegenArray index="Life" value="1.25"/>
+        </Modification>
+    </CBehaviorBuff>
     <CBehaviorBuff id="SquadBehemothFrenzy">
         <Alignment value="Positive"/>
         <InfoFlags index="Hidden" value="1"/>
@@ -131,8 +201,13 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="DamageBuffer">
+        <Alignment value="Positive"/>
+        <BehaviorFlags index="Permanent" value="1"/>
         <InfoIcon value="Assets\Textures\btn-progression-hornerhan-15-mysignificantother.dds"/>
+        <BehaviorCategories index="User9" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <DebugTrace value="1"/>
+        <MaxStackCount value="8"/>
         <DamageResponse>
             <Handled value="DamageBufferPersistent"/>
             <ModifyFraction value="0.2"/>
@@ -141,11 +216,6 @@
             <ExcludeEffectArray value="DamageBufferDamage"/>
             <Chance value="1"/>
         </DamageResponse>
-        <BehaviorCategories index="User9" value="1"/>
-        <MaxStackCount value="8"/>
-        <Alignment value="Positive"/>
-        <BehaviorFlags index="Permanent" value="1"/>
-        <DebugTrace value="1"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadMissileTurretDetector11" parent="Detector">
         <Alignment value="Positive"/>
@@ -319,7 +389,7 @@
         <BehaviorFlags index="Permanent" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <Modification>
-            <DeathResponse Chance="1" Effect="MagazineTracker1StackRemove">
+            <DeathResponse Chance="1" Effect="MagazineDeathResponseSwitch">
                 <Type index="Remove" value="0"/>
             </DeathResponse>
         </Modification>
@@ -466,7 +536,7 @@
         <InfoFlags index="Hidden" value="1"/>
         <BehaviorCategories index="User10" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Modification RadiusMultiplier="2.5"/>
+        <Modification RadiusMultiplier="1.5"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="ResourceMineralAssassin">
         <InfoIcon value="Assets\Textures\btn-tips-resourcecaches.dds"/>
@@ -476,6 +546,8 @@
         <Modification>
             <ResourceHarvestAmountMultiplier index="Minerals" value="2"/>
         </Modification>
+        <BuffFlags index="RefreshStack" value="1"/>
+        <MaxStackCountPerCaster value="1"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="MultiMineralAutoHarvestAura">
         <InfoIcon value="Assets\Textures\btn-tips-resourcecaches.dds"/>
@@ -585,6 +657,7 @@
             <AdditiveMoveSpeedFactor value="0.15"/>
         </Modification>
         <BehaviorFlags index="Permanent" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-upgrade-terran-reapernitropacks.dds"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="UnitAddMoveSpeedTier5">
         <InfoFlags index="Hidden" value="1"/>
@@ -595,14 +668,7 @@
             <AdditiveMoveSpeedFactor value="0.25"/>
         </Modification>
         <BehaviorFlags index="Permanent" value="1"/>
-    </CBehaviorBuff>
-    <CBehaviorBuff id="UnitSmallAddMaxLife">
-        <BehaviorFlags index="Permanent" value="1"/>
-        <BehaviorCategories index="User10" value="1"/>
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <BuffFlags index="RefreshStack" value="1"/>
-        <MaxStackCount value="8"/>
-        <MaxStackCountPerCaster value="1"/>
+        <InfoIcon value="Assets\Textures\btn-ability-hornerhan-hellion-stim.dds"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="MedicFlashbangGrenade">
         <Alignment value="Negative"/>
@@ -871,11 +937,10 @@
         <DurationBonusMax value="0"/>
         <Player Value="Origin"/>
         <AcquirePlayer Value="Origin"/>
-        <Modification RadiusMultiplier="0.33">
+        <Modification RadiusMultiplier="0.5">
             <StateFlags index="SuppressFoodUsed" value="1"/>
             <StateFlags index="SuppressArmySelect" value="1"/>
             <StateFlags index="Uncommandable" value="1"/>
-            <StateFlags index="Untargetable" value="1"/>
             <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
             <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
             <VitalMaxIncreaseAffectsCurrentArray index="Energy" value="0"/>
@@ -931,7 +996,6 @@
         <RemoveValidatorArray value="IsConstructing"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="ResourceFragile">
-        <BehaviorFlags index="Permanent" value="1"/>
         <InfoIcon value="Assets\Textures\btn-ability-protoss-firebeam.dds"/>
         <BehaviorCategories index="User9" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
@@ -952,9 +1016,12 @@
         <Modification>
             <VitalMaxArray index="Life" value="15"/>
             <VitalMaxFractionArray index="Life" value="0.1"/>
+            <VitalRegenArray index="Life" value="3.25"/>
         </Modification>
         <BehaviorFlags index="Permanent" value="1"/>
         <BuffFlags index="RefreshStack" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-ability-zerg-regenaura.dds"/>
+        <MaxStackCountPerCaster value="1"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="UnitHugeAddMaxLife">
         <InfoFlags index="Hidden" value="1"/>
@@ -964,8 +1031,10 @@
         <Modification>
             <VitalMaxArray index="Life" value="25"/>
             <VitalMaxFractionArray index="Life" value="0.25"/>
+            <VitalRegenArray index="Life" value="6.25"/>
         </Modification>
-        <BehaviorFlags index="Permanent" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-upgrade-zerg-stukov-regenrate.dds"/>
+        <MaxStackCountPerCaster value="1"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="EnergyMediumMaxandLargeRegeneration">
         <InfoFlags index="Hidden" value="1"/>
@@ -974,7 +1043,7 @@
         <MaxStackCount value="8"/>
         <Modification>
             <VitalMaxAdditiveMultiplierArray index="Energy" value="0.15"/>
-            <VitalRegenArray index="Energy" value="2"/>
+            <VitalRegenArray index="Energy" value="1.5"/>
         </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadFirebatViralPlasma">
