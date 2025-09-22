@@ -18,6 +18,22 @@
         <EditorCategories value="Race:Terran"/>
         <Cost Abil="SquadInfantry,Ammo4" ChargeCountUse="-1"/>
     </CEffectModifyUnit>
+    <CEffectRemoveBehavior id="LootOnDealDamageRemove">
+        <ValidatorArray index="0" removed="1"/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="CasterOuter"/>
+        <BehaviorLink value="LootOnDealDamage"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectSwitch id="LootonDealDamageSwitch">
+        <EditorCategories value="Race:Terran"/>
+        <CaseArray Validator="UnitLifeBelow60" Effect="LootonDealDamageTier1"/>
+        <CaseArray Validator="UnitLifeBelow602" Effect="LootonDealDamageTier2"/>
+        <CaseArray Validator="UnitLifeBelow250" Effect="LootonDealDamageTier3"/>
+        <CaseArray Validator="UnitLifeBelow500" Effect="LootonDealDamageTier4"/>
+        <CaseArray Validator="UnitLifeBelow1000" Effect="LootonDealDamageTier5"/>
+        <CaseDefault value="LootonDealDamageTier1"/>
+    </CEffectSwitch>
     <CEffectApplyBehavior id="SquadDiamondbackBurstCapacitorsApplyAttackingBehavior">
         <ValidatorArray index="0" value="BurstCapacitorsPurchased"/>
         <EditorCategories value="Race:Terran"/>
@@ -891,21 +907,25 @@
     </CEffectModifyPlayer>
     <CEffectModifyPlayer id="LootonDealDamageTier2">
         <EditorCategories value="Race:Terran"/>
+        <WhichPlayer Value="CasterOuter"/>
         <Resources index="Minerals" value="5"/>
         <Resources index="Vespene" value="2"/>
     </CEffectModifyPlayer>
     <CEffectModifyPlayer id="LootonDealDamageTier3">
         <EditorCategories value="Race:Terran"/>
+        <WhichPlayer Value="CasterOuter"/>
         <Resources index="Minerals" value="10"/>
         <Resources index="Vespene" value="5"/>
     </CEffectModifyPlayer>
     <CEffectModifyPlayer id="LootonDealDamageTier4">
         <EditorCategories value="Race:Terran"/>
+        <WhichPlayer Value="CasterOuter"/>
         <Resources index="Minerals" value="25"/>
         <Resources index="Vespene" value="10"/>
     </CEffectModifyPlayer>
     <CEffectModifyPlayer id="LootonDealDamageTier5">
         <EditorCategories value="Race:Terran"/>
+        <WhichPlayer Value="CasterOuter"/>
         <Resources index="Minerals" value="50"/>
         <Resources index="Vespene" value="15"/>
     </CEffectModifyPlayer>

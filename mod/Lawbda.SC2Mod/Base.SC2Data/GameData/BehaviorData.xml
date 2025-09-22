@@ -367,13 +367,13 @@
         <KillCredit Value="Caster"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="LootOnDealDamage">
-        <BehaviorFlags index="Permanent" value="1"/>
         <BehaviorCategories index="User10" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <DamageResponse>
-            <Handled value="LootonDealDamageTier1"/>
+            <Handled value="LootonDealDamageSwitch"/>
             <Location value="Attacker"/>
             <ModifyFraction value="0.5"/>
+            <TargetFilters value="-;Structure"/>
             <HandledValue value="Original"/>
             <Chance value="1"/>
         </DamageResponse>
@@ -384,6 +384,9 @@
                 </Cost>
             </DeathResponse>
         </Modification>
+        <BuffFlags index="RefreshStack" value="1"/>
+        <MaxStackCount value="8"/>
+        <MaxStackCountPerCaster value="1"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="MagazineDeathResponse">
         <BehaviorFlags index="Permanent" value="1"/>

@@ -246,6 +246,8 @@
     <CActorUnit id="CaptainExcavator" parent="GenericUnitStandardNoAutoSoundLinks" unitName="CaptainExcavator">
         <Model value="Excavator"/>
         <BuildModel value="Excavator"/>
+        <Macros value="UnloadDropAnim"/>
+        <DeathCustoms ModelLink="TerranLargeUnitDeathLow" Name="AntiGravTerran"/>
         <DeathArray index="Normal" ModelLink="TerranLargeUnitDeath" SoundLink="ColonistVehicleUnit_Explode"/>
         <PlacementModel value="Excavator"/>
         <PortraitActor value=""/>
@@ -1688,10 +1690,7 @@
         <Model value="ScannerSweepModel"/>
     </CActorModel>
     <CActorModel id="FloatingLootResourceTier1" parent="FloatingTextActorDefault" effectPickup="LootonDealDamageTier1" actorCreate="">
-        <On index="1" Terms="ActorCreation" Send="Create LootMineralsTextTier1"/>
-        <On index="2" Terms="ActorCreation" Send="Create LootGasTextTier1"/>
-        <On index="3" Terms="ActorCreation" Send="TimerSet 1.000000 Die"/>
-        <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
+        <On index="1" Terms="ActorCreation" Send="Create LootResourceTextTier1"/>
     </CActorModel>
     <CActorModel id="FloatingClimaxImpact" parent="FloatingTextActorDefault" effectPickup="LootonDealDamageTier1" actorCreate="">
         <On index="0" Terms="Effect.SCVFusionCutter.Start" Send="Create"/>
@@ -1699,28 +1698,16 @@
         <On index="2" Terms="ActorCreation" Send="TimerSet 0.860000 Die"/>
     </CActorModel>
     <CActorModel id="FloatingLootResourceTier2" parent="FloatingTextActorDefault" effectPickup="LootonDealDamageTier2" actorCreate="">
-        <On index="1" Terms="ActorCreation" Send="Create LootMineralsTextTier2"/>
-        <On index="2" Terms="ActorCreation" Send="Create LootGasTextTier2"/>
-        <On index="3" Terms="ActorCreation" Send="TimerSet 1.000000 Die"/>
-        <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
+        <On index="1" Terms="ActorCreation" Send="Create LootResourceTextTier2"/>
     </CActorModel>
     <CActorModel id="FloatingLootResourceTier3" parent="FloatingTextActorDefault" effectPickup="LootonDealDamageTier3" actorCreate="">
-        <On index="1" Terms="ActorCreation" Send="Create LootMineralsTextTier3"/>
-        <On index="2" Terms="ActorCreation" Send="Create LootGasTextTier3"/>
-        <On index="3" Terms="ActorCreation" Send="TimerSet 1.000000 Die"/>
-        <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
+        <On index="1" Terms="ActorCreation" Send="Create LootResourceTextTier3"/>
     </CActorModel>
     <CActorModel id="FloatingLootResourceTier4" parent="FloatingTextActorDefault" effectPickup="LootonDealDamageTier4" actorCreate="">
-        <On index="1" Terms="ActorCreation" Send="Create LootMineralsTextTier4"/>
-        <On index="2" Terms="ActorCreation" Send="Create LootGasTextTier4"/>
-        <On index="3" Terms="ActorCreation" Send="TimerSet 1.000000 Die"/>
-        <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
+        <On index="1" Terms="ActorCreation" Send="Create LootResourceTextTier4"/>
     </CActorModel>
     <CActorModel id="FloatingLootResourceTier5" parent="FloatingTextActorDefault" effectPickup="LootonDealDamageTier5" actorCreate="">
-        <On index="1" Terms="ActorCreation" Send="Create LootMineralsTextTier5"/>
-        <On index="2" Terms="ActorCreation" Send="Create LootGasTextTier5"/>
-        <On index="3" Terms="ActorCreation" Send="TimerSet 1.000000 Die"/>
-        <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
+        <On index="1" Terms="ActorCreation" Send="Create LootResourceTextTier5"/>
     </CActorModel>
     <CActorText id="ClimaxImpact01" parent="PickupTextDefault">
         <Text value="Button/Tooltip/LootGasTextTier12"/>
@@ -1798,18 +1785,11 @@
             <Image value="Assets\Textures\Wireframe-Terran-hercules.dds"/>
         </Wireframe>
     </CActorUnit>
-    <CActorText id="LootGasTextTier2" parent="PickupTextDefault">
-        <Text value="Button/Tooltip/LootGasTextTier12"/>
-    </CActorText>
-    <CActorText id="LootGasTextTier3" parent="PickupTextDefault"/>
-    <CActorText id="LootGasTextTier4" parent="PickupTextDefault"/>
-    <CActorText id="LootGasTextTier5" parent="PickupTextDefault"/>
-    <CActorText id="LootMineralsTextTier3" parent="PickupTextDefault"/>
-    <CActorText id="LootMineralsTextTier2" parent="PickupTextDefault"/>
-    <CActorText id="LootMineralsTextTier1" parent="PickupTextDefault"/>
-    <CActorText id="LootMineralsTextTier4" parent="PickupTextDefault"/>
-    <CActorText id="LootMineralsTextTier5" parent="PickupTextDefault"/>
-    <CActorText id="LootGasTextTier1" parent="PickupTextDefault"/>
+    <CActorText id="LootResourceTextTier3" parent="PickupTextDefault"/>
+    <CActorText id="LootResourceTextTier2" parent="PickupTextDefault"/>
+    <CActorText id="LootResourceTextTier1" parent="PickupTextDefault"/>
+    <CActorText id="LootResourceTextTier4" parent="PickupTextDefault"/>
+    <CActorText id="LootResourceTextTier5" parent="PickupTextDefault"/>
     <CActorUnit id="Mulelisk" parent="GenericUnitStandard" unitName="Mulelisk">
         <Aliases value="_UnitMedium"/>
         <Macros value="CarryAnim"/>
@@ -1945,14 +1925,14 @@
         <HostSiteOps Ops="SOpShadow"/>
         <Sound value="OrbitalCommand_ScannerSweep_Others"/>
     </CActorSound>
-    <CActorModel id="SpecialImpactClimaxModel01" parent="ModelAnimationStyleOneShot">
+    <CActorModel id="SquadFirebatFlameImpact" parent="ModelAnimationStyleOneShot">
         <Terms value="Cap 1"/>
         <On Terms="Effect.SquadFirebatFlameThrowerDamage.Start; At Target" Send="Create"/>
         <On Terms="Effect.VolatileDeathDamage.Start; At Target" Send="Create"/>
         <On Terms="ActorOrphan" Send="Destroy"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachRandomDamage"/>
-        <Model value="ImpactModelFlames2"/>
+        <Model value="ImpactModelFlames"/>
     </CActorModel>
     <CActorUnit id="SquadFirebat" parent="GenericUnitStandard" unitName="SquadFirebat">
         <Aliases value="_UnitMedium"/>
