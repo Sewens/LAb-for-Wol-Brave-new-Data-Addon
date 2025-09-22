@@ -97,11 +97,11 @@
             <WeaponDisableArray value="KaiserBlades"/>
         </Modification>
     </CBehaviorBuff>
-    <CBehaviorBuff id="CarryHarvestableRichVespeneGeyserGas2">
+    <CBehaviorBuff id="SquadCarryHarvestableRichVespeneGeyserGas">
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
     </CBehaviorBuff>
-    <CBehaviorResource id="HarvestableRichVespeneGeyserGas2">
+    <CBehaviorResource id="SquadHarvestableRichVespeneGeyserGas">
         <InfoFlags index="Hidden" value="1"/>
         <InfoIcon value="Assets\Textures\icon-gas.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -111,6 +111,7 @@
         <Flags index="HideHarvesters" value="1"/>
         <RequiredAlliance value="Control"/>
         <ExhaustedAlert value="ResourceExhausted_Vespene"/>
+        <CarryResourceBehavior value="SquadCarryHarvestableRichVespeneGeyserGas"/>
         <IdealHarvesterCount value="3"/>
     </CBehaviorResource>
     <CBehaviorBuff id="SquadPrecursorBurrowChargeImpact">
@@ -179,8 +180,8 @@
     <CBehaviorBuff id="SquadBunkerWeaponRangeBonus">
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
-        <InitialEffect value="ProjectileAccelerators2"/>
-        <FinalEffect value="ProjectileAcceleratorsRemove2"/>
+        <InitialEffect value="SquadProjectileAcceleratorsApply"/>
+        <FinalEffect value="SquadBunkerProjectileAcceleratorsRemove"/>
         <Modification WeaponRange="1">
             <AbilLinkEnableArray value="Stimpack"/>
             <AbilLinkEnableArray value="heal"/>
@@ -196,7 +197,7 @@
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
     </CBehaviorBuff>
-    <CBehaviorBuff id="CarryHarvestableVespeneGeyserGas3">
+    <CBehaviorBuff id="SquadCarryHarvestableVespeneGeyserGas">
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
     </CBehaviorBuff>
@@ -266,7 +267,7 @@
         <ExhaustedAlert value="ResourceExhausted_Vespene"/>
         <IdealHarvesterCount value="3"/>
     </CBehaviorResource>
-    <CBehaviorResource id="HarvestableVespeneGeyserGas3">
+    <CBehaviorResource id="SquadHarvestableVespeneGeyserGas">
         <InfoFlags index="Hidden" value="1"/>
         <InfoIcon value="Assets\Textures\icon-gas.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -276,6 +277,7 @@
         <Flags index="HideHarvesters" value="1"/>
         <RequiredAlliance value="Control"/>
         <ExhaustedAlert value="ResourceExhausted_Vespene"/>
+        <CarryResourceBehavior value="SquadCarryHarvestableVespeneGeyserGas"/>
         <IdealHarvesterCount value="3"/>
     </CBehaviorResource>
     <CBehaviorBuff id="SquadHellstormMissiles">
@@ -418,7 +420,7 @@
             </Modification>
         </PowerStageArray>
     </CBehaviorPowerUser>
-    <CBehaviorBuff id="SquadProjectileAccelerators">
+    <CBehaviorBuff id="SquadBunkerProjectileAccelerators">
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <DisableValidatorArray value="ProjectileAcceleratorsPurchased"/>
@@ -489,7 +491,7 @@
         <Requirements value="UseAutomatedRefinery"/>
         <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
         <Duration value="0.1"/>
-        <ExpireEffect value="RefineryMorph2"/>
+        <ExpireEffect value="SquadRefineryMorph"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="ScavengingSystemsMechDeath2">
         <InfoFlags index="Hidden" value="1"/>
@@ -499,12 +501,12 @@
             <DeathResponse Chance="1" Effect="ScavengingSystemsSearchArea"/>
         </Modification>
     </CBehaviorBuff>
-    <CBehaviorBuff id="SuqadShrikeTurret">
+    <CBehaviorBuff id="SuqadBunkerShrikeTurret">
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <Requirements value="ShrikeTurretResearched"/>
         <Modification>
-            <WeaponEnableArray value="ShrikeTurret"/>
+            <WeaponEnableArray value="SquadBunkerShrikeAutoGUn"/>
         </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadMarauderSlow">
