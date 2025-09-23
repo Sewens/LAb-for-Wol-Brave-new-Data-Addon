@@ -67,21 +67,69 @@
         <Icon value="Assets\Textures\RadarIcon2.dds"/>
         <IconArcLength value="3.250000"/>
     </CActorRange>
-    <CActorUnit id="Factory2" parent="TerranBuildingFlyerEx" unitName="Factory">
-        <On Terms="UnitDeathCustomize.FactoryFlying" Send="DeathCustomize Flying"/>
-        <On Terms="Behavior.ColonyInfestation.On" Send="Create InfestedVisual"/>
-        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="Factory_Explode"/>
-        <BarOffset value="150"/>
-        <BarWidth value="160"/>
-        <GroupIcon>
-            <Image value="Assets\Textures\Wireframe-Terran-Factory.dds"/>
-        </GroupIcon>
-        <HighlightTooltip value="Unit/Name/Factory2"/>
-        <NameOffset value="110"/>
-        <Wireframe>
-            <Image value="Assets\Textures\Wireframe-Terran-Factory.dds"/>
-        </Wireframe>
-    </CActorUnit>
+    <CActorModel id="SquadFactoryBuild" parent="TerranBuildingBuild">
+        <Model value="Factory_CovertOps_Build"/>
+    </CActorModel>
+    <CActorModel id="SquadBarracksBuild" parent="TerranBuildingBuild">
+        <Model value="Barracks_Silver_Build"/>
+    </CActorModel>
+    <CActorModel id="SquadReactorBuild" parent="TerranBuildingBuild">
+        <On Terms="ActorCreation" Send="SetScale 1.350000"/>
+        <Model value="ReactorBuild"/>
+    </CActorModel>
+    <CActorSplat id="SquadReactorSplat" parent="GenericUnitSplat" unitName="SquadReactor">
+        <Model value="ReactorSplat"/>
+    </CActorSplat>
+    <CActorSplat id="SquadFactoryPowerRadius" unitName="SquadReactor">
+        <Aliases value="_Snapshot"/>
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Decal" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <Supporter Subject="::Creator"/>
+        <On Terms="SupporterDestruction" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="Behavior.SquadFactoryPowerSource.Create" Send="Create"/>
+        <On Terms="Behavior.SquadFactoryPowerSource.Destroy" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <Color value="128,255,176,232"/>
+        <Model value="PowerVisualFast"/>
+    </CActorSplat>
+    <CActorSplat id="SquadStarportPowerRadius" unitName="SquadReactor">
+        <Aliases value="_Snapshot"/>
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Decal" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <Supporter Subject="::Creator"/>
+        <On Terms="SupporterDestruction" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="Behavior.SquadStarportPowerSource.Create" Send="Create"/>
+        <On Terms="Behavior.SquadStarportPowerSource.Destroy" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <Color value="128,255,176,232"/>
+        <Model value="PowerVisualFast"/>
+    </CActorSplat>
+    <CActorSound id="SquadMuleGatherMinerals" parent="SoundContinuous">
+        <On Terms="Abil.SquadMuleliskGather.Start" Send="Create"/>
+        <On Terms="Abil.SquadMuleliskGather.Stop" Send="Destroy"/>
+        <Sound value="Mule_GatherMinerals"/>
+    </CActorSound>
+    <CActorModel id="SquadMercDropModel" parent="ModelAnimationStyleOneShotNoOrphan">
+        <On Terms="Effect.SquadCalldownMULECreatePersistent.Start" Send="Create"/>
+        <On Terms="Effect.CalldownMULETimedLife.Start" Send="AnimBracketStop BSD"/>
+        <On Terms="AnimBracketState.*.AfterOpening; AnimName BSD" Send="Create DropPodUnload"/>
+        <HostSiteOps Ops="MercDropSOpShadow"/>
+        <Model value="DropPodFalling"/>
+    </CActorModel>
+    <CActorSound id="SquadOrbitalCommandCalldownMuleDrop" parent="SoundOneShot">
+        <On Terms="Effect.SquadCalldownMULECreatePersistent.Start; At Target" Send="Create"/>
+        <On Terms="ActorCreation" Send="TimerSet 2.100000 DelayDropPod"/>
+        <On Terms="TimerExpired; TimerName DelayDropPod" Send="Create OrbitalCommand_CalldownMuleImpact"/>
+        <On Terms="TimerExpired; TimerName DelayDropPod" Send="Destroy"/>
+        <Sound value="OrbitalCommand_CalldownMuleDrop"/>
+    </CActorSound>
+    <CActorRange id="SquadOrbitalDropMULERange" parent="RangeAbil" abil="SquadCalldownMulelisk">
+        <Range value="30.000000"/>
+    </CActorRange>
     <CActorUnit id="SquadArmory" parent="TerranBuildingEx" unitName="SquadArmory">
         <Aliases value="_UnitHuge"/>
         <Macros value="SnowVisualBuildingMacro"/>
@@ -148,6 +196,23 @@
         <HostSiteOps Ops="SOpAttachRollingWeaponStripe"/>
         <Model value="ShrikeTurretAttackLaunch"/>
     </CActorModel>
+    <CActorSplat id="SquadBarrackPowerRadius" unitName="SquadReactor">
+        <Aliases value="_Snapshot"/>
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Decal" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <Supporter Subject="::Creator"/>
+        <On Terms="SupporterDestruction" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="Behavior.SquadBarrackPowerSource.Create" Send="Create"/>
+        <On Terms="Behavior.SquadBarrackPowerSource.Destroy" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <Color value="128,255,251,176"/>
+        <Model value="PowerVisualFast"/>
+    </CActorSplat>
+    <CActorSplat id="SquadTechReactorSplat" parent="GenericUnitSplat" unitName="TechReactor">
+        <Model value="ReactorSplat"/>
+    </CActorSplat>
     <CActorTurret id="SqudBunkerShrikeTurret">
         <On Terms="TurretEnable.SquadBunkerShrikeTurret" Send="Create"/>
     </CActorTurret>
@@ -244,6 +309,9 @@
         <On Terms="Abil.PickupPalletMinerals.SourceCastStart" Send="Create"/>
         <Sound value="UI_ResourcePickup"/>
     </CActorSound>
+    <CActorModel id="SquadStarportBuild" parent="TerranBuildingBuild">
+        <Model value="Starport_CovertOps_Build"/>
+    </CActorModel>
     <CActorUnit id="StructurePickupScrapSalvage1x1" parent="GenericUnitStandardNoAutoSoundLinks" unitName="SmallScrapSalvagex11">
         <Macros value="AntiGravDeathRemoveMacro"/>
         <On Terms="ActorCreation" Send="Create PickupMineralCrystalGlow"/>
@@ -314,9 +382,6 @@
     <CActorUnit id="SquadFactory" parent="TerranBuildingFlyerEx" unitName="SquadFactory">
         <Macros value="SnowVisualBuildingMacro"/>
         <On Terms="UnitDeathCustomize.SquadFactoryFlying" Send="DeathCustomize Flying"/>
-        <On Terms="Behavior.ColonyInfestation.On" Send="Create InfestedVisual"/>
-        <On Terms="Upgrade.BlackOps.Add" Send="ModelSwap Factory_BlackOps_COOP"/>
-        <On Terms="ActorCreation; ValidateUnit HaveBlackOps" Send="ModelSwap Factory_BlackOps_COOP"/>
         <Model value="Factory_CovertOps"/>
         <BuildModel value="Factory_CovertOps_Build"/>
         <DeathArray index="Normal" ModelLink="Factory_CovertOps_Death" VoiceLink="Factory_Explode"/>
@@ -476,21 +541,6 @@
         <On Terms="UnitBirth.SquadGreaterNydusWorm.Normal" Send="Create"/>
         <Sound value="Nydus_Unburrow"/>
     </CActorSound>
-    <CActorSplat id="SquadReactorPowerRadius2" unitName="Pylon">
-        <Aliases value="_Snapshot"/>
-        <Inherits index="CloakEffect" value="1"/>
-        <Inherits index="Decal" value="1"/>
-        <Inherits index="Visibility" value="1"/>
-        <Supporter Subject="::Creator"/>
-        <On Terms="SupporterDestruction" Send="Destroy"/>
-        <On Terms="ActorOrphan" Send="Destroy"/>
-        <On Terms="UnitBirth.SquadReactor" Send="Create"/>
-        <On Terms="Behavior.SquadTPowerSource.Create" Send="Create"/>
-        <On Terms="Behavior.SquadTPowerSource.Destroy" Send="Destroy"/>
-        <Host Subject="_Selectable"/>
-        <Color value="128,41,250,244"/>
-        <Model value="PowerVisualFast"/>
-    </CActorSplat>
     <CActorAction id="SquadReaperD8Attack" parent="GenericAttack" effectImpact="SquadReaperD8ChargeDamage" effectLaunch="SquadReaperD8ChargeLaunchMissile">
         <LaunchAttachQuery Methods="AMFilterWeaponRight"/>
         <LaunchAssets Sound="Reaper_D8ChargeAttackLaunch"/>
@@ -677,15 +727,16 @@
     <CActorMissile id="ExcavatorD888AttackMissile" parent="GenericAttackMissile" unitName="SquadReaperD8Charge">
         <Model value="MercReaperD8ChargeWeapon"/>
     </CActorMissile>
-    <CActorRange id="SquadSensorTowerRange">
+    <CActorRange id="SquadReactorPowerRange">
         <On Terms="Behavior.SquadReactorPowerSource.Create" Send="Create"/>
         <On Terms="Behavior.SquadReactorPowerSource.Destroy" Send="Destroy"/>
         <HostSiteOps Ops=""/>
         <Range value="6.500000"/>
         <Icon value="Assets\Textures\RadarIcon2.dds"/>
         <IconArcLength value="1.500000"/>
+        <IconTint value="255,0,255,255"/>
     </CActorRange>
-    <CActorSplat id="SquadReactorPowerRadius" unitName="Pylon">
+    <CActorSplat id="SquadReactorPowerRadius" unitName="SquadReactor">
         <Aliases value="_Snapshot"/>
         <Inherits index="CloakEffect" value="1"/>
         <Inherits index="Decal" value="1"/>
@@ -697,20 +748,24 @@
         <On Terms="Behavior.SquadReactorPowerSource.Create" Send="Create"/>
         <On Terms="Behavior.SquadReactorPowerSource.Destroy" Send="Destroy"/>
         <Host Subject="_Selectable"/>
-        <Model value="PowerVisualFast"/>
         <Color value="128,41,250,244"/>
+        <Model value="PowerVisualFast"/>
     </CActorSplat>
     <CActorUnit id="SquadReactor" parent="ReactorBase" unitName="SquadReactor">
         <Macros value="SnowVisualBuildingMacro"/>
-        <On Terms="AbilMorph.*.Finish; MorphTo TechReactor" Target="ReactorSplat" Send="Destroy"/>
-        <On Terms="AbilMorph.*.Finish; MorphTo TechReactor" Send="Destroy"/>
-        <On Terms="AbilMorph.*.Finish; MorphTo TechReactor" Target="ReactorSplat" Send="Destroy"/>
-        <On Terms="AbilMorph.*.Finish; MorphTo TechReactor" Send="Destroy"/>
-        <Model value="Reactor"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo SquadTechReactor" Target="SquadReactorSplat" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo SquadTechReactor" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo SquadTechReactor" Target="SquadReactorSplat" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo SquadTechReactor" Send="Destroy"/>
+        <Model value="Reactor_CovertOps"/>
         <EventDataFootprint index="0" removed="1"/>
-        <BuildModel value="Reactor"/>
-        <AddonIndicator value="Actor/AddonIndicator/SquadReactor"/>
+        <BuildModel value="Reactor_CovertOps_Build"/>
+        <DeathArray index="Normal" ModelLink="Reactor_CovertOps_Death"/>
+        <EditorModel value="Reactor_CovertOps"/>
+        <PlacementModel value="Reactor_CovertOps_Placement"/>
+        <PortraitModel value="Reactor_CovertOps_Portrait"/>
         <HighlightTooltip value="Unit/Name/SquadReactor"/>
+        <HeroIcon value="Assets\Textures\btn-building-terran-reactor-covertops.dds"/>
     </CActorUnit>
     <CActorUnit id="SquadRefineryRich" parent="TerranBuildingEx" unitName="SquadRefineryRich">
         <Aliases value="_UnitHuge"/>
@@ -724,14 +779,14 @@
         <On Terms="Behavior.ColonyInfestation.On" Send="Create InfestationRefinery"/>
         <On Terms="UnitDeathCustomize; ValidateUnit NoVespene" Send="DeathCustomize Empty"/>
         <On Terms="UnitBirth.SquadRefineryRich" Send="TimerSet 0.100000 HideGeyser"/>
-        <Model value="RefineryRich"/>
+        <Model value="Refinery_CovertOps_HighYield"/>
         <CreepHeightClass value="Medium"/>
-        <BuildModel value="RefineryRich"/>
-        <DeathArray index="Normal" ModelLink="RefineryRichDeath"/>
+        <BuildModel value="Refinery_CovertOps_HighYield"/>
+        <DeathArray index="Normal" ModelLink="Refinery_CovertOps_HighYield_Death"/>
         <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="Refinery_Explode"/>
-        <DeathCustoms ModelLink="RefineryEmptyDeath" Name="Empty"/>
-        <PlacementModel value="RefineryPlacement"/>
-        <PortraitModel value="RefineryPortrait"/>
+        <DeathCustoms ModelLink="Refinery_CovertOps_Empty_Death" Name="Empty"/>
+        <PlacementModel value="Refinery_CovertOps_Placement"/>
+        <PortraitModel value="Refinery_CovertOps_Portrait"/>
         <BarOffset value="160"/>
         <BarWidth value="120"/>
         <GroupIcon>
@@ -747,6 +802,7 @@
         <Wireframe>
             <Image value="Assets\Textures\Wireframe-Terran-Refinery.dds"/>
         </Wireframe>
+        <EditorModel value="Refinery_CovertOps"/>
     </CActorUnit>
     <CActorSplat id="SquadRefineryRichSplat" parent="GenericUnitSplat" unitName="SquadRefineryRich">
         <Model value="RefinerySplat"/>
@@ -941,8 +997,6 @@
         <On Terms="UnitDeathCustomize; ValidateUnit OrbitalRelayUpgradedAndNotUnderConstruction" Send="DeathCustomize Variation6"/>
         <On Terms="UnitDeathCustomize; ValidateUnit OrbitalRelayUpgradedAndNotUnderConstruction; IsStatus FlyDeathAnim 2" Send="DeathCustomize Variation9"/>
         <On Terms="UnitDeathCustomize; ValidateUnit CommandCenterReactorPurchasedAndNotUnderConstruction" Send="Create CommandCenterReactorDeath"/>
-        <On Terms="Upgrade.BlackOps.Add" Send="ModelSwap CommandCenter_BlackOps_COOP"/>
-        <On Terms="ActorCreation; ValidateUnit HaveBlackOps" Send="ModelSwap CommandCenter_BlackOps_COOP"/>
         <Model value="CommandCenter"/>
         <BuildModel value="CommandCenter"/>
         <DeathArray index="Normal" ModelLink="CommandCenterDeath"/>
@@ -984,13 +1038,13 @@
         <On Terms="Behavior.ColonyInfestation.On" Send="Create InfestationEngineeringBay"/>
         <On Terms="Upgrade.BlackOps.Add" Send="ModelSwap EngineeringBay_BlackOps_COOP"/>
         <On Terms="ActorCreation; ValidateUnit HaveBlackOps" Send="ModelSwap EngineeringBay_BlackOps_COOP"/>
-        <Model value="EngineeringBay"/>
+        <Model value="EngineeringBay_CovertOps"/>
         <CreepHeightClass value="Medium"/>
-        <BuildModel value="EngineeringBay"/>
-        <DeathArray index="Normal" ModelLink="EngineeringBayDeath"/>
+        <BuildModel value="EngineeringBay_CovertOps_Build"/>
+        <DeathArray index="Normal" ModelLink="EngineeringBay_CovertOps_Death"/>
         <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="EngineeringBay_Explode"/>
-        <PlacementModel value="EngineeringBayPlacement"/>
-        <PortraitModel value="EngineeringBayPortrait"/>
+        <PlacementModel value="EngineeringBay_Silver_Placement"/>
+        <PortraitModel value="EngineeringBay_Silver_Portrait"/>
         <BarOffset value="110"/>
         <BarWidth value="135"/>
         <GroupIcon>
@@ -1004,6 +1058,7 @@
         <Wireframe>
             <Image value="Assets\Textures\Wireframe-Terran-EngineeringBay.dds"/>
         </Wireframe>
+        <EditorModel value="EngineeringBay_CovertOps"/>
     </CActorUnit>
     <CActorSplat id="SquadEngineeringBaySplat" parent="GenericUnitSplat" unitName="SquadEngineeringBay">
         <Model value="EngineeringBaySplat"/>
@@ -1091,16 +1146,16 @@
         <On Terms="AbilMorph.*.Finish; MorphFrom Refinery" Send="Destroy"/>
         <On Terms="Upgrade.BlackOps.Add" Send="ModelSwap Refinery_BlackOps_COOP"/>
         <On Terms="ActorCreation; ValidateUnit HaveBlackOps" Send="ModelSwap Refinery_BlackOps_COOP"/>
-        <Model value="Refinery"/>
+        <Model value="Refinery_CovertOps"/>
         <CreepHeightClass value="Medium"/>
-        <BuildModel value="Refinery"/>
-        <DeathArray index="Normal" ModelLink="RefineryDeath"/>
+        <BuildModel value="Refinery_CovertOps_Build"/>
+        <DeathArray index="Normal" ModelLink="Refinery_CovertOps_Death"/>
         <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="Refinery_Explode"/>
-        <DeathCustoms ModelLink="RefineryEmptyDeath" Name="Empty"/>
+        <DeathCustoms ModelLink="Refinery_CovertOps_Empty_Death" Name="Empty"/>
         <DeathCustoms ModelLink="RefineryDeathLow" SoundLink="Terran_ExplosionMedium" Name="Low"/>
-        <PlacementModel value="RefineryPlacement"/>
+        <PlacementModel value="Refinery_CovertOps_Placement"/>
         <PlacementActorModel value="RefineryPlacementModel"/>
-        <PortraitModel value="RefineryPortrait"/>
+        <PortraitModel value="Refinery_CovertOps_Portrait"/>
         <BarOffset value="160"/>
         <BarWidth value="120"/>
         <GroupIcon>
@@ -1116,6 +1171,7 @@
         <Wireframe>
             <Image value="Assets\Textures\Wireframe-Terran-Refinery.dds"/>
         </Wireframe>
+        <EditorModel value="Refinery_CovertOps"/>
     </CActorUnit>
     <CActorSplat id="SquadRefinerySplat" parent="GenericUnitSplat" unitName="SquadRefinery">
         <Model value="RefinerySplat"/>
@@ -1127,12 +1183,7 @@
     </CActorAction>
     <CActorUnit id="SquadBarracks" parent="TerranBuildingFlyerEx" unitName="SquadBarracks">
         <Macros value="SnowVisualBuildingMacro"/>
-        <On Terms="Behavior.ColonyInfestation.On" Send="Create InfestationBarracks"/>
         <On Terms="UnitDeathCustomize.BarracksFlying" Send="DeathCustomize Flying"/>
-        <!--
-        <On Terms="Upgrade.BlackOps.Add" Send="ModelSwap Barracks_BlackOps_COOP"/>
-        <On Terms="ActorCreation; ValidateUnit HaveBlackOps" Send="ModelSwap Barracks_BlackOps_COOP"/>
--->
         <Model value="Barracks_Silver"/>
         <BuildModel value="Barracks_Silver_Build"/>
         <DeathArray index="Normal" ModelLink="Barracks_Silver_Death"/>
@@ -1842,17 +1893,17 @@
         <Macros value="CarryAnim"/>
         <Macros value="PhysicsDeathsSwarmGround"/>
         <Macros value="PhysicsDeathsVoidGround"/>
-        <On Terms="Abil.MULEGather.Start" Send="AnimBracketStart Work Work,Start Work Work,End"/>
-        <On Terms="Abil.MULEGather.Stop" Send="AnimBracketStop Work"/>
-        <On Terms="Abil.MULERepair.SourceChannelStart" Send="AnimBracketStart Work Work,Start Work Work,End"/>
-        <On Terms="Abil.MULERepair.SourceChannelStop" Send="AnimBracketStop Work"/>
-        <On Terms="Abil.MULERepair.SourceChannelStart" Send="TimerSet 0.000000,0.300000 Repair"/>
-        <On Terms="Abil.MULERepair.SourceChannelStop" Send="TimerKill Repair"/>
-        <On Terms="Abil.MULERepair.SourceChannelStop" Send="AnimClear Repair"/>
+        <On Terms="Abil.SquadMuleliskGather.Start" Send="AnimBracketStart Work Work,Start Work Work,End"/>
+        <On Terms="Abil.SquadMuleliskGather.Stop" Send="AnimBracketStop Work"/>
+        <On Terms="Abil.SquadMuleliskRepair.SourceChannelStart" Send="AnimBracketStart Work Work,Start Work Work,End"/>
+        <On Terms="Abil.SquadMuleliskRepair.SourceChannelStop" Send="AnimBracketStop Work"/>
+        <On Terms="Abil.SquadMuleliskRepair.SourceChannelStart" Send="TimerSet 0.000000,0.300000 Repair"/>
+        <On Terms="Abil.SquadMuleliskRepair.SourceChannelStop" Send="TimerKill Repair"/>
+        <On Terms="Abil.SquadMuleliskRepair.SourceChannelStop" Send="AnimClear Repair"/>
         <On Terms="AnimDone.*.Complete; AnimName Repair" Send="TimerSet 0.000000,0.300000 Repair"/>
         <On Terms="TimerExpired; TimerName Repair" Send="AnimPlay Repair Work NonLooping"/>
         <On Terms="TimerExpired; TimerName Repair" Send="Create MULERepairSound"/>
-        <On Terms="Abil.MULEGather.Start" Send="StatusSet CloakSound 1"/>
+        <On Terms="Abil.SquadMuleliskGather.Start" Send="StatusSet CloakSound 1"/>
         <On Terms="Behavior.CarryHarvestableVespeneGeyserGas.Create" Send="StatusSet CloakSound 1"/>
         <On Terms="Confirmation.MULE.Start" Send="StatusSet CloakSound 0"/>
         <On Terms="Behavior.CloakFieldEffect.Create; IsStatus CloakSound 0" Send="Create Worker_CloakFieldOn"/>
@@ -2615,14 +2666,6 @@
     <CActorSplat id="SquadMercCompoundSplat" parent="GenericUnitSplat" unitName="SquadMercCompound">
         <Model value="MercCompoundSplat"/>
     </CActorSplat>
-    <CActorRange id="SquadSensorTowerRange2">
-        <On Terms="Behavior.SquadTPowerSource.Create" Send="Create"/>
-        <On Terms="Behavior.SquadTPowerSource.Destroy" Send="Destroy"/>
-        <HostSiteOps Ops=""/>
-        <Range value="6.500000"/>
-        <Icon value="Assets\Textures\RadarIcon2.dds"/>
-        <IconArcLength value="1.500000"/>
-    </CActorRange>
     <CActorModel id="SquadSpectreMindBlastStun" parent="ModelAnimationStyleContinuous">
         <On Terms="ActorCreation" Send="AnimBracketStart GL_BSD GLbirth GLstand GLdeath"/>
         <On Terms="Behavior.MindBlastStun.On" Send="Create"/>
@@ -3157,26 +3200,22 @@
         <On Terms="Behavior.ReaperRegen.On" Send="Create"/>
         <On Terms="UnitRegen.SquadReaper.LifeOn" Send="Create"/>
     </CActorSound>
-    <CActorUnit id="Starport2" parent="TerranBuildingFlyerEx" unitName="SquadStarport">
+    <CActorUnit id="SquadStarport" parent="TerranBuildingFlyerEx" unitName="SquadStarport">
         <Macros value="SnowVisualBuildingMacro"/>
-        <On Terms="UnitDeathCustomize.StarportFlying" Send="DeathCustomize Flying"/>
-        <On Terms="Behavior.ColonyInfestation.On" Send="Create InfestedVisual"/>
-        <On Terms="Upgrade.BlackOps.Add" Send="ModelSwap Starport_BlackOps_COOP"/>
-        <On Terms="ActorCreation; ValidateUnit HaveBlackOps" Send="ModelSwap Starport_BlackOps_COOP"/>
-        <Model value="Starport"/>
-        <BuildModel value="Starport"/>
-        <DeathArray index="Normal" ModelLink="StarportDeath"/>
+        <On Terms="UnitDeathCustomize.SquadStarportFlying" Send="DeathCustomize Flying"/>
+        <Model value="Starport_CovertOps"/>
+        <BuildModel value="Starport_CovertOps_Build"/>
+        <DeathArray index="Normal" ModelLink="Starport_CovertOps_Death"/>
         <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="Starport_Explode"/>
         <DeathCustoms index="5" ModelLink="StarportFlyDeath" SoundLink="Starport_Explode" Name="Flying"/>
-        <PlacementModel value="StarportPlacement"/>
-        <PortraitModel value="StarportPortrait"/>
+        <PlacementModel value="Starport_CovertOps_Placement"/>
+        <PortraitModel value="Starport_CovertOps_Portrait"/>
         <BarOffset value="155"/>
         <BarWidth value="160"/>
         <GroupIcon>
             <Image value="Assets\Textures\Wireframe-Terran-Starport.dds"/>
         </GroupIcon>
         <HeroIcon value="Assets\Textures\btn-building-terran-Starport.dds"/>
-        <HighlightTooltip value="Unit/Name/Starport2"/>
         <NameOffset value="110"/>
         <SoundArray index="Ready" value="Starport_Ready"/>
         <SoundArray index="What" value="Starport_What"/>
@@ -3186,7 +3225,7 @@
             <Image value="Assets\Textures\Wireframe-Terran-Starport.dds"/>
         </Wireframe>
     </CActorUnit>
-    <CActorSplat id="StarportSplat2" parent="TerranBuildingMorphSplat" unitName="SquadStarport">
+    <CActorSplat id="SquadStarportSplat" parent="TerranBuildingMorphSplat" unitName="SquadStarport">
         <Model value="StarportSplat"/>
     </CActorSplat>
     <CActorModel id="StimpackEndImpact2" parent="ModelAnimationStyleOneShot">
@@ -3397,37 +3436,37 @@
             <Image value="Assets\Textures\Wireframe-Terran-SupplyDepot-Lowered.dds"/>
         </Wireframe>
     </CActorUnit>
-    <CActorUnit id="TechLab2" parent="TechLabBase" unitName="SquadTechLab">
+    <CActorUnit id="SquadTechLab" parent="TechLabBase" unitName="SquadTechLab">
         <Macros value="SnowVisualBuildingMacro"/>
-        <On Terms="AbilMorph.*.Finish; MorphTo TechReactor" Target="TechLabSplat" Send="Destroy"/>
-        <On Terms="AbilMorph.*.Finish; MorphTo TechReactor" Send="Destroy"/>
-        <On Terms="AbilMorph.*.Finish; MorphTo TechReactor" Target="TechLabSplat" Send="Destroy"/>
-        <On Terms="AbilMorph.*.Finish; MorphTo TechReactor" Send="Destroy"/>
-        <On Terms="Upgrade.BlackOps.Add" Send="ModelSwap TechLab_BlackOps_COOP"/>
-        <On Terms="ActorCreation; ValidateUnit HaveBlackOps" Send="ModelSwap TechLab_BlackOps_COOP"/>
-        <BuildModel value="TechLab_CovertOps"/>
-        <AddonIndicator value="Actor/AddonIndicator/TechLab2"/>
-        <HighlightTooltip value="Unit/Name/TechLab2"/>
-        <Model value="TechLab_CovertOps"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo SquadTechReactor" Target="SquadTechLabSplat" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo SquadTechReactor" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo SquadTechReactor" Target="SquadTechLabSplat" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo SquadTechReactor" Send="Destroy"/>
+        <Model value="TechLab_Silver"/>
+        <EventDataFootprint index="0" removed="1"/>
+        <BuildModel value="TechLab_Silver_Build"/>
+        <DeathArray index="Normal" ModelLink="TechLab_Silver_Death"/>
+        <EditorModel value="TechLab_Silver"/>
+        <PlacementModel value="TechLab_Silver_Placement"/>
+        <PortraitModel value="Reactor_Silver_Portrait"/>
+        <HighlightTooltip value="Unit/Name/SquadTechLab"/>
+        <HeroIcon value="Assets\Textures\btn-building-terran-techlab-silver.dds"/>
     </CActorUnit>
-    <CActorSplat id="TechLabSplat2" parent="GenericUnitSplat" unitName="SquadTechLab">
-        <Model value="TechLabSplat"/>
-    </CActorSplat>
     <CActorUnit id="SquadTechReactor" parent="TerranBuilding" unitName="SquadTechReactor">
         <Macros value="QueueAnim"/>
         <Macros value="TerranAttachmentAnims"/>
         <Macros value="BuildingFlattenTerrainMacro"/>
         <Macros value="SnowVisualBuildingMacro"/>
-        <On Terms="AbilMorph.MorphToTechReactor.Finish; MorphTo TechReactor" Send="Create"/>
+        <On Terms="AbilMorph.SquadMorphToTechReactor.Finish; MorphTo SquadTechReactor" Send="Create"/>
         <Model value="TechReactor"/>
         <CreepHeightClass value="Tiny"/>
         <BuildModel value="TechReactor"/>
         <DeathArray index="Normal" ModelLink="TechReactorDetachedDeath" SoundLink="Terran_ExplosionMedium"/>
-        <EditorModel value="TechLab"/>
+        <EditorModel value="TechReactor"/>
         <PlacementModel value="TechReactorPlacement"/>
         <PlacementSound value="Terran_BuildingPlacement"/>
         <PortraitModel value="AdjutantPortrait"/>
-        <AddonIndicator value="Actor/AddonIndicator/SquadTechReactor"/>
+        <AddonIndicator value="Actor/AddonIndicator/TechReactor"/>
         <BarOffset value="80"/>
         <BarWidth value="70"/>
         <GroupIcon>
@@ -3458,6 +3497,16 @@
             <Image value="Assets\Textures\Wireframe-Terran-TechReactor.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorModel id="SquadTechLabBuild" parent="TerranBuildingBuild">
+        <On Terms="ActorCreation" Send="SetScale 1.350000"/>
+        <Model value="TechLabBuild"/>
+    </CActorModel>
+    <CActorSplat id="SquadTechLabSplat" parent="GenericUnitSplat" unitName="TechLab">
+        <Model value="TechLabSplat"/>
+    </CActorSplat>
+    <CActorModel id="SquadTechReactorBuild" parent="TerranBuildingBuild">
+        <Model value="TechReactorBuild"/>
+    </CActorModel>
     <CActorProgress id="TerranConstruction2">
         <On Terms="Abil.TerranBuild.BuiltStart" Send="Create"/>
         <On Terms="Abil.BarracksAddOns.BuiltStart" Send="Create"/>

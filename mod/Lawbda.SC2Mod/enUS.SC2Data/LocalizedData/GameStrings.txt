@@ -25,7 +25,6 @@ Abil/Name/KD8Charge2=KD8 Charge
 Abil/Name/MagrailMunitionsMarauder2=Magrail Munitions
 Abil/Name/MedicFlashBangGrenade=Medic Flash Bang Grenade Ability
 Abil/Name/MercCompoundResearch2=Research
-Abil/Name/MorphToTechReactor2=Morph To Tech Reactor
 Abil/Name/NuclearWarheadBlack=Nuclear Warhead Black
 Abil/Name/NuclearWarheadBlue=Nuclear Warhead Blue
 Abil/Name/NuclearWarheadGreen=Nuclear Warhead Green
@@ -55,6 +54,7 @@ Abil/Name/SquadBunkerSalvageBunkerRefund=Squad Bunker Salvage Bunker Refund
 Abil/Name/SquadBunkerStop=Squad Bunker Stop
 Abil/Name/SquadBunkerStopRedirect=Squad Bunker Stop Redirect
 Abil/Name/SquadBunkerSuperStimpackMarauderRedirect=Squad Bunker Super Stimpack Marauder Redirect
+Abil/Name/SquadCalldownMulelisk=Squad Calldown Mulelisk
 Abil/Name/SquadCommandCenterLiftOff=Squad Command Center Lift Off
 Abil/Name/SquadCommandCenterRally=Squad Command Center Rally
 Abil/Name/SquadCommandCenterTrain=Squad Command Center Train
@@ -69,6 +69,9 @@ Abil/Name/SquadGhostSnipe=Squad Ghost Snipe
 Abil/Name/SquadHerculesTransport=Squad Hercules Transport
 Abil/Name/SquadInfantry=Squad Infantry Magazine
 Abil/Name/SquadMedicHeal=Squad Medic Heal
+Abil/Name/SquadMorphToTechReactor=Squad Morph To Tech Reactor
+Abil/Name/SquadMuleliskGather=Squad Mulelisk Gather
+Abil/Name/SquadMuleliskRepair=Squad Mulelisk Repair
 Abil/Name/SquadNydusCanalTransport=Squad Nydus Canal Transport
 Abil/Name/SquadOrbitalLiftOff=Squad Orbital Lift Off
 Abil/Name/SquadPickupScrapLarge=Squad Pickup Scrap Large
@@ -104,9 +107,9 @@ Abil/Name/SuqadArmoryResearchVechileandStarship=Suqad Armory Research Vechile an
 Abil/Name/TerranInstantJustice=Terran Instant Justice
 Abil/Name/UltraliskWeaponCooldown2=Ultralisk Weapon Cooldown
 Abil/Name/VanillaScannerSweep=Vanilla Scanner Sweep
-Abil/Name/attack=Squad Bunker Attack
 Abil/Name/que12=Queue (1)
 Actor/AddonIndicator/SquadReactor=R
+Actor/AddonIndicator/SquadTechLab=T
 Actor/AddonIndicator/SquadTechReactor=TR
 Actor/AddonIndicator/TechLab2=T
 Behavior/Name/AlphaScannerInvisible=Alpha Scanner Invisible
@@ -134,6 +137,9 @@ Behavior/Name/MercGroundDropDelay2=Merc Ground Drop Delay
 Behavior/Name/MultiMineralAutoHarvest=Multi Mineral Auto Harvest
 Behavior/Name/MultiMineralAutoHarvestAura=Multi Mineral Auto Harvest Aura
 Behavior/Name/PassengerAutoFire=Passenger Auto Fire
+Behavior/Name/PoweredByBarrack=Powered By Barrack
+Behavior/Name/PoweredByFactory=Powered By Factory
+Behavior/Name/PoweredByStarport=Powered By Starport
 Behavior/Name/PredatorUnitTracker=PredatorUnitTracker
 Behavior/Name/ReaperUnitTracker=Reaper Unit Tracker
 Behavior/Name/RecycleStructureCauseDropPickup=Recycle Structure Cause Drop Pickup
@@ -158,11 +164,10 @@ Behavior/Name/SquadGhostEMPDecloak=Squad Ghost EMP Decloak
 Behavior/Name/SquadInfantryStimpack=Squad Infantry Stimpack
 Behavior/Name/SquadInfantrySuperStimpack=Squad Infantry Super Stimpack
 Behavior/Name/SquadMarauderSlow=Squad Marauder Slow
-Behavior/Name/SquadRQueueBuff=Squad R Queue Buff
+Behavior/Name/SquadReactorQueueBuff=Squad Reactor Queue Buff
 Behavior/Name/SquadReaperJump=Squad Reaper Jump
 Behavior/Name/SquadSpectreUltrasonicPulsestun=Squad Spectre Ultrasonic Pulse stun
 Behavior/Name/SquadSupplydrop=Squad Supply drop
-Behavior/Name/SquadTUnlockBuff=Squad T Unlock Buff
 Behavior/Name/UnitSmallAddMaxLife=Unit Small Add Max Life
 Behavior/Tooltip/DamageBuffer=Convert imidiately damage in 10s vital reduction.
 Behavior/Tooltip/DefensiveMatrix2=While active, the Defensive Matrix blocks all incoming damage, up to a maximum of 200.
@@ -186,13 +191,32 @@ Behavior/Tooltip/StimpackMarauder2=This unit moves and attacks more quickly whil
 Behavior/Tooltip/UnitSmallAddMaxLife=<c val="F0F50A"></c>Current Magazine unit: </c><d ref="$BehaviorStackCount:Unit Small Add Max Life$"/>
 Button/Name/AblativeScales2=Kinetic Foam
 Button/Name/BuildDefenceStructure=Build Defence Structure
+Button/Name/BuildSquadArmory=Build Squad Armory
+Button/Name/BuildSquadAutomatedRefinery=Build Squad Automated Refinery
+Button/Name/BuildSquadBarracks=Build Squad Barracks
+Button/Name/BuildSquadBunker=Build Squad Bunker
+Button/Name/BuildSquadCommandCenter=Build Squad Command Center
+Button/Name/BuildSquadCommandCenterwithOrbitalRelay=Build Squad Command Center with Orbital Relay
+Button/Name/BuildSquadEngineeringBay=Build Squad Engineering Bay
+Button/Name/BuildSquadFactory=Build Squad Factory
+Button/Name/BuildSquadFusionCore=Build Squad Fusion Core
+Button/Name/BuildSquadGhostAcademy=Build Squad Ghost Academy
+Button/Name/BuildSquadMissileTurret=Build Squad Missile Turret
+Button/Name/BuildSquadReactor=Build Squad Reactor
+Button/Name/BuildSquadRefinery=Build Squad Refinery
+Button/Name/BuildSquadSensorTower=Build Squad Sensor Tower
+Button/Name/BuildSquadStarport=Build Squad Starport
+Button/Name/BuildSquadSupplyDepot=Build Squad Supply Depot
+Button/Name/BuildSquadTechLab=Build Squad Tech Lab
+Button/Name/BuildSquadTechReactor=Build Squad Tech Reactor
 Button/Name/BulletTime=Bullet Time
-Button/Name/CaptainWarPigs=Captain War Pigs
+Button/Name/CaptainFreeman=Captain Freeman
 Button/Name/CloakOff2=Decloak
 Button/Name/CloakOff3=Decloak
 Button/Name/CloakOnGhost2=Cloak
 Button/Name/CloakOnSpectre2=Cloak
 Button/Name/CombatDrugs2=Combat Drugs
+Button/Name/CommandCenterUpgrade=Command Center Upgrade
 Button/Name/CriusSuit2=Crius Suit
 Button/Name/D8Charge2=G-4 Cluster Bombs
 Button/Name/DefenderCoreSentinelMissiles=Defender Core Sentinel Missiles
@@ -235,6 +259,7 @@ Button/Name/SpectreHoldFire2=Hold Fire
 Button/Name/SpectreNukeCalldown2=Tac Nuke Strike
 Button/Name/SpectreWeaponsFree2=Weapons Free
 Button/Name/SquadBanshee=Squad Banshee
+Button/Name/SquadCalldownMulelisk=Squad Calldown Mulelisk
 Button/Name/SquadFirebat=Squad Firebat
 Button/Name/SquadGhost=Squad Ghost
 Button/Name/SquadMagicBook=SquadMagicBook
@@ -247,11 +272,14 @@ Button/Name/SquadSCV=Squad SCV
 Button/Name/SquadSCVGather=Squad SCV Gather
 Button/Name/SquadSiegeTank=Squad Siege Tank
 Button/Name/SquadSpectre=Squad Spectre
+Button/Name/SquadTechBarracksUpgrade=Squad Tech Barracks Upgrade
+Button/Name/SquadTechFactoryUpgrade=Squad Tech Factory Upgrade
+Button/Name/SquadTechStarportUpgrade=Squad Tech Starport Upgrade
 Button/Name/SquadVikin=Squad Vikin
 Button/Name/SqudDukesRevenge=Captain Dukes Revenge
 Button/Name/StabilizerMedPacks2=Stabilizer Medpacks
 Button/Name/Stim2=Stimpack
-Button/Name/TerranInstantJustis=Terran Instant Justis.
+Button/Name/TerranInstantJustis=Terran Instant Justis
 Button/Name/UltrasonicPulse2=Ultrasonic Pulse
 Button/Name/WeaponsFree2=Weapons Free
 Button/Name/YamatoGun2=Yamato Cannon
@@ -259,17 +287,35 @@ Button/Tooltip/AblativeScales2=Increases Marauder life by 25.
 Button/Tooltip/AdvanceEngineBay=Generates electromagnetic pulses that damage Protoss shields.
 Button/Tooltip/ArtanisDummy=Hierarch of the Daelaam. Powerful psionic and melee warrior.
 Button/Tooltip/BuildDefenceStructure=Upgrades the Bunker to have 150 additional life. Cannot be garrisoned while the Bunker is upgrading.
+Button/Tooltip/BuildSquadArmory=Contains weapon and armor upgrades for Factory and Starport units. <n/><n/><c val="ffff8a">Enables:</c><n/>- Hellbat at the Factory<n/>- Thor at the Factory
+Button/Tooltip/BuildSquadAutomatedRefinery=Improved Refinery that sends refined vespene gas straight to the Command Center via short-range warp fields. Eliminates the need for SCVs in vespene gas production.
+Button/Tooltip/BuildSquadBarracks=Infantry production facility. <n/><n/><c val="ffff8a">Enables:</c><n/>- Marines<n/>- Bunkers from SCVs
+Button/Tooltip/BuildSquadBunker=Defensive structure. Able to protect up to <d ref="Abil,BunkerTransport,TotalCargoSpace"/> infantry unit slots. Units inside the Bunker have +1 range to their attacks. Bunkers can be salvaged.
+Button/Tooltip/BuildSquadCommandCenter=Primary structure. Used to train SCVs and receive gathered resources. Can use the Lift Off ability.<n/><n/><c val="ffff8a">Enables:</c><n/>- SCVs
+Button/Tooltip/BuildSquadCommandCenterwithOrbitalRelay=Primary structure. Used to train SCVs and receive gathered resources. Can use the Lift Off, Calldown: MULE, and Scanner Sweep abilities.<n/><n/><c val="ffff8a">Enables:</c><n/>- SCVs
+Button/Tooltip/BuildSquadEngineeringBay=Contains upgrades for Terran infantry units. Enables the construction of Terran defensive structures. 
+Button/Tooltip/BuildSquadFactory=Vehicle-production facility. <n/><n/><c val="ffff8a">Enables:</c><n/>- Vultures<n/>- Hellions
+Button/Tooltip/BuildSquadFusionCore=Contains Battlecruiser upgrades. <n/><n/><c val="ffff8a">Enables:</c><n/>- Battlecruisers at the Starport<n/>- Hercules at the Starport
+Button/Tooltip/BuildSquadGhostAcademy=Can build Nukes that Ghosts can use.<n/><n/><c val="ffff8a">Enables:</c><n/>- Ghosts at the Barracks
+Button/Tooltip/BuildSquadMissileTurret=Primary anti-air defensive structure. <n/><n/><c val="#ColorAttackInfo">Can attack air units.</c><n/><c val="FFE303">Detector</c>
+Button/Tooltip/BuildSquadReactor=Allows 2 units to be created simultaneously.
+Button/Tooltip/BuildSquadRefinery=Built over a Vespene Geyser to allow harvesting of vespene gas.
+Button/Tooltip/BuildSquadSensorTower=Reveals the locations of enemy units at long range. The Sensor Tower's detection area is visible to the enemy.
+Button/Tooltip/BuildSquadStarport=Air-unit production facility. <n/><n/><c val="ffff8a">Enables:</c><n/>- Vikings<n/>- Medivacs
+Button/Tooltip/BuildSquadSupplyDepot=Provides supply.<n/>Supply allows you to create more units.<n/>Supply Depots can be lowered to allow units to walk over them.
+Button/Tooltip/BuildSquadTechLab=Enables additional unit construction options.
+Button/Tooltip/BuildSquadTechReactor=Enables additional unit construction options and allows 2 units to be created simultaneously.
 Button/Tooltip/BulletTime=Freezes all enemies in time for <d ref="Behavior,SOATimeFreeze,Duration"/> seconds.
 Button/Tooltip/CaptainDukesRevenge=Powerful warship.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
-Button/Tooltip/CaptainFreeman=General-purpose infantry.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
+Button/Tooltip/CaptainFreeman=Request 4 War Pig Mercenaries.<n/><n/>Elite Marines with upgraded equipment.
 Button/Tooltip/CaptainPredator=Anti-infantry specialist that deals area damage with each attack.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
-Button/Tooltip/CaptainWarPigs=Request 4 War Pig Mercenaries.<n/><n/>Elite Marines with upgraded equipment.
 Button/Tooltip/ClimaxImpact01=<s val="Kicker_Gas">+1 </s><IMG path="Assets\Textures\icon-gas-terran.dds" height="28" width="28"/>
 Button/Tooltip/CloakOff2=Decloaks the selected unit, making it visible to enemies.
 Button/Tooltip/CloakOff3=Decloaks the selected unit, making it visible to enemies.
 Button/Tooltip/CloakOnGhost2=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,GhostCloak,Modification.VitalRegenArray[2] + Unit,Ghost,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/CloakOnSpectre2=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,SpectreCloaking,Modification.VitalRegenArray[2] + Unit,Spectre,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/CombatDrugs2=Regenerates life quickly while out of combat.
+Button/Tooltip/CommandCenterUpgrade=Reduces the cost and time required to research upgrades at Tech Labs and the Ghost Academy by 50%.
 Button/Tooltip/ConcussiveGrenade2=Units hit by the Marauder are temporarily slowed.<n/><n/><c val="#ColorAttackInfo">Massive units are immune.</c>
 Button/Tooltip/CriusSuit2=Cloak no longer requires energy.
 Button/Tooltip/D8Charge2=Timed explosive that does heavy area damage.
@@ -329,6 +375,7 @@ Button/Tooltip/SquadBanshee=Request 2 Dusk Wing Mercenaries.<n/><n/>Dominion des
 Button/Tooltip/SquadBarracks=Infantry-production facility.<n/><n/><c val="ffff8a">Enables:</c><n/>- Marines<n/>- Reapers<n/>- Bunkers from SCVs
 Button/Tooltip/SquadBarracksFlying=Infantry-production facility.<n/><n/><c val="ffff8a">Enables:</c><n/>- Marines<n/>- Reapers<n/>- Bunkers from SCVs
 Button/Tooltip/SquadBunker=Defensive structure. Able to protect up to <d ref="Abil,BunkerTransport,TotalCargoSpace"/> infantry unit slots. Units inside the Bunker have +1 range to their attacks. Bunkers can be salvaged.
+Button/Tooltip/SquadCalldownMulelisk=Increases the number of MULEs called down by the Orbital Command Center from 1 to 2.
 Button/Tooltip/SquadCommandCenter=Primary structure. Used to receive gathered resources. Can use the Lift Off ability and can upgrade into an Orbital Command.<n/><n/><c val="ffff8a">Enables:</c><n/>- SCVs
 Button/Tooltip/SquadCommandCenterFlying=Primary structure. Used to train SCVs and receive gathered resources. Can upgrade into an Orbital Command or Planetary Fortress.
 Button/Tooltip/SquadDiamondback=Fast, high-damage hovertank. Rail Gun can fire while the Diamondback is moving.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
@@ -368,8 +415,11 @@ Button/Tooltip/SquadStarport=Air-unit production facility. <n/><n/><c val="ffff8
 Button/Tooltip/SquadStarportFlying=Starport must land to start unit production.
 Button/Tooltip/SquadSupplyDepot=Provides supply.<n/>Supply allows you to create more units.<n/>Supply Depots can be lowered to allow units to walk over them.
 Button/Tooltip/SquadSupplyDepotLowered=Provides supply.<n/>Supply allows you to create more units.<n/>Supply Depots can be lowered to allow units to walk over them.
+Button/Tooltip/SquadTechBarracksUpgrade=Unlocks the following upgrades at the Barracks Tech Lab:</n><ul indent="2" text="•"><li/>Unlock the Elite Marine's Super Stimpack ability, which increases their attack and movement speeds while healing them over time. <li/>Equip Marauder Commandos with an additional weapon that attacks their current target.</ul>
+Button/Tooltip/SquadTechFactoryUpgrade=Unlocks the following upgrades at the Factory Tech Lab:</n><ul indent="2" text="•"><li/>Enable Hellbat Rangers to leap toward enemy ground units and stun them on impact.<li/>Enable Strike Goliaths to stun enemy mechanical air units and disable their detection.<li/>Increase the Heavy Siege Tank's attack range over time while in Siege Mode.</ul>
 Button/Tooltip/SquadTechLab=Enables additional unit construction options.
 Button/Tooltip/SquadTechReactor=Enables additional unit construction options and allows 2 units to be created simultaneously.
+Button/Tooltip/SquadTechStarportUpgrade=Unlocks the following upgrades at the Starport Tech Lab:<n/><ul indent="2" text="•"><li/>Unlock the Covert Banshee's Rocket Barrage ability, which deals damage to all enemy ground units in a target area.<li/>Allow Raid Liberators to transform faster.<li/>Allow Raid Liberators to attack structures while in Defender Mode.</ul>
 Button/Tooltip/SquadUltralisk=Heavy assault beast. Has an area-damage attack.<n/><n/><c val="ffff8a">Can attack ground units.</c>
 Button/Tooltip/SquadVikin=Request 3 Hel's Angels Mercenaries.<n/><n/>Pirate Vikings with exceptional aerial expertise.
 Button/Tooltip/SqudDukesRevenge=Request the Jackson's Revenge Battlecruiser.<n/><n/>Pirate Battlecruiser from the earliest days of the Confederacy.
@@ -555,6 +605,12 @@ Effect/Name/OnMagazineDeath=On Magazine Death
 Effect/Name/OnMagazineRelease=On Magazine Release
 Effect/Name/PassengerAutoFire=Passenger Auto Fire
 Effect/Name/PeriodMagazineIterate=Period Magazine Iterate
+Effect/Name/PoweredByBarrackApply=Powered By Barrack Apply
+Effect/Name/PoweredByBarrackRemove=Powered By Barrack Remove
+Effect/Name/PoweredByFactoryApply=Powered By Factory Apply
+Effect/Name/PoweredByFactoryRemove=Powered By Factory Remove
+Effect/Name/PoweredByStarportApply=Powered By Starport Apply
+Effect/Name/PoweredByStarportRemove=Powered By Starport Remove
 Effect/Name/PunisherGrenadesLM2=Punisher Grenades
 Effect/Name/PunisherGrenadesSet2=Punisher Grenades
 Effect/Name/PunisherGrenadesSlow2=Punisher Grenades
@@ -628,6 +684,11 @@ Effect/Name/SquadBurrowChargeTargetSearch=Squad Burrow Charge Target Search
 Effect/Name/SquadBurrowChargeTargetSearchAlly=Squad Burrow Charge Target Search Ally
 Effect/Name/SquadBurrowChargeTargetSet=Squad Burrow Charge Target Set
 Effect/Name/SquadC10CanisterRifle=Squad C-10 Canister Rifle
+Effect/Name/SquadCalldownMULECreatePersistent=Squad Calldown MULE Create Persistent
+Effect/Name/SquadCalldownMULECreateSet=Squad Calldown MULE Create Set
+Effect/Name/SquadCalldownMULECreateUnit=Squad Calldown MULE Create Unit
+Effect/Name/SquadCalldownMULEFinalSet=Squad Calldown MULE Final Set
+Effect/Name/SquadCalldownMULEIssueOrder=Squad Calldown MULE Issue Order
 Effect/Name/SquadDiamondbackBurstCapacitorsApplyAttackingBehavior=Squad Diamondback Burst Capacitors Apply Attacking Behavior
 Effect/Name/SquadDiamondbackBurstCapacitorsApplyChargeBehavior=Squad Diamondback Burst Capacitors Apply Charge Behavior
 Effect/Name/SquadDiamondbackBurstCapacitorsApplyDamageBuff=Squad Diamondback Burst Capacitors Apply Damage Buff
@@ -642,6 +703,7 @@ Effect/Name/SquadFirebatFlameThrowerSet=Squad Firebat Flame Thrower Set
 Effect/Name/SquadFirebatFlameThrowerViralPlasmaDoTDamage=Squad Firebat Flame Thrower Viral Plasma DoT Damage
 Effect/Name/SquadGuassRifleDamage=Squad Guass Rifle Damage
 Effect/Name/SquadMedicHeal=Squad Medic Heal
+Effect/Name/SquadMorphToTechReactor=Squad Morph To Tech Reactor
 Effect/Name/SquadNukePersistent=Squad Nuke Persistent
 Effect/Name/SquadNukeSuicide=Squad Nuke Suicide
 Effect/Name/SquadP38ScytheGuassPistol=Squad P-38 Scythe Guass Pistol
@@ -664,6 +726,7 @@ Effect/Name/SquadReaperJumpApply=Squad Reaper Jump Apply
 Effect/Name/SquadReaperJumpRemove=Squad Reaper Jump Remove
 Effect/Name/SquadReaperP45ScytheGuassPistol=Squad Reaper P-45 Scythe Guass Pistol
 Effect/Name/SquadRefineryMorph=Squad Refinery Morph
+Effect/Name/SquadRepair=Squad Repair
 Effect/Name/SquadSalvageDeath=Squad Salvage Death
 Effect/Name/SquadShrikeTurret=Squad Shrike Turret
 Effect/Name/SquadSnipeDamage=Squad Snipe Damage
@@ -782,6 +845,7 @@ Unit/Name/SquadTechLab=Squad Tech Lab
 Unit/Name/SquadTechReactor=Squad Tech Reactor
 Unit/Name/SquadUltralisk=Squad Ultralisk
 Unit/Name/Starport=Squad Starport Flying
+Unit/Name/TechLab2=Tech Lab
 Unit/Name/YamatoWeapon2=Yamato
 Upgrade/Name/AlphaSquadTerran7=Alpha Squad Terran
 Upgrade/Name/BlackOps2=Black Ops

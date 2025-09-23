@@ -18,6 +18,82 @@
         <EditorCategories value="Race:Terran"/>
         <Cost Abil="SquadInfantry,Ammo4" ChargeCountUse="-1"/>
     </CEffectModifyUnit>
+    <CEffectRemoveBehavior id="PoweredByFactoryRemove">
+        <EditorCategories value="Race:Terran"/>
+        <BehaviorLink value="PoweredByFactory"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="PoweredByFactoryApply">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="PoweredByFactory"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="PoweredByStarportApply">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="PoweredByStarport"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="PoweredByStarportRemove">
+        <EditorCategories value="Race:Terran"/>
+        <BehaviorLink value="PoweredByStarport"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="PoweredByBarrackApply">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="PoweredByBarrack"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="PoweredByBarrackRemove">
+        <EditorCategories value="Race:Terran"/>
+        <BehaviorLink value="PoweredByBarrack"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectIssueOrder id="SquadMorphToTechReactor">
+        <EditorCategories value="Race:Terran"/>
+        <Abil value="SquadMorphToTechReactor"/>
+    </CEffectIssueOrder>
+    <CEffectCreateHealer id="SquadRepair">
+        <ValidatorArray value="NotWarpingIn"/>
+        <ValidatorArray value="HiddenCompareBA"/>
+        <ValidatorArray value="HiddenCompareAB"/>
+        <ValidatorArray value="NotVortexd"/>
+        <ValidatorArray value="NotStasis"/>
+        <ValidatorArray value="NotThorWreckage"/>
+        <ValidatorArray value="NotOdinWreckage"/>
+        <EditorCategories value="Race:Terran"/>
+        <DrainResourceCostFactor index="Minerals" value="0.25"/>
+        <DrainResourceCostFactor index="Vespene" value="0.25"/>
+        <DrainResourceCostFactor index="Terrazine" value="0.25"/>
+        <DrainResourceCostFactor index="Custom" value="0.25"/>
+        <RechargeVitalRate value="1"/>
+        <TimeFactor value="1"/>
+    </CEffectCreateHealer>
+    <CEffectCreatePersistent id="SquadCalldownMULECreatePersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnitOrPoint"/>
+        <ExpireDelay value="4"/>
+        <FinalEffect value="SquadCalldownMULEFinalSet"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="SquadCalldownMULECreateSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="MakePrecursor"/>
+        <EffectArray value="SquadCalldownMULECreatePersistent"/>
+    </CEffectSet>
+    <CEffectCreateUnit id="SquadCalldownMULECreateUnit">
+        <ValidatorArray value="MULETargetCheck"/>
+        <ValidatorArray value="MULETargetCheck"/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnitOrPoint"/>
+        <SpawnEffect value="SquadCalldownMULECreateSet"/>
+        <SpawnUnit value="Mulelisk"/>
+    </CEffectCreateUnit>
+    <CEffectSet id="SquadCalldownMULEFinalSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="RemovePrecursor"/>
+        <EffectArray value="SquadCalldownMULEIssueOrder"/>
+    </CEffectSet>
+    <CEffectIssueOrder id="SquadCalldownMULEIssueOrder">
+        <EditorCategories value="Race:Terran"/>
+        <Abil value="SquadMuleliskGather"/>
+        <Target Effect="CalldownMULECreateUnit" Value="TargetUnit"/>
+    </CEffectIssueOrder>
     <CEffectRemoveBehavior id="LootOnDealDamageRemove">
         <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
@@ -430,7 +506,7 @@
     <CEffectRemoveBehavior id="RemoveSquadReactorPowerQueue">
         <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
-        <BehaviorLink value="SquadRQueueBuff"/>
+        <BehaviorLink value="SquadReactorQueueBuff"/>
     </CEffectRemoveBehavior>
     <CEffectSet id="BlueScannerDamageSet">
         <EditorCategories value="Race:Terran"/>
@@ -1439,7 +1515,7 @@
     <CEffectApplyBehavior id="AddSquadReactorPowerQueue">
         <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
-        <Behavior value="SquadRQueueBuff"/>
+        <Behavior value="SquadReactorQueueBuff"/>
     </CEffectApplyBehavior>
     <CEffectLaunchMissile id="ExcavatorD888ChargeLaunchMissile">
         <EditorCategories value="Race:Terran"/>

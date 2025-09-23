@@ -7,6 +7,40 @@
         <Period value="1"/>
         <PeriodicEffect value="PeriodMagazineIterate"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="PoweredByBarrack">
+        <InfoIcon value="Assets\Textures\nova coop_lvl 04_barracks tech lab_marine-marauder.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <MaxStackCountPerCaster value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="PoweredByFactory">
+        <InfoIcon value="Assets\Textures\nova coop_lvl 06_factorytech lab.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <MaxStackCountPerCaster value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="PoweredByStarport">
+        <InfoIcon value="Assets\Textures\nova coop_lvl 10 starport tech lab_banshee-liberator.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <MaxStackCountPerCaster value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorPowerSource id="SquadFactoryPowerSource">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-building-terran-techlab-covertops.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Radius value="6.5"/>
+    </CBehaviorPowerSource>
+    <CBehaviorPowerSource id="SquadStarportPowerSource">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-building-terran-techlab-covertops.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Radius value="6.5"/>
+    </CBehaviorPowerSource>
+    <CBehaviorBuff id="SquadMorphToTechReactor">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <Duration value="0.1"/>
+        <ExpireEffect value="SquadMorphToTechReactor"/>
+    </CBehaviorBuff>
     <CBehaviorBuff id="SquadDiamondbackBurstCapacitorsAttacking">
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -64,6 +98,12 @@
         </DamageResponse>
         <RemoveValidatorArray value="IsStructure"/>
     </CBehaviorBuff>
+    <CBehaviorPowerSource id="SquadBarrackPowerSource">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-building-terran-techlab-covertops.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Radius value="6.5"/>
+    </CBehaviorPowerSource>
     <CBehaviorBuff id="UnitSmallAddMaxLife">
         <InfoIcon value="Assets\Textures\btn-upgrade-zerg-regenerativebile.dds"/>
         <BehaviorCategories index="User10" value="1"/>
@@ -130,7 +170,7 @@
             <StateFlags index="Untargetable" value="1"/>
         </Modification>
     </CBehaviorBuff>
-    <CBehaviorPowerUser id="SquadRPowerUser">
+    <CBehaviorPowerUser id="SquadReactorPowerUser">
         <BehaviorFlags index="Permanent" value="1"/>
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
@@ -144,12 +184,7 @@
             </Modification>
         </PowerStageArray>
     </CBehaviorPowerUser>
-    <CBehaviorBuff id="SquadTUnlockBuff">
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
-        <RemoveValidatorArray value="IsInReactorPowerFeild"/>
-        <Modification QueueCount="1" QueueSize="3"/>
-    </CBehaviorBuff>
-    <CBehaviorPowerSource id="SquadTPowerSource">
+    <CBehaviorPowerSource id="SquadTechlabPowerSource">
         <InfoFlags index="Hidden" value="1"/>
         <InfoIcon value="Assets\Textures\btn-building-terran-techlab-covertops.dds"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
@@ -406,13 +441,13 @@
             <AbilClassEnableArray index="CAbilAttack" value="1"/>
         </Modification>
     </CBehaviorBuff>
-    <CBehaviorPowerUser id="SquadTPowerUser">
+    <CBehaviorPowerUser id="SquadTechlabBarrackPowerUser">
         <BehaviorFlags index="Permanent" value="1"/>
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
-        <PowerLink value="SquadTPowerSource"/>
+        <PowerLink value="SquadBarrackPowerSource"/>
         <PowerStageArray/>
-        <PowerStageArray MinPowerLevel="1">
+        <PowerStageArray MinPowerLevel="1" LevelGainEffect="PoweredByBarrackApply" LevelLossEffect="PoweredByBarrackRemove">
             <Modification>
                 <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
                 <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
@@ -426,7 +461,7 @@
         <DisableValidatorArray value="ProjectileAcceleratorsPurchased"/>
         <Modification WeaponRange="1"/>
     </CBehaviorBuff>
-    <CBehaviorBuff id="SquadRQueueBuff">
+    <CBehaviorBuff id="SquadReactorQueueBuff">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <RemoveValidatorArray value="IsInReactorPowerFeild"/>
         <Modification QueueCount="1" QueueSize="3"/>

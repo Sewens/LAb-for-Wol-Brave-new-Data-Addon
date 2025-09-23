@@ -123,6 +123,63 @@
         <AINotifyEffect value="GreenScannerSweep"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="ScannerSweepAlpha"/>
     </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadMuleliskRepair">
+        <Alignment value="Positive"/>
+        <AbilSetId value="Repair"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadRepair"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOffOwnerLeave" value="1"/>
+        <Flags index="BestUnit" value="0"/>
+        <Flags index="ReExecutable" value="1"/>
+        <Flags index="Smart" value="1"/>
+        <Flags index="PassengerAcquirePassengers" value="1"/>
+        <TargetFilters value="Mechanical,Visible;Self,Enemy,Missile,Stasis,UnderConstruction,Dead,Hidden"/>
+        <RangeSlop value="0.2"/>
+        <AutoCastAcquireLevel value="Defensive"/>
+        <AutoCastFilters value="-;Neutral,Enemy"/>
+        <AutoCastRange value="7"/>
+        <AutoCastValidatorArray value="HackingTRace"/>
+        <Marker Link="Abil/Repair">
+            <MatchFlags index="Link" value="0"/>
+            <MismatchFlags index="Id" value="0"/>
+        </Marker>
+        <UseMarkerArray index="Approach" value="0"/>
+        <UseMarkerArray index="Prep" value="0"/>
+        <UseMarkerArray index="Cast" value="0"/>
+        <UseMarkerArray index="Channel" value="0"/>
+        <InheritAttackPriorityArray index="Prep" value="1"/>
+        <InheritAttackPriorityArray index="Cast" value="1"/>
+        <InheritAttackPriorityArray index="Channel" value="1"/>
+        <AINotifyEffect value="Repair"/>
+        <DefaultError value="RequiresRepairTarget"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Repair">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectTarget>
+    <CAbilHarvest id="SquadMuleliskGather">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Gather" DefaultButtonFace="GatherMULE"/>
+        <FlagArray index="BypassResourceQueue" value="1"/>
+        <Range value="0.5"/>
+        <ReservedMarker Link="Abil/SquadMuleliskGather"/>
+        <ResourceAllowed index="Vespene" value="0"/>
+        <ResourceAllowed index="Terrazine" value="0"/>
+        <ResourceAllowed index="Custom" value="0"/>
+        <ResourceAmountRequest index="Minerals" value="30"/>
+        <ResourceTimeMultiplier index="Minerals" value="2.05"/>
+    </CAbilHarvest>
+    <CAbilEffectTarget id="SquadCalldownMulelisk">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadCalldownMULECreateUnit"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+        </Cost>
+        <Range value="500"/>
+        <Arc value="360"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadCalldownMulelisk"/>
+    </CAbilEffectTarget>
     <CAbilMorphPlacement id="SquadFactoryLand" parent="TerranBuildingLand" unit="Factory">
         <Name value="Abil/Name/SquadFactoryLand"/>
         <InfoArray index="0" Unit="SquadFactory" CollideRange="0">
@@ -436,25 +493,9 @@
             <Unit value="HellionTank"/>
             <Unit value="Goliath"/>
         </InfoArray>
-        <InfoArray index="Train8">
-            <Charge Link="Abil/##id##"/>
-            <Cooldown Link="Abil/##id##"/>
-        </InfoArray>
         <InfoArray index="Train9" Time="25">
             <Button DefaultButtonFace="Vulture" State="Restricted"/>
             <Unit value="Vulture"/>
-        </InfoArray>
-        <InfoArray index="Train10">
-            <Charge Link="Abil/##id##"/>
-            <Cooldown Link="Abil/##id##"/>
-        </InfoArray>
-        <InfoArray index="Train11">
-            <Charge Link="Abil/##id##"/>
-            <Cooldown Link="Abil/##id##"/>
-        </InfoArray>
-        <InfoArray index="Train12">
-            <Charge Link="Abil/##id##"/>
-            <Cooldown Link="Abil/##id##"/>
         </InfoArray>
         <InfoArray index="Train13" Time="45">
             <Button Requirements="HaveArmoryAndAttachedTechLabOrAttachedTechReactor"/>
@@ -468,10 +509,10 @@
             <Unit value="WidowMine"/>
         </InfoArray>
     </CAbilTrain>
-    <CAbilMorph id="MorphToTechReactor2">
+    <CAbilMorph id="SquadMorphToTechReactor">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Flags index="IgnoreUnitCost" value="1"/>
-        <InfoArray Unit="TechReactor"/>
+        <InfoArray Unit="SquadTechReactor"/>
     </CAbilMorph>
     <CAbilAttack id="SquadBunkerAttack">
         <Name value="Abil/Name/attack"/>
@@ -1784,42 +1825,42 @@
         <FlagArray index="Interruptible" value="1"/>
         <FlagArray index="PeonDisableCollision" value="1"/>
         <InfoArray index="Build1" Unit="SquadCommandCenter" Time="100">
-            <Button DefaultButtonFace="CommandCenter" State="Suppressed"/>
+            <Button DefaultButtonFace="BuildSquadCommandCenter" State="Suppressed"/>
         </InfoArray>
         <InfoArray index="Build2" Unit="SquadSupplyDepot" Time="30">
-            <Button DefaultButtonFace="SupplyDepot"/>
+            <Button DefaultButtonFace="BuildSquadSupplyDepot"/>
         </InfoArray>
         <InfoArray index="Build3" Unit="SquadRefinery" Time="30">
-            <Button DefaultButtonFace="Refinery"/>
+            <Button DefaultButtonFace="BuildSquadRefinery"/>
             <ValidatorArray value="HasVespene"/>
         </InfoArray>
         <InfoArray index="Build4" Unit="SquadBarracks" Time="5">
-            <Button DefaultButtonFace="Barracks" State="Suppressed" Requirements="HaveSupplyDepot"/>
+            <Button DefaultButtonFace="BuildSquadBarracks" State="Suppressed" Requirements="HaveSupplyDepot"/>
         </InfoArray>
         <InfoArray index="Build5" Unit="SquadEngineeringBay" Time="35">
-            <Button DefaultButtonFace="EngineeringBay" State="Suppressed" Requirements="HaveCommandCenter"/>
+            <Button DefaultButtonFace="BuildSquadEngineeringBay" State="Suppressed" Requirements="HaveCommandCenter"/>
         </InfoArray>
         <InfoArray index="Build6" Unit="SquadMissileTurret" Time="25">
-            <Button DefaultButtonFace="MissileTurret" State="Restricted" Requirements="HaveEngineeringBay"/>
+            <Button DefaultButtonFace="BuildSquadMissileTurret" State="Restricted" Requirements="HaveEngineeringBay"/>
         </InfoArray>
         <InfoArray index="Build7" Unit="SquadBunker" Time="40">
-            <Button DefaultButtonFace="Bunker" State="Restricted" Requirements="HaveBarracks"/>
+            <Button DefaultButtonFace="BuildSquadBunker" State="Restricted" Requirements="HaveBarracks"/>
         </InfoArray>
         <InfoArray index="Build8" Unit="SquadRefineryRich" Time="30">
-            <Button DefaultButtonFace="Refinery"/>
+            <Button DefaultButtonFace="BuildSquadRefinery"/>
             <ValidatorArray value="HasVespene"/>
         </InfoArray>
         <InfoArray index="Build9" Unit="SquadSensorTower" Time="25">
-            <Button DefaultButtonFace="SensorTower" State="Restricted" Requirements="HaveEngineeringBay"/>
+            <Button DefaultButtonFace="BuildSquadSensorTower" State="Restricted" Requirements="HaveEngineeringBay"/>
         </InfoArray>
-        <InfoArray index="Build10" Unit="SquadGhost" Time="40">
-            <Button DefaultButtonFace="GhostAcademy" State="Suppressed" Requirements="HaveBarracks"/>
+        <InfoArray index="Build10" Unit="NucolorAcademy" Time="40">
+            <Button DefaultButtonFace="BuildSquadGhostAcademy" State="Suppressed" Requirements="HaveBarracks"/>
         </InfoArray>
         <InfoArray index="Build11" Unit="SquadFactory" Time="60">
-            <Button DefaultButtonFace="Factory" State="Suppressed" Requirements="HaveBarracks"/>
+            <Button DefaultButtonFace="BuildSquadFactory" State="Suppressed" Requirements="HaveBarracks"/>
         </InfoArray>
         <InfoArray index="Build12" Unit="SquadStarport" Time="50">
-            <Button DefaultButtonFace="Starport" State="Suppressed" Requirements="HaveFactory"/>
+            <Button DefaultButtonFace="BuildSquadStarport" State="Suppressed" Requirements="HaveFactory"/>
         </InfoArray>
         <InfoArray index="Build13" Time="50">
             <Button State="Suppressed" Requirements="HaveBarracks"/>
@@ -1831,13 +1872,13 @@
             <Button DefaultButtonFace="FusionCore" State="Suppressed" Requirements="HaveStarport"/>
         </InfoArray>
         <InfoArray index="Build28" Unit="SquadTechLab">
-            <Button DefaultButtonFace="BuildTechLabBarracks"/>
+            <Button DefaultButtonFace="BuildSquadTechLab"/>
         </InfoArray>
         <InfoArray index="Build29" Unit="SquadReactor" Time="5">
-            <Button DefaultButtonFace="Reactor"/>
+            <Button DefaultButtonFace="BuildSquadReactor"/>
         </InfoArray>
         <InfoArray index="Build30" Unit="SquadTechReactor" Time="30">
-            <Button DefaultButtonFace="TechReactor" Requirements="HaveFactory"/>
+            <Button DefaultButtonFace="BuildSquadTechReactor" Requirements="HaveFactory"/>
         </InfoArray>
         <FidgetDelayMin value="5"/>
         <FidgetDelayMax value="10"/>
