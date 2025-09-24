@@ -123,6 +123,28 @@
         <AINotifyEffect value="GreenScannerSweep"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="ScannerSweepAlpha"/>
     </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadVultureSpiderMineUnburrowRangeDummy">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Range value="2"/>
+    </CAbilEffectTarget>
+    <CAbilSpecialize id="SquadVultureMakeSpiderMines">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Activity value="UI/SpiderMineBuilding"/>
+        <InfoArray index="Specialize1" Time="12" Effect="SquadVultureReplenishNanoConstructor">
+            <Resource index="Minerals" value="15"/>
+            <Display index="Minerals" value="1"/>
+            <Charge>
+                <CountMax value="3"/>
+                <CountUse value="1"/>
+                <HideCount value="1"/>
+                <Location value="Unit"/>
+            </Charge>
+            <Button DefaultButtonFace="SquadVultreReplenishSpiderMine"/>
+            <Flags index="AutoCast" value="1"/>
+        </InfoArray>
+        <Alert value="BuildComplete"/>
+        <Flags index="BestUnit" value="0"/>
+    </CAbilSpecialize>
     <CAbilMorph id="SquadRefineryToAutomatedRefinery">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="Raise"/>
@@ -560,45 +582,40 @@
     <CAbilTrain id="SquadFactoryTrain">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <Activity value="UI/Building"/>
+        <InfoArray index="Train1">
+            <Button DefaultButtonFace="BuildSquadHellbat" Requirements="CrossSpectrumDampenersResearched"/>
+        </InfoArray>
         <InfoArray index="Train2" Time="45">
-            <Button DefaultButtonFace="SiegeTank" State="Restricted" Requirements="HaveAttachedTechLab"/>
+            <Button DefaultButtonFace="BuildSquadSiegeTank" State="Restricted" Requirements="HaveAttachedTechLab"/>
             <Unit value="SiegeTank"/>
         </InfoArray>
         <InfoArray index="Train3" Time="40">
-            <Button DefaultButtonFace="Goliath" State="Restricted"/>
+            <Button DefaultButtonFace="BuildSquadGoliath" State="Restricted"/>
             <Unit value="Goliath"/>
         </InfoArray>
         <InfoArray index="Train4" Time="50">
-            <Button DefaultButtonFace="Diamondback" State="Restricted" Requirements="HaveAttachedTechLab"/>
+            <Button DefaultButtonFace="BuildSquadDiamondback" State="Restricted" Requirements="HaveAttachedTechLab"/>
             <Unit value="Diamondback"/>
         </InfoArray>
         <InfoArray index="Train5" Time="60">
-            <Button DefaultButtonFace="Thor" State="Restricted" Requirements="HaveArmoryAndAttachedTechLabOrAttachedTechReactor"/>
+            <Button DefaultButtonFace="BuildSquadThor" State="Restricted" Requirements="HaveArmoryAndAttachedTechLabOrAttachedTechReactor"/>
             <Unit value="Thor"/>
         </InfoArray>
         <InfoArray index="Train6" Time="30">
-            <Button DefaultButtonFace="Hellion" State="Restricted"/>
+            <Button DefaultButtonFace="BuildSquadHellion" State="Restricted"/>
             <Unit value="Hellion"/>
         </InfoArray>
         <InfoArray index="Train7" Time="40">
-            <Button DefaultButtonFace="Goliath" State="Restricted"/>
+            <Button DefaultButtonFace="BuildSquadGoliath" State="Restricted"/>
             <Unit value="HellionTank"/>
             <Unit value="Goliath"/>
         </InfoArray>
         <InfoArray index="Train9" Time="25">
-            <Button DefaultButtonFace="Vulture" State="Restricted"/>
+            <Button DefaultButtonFace="BuildSquadVulture" State="Restricted"/>
             <Unit value="Vulture"/>
         </InfoArray>
         <InfoArray index="Train13" Time="45">
             <Button Requirements="HaveArmoryAndAttachedTechLabOrAttachedTechReactor"/>
-        </InfoArray>
-        <InfoArray index="Train20" Time="30">
-            <Button DefaultButtonFace="Hellion" State="Restricted"/>
-            <Unit value="Hellion"/>
-        </InfoArray>
-        <InfoArray index="Train25" Time="40">
-            <Button DefaultButtonFace="WidowMine" State="Restricted"/>
-            <Unit value="WidowMine"/>
         </InfoArray>
     </CAbilTrain>
     <CAbilMorph id="SquadMorphToTechReactor">
@@ -813,43 +830,42 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <Activity value="UI/Building"/>
         <InfoArray index="Train1" Time="42">
-            <Button DefaultButtonFace="Medivac" State="Restricted"/>
+            <Button DefaultButtonFace="BuildSquadMedivac" State="Restricted"/>
             <Unit value="Medivac"/>
         </InfoArray>
         <InfoArray index="Train2" Time="60">
-            <Button DefaultButtonFace="Banshee" State="Restricted" Requirements="HaveAttachedTechLab"/>
+            <Button DefaultButtonFace="BuildSquadBanshee" State="Restricted" Requirements="HaveAttachedTechLab"/>
             <Unit value="Banshee"/>
         </InfoArray>
         <InfoArray index="Train3" Time="60">
-            <Button DefaultButtonFace="Raven" State="Restricted" Requirements="HaveAttachedTechLab"/>
+            <Button DefaultButtonFace="BuildSquadRaven" State="Restricted" Requirements="HaveAttachedTechLab"/>
             <Unit value="Raven"/>
         </InfoArray>
         <InfoArray index="Train4" Time="90">
-            <Button DefaultButtonFace="Battlecruiser" State="Restricted" Requirements="HaveAttachedStarportTechLabAndFusionCore"/>
+            <Button DefaultButtonFace="BuildSquadBattlecruiser" State="Restricted" Requirements="HaveAttachedStarportTechLabAndFusionCore"/>
             <Unit value="Battlecruiser"/>
         </InfoArray>
         <InfoArray index="Train5" Time="42">
-            <Button DefaultButtonFace="VikingFighter" State="Restricted"/>
+            <Button DefaultButtonFace="BuildSquadViking" State="Restricted"/>
             <Unit value="VikingFighter"/>
         </InfoArray>
         <InfoArray index="Train6" Time="70">
-            <Button DefaultButtonFace="BuildHercules" State="Restricted" Requirements="HaveAttachedStarportTechLabAndFusionCore"/>
+            <Button DefaultButtonFace="BuildSquadHercules" State="Restricted" Requirements="HaveAttachedStarportTechLabAndFusionCore"/>
             <Unit value="Hercules"/>
             <Unit value="Hercules"/>
         </InfoArray>
         <InfoArray index="Train7" Time="60">
-            <Button DefaultButtonFace="BuildScienceVessel" State="Restricted" Requirements="BuildScienceVessel"/>
+            <Button DefaultButtonFace="BuildSquadScienceVessel" State="Restricted" Requirements="BuildScienceVessel"/>
             <Unit value="Liberator"/>
             <Unit value="ScienceVessel"/>
         </InfoArray>
         <InfoArray index="Train8" Time="50">
-            <Button DefaultButtonFace="Wraith" State="Restricted" Requirements="HaveAttachedTechLab"/>
+            <Button DefaultButtonFace="BuildSquadWraith" State="Restricted" Requirements="HaveAttachedTechLab"/>
             <Unit value="Wraith"/>
             <Unit value="Wraith"/>
         </InfoArray>
         <InfoArray index="Train9" Time="60">
-            <Button DefaultButtonFace="BuildScienceVessel" State="Restricted" Requirements="HaveAttachedTechLab"/>
-            <Unit value="ScienceVessel"/>
+            <Button State="Restricted" Requirements="HaveCommandCenter"/>
         </InfoArray>
     </CAbilTrain>
     <CAbilEffectInstant id="SquadSuperStimpack">
@@ -1759,4 +1775,79 @@
         <QueueCount value="2"/>
         <QueueSize value="8"/>
     </CAbilQueue>
+    <CAbilQueue id="SquadVultureMakeSpiderMineQueue">
+        <EditorCategories value="Race:Neutral,AbilityorEffectType:Structures"/>
+        <QueueSize value="3"/>
+        <Flags index="Passive" value="1"/>
+    </CAbilQueue>
+    <CAbilMorph id="SquadVultureSpiderMineBurrow">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <ActorKey value="BurrowDown"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="SuppressMovement" value="1"/>
+        <Cost>
+            <Charge Link="Abil/SpiderMineBurrow"/>
+            <Cooldown Link="Abil/SpiderMineBurrow"/>
+        </Cost>
+        <InfoArray Unit="SquadSpiderMineBurrowed">
+            <SectionArray index="Actor">
+                <DurationArray index="Delay" value="3.5332"/>
+                <DurationArray index="Duration" value="1.067"/>
+            </SectionArray>
+            <SectionArray index="Mover">
+                <DurationArray index="Delay" value="3.5332"/>
+                <DurationArray index="Duration" value="1"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="4.5332"/>
+                <EffectArray index="Start" value="SpiderMineVulnerable"/>
+            </SectionArray>
+        </InfoArray>
+        <AutoCastFilters value="Ground,Visible;Player,Ally,Neutral,Structure,Worker,Missile,Stasis,Dead,Hidden,Invulnerable,Benign"/>
+        <AutoCastRange value="2"/>
+    </CAbilMorph>
+    <CAbilEffectTarget id="SquadVultureUseSpiderMines">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadVultureSpawnSpiderMineSet"/>
+        <Cost>
+            <Charge>
+                <CountMax value="3"/>
+                <CountStart value="3"/>
+                <CountUse value="1"/>
+                <Location value="Unit"/>
+            </Charge>
+        </Cost>
+        <Placeholder value="SpiderMine"/>
+        <Range value="3"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="DeploySquadSpiderMine"/>
+    </CAbilEffectTarget>
+    <CAbilMorph id="SquadVultureSpiderMineUnburrow">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <ActorKey value="BurrowUp"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="SuppressMovement" value="1"/>
+        <Cost>
+            <Charge Link="Abil/SpiderMineUnburrow"/>
+            <Cooldown Link="Abil/SpiderMineUnburrow"/>
+        </Cost>
+        <InfoArray Unit="SquadSpiderMineBurrowed">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="0.6"/>
+            </SectionArray>
+            <SectionArray index="Mover">
+                <DurationArray index="Duration" value="0.6"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Duration" value="0.6"/>
+                <EffectArray index="Start" value="SpiderMineInvulnerable"/>
+            </SectionArray>
+        </InfoArray>
+        <AutoCastFilters value="Ground,Visible;Player,Ally,Neutral,Structure,Worker,Missile,Stasis,Dead,Hidden,Invulnerable,Benign"/>
+        <AutoCastRange value="2"/>
+        <AutoCastCountMin value="1"/>
+    </CAbilMorph>
 </Catalog>

@@ -7,6 +7,25 @@
         <Period value="1"/>
         <PeriodicEffect value="PeriodMagazineIterate"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="SquadMultilockTargetingSystems">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <Requirements value="UseMultilockTargetingSystems"/>
+        <Modification>
+            <WeaponEnableArray value="GoliathAUpgraded"/>
+            <WeaponEnableArray value="GoliathGUpgraded"/>
+            <WeaponEnableArray value="SpartanCompanyAUpgraded"/>
+            <WeaponEnableArray value="SpartanCompanyGUpgraded"/>
+            <WeaponEnableArray value="MengskGoliathAUpgraded"/>
+            <WeaponEnableArray value="MengskGoliathGUpgraded"/>
+            <WeaponDisableArray value="GoliathA"/>
+            <WeaponDisableArray value="GoliathG"/>
+            <WeaponDisableArray value="SpartanCompanyA"/>
+            <WeaponDisableArray value="SpartanCompanyG"/>
+            <WeaponDisableArray value="MengskGoliathA"/>
+            <WeaponDisableArray value="MengskGoliathG"/>
+        </Modification>
+    </CBehaviorBuff>
     <CBehaviorBuff id="PoweredByBarrack">
         <InfoIcon value="Assets\Textures\nova coop_lvl 04_barracks tech lab_marine-marauder.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -21,6 +40,14 @@
         <InfoIcon value="Assets\Textures\nova coop_lvl 10 starport tech lab_banshee-liberator.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <MaxStackCountPerCaster value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadVultureSpiderMineInvulnerable">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Modification>
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="Untargetable" value="1"/>
+        </Modification>
     </CBehaviorBuff>
     <CBehaviorPowerSource id="SquadCommandCenterPowerSource">
         <InfoFlags index="Hidden" value="1"/>
@@ -1071,4 +1098,10 @@
         <Birth value="Footprint4x4CreepSourceStart"/>
         <Grown value="Footprint4x4CreepSourceGrown"/>
     </CBehaviorCreepSource>
+    <CBehaviorBuff id="SquadVultureSpiderMineBurrowFirst">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="5"/>
+        <InitialEffect value="SquadSpiderMineBurrowOrder"/>
+    </CBehaviorBuff>
 </Catalog>
