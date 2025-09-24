@@ -277,10 +277,6 @@
     <CBehaviorBuff id="SquadCommandCenterTransportDummy">
         <InfoFlags index="Hidden" value="1"/>
     </CBehaviorBuff>
-    <CBehaviorBuff id="CarryHarvestableVespeneGeyserGas2">
-        <InfoFlags index="Hidden" value="1"/>
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-    </CBehaviorBuff>
     <CBehaviorBuff id="SquadCarryHarvestableVespeneGeyserGas">
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -339,18 +335,6 @@
         <BehaviorCategories index="User15" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
     </CBehaviorBuff>
-    <CBehaviorResource id="HarvestableVespeneGeyserGas2">
-        <InfoFlags index="Hidden" value="1"/>
-        <InfoIcon value="Assets\Textures\icon-gas.dds"/>
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Capacity value="32000"/>
-        <HarvestTime value="1.981"/>
-        <HarvestAmount value="4"/>
-        <Flags index="HideHarvesters" value="1"/>
-        <RequiredAlliance value="Control"/>
-        <ExhaustedAlert value="ResourceExhausted_Vespene"/>
-        <IdealHarvesterCount value="3"/>
-    </CBehaviorResource>
     <CBehaviorResource id="SquadHarvestableVespeneGeyserGas">
         <InfoFlags index="Hidden" value="1"/>
         <InfoIcon value="Assets\Textures\icon-gas.dds"/>
@@ -575,14 +559,6 @@
         <Duration value="0.1"/>
         <ExpireEffect value="SquadRefineryMorph"/>
     </CBehaviorBuff>
-    <CBehaviorBuff id="ScavengingSystemsMechDeath2">
-        <InfoFlags index="Hidden" value="1"/>
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Requirements value="ScavengingSystemsResearched"/>
-        <Modification>
-            <DeathResponse Chance="1" Effect="ScavengingSystemsSearchArea"/>
-        </Modification>
-    </CBehaviorBuff>
     <CBehaviorBuff id="SuqadBunkerShrikeTurret">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <Modification>
@@ -712,20 +688,20 @@
             <StateFlags index="Stun" value="1"/>
         </Modification>
     </CBehaviorBuff>
-    <CBehaviorBuff id="UltraliskOutOfCombat12">
+    <CBehaviorBuff id="SquadUltraliskOutOfCombat1">
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
         <Period value="0.25"/>
-        <PeriodicEffect value="UltraliskOutOfCombat2AB2"/>
+        <PeriodicEffect value="SquadUltraliskOutOfCombat2AB"/>
     </CBehaviorBuff>
-    <CBehaviorBuff id="UltraliskOutOfCombat22">
+    <CBehaviorBuff id="SquadUltraliskOutOfCombat2">
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
         <RemoveValidatorArray value="CasterNotInCombatShort"/>
         <Period value="5"/>
-        <PeriodicEffect value="UltraliskOutOfCombat3AB2"/>
+        <PeriodicEffect value="SquadUltraliskOutOfCombat3AB"/>
     </CBehaviorBuff>
-    <CBehaviorBuff id="UltraliskOutOfCombat32">
+    <CBehaviorBuff id="SquadUltraliskOutOfCombat3">
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
         <RemoveValidatorArray value="CasterNotInCombatShort"/>
@@ -774,26 +750,6 @@
         <Duration value="8"/>
         <Period value="4"/>
         <PeriodicEffect value="ResourceMessage"/>
-    </CBehaviorBuff>
-    <CBehaviorBuff id="DefensiveMatrix2">
-        <Alignment value="Positive"/>
-        <InfoIcon value="Assets\Textures\btn-ability-terran-defensivematrix.dds"/>
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <DisplayDuration index="Self" value="1"/>
-        <DisplayDuration index="Ally" value="1"/>
-        <RemoveValidatorArray value="hasShields"/>
-        <Duration value="20"/>
-        <Modification>
-            <VitalMaxArray index="Shields" value="200"/>
-        </Modification>
-        <DamageResponse ModifyMinimumDamage="1"/>
-    </CBehaviorBuff>
-    <CBehaviorBuff id="DefensiveMatrixDummy2">
-        <InfoFlags index="Hidden" value="1"/>
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Modification>
-            <VitalMaxArray index="Shields" value="200"/>
-        </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="DisableJoinAbility">
         <InfoFlags index="Hidden" value="1"/>
@@ -907,59 +863,7 @@
         <MaxStackCount value="8"/>
         <MaxStackCountPerCaster value="1"/>
     </CBehaviorBuff>
-    <CBehaviorBuff id="MercAirDrop2">
-        <InfoFlags index="Hidden" value="1"/>
-        <Duration value="0.1"/>
-        <ExpireEffect value="MercAirDropB2"/>
-        <Modification Height="10" MoveSpeedMultiplier="0.1">
-            <StateFlags index="Invulnerable" value="1"/>
-            <StateFlags index="Unselectable" value="1"/>
-            <StateFlags index="Untargetable" value="1"/>
-            <HeightTime index="Stop" value="3"/>
-            <AbilClassDisableArray index="CAbilAttack" value="1"/>
-        </Modification>
-    </CBehaviorBuff>
-    <CBehaviorBuff id="MercAirDropB2">
-        <InfoFlags index="Hidden" value="1"/>
-        <Duration value="1.1"/>
-        <ExpireEffect value="MercAirDropC2"/>
-        <Modification MoveSpeedMultiplier="0.1">
-            <StateFlags index="Invulnerable" value="1"/>
-            <StateFlags index="Unselectable" value="1"/>
-            <StateFlags index="Untargetable" value="1"/>
-            <AbilClassDisableArray index="CAbilAttack" value="1"/>
-        </Modification>
-    </CBehaviorBuff>
-    <CBehaviorBuff id="MercAirDropC2">
-        <InfoFlags index="Hidden" value="1"/>
-        <Duration value="0.9"/>
-        <ExpireEffect value="MercAirDropD"/>
-        <Modification MoveSpeedMultiplier="0.25">
-            <StateFlags index="Invulnerable" value="1"/>
-            <StateFlags index="Unselectable" value="1"/>
-            <StateFlags index="Untargetable" value="1"/>
-            <AbilClassDisableArray index="CAbilAttack" value="1"/>
-        </Modification>
-    </CBehaviorBuff>
-    <CBehaviorBuff id="MercAirDropDelay2">
-        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
-        <Duration value="0.5"/>
-        <DurationRandomMin value="0.5"/>
-        <ExpireEffect value="MercAirDropApplyBehavior2"/>
-    </CBehaviorBuff>
-    <CBehaviorBuff id="MercGroundDrop2">
-        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
-        <Duration value="3"/>
-        <DurationRandomMin value="1"/>
-        <ExpireEffect value="RemovePrecursorMerc2"/>
-    </CBehaviorBuff>
-    <CBehaviorBuff id="MercGroundDropDelay2">
-        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
-        <Duration value="1"/>
-        <DurationRandomMin value="1"/>
-        <ExpireEffect value="MercGroundDropApplyBehavior2"/>
-    </CBehaviorBuff>
-    <CBehaviorBuff id="Precursor2">
+    <CBehaviorBuff id="SquadPrecursor">
         <InfoFlags index="Hidden" value="1"/>
         <Modification>
             <ModifyFlags index="DisableAbils" value="1"/>
@@ -970,16 +874,6 @@
             <StateFlags index="Uncommandable" value="1"/>
             <StateFlags index="Unselectable" value="1"/>
             <StateFlags index="Untargetable" value="1"/>
-        </Modification>
-    </CBehaviorBuff>
-    <CBehaviorBuff id="PrecursorMerc2">
-        <InfoFlags index="Hidden" value="1"/>
-        <Modification MoveSpeedMultiplier="0.05">
-            <StateFlags index="Invulnerable" value="1"/>
-            <StateFlags index="NoDraw" value="1"/>
-            <StateFlags index="Unselectable" value="1"/>
-            <StateFlags index="Untargetable" value="1"/>
-            <AbilClassDisableArray index="CAbilAttack" value="1"/>
         </Modification>
     </CBehaviorBuff>
     <CBehaviorJump id="SquadReaperJump">

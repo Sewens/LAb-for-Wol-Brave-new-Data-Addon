@@ -165,39 +165,39 @@
         <EditorCategories value="Race:Terran"/>
         <BehaviorLink value="EnergyMediumMaxandLargeRegeneration"/>
     </CEffectRemoveBehavior>
-    <CEffectSet id="HotSUltraliskKaiserBlades2">
+    <CEffectSet id="SquadHotSUltraliskKaiserBlades">
         <EditorCategories value="Race:Zerg"/>
-        <EffectArray value="HotSUltraliskKaiserBladesSearch2"/>
-        <EffectArray value="HotSUltraliskKaiserBladesDamage2"/>
-        <EffectArray value="TissueAssimilation2"/>
+        <EffectArray value="SquadHotSUltraliskKaiserBladesSearch"/>
+        <EffectArray value="SquadHotSUltraliskKaiserBladesDamage"/>
+        <EffectArray value="SquadTissueAssimilation"/>
         <EffectArray value="UltraliskBurrowChargeHold"/>
-        <EffectArray value="UltraliskOutOfCombatRBSet2"/>
+        <EffectArray value="SquadUltraliskOutOfCombatRBSet"/>
     </CEffectSet>
-    <CEffectDamage id="HotSUltraliskKaiserBladesDamage2" parent="DU_WEAP">
+    <CEffectDamage id="SquadHotSUltraliskKaiserBladesDamage" parent="DU_WEAP">
         <KindSplash value="Melee"/>
         <Amount value="25"/>
         <Death value="Eviscerate"/>
     </CEffectDamage>
-    <CEffectEnumArea id="HotSUltraliskKaiserBladesSearch2">
+    <CEffectEnumArea id="SquadHotSUltraliskKaiserBladesSearch">
         <EditorCategories value="Race:Zerg"/>
         <ImpactLocation Value="TargetUnit"/>
         <ExcludeArray Effect="HotSUltraliskKaiserBlades" Value="Target"/>
         <SearchFilters value="Ground,Visible;Self,Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
-        <AreaArray Arc="180" Radius="2" Effect="HotSUltraliskKaiserBladesSecondaryDamageSet2"/>
+        <AreaArray Arc="180" Radius="2" Effect="SquadHotSUltraliskKaiserBladesSecondaryDamageSet"/>
         <SearchFlags index="OffsetByUnitRadius" value="1"/>
     </CEffectEnumArea>
-    <CEffectDamage id="HotSUltraliskKaiserBladesSecondaryDamage2" parent="DU_WEAP">
+    <CEffectDamage id="SquadHotSUltraliskKaiserBladesSecondaryDamage" parent="DU_WEAP">
         <ValidatorArray value="NotHaveHotSMonarchBlades"/>
         <Amount value="5"/>
         <Death value="Eviscerate"/>
     </CEffectDamage>
-    <CEffectSet id="HotSUltraliskKaiserBladesSecondaryDamageSet2">
+    <CEffectSet id="SquadHotSUltraliskKaiserBladesSecondaryDamageSet">
         <EditorCategories value="Race:Zerg"/>
-        <EffectArray value="HotSUltraliskKaiserBladesSecondaryDamage2"/>
-        <EffectArray value="HotSUltraliskKaiserBladesSecondaryUpgradeDamage2"/>
-        <EffectArray value="TissueAssimilationSecondary2"/>
+        <EffectArray value="SquadHotSUltraliskKaiserBladesSecondaryDamage"/>
+        <EffectArray value="SquadHotSUltraliskKaiserBladesSecondaryUpgradeDamage"/>
+        <EffectArray value="SquadTissueAssimilationSecondary"/>
     </CEffectSet>
-    <CEffectDamage id="HotSUltraliskKaiserBladesSecondaryUpgradeDamage2" parent="DU_WEAP">
+    <CEffectDamage id="SquadHotSUltraliskKaiserBladesSecondaryUpgradeDamage" parent="DU_WEAP">
         <ValidatorArray value="HaveHotSMonarchBlades"/>
         <Amount value="25"/>
         <Death value="Eviscerate"/>
@@ -650,12 +650,12 @@
         <EditorCategories value="Race:Terran"/>
         <Amount value="12"/>
     </CEffectDamage>
-    <CEffectEnumArea id="MarauderSlowAOE2">
+    <CEffectEnumArea id="SquadMarauderSlowAOE">
         <ValidatorArray value="PunisherGrenadesResearched"/>
         <EditorCategories value="Race:Terran"/>
         <ExcludeArray Value="Target"/>
         <SearchFilters value="Ground;Self,Player,Ally,Massive,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
-        <AreaArray Radius="1" Effect="PunisherGrenadesSlow2"/>
+        <AreaArray Radius="1" Effect="SquadMarauderPunisherGrenadesSlow"/>
     </CEffectEnumArea>
     <CEffectApplyBehavior id="MultiApplyAutoMineralHarvest">
         <ValidatorArray index="0" removed="1"/>
@@ -779,65 +779,9 @@
         <RevealFlags index="Unfog" value="1"/>
         <RevealFlags index="Detect" value="1"/>
     </CEffectCreatePersistent>
-    <CEffectLaunchMissile id="Impaler2">
-        <ValidatorArray index="0" value="TargetNotAcrossChasm"/>
-        <ValidatorArray value="ImpalerIsBurrowed"/>
-        <EditorCategories value="Race:Zerg"/>
-        <ImpactEffect value="ImpalerDamage2"/>
-        <AmmoUnit value="ImpalerWeapon"/>
-    </CEffectLaunchMissile>
-    <CEffectDamage id="ImpalerDamage2">
-        <EditorCategories value="Race:Zerg"/>
-        <ResponseFlags index="Acquire" value="1"/>
-        <ResponseFlags index="Flee" value="1"/>
-        <ImpactLocation Value="TargetUnit"/>
-        <AttributeBonus index="Armored" value="25"/>
-        <ArmorReduction value="1"/>
-        <Flags index="Notification" value="1"/>
-        <Kind value="Ranged"/>
-        <Amount value="20"/>
-        <Death value="Blast"/>
-        <SearchFlags index="CallForHelp" value="1"/>
-    </CEffectDamage>
     <CEffectApplyBehavior id="GiveKillsToCaster">
         <EditorCategories value="Race:Terran"/>
     </CEffectApplyBehavior>
-    <CEffectCreatePersistent id="Lurker2">
-        <ValidatorArray value="TargetNotAcrossChasm"/>
-        <ValidatorArray value="LurkerIsBurrowed"/>
-        <EditorCategories value="Race:Zerg"/>
-        <WhichLocation Value="SourcePoint"/>
-        <TimeScaleSource Value="Caster"/>
-        <Flags index="Channeled" value="1"/>
-        <Flags index="EffectFailure" value="1"/>
-        <PeriodCount value="7"/>
-        <PeriodicEffectArray value="LurkerE2"/>
-        <PeriodicOffsetArray value="0,-1,0"/>
-        <PeriodicOffsetArray value="0,-2,0"/>
-        <PeriodicOffsetArray value="0,-3,0"/>
-        <PeriodicOffsetArray value="0,-4,0"/>
-        <PeriodicOffsetArray value="0,-5,0"/>
-        <PeriodicOffsetArray value="0,-6,0"/>
-        <PeriodicOffsetArray value="0,-7,0"/>
-        <PeriodicPeriodArray value="0.0625"/>
-    </CEffectCreatePersistent>
-    <CEffectEnumArea id="LurkerE2">
-        <ValidatorArray value="CliffLevelGE1"/>
-        <EditorCategories value="Race:Zerg"/>
-        <IncludeArray Effect="Lurker" Value="Target"/>
-        <IncludeArray Effect="LurkerExtended" Value="Target"/>
-        <SearchFilters value="Ground;Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
-        <AreaArray Radius="0.625" Effect="LurkerU2"/>
-        <SearchFlags index="CallForHelp" value="1"/>
-    </CEffectEnumArea>
-    <CEffectDamage id="LurkerU2" parent="DU_WEAP_SPLASH">
-        <ValidatorArray value="noMarkers"/>
-        <EditorCategories value="Race:Zerg"/>
-        <AttributeBonus index="Light" value="10"/>
-        <Amount value="20"/>
-        <Death value="Blast"/>
-        <SearchFlags index="SameCliff" value="0"/>
-    </CEffectDamage>
     <CEffectSet id="MorphBackGround">
         <EditorCategories value=""/>
         <EffectArray value="SCVTransformeGround"/>
@@ -870,18 +814,18 @@
     </CEffectRemoveBehavior>
     <CEffectLaunchMissile id="SquadMarauderPunisherGrenadesLaunchMissile">
         <EditorCategories value="Race:Terran"/>
-        <ImpactEffect value="PunisherGrenadesSet2"/>
-        <AmmoUnit value="PunisherGrenadesLMWeapon2"/>
+        <ImpactEffect value="SquadMarauderPunisherGrenadesSet"/>
+        <AmmoUnit value="SquadMarauderPunisherGrenadesLMWeapon"/>
         <Movers Link="PunisherGrenadesWeapon"/>
     </CEffectLaunchMissile>
-    <CEffectSet id="PunisherGrenadesSet2">
+    <CEffectSet id="SquadMarauderPunisherGrenadesSet">
         <EditorCategories value="Race:Terran"/>
-        <EffectArray value="PunisherGrenadesSlow2"/>
-        <EffectArray value="PunisherGrenadesU2"/>
-        <EffectArray value="MarauderSlowAOE2"/>
-        <EffectArray value="MarauderSlowAOE2"/>
+        <EffectArray value="SquadMarauderPunisherGrenadesSlow"/>
+        <EffectArray value="SquadMarauderPunisherGrenadesDamage"/>
+        <EffectArray value="SquadMarauderSlowAOE"/>
+        <EffectArray value="SquadMarauderSlowAOE"/>
     </CEffectSet>
-    <CEffectApplyBehavior id="PunisherGrenadesSlow2">
+    <CEffectApplyBehavior id="SquadMarauderPunisherGrenadesSlow">
         <ValidatorArray index="0" value="PunisherGrenadesResearched"/>
         <ValidatorArray value="PunisherGrenadesSlowTargetFilters"/>
         <ValidatorArray value="NotStructure"/>
@@ -889,7 +833,7 @@
         <EditorCategories value="Race:Terran"/>
         <Behavior value="SquadMarauderSlow"/>
     </CEffectApplyBehavior>
-    <CEffectDamage id="PunisherGrenadesU2" parent="DU_WEAP">
+    <CEffectDamage id="SquadMarauderPunisherGrenadesDamage" parent="DU_WEAP">
         <EditorCategories value="Race:Terran"/>
         <AttributeBonus index="Armored" value="10"/>
         <Kind value="Ranged"/>
@@ -1125,7 +1069,7 @@
         <ImpactLocation Value="TargetPoint"/>
         <ImpactOffset value="0,0,0.1"/>
         <ImpactEffect value="MedicFlashBangGrenadeSearch"/>
-        <AmmoUnit value="MedicFlashbangGrenades"/>
+        <AmmoUnit value="SquadMedicFlashbangGrenades"/>
     </CEffectLaunchMissile>
     <CEffectEnumArea id="MedicFlashBangGrenadeSearch">
         <EditorCategories value="Race:Terran"/>
@@ -1152,63 +1096,6 @@
         <Kind value="Ranged"/>
         <Amount value="10"/>
     </CEffectDamage>
-    <CEffectLaunchMissile id="DRBattlecruiserALM2">
-        <EditorCategories value="Race:Terran"/>
-        <ImpactEffect value="DRBattlecruiserAU2"/>
-        <AmmoUnit value="DRBattlecruiserALMWeapon2"/>
-    </CEffectLaunchMissile>
-    <CEffectDamage id="DRBattlecruiserAU2" parent="DU_WEAP_MISSILE">
-        <EditorCategories value="Race:Terran"/>
-        <Visibility value="Visible"/>
-        <Amount value="8"/>
-    </CEffectDamage>
-    <CEffectLaunchMissile id="DRBattlecruiserGLM2">
-        <EditorCategories value="Race:Terran"/>
-        <ImpactEffect value="DRBattlecruiserGU2"/>
-        <AmmoUnit value="DRBattlecruiserGLMWeapon2"/>
-    </CEffectLaunchMissile>
-    <CEffectDamage id="DRBattlecruiserGU2" parent="DU_WEAP_MISSILE">
-        <EditorCategories value="Race:Terran"/>
-        <Visibility value="Visible"/>
-        <Amount value="12"/>
-        <Death value="Fire"/>
-    </CEffectDamage>
-    <CEffectDamage id="DRCannonsA2" parent="DU_WEAP">
-        <EditorCategories value="Race:Terran"/>
-        <Visibility value="Visible"/>
-        <Amount value="8"/>
-    </CEffectDamage>
-    <CEffectDamage id="DRCannonsG2" parent="DU_WEAP">
-        <EditorCategories value="Race:Terran"/>
-        <Visibility value="Visible"/>
-        <Amount value="12"/>
-        <Death value="Fire"/>
-    </CEffectDamage>
-    <CEffectApplyBehavior id="DefensiveMatrixApplyBehavior2">
-        <EditorCategories value="Race:Terran"/>
-        <Behavior value="DefensiveMatrix2"/>
-    </CEffectApplyBehavior>
-    <CEffectApplyBehavior id="DefensiveMatrixApplyDummyBehavior2">
-        <EditorCategories value="Race:Terran"/>
-        <Behavior value="DefensiveMatrixDummy2"/>
-    </CEffectApplyBehavior>
-    <CEffectModifyUnit id="DefensiveMatrixModifyUnit2">
-        <EditorCategories value="Race:Terran"/>
-        <VitalArray index="Shields">
-            <ChangeFraction value="1"/>
-        </VitalArray>
-    </CEffectModifyUnit>
-    <CEffectRemoveBehavior id="DefensiveMatrixRemoveDummyBehavior2">
-        <EditorCategories value="Race:Terran"/>
-        <BehaviorLink value="DefensiveMatrixDummy"/>
-    </CEffectRemoveBehavior>
-    <CEffectSet id="DefensiveMatrixSet2">
-        <EditorCategories value="Race:Terran"/>
-        <EffectArray value="DefensiveMatrixApplyDummyBehavior2"/>
-        <EffectArray value="DefensiveMatrixModifyUnit2"/>
-        <EffectArray value="DefensiveMatrixApplyBehavior2"/>
-        <EffectArray value="DefensiveMatrixRemoveDummyBehavior2"/>
-    </CEffectSet>
     <CEffectApplyBehavior id="DisableMagazine">
         <EditorCategories value="Race:Terran"/>
     </CEffectApplyBehavior>
@@ -1225,11 +1112,11 @@
         <EditorCategories value="Race:Terran"/>
         <Cost Abil="SquadInfantry,Ammo1" ChargeCountUse="-1"/>
     </CEffectModifyUnit>
-    <CEffectApplyBehavior id="EMPApplyDecloakBehavior2">
+    <CEffectApplyBehavior id="SquadGhostEMPApplyDecloakBehavior">
         <EditorCategories value="Race:Terran"/>
         <Behavior value="SquadGhostEMPDecloak"/>
     </CEffectApplyBehavior>
-    <CEffectDamage id="EMPDamage2">
+    <CEffectDamage id="SquadGhostEMPDamage">
         <EditorCategories value="Race:Terran"/>
         <ResponseFlags index="Acquire" value="1"/>
         <ResponseFlags index="Flee" value="1"/>
@@ -1241,28 +1128,28 @@
         <ValidatorArray index="0" value="EMP2TargetFilters"/>
         <EditorCategories value="Race:Terran"/>
         <ImpactLocation Value="TargetPoint"/>
-        <ImpactEffect value="EMPSearch2"/>
-        <AmmoUnit value="EMP2Weapon2"/>
+        <ImpactEffect value="SquadEMPSearch"/>
+        <AmmoUnit value="SquadGhostEMPWeapon"/>
     </CEffectLaunchMissile>
-    <CEffectModifyUnit id="EMPModifyUnit2">
+    <CEffectModifyUnit id="SquadGhostEMPModifyUnit">
         <ValidatorArray value="empUTargetFilters"/>
         <EditorCategories value="Race:Terran"/>
         <VitalArray index="Energy">
             <Change value="-100"/>
         </VitalArray>
     </CEffectModifyUnit>
-    <CEffectEnumArea id="EMPSearch2">
+    <CEffectEnumArea id="SquadEMPSearch">
         <EditorCategories value="Race:Terran"/>
         <LaunchLocation Value="TargetPoint"/>
         <ImpactLocation Value="TargetPoint"/>
         <SearchFilters value="-;Hidden,Invulnerable"/>
-        <AreaArray Radius="1.5" Effect="EMPSet2"/>
+        <AreaArray Radius="1.5" Effect="SquadGhostEMPSet"/>
     </CEffectEnumArea>
-    <CEffectSet id="EMPSet2">
+    <CEffectSet id="SquadGhostEMPSet">
         <EditorCategories value="Race:Terran"/>
-        <EffectArray value="EMPDamage2"/>
-        <EffectArray value="EMPModifyUnit2"/>
-        <EffectArray value="EMPApplyDecloakBehavior2"/>
+        <EffectArray value="SquadGhostEMPDamage"/>
+        <EffectArray value="SquadGhostEMPModifyUnit"/>
+        <EffectArray value="SquadGhostEMPApplyDecloakBehavior"/>
     </CEffectSet>
     <CEffectRemoveBehavior id="EnableMagazine">
         <EditorCategories value="Race:Terran"/>
@@ -1334,110 +1221,6 @@
         <EditorCategories value="Race:Terran"/>
         <Amount value="2"/>
     </CEffectDamage>
-    <CEffectApplyBehavior id="GhostHoldFire2">
-        <EditorCategories value="Race:Terran"/>
-        <WhichUnit Value="Caster"/>
-    </CEffectApplyBehavior>
-    <CEffectApplyBehavior id="GhostHoldFireB2">
-        <EditorCategories value="Race:Terran"/>
-        <WhichUnit Value="Caster"/>
-    </CEffectApplyBehavior>
-    <CEffectRemoveBehavior id="GhostWeaponsFree2">
-        <EditorCategories value="Race:Terran"/>
-        <BehaviorLink value="GhostHoldFireB"/>
-    </CEffectRemoveBehavior>
-    <CEffectCreatePersistent id="HurricaneMissile2">
-        <EditorCategories value="Race:Terran"/>
-        <TimeScaleSource Value="Caster"/>
-        <Flags index="Channeled" value="1"/>
-        <InitialEffect value="HurricaneMissileDamageDelayPersistent2"/>
-        <PeriodCount value="10"/>
-        <PeriodicEffectArray value="HurricaneMissileBurstPersistent2"/>
-        <PeriodicOffsetArray value="-0.8,-0.8,0"/>
-        <PeriodicOffsetArray value="-0.8,0.8,0"/>
-        <PeriodicOffsetArray value="0.8,0.8,0"/>
-        <PeriodicOffsetArray value="0.8,-0.8,0"/>
-        <PeriodicPeriodArray value="0.1"/>
-    </CEffectCreatePersistent>
-    <CEffectCreatePersistent id="HurricaneMissileBurstPersistent2">
-        <EditorCategories value="Race:Terran"/>
-        <Flags index="Channeled" value="1"/>
-        <Flags index="RandomOffset" value="1"/>
-        <PeriodCount value="2"/>
-        <PeriodicEffectArray value="HurricaneMissileLeftLM2"/>
-        <PeriodicEffectArray value="HurricaneMissileRightLM2"/>
-        <PeriodicOffsetArray value="0,0,0"/>
-        <PeriodicOffsetArray value="-0.3,0.3,0"/>
-        <PeriodicOffsetArray value="0,0.3,0"/>
-        <PeriodicOffsetArray value="0.3,0.3,0"/>
-        <PeriodicOffsetArray value="-0.3,0,0"/>
-        <PeriodicOffsetArray value="0,0,0"/>
-        <PeriodicOffsetArray value="0.3,0,0"/>
-        <PeriodicOffsetArray value="-0.3,-0.3,0"/>
-        <PeriodicOffsetArray value="0,-0.3,0"/>
-        <PeriodicOffsetArray value="0.3,-0.3,0"/>
-        <PeriodicOffsetArray value="-0.6,0.6,0"/>
-        <PeriodicOffsetArray value="0,0.6,0"/>
-        <PeriodicOffsetArray value="0.6,0.6,0"/>
-        <PeriodicOffsetArray value="-0.6,0,0"/>
-        <PeriodicOffsetArray value="0,0,0"/>
-        <PeriodicOffsetArray value="0.6,0,0"/>
-        <PeriodicOffsetArray value="-0.6,-0.6,0"/>
-        <PeriodicOffsetArray value="0,-0.6,0"/>
-        <PeriodicOffsetArray value="0.6,-0.6,0"/>
-        <PeriodicPeriodArray value="0.05"/>
-    </CEffectCreatePersistent>
-    <CEffectDamage id="HurricaneMissileDamage2">
-        <EditorCategories value="Race:Terran"/>
-        <ResponseFlags index="Acquire" value="1"/>
-        <ResponseFlags index="Flee" value="1"/>
-        <LaunchLocation Value="SourceUnitOrPoint"/>
-        <AttributeBonus index="Light" value="5"/>
-        <Visibility value="Visible"/>
-        <Flags index="Notification" value="1"/>
-        <Amount value="4"/>
-        <Death value="Fire"/>
-        <AreaArray Radius="1.6" Fraction="1"/>
-        <SearchFilters value="Air;Missile,Stasis,Dead,Hidden,Invulnerable"/>
-        <SearchFlags index="CallForHelp" value="1"/>
-        <SearchFlags index="ExtendByUnitRadius" value="1"/>
-        <SearchFlags index="SameCliff" value="0"/>
-    </CEffectDamage>
-    <CEffectCreatePersistent id="HurricaneMissileDamageDelayPersistent2">
-        <EditorCategories value="Race:Terran"/>
-        <Flags index="Channeled" value="1"/>
-        <ExpireDelay value="1.5"/>
-        <FinalEffect value="HurricaneMissileDamagePersistent2"/>
-    </CEffectCreatePersistent>
-    <CEffectCreatePersistent id="HurricaneMissileDamagePersistent2">
-        <EditorCategories value="Race:Terran"/>
-        <Flags index="Channeled" value="1"/>
-        <PeriodCount value="10"/>
-        <PeriodicEffectArray value="HurricaneMissileDamage2"/>
-        <PeriodicPeriodArray value="0.1"/>
-    </CEffectCreatePersistent>
-    <CEffectEnumArea id="HurricaneMissileLeftDummy2">
-        <EditorCategories value="Race:Terran"/>
-        <AreaArray/>
-    </CEffectEnumArea>
-    <CEffectLaunchMissile id="HurricaneMissileLeftLM2">
-        <EditorCategories value="Race:Terran"/>
-        <LaunchLocation Value="CasterUnit"/>
-        <ImpactLocation Value="TargetPoint"/>
-        <ImpactEffect value="HurricaneMissileLeftDummy2"/>
-        <AmmoUnit value="HurricaneMissileLeft2"/>
-    </CEffectLaunchMissile>
-    <CEffectEnumArea id="HurricaneMissileRightDummy2">
-        <EditorCategories value="Race:Terran"/>
-        <AreaArray/>
-    </CEffectEnumArea>
-    <CEffectLaunchMissile id="HurricaneMissileRightLM2">
-        <EditorCategories value="Race:Terran"/>
-        <LaunchLocation Value="CasterUnit"/>
-        <ImpactLocation Value="TargetPoint"/>
-        <ImpactEffect value="HurricaneMissileRightDummy2"/>
-        <AmmoUnit value="HurricaneMissileRight2"/>
-    </CEffectLaunchMissile>
     <CEffectEnumMagazine id="IterMagazine">
         <EditorCategories value="Race:Terran"/>
         <EffectExternal value="ReleaseMagazinePack"/>
@@ -1484,9 +1267,6 @@
         <EditorCategories value="Race:Terran"/>
         <Abil value="SCVDisableJump"/>
     </CEffectIssueOrder>
-    <CEffectEnumArea id="SOATimeFreezeSearch">
-        <SearchFilters value="-;Missile,Dead,Hidden"/>
-    </CEffectEnumArea>
     <CEffectDamage id="SquadSalvageDeath">
         <EditorCategories value="Race:Terran"/>
         <ImpactLocation Value="SourceUnit"/>
@@ -1535,17 +1315,17 @@
         <Flags index="Kill" value="1"/>
         <Death value="Remove"/>
     </CEffectDamage>
-    <CEffectApplyBehavior id="SuperStimpackMarauderHellbat2">
+    <CEffectApplyBehavior id="SquadSuperStimpack">
         <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="Source"/>
         <Behavior value="SuperStim3"/>
     </CEffectApplyBehavior>
-    <CEffectSet id="SuperStimpackMarauderHellbatSet2">
+    <CEffectSet id="SquadSuperStimpackSet">
         <EditorCategories value="Race:Terran"/>
-        <EffectArray value="SuperStimpackMarauderHellbat2"/>
-        <EffectArray value="SuperStimpackMarauderHellbatSetMU2"/>
+        <EffectArray value="SquadSuperStimpack"/>
+        <EffectArray value="SquadSuperStimpackSetMU"/>
     </CEffectSet>
-    <CEffectModifyUnit id="SuperStimpackMarauderHellbatSetMU2">
+    <CEffectModifyUnit id="SquadSuperStimpackSetMU">
         <EditorCategories value="Race:Terran"/>
         <ImpactUnit Value="Source"/>
         <VitalArray index="Life">
@@ -1576,7 +1356,7 @@
         <CalldownCount value="200"/>
         <CalldownEffect value="DropPodPersistent"/>
     </CEffectUseCalldown>
-    <CEffectModifyUnit id="TissueAssimilation2">
+    <CEffectModifyUnit id="SquadTissueAssimilation">
         <ValidatorArray value="HaveHotSTissueAssimilation"/>
         <EditorCategories value="Race:Zerg"/>
         <ImpactUnit Value="Caster"/>
@@ -1584,7 +1364,7 @@
             <Change value="10"/>
         </VitalArray>
     </CEffectModifyUnit>
-    <CEffectModifyUnit id="TissueAssimilationSecondary2">
+    <CEffectModifyUnit id="SquadTissueAssimilationSecondary">
         <ValidatorArray value="HaveHotSTissueAssimilation"/>
         <EditorCategories value="Race:Zerg"/>
         <ImpactUnit Value="Caster"/>
@@ -1612,31 +1392,31 @@
         <WhichUnit Effect="BurrowChargeMPForcePersistent"/>
         <Behavior value="SquadBurrowChargeStun"/>
     </CEffectApplyBehavior>
-    <CEffectApplyBehavior id="UltraliskOutOfCombat2AB2">
+    <CEffectApplyBehavior id="SquadUltraliskOutOfCombat2AB">
         <ValidatorArray value="SelfNotUltraliskOutOfCombat2"/>
         <EditorCategories value="Race:Zerg"/>
-        <Behavior value="UltraliskOutOfCombat22"/>
+        <Behavior value="SquadUltraliskOutOfCombat2"/>
     </CEffectApplyBehavior>
-    <CEffectRemoveBehavior id="UltraliskOutOfCombat2RB2">
+    <CEffectRemoveBehavior id="SquadUltraliskOutOfCombat2RB">
         <EditorCategories value="Race:Zerg"/>
         <WhichUnit Value="Caster"/>
         <BehaviorLink value="UltraliskOutOfCombat2"/>
     </CEffectRemoveBehavior>
-    <CEffectApplyBehavior id="UltraliskOutOfCombat3AB2">
+    <CEffectApplyBehavior id="SquadUltraliskOutOfCombat3AB">
         <EditorCategories value="Race:Zerg"/>
-        <Behavior value="UltraliskOutOfCombat32"/>
+        <Behavior value="SquadUltraliskOutOfCombat3"/>
     </CEffectApplyBehavior>
-    <CEffectRemoveBehavior id="UltraliskOutOfCombat3RB2">
+    <CEffectRemoveBehavior id="SquadUltraliskOutOfCombat3RB">
         <EditorCategories value="Race:Zerg"/>
         <WhichUnit Value="Caster"/>
         <BehaviorLink value="UltraliskOutOfCombat3"/>
     </CEffectRemoveBehavior>
-    <CEffectSet id="UltraliskOutOfCombatRBSet2">
+    <CEffectSet id="SquadUltraliskOutOfCombatRBSet">
         <EditorCategories value="Race:Zerg"/>
-        <EffectArray value="UltraliskOutOfCombat2RB2"/>
-        <EffectArray value="UltraliskOutOfCombat3RB2"/>
+        <EffectArray value="SquadUltraliskOutOfCombat2RB"/>
+        <EffectArray value="SquadUltraliskOutOfCombat3RB"/>
     </CEffectSet>
-    <CEffectSet id="UltraliskWeaponCooldown2">
+    <CEffectSet id="SquadUltraliskWeaponCooldown">
         <EditorCategories value="Race:Zerg"/>
     </CEffectSet>
     <CEffectApplyBehavior id="MoveSpeedTier5Apply">
@@ -1679,55 +1459,8 @@
         <SearchFlags index="CallForHelp" value="1"/>
         <SearchFlags index="OffsetByUnitRadius" value="1"/>
     </CEffectDamage>
-    <CEffectApplyBehavior id="MakePrecursor2">
-        <Behavior value="Precursor2"/>
-    </CEffectApplyBehavior>
-    <CEffectApplyBehavior id="MakePrecursorMerc2">
-        <Behavior value="PrecursorMerc2"/>
-    </CEffectApplyBehavior>
-    <CEffectSet id="MercAirDrop2">
-        <EditorCategories value="Race:Zerg"/>
-        <EffectArray value="MakePrecursorMerc2"/>
-        <EffectArray value="MercAirDropApplyBehaviorDelay2"/>
-    </CEffectSet>
-    <CEffectApplyBehavior id="MercAirDropApplyBehavior2">
-        <ValidatorArray index="0" value=""/>
-        <EditorCategories value="Race:Terran"/>
-        <Behavior value="MercAirDrop2"/>
-    </CEffectApplyBehavior>
-    <CEffectApplyBehavior id="MercAirDropApplyBehaviorB2">
-        <ValidatorArray index="0" value=""/>
-        <EditorCategories value="Race:Terran"/>
-        <Behavior value="MercAirDropB2"/>
-    </CEffectApplyBehavior>
-    <CEffectApplyBehavior id="MercAirDropApplyBehaviorDelay2">
-        <ValidatorArray index="0" value=""/>
-        <EditorCategories value="Race:Terran"/>
-        <Behavior value="MercAirDropDelay2"/>
-    </CEffectApplyBehavior>
-    <CEffectSet id="MercAirDropB2">
-        <EditorCategories value="Race:Zerg"/>
-        <EffectArray value="RemovePrecursorMerc2"/>
-        <EffectArray value="MercAirDropApplyBehaviorB2"/>
-    </CEffectSet>
-    <CEffectApplyBehavior id="MercAirDropC2">
-        <ValidatorArray index="0" value=""/>
-        <EditorCategories value="Race:Terran"/>
-    </CEffectApplyBehavior>
-    <CEffectSet id="MercGroundDrop2">
-        <EditorCategories value="Race:Zerg"/>
-        <EffectArray value="MakePrecursorMerc2"/>
-        <EffectArray value="MercGroundDropApplyBehaviorDelay2"/>
-    </CEffectSet>
-    <CEffectApplyBehavior id="MercGroundDropApplyBehavior2">
-        <ValidatorArray index="0" value=""/>
-        <EditorCategories value="Race:Terran"/>
-        <Behavior value="MercGroundDrop2"/>
-    </CEffectApplyBehavior>
-    <CEffectApplyBehavior id="MercGroundDropApplyBehaviorDelay2">
-        <ValidatorArray index="0" value=""/>
-        <EditorCategories value="Race:Terran"/>
-        <Behavior value="MercGroundDropDelay2"/>
+    <CEffectApplyBehavior id="SquadMakePrecursor">
+        <Behavior value="SquadPrecursor"/>
     </CEffectApplyBehavior>
     <CEffectUseCalldown id="RedNuclear">
         <EditorCategories value="Race:Terran"/>
@@ -1753,7 +1486,7 @@
         <SearchFlags index="SameCliff" value="0"/>
         <DamageInheritEffect value="RedNuclearSearhVictim"/>
     </CEffectDamage>
-    <CEffectCreatePersistent id="NukeDetonate2">
+    <CEffectCreatePersistent id="SquadNukeDetonate">
         <EditorCategories value="Race:Terran"/>
         <InitialDelay value="1.25"/>
         <InitialEffect value="RedNuclearDamage"/>
@@ -1766,7 +1499,7 @@
         <Alert value="CalldownLaunchObserver"/>
         <Flags index="Channeled" value="1"/>
         <InitialDelay value="8.75"/>
-        <ExpireEffect value="NukeDetonate2"/>
+        <ExpireEffect value="SquadNukeDetonate"/>
         <FinalEffect value="SquadNukeSuicide"/>
         <PeriodCount value="50"/>
         <PeriodicPeriodArray value="0.2"/>
@@ -1860,11 +1593,8 @@
         <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="Target"/>
     </CEffectReleaseMagazine>
-    <CEffectRemoveBehavior id="RemovePrecursor2">
-        <BehaviorLink value="Precursor"/>
-    </CEffectRemoveBehavior>
-    <CEffectRemoveBehavior id="RemovePrecursorMerc2">
-        <BehaviorLink value="PrecursorMerc"/>
+    <CEffectRemoveBehavior id="SquadRemovePrecursor">
+        <BehaviorLink value="SquadPrecursor"/>
     </CEffectRemoveBehavior>
     <CEffectDamage id="RemoveUnit">
         <EditorCategories value="Race:Terran"/>
@@ -1932,7 +1662,7 @@
         <Kind value="Ranged"/>
         <Amount value="15"/>
     </CEffectDamage>
-    <CEffectApplyBehavior id="Stimpack2">
+    <CEffectApplyBehavior id="SquadStimPack">
         <EditorCategories value="Race:Terran"/>
         <Behavior value="SquadInfantryStimpack"/>
     </CEffectApplyBehavior>
@@ -1951,9 +1681,6 @@
         <EffectArray value="ReleaseMagazine"/>
         <EffectArray value="ReleaseSquadPatrolRandomizer"/>
     </CEffectSet>
-    <CEffectApplyBehavior id="Stimpack3">
-        <EditorCategories value="Race:Terran"/>
-    </CEffectApplyBehavior>
     <CEffectApplyBehavior id="SquadSpectreUltrasonicPulseApplyBehavior">
         <ValidatorArray index="0" removed="1"/>
         <EditorCategories value=""/>
@@ -2064,24 +1791,6 @@
         <WhichUnit Value="CasterOuter"/>
         <Count value="1"/>
     </CEffectRemoveBehavior>
-    <CEffectLaunchMissile id="Yamato2">
-        <ValidatorArray index="0" value="YamatoTargetFilters"/>
-        <ValidatorArray value="IsNotWarpBubble"/>
-        <ValidatorArray value="YamatoTargetFilters"/>
-        <EditorCategories value="Race:Terran"/>
-        <ImpactEffect value="YamatoU2"/>
-        <AmmoUnit value="YamatoWeapon2"/>
-    </CEffectLaunchMissile>
-    <CEffectDamage id="YamatoU2">
-        <EditorCategories value="Race:Terran"/>
-        <ResponseFlags index="Acquire" value="1"/>
-        <ResponseFlags index="Flee" value="1"/>
-        <Visibility value="Visible"/>
-        <Flags index="Notification" value="1"/>
-        <Amount value="300"/>
-        <Death value="Blast"/>
-        <SearchFlags index="CallForHelp" value="1"/>
-    </CEffectDamage>
     <CEffectCreateHealer id="SquadMedicHeal">
         <ValidatorArray value="noMarkers"/>
         <ValidatorArray value="NotWarpingIn"/>

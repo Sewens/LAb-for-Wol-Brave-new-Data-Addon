@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
-    <CActorSound id="ActorSound_Impaler_TentacleImpact" parent="SoundOneShot">
-        <On Terms="Effect.ImpalerDamage.Start; At Target" Send="Create"/>
-        <Sound value="Impaler_TentacleImpact"/>
-    </CActorSound>
-    <CActorSound id="ActorSound_Impaler_TentacleVox" parent="SoundOneShot">
-        <On Terms="Effect.ImpalerDamage.Start; At Target" Send="Create"/>
-        <Sound value="Impaler_TentacleVox"/>
-    </CActorSound>
+    <CActorAction default="1" id="SquadMarauderAttackBase" parent="MarauderAttackBase"/>
     <CActorModel id="AddSquadImpact" parent="ModelAnimationStyleOneShot">
         <On Terms="Effect.AddMarine.Start" Send="Create"/>
         <On Terms="Effect.AddMarauder.Start" Send="Create"/>
@@ -702,10 +695,7 @@
     <CActorSplat id="SquadFusionCoreSplat" parent="GenericUnitSplat" unitName="SquadFusionCore">
         <Model value="FusionCoreSplat"/>
     </CActorSplat>
-    <CActorAction id="GhostSnipeAttack">
-        <Beam value="SquadGhostSnipeAttackBeam"/>
-    </CActorAction>
-    <CActorUnit id="GreaterNydusWorm2" parent="GenericUnitMorph" unitName="SquadGreaterNydusWorm">
+    <CActorUnit id="SquadGreaterNydusWorm" parent="GenericUnitMorph" unitName="SquadGreaterNydusWorm">
         <Macros value="BuildingFlattenTerrainMacro"/>
         <On Terms="Abil.GreaterNydusWormTransport.TransportUnloadStart" Send="AnimClear Birth"/>
         <On Terms="Abil.GreaterNydusWormTransport.TransportUnloadStart" Send="AnimBracketStart Unload Work,Start Work Work,End"/>
@@ -728,7 +718,6 @@
             <Image value="Assets\Textures\Wireframe-Zerg-NydusDragon.dds"/>
         </GroupIcon>
         <HeroIcon value="Assets\Textures\Talent-Kerrigan-Level08-GreaterNydusWorm.dds"/>
-        <HighlightTooltip value="Unit/Name/GreaterNydusWorm2"/>
         <LifeArmorIcon value="Assets\Textures\btn-armor-zerg-building.dds"/>
         <MinimapIcon value="Assets\Textures\ui_minimap_icon_nydusdragon.dds"/>
         <NameOffset value="70"/>
@@ -743,7 +732,7 @@
             <Image value="Assets\Textures\Wireframe-Zerg-NydusDragon.dds"/>
         </Wireframe>
     </CActorUnit>
-    <CActorUnit id="NydusNetwork2" parent="ZergBuildingEx" unitName="SquadGreaterNydusNetwork">
+    <CActorUnit id="SquadNydusNetwork" parent="ZergBuildingEx" unitName="SquadGreaterNydusNetwork">
         <Aliases value="_UnitHuge"/>
         <On Terms="AbilTransport.NydusCanalTransport.TransportLoad" Send="$Spell"/>
         <On Terms="AbilTransport.NydusCanalTransport.TransportUnload" Send="$Spell"/>
@@ -767,7 +756,7 @@
             <Image value="Assets\Textures\Wireframe-Zerg-NydusNetwork.dds"/>
         </GroupIcon>
         <HeroIcon value="Assets\Textures\btn-building-zerg-nydusnetwork.dds"/>
-        <HighlightTooltip value="Unit/Name/NydusNetwork2"/>
+        <HighlightTooltip value="Unit/Name/SquadNydusNetwork"/>
         <SoundArray index="Ready" value="NydusNetwork_Ready"/>
         <SoundArray index="What" value="NydusNetwork_What"/>
         <UnitIcon value="Assets\Textures\btn-building-zerg-nydusnetwork.dds"/>
@@ -775,7 +764,7 @@
             <Image value="Assets\Textures\Wireframe-Zerg-NydusNetwork.dds"/>
         </Wireframe>
     </CActorUnit>
-    <CActorModel id="NydusRumble2" parent="ModelAddition">
+    <CActorModel id="SquadNydusRumble" parent="ModelAddition">
         <On Terms="ActorOrphan" Send="Destroy"/>
         <On Terms="UnitConstruction.NydusCanal.Start" Send="Create"/>
         <On Terms="UnitConstruction.NydusCanal.Finish" Send="Destroy"/>
@@ -786,22 +775,22 @@
         <On Terms="UnitConstruction.SquadGreaterNydusWorm.Cancel" Send="Destroy"/>
         <Model value="NydusRumble"/>
     </CActorModel>
-    <CActorSound id="NydusWorm_DeathCry2" parent="SoundOneShot">
+    <CActorSound id="SquadNydusWormDeathCry" parent="SoundOneShot">
         <On Terms="UnitDeathCustomize.NydusCanal; PassChance 100.000000" Send="Create"/>
         <On Terms="UnitDeathCustomize.SquadGreaterNydusWorm; PassChance 100.000000" Send="Create"/>
         <Sound value="NydusWorm_DeathCry"/>
     </CActorSound>
-    <CActorSound id="Nydus_ConstructionFinish2" parent="SoundOneShot">
+    <CActorSound id="SquadNydusConstructionFinish" parent="SoundOneShot">
         <On Terms="UnitConstruction.NydusCanal.Finish" Send="Create"/>
         <On Terms="UnitConstruction.SquadGreaterNydusWorm.Finish" Send="Create"/>
         <Sound value="Nydus_ConstructionFinish"/>
     </CActorSound>
-    <CActorSound id="Nydus_ConstructionStart2" parent="SoundOneShot">
+    <CActorSound id="SquadNydusConstructionStart" parent="SoundOneShot">
         <On Terms="UnitConstruction.NydusCanal.Start" Send="Create"/>
         <On Terms="UnitConstruction.SquadGreaterNydusWorm.Start" Send="Create"/>
         <Sound value="Nydus_ConstructionStart"/>
     </CActorSound>
-    <CActorSound id="Nydus_Unburrow2" parent="SoundOneShot">
+    <CActorSound id="SquadNydusUnburrow" parent="SoundOneShot">
         <On Terms="UnitBirth.NydusCanal.Normal" Send="Create"/>
         <On Terms="UnitBirth.SquadGreaterNydusWorm.Normal" Send="Create"/>
         <Sound value="Nydus_Unburrow"/>
@@ -889,7 +878,7 @@
     <CActorSplat id="SquadPlanetaryFortressSplat" parent="TerranBuildingMorphSplat" unitName="SquadPlanetaryFortress">
         <Model value="PlanetaryFortressSplat"/>
     </CActorSplat>
-    <CActorUnit id="Pylon2" parent="ProtossBuildingEx" unitName="SquadPylon">
+    <CActorUnit id="SquadPylon" parent="ProtossBuildingEx" unitName="SquadPylon">
         <Aliases value="_UnitLarge"/>
         <Remove Terms="UnitBirth; ValidateUnit NoDarkProtoss" Send="ModelSwap Pylon_Taldarim"/>
         <Remove Terms="Upgrade.DarkProtoss.Add" Send="TextureSelectById GlowRed"/>
@@ -954,7 +943,6 @@
             <Image value="Assets\Textures\Wireframe-Protoss-Pylon.dds"/>
         </GroupIcon>
         <HeroIcon value="Assets\Textures\btn-building-protoss-Pylon.dds"/>
-        <HighlightTooltip value="Unit/Name/Pylon2"/>
         <SoundArray index="Ready" value="Pylon_Ready"/>
         <SoundArray index="Help" value="Alert_ProtossPylonUnderAttack"/>
         <SoundArray index="What" value="Pylon_What"/>
@@ -969,7 +957,7 @@
             <Image value="Assets\Textures\Wireframe-Protoss-Pylon-Shield03.dds"/>
         </WireframeShield>
     </CActorUnit>
-    <CActorSplat id="PylonSplat2" parent="GenericUnitSplat" unitName="SquadPylon">
+    <CActorSplat id="SquadPylonSplat" parent="GenericUnitSplat" unitName="SquadPylon">
         <Model value="PylonSplat"/>
     </CActorSplat>
     <CActorMissile id="ExcavatorD888AttackMissile" parent="GenericAttackMissile" unitName="SquadReaperD8Charge">
@@ -1461,116 +1449,10 @@
         <Model value="BarracksDropPod"/>
         <EventDataSound Name="BarracksDropPodLand" Actor="UnitSound" Sound="Barracks_DropPodLand"/>
     </CActorModel>
-    <CActorAction id="BattlecruiserHurricaneLeftAttack2" parent="GenericAttack" effectImpact="HurricaneMissileLeftDummy2" effectLaunch="HurricaneMissileLeftLM2">
-        <LaunchAttachQuery Methods="AMFilterBattlecruiserHurricaneLeft AMRandomUniform"/>
-        <Missile value="BattlecruiserHurricaneLeftAttackMissile2"/>
-        <ImpactPointSiteOps Ops="SOpTargetPointStationary SOpShadow BattlecruiserHurricaneSiteOpOffset"/>
-        <ImpactMap index="None" Model="BattlecruiserHurricaneAttackImpact2" Sound="Battlecruiser_MissilePodsImpact2"/>
-    </CActorAction>
-    <CActorMissile id="BattlecruiserHurricaneLeftAttackMissile2" parent="GenericAttackMissile" unitName="HurricaneMissileLeft2">
-        <Model value="HurricaneMissile2"/>
-    </CActorMissile>
-    <CActorAction id="BattlecruiserHurricaneRightAttack2" parent="GenericAttack" effectImpact="HurricaneMissileRightDummy2" effectLaunch="HurricaneMissileRightLM2">
-        <LaunchAttachQuery Methods="AMFilterBattlecruiserHurricaneRight AMRandomUniform"/>
-        <Missile value="BattlecruiserHurricaneRightAttackMissile2"/>
-        <ImpactPointSiteOps Ops="SOpTargetPointStationary SOpShadow BattlecruiserHurricaneSiteOpOffset"/>
-        <ImpactMap index="None" Model="BattlecruiserHurricaneAttackImpact2" Sound="Battlecruiser_MissilePodsImpact2"/>
-    </CActorAction>
-    <CActorMissile id="BattlecruiserHurricaneRightAttackMissile2" parent="GenericAttackMissile" unitName="HurricaneMissileRight2">
-        <Model value="HurricaneMissile2"/>
-    </CActorMissile>
-    <CActorAction id="BattlecruiserHurricaneShieldHitter2" parent="AoESplashShieldHitter" effectHit="HurricaneMissileDamage2">
-        <DamageModel value="Genericattackmodel"/>
-    </CActorAction>
-    <CActorAction id="BattlecruiserYamatoAttack2" parent="GenericAttack" effectImpact="YamatoU2" effectLaunch="Yamato2">
-        <LaunchAttachQuery Methods="AMFilterWeaponSetA2"/>
-        <LaunchAssets Sound="Battlecruiser_YamatoAttackLaunch2"/>
-        <Missile value="BattlecruiserYamatoAttackMissile2"/>
-        <ImpactSiteOps Ops="SOpAttachHarness SOpForwardLaunchGuide SOp2DRotation"/>
-        <ImpactAttachQuery Methods="Origin"/>
-        <ImpactMap index="None" Model="BattlecruiserYamatoAttackImpact2" Sound="Battlecruiser_YamatoAttackImpact2"/>
-        <ImpactMap index="Miss" Model="None"/>
-        <ImpactModel value="BattlecruiserYamatoAttackImpactModel2"/>
-        <ImpactPhysics Name="YamatoImpact" MatchKeys="Basic" Physics="BattlecruiserYamatoAttackForce"/>
-        <ImpactPhysics Name="YamatoImpactAir" MatchKeys="BasicAir" Physics="BattlecruiserYamatoAttackForce"/>
-        <ShieldFlashType value="Full"/>
-        <ActionFlags index="LaunchForceSite" value="1"/>
-    </CActorAction>
-    <CActorModel id="BattlecruiserYamatoAttackImpactModel2" parent="ModelAnimationStyleOneShotNoOrphan">
-        <Flags index="SuppressCreationErrors" value="1"/>
-        <Inherits index="Visibility" value="1"/>
-        <HostSiteOps Ops="SOpAttachOrigin SOpForwardLaunchGuide SOp2DRotation" HoldPosition="1" HoldRotation="1"/>
-        <Model value="GenericAttackModel"/>
-        <ModelFlags index="AllowHitTest" value="0"/>
-    </CActorModel>
-    <CActorMissile id="BattlecruiserYamatoAttackMissile2" parent="GenericAttackMissile" unitName="YamatoWeapon2">
-        <TerrainSquibs MovementDistance="0.500000" RangeDown="5.000000" RangeDownFade="1.000000">
-            <Visuals TerrainPhysicsMaterial="Water" ActorModel="YamatoTerrainSquibHarnessOneShot" ModelLink="WaterSplashMassive">
-                <Flags index="OneShot" value="1"/>
-            </Visuals>
-        </TerrainSquibs>
-    </CActorMissile>
     <CActorModel id="DistributeDamageImpactModel" parent="ModelAnimationStyleOneShot">
         <On Terms="ActorCreation" Send="SetTintColor 255,0,0"/>
         <On Terms="Effect.DistributedDamage.Start; At Target" Send="Create"/>
         <Model value="ConsumeImpactModel"/>
-    </CActorModel>
-    <CActorAction id="DRBattlecruiserAirAttack2" parent="GenericAttack" effectImpact="DRBattlecruiserAU2" effectLaunch="DRBattlecruiserALM2">
-        <LaunchAttachQuery Methods="AMFilterWeaponSetA0 AMRandomUniform"/>
-        <LaunchAssets Sound="Battlecruiser_AirAttackLaunch2"/>
-        <Missile value="DRBattlecruiserAirAttackMissile2"/>
-        <ImpactMap index="None" Model="DRBattlecruiserAirAttackImpact2" Sound="Battlecruiser_AirAttackImpact2"/>
-        <ImpactPhysics Name="ATSImpact" MatchKeys="Basic" Physics="BattlecruiserAttackGroundForce"/>
-    </CActorAction>
-    <CActorMissile id="DRBattlecruiserAirAttackMissile2" parent="GenericAttackMissile" unitName="DRBattlecruiserALMWeapon2">
-        <BarHeight value="1"/>
-        <BarWidth value="1"/>
-    </CActorMissile>
-    <CActorAction id="DRBattlecruiserGroundAttack2" parent="GenericAttack" effectImpact="DRBattlecruiserGU2" effectLaunch="DRBattlecruiserGLM2">
-        <LaunchAttachQuery Methods="AMFilterWeaponSetA0 AMRandomUniform"/>
-        <LaunchAssets Sound="Battlecruiser_GroundAttackLaunch2"/>
-        <Missile value="DRBattlecruiserGroundAttackMissile2"/>
-        <ImpactMap index="None" Model="DRBattlecruiserGroundAttackImpact2" Sound="Battlecruiser_GroundAttackImpact2"/>
-        <ImpactPhysics Name="ATSImpact" MatchKeys="Basic" Physics="BattlecruiserAttackGroundForce"/>
-    </CActorAction>
-    <CActorMissile id="DRBattlecruiserGroundAttackMissile2" parent="GenericAttackMissile" unitName="DRBattlecruiserGLMWeapon2">
-        <BarHeight value="1"/>
-        <BarWidth value="1"/>
-    </CActorMissile>
-    <CActorAction id="DRCannonsA2" parent="GenericAttack" effectAttack="DRCannonsA2">
-        <LaunchAttachQuery Methods="AMFilterDRCannons AMPatternDRCannonsA"/>
-        <LaunchAssets Model="DRCannonsLaunch2" Sound="Loki_CannonLaunch2"/>
-        <ImpactMap index="None" Model="DRCannonsImpact2" Sound="Loki_CannonImpact2"/>
-    </CActorAction>
-    <CActorAction id="DRCannonsG2" parent="GenericAttack" effectAttack="DRCannonsG2">
-        <LaunchAttachQuery Methods="AMFilterDRCannons AMPatternDRCannonsG"/>
-        <LaunchAssets Model="DRCannonsLaunch2" Sound="Loki_CannonLaunch2"/>
-        <ImpactMap index="None" Model="DRCannonsImpact2" Sound="Loki_CannonImpact2"/>
-    </CActorAction>
-    <CActorSound id="DefensiveMatrixBirth2" parent="SoundOneShot">
-        <On Terms="Behavior.DefensiveMatrix2.On" Send="Create"/>
-        <On Terms="Behavior.DefensiveMatrix2.Off" Send="Destroy"/>
-        <On Terms="Behavior.SJHyperionShield.On" Send="Create"/>
-        <On Terms="Behavior.SJHyperionShield.Off" Send="Destroy"/>
-        <Sound value="Battlecruiser_DefensiveMatrixBirth2"/>
-    </CActorSound>
-    <CActorSound id="DefensiveMatrixDeath2" parent="SoundOneShot">
-        <On Terms="Behavior.DefensiveMatrix2.Off" Send="Create"/>
-        <On Terms="Behavior.SJHyperionShield.Off" Send="Create"/>
-        <Sound value="Battlecruiser_DefensiveMatrixDeath2"/>
-    </CActorSound>
-    <CActorModel id="DefensiveMatrixModel2" parent="ModelAddition">
-        <Inherits index="TintColor" value="0"/>
-        <On Terms="Behavior.DefensiveMatrix2.On" Send="Create"/>
-        <On Terms="Behavior.DefensiveMatrix2.Off" Send="AnimBracketStop BSD"/>
-        <On Terms="ActorCreation; ValidateUnit IsColossus" Send="SetScale 1.000000,1.000000,3.000000"/>
-        <On Terms="ActorCreation; ValidateUnit IsVoidRay" Send="SetScale 1.200000,1.600000,1.200000"/>
-        <On Terms="ActorCreation; ValidateUnit IsBattlecruiser" Send="SetScale 1.200000,1.500000,1.000000"/>
-        <On Terms="ActorCreation; ValidateUnit IsThor" Send="SetScale 1.400000,1.200000,1.200000"/>
-        <On Terms="ActorCreation; ValidateUnit IsHerculesCombine" Send="SetScale 1.100000,1.700000,1.100000"/>
-        <On Terms="ActorCreation; ValidateUnit IsGoliath" Send="SetScale 1.300000"/>
-        <HostSiteOps Ops="SOpAttachCenter"/>
-        <AutoScaleFactor value="1.500000"/>
     </CActorModel>
     <CActorModel id="ClimaxDamageImpact" parent="ModelAnimationStyleOneShot">
         <On index="0" Terms="Effect.DamageBufferDamage.Start" Send="Create"/>
@@ -1579,47 +1461,6 @@
         <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
         <Model value=""/>
     </CActorModel>
-    <CActorUnit id="DukesRevenge2" parent="GenericUnitStandard" unitName="CaptainDukesRevenge">
-        <Aliases value="_UnitHuge"/>
-        <On Terms="Behavior.MercAirDropB.Create" Send="Create BattlecruiserLokiReentry"/>
-        <HostSiteOps Ops="SOpBankerBattlecruiser"/>
-        <Model value="DukesRevenge2"/>
-        <BuildModel value="DukesRevenge2"/>
-        <DeathArray index="Normal" ModelLink="DukesRevengeDeath" SoundLink=""/>
-        <DeathArray index="Squish" ModelLink="BattlecruiserDeathSquish"/>
-        <PlacementModel value="DukesRevenge2"/>
-        <PortraitModel value="BattlecruiserMercenaryPortrait"/>
-        <BarOffset value="75"/>
-        <BarWidth value="144"/>
-        <GroupIcon>
-            <Image value="Assets\Textures\Wireframe-Terran-Battlecruiser-Loki.dds"/>
-        </GroupIcon>
-        <GroupSoundArray index="What" value="BattlecruiserGroupWhat"/>
-        <GroupSoundArray index="Yes" value="BattlecruiserGroupYes"/>
-        <GroupSoundArray index="Attack" value="BattlecruiserGroupAttack"/>
-        <GroupSoundArray index="Board" value="BattlecruiserGroupBoard"/>
-        <HeroIcon value="Assets\Textures\BTN-Unit-Terran-BattlecruiserLoki.dds"/>
-        <HighlightTooltip value="Unit/Name/DukesRevenge2"/>
-        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
-        <NameOffset value="110"/>
-        <SoundArray index="Birth" value="BattlecruiserBirth"/>
-        <SoundArray index="Ready" value="Battlecruiser_Ready"/>
-        <SoundArray index="Help" value="Battlecruiser_Help"/>
-        <SoundArray index="What" value="Battlecruiser_What"/>
-        <SoundArray index="Yes" value="Battlecruiser_Yes"/>
-        <SoundArray index="Attack" value="Battlecruiser_Attack"/>
-        <SoundArray index="Pissed" value="Battlecruiser_Pissed"/>
-        <SoundArray index="Movement" value="Battlecruiser_Movement"/>
-        <SoundArray index="Turning" value="BattlecruiserTurning"/>
-        <SoundArray index="Board" value="BattlecruiserBoard"/>
-        <SoundArray index="Click" value="BattlecruiserClick"/>
-        <SoundArray index="ClickError" value="BattlecruiserClickError"/>
-        <SoundArray index="Highlight" value="BattlecruiserHighlight"/>
-        <UnitIcon value="Assets\Textures\BTN-Unit-Terran-BattlecruiserLoki.dds"/>
-        <Wireframe>
-            <Image value="Assets\Textures\Wireframe-Terran-Battlecruiser-Loki.dds"/>
-        </Wireframe>
-    </CActorUnit>
     <CActorUnit id="SquadMarauder" parent="GenericUnitBase" unitName="SquadMarauder">
         <Aliases value="_UnitMedium"/>
         <Macros value="UnloadDropAnim"/>
@@ -1629,12 +1470,12 @@
         <Macros value="SnowVisualUnitMacro"/>
         <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
         <On Terms="ActorCreation" Send="StatusSet WeaponNext 0"/>
-        <On Terms="Effect.PunisherGrenadesLM.Start; At Caster" Send="StatusIncrement WeaponNext"/>
-        <On Terms="Effect.PunisherGrenadesLM.Start; At Caster; IsStatus WeaponNext 2" Send="StatusSet WeaponNext 0"/>
-        <On Terms="Effect.PunisherGrenadesLM.Start; At Caster; IsStatus WeaponNext 0" Send="AnimClear AttackRight"/>
-        <On Terms="Effect.PunisherGrenadesLM.Start; At Caster; IsStatus WeaponNext 0" Send="AnimPlay AttackLeft Attack,Left"/>
-        <On Terms="Effect.PunisherGrenadesLM.Start; At Caster; IsStatus WeaponNext 1" Send="AnimClear AttackLeft"/>
-        <On Terms="Effect.PunisherGrenadesLM.Start; At Caster; IsStatus WeaponNext 1" Send="AnimPlay AttackRight Attack,Right"/>
+        <On Terms="Effect.SquadMarauderPunisherGrenadesLaunchMissile.Start; At Caster" Send="StatusIncrement WeaponNext"/>
+        <On Terms="Effect.SquadMarauderPunisherGrenadesLaunchMissile.Start; At Caster; IsStatus WeaponNext 2" Send="StatusSet WeaponNext 0"/>
+        <On Terms="Effect.SquadMarauderPunisherGrenadesLaunchMissile.Start; At Caster; IsStatus WeaponNext 0" Send="AnimClear AttackRight"/>
+        <On Terms="Effect.SquadMarauderPunisherGrenadesLaunchMissile.Start; At Caster; IsStatus WeaponNext 0" Send="AnimPlay AttackLeft Attack,Left"/>
+        <On Terms="Effect.SquadMarauderPunisherGrenadesLaunchMissile.Start; At Caster; IsStatus WeaponNext 1" Send="AnimClear AttackLeft"/>
+        <On Terms="Effect.SquadMarauderPunisherGrenadesLaunchMissile.Start; At Caster; IsStatus WeaponNext 1" Send="AnimPlay AttackRight Attack,Right"/>
         <On Terms="UnitMovementUpdate.*.Walk" Send="AnimClear AttackLeft"/>
         <On Terms="UnitMovementUpdate.*.Walk" Send="AnimClear AttackRight"/>
         <On Terms="ModelEvent; ModelEventName AnimClear" Send="AnimClear AttackLeft"/>
@@ -1646,11 +1487,8 @@
         <On Terms="UnitDeathCustomize; PassChance 10.000000; !ValidateUnit IsNotNeuralParasited" Send="Create Marauder_Death_NP"/>
         <On Terms="UnitDeathCustomize; ValidateUnit HaveVoidShade" Send="DeathCustomize Shadow"/>
         <On Terms="UnitDeathCustomize; ValidateUnit HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
-        <On Terms="Upgrade.BlackOps.Add" Send="ModelSwap Marauder_BlackOps"/>
-        <On Terms="UnitBirth; ValidateUnit HaveBlackOps" Send="ModelSwap Marauder_BlackOps"/>
         <On Terms="Upgrade.SuperStimpackMarauder.Add" Send="Create StimPackDevice_Marauder"/>
         <On Terms="UnitBirth; ValidateUnit HaveSuperStimpackMarauder" Send="Create StimPackDevice_Marauder"/>
-        <On Terms="UnitDeathCustomize; ValidateUnit HaveBlackOps" Send="DeathCustomize BlackOps"/>
         <Model value="Marauder"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
         <BuildModel value="Marauder"/>
@@ -1683,7 +1521,6 @@
             <VoiceLink value="ShadowUnit_DeathVox"/>
             <Name value="Shadow"/>
         </DeathCustoms>
-        <DeathCustoms ModelLink="Marauder_BlackOps_Death" SoundLink="Marauder_Explode" Name="BlackOps"/>
         <DeathActorModel value="UnitDeathModelWithDeathMotionGround"/>
         <PlacementModel value="Marauder"/>
         <PortraitModel value="MarauderPortrait"/>
@@ -1714,17 +1551,17 @@
             <Image value="Assets\Textures\Wireframe-Terran-Marauder.dds"/>
         </Wireframe>
     </CActorUnit>
-    <CActorAction id="SquadMarauderAttack" parent="MarauderAttackBase" effectImpact="PunisherGrenadesU2" effectLaunch="PunisherGrenadesLM">
+    <CActorAction id="SquadMarauderAttack" parent="SquadMarauderAttackBase" effectImpact="SquadMarauderPunisherGrenadesDamage" effectLaunch="PunisherGrenadesLM">
         <On Terms="Effect.SquadMarauderPunisherGrenadesLaunchMissile.Start; At Caster; !ValidateEffect PunisherGrenadesResearched" Send="Create"/>
         <LaunchAttachQuery Methods="AMPatternMarauder"/>
         <LaunchAssets Model="MarauderAttackLaunch"/>
         <Missile value="SquadMarauderAttackMissile"/>
         <ImpactPhysics Name="PunisherGrenadesImpact" MatchKeys="Basic" Physics="MarauderAttackDeathForce"/>
     </CActorAction>
-    <CActorMissile id="SquadMarauderAttackMissile" parent="GenericAttackMissile" unitName="PunisherGrenadesLMWeapon2">
+    <CActorMissile id="SquadMarauderAttackMissile" parent="GenericAttackMissile" unitName="SquadMarauderPunisherGrenadesLMWeapon">
         <Model value="PunisherGrenadesLMWeapon"/>
     </CActorMissile>
-    <CActorAction id="SquadMarauderUpgradedAttack" parent="MarauderAttackBase" effectImpact="PunisherGrenadesU2" effectLaunch="PunisherGrenadesLM">
+    <CActorAction id="SquadMarauderUpgradedAttack" parent="MarauderAttackBase" effectImpact="SquadMarauderPunisherGrenadesDamage" effectLaunch="PunisherGrenadesLM">
         <On Terms="Effect.SquadMarauderPunisherGrenadesLaunchMissile.Start; At Caster; ValidateEffect PunisherGrenadesResearched" Send="Create"/>
         <LaunchAttachQuery Methods="AMPatternMarauder"/>
         <LaunchAssets Model="MarauderAttackLaunch"/>
@@ -1732,18 +1569,10 @@
         <ImpactMap index="None" Model="MarauderUpgradedAttackImpact"/>
         <ImpactPhysics Name="PunisherGrenadesImpact" MatchKeys="Basic" Physics="MarauderAttackDeathForce"/>
     </CActorAction>
-    <CActorModel id="FireSuppressionBots2" parent="ModelAnimationStyleContinuous">
+    <CActorModel id="SquadFireSuppressionBots" parent="ModelAnimationStyleContinuous">
         <On Terms="Behavior.SquadStructureFireSuppressionSystem.On" Send="Create"/>
         <On Terms="Behavior.SquadStructureFireSuppressionSystem.On" Send="Create FireSuppressionBots_Loop"/>
         <On Terms="Behavior.SquadStructureFireSuppressionSystem.Off" Send="AnimBracketStop BSD"/>
-        <Host Subject="_Unit"/>
-        <HostSiteOps Ops="SOpAttachCenter"/>
-        <Model value="FireSuppressionBots"/>
-    </CActorModel>
-    <CActorModel id="FireSuppressionBots3" parent="ModelAnimationStyleContinuous">
-        <On Terms="Behavior.FireSuppressionSystem3.On" Send="Create"/>
-        <On Terms="Behavior.FireSuppressionSystem3.On" Send="Create FireSuppressionBots_Loop"/>
-        <On Terms="Behavior.FireSuppressionSystem3.Off" Send="AnimBracketStop BSD"/>
         <Host Subject="_Unit"/>
         <HostSiteOps Ops="SOpAttachCenter"/>
         <Model value="FireSuppressionBots"/>
@@ -1762,81 +1591,6 @@
         <On Terms="Effect.BlueScannerSheildDamage.Stop" Send="AnimBracketStop BSD"/>
         <HostSiteOps Ops="SOpShadow"/>
         <Model value="EMP_ShadowScrambler_Shockwave"/>
-    </CActorModel>
-    <CActorAction id="ImpalerAttack2" parent="GenericAttack" effectImpact="ImpalerDamage2" effectLaunch="Impaler2">
-        <LaunchAttachQuery Methods="Origin"/>
-        <LaunchAssets Sound="Lurker_AttackLaunch"/>
-        <Missile value="ImpalerAttackMissile2"/>
-        <ImpactSiteOps Ops="SOpShadow SOpForwardLaunchGuide"/>
-        <ImpactMap index="None" Model="" Sound="Impaler_TentacleImpact1"/>
-        <ShieldFlashType value="Full"/>
-    </CActorAction>
-    <CActorModel id="ImpalerAttackImpact2">
-        <Flags index="SuppressSaveLoad" value="1"/>
-        <On Terms="Effect.ImpalerDamage2.Start" Send="Create"/>
-        <On Terms="ActorCreation" Send="$Birth 0 0.000000 0.000000 1.500000 AsDuration"/>
-        <On Terms="AnimDone; AnimName Birth" Send="Destroy"/>
-        <HostSiteOps Ops="SOpShadow SOpAttachOriginStationary"/>
-        <Model value="ImpalerAttackImpact"/>
-    </CActorModel>
-    <CActorMissile id="ImpalerAttackMissile2" parent="GenericAttackMissile" unitName="ImpalerWeapon">
-        <On Terms="ActorCreation" Send="SetOpacity 0.500000"/>
-        <HostSiteOps Ops="SOpShadow"/>
-        <Model value="Invisible"/>
-        <Baselines index="Stand" AnimProps="Unburrow" BlendIn="-1.000000" BlendOut="-1.000000"/>
-    </CActorMissile>
-    <CActorAction id="LurkerAttackSpike2" parent="AoEAttackBase">
-        <On Terms="Effect.LurkerU2.Start; At Effect" Send="Create"/>
-        <On Terms="Effect.LurkerU2.Start; At Effect" Send="ActionDamage"/>
-        <On Terms="Effect.LurkerU2.Stop; At Effect" Send="Destroy"/>
-        <DamageSiteOps Ops="SOpAttachHarness SOpShadow" HoldPosition="1" HoldRotation="1"/>
-        <DamageAttachQuery Methods="AMFilterTarget AMProximityAll"/>
-        <DamageMap index="Flesh" ModelReaction="LurkerAttackDeathBloodGeyser"/>
-        <DamageModelReaction value="LurkerAttackDamageModelReaction"/>
-        <Lifetime value="2.600000"/>
-    </CActorAction>
-    <CActorModel id="LurkerAttackSpikeAC2" parent="ModelAnimationStyleOneShot">
-        <On Terms="Effect.LurkerE2.Start" Send="Create"/>
-        <On Terms="ActorCreation" Send="AnimPlay Attack Attack"/>
-        <On Terms="ActorCreation" Send="TimerSet 1.500000 DelayDestroy"/>
-        <On Terms="TimerExpired; TimerName DelayDestroy" Send="Destroy"/>
-        <HostSiteOps Ops="LurkerSOpAoEVariancer SOpShadow SOpForwardCasterPoint SOp2DRotation LurkerSOpShadowSpine SOpRotVariancerUp15"/>
-        <Model value="LurkerAttackSpikeEx2"/>
-    </CActorModel>
-    <CActorSound id="LurkerAttackSpikeSound2" parent="SoundOneShot">
-        <On Terms="Effect.LurkerE2.Start" Send="Create"/>
-        <HostSiteOps Ops="SOpTargetPoint SOpShadow SOpForwardCasterPoint"/>
-        <Sound value="Lurker_AttackLaunch"/>
-    </CActorSound>
-    <CActorModel id="LurkerAttackSpikes62">
-        <Remove Terms="Effect.Lurker.Start" Send="Create"/>
-        <On Terms="Effect.LurkerE.Start; EffectExecuteIndex 1" Send="AttachSetBearingsFrom {Weapon 0} {} $LurkerSpineSiteOps"/>
-        <On Terms="Effect.LurkerE.Start; EffectExecuteIndex 2" Send="AttachSetBearingsFrom {Weapon 1} {} $LurkerSpineSiteOps"/>
-        <On Terms="Effect.LurkerE.Start; EffectExecuteIndex 3" Send="AttachSetBearingsFrom {Weapon 2} {} $LurkerSpineSiteOps"/>
-        <On Terms="Effect.LurkerE.Start; EffectExecuteIndex 4" Send="AttachSetBearingsFrom {Weapon 3} {} $LurkerSpineSiteOps"/>
-        <On Terms="Effect.LurkerE.Start; EffectExecuteIndex 5" Send="AttachSetBearingsFrom {Weapon 4} {} $LurkerSpineSiteOps"/>
-        <On Terms="Effect.LurkerE.Start; EffectExecuteIndex 6" Send="AttachSetBearingsFrom {Weapon 5} {} $LurkerSpineSiteOps"/>
-        <On Terms="Effect.LurkerE.Start; EffectExecuteIndex 7" Send="AttachSetBearingsFrom {Weapon 6} {} $LurkerSpineSiteOps"/>
-        <On Terms="Effect.LurkerE.Start; EffectExecuteIndex 8" Send="AttachSetBearingsFrom {Weapon 7} {} $LurkerSpineSiteOps"/>
-        <On Terms="Effect.LurkerE.Start; EffectExecuteIndex 9" Send="AttachSetBearingsFrom {Weapon 8} {} $LurkerSpineSiteOps"/>
-        <On Terms="Effect.LurkerE.Start; EffectExecuteIndex 10" Send="AttachSetBearingsFrom {Weapon 9} {} $LurkerSpineSiteOps"/>
-        <On Terms="Effect.LurkerE.Start; EffectExecuteIndex 1" Send="AnimPlay Attack00 Attack,00"/>
-        <On Terms="Effect.LurkerE.Start; EffectExecuteIndex 2" Send="AnimPlay Attack01 Attack,01"/>
-        <On Terms="Effect.LurkerE.Start; EffectExecuteIndex 3" Send="AnimPlay Attack02 Attack,02"/>
-        <On Terms="Effect.LurkerE.Start; EffectExecuteIndex 4" Send="AnimPlay Attack03 Attack,03"/>
-        <On Terms="Effect.LurkerE.Start; EffectExecuteIndex 5" Send="AnimPlay Attack04 Attack,04"/>
-        <On Terms="Effect.LurkerE.Start; EffectExecuteIndex 6" Send="AnimPlay Attack05 Attack,05"/>
-        <On Terms="Effect.LurkerE.Start; EffectExecuteIndex 7" Send="AnimPlay Attack06 Attack,06"/>
-        <On Terms="Effect.LurkerE.Start; EffectExecuteIndex 8" Send="AnimPlay Attack07 Attack,07"/>
-        <On Terms="Effect.LurkerE.Start; EffectExecuteIndex 9" Send="AnimPlay Attack08 Attack,08"/>
-        <On Terms="Effect.LurkerE.Start; EffectExecuteIndex 10" Send="AnimPlay Attack09 Attack,09"/>
-        <On Terms="Effect.Lurker2.Stop" Send="TimerSet 1.500000 DelayDestroy"/>
-        <On Terms="Effect.LurkerExtended.Stop" Send="TimerSet 1.500000 DelayDestroy"/>
-        <On Terms="TimerExpired; TimerName DelayDestroy" Send="Destroy"/>
-        <On Terms="Effect.Lurker2.Start" Send="Create"/>
-        <HostSiteOps Ops="SOpCasterPoint SOpForwardTargetPointInverted LurkerSOpOffset SOp2DRotation LurkerSOpShadowAllSpines" HoldPosition="1" HoldRotation="1"/>
-        <Model value="LurkerAttackSpike"/>
-        <LocalOffsetFor2ndVisibilityTest value="0.000000,6.000000,0.000000"/>
     </CActorModel>
     <CActorModel id="BlueScannerCircle" parent="ModelAnimationStyleContinuous">
         <On Terms="ActorCreation" Send="SetTintColor {0,0,255 5.000000}"/>
@@ -1901,7 +1655,7 @@
     <CActorSplat id="SquadOrbitalCommandSplat" parent="TerranBuildingMorphSplat" unitName="SquadOrbitalCommand">
         <Model value="OrbitalCommandSplat"/>
     </CActorSplat>
-    <CActorUnit id="SoACaster2" parent="ProtossBuilding" unitName="SquadGlobalCaster">
+    <CActorUnit id="SquadWOLGlobalCaster" parent="ProtossBuilding" unitName="SquadGlobalCaster">
         <Macros value="GlobalLoopMacro"/>
         <Macros value="QueueAnim"/>
         <Macros value="UnpoweredAnim"/>
@@ -1921,7 +1675,7 @@
             <Image value="Assets\Textures\wireframe-protoss-shipgeneratorsmall.dds"/>
         </GroupIcon>
         <HeroIcon value="Assets\Textures\btn-building-protoss-obelisk.dds"/>
-        <HighlightTooltip value="Unit/Name/SoACaster2"/>
+        <HighlightTooltip value="Unit/Name/SquadWOLGlobalCaster"/>
         <LifeArmorIcon value="Assets\Textures\btn-armor-protoss-buildingplating.dds"/>
         <NameOffset value="130"/>
         <SoundArray index="Ready" value="SoACaster_Ready"/>
@@ -1961,18 +1715,6 @@
             <Image value="Assets\Textures\Wireframe-Terran-predator.dds"/>
         </Wireframe>
     </CActorUnit>
-    <CActorSound id="RetributionFieldImpactSound3" parent="SoundOneShot">
-        <On Terms="Effect.RetributionFieldDamage3.Start" Send="Create"/>
-        <Sound value="RetributionFieldImpactSound"/>
-    </CActorSound>
-    <CActorModel id="RetributionFieldLaunch3" parent="ModelAnimationStyleOneShot">
-        <Inherits index="BaseModelScale" value="1"/>
-        <Inherits index="Scale" value="1"/>
-        <On Terms="Effect.RetributionFieldSearch3.Start; At Caster" Send="Create"/>
-        <Host Subject="_Selectable"/>
-        <HostSiteOps Ops="SOpAttachCenter"/>
-        <Model value="RetributionFieldLaunch"/>
-    </CActorModel>
     <CActorUnit id="AdvanceEngineBay" parent="GenericUnitStandardNoAutoSoundLinks" unitName="AdvanceEngineBay">
         <On index="0" Terms="UnitBirth.ShadowScrambler" Send="Create SoundEmitter ShadowScrambler_Ambience"/>
         <On Terms="ActorCreation" Send="AnimGroupApply Work {} {} Instant"/>
@@ -2059,7 +1801,7 @@
     <CActorSplat id="SquadGhostAcademySplat" parent="GenericUnitSplat" unitName="SquadGhostAcademy">
         <Model value="GhostAcademySplat"/>
     </CActorSplat>
-    <CActorUnit id="Hercules2" parent="GenericUnitStandard" unitName="HerculesDropCallDownTest">
+    <CActorUnit id="SquadHercules" parent="GenericUnitStandard" unitName="HerculesDropCallDownTest">
         <Aliases value="_UnitHuge"/>
         <On Terms="UnitBirth.HerculesDropCallDownTest" Send="AnimGroupApply Fly Fly,Start Fly,End Instant"/>
         <Model value="Hercules"/>
@@ -2080,7 +1822,7 @@
         <GroupSoundArray index="Attack" value="Hercules_Yes"/>
         <GroupSoundArray index="Board" value="MedivacGroupBoard"/>
         <HeroIcon value="Assets\Textures\btn-unit-terran-hercules.dds"/>
-        <HighlightTooltip value="Unit/Name/Hercules2"/>
+        <HighlightTooltip value="Unit/Name/SquadHercules"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
         <NameOffset value="50"/>
         <SoundArray index="Ready" value="Hercules_Ready"/>
@@ -2194,7 +1936,7 @@
         <HostSiteOps Ops="SOpAttachRandomDamage"/>
         <Model value="RegenImpact"/>
     </CActorModel>
-    <CActorSplat id="ScannerSweepCursorSplat2" parent="CursorSplat" abil="RedScannerSweep">
+    <CActorSplat id="SquadScannerSweepCursorSplat" parent="CursorSplat" abil="RedScannerSweep">
         <On Terms="Abil.GreenScannerSweep.Cursor" Send="Create"/>
         <On Terms="ActorCreation" Send="Create CursorRegion"/>
         <On Terms="ActorDestruction" Target="CursorRegion" Send="Destroy"/>
@@ -2212,7 +1954,7 @@
         <On Terms="ActorOrphan" Send="Destroy"/>
         <Model value="ScannerSweepCursorSplat"/>
     </CActorSplat>
-    <CActorSound id="ScannerSweepSound2" parent="SoundContinuous">
+    <CActorSound id="SquadScannerSweepSound" parent="SoundContinuous">
         <Filter index="Ally" value="1"/>
         <Filter index="Neutral" value="1"/>
         <Filter index="Enemy" value="1"/>
@@ -2227,7 +1969,7 @@
         <HostSiteOps Ops="SOpShadow"/>
         <Sound value="OrbitalCommand_ScannerSweep"/>
     </CActorSound>
-    <CActorSound id="ScannerSweepSoundOthers2" parent="SoundContinuous">
+    <CActorSound id="SquadScannerSweepSoundOthers" parent="SoundContinuous">
         <Filter index="Self" value="1"/>
         <On Terms="Effect.RedScannerSweep.Start" Send="Create"/>
         <On Terms="Effect.RedScannerSweep.Stop" Send="Destroy"/>
@@ -2476,19 +2218,21 @@
         <AcquisitionPitchHalfArc value="15.000000"/>
         <AccuracyHalfArc value="5.000000"/>
     </CActorAction>
-    <CActorAction id="SquadGhostEMPAttack" parent="GenericAttack" effectImpact="EMPSearch2" effectLaunch="SquadGhostEMPLaunchMissile">
+    <CActorAction id="SquadGhostEMPAttack" parent="GenericAttack" effectImpact="SquadEMPSearch" effectLaunch="SquadGhostEMPLaunchMissile">
         <On Terms="Effect.EMPDamage.Start; At Caster" Send="ActionDamage"/>
         <LaunchAssets Sound="Ghost_EMPAttackLaunch2"/>
         <ImpactPointSiteOps Ops="SOpTargetPointStationary SOpShadow GhostEMPOffset"/>
         <ImpactMap index="None" Sound="Ghost_EMPAttackImpact2"/>
     </CActorAction>
     <CActorModel id="SquadGhostEMPAttackImpactEffect" parent="ModelAnimationStyleOneShot">
-        <On Terms="Effect.EMPSearch2.Start" Send="Create"/>
-        <On Terms="Effect.EMPSearch2.Stop" Send="AnimBracketStop BSD"/>
+        <On Terms="Effect.SquadEMPSearch.Start" Send="Create"/>
+        <On Terms="Effect.SquadEMPSearch.Stop" Send="AnimBracketStop BSD"/>
         <HostSiteOps Ops="SOpShadow"/>
         <Model value="GhostEMPAttackImpactEffect"/>
     </CActorModel>
-    <CActorMissile id="SquadGhostEMPAttackMissile" parent="GenericAttackMissile" unitName="EMP2Weapon2"/>
+    <CActorMissile id="SquadGhostEMPAttackMissile" parent="GenericAttackMissile" unitName="SquadGhostEMPWeapon">
+        <Model value="SquadGhostEMP2Weapon"/>
+    </CActorMissile>
     <CActorModel id="RedNuclearCollateralFire">
         <On Terms="Effect.RedNuclearDamage.Start; At Target" Send="Create"/>
         <HostSiteOps Ops="SOpShadow"/>
@@ -2561,7 +2305,7 @@
         <On Terms="UnitDeath.SquadGhost; PassChance 100.000000" Send="Create"/>
         <Sound value="Ghost_Death"/>
     </CActorSound>
-    <CActorModel id="ImpactModelFlames2" parent="ModelAnimationStyleOneShot">
+    <CActorModel id="SquadFirebatImpactModelFlames" parent="ModelAnimationStyleOneShot">
         <Terms value="Cap 1"/>
         <On Terms="Effect.SquadFirebatFlameThrowerDamage.Start; At Target" Send="Create"/>
         <On Terms="Effect.VolatileDeathDamage.Start; At Target" Send="Create"/>
@@ -2569,7 +2313,7 @@
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachRandomDamage"/>
     </CActorModel>
-    <CActorUnit id="KelmorianMiner2" parent="GenericUnitBase" unitName="CaptainFreeman">
+    <CActorUnit id="SquadHeroFreeman" parent="GenericUnitBase" unitName="CaptainFreeman">
         <Aliases value="_UnitSmall"/>
         <Macros value="UnloadDropAnim"/>
         <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
@@ -2585,9 +2329,9 @@
         <On Terms="Upgrade.CombatShield.Remove" Send="AnimPlay Cover Cover PlayForever 0.000000"/>
         <On Terms="UnitDeath.CaptainFreeman; AnimPlaying Cover" Target="_DeathModel" Send="AnimPlay Cover Cover PlayForever"/>
         <On Terms="UnitHeightUpdate.*.Land" Send="Create Marine_Land"/>
-        <Model value="WarPig2"/>
+        <Model value="SquadHeroFreeman"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
-        <BuildModel value="WarPig2"/>
+        <BuildModel value="SquadHeroFreeman"/>
         <DeathArray index="Normal" ModelLink="KelmorianMinerDeath2" SoundLink="Marine_DeathFXBloodSpray"/>
         <DeathArray index="Blast" ModelLink="MarineDeathBlast3" SoundLink="Marine_DeathFXBlast"/>
         <DeathArray index="Disintegrate" ModelLink="MarineDeathAcid3" SoundLink="Marine_DeathFXFire"/>
@@ -2596,7 +2340,7 @@
         <DeathArray index="Fire" ModelLink="MarineDeathFire3" SoundLink="Marine_DeathFXFire"/>
         <DeathArray index="Silentkill" SoundLink="Marine_DeathFXSilentKill"/>
         <DeathArray index="Squish" SoundLink="Marine_DeathFXBloodSpray"/>
-        <PlacementModel value="WarPig2"/>
+        <PlacementModel value="SquadHeroFreeman"/>
         <PortraitModel value="MarineMercenaryPortrait2"/>
         <StandAnimTurnTime value="5"/>
         <WalkAnimMoveSpeed value="2.25"/>
@@ -2630,7 +2374,7 @@
             <Image value="Assets\Textures\wireframe-terran-marine-mercenary.dds"/>
         </Wireframe>
     </CActorUnit>
-    <CActorAction id="KelmorianMinerAttack2" parent="GenericAttack" effectAttack="FreemanGaussRifleDamage">
+    <CActorAction id="SquadHeroFreemanAttack" parent="GenericAttack" effectAttack="FreemanGaussRifleDamage">
         <LaunchAssets Model="MarineAttackLaunch" Sound="Marine_AttackLaunch"/>
         <ContainerAssets Model="MarineAttackLaunch3" Sound="Marine_AttackLaunch"/>
         <ImpactMap index="None" Model="MarineAttackImpact3" Sound="Marine_AttackImpact"/>
@@ -2724,7 +2468,7 @@
             <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleSmall"/>
         </TerrainSquibs>
         <WalkAnimMoveSpeed value="2.25"/>
-        <AbilSoundArray AbilCmd="Stimpack2,0" Sound="Marine_StimPackVO"/>
+        <AbilSoundArray AbilCmd="SquadStimpack,255" Sound="Marine_StimPackVO"/>
         <BarOffset value="40"/>
         <BarWidth value="36"/>
         <GlossaryAnim value="Spell"/>
@@ -2896,19 +2640,18 @@
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachOverhead"/>
         <ModelFlags index="AutomateGlobalLoops" value="1"/>
-        <Model value="MindBlastStun"/>
     </CActorModel>
     <CActorAction id="SquadMedicFlashbangGrenadesAttack" parent="GenericAttack" effectImpact="MedicFlashBangGrenadeSearch" effectLaunch="MedicFlashBangGrenadeLaunchMissile">
         <LaunchAttachQuery Methods="Weapon 2"/>
-        <LaunchAssets Model="NovaGadgetFlashBangGrenadesWeapon" Sound="Nova_FlashBangGrenade_Toss"/>
+        <LaunchAssets Model="SquadMedicFlashbangGrenadesWeapon" Sound="Nova_FlashBangGrenade_Toss"/>
         <ImpactPointSiteOps Ops="SOpTargetPoint SOpShadow SOpMoveUpByDot25"/>
         <ImpactMap index="None" Model="NovaGadgetFlashBangGrenadesAttackImpact2" Sound="Nova_FlashBangGrenade_Impact2"/>
     </CActorAction>
-    <CActorMissile id="SquadMedicFlashbangGrenadesAttackMissile" parent="GenericAttackMissile" unitName="MedicFlashbangGrenades">
-        <Model value="NovaGadgetFlashBangGrenadesWeapon"/>
+    <CActorMissile id="SquadMedicFlashbangGrenadesAttackMissile" parent="GenericAttackMissile" unitName="SquadMedicFlashbangGrenades">
+        <Model value="SquadMedicFlashbangGrenadesWeapon"/>
     </CActorMissile>
     <CActorSplat id="SquadMedicFlashbangGrenadesCursorSplat" parent="TerranCursorSplat" abil="MedicFlashBangGrenade">
-        <Model value="TerranAOECursorSplat2"/>
+        <Model value="SquadMedicTerranAOECursorSplat"/>
     </CActorSplat>
     <CActorRange id="MedicFlashbangGrenadesRange" parent="RangeAbil" abil="MedicFlashBangGrenade"/>
     <CActorForceCylinder id="RedNukeShockwave">
@@ -2924,7 +2667,7 @@
         <On Terms="ActorCreation" Send="Create NukeShockwave02"/>
         <On Terms="ActorCreation" Send="Create NukeShockwave03"/>
         <HostSiteOps Ops="SOpTargetPoint SOpShadow SOpMoveUpBy6"/>
-        <Model value="ActorForceField2"/>
+        <Model value="SquadActorForceField"/>
         <Field value="Radial"/>
         <Duration value="4.000000"/>
         <Magnitude value="35.000000,10.000000"/>
@@ -2948,7 +2691,7 @@
     <CActorSound id="SquadSpectreObliterateImpact" parent="SoundOneShot">
         <On Terms="Effect.SquadSpectreObliterate.Start" Send="Create"/>
     </CActorSound>
-    <CActorUnit id="Predator2" parent="GenericUnitStandard" unitName="CaptainPredator">
+    <CActorUnit id="SquadHeroPredator" parent="GenericUnitStandard" unitName="CaptainPredator">
         <Aliases value="_UnitMedium"/>
         <Macros value="UnloadDropAnim"/>
         <Model value="Predator"/>
@@ -3134,16 +2877,16 @@
         <HostSiteOps Ops="SOpAttachOverhead"/>
         <Model value="RegenImpact"/>
     </CActorModel>
-    <CActorSound id="RetributionFieldImpactSound2" parent="SoundOneShot">
+    <CActorSound id="SquadPredatorRetributionFieldImpactSound" parent="SoundOneShot">
         <On Terms="Effect.SquadPredatorRetributionFieldDamage.Start" Send="Create"/>
+        <Sound value="RetributionFieldImpactSound2"/>
     </CActorSound>
-    <CActorModel id="RetributionFieldLaunch2" parent="ModelAnimationStyleOneShot">
+    <CActorModel id="SquadPredatorRetributionFieldLaunch" parent="ModelAnimationStyleOneShot">
         <Inherits index="BaseModelScale" value="1"/>
         <Inherits index="Scale" value="1"/>
         <On Terms="Effect.SquadPredatorRetributionFieldSearch.Start; At Caster" Send="Create"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachCenter"/>
-        <Model value="SquadPredatorRetributionFieldLaunch"/>
     </CActorModel>
     <CActorUnit id="SquadSCVJumper" parent="GenericUnitStandard" unitName="SquadSCV">
         <Aliases value="_UnitSmall"/>
@@ -3412,9 +3155,10 @@
         <On Terms="UnitDeath.SquadSpectre; PassChance 100.000000" Send="Create"/>
         <Sound value="Spectre_Death"/>
     </CActorSound>
-    <CActorSound id="Spell_CombatDrugs_Launch" parent="SoundOneShot">
+    <CActorSound id="SquadReaperCombatDrugsLaunch" parent="SoundOneShot">
         <On Terms="Behavior.ReaperRegen.On" Send="Create"/>
         <On Terms="UnitRegen.SquadReaper.LifeOn" Send="Create"/>
+        <Sound value="Spell_CombatDrugs_Launch"/>
     </CActorSound>
     <CActorUnit id="SquadStarport" parent="TerranBuildingFlyerEx" unitName="SquadStarport">
         <Macros value="SnowVisualBuildingMacro"/>
@@ -3444,19 +3188,13 @@
     <CActorSplat id="SquadStarportSplat" parent="TerranBuildingMorphSplat" unitName="SquadStarport">
         <Model value="StarportSplat"/>
     </CActorSplat>
-    <CActorModel id="StimpackEndImpact2" parent="ModelAnimationStyleOneShot">
+    <CActorModel id="SquadStimpackEndImpact" parent="ModelAnimationStyleOneShot">
         <Inherits index="CloakEffect" value="1"/>
         <On Terms="Behavior.SquadInfantryStimpack.Off; ValidateUnit NotDead" Send="Create"/>
         <On Terms="Behavior.StimpackMarauder.Off; ValidateUnit NotDead" Send="Create"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachOverhead"/>
-    </CActorModel>
-    <CActorModel id="StimpackEndImpact3" parent="ModelAnimationStyleOneShot">
-        <Inherits index="CloakEffect" value="1"/>
-        <On Terms="Behavior.Stimpack3.Off; ValidateUnit NotDead" Send="Create"/>
-        <On Terms="Behavior.StimpackMarauder.Off; ValidateUnit NotDead" Send="Create"/>
-        <Host Subject="_Selectable"/>
-        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Model value="StimpackEndImpact2"/>
     </CActorModel>
     <CActorModel id="CaptainBuffIndicator" parent="ModelAddition">
         <On Terms="Behavior.InfantryEnlargeRadius.Enable" Send="Create"/>
@@ -3548,16 +3286,9 @@
         <StatusBarFlags index="Duration" value="0"/>
         <UnitIcon value="Assets\Textures\btn-tips-scrap.dds"/>
     </CActorUnit>
-    <CActorModel id="SuperStimpackEndImpact2" parent="ModelAnimationStyleOneShot">
+    <CActorModel id="SquadSuperStimpackEndImpact" parent="ModelAnimationStyleOneShot">
         <Inherits index="CloakEffect" value="1"/>
         <On Terms="Behavior.SquadInfantrySuperStimpack.Off; ValidateUnit NotDead" Send="Create"/>
-        <Host Subject="_Selectable"/>
-        <HostSiteOps Ops="SOpAttachOverhead"/>
-        <Model value="SuperStimpackEndImpact"/>
-    </CActorModel>
-    <CActorModel id="SuperStimpackEndImpact3" parent="ModelAnimationStyleOneShot">
-        <Inherits index="CloakEffect" value="1"/>
-        <On Terms="Behavior.SuperStim3.Off; ValidateUnit NotDead" Send="Create"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachOverhead"/>
         <Model value="SuperStimpackEndImpact"/>
@@ -3765,22 +3496,6 @@
         <HostSiteOps Ops="SOpAttachOriginStationary"/>
         <Model value="SupplyDepotDropPod"/>
     </CActorModel>
-    <CActorProgress id="TerranConstruction2">
-        <On Terms="Abil.TerranBuild.BuiltStart" Send="Create"/>
-        <On Terms="Abil.BarracksAddOns.BuiltStart" Send="Create"/>
-        <On Terms="Abil.FactoryAddOns.BuiltStart" Send="Create"/>
-        <On Terms="Abil.StarportAddOns.BuiltStart" Send="Create"/>
-        <On Terms="Abil.MachineShop.BuiltStart" Send="Create"/>
-        <On Terms="ProgressLevel.TerranConstruction.Start; Level 0" Send="SetTransferOverrideAnim Build,A,Stand"/>
-        <On Terms="ProgressLevel.TerranConstruction.Stop; Level 0" Send="SetTransferOverrideAnim"/>
-        <StageArray AnimProps="Build,A,Start" BlendTime="0.000000"/>
-        <StageArray AnimProps="Build,A,Stand"/>
-        <StageArray AnimProps="Build,B,Start"/>
-        <StageArray AnimProps="Build,B,Stand"/>
-        <StageArray AnimProps="Build,C,Start"/>
-        <StageArray AnimProps="Build,C,Stand"/>
-        <StageArray AnimProps="Build,D"/>
-    </CActorProgress>
     <CActorSound id="SquadSpectreUltraSonicPulseImpactSound" parent="SoundOneShot">
         <On Terms="Effect.SquadSpectreUltrasonicPulseSearchArea.Start" Send="Create"/>
         <On Terms="Effect.SquadSpectreUltrasonicPulseSearchArea.Start" Send="Create"/>
@@ -3799,9 +3514,7 @@
         <ImpactMap index="None" Sound="UltraSonicPulseImpactSound"/>
         <ImpactModel value="GenericAttackImpactModel0"/>
     </CActorAction>
-    <CActorMissile id="SquadSpectreUltrasonicPulseAttackMissile" parent="GenericAttackMissile" unitName="SquadSpectreUltrasonicPulseWeapon">
-        <Model value="UltrasonicPulseWeapon2"/>
-    </CActorMissile>
+    <CActorMissile id="SquadSpectreUltrasonicPulseAttackMissile" parent="GenericAttackMissile" unitName="SquadSpectreUltrasonicPulseWeapon"/>
     <CActorSplat id="SquadSpectireUltrasonicPulseCursorSplat" parent="TerranCursorSplat" abil="SquadSpectreUltrasonicPulse"/>
     <CActorRange id="SquadSpectreUltrasonicPulseRange" parent="RangeAbil" abil="SquadSpectreUltrasonicPulse"/>
     <CActorSplat id="SquadUltraliskBurrowChargeCursorSplat" parent="ZergCursorSplat" abil="SquadUltraliskBurrowCharge"/>
@@ -3832,15 +3545,15 @@
         <Magnitude value="25.000000,10.000000"/>
         <Radius value="2.500000"/>
     </CActorForceSphere>
-    <CActorModel id="TissueAssimilationModel2" parent="ModelAnimationStyleOneShot">
+    <CActorModel id="SquadUltraliskTissueAssimilationModel" parent="ModelAnimationStyleOneShot">
         <Inherits index="CloakEffect" value="1"/>
         <Inherits index="Visibility" value="1"/>
-        <On Terms="Effect.TissueAssimilation2.Start" Send="Create"/>
+        <On Terms="Effect.SquadTissueAssimilation.Start" Send="Create"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachOverhead" HoldRotation="1"/>
         <Model value="TissueAssimilationModel"/>
     </CActorModel>
-    <CActorUnit id="Ultralisk2" parent="GenericUnitBase" unitName="SquadUltralisk">
+    <CActorUnit id="SquadUltralisk" parent="GenericUnitBase" unitName="SquadUltralisk">
         <Aliases value="_UnitHuge"/>
         <Macros value="ZergBurrowStandardAnimMacro"/>
         <Macros value="ZergLargeBurrowEffects"/>
@@ -4010,7 +3723,6 @@
             <Image value="Assets\Textures\Wireframe-Zerg-Ultralisk.dds"/>
         </GroupIcon>
         <HeroIcon value="Assets\Textures\btn-unit-zerg-omegalisk.dds"/>
-        <HighlightTooltip value="Unit/Name/Ultralisk2"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-zerg-groundcarapace-level0.dds"/>
         <NameOffset value="40"/>
         <ShieldArmorIcon value="Assets\Textures\btn-upgrade-zerg-swarmfrenzy.dds"/>
@@ -4033,7 +3745,7 @@
         </Wireframe>
         <WireframeShieldColor value="255,0,128,0"/>
     </CActorUnit>
-    <CActorSplat id="UltraliskBurrowedSplat2" parent="BurrowedSplat" unitName="SquadUltralisk">
+    <CActorSplat id="SquadUltraliskBurrowedSplat2" parent="BurrowedSplat" unitName="SquadUltralisk">
         <On Terms="Effect.BurrowChargeTargetSearchRevD.Start; At Caster" Send="Create"/>
         <On Terms="Effect.BurrowChargeTargetSearchRevD.Start; At Caster" Send="TimerSet 5.000000 DelayDestroy"/>
         <On Terms="Effect.BurrowChargeTargetSearchRevD.Start; At Caster" Send="RefClear ::Host"/>
@@ -4051,7 +3763,7 @@
         <On Terms="Effect.BurrowChargeTargetSearch.Start; At Caster" Send="TimerSet 5.000000 DelayDestroy"/>
         <On Terms="Effect.BurrowChargeTargetSearch.Start; At Caster" Send="RefClear ::Host"/>
     </CActorSplat>
-    <CActorForceSphere id="UltraliskChargeDeathForce2">
+    <CActorForceSphere id="SquadUltraliskChargeDeathForce2">
         <On Terms="Effect.BurrowChargeImpactSet.Stop; At Caster" Send="Create"/>
         <On Terms="Effect.BurrowChargeImpactSetRevD.Stop; At Caster" Send="Create"/>
         <Host Subject="SOpTargetPoint SOpSplashDamagePositionVariance"/>
@@ -4059,7 +3771,7 @@
         <Magnitude value="25.000000,10.000000"/>
         <Radius value="2.500000"/>
     </CActorForceSphere>
-    <CActorModel id="ViralPlasmaBurnModel2">
+    <CActorModel id="SquadFirebatViralPlasmaBurnModel">
         <On Terms="Behavior.SquadFirebatViralPlasma.On" Send="Create"/>
         <On Terms="ActorCreation" Send="$Stand 0 -1.000000 -1.000000 6.000000 AsDuration"/>
         <On Terms="Behavior.SquadFirebatViralPlasma.Off" Send="Destroy"/>
