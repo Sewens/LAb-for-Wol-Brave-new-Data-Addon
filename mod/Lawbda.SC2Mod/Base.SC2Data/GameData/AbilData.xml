@@ -123,6 +123,11 @@
         <AINotifyEffect value="GreenScannerSweep"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="ScannerSweepAlpha"/>
     </CAbilEffectTarget>
+    <CAbilMorph id="SquadRefineryToAutomatedRefinery">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Raise"/>
+        <InfoArray Unit="SquadAutomatedRefinery" CollideRange="0"/>
+    </CAbilMorph>
     <CAbilBuild id="SquadProtossBuild">
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
         <FlagArray index="PeonDisableCollision" value="1"/>
@@ -1250,7 +1255,7 @@
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectTarget>
-    <CAbilHarvest id="SCVGather">
+    <CAbilHarvest id="SquadSCVGather">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
     </CAbilHarvest>
     <CAbilEffectTarget id="SquadGhostSnipe">
@@ -1435,10 +1440,11 @@
         <Flags index="Hidden" value="1"/>
         <Flags index="Passive" value="1"/>
     </CAbilQueue>
-    <CAbilEffectTarget id="SCVRepair">
+    <CAbilEffectTarget id="SquadSCVRepair">
         <Alignment value="Positive"/>
         <AbilSetId value="Repair"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SCVRepair"/>
         <Flags index="AutoCast" value="1"/>
         <Flags index="AutoCastOffOwnerLeave" value="1"/>
         <Flags index="AutoCastOn" value="1"/>
@@ -1462,6 +1468,7 @@
         <InheritAttackPriorityArray index="Prep" value="1"/>
         <InheritAttackPriorityArray index="Cast" value="1"/>
         <InheritAttackPriorityArray index="Channel" value="1"/>
+        <AINotifyEffect value="SCVRepair"/>
         <DefaultError value="RequiresRepairTarget"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="Repair">
             <Flags index="ToSelection" value="1"/>

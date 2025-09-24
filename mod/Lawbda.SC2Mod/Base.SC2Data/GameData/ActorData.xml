@@ -1489,13 +1489,13 @@
         <On Terms="UnitDeathCustomize; ValidateUnit HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
         <On Terms="Upgrade.SuperStimpackMarauder.Add" Send="Create StimPackDevice_Marauder"/>
         <On Terms="UnitBirth; ValidateUnit HaveSuperStimpackMarauder" Send="Create StimPackDevice_Marauder"/>
-        <Model value="Marauder"/>
+        <Model value="Marauder_Umojan"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
-        <BuildModel value="Marauder"/>
-        <DeathArray index="Normal" ModelLink="MarauderDeath" SoundLink="Marauder_Explode"/>
+        <BuildModel value="Marauder_Umojan"/>
+        <DeathArray index="Normal" ModelLink="Marauder_Umojan_Death" SoundLink="Marauder_Explode"/>
         <DeathArray index="Eviscerate" ModelLink="MarauderDeathEviscerate" SoundLink="Uni_DeathFXEviscerate"/>
         <DeathArray index="Silentkill" SoundLink="Nova_Q_NeckBreak" VoiceLink="DxFx_MarauderDeath_Exerts"/>
-        <DeathCustoms ActorModel="UnitDeathRagdollBloodPrevent" ModelLink="MarauderDeathRagdoll" Name="RagdollBasic">
+        <DeathCustoms ActorModel="UnitDeathRagdollBloodPrevent" ModelLink="Marauder_Umojan_Death_Ragdoll" Name="RagdollBasic">
             <BodySquibs Name="None"/>
         </DeathCustoms>
         <DeathCustoms Name="RagdollSiegeTank" InheritsFrom="RagdollBasic"/>
@@ -1522,8 +1522,8 @@
             <Name value="Shadow"/>
         </DeathCustoms>
         <DeathActorModel value="UnitDeathModelWithDeathMotionGround"/>
-        <PlacementModel value="Marauder"/>
-        <PortraitModel value="MarauderPortrait"/>
+        <PlacementModel value="Marauder_Umojan"/>
+        <PortraitModel value="Marauder_Umojan_Portrait"/>
         <TerrainSquibs>
             <MovementDistance value="0.150000,0.150000"/>
             <IdlePeriod value="0.100000,0.250000"/>
@@ -2759,9 +2759,9 @@
         <Model value="Reaper_Silver"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
         <BuildModel value="Reaper"/>
-        <DeathArray index="Normal" ModelLink="ReaperDeath" SoundLink="Reaper_Explode"/>
+        <DeathArray index="Normal" ModelLink="Reaper_Silver_Death" SoundLink="Reaper_Explode"/>
         <DeathCustoms index="4" ModelLink="Invisible1" Name="Vortex"/>
-        <DeathCustoms ActorModel="UnitDeathRagdollBloodPrevent" ModelLink="ReaperDeathRagdoll" Name="RagdollBasic">
+        <DeathCustoms ActorModel="UnitDeathRagdollBloodPrevent" ModelLink="Reaper_Silver_Death_Ragdoll" Name="RagdollBasic">
             <BodySquibs Name="None"/>
         </DeathCustoms>
         <DeathCustoms Name="RagdollSiegeTank" InheritsFrom="RagdollBasic"/>
@@ -2791,8 +2791,8 @@
             <Name value="Shadow"/>
         </DeathCustoms>
         <DeathActorModel value="UnitDeathModelWithDeathMotionGround"/>
-        <PlacementModel value="Reaper"/>
-        <PortraitModel value="ReaperPortrait"/>
+        <PlacementModel value="Reaper_Silver"/>
+        <PortraitModel value="Reaper_Silver_Portrait"/>
         <TerrainSquibs>
             <MovementDistance value="0.150000,0.150000"/>
             <IdlePeriod value="0.250000,0.500000"/>
@@ -2901,16 +2901,16 @@
         <On index="3" Terms="UnitRevive.SquadSCVJumper"/>
         <On index="4" Terms="UnitConstruction.SquadSCVJumper.Start"/>
         <On index="5" Terms="UnitConstruction.SquadSCVJumper.Finish"/>
-        <On Terms="Abil.SCVGather" Send="TimerSet 0.000000,0.300000 Gather"/>
-        <On Terms="Abil.SCVGather" Send="AnimClear Gather"/>
-        <On Terms="Abil.SCVHarvest.Stop" Send="TimerKill Gather"/>
-        <On Terms="AnimDone.*.Complete; AnimName Gather" Send="TimerSet 0.000000,0.300000 Gather"/>
-        <On Terms="TimerExpired; TimerName Gather" Send="AnimPlay Gather Work NonLooping"/>
-        <On Terms="TimerExpired; TimerName Gather" Send="Create SquadSCVGatherSound"/>
-        <On Terms="Abil.SCVRepair" Send="TimerSet 0.000000,0.300000 Repair"/>
-        <On Terms="Abil.SCVRepair" Send="TimerKill Repair"/>
-        <On Terms="Abil.SCVRepair" Send="AnimClear Repair"/>
-        <On Terms="AnimDone.*.Complete; AnimName Repair" Send="TimerSet 0.000000,0.300000 Repair"/>
+        <On Terms="Abil.SquadSCVGather" Send="TimerSet 0.000000,0.300000 SquadSCVGather"/>
+        <On Terms="Abil.SquadSCVGather" Send="AnimClear SquadSCVGather"/>
+        <On Terms="Abil.SCVHarvest.Stop" Send="TimerKill SquadSCVGather"/>
+        <On Terms="AnimDone.*.Complete; AnimName Gather" Send="TimerSet 0.000000,0.300000 SquadSCVGather"/>
+        <On Terms="TimerExpired; TimerName SquadSCVGather" Send="AnimPlay Gather Work NonLooping"/>
+        <On Terms="TimerExpired; TimerName SquadSCVGather" Send="Create SquadSCVGatherSound"/>
+        <On Terms="Abil.SquadSCVRepair" Send="TimerSet 0.000000,0.300000 SquadSCVRepair"/>
+        <On Terms="Abil.SquadSCVRepair" Send="TimerKill SquadSCVRepair"/>
+        <On Terms="Abil.SquadSCVRepair" Send="AnimClear SquadSCVRepair"/>
+        <On Terms="AnimDone.*.Complete; AnimName Repair" Send="TimerSet 0.000000,0.300000 SquadSCVRepair"/>
         <On Terms="TimerExpired; TimerName Repair" Send="AnimPlay Repair Work NonLooping"/>
         <On Terms="TimerExpired; TimerName Repair" Send="Create SquadSCVRepairSound"/>
         <On Terms="Abil.*.WorkerStart" Send="TimerSet 0.000000,0.300000 Build"/>
@@ -2921,7 +2921,7 @@
         <On Terms="AnimDone.*.Complete; AnimName Build" Send="TimerSet 0.000000,0.300000 Build"/>
         <On Terms="TimerExpired; TimerName Build" Send="AnimPlay Build Work NonLooping"/>
         <On Terms="TimerExpired; TimerName Build" Send="Create SquadSCVBuildSound"/>
-        <On Terms="Abil.SCVGather" Send="StatusSet CloakSound 1"/>
+        <On Terms="Abil.SquadSCVGather" Send="StatusSet CloakSound 1"/>
         <On Terms="Behavior.CarryHarvestableVespeneGeyserGas.Create" Send="StatusSet CloakSound 1"/>
         <On Terms="Confirmation.SCV.Start" Send="StatusSet CloakSound 0"/>
         <On Terms="Behavior.CloakFieldEffect.Create; IsStatus CloakSound 0" Send="Create Worker_CloakFieldOn"/>
@@ -2933,8 +2933,7 @@
         <AnimBlendTime value="0.500000"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
         <BuildModel value="SCV_Remastered"/>
-        <DeathArray index="Normal" ModelLink="SCV_Remastered_Death" SoundLink="SCV_Explode2"/>
-        <DeathCustoms index="4" ModelLink="Invisible2" Name="Vortex"/>
+        <DeathArray index="Normal" ModelLink="SCV_Remastered_Death" SoundLink="SCV_Explode"/>
         <DeathCustoms ModelLink="SCV_Remastered_DeathRagdoll" Name="RagdollBasic">
             <BodySquibs Name="Basic" Model="SCV_Remastered_DeathRagdoll"/>
         </DeathCustoms>
@@ -3006,18 +3005,18 @@
         <Macros value="MacroWorkerHat"/>
         <Macros value="PhysicsDeathsSwarmGround"/>
         <Macros value="PhysicsDeathsVoidGround"/>
-        <On Terms="Abil.SCVGather" Send="TimerSet 0.000000,0.300000 Gather"/>
-        <On Terms="Abil.SCVGather" Send="AnimClear Gather"/>
-        <On Terms="Abil.SCVHarvest.Stop" Send="TimerKill Gather"/>
-        <On Terms="AnimDone.*.Complete; AnimName Gather" Send="TimerSet 0.000000,0.300000 Gather"/>
-        <On Terms="TimerExpired; TimerName Gather" Send="AnimPlay Gather Work NonLooping"/>
-        <On Terms="TimerExpired; TimerName Gather" Send="Create SquadSCVGatherSound"/>
-        <On Terms="Abil.SCVRepair" Send="TimerSet 0.000000,0.300000 Repair"/>
-        <On Terms="Abil.SCVRepair" Send="TimerKill Repair"/>
-        <On Terms="Abil.SCVRepair" Send="AnimClear Repair"/>
-        <On Terms="AnimDone.*.Complete; AnimName Repair" Send="TimerSet 0.000000,0.300000 Repair"/>
-        <On Terms="TimerExpired; TimerName Repair" Send="AnimPlay Repair Work NonLooping"/>
-        <On Terms="TimerExpired; TimerName Repair" Send="Create SquadSCVRepairSound"/>
+        <On Terms="Abil.SquadSCVGather" Send="TimerSet 0.000000,0.300000 SquadSCVGather"/>
+        <On Terms="Abil.SquadSCVGather" Send="AnimClear SquadSCVGather"/>
+        <On Terms="Abil.SCVHarvest.Stop" Send="TimerKill SquadSCVGather"/>
+        <On Terms="AnimDone.*.Complete; AnimName Gather" Send="TimerSet 0.000000,0.300000 SquadSCVGather"/>
+        <On Terms="TimerExpired; TimerName SquadSCVGather" Send="AnimPlay Gather Work NonLooping"/>
+        <On Terms="TimerExpired; TimerName SquadSCVGather" Send="Create SquadSCVGatherSound"/>
+        <On Terms="Abil.SquadSCVRepair" Send="TimerSet 0.000000,0.300000 SquadSCVRepair"/>
+        <On Terms="Abil.SquadSCVRepair" Send="TimerKill SquadSCVRepair"/>
+        <On Terms="Abil.SquadSCVRepair" Send="AnimClear SquadSCVRepair"/>
+        <On Terms="AnimDone.*.Complete; AnimName Repair" Send="TimerSet 0.000000,0.300000 SquadSCVRepair"/>
+        <On Terms="TimerExpired; TimerName SquadSCVRepair" Send="AnimPlay Repair Work NonLooping"/>
+        <On Terms="TimerExpired; TimerName SquadSCVRepair" Send="Create SquadSCVRepairSound"/>
         <On Terms="Abil.*.WorkerStart" Send="TimerSet 0.000000,0.300000 Build"/>
         <On Terms="Abil.*.WorkerStop" Send="TimerKill Build"/>
         <On Terms="Abil.*.WorkerStop" Send="AnimClear Build"/>
@@ -3026,7 +3025,7 @@
         <On Terms="AnimDone.*.Complete; AnimName Build" Send="TimerSet 0.000000,0.300000 Build"/>
         <On Terms="TimerExpired; TimerName Build" Send="AnimPlay Build Work NonLooping"/>
         <On Terms="TimerExpired; TimerName Build" Send="Create SquadSCVBuildSound"/>
-        <On Terms="Abil.SCVGather" Send="StatusSet CloakSound 1"/>
+        <On Terms="Abil.SquadSCVGather" Send="StatusSet CloakSound 1"/>
         <On Terms="Behavior.CarryHarvestableVespeneGeyserGas.Create" Send="StatusSet CloakSound 1"/>
         <On Terms="Confirmation.SCV.Start" Send="StatusSet CloakSound 0"/>
         <On Terms="Behavior.CloakFieldEffect.Create; IsStatus CloakSound 0" Send="Create Worker_CloakFieldOn"/>
@@ -3038,8 +3037,7 @@
         <AnimBlendTime value="0.500000"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
         <BuildModel value="SCV_Remastered"/>
-        <DeathArray index="Normal" ModelLink="SCV_Remastered_Death" SoundLink="SCV_Explode2"/>
-        <DeathCustoms index="4" ModelLink="Invisible2" Name="Vortex"/>
+        <DeathArray index="Normal" ModelLink="SCV_Remastered_Death" SoundLink="SCV_Explode"/>
         <DeathCustoms ModelLink="SCV_Remastered_DeathRagdoll" Name="RagdollBasic">
             <BodySquibs Name="Basic" Model="SCV_Remastered_DeathRagdoll"/>
         </DeathCustoms>
@@ -3777,7 +3775,7 @@
         <On Terms="Behavior.SquadFirebatViralPlasma.Off" Send="Destroy"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachRandomDamage"/>
-        <Model value="ImpactModelFlames2"/>
+        <Model value="ImpactModelFlames"/>
     </CActorModel>
     <CActorModel id="RedNuclearViralPlasmaBurnModel">
         <On Terms="Behavior.RedNuclearFireDOT.On" Send="Create"/>
