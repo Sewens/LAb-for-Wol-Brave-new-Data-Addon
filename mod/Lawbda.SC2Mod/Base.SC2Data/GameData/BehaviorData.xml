@@ -22,6 +22,12 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <MaxStackCountPerCaster value="1"/>
     </CBehaviorBuff>
+    <CBehaviorPowerSource id="SquadCommandCenterPowerSource">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-building-terran-techlab-covertops.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Radius value="6.5"/>
+    </CBehaviorPowerSource>
     <CBehaviorPowerSource id="SquadFactoryPowerSource">
         <InfoFlags index="Hidden" value="1"/>
         <InfoIcon value="Assets\Textures\btn-building-terran-techlab-covertops.dds"/>
@@ -111,6 +117,48 @@
         <Duration value="0.001"/>
         <ExpireEffect value="SquadSupplyDepotDropMorph"/>
     </CBehaviorBuff>
+    <CBehaviorPowerUser id="SquadTechlabCommandCenterPowerUser">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <PowerLink value="SquadCommandCenterPowerSource"/>
+        <PowerStageArray/>
+        <PowerStageArray MinPowerLevel="1" LevelGainEffect="PoweredByBarrackApply" LevelLossEffect="PoweredByBarrackRemove">
+            <Modification>
+                <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Energy" value="0"/>
+            </Modification>
+        </PowerStageArray>
+    </CBehaviorPowerUser>
+    <CBehaviorPowerUser id="SquadTechlabFactoryPowerUser">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <PowerLink value="SquadFactoryPowerSource"/>
+        <PowerStageArray/>
+        <PowerStageArray MinPowerLevel="1" LevelGainEffect="PoweredByBarrackApply" LevelLossEffect="PoweredByBarrackRemove">
+            <Modification>
+                <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Energy" value="0"/>
+            </Modification>
+        </PowerStageArray>
+    </CBehaviorPowerUser>
+    <CBehaviorPowerUser id="SquadTechlabStarportPowerUser">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <PowerLink value="SquadStarportPowerSource"/>
+        <PowerStageArray/>
+        <PowerStageArray MinPowerLevel="1" LevelGainEffect="PoweredByBarrackApply" LevelLossEffect="PoweredByBarrackRemove">
+            <Modification>
+                <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Energy" value="0"/>
+            </Modification>
+        </PowerStageArray>
+    </CBehaviorPowerUser>
     <CBehaviorBuff id="UnitSmallAddMaxLife">
         <InfoIcon value="Assets\Textures\btn-upgrade-zerg-regenerativebile.dds"/>
         <BehaviorCategories index="User10" value="1"/>
