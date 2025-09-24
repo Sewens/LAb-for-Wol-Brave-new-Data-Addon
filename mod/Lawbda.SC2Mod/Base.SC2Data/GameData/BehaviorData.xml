@@ -104,6 +104,13 @@
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <Radius value="6.5"/>
     </CBehaviorPowerSource>
+    <CBehaviorBuff id="SquadSupplyDepotDropMorph">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <Duration value="0.001"/>
+        <ExpireEffect value="SquadSupplyDepotDropMorph"/>
+    </CBehaviorBuff>
     <CBehaviorBuff id="UnitSmallAddMaxLife">
         <InfoIcon value="Assets\Textures\btn-upgrade-zerg-regenerativebile.dds"/>
         <BehaviorCategories index="User10" value="1"/>
@@ -207,13 +214,7 @@
         <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
         <Modification Radar="30" RadarFilters="-;Neutral,RawResource,HarvestableResource,Missile,Destructible,Buried,Cloaked"/>
     </CBehaviorBuff>
-    <CBehaviorBuff id="SquadBunkerNotJumbo">
-        <InfoFlags index="Hidden" value="1"/>
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <RemoveValidatorArray value="NeosteelFrameNotPurchased"/>
-    </CBehaviorBuff>
     <CBehaviorBuff id="SquadBunkerWeaponRangeBonus">
-        <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <InitialEffect value="SquadProjectileAcceleratorsApply"/>
         <FinalEffect value="SquadBunkerProjectileAcceleratorsRemove"/>
@@ -222,7 +223,7 @@
             <AbilLinkEnableArray value="heal"/>
             <AbilLinkEnableArray value="stop"/>
             <AbilLinkEnableArray value="HoldFire"/>
-            <WeaponDisableArray value="FusionCutter"/>
+            <AbilLinkEnableArray value="attack"/>
         </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadCommandCenterTransportDummy">
@@ -456,9 +457,7 @@
         </PowerStageArray>
     </CBehaviorPowerUser>
     <CBehaviorBuff id="SquadBunkerProjectileAccelerators">
-        <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
-        <DisableValidatorArray value="ProjectileAcceleratorsPurchased"/>
         <Modification WeaponRange="1"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadReactorQueueBuff">
@@ -537,11 +536,9 @@
         </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="SuqadBunkerShrikeTurret">
-        <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
-        <Requirements value="ShrikeTurretResearched"/>
         <Modification>
-            <WeaponEnableArray value="SquadBunkerShrikeAutoGUn"/>
+            <WeaponEnableArray value="SquadBunkerShrikeAutoGun"/>
         </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadMarauderSlow">

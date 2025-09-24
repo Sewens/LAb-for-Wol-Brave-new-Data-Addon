@@ -64,18 +64,18 @@
         <CostResource index="Minerals" value="100"/>
         <RepairTime value="50"/>
         <AttackTargetPriority value="11"/>
-        <AbilArray Link="BuildInProgress"/>
+        <AbilArray Link="SquadBuildinProgress"/>
         <BehaviorArray Link="AutomaticHarvestableVespene"/>
         <BehaviorArray Link="AutoHarvestVespene"/>
         <BehaviorArray Link="FireSuppressionSystem"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="FireSuppressionSystem"/>
         <CardLayouts>
-            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Cancel" Row="2" Column="4"/>
             <LayoutButtons>
                 <Face value="MicroFiltering"/>
                 <Type value="Passive"/>
-                <AbilCmd value="255"/>
+                <AbilCmd value="255,255"/>
                 <Requirements value="HaveMicroFiltering"/>
                 <Row value="1"/>
                 <Column value="0"/>
@@ -83,11 +83,12 @@
             <LayoutButtons>
                 <Face value="MicroFiltering"/>
                 <Type value="Passive"/>
-                <AbilCmd value="255"/>
+                <AbilCmd value="255,255"/>
                 <Requirements value="HaveMicroFiltering"/>
                 <Row value="1"/>
                 <Column value="0"/>
             </LayoutButtons>
+            <LayoutButtons Face="Halt" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Halt" Row="2" Column="3"/>
         </CardLayouts>
         <Radius value="1.5"/>
         <SeparationRadius value="1.5"/>
@@ -507,7 +508,7 @@
         <AbilArray Link="CommandCenterTransport"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="FireSuppressionSystem"/>
-        <WeaponArray Link="TwinIbiksCannon2" Turret="PlanetaryFortress2"/>
+        <WeaponArray Link="SquadPlanetaryFortressIbiksCannon" Turret="SquadPlanetaryFortress"/>
         <CardLayouts>
             <LayoutButtons Face="PlanetaryFortressLoad" Type="AbilCmd" AbilCmd="CommandCenterTransport,LoadAll" Row="2" Column="0"/>
             <LayoutButtons Face="CommandCenterUnloadAll" Type="AbilCmd" AbilCmd="CommandCenterTransport,UnloadAll" Row="2" Column="1"/>
@@ -759,25 +760,14 @@
         <AttackTargetPriority value="11"/>
         <AbilArray Link="SquadBuildinProgress"/>
         <AbilArray Link="SquadQueue5"/>
-        <AbilArray Link="ArmoryResearch2"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="FireSuppressionSystem"/>
         <BehaviorArray Link="FireSuppressionSystem"/>
         <CardLayouts>
-            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Halt" Row="2" Column="4"/>
-            <LayoutButtons Face="TerranVehicleAndShipPlatingLevel1" Type="AbilCmd" AbilCmd="SuqadArmoryResearchVechileandStarship,Research4" Row="0" Column="1"/>
-            <LayoutButtons Face="TerranVehicleAndShipPlatingLevel2" Type="AbilCmd" AbilCmd="SuqadArmoryResearchVechileandStarship,Research5" Row="0" Column="1"/>
-            <LayoutButtons Face="TerranVehicleAndShipPlatingLevel3" Type="AbilCmd" AbilCmd="SuqadArmoryResearchVechileandStarship,Research6" Row="0" Column="1"/>
-            <LayoutButtons Face="TerranVehiclePlatingVanadiumPlatingLevel1" Type="AbilCmd" AbilCmd="ArmoryResearch2,Research22" Row="0" Column="1"/>
-            <LayoutButtons Face="TerranVehiclePlatingVanadiumPlatingLevel2" Type="AbilCmd" AbilCmd="ArmoryResearch2,Research23" Row="0" Column="1"/>
-            <LayoutButtons Face="TerranVehiclePlatingVanadiumPlatingLevel3" Type="AbilCmd" AbilCmd="ArmoryResearch2,Research24" Row="0" Column="1"/>
-            <LayoutButtons Face="SelectBuilder" Type="SelectBuilder" AbilCmd="ArmoryResearch2,Research9" Row="1" Column="3"/>
-            <LayoutButtons Face="TerranVehicleAndShipWeaponsLevel1" Type="AbilCmd" AbilCmd="SuqadArmoryResearchVechileandStarship,Research1" Row="0" Column="0"/>
-            <LayoutButtons Face="TerranVehicleAndShipWeaponsLevel2" Type="AbilCmd" AbilCmd="SuqadArmoryResearchVechileandStarship,Research2" Row="0" Column="0"/>
-            <LayoutButtons Face="TerranVehicleAndShipWeaponsLevel3" Type="AbilCmd" AbilCmd="SuqadArmoryResearchVechileandStarship,Research3" Row="0" Column="0"/>
-            <LayoutButtons Face="TerranVehicleWeaponsUltraCapacitorsLevel1" Type="AbilCmd" AbilCmd="ArmoryResearch2,Research16" Row="0" Column="0"/>
-            <LayoutButtons Face="TerranVehicleWeaponsUltraCapacitorsLevel2" Type="AbilCmd" AbilCmd="ArmoryResearch2,Research17" Row="0" Column="0"/>
-            <LayoutButtons Face="TerranVehicleWeaponsUltraCapacitorsLevel3" Type="AbilCmd" AbilCmd="ArmoryResearch2,Research18" Row="0" Column="0"/>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Cancel" Row="2" Column="4"/>
+            <LayoutButtons Row="0" Column="0"/>
+            <LayoutButtons Face="SelectBuilder" Type="SelectBuilder" AbilCmd="ArmoryResearch2,255" Row="1" Column="3"/>
+            <LayoutButtons Face="Halt" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Halt" Row="2" Column="3"/>
         </CardLayouts>
         <Radius value="1.25"/>
         <SeparationRadius value="1.25"/>
@@ -1095,7 +1085,7 @@
         <DeathRevealRadius value="3"/>
         <Facing value="315"/>
         <Race value="Terr"/>
-        <Mob value="Multiplayer"/>
+        <Mob value="Campaign"/>
         <FlagArray index="Turnable" value="0"/>
         <FlagArray index="PreventDefeat" value="1"/>
         <FlagArray index="PreventDestroy" value="1"/>
@@ -1117,8 +1107,8 @@
         <Attributes index="Armored" value="1"/>
         <Attributes index="Mechanical" value="1"/>
         <Attributes index="Structure" value="1"/>
-        <LifeStart value="400"/>
-        <LifeMax value="400"/>
+        <LifeStart value="550"/>
+        <LifeMax value="550"/>
         <LifeArmor value="1"/>
         <LifeArmorName value="Unit/LifeArmorName/TerranBuildingPlating"/>
         <Sight value="10"/>
@@ -1130,73 +1120,31 @@
         <AbilArray Link="SquadStructureRally"/>
         <AbilArray Link="SquadStructureSalvageShared"/>
         <AbilArray Link="SquadBunkerSalvageBunkerRefund"/>
-        <AbilArray Link="SquadStructureRally"/>
-        <AbilArray Link="StimpackRedirect2"/>
-        <AbilArray Link="StimpackMarauderRedirect2"/>
-        <AbilArray Link="SquadBunkerStopRedirect"/>
-        <AbilArray Link="SquadBunkerAttackRedirect"/>
+        <AbilArray Link="StopRedirect"/>
+        <AbilArray Link="AttackRedirect"/>
         <AbilArray Link="SquadBunkerHealRedirect"/>
-        <AbilArray Link="attack"/>
+        <AbilArray Link="SquadBunkerAttack"/>
         <AbilArray Link="SquadBunkerStop"/>
-        <AbilArray Link="SquadBunkerHealRedirect"/>
-        <AbilArray Link="SquadBunkerStop"/>
-        <AbilArray Link="SuperStimpackMarineRedirect2"/>
-        <AbilArray Link="SquadBunkerSuperStimpackMarauderRedirect"/>
-        <AbilArray Link="SuperStimpackReaperRedirect2"/>
-        <AbilArray Link="ReaperSpiderMinesRedirect2"/>
+        <AbilArray Link="SquadBunkerLoadUnload"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
-        <BehaviorArray Link="SquadBunkerNotJumbo"/>
         <BehaviorArray Link="SuqadBunkerShrikeTurret"/>
         <BehaviorArray Link="FireSuppressionSystem"/>
-        <BehaviorArray Link="SquadBunkerNotJumbo"/>
-        <BehaviorArray Link="SuqadBunkerShrikeTurret"/>
-        <WeaponArray Link="SquadBunkerShrikeAutoGUn" Turret="SquadBunkerShrikeTurret"/>
-        <WeaponArray Link="SquadBunkerShrikeAutoGUn" Turret="ShrikeTurret"/>
+        <WeaponArray Link="SquadBunkerShrikeAutoGun" Turret="SquadBunkerShrikeTurret"/>
         <CardLayouts>
-            <LayoutButtons Face="AttackRedirect" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
-            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
-            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="SquadBunkerStopRedirect,255" Row="0" Column="1"/>
+            <LayoutButtons Face="AttackRedirect" Type="AbilCmd" AbilCmd="AttackRedirect,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="MothershipCoreAttack" Type="AbilCmd" AbilCmd="SquadBunkerAttack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="StopBunker" Type="AbilCmd" AbilCmd="SquadBunkerStop,Stop" Row="0" Column="1"/>
-            <LayoutButtons Face="StopBunker" Type="AbilCmd" AbilCmd="SquadBunkerStop,Stop" Row="0" Column="1"/>
-            <LayoutButtons Face="StimRedirect" Type="AbilCmd" AbilCmd="StimpackRedirect2,Execute" Row="2" Column="0"/>
-            <LayoutButtons Face="StimRedirect" Type="AbilCmd" AbilCmd="StimpackMarauderRedirect2,Execute" Row="2" Column="0"/>
-            <LayoutButtons Face="SuperStimMarineRedirect" Type="AbilCmd" AbilCmd="SuperStimpackMarineRedirect2,Execute" Row="2" Column="0"/>
-            <LayoutButtons Face="SuperStimMarauderRedirect" Type="AbilCmd" AbilCmd="SquadBunkerSuperStimpackMarauderRedirect,255" Row="2" Column="0"/>
-            <LayoutButtons Face="SuperStimReaperRedirect" Type="AbilCmd" AbilCmd="SuperStimpackReaperRedirect2,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="StopRedirect" Type="AbilCmd" AbilCmd="StopRedirect,Execute" Row="0" Column="1"/>
             <LayoutButtons Face="SetBunkerRallyPoint" Type="AbilCmd" AbilCmd="SquadStructureRally,Rally1" Row="1" Column="4"/>
             <LayoutButtons Face="BunkerLoad" Type="AbilCmd" AbilCmd="SquadBunkerLoadUnload,Load" Row="2" Column="1"/>
             <LayoutButtons Face="BunkerUnloadAll" Type="AbilCmd" AbilCmd="SquadBunkerLoadUnload,UnloadAll" Row="2" Column="2"/>
             <LayoutButtons Face="Salvage" Type="AbilCmd" AbilCmd="SquadStructureSalvageShared,On" Row="2" Column="3"/>
-            <LayoutButtons Face="Halt" Type="AbilCmd" AbilCmd="BuildInProgress6,255" Row="2" Column="3"/>
-            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress6,255" Row="2" Column="4"/>
-            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="SquadStructureSalvageShared,255" Row="2" Column="4"/>
+            <LayoutButtons Face="Halt" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Halt" Row="2" Column="3"/>
+            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Cancel" Row="2" Column="4"/>
             <LayoutButtons Face="SelectBuilder" Type="SelectBuilder" Row="1" Column="3"/>
-            <LayoutButtons Face="ShrikeTurret" Type="Passive" Requirements="ShrikeTurretResearched" Row="1" Column="2"/>
-            <LayoutButtons>
-                <Face value="FortifiedBunker"/>
-                <Type value="Passive"/>
-                <AbilCmd value="255,255"/>
-                <Requirements value="FortifiedCarapace"/>
-                <Row value="1"/>
-                <Column value="2"/>
-            </LayoutButtons>
-            <LayoutButtons>
-                <Face value="NeoSteelFrame"/>
-                <Type value="Passive"/>
-                <AbilCmd value="255,255"/>
-                <Requirements value="UseNeoSteelFrame"/>
-                <Row value="1"/>
-                <Column value="1"/>
-            </LayoutButtons>
-            <LayoutButtons>
-                <Face value="ProjectileAccelerators"/>
-                <Type value="Passive"/>
-                <AbilCmd value="255,255"/>
-                <Requirements value="UseProjectileAccelerators"/>
-                <Row value="1"/>
-                <Column value="0"/>
-            </LayoutButtons>
-            <LayoutButtons Face="SpiderMine" Type="AbilCmd" AbilCmd="ReaperSpiderMinesRedirect2,Execute" Row="1" Column="0"/>
+            <LayoutButtons Face="ShrikeTurret" Type="Passive" Row="1" Column="2"/>
+            <LayoutButtons Face="NeoSteelFrame" Type="Passive" AbilCmd="255,255" Row="1" Column="1"/>
+            <LayoutButtons Face="ProjectileAccelerators" Type="Passive" AbilCmd="255,255" Row="1" Column="0"/>
         </CardLayouts>
         <Radius value="1.25"/>
         <SeparationRadius value="1.25"/>
@@ -1524,7 +1472,7 @@
         <Food value="11"/>
         <CostCategory value="Economy"/>
         <CostResource index="Minerals" value="400"/>
-        <RepairTime value="100"/>
+        <RepairTime value="25"/>
         <AttackTargetPriority value="11"/>
         <AbilArray Link="SquadBuildinProgress"/>
         <AbilArray Link="SquadCommandCenterRally"/>
@@ -1540,10 +1488,9 @@
         <EffectArray index="Create" value="CCCreateSet"/>
         <EffectArray index="Birth" value="CCBirthSet"/>
         <CardLayouts>
-            <LayoutButtons Face="SCV" Type="AbilCmd" AbilCmd="SquadCommandCenterTrain,Train1" Row="0" Column="0"/>
+            <LayoutButtons Face="BuildSquadSCV" Type="AbilCmd" AbilCmd="SquadCommandCenterTrain,Train1" Row="0" Column="0"/>
             <LayoutButtons Face="UpgradeToPlanetaryFortress" Type="AbilCmd" AbilCmd="SquadUpgradeToPlanetaryFortress,Execute" Row="0" Column="4"/>
-            <LayoutButtons Face="Rally" Type="AbilCmd" AbilCmd="RallyCommand,Rally1" Row="1" Column="4"/>
-            <LayoutButtons Face="Rally" Type="AbilCmd" AbilCmd="RallyCommand,Rally2" Row="1" Column="4"/>
+            <LayoutButtons Face="Rally" Type="AbilCmd" AbilCmd="SquadCommandCenterRally,Rally1" Row="1" Column="4"/>
             <LayoutButtons Face="CommandCenterLoad" Type="AbilCmd" AbilCmd="SquadCommandCenterTransport,LoadAll" Row="2" Column="0"/>
             <LayoutButtons Face="CommandCenterUnloadAll" Type="AbilCmd" AbilCmd="SquadCommandCenterTransport,UnloadAll" Row="2" Column="1"/>
             <LayoutButtons Face="Lift" Type="AbilCmd" AbilCmd="SquadCommandCenterLiftOff,Execute" Row="2" Column="3"/>
@@ -1569,9 +1516,9 @@
         <TechAliasArray value="Alias_CommandCenter"/>
         <GlossaryPriority value="30"/>
         <HotkeyCategory value="Unit/Category/TerranUnits"/>
-        <TechTreeProducedUnitArray value="SCV"/>
-        <TechTreeProducedUnitArray value="PlanetaryFortress"/>
-        <TechTreeProducedUnitArray value="OrbitalCommand"/>
+        <TechTreeProducedUnitArray value="SquadSCV"/>
+        <TechTreeProducedUnitArray value="SquadPlanetaryFortress"/>
+        <TechTreeProducedUnitArray value="SquadOrbitalCommand"/>
     </CUnit>
     <CUnit id="SquadCommandCenterFlying">
         <Name value="Unit/Name/CommandCenter"/>
@@ -1606,14 +1553,14 @@
         <CostResource index="Minerals" value="400"/>
         <RepairTime value="100"/>
         <AttackTargetPriority value="11"/>
-        <AbilArray Link="CommandCenterLand2"/>
+        <AbilArray Link="SquadCommandCenterLand"/>
         <AbilArray Link="move"/>
         <AbilArray Link="stop"/>
         <AbilArray Link="CommandCenterTransport"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="FireSuppressionSystem"/>
         <CardLayouts>
-            <LayoutButtons Face="Land" Type="AbilCmd" AbilCmd="CommandCenterLand2,Execute" Row="2" Column="3"/>
+            <LayoutButtons Face="Land" Type="AbilCmd" AbilCmd="SquadCommandCenterLand,255" Row="2" Column="3"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
             <LayoutButtons Face="CommandCenterLoad" Type="AbilCmd" AbilCmd="CommandCenterTransport,LoadAll" Row="2" Column="0"/>
@@ -2505,7 +2452,7 @@
         <GlossaryPriority value="200"/>
         <HotkeyCategory value="Unit/Category/TerranStory"/>
     </CUnit>
-    <CUnit id="NucolorAcademy">
+    <CUnit id="SquadGhostAcademy">
         <DeathRevealRadius value="3"/>
         <Facing value="315"/>
         <Race value="Terr"/>
@@ -3637,9 +3584,9 @@
         <AbilArray Link="SquadSupplyDepotRaise"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="FireSuppressionSystem"/>
-        <BehaviorArray Link="FireSuppressionSystem"/>
         <CardLayouts>
             <LayoutButtons Face="Raise" Type="AbilCmd" AbilCmd="SquadSupplyDepotRaise,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Cancel" Row="2" Column="4"/>
         </CardLayouts>
         <Radius value="1.25"/>
         <SeparationRadius value="1.25"/>
@@ -3693,11 +3640,10 @@
         <AbilArray Link="SquadBuildinProgress"/>
         <AbilArray Link="SquadSupplyDepotLower"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
-        <BehaviorArray Link="FireSuppressionSystem3"/>
-        <BehaviorArray Link="FireSuppressionSystem3"/>
+        <BehaviorArray Link="FireSuppressionSystem"/>
         <CardLayouts>
-            <LayoutButtons Face="Halt" Type="AbilCmd" AbilCmd="BuildInProgress4,255" Row="2" Column="3"/>
-            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress4,255" Row="2" Column="4"/>
+            <LayoutButtons Face="Halt" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Halt" Row="2" Column="3"/>
+            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Cancel" Row="2" Column="4"/>
             <LayoutButtons Face="Lower" Type="AbilCmd" AbilCmd="SquadSupplyDepotLower,Execute" Row="2" Column="0"/>
             <LayoutButtons Face="SelectBuilder" Type="SelectBuilder" Row="1" Column="3"/>
         </CardLayouts>
@@ -4095,12 +4041,11 @@
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
             <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
-            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="AcquireMove" Type="AbilCmd" AbilCmd="move,AcquireMove" Row="0" Column="4"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
             <LayoutButtons Face="DefenderCoreSentinelMissiles" Type="Passive" Row="2" Column="0"/>
-            <LayoutButtons Face="WidowMineBurrow" Type="AbilCmd" AbilCmd="DefenderCoreBurrow,Execute" Row="2" Column="1"/>
             <LayoutButtons Face="WidowMineAttack" Type="AbilCmd" AbilCmd="DefenderCoreAttack,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="WidowMineBurrow" Type="AbilCmd" AbilCmd="DefenderCoreBurrow,Execute" Row="2" Column="1"/>
         </CardLayouts>
         <CargoSize value="2"/>
         <ScoreMake value="100"/>
@@ -4159,15 +4104,14 @@
         <CostResource index="Vespene" value="25"/>
         <RepairTime value="20"/>
         <AttackTargetPriority value="20"/>
-        <AbilArray Link="WidowMineUnburrow"/>
+        <AbilArray Link="DefenderCoreUnburrow"/>
         <AbilArray Link="WidowMineAttack"/>
         <BehaviorArray Link="WidowMineArmed"/>
         <CardLayouts>
             <LayoutButtons Face="WidowMineBioSplash" Type="Passive" AbilCmd="WidowMineAttack,Execute" Row="2" Column="0"/>
-            <LayoutButtons Face="WidowMineUnburrow" Type="AbilCmd" AbilCmd="WidowMineUnburrow,Execute" Row="2" Column="2"/>
             <LayoutButtons Face="WidowMineAttack" Type="AbilCmd" AbilCmd="WidowMineAttack,Execute" Row="2" Column="0"/>
-            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
-            <LayoutButtons Face="AcquireMove" Type="AbilCmd" AbilCmd="move,AcquireMove" Row="0" Column="4"/>
+            <LayoutButtons Face="WidowMineUnburrow" Type="AbilCmd" AbilCmd="DefenderCoreUnburrow,Execute" Row="2" Column="2"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="WidowMineAttack,Execute" Row="0" Column="4"/>
         </CardLayouts>
         <ScoreKill value="100"/>
         <SubgroupPriority value="4"/>
@@ -4283,6 +4227,60 @@
         </Fidget>
         <TauntDuration index="Cheer" value="5"/>
         <TauntDuration index="Dance" value="5"/>
+    </CUnit>
+    <CUnit id="SquadSupplyDepotDrop">
+        <DeathRevealRadius value="3"/>
+        <Facing value="315"/>
+        <Race value="Terr"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="Unselectable" value="1"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="PenaltyRevealed" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Locust" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="350"/>
+        <LifeMax value="350"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranBuildingPlating"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="9"/>
+        <CostResource index="Minerals" value="100"/>
+        <RepairTime value="50"/>
+        <AttackTargetPriority value="11"/>
+        <AbilArray Link="SquadBuildinProgress"/>
+        <AbilArray Link="SquadDropToSupplyDepot"/>
+        <BehaviorArray Link="SquadSupplyDepotDropMorph"/>
+        <CardLayouts>
+            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Cancel" Row="2" Column="4"/>
+        </CardLayouts>
+        <Radius value="1.25"/>
+        <SeparationRadius value="1.25"/>
+        <Footprint value="Footprint2x2Contour"/>
+        <PlacementFootprint value="Footprint2x2"/>
+        <ScoreMake value="50"/>
+        <ScoreKill value="150"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="3"/>
+        <MinimapRadius value="1.25"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Campaign"/>
+        <TechAliasArray value="Alias_SupplyDepot"/>
     </CUnit>
     <CUnit id="YamatoWeapon2" parent="MISSILE_INVULNERABLE">
         <Race value="Terr"/>

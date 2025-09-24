@@ -123,6 +123,25 @@
         <AINotifyEffect value="GreenScannerSweep"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="ScannerSweepAlpha"/>
     </CAbilEffectTarget>
+    <CAbilStop id="SquadBunkerStop">
+        <CmdButtonArray index="Stop" DefaultButtonFace="StopBunker"/>
+        <CmdButtonArray index="HoldFire" DefaultButtonFace="HoldFireSpecial"/>
+        <CmdButtonArray index="Cheer" DefaultButtonFace=""/>
+        <CmdButtonArray index="Dance" DefaultButtonFace=""/>
+    </CAbilStop>
+    <CAbilAttack id="SquadBunkerAttack">
+        <Name value="Abil/Name/attack"/>
+        <TargetMessage value="Abil/TargetMessage/attack"/>
+        <DataCollection value="attack"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="BunkerAttack"/>
+        <MinAttackSpeedMultiplier value="0.25"/>
+        <MaxAttackSpeedMultiplier value="128"/>
+    </CAbilAttack>
+    <CAbilMorph id="SquadDropToSupplyDepot">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Raise"/>
+        <InfoArray Unit="SquadSupplyDepot" CollideRange="0"/>
+    </CAbilMorph>
     <CAbilEffectTarget id="SquadMuleliskRepair">
         <Alignment value="Positive"/>
         <AbilSetId value="Repair"/>
@@ -130,6 +149,7 @@
         <Effect index="0" value="SquadRepair"/>
         <Flags index="AutoCast" value="1"/>
         <Flags index="AutoCastOffOwnerLeave" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
         <Flags index="BestUnit" value="0"/>
         <Flags index="ReExecutable" value="1"/>
         <Flags index="Smart" value="1"/>
@@ -312,13 +332,6 @@
             <Button DefaultButtonFace="TerranInfantryArmorVanadiumPlatingLevel3" Requirements="LearnTerranInfantryArmorVanadiumPlating3"/>
         </InfoArray>
     </CAbilResearch>
-    <CAbilRedirectTarget id="SquadBunkerAttackRedirect">
-        <Alignment value="Negative"/>
-        <Abil value="attack"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="AttackRedirect">
-            <Flags index="ToSelection" value="1"/>
-        </CmdButtonArray>
-    </CAbilRedirectTarget>
     <CAbilMorph id="BurrowUltraliskDown2">
         <AbilSetId value="BrwD"/>
         <EditorCategories value="Race:Zerg,AbilityorEffectType:MorphsandBurrows"/>
@@ -341,8 +354,8 @@
             </SectionArray>
         </InfoArray>
     </CAbilMorph>
-    <CAbilMorphPlacement id="CommandCenterLand2" parent="TerranBuildingLand" unit="SquadCommandCenter">
-        <Name value="Abil/Name/CommandCenterLand2"/>
+    <CAbilMorphPlacement id="SquadCommandCenterLand" parent="TerranBuildingLand" unit="SquadCommandCenter">
+        <Name value="Abil/Name/SquadCommandCenterLand"/>
         <InfoArray index="0" Unit="SquadCommandCenter" CollideRange="0">
             <SectionArray index="Abils">
                 <DurationArray index="Delay" value="2"/>
@@ -460,7 +473,9 @@
         <Flags index="Automatic" value="1"/>
         <InfoArray Unit="BarracksTechReactor"/>
     </CAbilMorph>
-    <CAbilBuildable id="SquadBuildinProgress"/>
+    <CAbilBuildable id="SquadBuildinProgress">
+        <CmdButtonArray index="Halt" DefaultButtonFace="Halt"/>
+    </CAbilBuildable>
     <CAbilMorph id="SquadFactoryLiftOff" parent="TerranBuildingLiftOff" unit="FactoryFlying">
         <Name value="Abil/Name/SquadFactoryLiftOff"/>
         <InfoArray index="0" Unit="SquadFactoryFlying"/>
@@ -514,22 +529,6 @@
         <Flags index="IgnoreUnitCost" value="1"/>
         <InfoArray Unit="SquadTechReactor"/>
     </CAbilMorph>
-    <CAbilAttack id="SquadBunkerAttack">
-        <Name value="Abil/Name/attack"/>
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <TargetMessage value="Abil/TargetMessage/attack"/>
-        <DataCollection value="attack"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="BunkerAttack" Requirements="BunkerAttack"/>
-        <MinAttackSpeedMultiplier value="0.25"/>
-        <MaxAttackSpeedMultiplier value="128"/>
-    </CAbilAttack>
-    <CAbilStop id="SquadBunkerStop">
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <CmdButtonArray index="Stop" DefaultButtonFace="StopBunker" Requirements="BunkerAttack"/>
-        <CmdButtonArray index="HoldFire" DefaultButtonFace="HoldFireSpecial"/>
-        <CmdButtonArray index="Cheer" DefaultButtonFace=""/>
-        <CmdButtonArray index="Dance" DefaultButtonFace=""/>
-    </CAbilStop>
     <CAbilTransport id="SquadBunkerLoadUnload">
         <AbilSetId value="ULdS"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
@@ -547,14 +546,11 @@
             <Flags index="Hidden" value="1"/>
         </CmdButtonArray>
         <Range value="0"/>
-        <MaxCargoCount value="4"/>
+        <MaxCargoCount value="6"/>
         <MaxCargoSize value="2"/>
-        <TotalCargoSpace value="4"/>
+        <TotalCargoSpace value="6"/>
         <LoadCargoBehavior value="SquadBunkerWeaponRangeBonus"/>
         <TargetFilters value="Biological,Visible;Ally,Neutral,Enemy,Dead,Hidden"/>
-        <LoadValidatorArray value="NotNovaAndRequiresTerranOrInfested"/>
-        <LoadValidatorArray value="NotWidowMineTarget"/>
-        <LoadValidatorArray value="IsNotHellionTank"/>
     </CAbilTransport>
     <CAbilRally id="SquadStructureRally">
         <EditorCategories value="Race:Neutral,AbilityorEffectType:Structures"/>
@@ -843,12 +839,6 @@
         <AbilSetId value="Stimpack"/>
         <Abil value="Stimpack"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="StimRedirect" Requirements="UseStimpack">
-            <Flags index="ToSelection" value="1"/>
-        </CmdButtonArray>
-    </CAbilRedirectInstant>
-    <CAbilRedirectInstant id="SquadBunkerStopRedirect">
-        <Abil value="stop"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="StopRedirect">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilRedirectInstant>
@@ -1510,6 +1500,7 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Flags index="AutoCast" value="1"/>
         <Flags index="AutoCastOffOwnerLeave" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
         <Flags index="BestUnit" value="0"/>
         <Flags index="ReExecutable" value="1"/>
         <Flags index="Smart" value="1"/>
@@ -1824,7 +1815,7 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <FlagArray index="Interruptible" value="1"/>
         <FlagArray index="PeonDisableCollision" value="1"/>
-        <InfoArray index="Build1" Unit="SquadCommandCenter" Time="100">
+        <InfoArray index="Build1" Unit="SquadCommandCenter" Time="5">
             <Button DefaultButtonFace="BuildSquadCommandCenter" State="Suppressed"/>
         </InfoArray>
         <InfoArray index="Build2" Unit="SquadSupplyDepot" Time="30">
@@ -1841,9 +1832,9 @@
             <Button DefaultButtonFace="BuildSquadEngineeringBay" State="Suppressed" Requirements="HaveCommandCenter"/>
         </InfoArray>
         <InfoArray index="Build6" Unit="SquadMissileTurret" Time="25">
-            <Button DefaultButtonFace="BuildSquadMissileTurret" State="Restricted" Requirements="HaveEngineeringBay"/>
+            <Button DefaultButtonFace="BuildSquadMissileTurret" State="Restricted"/>
         </InfoArray>
-        <InfoArray index="Build7" Unit="SquadBunker" Time="40">
+        <InfoArray index="Build7" Unit="SquadBunker" Time="5">
             <Button DefaultButtonFace="BuildSquadBunker" State="Restricted" Requirements="HaveBarracks"/>
         </InfoArray>
         <InfoArray index="Build8" Unit="SquadRefineryRich" Time="30">
@@ -1851,9 +1842,9 @@
             <ValidatorArray value="HasVespene"/>
         </InfoArray>
         <InfoArray index="Build9" Unit="SquadSensorTower" Time="25">
-            <Button DefaultButtonFace="BuildSquadSensorTower" State="Restricted" Requirements="HaveEngineeringBay"/>
+            <Button DefaultButtonFace="BuildSquadSensorTower" State="Restricted"/>
         </InfoArray>
-        <InfoArray index="Build10" Unit="NucolorAcademy" Time="40">
+        <InfoArray index="Build10" Unit="SquadGhostAcademy" Time="40">
             <Button DefaultButtonFace="BuildSquadGhostAcademy" State="Suppressed" Requirements="HaveBarracks"/>
         </InfoArray>
         <InfoArray index="Build11" Unit="SquadFactory" Time="60">
@@ -1866,12 +1857,12 @@
             <Button State="Suppressed" Requirements="HaveBarracks"/>
         </InfoArray>
         <InfoArray index="Build14" Unit="SquadArmory" Time="65">
-            <Button DefaultButtonFace="Armory" State="Suppressed" Requirements="HaveFactory"/>
+            <Button DefaultButtonFace="BuildSquadArmory" State="Suppressed" Requirements="HaveFactory"/>
         </InfoArray>
         <InfoArray index="Build16" Unit="SquadFusionCore" Time="65">
-            <Button DefaultButtonFace="FusionCore" State="Suppressed" Requirements="HaveStarport"/>
+            <Button DefaultButtonFace="BuildSquadFusionCore" State="Suppressed" Requirements="HaveStarport"/>
         </InfoArray>
-        <InfoArray index="Build28" Unit="SquadTechLab">
+        <InfoArray index="Build28" Unit="SquadTechLab" Time="5">
             <Button DefaultButtonFace="BuildSquadTechLab"/>
         </InfoArray>
         <InfoArray index="Build29" Unit="SquadReactor" Time="5">
@@ -1994,6 +1985,27 @@
         </InfoArray>
     </CAbilMorph>
     <CAbilRedirectTarget id="SquadBunkerHealRedirect"/>
+    <CAbilMorph id="DefenderCoreUnburrow">
+        <AbilSetId value="BrwU"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="WidowMineUnburrow">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <ActorKey value="BurrowUp"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="SuppressMovement" value="1"/>
+        <InfoArray Unit="WidowMine" RandomDelayMax="0.5">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="1"/>
+            </SectionArray>
+            <SectionArray index="Mover">
+                <DurationArray index="Duration" value="1"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Duration" value="1"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
     <CAbilQueue id="que12">
         <EditorCategories value="Race:Neutral,AbilityorEffectType:Structures"/>
         <QueueSize value="1"/>
