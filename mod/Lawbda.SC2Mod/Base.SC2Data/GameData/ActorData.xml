@@ -60,11 +60,85 @@
         <Icon value="Assets\Textures\RadarIcon2.dds"/>
         <IconArcLength value="3.250000"/>
     </CActorRange>
-    <CActorModel id="PoisonOrbDamageEffect">
+    <CActorRange id="ChargeSquadFirebatRange" parent="RangeAbil" abil="AddFirebatToSquad">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorRange id="ChargeSquadMedicRange" parent="RangeAbil" abil="AddMedicToSquad">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorRange id="ChargeSquadSpectreRange" parent="RangeAbil" abil="AddSpectreToSquad">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorRange id="ChargeSquadReaperRange" parent="RangeAbil" abil="AddReaperToSquad">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorRange id="ChargeSquadMarineRange" parent="RangeAbil" abil="AddMarineToSquad">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorRange id="ChargeSquadMarauderRange" parent="RangeAbil" abil="AddMarauderToSquad">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorRange id="ChargeSquadGhostRange" parent="RangeAbil" abil="AddGhostToSquad">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorRange id="ChargeSquadPradetorRange" parent="RangeAbil" abil="AddPradetorToSquad">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorModel id="SquadFeedbackImpact" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.SquadFeedback.Start; At Target" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="FeedbackImpact"/>
+    </CActorModel>
+    <CActorModel id="SquadGhostGiftLightingFeedbackImpact" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.SquadGhostGiftLightingFeedbackDamage.Start; At Target" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="FeedbackImpact"/>
+        <Scale value="0.500000"/>
+    </CActorModel>
+    <CActorSound id="SquadFeedbackImpactSound" parent="SoundOneShot">
+        <On Terms="Effect.SquadFeedback.Start; At Target" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <Sound value="Obelisk_ArgusLinkImpact"/>
+    </CActorSound>
+    <CActorSound id="SquadGhostGiftLightingImpactSound" parent="SoundOneShot">
+        <On Terms="Effect.SquadGhostGiftLightingFeedbackDamage.Start; At Target" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <Sound value="Obelisk_ArgusLinkImpact"/>
+    </CActorSound>
+    <CActorModel id="SquadFeedbackLaunch" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.SquadFeedback.Start; At Caster" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+        <Model value="FeedbackLaunch"/>
+    </CActorModel>
+    <CActorSound id="SquadFeedbackLaunchSound" parent="SoundOneShot">
+        <On Terms="Effect.SquadFeedback.Start; At Caster" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <Sound value="Obelisk_ArgusLinkLaunch"/>
+    </CActorSound>
+    <CActorRange id="SquadFeedbackRange" parent="RangeAbil" abil="SuadFeedback">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorRange id="ChargeSquadSCVRange" parent="RangeAbil" abil="AddSCVToSquad">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorModel id="SquadMedicGiftPosionDOT">
         <Inherits index="CloakEffect" value="1"/>
         <Inherits index="Visibility" value="1"/>
-        <On Terms="Behavior.SquadMedicGiftPoisonDOT.On" Send="Create"/>
-        <On Terms="Behavior.SquadMedicGiftPoisonDOT.Off" Send="Destroy"/>
+        <On Terms="Behavior.SquadMedicGiftPoisonDamageonTime.On" Send="Create"/>
+        <On Terms="Behavior.SquadMedicGiftPoisonDamageonTime.Off" Send="Destroy"/>
         <On Terms="ActorCreation" Send="$Stand PlayForever"/>
         <On Terms="ActorCreation" Send="SetTintColor 0,255,0"/>
         <On Terms="ActorCreation" Send="SetOpacity 0.750000"/>
@@ -72,8 +146,11 @@
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachCenter"/>
         <Model value="IrradiateEffect"/>
-        <Scale value="0.750000"/>
     </CActorModel>
+    <CActorSound id="SquadMedicGiftPosionImpact" parent="SoundOneShot">
+        <On Terms="Behavior.SquadMedicGiftPoisonDamageonTime.On" Send="Create"/>
+        <Sound value="ScienceVessel_IrradiateImpact"/>
+    </CActorSound>
     <CActorModel id="SquadRefineryRichBuild" parent="TerranBuildingBuildRefinery" unitName="SquadRefinery">
         <Model value="Refinery_CovertOps_Build"/>
     </CActorModel>

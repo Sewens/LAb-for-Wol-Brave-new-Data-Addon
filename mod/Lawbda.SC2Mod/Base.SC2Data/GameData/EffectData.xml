@@ -18,6 +18,59 @@
         <EditorCategories value="Race:Terran"/>
         <Cost Abil="SquadInfantry,Ammo4" ChargeCountUse="-1"/>
     </CEffectModifyUnit>
+    <CEffectSwitch id="ModifyMagazineUnitBehaviorSwitch">
+        <EditorCategories value=""/>
+    </CEffectSwitch>
+    <CEffectRemoveBehavior id="SquadDisableAttackRemove">
+        <EditorCategories value=""/>
+        <BehaviorLink value="SquadDisableAttack"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectDamage id="SquadFeedback">
+        <ValidatorArray value=""/>
+        <EditorCategories value="Race:Protoss"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <Flags index="Notification" value="1"/>
+        <VitalFractionCurrent index="Energy" value="1"/>
+        <Death value="Blast"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="SameCliff" value="0"/>
+    </CEffectDamage>
+    <CEffectDamage id="SquadGhostGiftLightingFeedbackDamage">
+        <EditorCategories value="Race:Protoss"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <Flags index="Notification" value="1"/>
+        <VitalFractionCurrent index="Energy" value="0.05"/>
+        <Death value="Blast"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="SameCliff" value="0"/>
+    </CEffectDamage>
+    <CEffectModifyUnit id="SquadFeedbackRemoveEnergy">
+        <ValidatorArray value=""/>
+        <EditorCategories value="Race:Protoss"/>
+        <VitalArray index="Energy">
+            <ChangeFraction value="-1"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectModifyUnit id="SquadGhostGiftLightingFeedbackReduceEnergy">
+        <ValidatorArray value=""/>
+        <EditorCategories value="Race:Protoss"/>
+        <VitalArray index="Energy">
+            <ChangeFraction value="0.05"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectSet id="SquadFeedbackSet">
+        <ValidatorArray value="NotOrbitalCommand"/>
+        <ValidatorArray value="NotOrbitalCommandFlying"/>
+        <ValidatorArray value="NotNexus"/>
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="SquadFeedback"/>
+        <EffectArray value="SquadFeedbackRemoveEnergy"/>
+    </CEffectSet>
     <CEffectRemoveBehavior id="InfantryEnlargeRadiusRemoveMagazineCast">
         <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
@@ -25,6 +78,37 @@
         <BehaviorLink value="InfantryEnlargeRadius"/>
         <Count value="1"/>
     </CEffectRemoveBehavior>
+    <CEffectSet id="SquadGhostGiftLightingFeedbackSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="SquadGhostGiftLightingFeedbackDamage"/>
+        <EffectArray value="SquadGhostGiftLightingFeedbackReduceEnergy"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="SquadGhostGiftLightingOrbApply">
+        <EditorCategories value="Race:Commoner"/>
+        <Behavior value="LightingOrb"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="SquadGhostGiftLightingOrbRemove">
+        <EditorCategories value="Race:Commoner"/>
+        <WhichUnit Value="CasterOuter"/>
+        <BehaviorLink value="LightingOrb"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="SquadMedicGiftPoisonApplyBehavior">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadMedicGiftPoisonDamageonTime"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="SquadMeidcGiftPosionPeriodicDamage">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Amount value="2"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="SquadMedicGiftPosionSearchArea">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <SearchFilters value="Biological;Structure,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="1" Effect="SquadMeidcGiftPosionPeriodicDamage"/>
+    </CEffectEnumArea>
     <CEffectRemoveBehavior id="JoinAbilityDisableRemoveMagazineCast">
         <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
@@ -37,12 +121,12 @@
         <BehaviorLink value="MultiMineralAutoHarvestAura"/>
         <Count value="1"/>
     </CEffectRemoveBehavior>
-    <CEffectApplyBehavior id="PoisonOrbApply">
-        <EditorCategories value=""/>
+    <CEffectApplyBehavior id="SquadMedicGiftPoisonOrbApply">
+        <EditorCategories value="Race:Terran"/>
         <Behavior value="PoisonOrb"/>
     </CEffectApplyBehavior>
-    <CEffectRemoveBehavior id="PoisonOrbRemove">
-        <EditorCategories value=""/>
+    <CEffectRemoveBehavior id="SquadMedicGiftPoisonOrbRemove">
+        <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="CasterOuter"/>
         <BehaviorLink value="PoisonOrb"/>
         <Count value="1"/>
@@ -64,19 +148,8 @@
         <DamageModifierSource Value="Outer"/>
         <EffectArray value="UnitHugeMaxLifeRemove"/>
         <EffectArray value="ResourceMessageRemove"/>
-        <EffectArray value="PoisonOrbRemove"/>
+        <EffectArray value="SquadMedicGiftPoisonOrbRemove"/>
     </CEffectSet>
-    <CEffectApplyBehavior id="SquadMedicGiftPoisonDOT">
-        <EditorCategories value=""/>
-    </CEffectApplyBehavior>
-    <CEffectDamage id="SquadMedicGiftPoisonDamage">
-        <EditorCategories value=""/>
-        <ResponseFlags index="Flee" value="1"/>
-        <ArmorReduction value="-1"/>
-        <Flags index="Kill" value="1"/>
-        <Amount value="5"/>
-        <SearchFlags index="SameCliff" value="0"/>
-    </CEffectDamage>
     <CEffectSet id="SquadReaperDeathResponseChain">
         <EditorCategories value="Race:Terran"/>
         <DamageModifierSource Value="Outer"/>
@@ -116,6 +189,7 @@
         <EffectArray value="UnitSmallMaxLifeRemove"/>
         <EffectArray value="EnergyMediumMaxandHugeRegenerationRemove"/>
         <EffectArray value="ResourceVespenseCrazyRemove"/>
+        <EffectArray value="SquadGhostGiftLightingOrbRemove"/>
     </CEffectSet>
     <CEffectSet id="SquadSCVDeathResponseChain">
         <EditorCategories value="Race:Terran"/>
@@ -801,6 +875,7 @@
         <EffectArray value="UnitSmallMaxLifeApply"/>
         <EffectArray value="EnergyMediumMaxandHugeRegenerationApply"/>
         <EffectArray value="ResourceVespenseCrazyApply"/>
+        <EffectArray value="SquadGhostGiftLightingOrbApply"/>
     </CEffectSet>
     <CEffectSet id="AddReaperChain">
         <ValidatorArray value="IsMagazineFull"/>
@@ -828,7 +903,7 @@
         <EffectArray value="InfantryChargeBasicChain"/>
         <EffectArray value="UnitHugeMaxLifeApply"/>
         <EffectArray value="ResourceRegenAuraApply"/>
-        <EffectArray value="PoisonOrbApply"/>
+        <EffectArray value="SquadMedicGiftPoisonOrbApply"/>
     </CEffectSet>
     <CEffectModifyUnit id="AddMedic">
         <EditorCategories value="Race:Terran"/>
@@ -1697,7 +1772,7 @@
     </CEffectApplyBehavior>
     <CEffectDamage id="SCVFusionCutter" parent="DU_WEAP">
         <EditorCategories value="Race:Terran"/>
-        <Amount value="100"/>
+        <Amount value="5"/>
     </CEffectDamage>
     <CEffectDamage id="SquadGuassRifleDamage" parent="DU_WEAP">
         <EditorCategories value="Race:Terran"/>
@@ -1781,6 +1856,7 @@
         <EffectArray value="DisableMagazine"/>
         <EffectArray value="DistributeBuffTrackerApply"/>
         <EffectArray value="AddDeathResponseSquad"/>
+        <EffectArray value="SquadDisableAttackApply"/>
     </CEffectSet>
     <CEffectSet id="OnMagazineRelease">
         <EditorCategories value="Race:Terran"/>
@@ -2104,4 +2180,8 @@
         <EffectArray value="SquadSpiderMinesDamage"/>
         <EffectArray value="Suicide"/>
     </CEffectSet>
+    <CEffectApplyBehavior id="SquadDisableAttackApply">
+        <EditorCategories value=""/>
+        <Behavior value="SquadDisableAttack"/>
+    </CEffectApplyBehavior>
 </Catalog>

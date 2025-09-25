@@ -8,14 +8,32 @@
         <MaxStackCount value="8"/>
         <MaxStackCountPerCaster value="1"/>
     </CBehaviorBuff>
-    <CBehaviorBuff id="LightingOrb">
+    <CBehaviorBuff id="SquadDisableAttack">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <DisableValidatorArray value="IsWorker"/>
+        <Modification>
+            <AbilLinkDisableArray value="attack"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadMedicGiftPoisonDamageonTime">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-irradiate.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Duration value="5"/>
+        <Period value="1"/>
+        <PeriodicEffect value="SquadMedicGiftPosionSearchArea"/>
+        <MaxStackCount value="8"/>
+    </CBehaviorBuff>
+    <CBehaviorAttackModifier id="LightingOrb">
+        <BehaviorFlags index="Permanent" value="0"/>
+        <InfoFlags index="Hidden" value="0"/>
         <InfoIcon value="Assets\Textures\ui_tipicon_campaign_zerus03-yagdrafireball.dds"/>
         <BehaviorCategories index="User9" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
-        <BuffFlags index="RefreshStack" value="1"/>
+        <Chance value="1"/>
         <MaxStackCount value="8"/>
-        <MaxStackCountPerCaster value="1"/>
-    </CBehaviorBuff>
+        <PreImpactEffect value="SquadGhostGiftLightingFeedbackSet"/>
+    </CBehaviorAttackModifier>
     <CBehaviorBuff id="PoisonOrb">
         <InfoIcon value="Assets\Textures\ui_tipicon_campaign_zerus03-yagdrafireball.dds"/>
         <BehaviorCategories index="User9" value="1"/>
@@ -24,7 +42,7 @@
         <MaxStackCount value="8"/>
         <MaxStackCountPerCaster value="1"/>
         <DamageResponse>
-            <Handled value="SquadMedicGiftPoisonDOT"/>
+            <Handled value="SquadMedicGiftPoisonApplyBehavior"/>
             <Location value="Attacker"/>
             <ModifyFraction value="0.99"/>
             <DamageValue value="Original"/>
@@ -38,14 +56,6 @@
         <BuffFlags index="RefreshStack" value="1"/>
         <MaxStackCount value="8"/>
         <MaxStackCountPerCaster value="1"/>
-    </CBehaviorBuff>
-    <CBehaviorBuff id="SquadMedicGiftPoisonDOT">
-        <EditorCategories value="AbilityorEffectType:Units"/>
-        <MaxStackCount value="8"/>
-        <Duration value="5"/>
-        <Period value="1"/>
-        <PeriodCount value="0"/>
-        <PeriodicEffect value="SquadMedicGiftPoisonDamage"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="VampireOrb">
         <InfoIcon value="Assets\Textures\ui_tipicon_campaign_zerus03-yagdrafireball.dds"/>
@@ -63,7 +73,7 @@
     </CBehaviorResource>
     <CBehaviorBuff id="SquadAutoHarvestVespene">
         <InfoFlags index="Hidden" value="1"/>
-        <EditorCategories value="AbilityorEffectType:Units"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <DisableValidatorArray value="AutoHarvesterHarvest"/>
         <RemoveValidatorArray value="AutoHarvesterFinish"/>
         <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
@@ -864,6 +874,7 @@
     </CBehaviorBuff>
     <CBehaviorBuff id="DisableJoinAbility">
         <InfoFlags index="Hidden" value="1"/>
+        <BehaviorCategories index="User10" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <Modification>
             <AbilLinkDisableArray value="AddMarineToSquad"/>
@@ -876,7 +887,6 @@
             <AbilLinkDisableArray value="AddReaperToSquad"/>
             <AbilLinkDisableArray value="AddSpectreToSquad"/>
         </Modification>
-        <BehaviorCategories index="User10" value="1"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="DisableMagazine">
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
@@ -1155,7 +1165,7 @@
     </CBehaviorBuff>
     <CBehaviorBuff id="DefenderCoreAnimationController">
         <InfoFlags index="Hidden" value="1"/>
-        <EditorCategories value="AbilityorEffectType:Units"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <DisplayDuration index="Self" value="1"/>
         <DisplayDuration index="Ally" value="1"/>
         <DisableValidatorArray value="NotStasis"/>
