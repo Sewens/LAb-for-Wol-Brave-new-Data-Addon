@@ -60,6 +60,121 @@
         <Icon value="Assets\Textures\RadarIcon2.dds"/>
         <IconArcLength value="3.250000"/>
     </CActorRange>
+    <CActorModel id="SquadRefineryRichBuild" parent="TerranBuildingBuildRefinery" unitName="SquadRefinery">
+        <Model value="Refinery_CovertOps_Build"/>
+    </CActorModel>
+    <CActorModel id="SquadRefineryBuild" parent="TerranBuildingBuildRefinery" unitName="SquadRefinery">
+        <Model value="Refinery_CovertOps_Build"/>
+    </CActorModel>
+    <CActorUnit id="SquadAutomatedRefinery" parent="TerranBuilding" unitName="SquadAutomatedRefinery">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="ExtractAnim"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom SquadRefinery" Send="Create"/>
+        <On Terms="ActorCreation" Send="AnimGroupRemove A"/>
+        <On Terms="ActorCreation" Send="AnimGroupRemove D"/>
+        <On Terms="ActorCreation" Send="AnimGroupApply B"/>
+        <On Terms="ActorCreation" Send="StatusSet Mining 0"/>
+        <On Terms="Effect.SquadAutoHarvestVespene.Start" Send="TimerKill Stopped"/>
+        <On Terms="Effect.SquadAutoHarvestVespene.Start" Send="TimerSet 5.000000 Stopped"/>
+        <On Terms="Effect.SquadAutoHarvestVespene.Start; IsStatus Mining 0" Send="AnimPlay Work Stand,Work"/>
+        <On Terms="Effect.SquadAutoHarvestVespene.Start; IsStatus Mining 0" Send="AnimGroupRemove B"/>
+        <On Terms="Effect.SquadAutoHarvestVespene.Start; IsStatus Mining 0" Send="AnimGroupApply A"/>
+        <On Terms="Effect.SquadAutoHarvestVespene.Start; IsStatus Mining 0" Send="StatusSet Mining 1"/>
+        <On Terms="TimerExpired; TimerName Stopped" Send="AnimGroupRemove A"/>
+        <On Terms="TimerExpired; TimerName Stopped" Send="AnimGroupApply B"/>
+        <On Terms="TimerExpired; TimerName Stopped" Send="StatusSet Mining 0"/>
+        <On Terms="AnimDone; AnimName Work; IsStatus Mining 1" Send="AnimPlay Work Stand,Work"/>
+        <On Terms="Behavior.SquadAutoHarvestVespene.On" Send="SetTintColor 255,255,255"/>
+        <On Terms="Behavior.SquadAutoHarvestVespene.Off" Send="SetTintColor 255,170,170"/>
+        <On Terms="Effect.SquadAutoHarvestVespene.Start; !ValidateUnit HasMicroFiltering" Send="Create AutomatedRefineryTextKicker4"/>
+        <On Terms="Effect.SquadAutoHarvestVespene.Start; ValidateUnit HasMicroFiltering" Send="Create AutomatedRefineryTextKicker5"/>
+        <On Terms="UnitBirth.SquadAutomatedRefinery" Send="TimerSet 0.100000 HideGeyser"/>
+        <On Terms="TimerExpired; TimerName HideGeyser" Send="Create GeyserBuildFinishCovered"/>
+        <On Terms="ActorDestruction" Send="Create GeyserUncovered"/>
+        <DeathArray index="Normal" ModelLink="AutomatedRefineryDeath" SoundLink="AutomatedRefinery_Explode"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="Refinery_Explode"/>
+        <PlacementModel value="AutomatedRefineryPlacement"/>
+        <PlacementSound value="Terran_BuildingPlacement"/>
+        <PortraitModel value="AdjutantPortrait"/>
+        <BarOffset value="160"/>
+        <BarWidth value="120"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Refinery-automated.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\BTN-Building-Terran-RefineryAutomated.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-buildingarmor.dds"/>
+        <NameOffset value="80"/>
+        <SoundArray index="Ready" value="Refinery_What"/>
+        <SoundArray index="What" value="Refinery_What"/>
+        <SoundArray index="Construction" value="Terran_ConstructionWhat"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\BTN-Building-Terran-RefineryAutomated.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Refinery-automated.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorModel id="SquadAutomatedRefineryBuild" parent="TerranBuildingBuildRefinery">
+        <Model value="AutomatedRefineryBuild"/>
+    </CActorModel>
+    <CActorModel id="SquadCarryMineralFieldMineralsNoRemove" parent="ModelAnimationStyleContinuousUNIT">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <Inherits index="WarpGroup" value="1"/>
+        <On Terms="Behavior.SquadCarryMineralFieldMineralsNoRemove.On" Send="Create"/>
+        <On Terms="Behavior.SquadCarryMineralFieldMineralsNoRemove.Off" Send="AnimBracketStop BSD"/>
+        <HostSiteOps Ops="SOpAttachHardPoint"/>
+        <Model value="CarryMineralFieldMinerals"/>
+    </CActorModel>
+    <CActorModel id="SquadCarryMineralFieldMineralsDeath" parent="ModelAnimationStyleOneShotUNIT">
+        <Flags index="SuppressSaveLoad" value="0"/>
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <Inherits index="WarpGroup" value="1"/>
+        <On Terms="Behavior.SquadCarryMineralFieldMinerals.Off" Send="Create"/>
+        <HostSiteOps Ops="SOpAttachHardPoint" HoldPosition="1" HoldRotation="1"/>
+        <Model value="CarryMineralFieldMineralsDeath"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorModel id="SquadCarryMineralFieldMinerals" parent="ModelAnimationStyleContinuousUNIT">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <Inherits index="WarpGroup" value="1"/>
+        <On Terms="Behavior.SquadCarryMineralFieldMinerals.On" Send="Create"/>
+        <On Terms="Behavior.SquadCarryMineralFieldMinerals.Off" Send="AnimBracketStop BSD"/>
+        <HostSiteOps Ops="SOpAttachHardPoint"/>
+        <Model value="CarryMineralFieldMinerals"/>
+    </CActorModel>
+    <CActorModel id="SquadCarryHarvestableRichVespeneGeyserGas" parent="ModelAnimationStyleContinuousUNIT">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <Inherits index="WarpGroup" value="1"/>
+        <On Terms="Behavior.SquadCarryHarvestableRichVespeneGeyserGas2.On" Send="Create"/>
+        <On Terms="Behavior.SquadCarryHarvestableRichVespeneGeyserGas2.Off" Send="AnimBracketStop BSD"/>
+        <HostSiteOps Ops="SOpAttachHardPoint"/>
+        <Model value="CarryHarvestableRichVespeneGeyserGas"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorModel id="SquadCarryHarvestableTerrazineGeyserGas" parent="ModelAnimationStyleContinuousUNIT">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="WarpGroup" value="1"/>
+        <On Terms="ActorCreation" Send="SetTintColor 255,0,255"/>
+        <On Terms="Behavior.SquadCarryHarvestableTerrazineGeyserGas.On" Send="Create"/>
+        <On Terms="Behavior.SquadCarryHarvestableTerrazineGeyserGas.Off" Send="AnimBracketStop BSD"/>
+        <HostSiteOps Ops="SOpAttachHardPoint"/>
+        <Model value="CarryHarvestableVespeneGeyserGas"/>
+    </CActorModel>
+    <CActorModel id="SquadCarryHarvestableVespeneGeyserGas" parent="ModelAnimationStyleContinuousUNIT">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <Inherits index="WarpGroup" value="1"/>
+        <On Terms="Behavior.SquadCarryHarvestableVespeneGeyserGas.On" Send="Create"/>
+        <On Terms="Behavior.SquadCarryHarvestableVespeneGeyserGas.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation; ValidateUnit HasMicroFiltering" Send="ModelSwap CarryMicroFilterHarvestableVespeneGeyserGas"/>
+        <On Terms="ActorCreation; ValidateUnit HasMicroFiltering" Send="ModelSwap CarryMicroFilterHarvestableVespeneGeyserGas"/>
+        <HostSiteOps Ops="SOpAttachHardPoint"/>
+        <Model value="CarryHarvestableVespeneGeyserGas"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
     <CActorModel id="SquadGoliathDeath">
         <CopySource value="Goliath"/>
         <Aliases value="_Main"/>
@@ -1517,12 +1632,12 @@
         <Aliases value="_UnitHuge"/>
         <Macros value="ExtractAnim"/>
         <Macros value="SnowVisualBuildingMacro"/>
-        <On Terms="Behavior.HarvestableVespeneGeyserGas.Deplete" Send="SetTintColor 255,170,170"/>
-        <On Terms="Behavior.HarvestableVespeneGeyserGas.Deplete" Send="AnimGroupRemove D"/>
-        <On Terms="Behavior.HarvestableVespeneGeyserGas.Deplete" Send="AnimGroupApply B"/>
-        <On Terms="Behavior.HarvestableVespeneGeyserGas.Restore" Send="SetTintColor 255,255,255"/>
-        <On Terms="Behavior.HarvestableVespeneGeyserGas.Restore" Send="AnimGroupRemove B"/>
-        <On Terms="Behavior.HarvestableVespeneGeyserGas.Restore" Send="AnimGroupApply D"/>
+        <On Terms="Behavior.SquadHarvestableVespeneGeyserGas.Deplete" Send="SetTintColor 255,170,170"/>
+        <On Terms="Behavior.SquadHarvestableVespeneGeyserGas.Deplete" Send="AnimGroupRemove D"/>
+        <On Terms="Behavior.SquadHarvestableVespeneGeyserGas.Deplete" Send="AnimGroupApply B"/>
+        <On Terms="Behavior.SquadHarvestableVespeneGeyserGas.Restore" Send="SetTintColor 255,255,255"/>
+        <On Terms="Behavior.SquadHarvestableVespeneGeyserGas.Restore" Send="AnimGroupRemove B"/>
+        <On Terms="Behavior.SquadHarvestableVespeneGeyserGas.Restore" Send="AnimGroupApply D"/>
         <On Terms="Behavior.ColonyInfestation.On" Send="Create InfestationRefinery"/>
         <On Terms="UnitDeathCustomize; ValidateUnit NoVespene" Send="DeathCustomize Empty"/>
         <On Terms="UnitBirth.SquadRefinery" Send="TimerSet 0.100000 HideGeyser"/>
@@ -1530,8 +1645,6 @@
         <On Terms="UnitBirth.RefineryPipes" Send="Create"/>
         <On Terms="UnitDeathCustomize; Option Model Low" Send="DeathCustomize Low"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom Refinery" Send="Destroy"/>
-        <On Terms="Upgrade.BlackOps.Add" Send="ModelSwap Refinery_BlackOps_COOP"/>
-        <On Terms="ActorCreation; ValidateUnit HaveBlackOps" Send="ModelSwap Refinery_BlackOps_COOP"/>
         <Model value="Refinery_CovertOps"/>
         <CreepHeightClass value="Medium"/>
         <BuildModel value="Refinery_CovertOps_Build"/>
@@ -1540,7 +1653,7 @@
         <DeathCustoms ModelLink="Refinery_CovertOps_Empty_Death" Name="Empty"/>
         <DeathCustoms ModelLink="RefineryDeathLow" SoundLink="Terran_ExplosionMedium" Name="Low"/>
         <PlacementModel value="Refinery_CovertOps_Placement"/>
-        <PlacementActorModel value="RefineryPlacementModel"/>
+        <PlacementActorModel value="Refinery_CovertOps_Placement"/>
         <PortraitModel value="Refinery_CovertOps_Portrait"/>
         <BarOffset value="160"/>
         <BarWidth value="120"/>
@@ -3185,7 +3298,7 @@
         <Macros value="PhysicsDeathsVoidGround"/>
         <On Terms="Abil.SquadSCVGather" Send="TimerSet 0.000000,0.300000 SquadSCVGather"/>
         <On Terms="Abil.SquadSCVGather" Send="AnimClear SquadSCVGather"/>
-        <On Terms="Abil.SCVHarvest.Stop" Send="TimerKill SquadSCVGather"/>
+        <On Terms="Abil.SquadSCVGather.Stop" Send="TimerKill SquadSCVGather"/>
         <On Terms="AnimDone.*.Complete; AnimName Gather" Send="TimerSet 0.000000,0.300000 SquadSCVGather"/>
         <On Terms="TimerExpired; TimerName SquadSCVGather" Send="AnimPlay Gather Work NonLooping"/>
         <On Terms="TimerExpired; TimerName SquadSCVGather" Send="Create SquadSCVGatherSound"/>
@@ -3204,7 +3317,7 @@
         <On Terms="TimerExpired; TimerName Build" Send="AnimPlay Build Work NonLooping"/>
         <On Terms="TimerExpired; TimerName Build" Send="Create SquadSCVBuildSound"/>
         <On Terms="Abil.SquadSCVGather" Send="StatusSet CloakSound 1"/>
-        <On Terms="Behavior.CarryHarvestableVespeneGeyserGas.Create" Send="StatusSet CloakSound 1"/>
+        <On Terms="Behavior.SquadCarryHarvestableVespeneGeyserGas.Create" Send="StatusSet CloakSound 1"/>
         <On Terms="Confirmation.SCV.Start" Send="StatusSet CloakSound 0"/>
         <On Terms="Behavior.CloakFieldEffect.Create; IsStatus CloakSound 0" Send="Create Worker_CloakFieldOn"/>
         <On Terms="Behavior.CloakFieldEffect.Destroy; IsStatus CloakSound 0" Send="Create Worker_CloakFieldOff"/>
@@ -3249,7 +3362,7 @@
         <HeroIcon value="Assets\Textures\btn-unit-terran-scv.dds"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
         <SoundArray index="Ready" value="SCV_Ready"/>
-        <SoundArray index="Help" value="Alert_TerranEconomyUnderAttack2"/>
+        <SoundArray index="Help" value="Alert_TerranEconomyUnderAttack"/>
         <SoundArray index="What" value="SCV_What"/>
         <SoundArray index="Yes" value="SCV_Yes"/>
         <SoundArray index="Attack" value="SCV_Attack"/>

@@ -18,6 +18,32 @@
         <EditorCategories value="Race:Terran"/>
         <Cost Abil="SquadInfantry,Ammo4" ChargeCountUse="-1"/>
     </CEffectModifyUnit>
+    <CEffectModifyUnit id="SquadAutoHarvestVespene">
+        <EditorCategories value=""/>
+        <Resources value="-4"/>
+        <ResourcesHarvestedFraction value="1"/>
+    </CEffectModifyUnit>
+    <CEffectApplyBehavior id="SquadRefineryRichAB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="SquadHarvestableRichVespeneGeyserGas"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="SquadRefineryRichRB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="SquadHarvestableVespeneGeyserGas"/>
+    </CEffectRemoveBehavior>
+    <CEffectEnumArea id="SquadRefineryRichSearch">
+        <EditorCategories value="Race:Terran"/>
+        <SearchFilters value="RawResource;-"/>
+        <AreaArray Radius="0.5" Effect="SquadRefineryRichSet"/>
+    </CEffectEnumArea>
+    <CEffectSet id="SquadRefineryRichSet">
+        <ValidatorArray value="RichVespeneGeyser"/>
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadRefineryRichAB"/>
+        <EffectArray value="SquadRefineryRichRB"/>
+    </CEffectSet>
     <CEffectCreatePersistent id="SquadGoliathHellfireMissilePack2">
         <ValidatorArray value="CasterIsNotHidden"/>
         <EditorCategories value="Race:Terran"/>

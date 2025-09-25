@@ -1,11 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorResource id="SquadAutomaticHarvestableVespene">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\icon-gas.dds"/>
+        <Capacity value="32000"/>
+        <Contents value="10000"/>
+    </CBehaviorResource>
+    <CBehaviorBuff id="SquadAutoHarvestVespene">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="AutoHarvesterHarvest"/>
+        <RemoveValidatorArray value="AutoHarvesterFinish"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <Period value="2.1"/>
+        <PeriodicEffect value="SquadAutoHarvestVespene"/>
+    </CBehaviorBuff>
     <CBehaviorBuff id="AutoTrackMagazine">
         <BehaviorFlags index="Permanent" value="1"/>
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <Period value="1"/>
         <PeriodicEffect value="PeriodMagazineIterate"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadCarryMineralFieldMineralsNoRemove">
+        <InfoFlags index="Hidden" value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadCarryMineralFieldMinerals">
+        <InfoFlags index="Hidden" value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadCarryHarvestableRichVespeneGeyserGas2">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadCarryHarvestableTerrazineGeyserGas">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadMultilockTargetingSystems">
         <InfoFlags index="Hidden" value="1"/>
@@ -219,10 +248,6 @@
             <WeaponDisableArray value="KaiserBlades"/>
         </Modification>
     </CBehaviorBuff>
-    <CBehaviorBuff id="SquadCarryHarvestableRichVespeneGeyserGas">
-        <InfoFlags index="Hidden" value="1"/>
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-    </CBehaviorBuff>
     <CBehaviorResource id="SquadHarvestableRichVespeneGeyserGas">
         <InfoFlags index="Hidden" value="1"/>
         <InfoIcon value="Assets\Textures\icon-gas.dds"/>
@@ -233,7 +258,7 @@
         <Flags index="HideHarvesters" value="1"/>
         <RequiredAlliance value="Control"/>
         <ExhaustedAlert value="ResourceExhausted_Vespene"/>
-        <CarryResourceBehavior value="SquadCarryHarvestableRichVespeneGeyserGas"/>
+        <CarryResourceBehavior value="SquadCarryHarvestableRichVespeneGeyserGas2"/>
         <IdealHarvesterCount value="3"/>
     </CBehaviorResource>
     <CBehaviorBuff id="SquadPrecursorBurrowChargeImpact">

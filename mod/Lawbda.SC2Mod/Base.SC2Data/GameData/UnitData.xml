@@ -306,23 +306,14 @@
         <RepairTime value="50"/>
         <AttackTargetPriority value="11"/>
         <AbilArray Link="SquadBuildinProgress"/>
-        <BehaviorArray Link="AutomaticHarvestableVespene"/>
-        <BehaviorArray Link="AutoHarvestVespene"/>
+        <BehaviorArray Link="SquadAutomaticHarvestableVespene"/>
+        <BehaviorArray Link="SquadAutoHarvestVespene"/>
         <BehaviorArray Link="FireSuppressionSystem"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
-        <BehaviorArray Link="FireSuppressionSystem"/>
         <CardLayouts>
             <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Cancel" Row="2" Column="4"/>
             <LayoutButtons>
-                <Face value="MicroFiltering"/>
-                <Type value="Passive"/>
-                <AbilCmd value="255,255"/>
-                <Requirements value="HaveMicroFiltering"/>
-                <Row value="1"/>
-                <Column value="0"/>
-            </LayoutButtons>
-            <LayoutButtons>
-                <Face value="MicroFiltering"/>
+                <Face value="SquadRefineryMicroFiltering"/>
                 <Type value="Passive"/>
                 <AbilCmd value="255,255"/>
                 <Requirements value="HaveMicroFiltering"/>
@@ -1524,15 +1515,7 @@
             <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Cancel" Row="2" Column="4"/>
             <LayoutButtons Face="SquadSelectBuilder" Type="SelectBuilder" Row="1" Column="3"/>
             <LayoutButtons>
-                <Face value="MicroFiltering"/>
-                <Type value="Passive"/>
-                <AbilCmd value="255,255"/>
-                <Requirements value="HaveMicroFiltering"/>
-                <Row value="1"/>
-                <Column value="0"/>
-            </LayoutButtons>
-            <LayoutButtons>
-                <Face value="MicroFiltering"/>
+                <Face value="SquadRefineryMicroFiltering"/>
                 <Type value="Passive"/>
                 <AbilCmd value="255,255"/>
                 <Requirements value="HaveMicroFiltering"/>
@@ -3272,11 +3255,10 @@
             <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="3"/>
             <LayoutButtons Face="Repair" Type="AbilCmd" AbilCmd="SquadSCVRepair,255" Row="2" Column="3"/>
             <LayoutButtons Face="BuildDefenceStructure" Type="Submenu" SubmenuCardId="TBl3" Row="2" Column="1"/>
-            <LayoutButtons Face="WarpInSquadForge" Type="AbilCmd" AbilCmd="SquadProtossBuild,Build5" Row="1" Column="1"/>
         </CardLayouts>
         <CardLayouts CardId="TBl1">
             <LayoutButtons Face="BuildSquadCommandCenter" Type="AbilCmd" AbilCmd="SquadTerranBuild,Build1" Row="0" Column="0"/>
-            <LayoutButtons Face="BuildSquadRefinery" Type="AbilCmd" AbilCmd="SquadTerranBuild,Build8" Row="0" Column="1"/>
+            <LayoutButtons Face="BuildSquadRefinery" Type="AbilCmd" AbilCmd="SquadTerranBuild,Build3" Row="0" Column="1"/>
             <LayoutButtons Face="BuildSquadSupplyDepot" Type="AbilCmd" AbilCmd="SquadTerranBuild,Build2" Row="0" Column="2"/>
             <LayoutButtons Face="BuildSquadBarracks" Type="AbilCmd" AbilCmd="SquadTerranBuild,Build4" Row="1" Column="0"/>
             <LayoutButtons Face="BuildSquadEngineeringBay" Type="AbilCmd" AbilCmd="SquadTerranBuild,Build5" Row="1" Column="1"/>
@@ -3284,6 +3266,7 @@
             <LayoutButtons Face="BuildSquadReactor" Type="AbilCmd" AbilCmd="SquadTerranBuild,Build29" Row="2" Column="1"/>
             <LayoutButtons Face="BuildSquadTechLab" Type="AbilCmd" AbilCmd="SquadTerranBuild,Build28" Row="2" Column="0"/>
             <LayoutButtons Face="BuildSquadTechReactor" Type="AbilCmd" AbilCmd="SquadTerranBuild,Build30" Row="2" Column="2"/>
+            <LayoutButtons Face="BuildSquadAutomatedRefinery" Type="AbilCmd" AbilCmd="SquadTerranBuild,Build8" Row="0" Column="3"/>
         </CardLayouts>
         <CardLayouts CardId="TBl2">
             <LayoutButtons Face="BuildSquadGhostAcademy" Type="AbilCmd" AbilCmd="SquadTerranBuild,Build10" Row="0" Column="0"/>
@@ -3466,7 +3449,10 @@
             <LayoutButtons index="10" Face="CancelBuilding" Type="AbilCmd" AbilCmd="SquadTerranBuild,Halt" Row="2" Column="4"/>
             <LayoutButtons index="11" Face="Enband" Type="AbilCmd" AbilCmd="AddSCVToSquad,Execute" Row="1" Column="4"/>
             <LayoutButtons index="12" Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="3"/>
-            <LayoutButtons index="14" removed="1"/>
+        </CardLayouts>
+        <CardLayouts index="1" CardId="TBl1">
+            <LayoutButtons index="1" Face="BuildSquadRefinery" Type="AbilCmd" AbilCmd="SquadTerranBuild,Build8" Row="0" Column="1"/>
+            <LayoutButtons index="9" removed="1"/>
         </CardLayouts>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
