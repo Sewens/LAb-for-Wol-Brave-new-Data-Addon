@@ -60,6 +60,20 @@
         <Icon value="Assets\Textures\RadarIcon2.dds"/>
         <IconArcLength value="3.250000"/>
     </CActorRange>
+    <CActorModel id="PoisonOrbDamageEffect">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Behavior.SquadMedicGiftPoisonDOT.On" Send="Create"/>
+        <On Terms="Behavior.SquadMedicGiftPoisonDOT.Off" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="$Stand PlayForever"/>
+        <On Terms="ActorCreation" Send="SetTintColor 0,255,0"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.750000"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="IrradiateEffect"/>
+        <Scale value="0.750000"/>
+    </CActorModel>
     <CActorModel id="SquadRefineryRichBuild" parent="TerranBuildingBuildRefinery" unitName="SquadRefinery">
         <Model value="Refinery_CovertOps_Build"/>
     </CActorModel>
@@ -914,12 +928,19 @@
         <HostSiteOps Ops="SOpAttachOverhead"/>
         <Model value="BurrowChargeStun"/>
     </CActorModel>
-    <CActorUnit id="CaptainExcavator" parent="GenericUnitStandardNoAutoSoundLinks" unitName="CaptainExcavator">
+    <CActorUnit id="SquadExcavator" parent="GenericUnitStandard" unitName="CaptainExcavator">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="UnloadDropAnim"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Stand"/>
+        <On Terms="WeaponStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart Stand Work,End"/>
+        <On Terms="WeaponStart" Send="AnimBracketStart Stand Work,End"/>
+        <On Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Stand"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Stand"/>
+        <On Terms="UnitDeath.CaptainExcavator; AnimPlaying Cover" Target="_DeathModel" Send="AnimPlay Cover Cover PlayForever"/>
         <Model value="Excavator"/>
         <BuildModel value="Excavator"/>
-        <Macros value="UnloadDropAnim"/>
-        <DeathCustoms ModelLink="TerranLargeUnitDeathLow" Name="AntiGravTerran"/>
         <DeathArray index="Normal" ModelLink="TerranLargeUnitDeath" SoundLink="ColonistVehicleUnit_Explode"/>
+        <DeathCustoms ModelLink="TerranLargeUnitDeathLow" Name="AntiGravTerran"/>
         <PlacementModel value="Excavator"/>
         <PortraitActor value=""/>
         <PortraitModel value="Banshee_Silver_Portrait"/>
@@ -927,10 +948,33 @@
         <WalkAnimMoveSpeed value="2.25"/>
         <BarOffset value="80"/>
         <BarWidth value="102"/>
+        <HighlightTooltip value="Unit/Name/SquadExcavator"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
         <NameOffset value="60"/>
         <UnitIcon value="Assets\Textures\wireframe-terran-jarbanminorexcavator.dds"/>
+        <SoundArray index="Birth" value="BansheeBirth"/>
+        <SoundArray index="Ready" value="Banshee_Ready"/>
+        <SoundArray index="Help" value="Banshee_Help"/>
+        <SoundArray index="What" value="Banshee_What"/>
+        <SoundArray index="Yes" value="Banshee_Yes"/>
+        <SoundArray index="Attack" value="Banshee_Attack"/>
+        <SoundArray index="Pissed" value="Banshee_Pissed"/>
+        <SoundArray index="Movement" value="Banshee_Movement"/>
+        <SoundArray index="Turning" value="BansheeTurning"/>
+        <SoundArray index="Board" value="BansheeBoard"/>
+        <SoundArray index="Click" value="BansheeClick"/>
+        <SoundArray index="ClickError" value="BansheeClickError"/>
+        <SoundArray index="Highlight" value="BansheeHighlight"/>
+        <GroupSoundArray index="What" value="BansheeGroupWhat"/>
+        <GroupSoundArray index="Yes" value="BansheeGroupYes"/>
+        <GroupSoundArray index="Attack" value="BansheeGroupAttack"/>
+        <GroupSoundArray index="Board" value="BansheeGroupBoard"/>
     </CActorUnit>
+    <CActorAction id="SquadExcavatorAttack" parent="GenericAttack" effectAttack="ExcavatorD888ChargeDamage">
+        <LaunchAttachQuery Methods="AMFilterWeaponRight"/>
+        <LaunchAssets Sound="Reaper_D8ChargeAttackLaunch"/>
+        <ImpactMap index="None" Model="MercReaperD8AttackImpact" Sound="Reaper_D8ChargeExplode"/>
+    </CActorAction>
     <CActorUnit id="SquadFactory" parent="TerranBuildingFlyerEx" unitName="SquadFactory">
         <Macros value="SnowVisualBuildingMacro"/>
         <On Terms="UnitDeathCustomize.SquadFactoryFlying" Send="DeathCustomize Flying"/>

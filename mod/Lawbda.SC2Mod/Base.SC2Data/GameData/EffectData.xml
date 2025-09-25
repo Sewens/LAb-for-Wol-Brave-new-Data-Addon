@@ -37,6 +37,16 @@
         <BehaviorLink value="MultiMineralAutoHarvestAura"/>
         <Count value="1"/>
     </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="PoisonOrbApply">
+        <EditorCategories value=""/>
+        <Behavior value="PoisonOrb"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="PoisonOrbRemove">
+        <EditorCategories value=""/>
+        <WhichUnit Value="CasterOuter"/>
+        <BehaviorLink value="PoisonOrb"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
     <CEffectRemoveBehavior id="RecycleStructureCauseDropPickupRemove">
         <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
@@ -54,7 +64,19 @@
         <DamageModifierSource Value="Outer"/>
         <EffectArray value="UnitHugeMaxLifeRemove"/>
         <EffectArray value="ResourceMessageRemove"/>
+        <EffectArray value="PoisonOrbRemove"/>
     </CEffectSet>
+    <CEffectApplyBehavior id="SquadMedicGiftPoisonDOT">
+        <EditorCategories value=""/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="SquadMedicGiftPoisonDamage">
+        <EditorCategories value=""/>
+        <ResponseFlags index="Flee" value="1"/>
+        <ArmorReduction value="-1"/>
+        <Flags index="Kill" value="1"/>
+        <Amount value="5"/>
+        <SearchFlags index="SameCliff" value="0"/>
+    </CEffectDamage>
     <CEffectSet id="SquadReaperDeathResponseChain">
         <EditorCategories value="Race:Terran"/>
         <DamageModifierSource Value="Outer"/>
@@ -806,6 +828,7 @@
         <EffectArray value="InfantryChargeBasicChain"/>
         <EffectArray value="UnitHugeMaxLifeApply"/>
         <EffectArray value="ResourceRegenAuraApply"/>
+        <EffectArray value="PoisonOrbApply"/>
     </CEffectSet>
     <CEffectModifyUnit id="AddMedic">
         <EditorCategories value="Race:Terran"/>
