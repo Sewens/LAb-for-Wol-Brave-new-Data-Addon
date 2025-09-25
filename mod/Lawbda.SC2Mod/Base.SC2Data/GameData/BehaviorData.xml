@@ -283,7 +283,7 @@
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <PowerLink value="SquadReactorPowerSource"/>
         <PowerStageArray/>
-        <PowerStageArray MinPowerLevel="1" LevelGainEffect="AddSquadReactorPowerQueue" LevelLossEffect="RemoveSquadReactorPowerQueue">
+        <PowerStageArray MinPowerLevel="1" LevelGainEffect="AddSquadReactorPowerQueue" LevelLossEffect="SquadReactorPowerQueueRemove">
             <Modification>
                 <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
                 <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
@@ -357,7 +357,6 @@
         <Modification Detect="11"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="EnergyHugeMaxandMediumRegeneration">
-        <InfoFlags index="Hidden" value="1"/>
         <BehaviorCategories index="User10" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <MaxStackCount value="8"/>
@@ -798,9 +797,15 @@
         <InfoIcon value="Assets\Textures\btn-upgrade-zerg-stukov-regenrate.dds"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <BuffFlags index="RefreshStack" value="1"/>
         <Duration value="8"/>
         <Period value="4"/>
         <PeriodicEffect value="ResourceMessage"/>
+        <MaxStackCount value="8"/>
+        <MaxStackCountPerCaster value="1"/>
+        <Modification>
+            <ResourceHarvestAmountBonus index="Minerals" value="5"/>
+        </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="DisableJoinAbility">
         <InfoFlags index="Hidden" value="1"/>
@@ -955,6 +960,7 @@
         <Modification>
             <ResourceHarvestAmountBonus index="Minerals" value="5"/>
         </Modification>
+        <MaxStackCountPerCaster value="1"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="InfantryReduceRadius">
         <BehaviorFlags index="Permanent" value="1"/>
@@ -994,7 +1000,7 @@
     <CBehaviorBuff id="ResourceRegenAura">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Period value="4"/>
-        <PeriodicEffect value="RsourceMessageSearch"/>
+        <PeriodicEffect value="ResourceMessageSearch"/>
         <InfoIcon value="Assets\Textures\btn-upgrade-zerg-stukov-regenrate.dds"/>
         <BehaviorCategories index="User9" value="1"/>
         <MaxStackCount value="8"/>
@@ -1039,7 +1045,6 @@
         </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="UnitMediumAddMaxLife">
-        <InfoFlags index="Hidden" value="1"/>
         <BehaviorCategories index="User10" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <MaxStackCount value="8"/>
@@ -1048,13 +1053,11 @@
             <VitalMaxFractionArray index="Life" value="0.1"/>
             <VitalRegenArray index="Life" value="3.25"/>
         </Modification>
-        <BehaviorFlags index="Permanent" value="1"/>
         <BuffFlags index="RefreshStack" value="1"/>
         <InfoIcon value="Assets\Textures\btn-ability-zerg-regenaura.dds"/>
         <MaxStackCountPerCaster value="1"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="UnitHugeAddMaxLife">
-        <InfoFlags index="Hidden" value="1"/>
         <BehaviorCategories index="User10" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <MaxStackCount value="8"/>
@@ -1065,9 +1068,9 @@
         </Modification>
         <InfoIcon value="Assets\Textures\btn-upgrade-zerg-stukov-regenrate.dds"/>
         <MaxStackCountPerCaster value="1"/>
+        <BuffFlags index="RefreshStack" value="1"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="EnergyMediumMaxandLargeRegeneration">
-        <InfoFlags index="Hidden" value="1"/>
         <BehaviorCategories index="User10" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <MaxStackCount value="8"/>

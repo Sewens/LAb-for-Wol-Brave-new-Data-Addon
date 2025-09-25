@@ -2620,19 +2620,19 @@
         <On Terms="Upgrade.CombatShield.Remove" Send="AnimPlay Cover Cover PlayForever 0.000000"/>
         <On Terms="UnitDeath.CaptainFreeman; AnimPlaying Cover" Target="_DeathModel" Send="AnimPlay Cover Cover PlayForever"/>
         <On Terms="UnitHeightUpdate.*.Land" Send="Create Marine_Land"/>
-        <Model value="SquadHeroFreeman"/>
+        <Model value="RaynorCommando"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
-        <BuildModel value="SquadHeroFreeman"/>
-        <DeathArray index="Normal" ModelLink="KelmorianMinerDeath2" SoundLink="Marine_DeathFXBloodSpray"/>
-        <DeathArray index="Blast" ModelLink="MarineDeathBlast3" SoundLink="Marine_DeathFXBlast"/>
-        <DeathArray index="Disintegrate" ModelLink="MarineDeathAcid3" SoundLink="Marine_DeathFXFire"/>
-        <DeathArray index="Eat" AnimProps="Stand" ModelLink="MarineDeathEat3" SoundLink="Marine_DeathFXEat"/>
-        <DeathArray index="Eviscerate" ModelLink="MarineDeathEviscerate3" SoundLink="Marine_DeathFXEviscerate"/>
-        <DeathArray index="Fire" ModelLink="MarineDeathFire3" SoundLink="Marine_DeathFXFire"/>
+        <BuildModel value="RaynorCommando"/>
+        <DeathArray index="Normal" ModelLink="RaynorDeathFire" SoundLink="Marine_DeathFXBloodSpray"/>
+        <DeathArray index="Blast" ModelLink="MarineDeathBlast" SoundLink="Marine_DeathFXBlast"/>
+        <DeathArray index="Disintegrate" ModelLink="MarineDeathAcid" SoundLink="Marine_DeathFXFire"/>
+        <DeathArray index="Eat" AnimProps="Stand" ModelLink="MarineDeathEat" SoundLink="Marine_DeathFXEat"/>
+        <DeathArray index="Eviscerate" ModelLink="MarineDeathEviscerate" SoundLink="Marine_DeathFXEviscerate"/>
+        <DeathArray index="Fire" ModelLink="MarineDeathFire" SoundLink="Marine_DeathFXFire"/>
         <DeathArray index="Silentkill" SoundLink="Marine_DeathFXSilentKill"/>
         <DeathArray index="Squish" SoundLink="Marine_DeathFXBloodSpray"/>
-        <PlacementModel value="SquadHeroFreeman"/>
-        <PortraitModel value="MarineMercenaryPortrait2"/>
+        <PlacementModel value="RaynorCommando"/>
+        <PortraitModel value="RaynorCommanderPortrait"/>
         <StandAnimTurnTime value="5"/>
         <WalkAnimMoveSpeed value="2.25"/>
         <BarOffset value="40"/>
@@ -2640,35 +2640,35 @@
         <GroupIcon>
             <Image value="Assets\Textures\wireframe-terran-marine-mercenary.dds"/>
         </GroupIcon>
-        <GroupSoundArray index="What" value="MarineGroupWhat"/>
-        <GroupSoundArray index="Yes" value="MarineGroupYes"/>
-        <GroupSoundArray index="Attack" value="MarineGroupAttack"/>
-        <GroupSoundArray index="Board" value="MarineGroupBoard"/>
+        <GroupSoundArray index="What" value="Raynor_What"/>
+        <GroupSoundArray index="Yes" value="Raynor_Yes"/>
+        <GroupSoundArray index="Attack" value="Raynor_Attack"/>
+        <GroupSoundArray index="Board" value="Raynor_Ready"/>
         <HeroIcon value="Assets\Textures\BTN-Unit-Terran-MarineMercenary.dds"/>
         <HighlightTooltip value="Unit/Name/WarPig"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
-        <SoundArray index="Birth" value="MarineBirth"/>
-        <SoundArray index="Ready" value="Marine_Ready"/>
-        <SoundArray index="Help" value="Marine_Help"/>
-        <SoundArray index="What" value="Marine_What"/>
-        <SoundArray index="Yes" value="Marine_Yes"/>
-        <SoundArray index="Attack" value="Marine_Attack"/>
-        <SoundArray index="Pissed" value="Marine_Pissed"/>
+        <SoundArray index="Birth" value="Raynor_Ready"/>
+        <SoundArray index="Ready" value="Raynor_Ready"/>
+        <SoundArray index="Help" value="Raynor_Help"/>
+        <SoundArray index="What" value="Raynor_What"/>
+        <SoundArray index="Yes" value="Raynor_Yes"/>
+        <SoundArray index="Attack" value="Raynor_Attack"/>
+        <SoundArray index="Pissed" value="Raynor_Pissed"/>
         <SoundArray index="Movement" value="MarineMovement"/>
         <SoundArray index="Turning" value="MarineTurning"/>
         <SoundArray index="Board" value="MarineBoard"/>
-        <SoundArray index="Click" value="MarineClick"/>
-        <SoundArray index="ClickError" value="MarineClickError"/>
-        <SoundArray index="Highlight" value="MarineHighlight"/>
+        <SoundArray index="Click" value="RaynorA_GoodLuckHaveFun"/>
+        <SoundArray index="ClickError" value="Raynor_Explode"/>
+        <SoundArray index="Highlight" value="RaynorA_GGWin"/>
         <UnitIcon value="Assets\Textures\BTN-Unit-Terran-MarineMercenary.dds"/>
         <Wireframe>
             <Image value="Assets\Textures\wireframe-terran-marine-mercenary.dds"/>
         </Wireframe>
     </CActorUnit>
     <CActorAction id="SquadHeroFreemanAttack" parent="GenericAttack" effectAttack="FreemanGaussRifleDamage">
-        <LaunchAssets Model="MarineAttackLaunch" Sound="Marine_AttackLaunch"/>
-        <ContainerAssets Model="MarineAttackLaunch3" Sound="Marine_AttackLaunch"/>
-        <ImpactMap index="None" Model="MarineAttackImpact3" Sound="Marine_AttackImpact"/>
+        <LaunchAssets Model="RaynorAttackLaunch" Sound="Raynor_Attack"/>
+        <ContainerAssets Model="RaynorAttackLaunch" Sound="Raynor_Attack"/>
+        <ImpactMap index="None" Model="RaynorAttackImpact" Sound="Raynor_AttackImpact"/>
         <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
         <ImpactPhysics Name="BulletImpact" MatchKeys="Basic" Physics="MarineAttackDeathForce"/>
     </CActorAction>
@@ -3162,7 +3162,7 @@
         <Sound value="Reaper_JumpLaunch"/>
     </CActorSound>
     <CActorModel id="ResourceRegenImpact" parent="ModelAnimationStyleOneShot">
-        <On Terms="Effect.ApplyResourceMessage.Start; At Target" Send="Create"/>
+        <On Terms="Effect.ResourceMessageApply.Start; At Target" Send="Create"/>
         <On Terms="SetTintColor" Send="SetTintColor 66,249,244 0.000000 Cycle"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachOverhead"/>
