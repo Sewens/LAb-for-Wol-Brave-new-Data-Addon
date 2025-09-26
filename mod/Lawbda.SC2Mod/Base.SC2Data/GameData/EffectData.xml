@@ -13,11 +13,118 @@
         <EffectArray value="InfantryChargeBasicChain"/>
         <EffectArray value="UnitMediumMaxLifeApply"/>
         <EffectArray value="ResourceFragileApply"/>
+        <EffectArray value="FireOrbApply"/>
     </CEffectSet>
     <CEffectModifyUnit id="AddFirebat">
         <EditorCategories value="Race:Terran"/>
         <Cost Abil="SquadInfantry,Ammo4" ChargeCountUse="-1"/>
     </CEffectModifyUnit>
+    <CEffectRemoveBehavior id="OrbOrbRemove">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="CasterOuter"/>
+        <BehaviorLink value="OrbOrb"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="FrostOrbRemove">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="CasterOuter"/>
+        <BehaviorLink value="FrostOrb"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="OrbOrbApply">
+        <EditorCategories value="Race:Commoner"/>
+        <Behavior value="OrbOrb"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="SoulOrbRemove">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="CasterOuter"/>
+        <BehaviorLink value="SoulOrb"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="SquadFirbatGiftFireOrbBurningGroundApply">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadFirbatGiftFireOrbBurningGround"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="SquadFirbatGiftFireOrbBurningGroundDamage">
+        <EditorCategories value="Race:Terran"/>
+        <Visibility value="Hidden"/>
+        <Amount value="1"/>
+    </CEffectDamage>
+    <CEffectDamage id="SquadFirbatGiftFireOrbBurningGroundDamage2">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Amount value="1"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="SquadFirbatGiftFireOrbBurningGroundPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <InitialEffect value="SquadFirbatGiftFireOrbBurningGroundSearch"/>
+        <PeriodCount value="6"/>
+        <PeriodicEffectArray value="SquadFirbatGiftFireOrbBurningGroundSearch"/>
+        <PeriodicPeriodArray value="0.5712"/>
+        <AINotifyEffect value="PsiStormSearch"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="SquadFirbatGiftFireOrbBurningGroundSearch">
+        <EditorCategories value="Race:Terran"/>
+        <AINotifyFlags index="HurtFriend" value="1"/>
+        <AINotifyFlags index="HurtEnemy" value="1"/>
+        <SearchFilters value="-;Player,Ally,Neutral,Structure,Missile,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="1.5" Effect="SquadFirbatGiftFireOrbBurningGroundApply"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectEnumArea>
+    <CEffectApplyBehavior id="FireOrbApply">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="FireOrb"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="FireOrbRemove">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="CasterOuter"/>
+        <BehaviorLink value="FireOrb"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="OverjobOrbRemove">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="CasterOuter"/>
+        <BehaviorLink value="OverjobOrb"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="OverjobOrbApply">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="OverjobOrb"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumArea id="SquadMarauderGiftFrostOrbSlowAOE">
+        <EditorCategories value="Race:Terran"/>
+        <SearchFilters value="-;Player,Ally,Structure,Missile,Stasis,Dead,Invulnerable"/>
+        <AreaArray Radius="1" Effect="SquadMarauderGiftFrostOrbSet"/>
+    </CEffectEnumArea>
+    <CEffectDamage id="SquadMarauderGiftFrostOrbDamage">
+        <EditorCategories value=""/>
+        <Amount value="2"/>
+    </CEffectDamage>
+    <CEffectSet id="SquadMarauderGiftFrostOrbSet">
+        <EditorCategories value=""/>
+        <EffectArray value="SquadMarauderGiftFrostOrbDamage"/>
+        <EffectArray value="SquadMarauderGiftFrostOrbSlow"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="SquadMarauderGiftFrostOrbSlow">
+        <ValidatorArray index="0" value="PunisherGrenadesSlowTargetFilters"/>
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="FrostOrbApply">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="FrostOrb"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="VampireOrbRemove">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="CasterOuter"/>
+        <BehaviorLink value="VampireOrb"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="VampireOrbApply">
+        <EditorCategories value="Race:Commoner"/>
+        <Behavior value="VampireOrb"/>
+    </CEffectApplyBehavior>
     <CEffectDamage id="SquadHiveMindEmulatorMindControlKill">
         <EditorCategories value="Race:Terran"/>
         <ResponseFlags index="Acquire" value="1"/>
@@ -120,11 +227,11 @@
         <EffectArray value="SquadGhostGiftLightingFeedbackDamage"/>
         <EffectArray value="SquadGhostGiftLightingFeedbackReduceEnergy"/>
     </CEffectSet>
-    <CEffectApplyBehavior id="SquadGhostGiftLightingOrbApply">
+    <CEffectApplyBehavior id="LightingOrbApply">
         <EditorCategories value="Race:Commoner"/>
         <Behavior value="LightingOrb"/>
     </CEffectApplyBehavior>
-    <CEffectRemoveBehavior id="SquadGhostGiftLightingOrbRemove">
+    <CEffectRemoveBehavior id="LightingOrbRemove">
         <EditorCategories value="Race:Commoner"/>
         <WhichUnit Value="CasterOuter"/>
         <BehaviorLink value="LightingOrb"/>
@@ -162,11 +269,11 @@
         <BehaviorLink value="MultiMineralAutoHarvestAura"/>
         <Count value="1"/>
     </CEffectRemoveBehavior>
-    <CEffectApplyBehavior id="SquadMedicGiftPoisonOrbApply">
+    <CEffectApplyBehavior id="PoisonOrbApply">
         <EditorCategories value="Race:Terran"/>
         <Behavior value="PoisonOrb"/>
     </CEffectApplyBehavior>
-    <CEffectRemoveBehavior id="SquadMedicGiftPoisonOrbRemove">
+    <CEffectRemoveBehavior id="PoisonOrbRemove">
         <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="CasterOuter"/>
         <BehaviorLink value="PoisonOrb"/>
@@ -189,7 +296,7 @@
         <DamageModifierSource Value="Outer"/>
         <EffectArray value="UnitHugeMaxLifeRemove"/>
         <EffectArray value="ResourceMessageRemove"/>
-        <EffectArray value="SquadMedicGiftPoisonOrbRemove"/>
+        <EffectArray value="PoisonOrbRemove"/>
     </CEffectSet>
     <CEffectSet id="SquadReaperDeathResponseChain">
         <EditorCategories value="Race:Terran"/>
@@ -197,6 +304,7 @@
         <EffectArray value="UnitSmallMaxLifeRemove"/>
         <EffectArray value="ResourceMineralAssassinRemove"/>
         <EffectArray value="MoveSpeedTier3Remove"/>
+        <EffectArray value="SoulOrbRemove"/>
     </CEffectSet>
     <CEffectSet id="SquadAlphaInfantryDeathResponseChain">
         <EditorCategories value="Race:Terran"/>
@@ -218,12 +326,14 @@
         <DamageModifierSource Value="Outer"/>
         <EffectArray value="UnitMediumMaxLifeRemove"/>
         <EffectArray value="MultiMineralAutoHarvestAuraRemove"/>
+        <EffectArray value="FrostOrbRemove"/>
     </CEffectSet>
     <CEffectSet id="SquadPredatorDeathResponseChain">
         <EditorCategories value="Race:Terran"/>
         <DamageModifierSource Value="Outer"/>
         <EffectArray value="UnitHugeMaxLifeRemove"/>
         <EffectArray value="LootOnDealDamageRemove"/>
+        <EffectArray value="VampireOrbRemove"/>
     </CEffectSet>
     <CEffectSet id="SquadGhostDeathResponseChain">
         <EditorCategories value="Race:Terran"/>
@@ -231,13 +341,14 @@
         <EffectArray value="UnitSmallMaxLifeRemove"/>
         <EffectArray value="EnergyMediumMaxandHugeRegenerationRemove"/>
         <EffectArray value="ResourceVespenseCrazyRemove"/>
-        <EffectArray value="SquadGhostGiftLightingOrbRemove"/>
+        <EffectArray value="LightingOrbRemove"/>
     </CEffectSet>
     <CEffectSet id="SquadSCVDeathResponseChain">
         <EditorCategories value="Race:Terran"/>
         <DamageModifierSource Value="Outer"/>
         <EffectArray value="UnitHugeMaxLifeRemove"/>
         <EffectArray value="RecycleStructureCauseDropPickupRemove"/>
+        <EffectArray value="OverjobOrbRemove"/>
     </CEffectSet>
     <CEffectRemoveBehavior id="InfantryEnlargeRadiusRemove">
         <ValidatorArray index="0" removed="1"/>
@@ -371,6 +482,7 @@
         <DamageModifierSource Value="Outer"/>
         <EffectArray value="UnitMediumMaxLifeRemove"/>
         <EffectArray value="ResourceFragileRemove"/>
+        <EffectArray value="FireOrbRemove"/>
     </CEffectSet>
     <CEffectApplyBehavior id="SquadSpiderMineInvulnerable">
         <EditorCategories value="Race:Terran"/>
@@ -482,6 +594,7 @@
         <DamageModifierSource Value="CasterOuter"/>
         <EffectArray value="UnitSmallMaxLifeRemove"/>
         <EffectArray value="ResourceMineralRobberyRemove"/>
+        <EffectArray value="OrbOrbRemove"/>
     </CEffectSet>
     <CEffectModifyUnit id="AddPredator">
         <EditorCategories value="Race:Terran"/>
@@ -496,6 +609,7 @@
         <EffectArray value="InfantryChargeBasicChain"/>
         <EffectArray value="UnitHugeMaxLifeApply"/>
         <EffectArray value="LootOnDealDamage"/>
+        <EffectArray value="VampireOrbApply"/>
     </CEffectSet>
     <CEffectSet id="SquadDiamondbackEvisceratorSet">
         <ValidatorArray value="CasterIsNotHidden"/>
@@ -918,7 +1032,7 @@
         <EffectArray value="UnitSmallMaxLifeApply"/>
         <EffectArray value="EnergyMediumMaxandHugeRegenerationApply"/>
         <EffectArray value="ResourceVespenseCrazyApply"/>
-        <EffectArray value="SquadGhostGiftLightingOrbApply"/>
+        <EffectArray value="LightingOrbApply"/>
     </CEffectSet>
     <CEffectSet id="AddReaperChain">
         <ValidatorArray value="IsMagazineFull"/>
@@ -932,6 +1046,7 @@
         <EffectArray value="ResourceMineralAssassinApply"/>
         <EffectArray value="SquadReaperJumpApply"/>
         <EffectArray value="SCVTransformeJump"/>
+        <EffectArray value="SoulOrbApply"/>
     </CEffectSet>
     <CEffectModifyUnit id="AddReaper">
         <EditorCategories value="Race:Terran"/>
@@ -946,7 +1061,7 @@
         <EffectArray value="InfantryChargeBasicChain"/>
         <EffectArray value="UnitHugeMaxLifeApply"/>
         <EffectArray value="ResourceRegenAuraApply"/>
-        <EffectArray value="SquadMedicGiftPoisonOrbApply"/>
+        <EffectArray value="PoisonOrbApply"/>
     </CEffectSet>
     <CEffectModifyUnit id="AddMedic">
         <EditorCategories value="Race:Terran"/>
@@ -961,6 +1076,7 @@
         <EffectArray value="InfantryChargeBasicChain"/>
         <EffectArray value="UnitMediumMaxLifeApply"/>
         <EffectArray value="MultiMineralAutoHarvestAuraApply"/>
+        <EffectArray value="FrostOrbApply"/>
     </CEffectSet>
     <CEffectApplyBehavior id="AddDeathResponseSquad">
         <EditorCategories value="Race:Terran"/>
@@ -2002,6 +2118,7 @@
         <EffectArray value="InfantryChargeBasicChain"/>
         <EffectArray value="UnitHugeMaxLifeApply"/>
         <EffectArray value="RecycleStructureCauseDropPickupApply"/>
+        <EffectArray value="OverjobOrbApply"/>
     </CEffectSet>
     <CEffectDamage id="SquadPredatorRetributionFieldDamage">
         <EditorCategories value="Race:Terran"/>
@@ -2051,6 +2168,7 @@
         <EffectArray value="InfantryChargeBasicChain"/>
         <EffectArray value="UnitSmallMaxLifeApply"/>
         <EffectArray value="ResourceMineralRobberyApply"/>
+        <EffectArray value="OrbOrbApply"/>
     </CEffectSet>
     <CEffectSet id="ReleaseMagazinePack">
         <EditorCategories value="Race:Terran"/>
@@ -2232,9 +2350,14 @@
         <EditorCategories value=""/>
         <Behavior value="VoodooOrb"/>
     </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SoulOrbApply">
+        <EditorCategories value=""/>
+        <Behavior value="SoulOrb"/>
+    </CEffectApplyBehavior>
     <CEffectRemoveBehavior id="VoodooOrbRemove">
         <EditorCategories value=""/>
         <WhichUnit Value="CasterOuter"/>
+        <BehaviorLink value="VoodooOrb"/>
         <Count value="1"/>
     </CEffectRemoveBehavior>
 </Catalog>

@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
-    <CBehaviorBuff id="FrostOrb">
-        <InfoIcon value="Assets\Textures\btn-frost-orb.dds"/>
-        <BehaviorCategories index="User9" value="1"/>
-        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
-        <BuffFlags index="RefreshStack" value="1"/>
-        <MaxStackCount value="8"/>
-        <MaxStackCountPerCaster value="1"/>
-    </CBehaviorBuff>
     <CBehaviorBuff id="LightingOrb">
         <InfoIcon value="Assets\Textures\btn-poison-orb.dds"/>
         <BehaviorCategories index="User9" value="1"/>
@@ -22,6 +14,57 @@
             <DamageValue value="Original"/>
             <Chance value="1"/>
         </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="FrostOrb">
+        <InfoIcon value="Assets\Textures\btn-frost-orb.dds"/>
+        <BehaviorCategories index="User9" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <BuffFlags index="RefreshStack" value="1"/>
+        <MaxStackCount value="8"/>
+        <MaxStackCountPerCaster value="1"/>
+        <DamageResponse>
+            <Handled value="SquadMarauderGiftFrostOrbSlowAOE"/>
+            <Location value="Attacker"/>
+            <ModifyFraction value="0.99"/>
+            <DamageValue value="Original"/>
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="FireOrb">
+        <InfoIcon value="Assets\Textures\btn-fire-orb.dds"/>
+        <BehaviorCategories index="User9" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <BuffFlags index="RefreshStack" value="1"/>
+        <MaxStackCount value="8"/>
+        <MaxStackCountPerCaster value="1"/>
+        <DamageResponse>
+            <Handled value="SquadFirbatGiftFireOrbBurningGroundSearch"/>
+            <Location value="Attacker"/>
+            <ModifyFraction value="0.99"/>
+            <DamageValue value="Original"/>
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadFirbatGiftFireOrbBurningGround">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-tips-walloffire.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <TimeScaleSource Value="Global"/>
+        <Duration value="0.6665"/>
+        <Period value="0.571"/>
+        <InitialEffect value="SquadFirbatGiftFireOrbBurningGroundDamage2"/>
+        <PeriodicEffect value="SquadFirbatGiftFireOrbBurningGroundDamage"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadMarauderGiftFrostOrbSlow">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-slow.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="HasPsiStrike"/>
+        <RemoveValidatorArray value="NoPurificationNova"/>
+        <RemoveValidatorArray value="HasNovaPsiStrikeWalkSpeed"/>
+        <MaxStackCount value="8"/>
+        <Duration value="5"/>
+        <Modification MoveSpeedMultiplier="0.75"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadGhostGiftLightingDOH">
         <InfoIcon value="Assets\Textures\btn-lighting-orb.dds"/>
@@ -83,6 +126,8 @@
             <Chance value="1"/>
         </DamageResponse>
     </CBehaviorBuff>
+    <!--Regen life and sheild based on damage taken, by ratio 5%.-->
+    <!--Additional damage dealt based on target life %5.-->
     <CBehaviorBuff id="SoulOrb">
         <InfoIcon value="Assets\Textures\btn-soul-orb.dds"/>
         <BehaviorCategories index="User9" value="1"/>
@@ -90,6 +135,22 @@
         <BuffFlags index="RefreshStack" value="1"/>
         <MaxStackCount value="8"/>
         <MaxStackCountPerCaster value="1"/>
+        <Modification>
+            <VitalDamageGainArray index="Life">
+                <KindArray index="Spell" value="0.05"/>
+                <KindArray index="Melee" value="0.05"/>
+                <KindArray index="Ranged" value="0.05"/>
+                <KindArray index="Splash" value="0.05"/>
+                <KindArray index="NoProc" value="0.05"/>
+            </VitalDamageGainArray>
+            <VitalDamageGainArray index="Shields">
+                <KindArray index="Spell" value="0.05"/>
+                <KindArray index="Melee" value="0.05"/>
+                <KindArray index="Ranged" value="0.05"/>
+                <KindArray index="Splash" value="0.05"/>
+                <KindArray index="NoProc" value="0.05"/>
+            </VitalDamageGainArray>
+        </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="VampireOrb">
         <InfoIcon value="Assets\Textures\btn-vampire-orb.dds"/>
@@ -98,6 +159,29 @@
         <BuffFlags index="RefreshStack" value="1"/>
         <MaxStackCount value="8"/>
         <MaxStackCountPerCaster value="1"/>
+        <Modification>
+            <VitalDamageLeechArray index="Life">
+                <KindArray index="Spell" value="1"/>
+                <KindArray index="Melee" value="1"/>
+                <KindArray index="Ranged" value="1"/>
+                <KindArray index="Splash" value="1"/>
+                <KindArray index="NoProc" value="1"/>
+            </VitalDamageLeechArray>
+            <VitalDamageLeechArray index="Shields">
+                <KindArray index="Spell" value="1"/>
+                <KindArray index="Melee" value="1"/>
+                <KindArray index="Ranged" value="1"/>
+                <KindArray index="Splash" value="1"/>
+                <KindArray index="NoProc" value="1"/>
+            </VitalDamageLeechArray>
+            <VitalDamageLeechArray index="Energy">
+                <KindArray index="Spell" value="1"/>
+                <KindArray index="Melee" value="1"/>
+                <KindArray index="Ranged" value="1"/>
+                <KindArray index="Splash" value="1"/>
+                <KindArray index="NoProc" value="1"/>
+            </VitalDamageLeechArray>
+        </Modification>
     </CBehaviorBuff>
     <CBehaviorResource id="SquadAutomaticHarvestableVespene">
         <InfoFlags index="Hidden" value="1"/>
@@ -478,14 +562,6 @@
             <AdditiveMoveSpeedFactor value="0.05"/>
             <AdditiveAttackSpeedFactor value="0.01"/>
         </Modification>
-    </CBehaviorBuff>
-    <CBehaviorBuff id="FireOrb">
-        <InfoIcon value="Assets\Textures\btn-fire-orb.dds"/>
-        <BehaviorCategories index="User9" value="1"/>
-        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
-        <BuffFlags index="RefreshStack" value="1"/>
-        <MaxStackCount value="8"/>
-        <MaxStackCountPerCaster value="1"/>
     </CBehaviorBuff>
     <CBehaviorResource id="SquadHarvestableVespeneGeyserGas">
         <InfoFlags index="Hidden" value="1"/>
@@ -1256,7 +1332,14 @@
         <BuffFlags index="RefreshStack" value="1"/>
         <MaxStackCount value="8"/>
         <MaxStackCountPerCaster value="1"/>
+        <Modification>
+            <DamageDealtFraction index="Spell" value="1.05"/>
+            <DamageDealtFraction index="Ranged" value="1.05"/>
+            <DamageDealtFraction index="Splash" value="1.05"/>
+            <DamageDealtFraction index="NoProc" value="1.05"/>
+        </Modification>
     </CBehaviorBuff>
+    <!--Add 10% heal effect, 25% melee damage increase.-->
     <CBehaviorBuff id="OverjobOrb">
         <InfoIcon value="Assets\Textures\btn-overjob-orb.dds"/>
         <BehaviorCategories index="User9" value="1"/>
@@ -1264,5 +1347,8 @@
         <BuffFlags index="RefreshStack" value="1"/>
         <MaxStackCount value="8"/>
         <MaxStackCountPerCaster value="1"/>
+        <Modification HealDealtAdditiveMultiplier="1.1" HealTakenAdditiveMultiplier="1.1">
+            <DamageDealtFraction index="Melee" value="1.25"/>
+        </Modification>
     </CBehaviorBuff>
 </Catalog>

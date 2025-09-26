@@ -92,6 +92,45 @@
         <Icon value="Assets\Textures\RadarIcon2.dds"/>
         <IconArcLength value="3.250000"/>
     </CActorRange>
+    <CActorModel id="FireOrbBurningGroundModel" parent="ModelAnimationStyleContinuous">
+        <On Terms="Effect.SquadFirbatGiftFireOrbBurningGroundPersistent.Start" Send="Create"/>
+        <On Terms="Effect.SquadFirbatGiftFireOrbBurningGroundPersistent.Stop" Send="AnimBracketStop BSD"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Model value="HighTemplarPsiStormModel"/>
+        <Scale value="1.300000"/>
+    </CActorModel>
+    <CActorSound id="SquadFirbatGiftFireOrbBurningGroundImpactSound" parent="SoundOneShot">
+        <On Terms="Behavior.SquadFirbatGiftFireOrbBurningGround.On" Send="Create"/>
+        <Sound value="Terran_FlameLoopLarge"/>
+    </CActorSound>
+    <CActorModel id="SquadFirbatGiftFireOrbBurningGroundImpact" parent="ModelAnimationStyleContinuous">
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <On Terms="Behavior.SquadFirbatGiftFireOrbBurningGround.On" Send="Create"/>
+        <On Terms="Behavior.SquadFirbatGiftFireOrbBurningGround.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="SolarCombustionTastesLikeBurning"/>
+        <AutoScaleFactor value="0.750000"/>
+    </CActorModel>
+    <CActorModel id="SquadMarauderGiftFrostOrbFrozen" parent="ModelAddition">
+        <Inherits index="TimeScale" value="0"/>
+        <Inherits index="TintColor" value="0"/>
+        <Remove Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="Behavior.SquadMarauderGiftFrostOrbSlow.On" Send="Create"/>
+        <On Terms="Behavior.SquadMarauderGiftFrostOrbSlow.On" Send="HostSiteOpsSet ::Host SOpAttachOrigin"/>
+        <On Terms="Behavior.SquadMarauderGiftFrostOrbSlow.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="Behavior.SquadMarauderGiftFrostOrbSlow.Off" Send="Destroy"/>
+        <Model value="FrozenSolid"/>
+        <AutoScaleFactor value="1.000000"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorModel id="SquadPredatorVampireLeach" parent="ModelAnimationStyleOneShot">
+        <On Terms="ActionDamage; ValidateUnit HasVampireOrb" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Model value="RegenImpact"/>
+    </CActorModel>
     <CActorBeamSimple id="SquadHiveMindEmulatorBeam" parent="BeamSimpleAnimationStyleContinuous">
         <On Terms="Effect.SquadHiveMindEmulatorMindControl.Start" Send="Create"/>
         <On Terms="Effect.SquadHiveMindEmulatorMindControl.Start" Send="TimerSet 1.500000 DelayDestroy"/>
