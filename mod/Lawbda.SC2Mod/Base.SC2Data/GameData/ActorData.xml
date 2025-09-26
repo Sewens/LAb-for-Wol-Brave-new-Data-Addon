@@ -92,6 +92,56 @@
         <Icon value="Assets\Textures\RadarIcon2.dds"/>
         <IconArcLength value="3.250000"/>
     </CActorRange>
+    <CActorBeamSimple id="SquadHiveMindEmulatorBeam" parent="BeamSimpleAnimationStyleContinuous">
+        <On Terms="Effect.SquadHiveMindEmulatorMindControl.Start" Send="Create"/>
+        <On Terms="Effect.SquadHiveMindEmulatorMindControl.Start" Send="TimerSet 1.500000 DelayDestroy"/>
+        <On Terms="TimerExpired; TimerName DelayDestroy" Send="Destroy"/>
+        <Model value="HiveMindEmulatorBeam"/>
+        <AutoScaleFactor value="0.500000"/>
+        <HostLaunch Subject="_Unit" Scope="Caster" Actor="Find"/>
+        <HostLaunchSiteOps Ops="SOpAttachWeapon"/>
+        <HostImpact Subject="_Unit" Scope="Target" Actor="Find"/>
+        <HostImpactSiteOps Ops="SOpAttachCenter"/>
+    </CActorBeamSimple>
+    <CActorBeamSimple id="SquadSpectreGiftVoodooMindControlBeam" parent="BeamSimpleAnimationStyleContinuous">
+        <On Terms="Effect.SquadSpectreGiftVoodooMindControl.Start" Send="Create"/>
+        <On Terms="Effect.SquadSpectreGiftVoodooMindControl.Start" Send="TimerSet 1.500000 DelayDestroy"/>
+        <On Terms="TimerExpired; TimerName DelayDestroy" Send="Destroy"/>
+        <Model value="HiveMindEmulatorBeam"/>
+        <AutoScaleFactor value="0.500000"/>
+        <HostLaunch Subject="_Unit" Scope="Caster" Actor="Find"/>
+        <HostLaunchSiteOps Ops="SOpAttachWeapon"/>
+        <HostImpact Subject="_Unit" Scope="Target" Actor="Find"/>
+        <HostImpactSiteOps Ops="SOpAttachCenter"/>
+    </CActorBeamSimple>
+    <CActorModel id="SquadHiveMindEmulatorImpactModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.SquadHiveMindEmulatorMindControl.Start" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="HiveMindEmulatorImpactModel"/>
+        <AutoScaleFactor value="0.500000"/>
+    </CActorModel>
+    <CActorModel id="SquadSpectreGiftVoodooMindControlImpactModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.SquadSpectreGiftVoodooMindControl.Start" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="HiveMindEmulatorImpactModel"/>
+        <AutoScaleFactor value="0.500000"/>
+    </CActorModel>
+    <CActorSound id="SquadHiveMindEmulatorMindControlImpactSound" parent="SoundOneShot">
+        <On Terms="Behavior.SquadHiveEmulatorMindControl.On" Send="Create"/>
+        <Sound value="HiveMindEmulator_MindControlImpact"/>
+    </CActorSound>
+    <CActorSound id="SquadSpectreGiftVoodooMindControlImpactSound" parent="SoundOneShot">
+        <On Terms="Behavior.SquadSpectreGiftVoodooMindControl.On" Send="Create"/>
+        <Sound value="HiveMindEmulator_MindControlImpact"/>
+    </CActorSound>
+    <CActorSound id="SquadHiveMindEmulatorMindControlLaunchSound" parent="SoundOneShot">
+        <On Terms="Abil.SquadHiveMindEmulatorMindControl.SourceCastStart" Send="Create"/>
+        <Sound value="HiveMindEmulator_MindControlLaunch"/>
+    </CActorSound>
+    <CActorRange id="SquadHiveMindEmulatorProtectRange" parent="RangeAbil" abil="SquadHiveMindEmulatorMindControl"/>
+    <CActorRange id="SquadHiveMindEmulatorMindControlRange" parent="RangeAbil" abil="SquadHiveMindEmulatorMindControl"/>
     <CActorModel id="SquadFeedbackImpact" parent="ModelAnimationStyleOneShot">
         <On Terms="Effect.SquadFeedback.Start; At Target" Send="Create"/>
         <Host Subject="_Selectable"/>
@@ -137,8 +187,8 @@
     <CActorModel id="SquadMedicGiftPosionDOT">
         <Inherits index="CloakEffect" value="1"/>
         <Inherits index="Visibility" value="1"/>
-        <On Terms="Behavior.SquadMedicGiftPoisonDamageonTime.On" Send="Create"/>
-        <On Terms="Behavior.SquadMedicGiftPoisonDamageonTime.Off" Send="Destroy"/>
+        <On Terms="Behavior.SquadMedicGiftPoisonDOT.On" Send="Create"/>
+        <On Terms="Behavior.SquadMedicGiftPoisonDOT.Off" Send="Destroy"/>
         <On Terms="ActorCreation" Send="$Stand PlayForever"/>
         <On Terms="ActorCreation" Send="SetTintColor 0,255,0"/>
         <On Terms="ActorCreation" Send="SetOpacity 0.750000"/>
@@ -148,7 +198,7 @@
         <Model value="IrradiateEffect"/>
     </CActorModel>
     <CActorSound id="SquadMedicGiftPosionImpact" parent="SoundOneShot">
-        <On Terms="Behavior.SquadMedicGiftPoisonDamageonTime.On" Send="Create"/>
+        <On Terms="Behavior.SquadMedicGiftPoisonDOT.On" Send="Create"/>
         <Sound value="ScienceVessel_IrradiateImpact"/>
     </CActorSound>
     <CActorModel id="SquadRefineryRichBuild" parent="TerranBuildingBuildRefinery" unitName="SquadRefinery">

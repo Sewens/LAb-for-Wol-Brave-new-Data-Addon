@@ -1,12 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
     <CBehaviorBuff id="FrostOrb">
-        <InfoIcon value="Assets\Textures\ui_tipicon_campaign_zerus03-yagdrafireball.dds"/>
+        <InfoIcon value="Assets\Textures\btn-frost-orb.dds"/>
         <BehaviorCategories index="User9" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <BuffFlags index="RefreshStack" value="1"/>
         <MaxStackCount value="8"/>
         <MaxStackCountPerCaster value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="LightingOrb">
+        <InfoIcon value="Assets\Textures\btn-poison-orb.dds"/>
+        <BehaviorCategories index="User9" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <BuffFlags index="RefreshStack" value="1"/>
+        <MaxStackCount value="8"/>
+        <MaxStackCountPerCaster value="1"/>
+        <DamageResponse>
+            <Handled value="SquadGhostGiftLightingDOHApply"/>
+            <Location value="Attacker"/>
+            <ModifyFraction value="0.99"/>
+            <DamageValue value="Original"/>
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadGhostGiftLightingDOH">
+        <InfoIcon value="Assets\Textures\btn-lighting-orb.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <MaxStackCount value="8"/>
+        <Duration value="5"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffect value="SquadGhostGiftLightingFeedbackSet"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadHiveEmulatorMindControl">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\ui_debuff_hivemindemulator.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InitialEffect value="SquadHiveMindEmulatorMindControlKillCargo"/>
+        <Player Value="Caster"/>
+        <Modification>
+            <AbilLinkDisableArray value="NeuralParasite"/>
+        </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadDisableAttack">
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
@@ -15,27 +48,28 @@
             <AbilLinkDisableArray value="attack"/>
         </Modification>
     </CBehaviorBuff>
-    <CBehaviorBuff id="SquadMedicGiftPoisonDamageonTime">
+    <CBehaviorBuff id="SquadSpectreGiftVoodooMindControl">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-zerg-neuralparasite.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="0.5"/>
+        <InitialEffect value="SquadSpectreGiftVoodooMindControlKillCargo"/>
+        <Player Value="Caster"/>
+        <Modification>
+            <AbilLinkDisableArray value="NeuralParasite"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadMedicGiftPoisonDOT">
         <Alignment value="Negative"/>
         <InfoIcon value="Assets\Textures\btn-ability-terran-irradiate.dds"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <MaxStackCount value="8"/>
         <Duration value="5"/>
         <Period value="1"/>
         <PeriodicEffect value="SquadMedicGiftPosionSearchArea"/>
-        <MaxStackCount value="8"/>
     </CBehaviorBuff>
-    <CBehaviorAttackModifier id="LightingOrb">
-        <BehaviorFlags index="Permanent" value="0"/>
-        <InfoFlags index="Hidden" value="0"/>
-        <InfoIcon value="Assets\Textures\ui_tipicon_campaign_zerus03-yagdrafireball.dds"/>
-        <BehaviorCategories index="User9" value="1"/>
-        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
-        <Chance value="1"/>
-        <MaxStackCount value="8"/>
-        <PreImpactEffect value="SquadGhostGiftLightingFeedbackSet"/>
-    </CBehaviorAttackModifier>
     <CBehaviorBuff id="PoisonOrb">
-        <InfoIcon value="Assets\Textures\ui_tipicon_campaign_zerus03-yagdrafireball.dds"/>
+        <InfoIcon value="Assets\Textures\btn-poison-orb.dds"/>
         <BehaviorCategories index="User9" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <BuffFlags index="RefreshStack" value="1"/>
@@ -50,7 +84,7 @@
         </DamageResponse>
     </CBehaviorBuff>
     <CBehaviorBuff id="SoulOrb">
-        <InfoIcon value="Assets\Textures\ui_tipicon_campaign_zerus03-yagdrafireball.dds"/>
+        <InfoIcon value="Assets\Textures\btn-soul-orb.dds"/>
         <BehaviorCategories index="User9" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <BuffFlags index="RefreshStack" value="1"/>
@@ -58,7 +92,7 @@
         <MaxStackCountPerCaster value="1"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="VampireOrb">
-        <InfoIcon value="Assets\Textures\ui_tipicon_campaign_zerus03-yagdrafireball.dds"/>
+        <InfoIcon value="Assets\Textures\btn-vampire-orb.dds"/>
         <BehaviorCategories index="User9" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <BuffFlags index="RefreshStack" value="1"/>
@@ -446,7 +480,7 @@
         </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="FireOrb">
-        <InfoIcon value="Assets\Textures\ui_tipicon_campaign_zerus03-yagdrafireball.dds"/>
+        <InfoIcon value="Assets\Textures\btn-fire-orb.dds"/>
         <BehaviorCategories index="User9" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <BuffFlags index="RefreshStack" value="1"/>
@@ -998,6 +1032,8 @@
         </Modification>
     </CBehaviorBuff>
     <CBehaviorJump id="SquadReaperJump">
+        <InfoIcon value="Assets\Textures\btn-upgrade-terran-ui-jumpjets.dds"/>
+        <BehaviorCategories index="User10" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <TriggerHeightDeltaMin value="1.5"/>
         <TriggerHeightDeltaMax value="4.5"/>
@@ -1014,8 +1050,6 @@
         <LandAdjustmentDown value="1"/>
         <LandArrivalRange value="0.05"/>
         <LandCheckRadius value="5"/>
-        <BehaviorCategories index="User10" value="1"/>
-        <InfoIcon value="Assets\Textures\btn-upgrade-terran-ui-jumpjets.dds"/>
     </CBehaviorJump>
     <CBehaviorBuff id="ResourceMineralRobbery">
         <InfoIcon value="Assets\Textures\btn-tips-resourcecaches.dds"/>
@@ -1198,15 +1232,25 @@
         <InitialEffect value="SquadSpiderMineBurrowOrder"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="VoodooOrb">
-        <InfoIcon value="Assets\Textures\ui_tipicon_campaign_zerus03-yagdrafireball.dds"/>
+        <InfoIcon value="Assets\Textures\btn-voodoo-orb.dds"/>
         <BehaviorCategories index="User9" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <BuffFlags index="RefreshStack" value="1"/>
         <MaxStackCount value="8"/>
         <MaxStackCountPerCaster value="1"/>
+        <Modification>
+            <DeathResponse Chance="1"/>
+        </Modification>
+        <DamageResponse>
+            <Handled value="SquadSpectreGiftVoodooMindControlApply"/>
+            <Location value="Attacker"/>
+            <ModifyFraction value="0.99"/>
+            <DamageValue value="Original"/>
+            <Chance value="1"/>
+        </DamageResponse>
     </CBehaviorBuff>
     <CBehaviorBuff id="OrbOrb">
-        <InfoIcon value="Assets\Textures\ui_tipicon_campaign_zerus03-yagdrafireball.dds"/>
+        <InfoIcon value="Assets\Textures\btn-orb-orb.dds"/>
         <BehaviorCategories index="User9" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <BuffFlags index="RefreshStack" value="1"/>
@@ -1214,7 +1258,7 @@
         <MaxStackCountPerCaster value="1"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="OverjobOrb">
-        <InfoIcon value="Assets\Textures\ui_tipicon_campaign_zerus03-yagdrafireball.dds"/>
+        <InfoIcon value="Assets\Textures\btn-overjob-orb.dds"/>
         <BehaviorCategories index="User9" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <BuffFlags index="RefreshStack" value="1"/>

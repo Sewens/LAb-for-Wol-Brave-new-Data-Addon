@@ -18,6 +18,44 @@
         <EditorCategories value="Race:Terran"/>
         <Cost Abil="SquadInfantry,Ammo4" ChargeCountUse="-1"/>
     </CEffectModifyUnit>
+    <CEffectDamage id="SquadHiveMindEmulatorMindControlKill">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Flags index="Kill" value="1"/>
+        <Flags index="Notification" value="1"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectDamage>
+    <CEffectApplyBehavior id="SquadGhostGiftLightingDOHApply">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadGhostGiftLightingDOH"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadSpectreGiftVoodooMindControlApply">
+        <EditorCategories value=""/>
+        <Behavior value="SquadSpectreGiftVoodooMindControl"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="SquadSpectreGiftVoodooMindControlKill">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Flags index="Kill" value="1"/>
+        <Flags index="Notification" value="1"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectDamage>
+    <CEffectApplyBehavior id="SquadHiveMindEmulatorMindControl">
+        <ValidatorArray index="0" removed="1"/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadHiveEmulatorMindControl"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadSpectreGiftVoodooMindControl">
+        <ValidatorArray index="0" removed="1"/>
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumTransport id="SquadHiveMindEmulatorMindControlKillCargo">
+        <EditorCategories value=""/>
+        <Effect value="SquadHiveMindEmulatorMindControlKill"/>
+    </CEffectEnumTransport>
     <CEffectSwitch id="ModifyMagazineUnitBehaviorSwitch">
         <EditorCategories value=""/>
     </CEffectSwitch>
@@ -44,7 +82,7 @@
         <ResponseFlags index="Flee" value="1"/>
         <ImpactLocation Value="TargetUnit"/>
         <Flags index="Notification" value="1"/>
-        <VitalFractionCurrent index="Energy" value="0.05"/>
+        <VitalFractionCurrent index="Energy" value="-0.05"/>
         <Death value="Blast"/>
         <SearchFlags index="CallForHelp" value="1"/>
         <SearchFlags index="SameCliff" value="0"/>
@@ -57,10 +95,9 @@
         </VitalArray>
     </CEffectModifyUnit>
     <CEffectModifyUnit id="SquadGhostGiftLightingFeedbackReduceEnergy">
-        <ValidatorArray value=""/>
         <EditorCategories value="Race:Protoss"/>
         <VitalArray index="Energy">
-            <ChangeFraction value="0.05"/>
+            <ChangeFraction value="-0.05"/>
         </VitalArray>
     </CEffectModifyUnit>
     <CEffectSet id="SquadFeedbackSet">
@@ -93,10 +130,14 @@
         <BehaviorLink value="LightingOrb"/>
         <Count value="1"/>
     </CEffectRemoveBehavior>
+    <CEffectEnumTransport id="SquadSpectreGiftVoodooMindControlKillCargo">
+        <EditorCategories value=""/>
+        <Effect value="SquadSpectreGiftVoodooMindControlKill"/>
+    </CEffectEnumTransport>
     <CEffectApplyBehavior id="SquadMedicGiftPoisonApplyBehavior">
         <ValidatorArray index="0" value=""/>
         <EditorCategories value="Race:Terran"/>
-        <Behavior value="SquadMedicGiftPoisonDamageonTime"/>
+        <Behavior value="SquadMedicGiftPoisonDOT"/>
     </CEffectApplyBehavior>
     <CEffectDamage id="SquadMeidcGiftPosionPeriodicDamage">
         <EditorCategories value="Race:Terran"/>
@@ -170,6 +211,7 @@
         <EffectArray value="UnitSmallMaxLifeRemove"/>
         <EffectArray value="EnergyHugeMaxandMediumRegenerationRemove"/>
         <EffectArray value="ResourceTerrazineCrazyRemove"/>
+        <EffectArray value="VoodooOrbRemove"/>
     </CEffectSet>
     <CEffectSet id="SquadMarauderDeathResponseChain">
         <EditorCategories value="Race:Terran"/>
@@ -851,6 +893,7 @@
         <EffectArray value="UnitSmallMaxLifeApply"/>
         <EffectArray value="EnergyHugeMaxandMediumRegenerationApply"/>
         <EffectArray value="ResourceTerrazineCrazyApply"/>
+        <EffectArray value="VoodooOrbApply"/>
     </CEffectSet>
     <CEffectApplyBehavior id="MagazineTrackerApply">
         <ValidatorArray index="0" removed="1"/>
@@ -981,8 +1024,9 @@
         <EditorCategories value="Race:Terran"/>
         <Behavior value="MultiMineralAutoHarvest"/>
     </CEffectApplyBehavior>
-    <CEffectApplyBehavior id="DamageBuffer">
+    <CEffectApplyBehavior id="SquadDamageBuffer">
         <EditorCategories value="Race:Terran"/>
+        <Behavior value="DamageBuffer"/>
     </CEffectApplyBehavior>
     <CEffectDamage id="DamageBufferDamage">
         <EditorCategories value="Race:Terran"/>
@@ -1177,7 +1221,7 @@
         <Death value="Electrocute"/>
         <KillHallucination value="1"/>
     </CEffectDamage>
-    <CEffectApplyBehavior id="BlueScannerEMP">
+    <CEffectApplyBehavior id="BlueScannerEMPApply">
         <EditorCategories value="Race:Terran"/>
         <Behavior value="BlueScannerEMPDOT"/>
     </CEffectApplyBehavior>
@@ -1314,7 +1358,7 @@
     <CEffectEnumArea id="BlueScannerSearhVictim">
         <EditorCategories value="Race:Terran"/>
         <OwningPlayer Value="Source"/>
-        <AreaArray Radius="13" Effect="BlueScannerEMP"/>
+        <AreaArray Radius="13" Effect="BlueScannerEMPApply"/>
         <SearchFilters value="-;Player,Ally,Neutral"/>
     </CEffectEnumArea>
     <CEffectCreatePersistent id="BlueScannerSweep">
@@ -2184,4 +2228,13 @@
         <EditorCategories value=""/>
         <Behavior value="SquadDisableAttack"/>
     </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="VoodooOrbApply">
+        <EditorCategories value=""/>
+        <Behavior value="VoodooOrb"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="VoodooOrbRemove">
+        <EditorCategories value=""/>
+        <WhichUnit Value="CasterOuter"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
 </Catalog>

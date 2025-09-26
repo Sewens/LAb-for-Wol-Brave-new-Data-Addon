@@ -123,6 +123,21 @@
         <AINotifyEffect value="GreenScannerSweep"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="ScannerSweepAlpha"/>
     </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadHiveMindEmulatorMindControl">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Flags index="Smart" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+            <Charge Link=""/>
+            <Cooldown Link=""/>
+        </Cost>
+        <TargetFilters value="-;Self,Player,Ally,Neutral,Structure,Heroic,Worker,Missile,Stasis,UnderConstruction,Dead,Invulnerable"/>
+        <Range value="11"/>
+        <RangeSlop value="2"/>
+        <Arc value="360"/>
+        <SmartValidatorArray value="IsZerg"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="MindControl"/>
+    </CAbilEffectTarget>
     <CAbilEffectTarget id="SuadFeedback">
         <Alignment value="Negative"/>
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
