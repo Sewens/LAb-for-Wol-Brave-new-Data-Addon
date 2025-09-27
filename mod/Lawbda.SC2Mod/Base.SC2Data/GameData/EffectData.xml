@@ -47,6 +47,68 @@
         <EffectArray value="ExcavatorBehemothCrashSearch"/>
         <EffectArray value="ExcavatorBehemothCrashModifyMagazineIterator"/>
     </CEffectSet>
+    <CEffectDamage id="SquadHellionInfernalFlameThrower" parent="DU_WEAP">
+        <ValidatorArray value="noMarkers"/>
+        <EditorCategories value="Race:Terran"/>
+        <AttributeBonus index="Light" value="6"/>
+        <Kind value="Splash"/>
+        <Amount value="10"/>
+        <Death value="Fire"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="SquadHellionInfernalFlameThrowerCP">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="SourcePoint"/>
+        <InitialEffect value="SquadHellionInfernalFlameThrower"/>
+        <PeriodCount value="24"/>
+        <PeriodicEffectArray value="SquadHellionInfernalFlameThrowerE"/>
+        <PeriodicOffsetArray value="0,-0.25,0"/>
+        <PeriodicOffsetArray value="0,-0.5,0"/>
+        <PeriodicOffsetArray value="0,-0.75,0"/>
+        <PeriodicOffsetArray value="0,-1,0"/>
+        <PeriodicOffsetArray value="0,-1.25,0"/>
+        <PeriodicOffsetArray value="0,-1.5,0"/>
+        <PeriodicOffsetArray value="0,-1.75,0"/>
+        <PeriodicOffsetArray value="0,-2,0"/>
+        <PeriodicOffsetArray value="0,-2.25,0"/>
+        <PeriodicOffsetArray value="0,-2.5,0"/>
+        <PeriodicOffsetArray value="0,-2.75,0"/>
+        <PeriodicOffsetArray value="0,-3,0"/>
+        <PeriodicOffsetArray value="0,-3.25,0"/>
+        <PeriodicOffsetArray value="0,-3.5,0"/>
+        <PeriodicOffsetArray value="0,-3.75,0"/>
+        <PeriodicOffsetArray value="0,-4,0"/>
+        <PeriodicOffsetArray value="0,-4.25,0"/>
+        <PeriodicOffsetArray value="0,-4.5,0"/>
+        <PeriodicOffsetArray value="0,-4.75,0"/>
+        <PeriodicOffsetArray value="0,-5,0"/>
+        <PeriodicOffsetArray value="0,-5.25,0"/>
+        <PeriodicOffsetArray value="0,-5.5,0"/>
+        <PeriodicOffsetArray value="0,-5.75,0"/>
+        <PeriodicOffsetArray value="0,-6,0"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="SquadHellionInfernalFlameThrowerDummyDamage">
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Splash"/>
+        <Death value="Fire"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="SquadHellionInfernalFlameThrowerDummyPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <InitialEffect value="SquadHellionInfernalFlameThrowerDummyDamage"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="SquadHellionInfernalFlameThrowerE">
+        <EditorCategories value="Race:Terran"/>
+        <ExcludeArray Value="Target"/>
+        <IncludeArray Effect="MengskHellionInfernalFlameThrowerCP" Value="Target"/>
+        <SearchFilters value="Ground;Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="0.15" Effect="SquadHellionInfernalFlameThrower"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectEnumArea>
+    <CEffectSet id="SquadHellionInfernalFlameThrowerSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadHellionInfernalFlameThrowerCP"/>
+        <EffectArray value="SquadHellionInfernalFlameThrowerDummyPersistent"/>
+    </CEffectSet>
     <CEffectRemoveBehavior id="OrbOrbRemove">
         <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="CasterOuter"/>
