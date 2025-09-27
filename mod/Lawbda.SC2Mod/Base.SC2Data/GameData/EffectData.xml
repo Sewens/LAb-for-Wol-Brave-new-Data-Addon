@@ -49,6 +49,10 @@
         <CaseArray Validator="StructureLifeBelow400" Effect="RecycleonKillMediumDropPickup"/>
         <CaseArray Effect="RecycleonKillLargeDropPickup"/>
     </CEffectSwitch>
+    <CEffectEnumArea id="SquadShooterAuraSearch">
+        <SearchFilters value="-;Enemy,Air,Structure,Worker,Missile,Dead,AirUnit"/>
+        <AreaArray Radius="2" Effect="SquadShooterAureBuffApply"/>
+    </CEffectEnumArea>
     <CEffectRemoveBehavior id="SoulOrbRemove">
         <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="CasterOuter"/>
@@ -128,6 +132,10 @@
     <CEffectApplyBehavior id="FrostOrbApply">
         <EditorCategories value="Race:Terran"/>
         <Behavior value="FrostOrb"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadShooterAureBuffApply">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadShooterAuraBuff"/>
     </CEffectApplyBehavior>
     <CEffectApplyBehavior id="SquadSuperStimpack">
         <EditorCategories value="Race:Terran"/>
