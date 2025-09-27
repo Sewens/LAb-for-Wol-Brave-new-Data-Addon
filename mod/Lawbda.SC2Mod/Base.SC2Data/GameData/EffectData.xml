@@ -28,6 +28,25 @@
         <EditorCategories value="Race:Terran"/>
         <EffectExternal value="SquadStimpack"/>
     </CEffectEnumMagazine>
+    <CEffectDamage id="ExcavatorBehemothCrashDamage">
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Melee"/>
+        <Amount value="100"/>
+    </CEffectDamage>
+    <CEffectEnumMagazine id="ExcavatorBehemothCrashModifyMagazineIterator">
+        <EditorCategories value="Race:Terran"/>
+        <EffectExternal value="SquadMagazineInvulnerableApply"/>
+    </CEffectEnumMagazine>
+    <CEffectEnumArea id="ExcavatorBehemothCrashSearch">
+        <EditorCategories value="Race:Terran"/>
+        <SearchFilters value="-;Player,Ally,Neutral,Air,AirUnit"/>
+        <AreaArray Radius="2" Effect="ExcavatorBehemothCrashDamage"/>
+    </CEffectEnumArea>
+    <CEffectSet id="ExcavatorBehemothCrashSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="ExcavatorBehemothCrashSearch"/>
+        <EffectArray value="ExcavatorBehemothCrashModifyMagazineIterator"/>
+    </CEffectSet>
     <CEffectRemoveBehavior id="OrbOrbRemove">
         <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="CasterOuter"/>
@@ -50,6 +69,14 @@
         <CaseArray Validator="StructureLifeBelow400" Effect="RecycleonKillMediumDropPickup"/>
         <CaseArray Effect="RecycleonKillLargeDropPickup"/>
     </CEffectSwitch>
+    <CEffectApplyBehavior id="SquadMagazineInvulnerableApply">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadMagazineInvulnerable"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadScoutAfterburnerBoost">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadScoutAfterburner"/>
+    </CEffectApplyBehavior>
     <CEffectEnumArea id="SquadShooterAuraSearch">
         <SearchFilters value="-;Enemy,Air,Structure,Worker,Missile,Dead,AirUnit"/>
         <AreaArray Radius="2" Effect="SquadShooterAureBuffApply"/>
@@ -1550,12 +1577,14 @@
         <EditorCategories value="Race:Terran"/>
         <BehaviorCategories index="User10" value="1"/>
         <BehaviorLink value=""/>
+        <BehaviorAlignment value="Any"/>
     </CEffectRemoveBehavior>
     <CEffectRemoveBehavior id="RemoveBuffModification">
         <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
         <BehaviorCategories index="User9" value="1"/>
         <BehaviorLink value=""/>
+        <BehaviorAlignment value="Any"/>
     </CEffectRemoveBehavior>
     <CEffectRemoveBehavior id="MagazineTracker1StackRemove">
         <ValidatorArray index="0" removed="1"/>
@@ -1632,12 +1661,12 @@
     </CEffectApplyBehavior>
     <CEffectSet id="Disband">
         <EditorCategories value="Race:Terran"/>
+        <EffectArray value="RemoveBasicModification"/>
+        <EffectArray value="RemoveBuffModification"/>
         <EffectArray value="DisbandMagazineIterator"/>
         <EffectArray value="JoinAbilityDisableRemove"/>
         <EffectArray value="MagazineTrackerAllStackRemove"/>
-        <EffectArray value="RemoveBasicModification"/>
         <EffectArray value="SCVTransformeGround"/>
-        <EffectArray value="RemoveBuffModification"/>
     </CEffectSet>
     <CEffectModifyUnit id="AddSCV">
         <EditorCategories value="Race:Terran"/>

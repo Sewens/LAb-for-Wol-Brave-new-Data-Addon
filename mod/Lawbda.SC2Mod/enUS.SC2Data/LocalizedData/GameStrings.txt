@@ -31,6 +31,7 @@ Abil/Name/RedScannerSweep=Red Scanner Sweep
 Abil/Name/SCVDisableJump=SCV Disable Jump
 Abil/Name/SCVEnableJump=SCV Enable Jump
 Abil/Name/Salvage=Squad Structure Salvage Shared
+Abil/Name/SquadAfterburner=Squad Afterburner
 Abil/Name/SquadBarracksLand=Squad Barracks Land
 Abil/Name/SquadBarracksLiftOff=Squad Barracks Lift Off
 Abil/Name/SquadBarracksTrain=Squad Barracks Train
@@ -112,7 +113,8 @@ Behavior/Name/DamageBuffer=Damage Buffer
 Behavior/Name/DisableMagazineAbilities=Disable Magazine Abilities
 Behavior/Name/EnergyHugeMaxandMediumRegeneration=Energy Huge Max and Medium Regeneration
 Behavior/Name/EnergyMediumMaxandLargeRegeneration=Energy Medium Max and Huge Regeneration
-Behavior/Name/ExcavatorRecycleStructureCauseDropPickup=Excavator Recycle Structure Cause Drop Pickup
+Behavior/Name/ExcavatorBehemothProtocal=Excavator Behemoth Protocal
+Behavior/Name/ExcludeFromF2=Exclude From F2
 Behavior/Name/FireOrb=Fire Orb
 Behavior/Name/FirebatUnitTracker=Firebat Unit Tracker
 Behavior/Name/FrostOrb=Frost Orb
@@ -123,7 +125,6 @@ Behavior/Name/InfantryLevelUpto10=Infantry Level Up to10
 Behavior/Name/LightingOrb=Lighting Orb
 Behavior/Name/LootOnDealDamage=Loot On Deal Damage
 Behavior/Name/MagazineDeathResponse=Magazine Death Response
-Behavior/Name/MagazineUnitTracker=Alpha Magazine Unit Tracker
 Behavior/Name/MarauderUnitTracker=Marauder Unit Tracker
 Behavior/Name/MarineUnitTracker=Marine Unit Tracker
 Behavior/Name/MedicFlashbangGrenade=Squad Medic Flashbang Grenade
@@ -165,11 +166,13 @@ Behavior/Name/SquadFirebatViralPlasma=Squad Firebat Viral Plasma
 Behavior/Name/SquadGhostEMPDecloak=Squad Ghost EMP Decloak
 Behavior/Name/SquadGhostGiftLightingDOH=Squad Ghost Gift Lighting DOH
 Behavior/Name/SquadHiveEmulatorMindControl=Squad Hive Emulator Mind Control
+Behavior/Name/SquadJump=Squad Jump
 Behavior/Name/SquadMarauderGiftFrostOrbSlow=Squad Marauder Gift Frost Orb Slow
 Behavior/Name/SquadMarauderSlow=Squad Marauder Slow
 Behavior/Name/SquadMedicGiftPoisonDOT=Squad Medic Gift Poison DOT
 Behavior/Name/SquadReactorQueueBuff=Squad Reactor Queue Buff
 Behavior/Name/SquadReaperJump=Squad Reaper Jump
+Behavior/Name/SquadScoutAfterburner=Squad Scout Afterburner
 Behavior/Name/SquadShooterAuraBuff=Squad Shooter Aura Buff
 Behavior/Name/SquadSpectreGiftVoodooMindControl=Squad Spectre Gift Voodoo Mind Control
 Behavior/Name/SquadSpectreUltrasonicPulsestun=Squad Spectre Ultrasonic Pulse stun
@@ -189,7 +192,6 @@ Behavior/Tooltip/MagazineGhostTracker22=<c val="000000">Current Magazine unit:</
 Behavior/Tooltip/MagazineMarineTracker2=<c val="000000">Current Magazine unit:</c>
 Behavior/Tooltip/MagazineMedicTracker2=<c val="000000">Current Magazine unit:</c>
 Behavior/Tooltip/MagazineReaperTracker2=<c val="000000">Current Magazine unit:</c>
-Behavior/Tooltip/MagazineUnitTracker=<c val="F0F50A"></c>Current Magazine unit: </c><d ref="$BehaviorStackCount:MagazineUnitTracker$"/>
 Behavior/Tooltip/MultiMineralAutoHarvest=Marauder helping you harvest now.
 Behavior/Tooltip/ObserverTargetLock2=This unit is taking increased damage.
 Behavior/Tooltip/OrbOrb=Increase all kinds of damage by <d ref="Behavior,OrbOrb,Modification.DamageDealtFraction[Ranged]"/>.
@@ -209,6 +211,7 @@ Behavior/Tooltip/StimpackMarauder2=This unit moves and attacks more quickly whil
 Behavior/Tooltip/UnitSmallAddMaxLife=<c val="F0F50A"></c>Current Magazine unit: </c><d ref="$BehaviorStackCount:Unit Small Add Max Life$"/>
 Behavior/Tooltip/VampireOrb=Leach life on damage dealt 5%.
 Behavior/Tooltip/VoodooOrb=Temporary control target unit for 0.5s.
+Button/Name/BehemothProtocal=Behemoth Protocal
 Button/Name/BuildDefenceStructure=Build Defence Structure
 Button/Name/BuildSquadArmory=Build Squad Armory
 Button/Name/BuildSquadAutomatedRefinery=Build Squad Automated Refinery
@@ -274,6 +277,7 @@ Button/Name/ScannerSweepRed=Scanner Sweep Red
 Button/Name/ScannerSweepYellow=Scanner Sweep Yellow
 Button/Name/ScavageStructure=Scavage Structure
 Button/Name/ShooterAura=Shooter Aura
+Button/Name/SquadAfterburner=Squad Afterburner
 Button/Name/SquadBanshee=Squad Banshee
 Button/Name/SquadBansheeResearchCloakingField=Squad Banshee Research Cloaking Field
 Button/Name/SquadBansheeShockwaveMissileBattery=Squad Banshee Shockwave Missile Battery
@@ -385,6 +389,7 @@ Button/Name/SqudDukesRevenge=Captain Dukes Revenge
 Button/Name/TerranInstantJustis=Terran Instant Justis
 Button/Name/WarpInSquadForge=Warp In Squad Forge
 Button/Tooltip/AdvanceEngineBay=Generates electromagnetic pulses that damage Protoss shields.
+Button/Tooltip/BehemothProtocal=Captain Excavator immune for almost every debuff behavior and crash everything when movement speed above 7.
 Button/Tooltip/BuildDefenceStructure=Upgrades the Bunker to have 150 additional life. Cannot be garrisoned while the Bunker is upgrading.
 Button/Tooltip/BuildSquadArmory=Contains weapon and armor upgrades for Factory and Starport units. <n/><n/><c val="ffff8a">Enables:</c><n/>- Hellbat at the Factory<n/>- Thor at the Factory
 Button/Tooltip/BuildSquadAutomatedRefinery=Improved Refinery that sends refined vespene gas straight to the Command Center via short-range warp fields. Eliminates the need for SCVs in vespene gas production.
@@ -462,6 +467,7 @@ Button/Tooltip/ScannerSweepBlue=Reveals an area of the map, detecting cloaked an
 Button/Tooltip/ScannerSweepGreen=Reveals an area of the map, detecting cloaked and burrowed units. Lasts <d time="12"/>.
 Button/Tooltip/ScannerSweepRed=Reveals an area of the map, detecting cloaked and burrowed units. Lasts <d time="12"/>.
 Button/Tooltip/ShooterAura=Captain Freeman offer +<d ref="Behavior,SquadShooterAuraBuff,Modification.RangedWeaponRange"/> range for non-melee weapons in <d ref="Effect,SquadShooterAuraSearch,AreaArray[0].Radius"/>  raiuds.
+Button/Tooltip/SquadAfterburner=<n/>Increases the Scout's movement speed by 100% for <d time="10"/>.
 Button/Tooltip/SquadArmory=Contains weapon and armor upgrades for Factory and Starport units.
 Button/Tooltip/SquadBanshee=Request 2 Dusk Wing Mercenaries.<n/><n/>Dominion deserters piloting modified Banshees.
 Button/Tooltip/SquadBansheeResearchCloakingField=Enables <c val="ffff8a">Banshees</c> to use the Cloak ability. Cloak renders the <c val="ffff8a">Banshee</c> invisible to enemies unless the unit is revealed by detectors or effects.
@@ -671,6 +677,10 @@ Effect/Name/EnergyHugeMaxandMediumRegenerationApply=Energy Huge Max and Medium R
 Effect/Name/EnergyHugeMaxandMediumRegenerationRemove=Energy Huge Max and Medium Regeneration Remove
 Effect/Name/EnergyMediumMaxandHugeRegenerationApply=Energy Medium Max and Huge Regeneration Apply
 Effect/Name/EnergyMediumMaxandHugeRegenerationRemove=Energy Medium Max and Huge Regeneration Remove
+Effect/Name/ExcavatorBehemothCrashDamage=Excavator Behemoth Crash Damage
+Effect/Name/ExcavatorBehemothCrashModifyMagazineIterator=Excavator Behemoth Crash Modify Magazine Iterator
+Effect/Name/ExcavatorBehemothCrashSearch=Excavator Behemoth Crash Search
+Effect/Name/ExcavatorBehemothCrashSet=Excavator Behemoth Crash Set
 Effect/Name/ExcavatorD888ChargeDamage=Excavator D888 Charge Damage
 Effect/Name/ExcavatorD888ChargeLaunchMissile=Excavator D888 Charge Launch Missile
 Effect/Name/ExcavatorD888MultiShot=Excavator D888 Multi Shot
@@ -873,6 +883,7 @@ Effect/Name/SquadHotSUltraliskKaiserBladesSearch=Squad Hot SUltralisk Kaiser Bla
 Effect/Name/SquadHotSUltraliskKaiserBladesSecondaryDamage=Squad Hot SUltralisk Kaiser Blades Secondary Damage
 Effect/Name/SquadHotSUltraliskKaiserBladesSecondaryDamageSet=Squad Hot SUltralisk Kaiser Blades Secondary Damage Set
 Effect/Name/SquadHotSUltraliskKaiserBladesSecondaryUpgradeDamage=Squad Hot SUltralisk Kaiser Blades Secondary Upgrade Damage
+Effect/Name/SquadMagazineInvulnerableApply=Squad Magazine Invulnerable Apply
 Effect/Name/SquadMakePrecursor=Squad Make Precursor
 Effect/Name/SquadMarauderDeathResponseChain=Squad Marauder Death Response Chain
 Effect/Name/SquadMarauderGiftFrostOrbDamage=Squad Marauder Gift Frost Orb Damage
@@ -932,6 +943,7 @@ Effect/Name/SquadRemovePrecursor=Squad Remove Precursor
 Effect/Name/SquadRepair=Squad Repair
 Effect/Name/SquadSCVDeathResponseChain=Squad SCV Death Response Chain
 Effect/Name/SquadSalvageDeath=Squad Salvage Death
+Effect/Name/SquadScoutAfterburnerBoost=Squad Scout Afterburner Apply
 Effect/Name/SquadShooterAuraSearch=Squad Shooter Aura Search
 Effect/Name/SquadShooterAureBuffApply=Squad Shooter Aure Buff Apply
 Effect/Name/SquadSnipeDamage=Squad Snipe Damage

@@ -15,6 +15,7 @@
         <AutoCastFilters value="Visible;Enemy"/>
         <AINotifyEffect value=""/>
         <CmdButtonArray index="Execute" DefaultButtonFace="Enband"/>
+        <IgnoreFilters value="-;Enemy"/>
     </CAbilEffectTarget>
     <CAbilEffectTarget id="AddSpectreToSquad">
         <Alignment value="Positive"/>
@@ -31,6 +32,7 @@
         <AutoCastFilters value="Visible;Enemy"/>
         <AINotifyEffect value=""/>
         <CmdButtonArray index="Execute" DefaultButtonFace="Enband"/>
+        <IgnoreFilters value="-;Enemy"/>
     </CAbilEffectTarget>
     <CAbilEffectTarget id="AddReaperToSquad">
         <Alignment value="Positive"/>
@@ -47,6 +49,7 @@
         <AutoCastFilters value="Visible;Enemy"/>
         <AINotifyEffect value=""/>
         <CmdButtonArray index="Execute" DefaultButtonFace="Enband"/>
+        <IgnoreFilters value="-;Enemy"/>
     </CAbilEffectTarget>
     <CAbilEffectTarget id="AddMarauderToSquad">
         <Alignment value="Positive"/>
@@ -63,6 +66,7 @@
         <AutoCastFilters value="Visible;Enemy"/>
         <AINotifyEffect value=""/>
         <CmdButtonArray index="Execute" DefaultButtonFace="Enband"/>
+        <IgnoreFilters value="-;Enemy"/>
     </CAbilEffectTarget>
     <CAbilEffectTarget id="AddFirebatToSquad">
         <Alignment value="Positive"/>
@@ -79,6 +83,7 @@
         <AutoCastFilters value="Visible;Enemy"/>
         <AINotifyEffect value=""/>
         <CmdButtonArray index="Execute" DefaultButtonFace="Enband"/>
+        <IgnoreFilters value="-;Enemy"/>
     </CAbilEffectTarget>
     <CAbilEffectTarget id="AddMedicToSquad">
         <Alignment value="Positive"/>
@@ -95,6 +100,7 @@
         <AutoCastFilters value="Visible;Enemy"/>
         <AINotifyEffect value=""/>
         <CmdButtonArray index="Execute" DefaultButtonFace="Enband"/>
+        <IgnoreFilters value="-;Enemy"/>
     </CAbilEffectTarget>
     <CAbilEffectTarget id="AddPredatorToSquad">
         <Alignment value="Positive"/>
@@ -111,6 +117,7 @@
         <AutoCastFilters value="Visible;Enemy"/>
         <AINotifyEffect value=""/>
         <CmdButtonArray index="Execute" DefaultButtonFace="Enband"/>
+        <IgnoreFilters value="-;Enemy"/>
     </CAbilEffectTarget>
     <CAbilEffectTarget id="AlphaScannerSweep">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -123,6 +130,16 @@
         <AINotifyEffect value="GreenScannerSweep"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="ScannerSweepAlpha"/>
     </CAbilEffectTarget>
+    <CAbilEffectInstant id="SquadAfterburner">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadScoutAfterburnerBoost"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="20"/>
+        </Cost>
+        <AINotifyEffect value="SquadScoutAfterburnerBoost"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="ScoutSpeedBoost"/>
+    </CAbilEffectInstant>
     <CAbilEffectTarget id="SquadHiveMindEmulatorMindControl">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Flags index="Smart" value="1"/>
@@ -148,6 +165,7 @@
         <ResourceAllowed index="Terrazine" value="0"/>
         <ResourceAllowed index="Custom" value="0"/>
         <ResourceAmountRequest index="Minerals" value="100"/>
+        <AbilityCategories index="User1" value="1"/>
     </CAbilHarvest>
     <CAbilEffectInstant id="SquadSuperStimpack">
         <AbilSetId value="Stimpack"/>
@@ -347,6 +365,7 @@
         <ResourceAllowed index="Custom" value="0"/>
         <ResourceAmountRequest index="Minerals" value="30"/>
         <ResourceTimeMultiplier index="Minerals" value="2.05"/>
+        <AbilityCategories index="User1" value="1"/>
     </CAbilHarvest>
     <CAbilEffectTarget id="SquadCalldownMulelisk">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -1056,10 +1075,12 @@
         <CmdButtonArray index="Execute" DefaultButtonFace="BurrowDown">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
-        <ActorKey value="BurrowDown"/>
+        <ActorKey value=""/>
         <Flags index="IgnoreFacing" value="1"/>
         <Flags index="SuppressMovement" value="1"/>
         <InfoArray Unit="SquadSCVJumper"/>
+        <AbilClassEnableArray index="CAbilRally" value="0"/>
+        <AbilClassDisableArray index="CAbilQueue" value="0"/>
     </CAbilMorph>
     <CAbilMorph id="SCVDisableJump">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -1071,6 +1092,8 @@
         <Flags index="MoveBlockers" value="1"/>
         <Flags index="SuppressMovement" value="1"/>
         <InfoArray Unit="SquadSCV" CollideRange="0"/>
+        <AbilClassEnableArray index="CAbilRally" value="0"/>
+        <AbilClassDisableArray index="CAbilQueue" value="0"/>
     </CAbilMorph>
     <CAbilArmMagazine id="NuclearWarheadWhite">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
@@ -1296,6 +1319,7 @@
     </CAbilEffectTarget>
     <CAbilHarvest id="SquadSCVGather">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <AbilityCategories index="User1" value="1"/>
     </CAbilHarvest>
     <CAbilEffectTarget id="SquadGhostSnipe">
         <Alignment value="Negative"/>
@@ -1471,6 +1495,7 @@
         <AutoCastFilters value="Visible;Enemy"/>
         <AINotifyEffect value=""/>
         <CmdButtonArray index="Execute" DefaultButtonFace="Enband"/>
+        <IgnoreFilters value="-;Enemy"/>
     </CAbilEffectTarget>
     <CAbilQueue id="QueueMagazine">
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
@@ -1528,6 +1553,7 @@
         <AutoCastFilters value="Visible;Enemy"/>
         <AINotifyEffect value=""/>
         <CmdButtonArray index="Execute" DefaultButtonFace="Enband"/>
+        <IgnoreFilters value="-;Enemy"/>
     </CAbilEffectTarget>
     <CAbilEffectInstant id="SquadStimpack">
         <AbilSetId value="Stimpack"/>

@@ -252,7 +252,7 @@
         <AbilArray Link="SquadPickupScrapMedium"/>
         <Radius value="1"/>
         <MinimapRadius value="0.75"/>
-        <EditorCategories value="ObjectType:Item,ObjectFamily:Melee"/>
+        <EditorCategories value="ObjectType:Item,ObjectFamily:Campaign"/>
         <LeaderAlias value=""/>
     </CUnit>
     <CUnit id="LargeScrapSalvagex33" parent="ITEM">
@@ -266,7 +266,7 @@
         <AbilArray Link="SquadPickupScrapLarge"/>
         <Radius value="1"/>
         <MinimapRadius value="0.75"/>
-        <EditorCategories value="ObjectType:Item,ObjectFamily:Melee"/>
+        <EditorCategories value="ObjectType:Item,ObjectFamily:Campaign"/>
         <LeaderAlias value=""/>
     </CUnit>
     <CUnit id="SquadAutomatedRefinery">
@@ -433,7 +433,7 @@
         <AbilArray Link="SquadPickupScrapSmall"/>
         <Radius value="1"/>
         <MinimapRadius value="0.75"/>
-        <EditorCategories value="ObjectType:Item,ObjectFamily:Melee"/>
+        <EditorCategories value="ObjectType:Item,ObjectFamily:Campaign"/>
         <LeaderAlias value=""/>
     </CUnit>
     <CUnit id="SquadGreaterNydusWorm">
@@ -576,23 +576,21 @@
         <DeathRevealRadius value="3"/>
         <Race value="Terr"/>
         <FlagArray index="UseLineOfSight" value="1"/>
-        <ResourceDropOff index="Minerals" value="1"/>
-        <ResourceDropOff index="Vespene" value="1"/>
         <PlaneArray index="Ground" value="1"/>
         <Collide index="Ground" value="1"/>
-        <Collide index="Small" value="1"/>
         <Attributes index="Armored" value="1"/>
         <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Massive" value="1"/>
         <LifeStart value="575"/>
         <LifeMax value="575"/>
         <LifeArmor value="1"/>
         <LifeArmorName value="Unit/LifeArmorName/TerranVehiclePlating"/>
         <Speed value="1.75"/>
-        <Acceleration value="1000"/>
+        <Acceleration value="50"/>
         <LateralAcceleration value="46.0625"/>
         <StationaryTurningRate value="360"/>
         <TurningRate value="359.4726"/>
-        <Sight value="11"/>
+        <Sight value="13"/>
         <CostResource index="Minerals" value="200"/>
         <CostResource index="Vespene" value="125"/>
         <RepairTime value="50"/>
@@ -607,8 +605,11 @@
         <AbilArray Link="QueueMagazine"/>
         <AbilArray Link="DisbandSquad"/>
         <AbilArray Link="SquadExcavatorGather"/>
+        <AbilArray Link="SquadAfterburner"/>
         <BehaviorArray Link="ExcavatorRecycleStructureCauseDropPickup"/>
         <BehaviorArray Link="SquadStructureFireSuppressionSystem"/>
+        <BehaviorArray Link="Frenzy"/>
+        <BehaviorArray Link="ExcavatorBehemothProtocal"/>
         <WeaponArray Link="ExcavatorD888Charge"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -621,10 +622,12 @@
             <LayoutButtons Face="ExcavatorGather" Type="AbilCmd" AbilCmd="SquadExcavatorGather,Gather" Row="1" Column="0"/>
             <LayoutButtons Face="ReturnCargo" Type="AbilCmd" AbilCmd="SquadExcavatorGather,Return" Row="1" Column="0"/>
             <LayoutButtons Face="ScavageStructure" Type="Passive" Behavior="ExcavatorRecycleStructureCauseDropPickup" Row="1" Column="2"/>
+            <LayoutButtons Face="BehemothProtocal" Type="Passive" Row="2" Column="2"/>
+            <LayoutButtons Face="SquadAfterburner" Type="AbilCmd" AbilCmd="SquadAfterburner,Execute" Row="2" Column="0"/>
         </CardLayouts>
-        <Radius value="0.75"/>
+        <Radius value="1"/>
         <SeparationRadius value="1"/>
-        <InnerRadius value="0.625"/>
+        <InnerRadius value="1"/>
         <CargoSize value="4"/>
         <ScoreMake value="350"/>
         <ScoreKill value="700"/>
@@ -2339,7 +2342,7 @@
         <AbilArray Link="QueueMagazine"/>
         <AbilArray Link="AddPredatorToSquad"/>
         <AbilArray Link="DisbandSquad"/>
-        <BehaviorArray Link="SquadReaperJump"/>
+        <BehaviorArray Link="SquadJump"/>
         <WeaponArray Link="SquadPredatorTitaniumClaws"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -2784,7 +2787,8 @@
         <AbilArray Link="DisbandSquad"/>
         <AbilArray Link="AddReaperToSquad"/>
         <CardLayouts index="0">
-            <LayoutButtons index="5" AbilCmd="255,255" Column="0"/>
+            <LayoutButtons index="5" Face="SquadReaperJetPack" AbilCmd="255,255" Column="0"/>
+            <LayoutButtons index="6" Face="SquadReaperCombatDrugs"/>
             <LayoutButtons index="7" Face="Enband" AbilCmd="AddReaperToSquad,Execute" Row="1" Column="4"/>
             <LayoutButtons index="8">
                 <Face value="Disband"/>
@@ -2818,7 +2822,7 @@
         <ReviveType value="SquadReaper"/>
         <FlagArray index="PreventDestroy" value="0"/>
         <LeaderAlias value="SquadReaper"/>
-        <BehaviorArray index="0" Link="SquadReaperJump"/>
+        <BehaviorArray index="0" Link="SquadJump"/>
         <WeaponArray index="0" Link="SquadReaperP45GaussPistol" Turret="SquadReaperTurret"/>
         <WeaponArray index="1" Link="SquadReaperD8Charge" Turret="SquadReaperTurret"/>
         <TurretArray value="SquadReaperTurret"/>
@@ -3235,7 +3239,6 @@
         <AbilArray Link="SquadInfantry"/>
         <AbilArray Link="SCVEnableJump"/>
         <AbilArray Link="SCVDisableJump"/>
-        <AbilArray Link="SquadProtossBuild"/>
         <WeaponArray Link="SCVFusionCutter"/>
         <WeaponArray/>
         <CardLayouts>
@@ -3244,8 +3247,8 @@
             <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
             <LayoutButtons Face="AttackWorker" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
-            <LayoutButtons Face="SquadSCVGather" Type="AbilCmd" AbilCmd="SquadSCVGather,255" Row="1" Column="0"/>
-            <LayoutButtons Face="ReturnCargo" Type="AbilCmd" AbilCmd="SquadSCVGather,255" Row="1" Column="0"/>
+            <LayoutButtons Face="SquadSCVGather" Type="AbilCmd" AbilCmd="SquadSCVGather,Gather" Row="1" Column="0"/>
+            <LayoutButtons Face="ReturnCargo" Type="AbilCmd" AbilCmd="SquadSCVGather,Return" Row="1" Column="0"/>
             <LayoutButtons Face="TerranBuild" Type="Submenu" SubmenuCardId="TBl1" Row="2" Column="0"/>
             <LayoutButtons Face="TerranBuildAdvanced" Type="Submenu" SubmenuCardId="TBl2" Row="2" Column="2"/>
             <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="SquadTerranBuild,Halt" Row="2" Column="4"/>
@@ -3411,12 +3414,12 @@
         <Description value="Button/Tooltip/SquadSCVJumper"/>
         <Mover value="CliffJumper"/>
         <CardLayouts index="0">
-            <LayoutButtons index="5" Face="Repair" Type="AbilCmd" AbilCmd="SquadSCVRepair,255" Row="2" Column="3"/>
-            <LayoutButtons index="6" Face="SquadSCVGather" Type="AbilCmd" AbilCmd="SquadSCVGather,255" Row="1" Column="0"/>
+            <LayoutButtons index="5" Face="Repair" Type="AbilCmd" AbilCmd="SquadSCVRepair,Execute" Row="2" Column="3"/>
+            <LayoutButtons index="6" Face="SquadSCVGather" Type="AbilCmd" AbilCmd="SquadSCVGather,Gather" Row="1" Column="0"/>
             <LayoutButtons index="7">
-                <Face value="ReturnCargo"/>
+                <Face value="SquadReturnCargo"/>
                 <Type value="AbilCmd"/>
-                <AbilCmd value="SquadSCVGather,255"/>
+                <AbilCmd value="SquadSCVGather,Return"/>
                 <SubmenuCardId value=""/>
                 <Row value="1"/>
                 <Column value="0"/>
@@ -3490,7 +3493,6 @@
             <LayoutButtons Face="SquadSpectre" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo8" Row="1" Column="2"/>
             <LayoutButtons Face="SquadPredator" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo9" Row="1" Column="3"/>
         </CardLayouts>
-        <AbilArray index="12" removed="1"/>
     </CUnit>
     <CUnit id="SquadSupplyDepotLowered">
         <DeathRevealRadius value="3"/>

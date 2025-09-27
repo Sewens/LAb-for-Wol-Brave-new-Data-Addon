@@ -1,5 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorBuff id="ExcavatorBehemothProtocal">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <InfoIcon value="Assets\Textures\talent-kerrigan-level13-ultraliskresearchbundle.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <DisableValidatorArray value="ExcavatorSpeedAbove7"/>
+        <Period value="0.5"/>
+        <PeriodicEffect value="ExcavatorBehemothCrashSet"/>
+        <Modification>
+            <ModifyFlags index="DisableWeapons" value="1"/>
+            <StateFlags index="UnitAttrOnMapBoss" value="1"/>
+            <StateFlags index="UnitAttrOffArmored" value="1"/>
+            <StateFlags index="UnitAttrOffMechanical" value="1"/>
+            <StateFlags index="UnitAttrOffRobotic" value="1"/>
+            <StateFlags index="SuppressCollision" value="1"/>
+            <StateFlags index="Unradarable" value="1"/>
+            <StateFlags index="Unstoppable" value="1"/>
+            <StateFlags index="Untargetable" value="1"/>
+            <DamageTakenFraction index="Spell" value="0.5"/>
+            <DamageTakenFraction index="Melee" value="0.5"/>
+            <DamageTakenFraction index="Ranged" value="0.5"/>
+            <DamageTakenFraction index="Splash" value="0.5"/>
+            <DamageTakenFraction index="NoProc" value="0.5"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="ExcludeFromF2">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+    </CBehaviorBuff>
     <CBehaviorBuff id="LightingOrb">
         <InfoIcon value="Assets\Textures\btn-poison-orb.dds"/>
         <BehaviorCategories index="User9" value="1"/>
@@ -46,8 +73,8 @@
         </DamageResponse>
     </CBehaviorBuff>
     <CBehaviorBuff id="ExcavatorRecycleStructureCauseDropPickup">
+        <InfoFlags index="Hidden" value="1"/>
         <InfoIcon value="Assets\Textures\btn-ability-stetmann-scrapdrop.dds"/>
-        <BehaviorCategories index="User9" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <BuffFlags index="RefreshStack" value="1"/>
         <MaxStackCountPerCaster value="1"/>
@@ -61,6 +88,44 @@
         <DamageResponse Handled="RecycleStructureDropPickup" Location="Attacker">
             <Chance value="1"/>
         </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadMagazineInvulnerable">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <MaxStackCountPerCaster value="1"/>
+        <Duration value="10"/>
+        <Modification>
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="SuppressCollision" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorJump id="SquadJump">
+        <InfoFlags index="AlwaysUseGameText" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-upgrade-terran-ui-jumpjets.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <TriggerHeightDeltaMin value="1.5"/>
+        <TriggerHeightDeltaMax value="4.5"/>
+        <InitiateRangeUp value="1.5"/>
+        <InitiateRangeDown value="0.5"/>
+        <JumpRangeMax value="12"/>
+        <Mover value="CliffJumper"/>
+        <MoverUp value="ReaperJumpDown"/>
+        <MoverDown value="ReaperJumpDown"/>
+        <DurationPreLaunch value="0.05"/>
+        <DurationPostLand value="0.075"/>
+        <DurationMoveOut value="0.08"/>
+        <Placeholder value="ReaperPlaceholder"/>
+        <LandAdjustmentDown value="1"/>
+        <LandArrivalRange value="0.05"/>
+        <LandCheckRadius value="5"/>
+    </CBehaviorJump>
+    <CBehaviorBuff id="SquadScoutAfterburner">
+        <InfoIcon value="Assets\Textures\btn-upgrade-terran-jotunboosters.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <Duration value="10"/>
+        <Modification MoveSpeedMultiplier="4" AccelerationBonus="2" DecelerationBonus="2"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadFirbatGiftFireOrbBurningGround">
         <Alignment value="Negative"/>
@@ -1060,6 +1125,7 @@
         <BuffFlags index="RefreshStack" value="1"/>
         <MaxStackCount value="8"/>
         <MaxStackCountPerCaster value="1"/>
+        <InfoFlags index="Hidden" value="1"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="MarineUnitTracker">
         <BehaviorFlags index="Permanent" value="1"/>
@@ -1156,6 +1222,7 @@
         <LandAdjustmentDown value="1"/>
         <LandArrivalRange value="0.05"/>
         <LandCheckRadius value="5"/>
+        <InfoFlags index="AlwaysUseGameText" value="1"/>
     </CBehaviorJump>
     <CBehaviorBuff id="ResourceMineralRobbery">
         <InfoIcon value="Assets\Textures\btn-tips-resourcecaches.dds"/>

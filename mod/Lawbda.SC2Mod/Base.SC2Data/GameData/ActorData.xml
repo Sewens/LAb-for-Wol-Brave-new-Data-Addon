@@ -68,6 +68,39 @@
         <Icon value="Assets\Textures\RadarIcon2.dds"/>
         <IconArcLength value="3.250000"/>
     </CActorRange>
+    <CActorModel id="SquadJumpLandDownModel" parent="ModelAnimationStyleOneShot">
+        <Inherits index="CloakEffect" value="1"/>
+        <On Terms="Behavior.SquadJump.LandDown" Send="Create"/>
+        <On Terms="Behavior.SquadJump.LandUp" Send="Create"/>
+        <On Terms="Behavior.SquadJump.LandDown" Send="TimerSet 0.300000 TriggerSound"/>
+        <On Terms="TimerExpired; TimerName TriggerSound" Send="Create ReaperJumpLandSound"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter SOpShadow"/>
+        <Model value="ReaperJumpLandDownModel"/>
+    </CActorModel>
+    <CActorSound id="SquadJumpLandSound" parent="SoundOneShot">
+        <On Terms="Behavior.SquadJump.LandUp" Send="Create"/>
+        <Sound value="Reaper_JumpLand"/>
+    </CActorSound>
+    <CActorModel id="SquadJumpLaunchModel" parent="ModelAnimationStyleOneShot">
+        <Inherits index="CloakEffect" value="1"/>
+        <On Terms="Behavior.SquadJump.Launch" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter SOpShadow" HoldPosition="1" HoldRotation="1"/>
+        <Model value="ReaperJumpLaunchModel"/>
+    </CActorModel>
+    <CActorSound id="SquadJumpLaunchSound" parent="SoundOneShot">
+        <On Terms="Behavior.SquadJump.Launch" Send="Create"/>
+        <Sound value="Reaper_JumpLaunch"/>
+    </CActorSound>
+    <CActorSound id="SquadScoutAfterburner2" parent="SoundOneShot">
+        <On Terms="Behavior.SquadScoutAfterburner.On" Send="Create"/>
+        <Sound value="Scout_Afterburner2"/>
+    </CActorSound>
+    <CActorSound id="SquadScoutAfterburner" parent="SoundOneShot">
+        <On Terms="Behavior.SquadScoutAfterburner.On" Send="Create"/>
+        <Sound value="Scout_Afterburner"/>
+    </CActorSound>
     <CActorRange id="SquadShooterAureRange">
         <On Terms="ActorCreation" Send="SetTintColor 244,87,74"/>
         <On Terms="Behavior.SquadShooterAura.On" Send="Create"/>
@@ -3578,7 +3611,7 @@
         <On Terms="Behavior.CloakFieldEffect.Destroy; IsStatus CloakSound 0" Send="Create Worker_CloakFieldOff"/>
         <On Terms="Behavior.OracleCloakFieldEffect.Create; IsStatus CloakSound 0" Send="Create Worker_CloakFieldOn"/>
         <On Terms="Behavior.OracleCloakFieldEffect.Destroy; IsStatus CloakSound 0" Send="Create Worker_CloakFieldOff"/>
-        <On Terms="UnitHeightUpdate.*.Land" Send="Create SquadSCV_Land"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create SquadSCVLand"/>
         <Model value="SCV_Remastered"/>
         <AnimBlendTime value="0.500000"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
