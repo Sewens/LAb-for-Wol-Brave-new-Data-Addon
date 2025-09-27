@@ -45,6 +45,23 @@
             <Chance value="1"/>
         </DamageResponse>
     </CBehaviorBuff>
+    <CBehaviorBuff id="HeroExcavatorRecycleStructureCauseDropPickup">
+        <InfoIcon value="Assets\Textures\btn-ability-stetmann-scrapdrop.dds"/>
+        <BehaviorCategories index="User9" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <BuffFlags index="RefreshStack" value="1"/>
+        <MaxStackCountPerCaster value="1"/>
+        <Modification>
+            <DeathResponse>
+                <Cost>
+                    <Cooldown Location="Behavior"/>
+                </Cost>
+            </DeathResponse>
+        </Modification>
+        <DamageResponse Handled="RecycleStructureDropPickup" Location="Attacker">
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
     <CBehaviorBuff id="SquadFirbatGiftFireOrbBurningGround">
         <Alignment value="Negative"/>
         <InfoIcon value="Assets\Textures\btn-tips-walloffire.dds"/>
@@ -151,6 +168,13 @@
                 <KindArray index="NoProc" value="0.05"/>
             </VitalDamageGainArray>
         </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadSuperStimpack">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-stimpack.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="15"/>
+        <Modification MoveSpeedMultiplier="1.5" AttackSpeedMultiplier="1.5"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="VampireOrb">
         <InfoIcon value="Assets\Textures\btn-vampire-orb.dds"/>
@@ -875,14 +899,6 @@
             <Chance value="1"/>
         </DamageResponse>
     </CBehaviorBuff>
-    <CBehaviorBuff id="SquadInfantrySuperStimpack">
-        <Alignment value="Positive"/>
-        <InfoIcon value="Assets\Textures\btn-upgrade-terran-superstimppack.dds"/>
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <RemoveValidatorArray value="SourceIsNotHellion"/>
-        <Duration value="15"/>
-        <Modification MoveSpeedMultiplier="1.5" AttackSpeedMultiplier="1.5"/>
-    </CBehaviorBuff>
     <CBehaviorBuff id="SquadSupplydrop">
         <Alignment value="Positive"/>
         <InfoIcon value="Assets\Textures\BTN-Building-Terran-SupplyDepot.dds"/>
@@ -998,7 +1014,7 @@
             <AbilLinkDisableArray value="AddSpectreToSquad"/>
         </Modification>
     </CBehaviorBuff>
-    <CBehaviorBuff id="DisableMagazine">
+    <CBehaviorBuff id="DisableMagazineAbilities">
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <Modification>
             <AbilLinkDisableArray value="SquadInfantry"/>
@@ -1137,7 +1153,7 @@
         </Modification>
         <MaxStackCountPerCaster value="1"/>
     </CBehaviorBuff>
-    <CBehaviorBuff id="InfantryReduceRadius">
+    <CBehaviorBuff id="InfantryBasicStatesModifies">
         <BehaviorFlags index="Permanent" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <BuffFlags index="Countdown" value="0"/>
@@ -1149,9 +1165,12 @@
         <Player Value="Origin"/>
         <AcquirePlayer Value="Origin"/>
         <Modification RadiusMultiplier="0.5">
+            <StateFlags index="HideWaypoints" value="1"/>
+            <StateFlags index="SuppressFidgeting" value="1"/>
             <StateFlags index="SuppressFoodUsed" value="1"/>
             <StateFlags index="SuppressArmySelect" value="1"/>
             <StateFlags index="Uncommandable" value="1"/>
+            <StateFlags index="Untargetable" value="1"/>
             <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
             <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
             <VitalMaxIncreaseAffectsCurrentArray index="Energy" value="0"/>
@@ -1165,7 +1184,7 @@
         <KillCredit Value="Caster"/>
         <RevealUnit Value="Caster"/>
     </CBehaviorBuff>
-    <CBehaviorBuff id="SquadInfantryStimpack">
+    <CBehaviorBuff id="SquadStimpack">
         <Alignment value="Positive"/>
         <InfoIcon value="Assets\Textures\btn-ability-terran-stimpack.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -1331,12 +1350,11 @@
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <BuffFlags index="RefreshStack" value="1"/>
         <MaxStackCount value="8"/>
-        <MaxStackCountPerCaster value="1"/>
         <Modification>
-            <DamageDealtFraction index="Spell" value="1.05"/>
-            <DamageDealtFraction index="Ranged" value="1.05"/>
-            <DamageDealtFraction index="Splash" value="1.05"/>
-            <DamageDealtFraction index="NoProc" value="1.05"/>
+            <DamageDealtFraction index="Spell" value="0.1"/>
+            <DamageDealtFraction index="Ranged" value="0.1"/>
+            <DamageDealtFraction index="Splash" value="0.1"/>
+            <DamageDealtFraction index="NoProc" value="0.1"/>
         </Modification>
     </CBehaviorBuff>
     <!--Add 10% heal effect, 25% melee damage increase.-->

@@ -99,6 +99,10 @@
         <Model value="HighTemplarPsiStormModel"/>
         <Scale value="1.300000"/>
     </CActorModel>
+    <CActorSound id="SquadStimpack" parent="SoundOneShot">
+        <On Terms="Behavior.SquadStimpack.On" Send="Create"/>
+        <Sound value="Marine_Stimpack"/>
+    </CActorSound>
     <CActorSound id="SquadFirbatGiftFireOrbBurningGroundImpactSound" parent="SoundOneShot">
         <On Terms="Behavior.SquadFirbatGiftFireOrbBurningGround.On" Send="Create"/>
         <Sound value="Terran_FlameLoopLarge"/>
@@ -125,6 +129,11 @@
         <AutoScaleFactor value="1.000000"/>
         <ModelFlags index="AllowHitTest" value="0"/>
     </CActorModel>
+    <CActorSound id="SquadMuleGatherMinerals2" parent="SoundContinuous">
+        <On Terms="Abil.SquadExcavatorGather.Start" Send="Create"/>
+        <On Terms="Abil.SquadExcavatorGather.Stop" Send="Destroy"/>
+        <Sound value="Mule_GatherMinerals"/>
+    </CActorSound>
     <CActorModel id="SquadPredatorVampireLeach" parent="ModelAnimationStyleOneShot">
         <On Terms="ActionDamage; ValidateUnit HasVampireOrb" Send="Create"/>
         <Host Subject="_Selectable"/>
@@ -533,6 +542,31 @@
         <ImpactMap index="None" Model="VultureSpiderMineAttackImpact" Sound="VultureSpiderMineAttackImpact"/>
         <ShieldFlashType value="Header"/>
     </CActorAction>
+    <CActorSound id="SquadSuperStimpack" parent="SoundOneShot">
+        <On Terms="Behavior.SquadSuperStimpack.On" Send="Create"/>
+        <Sound value="Marine_Stimpack"/>
+    </CActorSound>
+    <CActorModel id="SquadSuperStimpackEndImpact" parent="ModelAnimationStyleOneShot">
+        <Inherits index="CloakEffect" value="1"/>
+        <On Terms="Behavior.SquadSuperStimpack.Off; ValidateUnit NotDead" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Model value="SuperStimpackNovaEndImpact"/>
+    </CActorModel>
+    <CActorModel id="SquadStimpackStartImpact" parent="ModelAnimationStyleOneShot">
+        <Inherits index="CloakEffect" value="1"/>
+        <On Terms="Behavior.SquadStimpack.On" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Model value="StimpackStartImpact"/>
+    </CActorModel>
+    <CActorModel id="SquadSuperStimpackStartImpact" parent="ModelAnimationStyleOneShot">
+        <Inherits index="CloakEffect" value="1"/>
+        <On Terms="Behavior.SquadSuperStimpack.On" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Model value="SuperStimpackNovaStartImpact"/>
+    </CActorModel>
     <CActorSound id="TerranPowerDownLarge" parent="SoundOneShot">
         <On Terms="BehaviorLevel.PowerUserQueue.Start; Level 0; ValidateUnit NotDeadOrConstruction" Send="Create"/>
         <Sound value="Protoss_PowerDownLarge"/>
@@ -2495,7 +2529,7 @@
     <CActorUnit id="SquadFirebat" parent="GenericUnitStandard" unitName="SquadFirebat">
         <Aliases value="_UnitMedium"/>
         <Macros value="UnloadDropAnim"/>
-        <On Terms="Abil.attack.ReadyStop" Target="FirebatAttackModel" Send="SetOpacity 0.000000 0.250000"/>
+        <On Terms="Abil.attack.ReadyStop" Target="FirebatAttackModel" Send="SetOpacity 0.000000 0.050000"/>
         <On Terms="UnitDeathCustomize; ValidateUnit HaveVoidShade" Send="DeathCustomize Shadow"/>
         <On Terms="UnitDeathCustomize; ValidateUnit HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
         <Model value="DevilDog"/>
@@ -2807,6 +2841,7 @@
         <Sound value="Ghost_Death"/>
     </CActorSound>
     <CActorModel id="SquadFirebatImpactModelFlames" parent="ModelAnimationStyleOneShot">
+        <Model value="ImpactModelFlames"/>
         <Terms value="Cap 1"/>
         <On Terms="Effect.SquadFirebatFlameThrowerDamage.Start; At Target" Send="Create"/>
         <On Terms="Effect.VolatileDeathDamage.Start; At Target" Send="Create"/>
@@ -2969,7 +3004,9 @@
             <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleSmall"/>
         </TerrainSquibs>
         <WalkAnimMoveSpeed value="2.25"/>
+        <!--
         <AbilSoundArray AbilCmd="SquadStimpack,255" Sound="Marine_StimPackVO"/>
+-->
         <BarOffset value="40"/>
         <BarWidth value="36"/>
         <GlossaryAnim value="Spell"/>
@@ -3689,11 +3726,10 @@
     </CActorSplat>
     <CActorModel id="SquadStimpackEndImpact" parent="ModelAnimationStyleOneShot">
         <Inherits index="CloakEffect" value="1"/>
-        <On Terms="Behavior.SquadInfantryStimpack.Off; ValidateUnit NotDead" Send="Create"/>
-        <On Terms="Behavior.StimpackMarauder.Off; ValidateUnit NotDead" Send="Create"/>
+        <On Terms="Behavior.SquadStimpack.Off; ValidateUnit NotDead" Send="Create"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachOverhead"/>
-        <Model value="StimpackEndImpact2"/>
+        <Model value="StimpackEndImpact"/>
     </CActorModel>
     <CActorModel id="CaptainBuffIndicator" parent="ModelAddition">
         <On Terms="Behavior.InfantryEnlargeRadius.Enable" Send="Create"/>
@@ -3785,13 +3821,6 @@
         <StatusBarFlags index="Duration" value="0"/>
         <UnitIcon value="Assets\Textures\btn-tips-scrap.dds"/>
     </CActorUnit>
-    <CActorModel id="SquadSuperStimpackEndImpact" parent="ModelAnimationStyleOneShot">
-        <Inherits index="CloakEffect" value="1"/>
-        <On Terms="Behavior.SquadInfantrySuperStimpack.Off; ValidateUnit NotDead" Send="Create"/>
-        <Host Subject="_Selectable"/>
-        <HostSiteOps Ops="SOpAttachOverhead"/>
-        <Model value="SuperStimpackEndImpact"/>
-    </CActorModel>
     <CActorModel id="SquadSupplyDropModel">
         <Aliases value="_SnapshotExtra"/>
         <Inherits index="CastShadows" value="1"/>

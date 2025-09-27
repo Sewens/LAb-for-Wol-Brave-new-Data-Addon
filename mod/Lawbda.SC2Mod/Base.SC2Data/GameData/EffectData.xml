@@ -19,6 +19,14 @@
         <EditorCategories value="Race:Terran"/>
         <Cost Abil="SquadInfantry,Ammo4" ChargeCountUse="-1"/>
     </CEffectModifyUnit>
+    <CEffectEnumMagazine id="CaptainStimpackRedirector">
+        <EditorCategories value="Race:Terran"/>
+        <EffectExternal value="SquadStimpack"/>
+    </CEffectEnumMagazine>
+    <CEffectEnumMagazine id="CaptainSuperStimpackRedirector">
+        <EditorCategories value="Race:Terran"/>
+        <EffectExternal value="SquadStimpack"/>
+    </CEffectEnumMagazine>
     <CEffectRemoveBehavior id="OrbOrbRemove">
         <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="CasterOuter"/>
@@ -35,6 +43,12 @@
         <EditorCategories value="Race:Commoner"/>
         <Behavior value="OrbOrb"/>
     </CEffectApplyBehavior>
+    <CEffectSwitch id="HeroExcavatorRecycleDropPickupSwitch">
+        <ValidatorArray value="IsStructure"/>
+        <EditorCategories value="Race:Terran"/>
+        <CaseArray Validator="StructureLifeBelow400" Effect="RecycleonKillMediumDropPickup"/>
+        <CaseArray Effect="RecycleonKillLargeDropPickup"/>
+    </CEffectSwitch>
     <CEffectRemoveBehavior id="SoulOrbRemove">
         <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="CasterOuter"/>
@@ -115,6 +129,25 @@
         <EditorCategories value="Race:Terran"/>
         <Behavior value="FrostOrb"/>
     </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadSuperStimpack">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="SquadStimpackWrapper">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadStimpack"/>
+        <EffectArray value="CaptainStimpackRedirector"/>
+    </CEffectSet>
+    <CEffectModifyUnit id="SquadSuperStimpackMU">
+        <EditorCategories value="Race:Terran"/>
+        <VitalArray index="Life">
+            <Change value="50"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectSet id="SquadSuperStimpackWrapper">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadSuperStimpack"/>
+        <EffectArray value="CaptainSuperStimpackRedirector"/>
+    </CEffectSet>
     <CEffectRemoveBehavior id="VampireOrbRemove">
         <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="CasterOuter"/>
@@ -1580,10 +1613,11 @@
     </CEffectDamage>
     <CEffectApplyBehavior id="DisableMagazine">
         <EditorCategories value="Race:Terran"/>
+        <Behavior value="DisableMagazineAbilities"/>
     </CEffectApplyBehavior>
     <CEffectSet id="Disband">
         <EditorCategories value="Race:Terran"/>
-        <EffectArray value="IterMagazine"/>
+        <EffectArray value="DisbandMagazineIterator"/>
         <EffectArray value="JoinAbilityDisableRemove"/>
         <EffectArray value="MagazineTrackerAllStackRemove"/>
         <EffectArray value="RemoveBasicModification"/>
@@ -1635,12 +1669,12 @@
     </CEffectSet>
     <CEffectRemoveBehavior id="EnableMagazine">
         <EditorCategories value="Race:Terran"/>
-        <BehaviorLink value="DisableMagazine"/>
+        <BehaviorLink value="DisableMagazineAbilities"/>
     </CEffectRemoveBehavior>
     <CEffectApplyBehavior id="EnableNoCollision">
         <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
-        <Behavior value="InfantryReduceRadius"/>
+        <Behavior value="InfantryBasicStatesModifies"/>
     </CEffectApplyBehavior>
     <CEffectApplyBehavior id="DisableJoinAbilityApply">
         <ValidatorArray index="0" removed="1"/>
@@ -1656,7 +1690,7 @@
     <CEffectRemoveBehavior id="DisableNoCollision">
         <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
-        <BehaviorLink value="InfantryReduceRadius"/>
+        <BehaviorLink value="InfantryBasicStatesModifies"/>
     </CEffectRemoveBehavior>
     <CEffectCreatePersistent id="SquadFirebatFlameThrowerPersistent">
         <EditorCategories value="Race:Terran"/>
@@ -1705,7 +1739,7 @@
         <EditorCategories value="Race:Terran"/>
         <Amount value="2"/>
     </CEffectDamage>
-    <CEffectEnumMagazine id="IterMagazine">
+    <CEffectEnumMagazine id="DisbandMagazineIterator">
         <EditorCategories value="Race:Terran"/>
         <EffectExternal value="ReleaseMagazinePack"/>
     </CEffectEnumMagazine>
@@ -1804,23 +1838,6 @@
         <Flags index="Kill" value="1"/>
         <Death value="Remove"/>
     </CEffectDamage>
-    <CEffectApplyBehavior id="SquadSuperStimpack">
-        <EditorCategories value="Race:Terran"/>
-        <WhichUnit Value="Source"/>
-        <Behavior value="SuperStim3"/>
-    </CEffectApplyBehavior>
-    <CEffectSet id="SquadSuperStimpackSet">
-        <EditorCategories value="Race:Terran"/>
-        <EffectArray value="SquadSuperStimpack"/>
-        <EffectArray value="SquadSuperStimpackSetMU"/>
-    </CEffectSet>
-    <CEffectModifyUnit id="SquadSuperStimpackSetMU">
-        <EditorCategories value="Race:Terran"/>
-        <ImpactUnit Value="Source"/>
-        <VitalArray index="Life">
-            <Change value="60"/>
-        </VitalArray>
-    </CEffectModifyUnit>
     <CEffectApplyBehavior id="SquadSupplyDropApplyBehavior">
         <EditorCategories value="Race:Terran"/>
         <Behavior value="SquadSupplydrop"/>
@@ -2122,7 +2139,7 @@
     </CEffectSet>
     <CEffectDamage id="SquadPredatorRetributionFieldDamage">
         <EditorCategories value="Race:Terran"/>
-        <Amount value="20"/>
+        <Amount value="5"/>
     </CEffectDamage>
     <CEffectEnumArea id="SquadPredatorRetributionFieldSearch">
         <EditorCategories value="Race:Terran"/>
@@ -2155,9 +2172,8 @@
         <Kind value="Ranged"/>
         <Amount value="15"/>
     </CEffectDamage>
-    <CEffectApplyBehavior id="SquadStimPack">
+    <CEffectApplyBehavior id="SquadStimpack">
         <EditorCategories value="Race:Terran"/>
-        <Behavior value="SquadInfantryStimpack"/>
     </CEffectApplyBehavior>
     <CEffectSet id="AddMarineChain">
         <ValidatorArray value="IsMagazineFull"/>

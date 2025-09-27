@@ -138,6 +138,30 @@
         <SmartValidatorArray value="IsZerg"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="MindControl"/>
     </CAbilEffectTarget>
+    <CAbilHarvest id="SquadExcavatorGather">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Gather" DefaultButtonFace="GatherMULE"/>
+        <FlagArray index="BypassResourceQueue" value="1"/>
+        <Range value="1"/>
+        <ReservedMarker Link="Abil/SquadExcavatorGather"/>
+        <ResourceAllowed index="Vespene" value="0"/>
+        <ResourceAllowed index="Terrazine" value="0"/>
+        <ResourceAllowed index="Custom" value="0"/>
+        <ResourceAmountRequest index="Minerals" value="100"/>
+    </CAbilHarvest>
+    <CAbilEffectInstant id="SquadSuperStimpack">
+        <AbilSetId value="Stimpack"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoTooltipPriority value="1"/>
+        <Effect index="0" value="SquadSuperStimpackWrapper"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="20"/>
+        </Cost>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadStimpack">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
     <CAbilEffectTarget id="SuadFeedback">
         <Alignment value="Negative"/>
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
@@ -894,33 +918,6 @@
             <Button State="Restricted" Requirements="HaveCommandCenter"/>
         </InfoArray>
     </CAbilTrain>
-    <CAbilEffectInstant id="SquadSuperStimpack">
-        <AbilSetId value="SuperStimpack"/>
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <InfoTooltipPriority value="1"/>
-        <Effect index="0" value="SquadSuperStimpackSet"/>
-        <Flags index="AutoCast" value="1"/>
-        <Flags index="AutoCastOn" value="1"/>
-        <Flags index="RequireTargetVision" value="0"/>
-        <Flags index="Transient" value="1"/>
-        <Flags index="PassengerAcquirePassengers" value="1"/>
-        <Cost>
-            <Cooldown TimeUse="18"/>
-        </Cost>
-        <AutoCastRange value="5"/>
-        <AutoCastValidatorArray value="CasterIsFiringWeapon"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="SuperStimpackMarauder" Requirements="HaveSuperStimpackMarauder">
-            <Flags index="ToSelection" value="1"/>
-        </CmdButtonArray>
-    </CAbilEffectInstant>
-    <CAbilRedirectInstant id="SquadBunkerSuperStimpackMarauderRedirect">
-        <AbilSetId value="SuperStimpack"/>
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Abil value="SuperStimpackMarauder"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="SuperStimMarauderRedirect" Requirements="HaveSuperStimpackMarauder">
-            <Flags index="ToSelection" value="1"/>
-        </CmdButtonArray>
-    </CAbilRedirectInstant>
     <CAbilEffectTarget id="SquadSupplyDrop">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Effect index="0" value="SquadSupplyDropApplyTempBehavior"/>
@@ -1536,13 +1533,12 @@
         <AbilSetId value="Stimpack"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <InfoTooltipPriority value="1"/>
-        <Effect index="0" value="SquadStimPack"/>
+        <Effect index="0" value="SquadStimpackWrapper"/>
         <Flags index="Transient" value="1"/>
         <Cost>
             <Vital index="Life" value="10"/>
         </Cost>
-        <AINotifyEffect value="SquadStimPack"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="Stim" Requirements="UseStimpack">
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadStimpack">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectInstant>
