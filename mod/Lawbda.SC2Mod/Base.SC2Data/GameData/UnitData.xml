@@ -1,5 +1,194 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CUnit id="SquadSiegeTankSieged">
+        <Name value="Unit/Name/SiegeTank"/>
+        <DeathRevealRadius value="3"/>
+        <Facing value="45"/>
+        <Race value="Terr"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="AISplash" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Locust" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <LifeStart value="160"/>
+        <LifeMax value="160"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranVehiclePlating"/>
+        <Sight value="11"/>
+        <Food value="-3"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="150"/>
+        <CostResource index="Vespene" value="125"/>
+        <RepairTime value="45"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="50"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="SquadSiegeTankUnsiege"/>
+        <WeaponArray Link="SquadSiegeTankCrucioShockCannon" Turret="SiegeTankSieged"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="AttackBuilding" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons>
+                <Face value="ShapedBlast"/>
+                <Type value="Passive"/>
+                <AbilCmd value="255,255"/>
+                <Requirements value="UseShapedBlast"/>
+                <Row value="2"/>
+                <Column value="2"/>
+            </LayoutButtons>
+            <LayoutButtons>
+                <Face value="MaelstromRounds"/>
+                <Type value="Passive"/>
+                <AbilCmd value="255,255"/>
+                <Requirements value="UseMaelstromRounds"/>
+                <Row value="2"/>
+                <Column value="2"/>
+            </LayoutButtons>
+            <LayoutButtons>
+                <Face value="ShapedBlast"/>
+                <Type value="Passive"/>
+                <AbilCmd value="255,255"/>
+                <Requirements value="UseShapedBlast"/>
+                <Row value="2"/>
+                <Column value="3"/>
+            </LayoutButtons>
+            <LayoutButtons Face="SquadSiegeTankUnsiege" Type="AbilCmd" AbilCmd="SquadSiegeTankUnsiege,Execute" Row="2" Column="0"/>
+        </CardLayouts>
+        <Radius value="0.875"/>
+        <SeparationRadius value="1"/>
+        <InnerRadius value="0.875"/>
+        <Footprint value="FootprintSieged"/>
+        <ScoreKill value="275"/>
+        <SubgroupPriority value="13"/>
+        <MinimapRadius value="1"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
+        <TacticalAI value="SiegeTankSieged"/>
+        <AIEvalFactor value="1.5"/>
+        <LeaderAlias value="SiegeTank"/>
+        <HotkeyAlias value="SiegeTank"/>
+        <SelectAlias value="SiegeTank"/>
+        <SubgroupAlias value="SiegeTank"/>
+        <TechAliasArray value="Alias_SiegeTank"/>
+        <GlossaryCategory value="Unit/Category/TerranUnits"/>
+        <GlossaryPriority value="135"/>
+        <GlossaryStrongArray value="Marine"/>
+        <GlossaryStrongArray value="Hydralisk"/>
+        <GlossaryStrongArray value="Stalker"/>
+        <GlossaryWeakArray value="Banshee"/>
+        <GlossaryWeakArray value="Mutalisk"/>
+        <GlossaryWeakArray value="Immortal"/>
+        <HotkeyCategory value="Unit/Category/TerranUnits"/>
+    </CUnit>
+    <CUnit id="SquadSiegeTank">
+        <DeathRevealRadius value="3"/>
+        <Race value="Terr"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TurnBeforeMove" value="1"/>
+        <FlagArray index="AIPressForwardDisabled" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Locust" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <LifeStart value="160"/>
+        <LifeMax value="160"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranVehiclePlating"/>
+        <Speed value="2.25"/>
+        <Acceleration value="1000"/>
+        <LateralAcceleration value="64"/>
+        <TurningRate value="360"/>
+        <Sight value="11"/>
+        <Food value="-3"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="150"/>
+        <CostResource index="Vespene" value="125"/>
+        <RepairTime value="45"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="50"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="SquadSiegeMode"/>
+        <WeaponArray Link="SquadSiegeTank90mmCannons" Turret="SquadSiegeTankTurret"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="SquadSiegeTankSiegeMode" Type="AbilCmd" AbilCmd="SquadSiegeMode,Execute" Row="2" Column="0"/>
+            <LayoutButtons>
+                <Face value="MaelstromRounds"/>
+                <Type value="Passive"/>
+                <AbilCmd value="255,255"/>
+                <Requirements value="UseMaelstromRoundsReq"/>
+                <Row value="2"/>
+                <Column value="2"/>
+            </LayoutButtons>
+            <LayoutButtons>
+                <Face value="ShapedBlast"/>
+                <Type value="Passive"/>
+                <AbilCmd value="255,255"/>
+                <Requirements value="UseShapedBlastReq"/>
+                <Row value="2"/>
+                <Column value="3"/>
+            </LayoutButtons>
+        </CardLayouts>
+        <Radius value="0.875"/>
+        <SeparationRadius value="1"/>
+        <InnerRadius value="0.875"/>
+        <CargoSize value="4"/>
+        <ScoreMake value="275"/>
+        <ScoreKill value="275"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="13"/>
+        <MinimapRadius value="1"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
+        <TacticalAI value="SiegeTank"/>
+        <AIEvalFactor value="1.5"/>
+        <TechAliasArray value="Alias_SiegeTank"/>
+        <GlossaryCategory value="Unit/Category/TerranUnits"/>
+        <GlossaryPriority value="130"/>
+        <GlossaryStrongArray value="Marine"/>
+        <GlossaryStrongArray value="Hydralisk"/>
+        <GlossaryStrongArray value="Stalker"/>
+        <GlossaryStrongArray value="Hydralisk"/>
+        <GlossaryStrongArray value="Stalker"/>
+        <GlossaryStrongArray value="Marine"/>
+        <GlossaryWeakArray value="Banshee"/>
+        <GlossaryWeakArray value="Mutalisk"/>
+        <GlossaryWeakArray value="Immortal"/>
+        <GlossaryWeakArray value="Immortal"/>
+        <GlossaryWeakArray value="Diamondback"/>
+        <HotkeyCategory value="Unit/Category/TerranUnits"/>
+        <Fidget>
+            <ChanceArray index="Anim" value="33"/>
+            <ChanceArray index="Idle" value="33"/>
+            <ChanceArray index="Turn" value="33"/>
+        </Fidget>
+    </CUnit>
     <CUnit id="SquadHellion">
         <DeathRevealRadius value="3"/>
         <Race value="Terr"/>
@@ -35,14 +224,19 @@
         <AbilArray Link="stop"/>
         <AbilArray Link="attack"/>
         <AbilArray Link="move"/>
+        <AbilArray Link="SquadHellionTransport"/>
+        <AbilArray Link="SquadAttackRedirect"/>
         <WeaponArray Link="SquadHellionHellfireFlamethrower" Turret="SquadHellion"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
             <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="SquadAttackRedirect" Type="AbilCmd" AbilCmd="SquadAttackRedirect,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
             <LayoutButtons Face="InfernalPreIgniter" Type="Passive" Requirements="UseInfernalPreIgniter" Row="2" Column="0"/>
+            <LayoutButtons Face="SquadHellionLoad" Type="AbilCmd" AbilCmd="SquadHellionTransport,Load" Row="1" Column="0"/>
+            <LayoutButtons Face="SquadHellionUnloadAll" Type="AbilCmd" AbilCmd="SquadHellionTransport,UnloadAll" Row="1" Column="1"/>
         </CardLayouts>
         <Radius value="0.625"/>
         <SeparationRadius value="0.625"/>
@@ -1320,7 +1514,7 @@
         <AbilArray Link="SquadBunkerSalvageBunkerRefund"/>
         <AbilArray Link="StopRedirect"/>
         <AbilArray Link="AttackRedirect"/>
-        <AbilArray Link="SquadBunkerHealRedirect"/>
+        <AbilArray Link="SquadHealRedirect"/>
         <AbilArray Link="SquadBunkerAttack"/>
         <AbilArray Link="SquadBunkerStop"/>
         <AbilArray Link="SquadBunkerLoadUnload"/>
@@ -2258,7 +2452,7 @@
         </CardLayouts>
         <Radius value="0.5625"/>
         <InnerRadius value="0.375"/>
-        <CargoSize value="2"/>
+        <CargoSize value="1"/>
         <ScoreMake value="125"/>
         <ScoreKill value="125"/>
         <ScoreResult value="BuildOrder"/>
@@ -2453,7 +2647,7 @@
         <GlossaryWeakArray value="Thor"/>
         <HotkeyCategory value="Unit/Category/TerranStory"/>
     </CUnit>
-    <CUnit id="HerculesDropCallDownTest">
+    <CUnit id="SquadHercules">
         <DeathRevealRadius value="3"/>
         <Race value="Terr"/>
         <Mob value="Campaign"/>
@@ -2487,17 +2681,21 @@
         <AbilArray Link="move"/>
         <AbilArray Link="SquadHerculesTransport"/>
         <AbilArray Link="TerranInstantJustice"/>
+        <AbilArray Link="SquadAttackRedirect"/>
+        <AbilArray Link="SquadRepairRedirect"/>
         <BehaviorArray Link="ScavengingSystemsMechDeath2"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
             <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
-            <LayoutButtons Face="HerculesLoad" Type="AbilCmd" AbilCmd="SquadHerculesTransport,Load" Row="2" Column="0"/>
-            <LayoutButtons Face="HerculesUnloadAll" Type="AbilCmd" AbilCmd="SquadHerculesTransport,UnloadAt" Row="2" Column="1"/>
+            <LayoutButtons Face="SquadHellionLoad" Type="AbilCmd" AbilCmd="SquadHerculesTransport,Load" Row="2" Column="0"/>
+            <LayoutButtons Face="SquadHellionUnloadAll" Type="AbilCmd" AbilCmd="SquadHerculesTransport,UnloadAt" Row="2" Column="1"/>
+            <LayoutButtons Face="SquadAttackRedirect" Type="AbilCmd" AbilCmd="SquadAttackRedirect,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="AcquireMove" Type="AbilCmd" AbilCmd="move,AcquireMove" Row="0" Column="4"/>
             <LayoutButtons Face="RapidDeployment" Type="Passive" Row="1" Column="0"/>
             <LayoutButtons Face="TerranInstantJustis" Type="AbilCmd" AbilCmd="TerranInstantJustice,Execute" Row="2" Column="2"/>
+            <LayoutButtons Face="SquadRepair" Type="AbilCmd" AbilCmd="SquadRepairRedirect,Execute" Row="1" Column="2"/>
         </CardLayouts>
         <Radius value="1.5"/>
         <SeparationRadius value="1.5"/>
@@ -2588,7 +2786,7 @@
         <Collide index="Small" value="1"/>
         <DefaultAcquireLevel value="Defensive"/>
         <Response value="Flee"/>
-        <Attributes index="Light" value="1"/>
+        <Attributes index="Biological" value="1"/>
         <Attributes index="Mechanical" value="1"/>
         <LifeStart value="160"/>
         <LifeMax value="160"/>
@@ -2714,7 +2912,7 @@
         </CardLayouts>
         <Radius value="0.375"/>
         <SeparationRadius value="0.375"/>
-        <CargoSize value="2"/>
+        <CargoSize value="1"/>
         <ScoreMake value="500"/>
         <ScoreKill value="1000"/>
         <SubgroupPriority value="25"/>
@@ -2969,7 +3167,7 @@
             <LayoutButtons Face="SquadPredator" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo9" Row="1" Column="3"/>
         </CardLayouts>
         <InnerRadius value="0.4375"/>
-        <CargoSize value="2"/>
+        <CargoSize value="1"/>
         <ScoreMake value="150"/>
         <ScoreKill value="225"/>
         <SubgroupPriority value="5"/>
@@ -3318,7 +3516,7 @@
             <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="SquadTerranBuild,Halt" Row="2" Column="4"/>
             <LayoutButtons Face="Enband" Type="AbilCmd" AbilCmd="AddSCVToSquad,Execute" Row="1" Column="4"/>
             <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="3"/>
-            <LayoutButtons Face="Repair" Type="AbilCmd" AbilCmd="SquadSCVRepair,255" Row="2" Column="3"/>
+            <LayoutButtons Face="Repair" Type="AbilCmd" AbilCmd="SquadSCVRepair,Execute" Row="2" Column="3"/>
             <LayoutButtons Face="BuildDefenceStructure" Type="Submenu" SubmenuCardId="TBl3" Row="2" Column="1"/>
         </CardLayouts>
         <CardLayouts CardId="TBl1">

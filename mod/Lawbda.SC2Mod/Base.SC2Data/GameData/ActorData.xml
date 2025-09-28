@@ -68,6 +68,278 @@
         <Icon value="Assets\Textures\RadarIcon2.dds"/>
         <IconArcLength value="3.250000"/>
     </CActorRange>
+    <CActorUnit id="SquadSiegeTankSiegeModeMorphModel" parent="GenericUnitBaseMorphTransition" unitName="SquadSiegeTankSiegeModeMorphModel">
+        <Aliases value="_UnitLarge"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create SiegeTank_Land"/>
+        <On Terms="AbilMorph.*.Start; MorphTo SquadSiegeTankSieged" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo SquadSiegeTankSieged" Send="AnimPlay Start Morph,Start"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom SquadSiegeTankSieged" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom SquadSiegeTank" Send="Destroy"/>
+        <Model value="SiegeTank_Commando_Morph"/>
+        <DeathArray index="Normal" ModelLink="TerranLargeUnitDeath" SoundLink="SiegeTank_Explode"/>
+        <PortraitModel value="SiegeTank_Commando_Portrait"/>
+        <BarOffset value="65"/>
+        <BarWidth value="102"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-siegetank-mercenary-siegemode.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-siegetanksiegemode.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <NameOffset value="50"/>
+        <SoundArray index="Ready" value="SiegeTank_Ready"/>
+        <SoundArray index="Help" value="SiegeTank_Help"/>
+        <SoundArray index="What" value="SiegeTank_What"/>
+        <SoundArray index="Yes" value="SiegeTank_Yes"/>
+        <SoundArray index="Attack" value="SiegeTank_Attack"/>
+        <SoundArray index="Pissed" value="SiegeTank_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-siegetanksiegemode.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-siegetank-mercenary-siegemode.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorUnit id="SquadSiegeTankSieged" parent="GenericUnitMorph" unitName="SquadSiegeTankSieged">
+        <Aliases value="_UnitLarge"/>
+        <Model value="SiegeTank_Commando_Sieged"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <DeathArray index="Normal" ModelLink="SiegeTank_Commando_Sieged_Death" SoundLink="SiegeTank_Explode"/>
+        <PortraitModel value="SiegeTank_Commando_Collection_Portrait"/>
+        <BarOffset value="65"/>
+        <BarWidth value="102"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-siegetank-mercenary-siegemode.dds"/>
+        </GroupIcon>
+        <GroupSoundArray index="What" value="SiegeTankSiegedGroupWhat"/>
+        <GroupSoundArray index="Yes" value="SiegeTankSiegedGroupYes"/>
+        <GroupSoundArray index="Attack" value="SiegeTankSiegedGroupAttack"/>
+        <GroupSoundArray index="Board" value="SiegeTankSiegedGroupBoard"/>
+        <HeroIcon value="Assets\Textures\BTN-Unit-Terran-SiegeTankMercenary-Sieged.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <NameOffset value="50"/>
+        <SoundArray index="Birth" value="SiegeTankSiegedBirth"/>
+        <SoundArray index="Ready" value="SiegeTank_Ready"/>
+        <SoundArray index="Help" value="SiegeTank_Help"/>
+        <SoundArray index="What" value="SiegeTank_What"/>
+        <SoundArray index="Yes" value="SiegeTank_Yes"/>
+        <SoundArray index="Attack" value="SiegeTank_Attack"/>
+        <SoundArray index="Pissed" value="SiegeTank_Pissed"/>
+        <SoundArray index="Movement" value="SiegeTankSiegedMovement"/>
+        <SoundArray index="Turning" value="SiegeTankSiegedTurning"/>
+        <SoundArray index="Board" value="SiegeTankSiegedBoard"/>
+        <SoundArray index="Click" value="SiegeTankSiegedClick"/>
+        <SoundArray index="ClickError" value="SiegeTankSiegedClickError"/>
+        <SoundArray index="Highlight" value="SiegeTankSiegedHighlight"/>
+        <UnitIcon value="Assets\Textures\BTN-Unit-Terran-SiegeTankMercenary-Sieged.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-siegetank-mercenary-siegemode.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorTurret id="SquadSiegeTankTurret">
+        <On Terms="TurretEnable.SquadSiegeTankTurret" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom SquadSiegeTank" Send="Destroy"/>
+    </CActorTurret>
+    <CActorModel id="SquadSiegeTankDropModel" parent="MercDropModelBase">
+        <On Terms="ActorCreation" Send="SetScale 1.500000,1.500000,1.000000"/>
+    </CActorModel>
+    <CActorSound id="SquadSiegeTankLand" parent="SoundOneShot">
+        <Sound value="SiegeTank_Land"/>
+    </CActorSound>
+    <CActorAction id="SquadSiegeTankArcliteShockCannonAttack" parent="GenericAttack" effectAttack="SquadSiegeTankArcliteShockCannonBlast">
+        <On Terms="Effect.SquadSiegeTankArcliteShockCannonFriendlyDamage.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.SquadSiegeTankArcliteShockCannonFriendlyDamage.Start; At Caster" Send="Create"/>
+        <LaunchAssets Model="SiegeBreakerSiegedAttackLaunch" Sound="SiegeTank_SiegedAttackLaunch"/>
+        <ImpactSiteOps Ops="SOpActionCenter SOpTargetUnitZ" HoldPosition="1"/>
+        <ImpactMap index="None" Model="SiegeBreakerSiegedAttackImpact" Sound="SiegeTank_SiegedAttackImpact"/>
+        <ImpactPhysics Name="Explosion" MatchKeys="Basic" Physics="SiegeTankSiegedForce"/>
+        <DamageSiteOps Ops="SOpAttachHarness"/>
+        <DamageMap index="None" Model="SiegeBreakerSiegedAttackDamage"/>
+        <ShieldFlashType value="Full"/>
+    </CActorAction>
+    <CActorModel id="SquadSiegeTankAttackDamageModel" parent="ModelAnimationStyleOneShotNoOrphan">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <Supporter Subject="_Selectable"/>
+        <On Terms="SupporterDestruction" Send="AnimBracketStop BSD"/>
+        <Model value="GenericAttackModel"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorAction id="SquadSiegeTankSiegedAttack" parent="GenericAttack" effectAttack="SquadSiegeTankCrucioShockCannonBlast">
+        <On Terms="Effect.SquadSiegeTankArcliteShockCannonFriendlyDamage.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.SquadSiegeTankArcliteShockCannonEnemyDamage.Start; At Caster" Send="Create"/>
+        <LaunchAssets Model="SiegeBreakerSiegedAttackLaunch" Sound="SiegeTank_SiegedAttackLaunch"/>
+        <ImpactSiteOps Ops="SOpActionCenter SOpTargetUnitZ" HoldPosition="1"/>
+        <ImpactMap index="None" Model="SiegeBreakerSiegedAttackImpact" Sound="SiegeTank_SiegedAttackImpact"/>
+        <ImpactPhysics Name="Explosion" MatchKeys="Basic" Physics="SiegeTankSiegedForce"/>
+        <DamageSiteOps Ops="SOpAttachHarness"/>
+        <DamageMap index="None" Model="SiegeBreakerSiegedAttackDamage"/>
+        <DamageModel value="SquadSiegeTankAttackDamageModel"/>
+        <ShieldFlashType value="Full"/>
+    </CActorAction>
+    <CActorAction id="SquadSiegeTankSiegedAttackDirected" parent="GenericAttack" effectAttack="SquadSiegeTankCrucioShockCannonDirected">
+        <LaunchAssets Model="SiegeBreakerSiegedAttackDirectedLaunch" Sound="SiegeTank_SiegedAttackLaunch"/>
+        <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeStandard SOpForwardLaunchGuide"/>
+        <ImpactMap index="None" Model="SiegeBreakerSiegedAttackDirectedImpact" Sound="SiegeTank_SiegedAttackImpact"/>
+        <ImpactPhysics Name="Explosion" MatchKeys="Basic" Physics="SiegeTankSiegedForce"/>
+        <DamageMap index="None" Model="SiegeBreakerSiegedAttackDamage"/>
+        <DamageModel value="SquadSiegeTankAttackDamageModel"/>
+        <ShieldFlashType value="Header"/>
+    </CActorAction>
+    <CActorRange id="SquadSiegeTankSiegedRange">
+        <On Terms="SelectionLocalUpdate.SquadSiegeTankSieged.Start" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.SquadSiegeTankSieged.StartEditorGround" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.SquadSiegeTankSieged.StartEditorFlyer" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.SquadSiegeTankSieged.Stop" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Start; MorphTo SquadSiegeTankSieged; Selected" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo SquadSiegeTank" Send="Destroy"/>
+        <Weapon value="SquadSiegeTankCrucioShockCannon"/>
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.000000"/>
+    </CActorRange>
+    <CActorTurret id="SquadSiegeTankSiegedTurret">
+        <On Terms="TurretEnable.SquadSiegeTankSieged" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom SquadSiegeTankSieged" Send="Destroy"/>
+    </CActorTurret>
+    <CActorUnit id="SquadSiegeTank" parent="GenericUnitMorph" unitName="SquadSiegeTank">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="UnloadDropAnim"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <Macros value="PhysicsDeathsSwarmGround"/>
+        <Macros value="PhysicsDeathsVoidGround"/>
+        <Inherits index="ModelMaterials" value="1"/>
+        <AcceptedTransfers index="ModelMaterials" value="1"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create SquadSiegeTankLand"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit HaveVoidShade" Send="DeathCustomize Shadow"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
+        <Model value="SiegeTank_Commando"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <CreepHeightClass value="Tiny"/>
+        <BuildModel value="SiegeTank_Commando"/>
+        <DeathArray index="Normal" ModelLink="SiegeTank_Commando_Death" SoundLink="SiegeTank_Explode"/>
+        <DeathCustoms ModelLink="TerranLargeUnitDeathLow" Name="AntiGravTerran"/>
+        <DeathCustoms ActorModel="SiegeTankDeathRagdoll" ModelLink="SiegeTankDeathRagdoll" Name="RagdollBasic">
+            <BodySquibs Name="Basic" Model="TerranSquibDeathRagdoll"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollSiegeTank" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollBaneling" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollUltraUnburrow" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms>
+            <ModelLink value="DeathVoidShadowMedium"/>
+            <SoundLink value="ShadowUnit_DeathFX"/>
+            <VoiceLink value="ShadowUnit_DeathVox"/>
+            <Name value="Shadow"/>
+        </DeathCustoms>
+        <DeathCustomData Name="RagdollBasic"/>
+        <DeathActorModel value="UnitDeathModelWithDeathMotionGround"/>
+        <PlacementModel value="SiegeTank_Commando"/>
+        <PortraitModel value="SiegeTank_Commando_Portrait"/>
+        <StandAnimTurnTime value="3.33"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="1.000000"/>
+            <RangeDown value="1.000000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleSiegeTank"/>
+        </TerrainSquibs>
+        <WalkAnimMoveSpeed value="1"/>
+        <AbilSoundArray AbilCmd="SquadSiegeMode,Execute" Sound="SiegeTank_MorphToSiege"/>
+        <BarOffset value="80"/>
+        <BarWidth value="102"/>
+        <ErrorArray Error="CantSeeBuildLocation" Sound="UI_GenericError" GroupSound="UI_GenericError"/>
+        <ErrorArray Error="CantSeeLandLocation" Sound="UI_GenericError" GroupSound="UI_GenericError"/>
+        <ErrorArray Error="CantBuildLocationInvalid" Sound="UI_GenericError" GroupSound="UI_GenericError"/>
+        <ErrorArray Error="CantLandLocationInvalid" Sound="UI_GenericError" GroupSound="UI_GenericError"/>
+        <ErrorArray Error="CouldntReachTarget" Sound="UI_GenericError" GroupSound="UI_GenericError"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-SiegeTank-TankMode.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-siegetank.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <SoundArray index="Ready" value="SiegeTank_Ready"/>
+        <SoundArray index="Help" value="SiegeTank_Help"/>
+        <SoundArray index="What" value="SiegeTank_What"/>
+        <SoundArray index="Yes" value="SiegeTank_Yes"/>
+        <SoundArray index="Attack" value="SiegeTank_Attack"/>
+        <SoundArray index="Pissed" value="SiegeTank_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-siegetank.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-SiegeTank-TankMode.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="SquadSiegeTankAttack" parent="GenericAttack" effectAttack="SquadSiegeTankArcliteCannon">
+        <LaunchAttachQuery Methods="AMPatternRollingStripe"/>
+        <LaunchAssets Model="SiegeTankAttackLaunch" Sound="SiegeTank_AttackLaunch"/>
+        <ImpactMap index="None" Model="SiegeTankAttackImpact" Sound="SiegeTank_AttackImpact"/>
+        <ImpactPhysics Name="90mmCannonImpact" MatchKeys="Basic" Physics="SiegeTankAttackForce"/>
+    </CActorAction>
+    <CActorSiteOpForward id="SquadHellionPassengerRepaireSiteOpForward">
+        <HostForward Subject="SquadRepairBeam" Actor="Find"/>
+        <Invert value="1"/>
+    </CActorSiteOpForward>
+    <CActorBeamSimple id="SquadRepairBeam" parent="BeamSimpleAnimationStyleContinuous">
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.SquadRepair.TargetStart" Send="Create"/>
+        <On Terms="Effect.SquadRepair.TargetStop" Send="Destroy"/>
+        <HostForProps Subject="_Unit" Scope="Caster" Actor="Find"/>
+        <Model value="NanoRepairBeam"/>
+        <HostLaunch Subject="_Unit" Scope="Caster" Actor="Find"/>
+        <HostLaunchSiteOps Ops="SOpAttachTarget"/>
+        <HostImpact Subject="_Unit" Scope="Target" Actor="Find"/>
+        <HostImpactSiteOps Ops="SOpAttachCenter"/>
+    </CActorBeamSimple>
+    <CActorModel id="SquadRepairModel" parent="ModelAnimationStyleContinuous">
+        <On Terms="ActorCreation" Send="$Birth PlayForever"/>
+        <On Terms="Effect.SquadRepair.TargetStart; At Target" Send="Create"/>
+        <On Terms="Effect.SquadRepair.TargetStop; At Target" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Model value="NanoRepairBeamImpact"/>
+    </CActorModel>
+    <CActorSound id="SquadRepairSound" parent="SoundContinuous">
+        <On Terms="Effect.SquadRepair.TargetStart; At Target" Send="Create"/>
+        <On Terms="Effect.SquadRepair.TargetStop; At Target" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="Create SquadRepairSoundStart"/>
+        <On Terms="ActorDestruction" Send="Create SquadRepairSoundStop"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Sound value="Medivac_HealLoop"/>
+    </CActorSound>
+    <CActorSound id="SquadRepairSoundStart" parent="SoundOneShot">
+        <Sound value="Medivac_HealStart"/>
+    </CActorSound>
+    <CActorSound id="SquadRepairSoundStop" parent="SoundOneShot">
+        <Sound value="Medivac_HealEnd"/>
+    </CActorSound>
+    <CActorSound id="SquadHellionTransportLoadSound" parent="SoundOneShot">
+        <On Terms="AbilTransport.SquadHellionTransport.TransportLoad" Send="Create"/>
+        <On Terms="AbilTransport.BunkerTransport.TransportLoad" Send="Create"/>
+        <On Terms="AbilTransport.CommandCenterTransport.TransportLoad" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+        <Sound value="Medivac_Load"/>
+    </CActorSound>
+    <CActorSound id="SquadHellionTransportUnloadSound" parent="SoundOneShot">
+        <On Terms="AbilTransport.SquadHellionTransport.TransportUnload" Send="Create"/>
+        <On Terms="AbilTransport.BunkerTransport.TransportUnload" Send="Create"/>
+        <On Terms="AbilTransport.CommandCenterTransport.TransportUnload" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+        <Sound value="Medivac_Unload"/>
+    </CActorSound>
     <CActorSound id="SquadHellionLand" parent="SoundOneShot">
         <Sound value="Hellion_Land"/>
     </CActorSound>
@@ -368,7 +640,7 @@
         <Host Subject="_Selectable"/>
         <Sound value="Obelisk_ArgusLinkLaunch"/>
     </CActorSound>
-    <CActorRange id="SquadFeedbackRange" parent="RangeAbil" abil="SuadFeedback">
+    <CActorRange id="SquadFeedbackRange" parent="RangeAbil" abil="SquadFeedback">
         <Icon value="Assets\Textures\RadarIcon2.dds"/>
         <IconArcLength value="3.250000"/>
     </CActorRange>
@@ -711,6 +983,45 @@
         <HostSiteOps Ops="SOpAttachOverhead"/>
         <Model value="SuperStimpackNovaStartImpact"/>
     </CActorModel>
+    <CActorUnit id="SquadSiegeTankTankModeMorphModel" parent="GenericUnitBaseMorphTransition" unitName="SquadSiegeTankTankModeMorphModel">
+        <Aliases value="_UnitLarge"/>
+        <Inherits index="ModelMaterials" value="1"/>
+        <AcceptedTransfers index="ModelMaterials" value="1"/>
+        <On Terms="AbilMorph.*.Start; MorphTo SquadSiegeTank" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo SquadSiegeTank" Send="AnimPlay End Morph,End"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom SquadSiegeTank" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom SquadSiegeTankSieged" Send="Destroy"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create SquadSiegeTankLand"/>
+        <On Terms="ActorCreation; CreepEngulfs" Send="CreepEngulfmentStopTransition"/>
+        <Model value="SiegeTank_Commando_Morph"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <CreepHeightClass value="Tiny"/>
+        <CreepRateGrow value="Grow"/>
+        <CreepRateShrink value="Shrink"/>
+        <DeathArray index="Normal" ModelLink="TerranLargeUnitDeath" SoundLink="SiegeTank_Explode"/>
+        <DeathCustoms ModelLink="TerranLargeUnitDeathLow" Name="AntiGravTerran"/>
+        <PortraitModel value="SiegeTank_Commando_Portrait"/>
+        <AbilSoundArray AbilCmd="SquadSiegeMode,Execute" Sound="SiegeTank_SiegeModeVO"/>
+        <BarOffset value="80"/>
+        <BarWidth value="102"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-SiegeTank-TankMode.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-siegetank.dds"/>
+        <HighlightTooltip value="Unit/Name/SiegeTank"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <SoundArray index="Ready" value="SiegeTank_Ready"/>
+        <SoundArray index="Help" value="SiegeTank_Help"/>
+        <SoundArray index="What" value="SiegeTank_What"/>
+        <SoundArray index="Yes" value="SiegeTank_Yes"/>
+        <SoundArray index="Attack" value="SiegeTank_Attack"/>
+        <SoundArray index="Pissed" value="SiegeTank_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-siegetank.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-SiegeTank-TankMode.dds"/>
+        </Wireframe>
+        <EventDataFootprint index="0" removed="1"/>
+    </CActorUnit>
     <CActorSound id="TerranPowerDownLarge" parent="SoundOneShot">
         <On Terms="BehaviorLevel.PowerUserQueue.Start; Level 0; ValidateUnit NotDeadOrConstruction" Send="Create"/>
         <Sound value="Protoss_PowerDownLarge"/>
@@ -2480,9 +2791,9 @@
     <CActorSplat id="SquadGhostAcademySplat" parent="GenericUnitSplat" unitName="SquadGhostAcademy">
         <Model value="GhostAcademySplat"/>
     </CActorSplat>
-    <CActorUnit id="SquadHercules" parent="GenericUnitStandard" unitName="HerculesDropCallDownTest">
+    <CActorUnit id="SquadHercules" parent="GenericUnitStandard" unitName="SquadHercules">
         <Aliases value="_UnitHuge"/>
-        <On Terms="UnitBirth.HerculesDropCallDownTest" Send="AnimGroupApply Fly Fly,Start Fly,End Instant"/>
+        <On Terms="UnitBirth.SquadHercules" Send="AnimGroupApply Fly Fly,Start Fly,End Instant"/>
         <Model value="Hercules"/>
         <ProximityPosition value="CenterActor"/>
         <BuildModel value="Hercules"/>
@@ -2501,7 +2812,6 @@
         <GroupSoundArray index="Attack" value="Hercules_Yes"/>
         <GroupSoundArray index="Board" value="MedivacGroupBoard"/>
         <HeroIcon value="Assets\Textures\btn-unit-terran-hercules.dds"/>
-        <HighlightTooltip value="Unit/Name/SquadHercules"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
         <NameOffset value="50"/>
         <SoundArray index="Ready" value="Hercules_Ready"/>
@@ -3570,7 +3880,7 @@
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachCenter"/>
     </CActorModel>
-    <CActorUnit id="SquadSCVJumper" parent="GenericUnitStandard" unitName="SquadSCV">
+    <CActorUnit id="SquadSCVJumper" parent="GenericUnitMorph" unitName="SquadSCV">
         <Aliases value="_UnitSmall"/>
         <Macros value="CarryAnim"/>
         <Macros value="UnloadDropAnim"/>
@@ -3670,9 +3980,6 @@
     <CActorSound id="SquadSCVGatherSound" parent="SoundOneShot">
         <Sound value="SCV_Mine"/>
     </CActorSound>
-    <CActorSound id="SquadSCVRepairSound" parent="SoundOneShot">
-        <Sound value="SCV_Repair"/>
-    </CActorSound>
     <CActorSound id="SquadSCVLand" parent="SoundOneShot">
         <Sound value="SCV_Land"/>
     </CActorSound>
@@ -3680,7 +3987,7 @@
         <On Terms="WeaponStart.SCVFusionCutter" Send="Create"/>
         <Sound value="SCV_AttackLaunch"/>
     </CActorSound>
-    <CActorUnit id="SquadSCV" parent="GenericUnitStandard" unitName="SquadSCV">
+    <CActorUnit id="SquadSCV" parent="GenericUnitMorph" unitName="SquadSCV">
         <Aliases value="_UnitSmall"/>
         <Macros value="CarryAnim"/>
         <Macros value="UnloadDropAnim"/>
@@ -3698,7 +4005,6 @@
         <On Terms="Abil.SquadSCVRepair" Send="AnimClear SquadSCVRepair"/>
         <On Terms="AnimDone.*.Complete; AnimName Repair" Send="TimerSet 0.000000,0.300000 SquadSCVRepair"/>
         <On Terms="TimerExpired; TimerName SquadSCVRepair" Send="AnimPlay Repair Work NonLooping"/>
-        <On Terms="TimerExpired; TimerName SquadSCVRepair" Send="Create SquadSCVRepairSound"/>
         <On Terms="Abil.*.WorkerStart" Send="TimerSet 0.000000,0.300000 Build"/>
         <On Terms="Abil.*.WorkerStop" Send="TimerKill Build"/>
         <On Terms="Abil.*.WorkerStop" Send="AnimClear Build"/>
@@ -4652,4 +4958,18 @@
     <CActorMissile id="SquadVultureAttackMissile" parent="GenericAttackMissile" unitName="SquadVultureWeapon">
         <Model value="VultureWeapon"/>
     </CActorMissile>
+    <CActorModel id="SquadHellionUnloadFX">
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="ActorCreation" Send="$Stand,00"/>
+        <On Terms="AnimDone; AnimName Stand" Send="Destroy"/>
+        <On Terms="AbilTransport.SquadHellionTransport.CargoUnload" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter SOpShadow"/>
+        <Model value="UnloadFX"/>
+        <AutoScaleFactor value="1.000000"/>
+    </CActorModel>
 </Catalog>

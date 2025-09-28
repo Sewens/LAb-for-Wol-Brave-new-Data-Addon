@@ -130,6 +130,76 @@
         <AINotifyEffect value="GreenScannerSweep"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="ScannerSweepAlpha"/>
     </CAbilEffectTarget>
+    <CAbilMorph id="SquadSiegeMode">
+        <OrderArray index="0">
+            <DisplayType value="Confirm"/>
+            <Color value="255,0,255,0"/>
+            <Model value="Assets\UI\Cursors\WayPointAttack_Void\WayPointAttack_Void.m3"/>
+            <LineTexture value="Assets\Textures\WayPointLine.dds"/>
+        </OrderArray>
+        <AbilSetId value="SiegeMode"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SiegeMode">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Flags index="IgnoreCollision" value="0"/>
+        <Flags index="SuppressMovement" value="1"/>
+        <InfoArray Unit="SquadSiegeTankSieged" RandomDelayMax="0.5">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="0.5"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Delay" value="0.5"/>
+                <DurationArray index="Duration" value="3.5417"/>
+            </SectionArray>
+            <SectionArray index="Facing">
+                <DurationArray index="Duration" value="0.5"/>
+            </SectionArray>
+            <SectionArray index="Mover">
+                <DurationArray index="Delay" value="0.5"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="0.5"/>
+                <DurationArray index="Duration" value="3.5417"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilRedirectTarget id="SquadRepairRedirect">
+        <Abil value="SquadSCVRepair"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadRepair"/>
+    </CAbilRedirectTarget>
+    <CAbilTransport id="SquadHellionTransport">
+        <AbilSetId value="ULdM"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Load" DefaultButtonFace="SquadHellionLoad"/>
+        <CmdButtonArray index="UnloadAll" DefaultButtonFace="SquadHellionUnloadAll">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="UnloadUnit">
+            <Flags index="Hidden" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="LoadAll">
+            <Flags index="Hidden" value="1"/>
+        </CmdButtonArray>
+        <Flags index="CargoDeath" value="1"/>
+        <Flags index="ShowCargoSize" value="0"/>
+        <MaxCargoCount value="1"/>
+        <MaxCargoSize value="1"/>
+        <TotalCargoSpace value="1"/>
+        <UnloadPeriod value="1"/>
+        <TargetFilters value="Biological,Visible;Ally,Neutral,Enemy,Buried,UnderConstruction,Dead,Hidden"/>
+        <LoadCargoEffect value="PassengerAutoFireApply"/>
+        <UnloadCargoEffect value="PassengerAutoFireRemove"/>
+    </CAbilTransport>
+    <CAbilRedirectTarget id="SquadAttackRedirect">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Abil value="attack"/>
+        <Flags index="IncludeSelf" value="0"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadAttackRedirect">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilRedirectTarget>
     <CAbilEffectInstant id="SquadAfterburner">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Effect index="0" value="SquadScoutAfterburnerBoost"/>
@@ -180,7 +250,21 @@
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectInstant>
-    <CAbilEffectTarget id="SuadFeedback">
+    <CAbilRedirectInstant id="SquadStimpackRedirect">
+        <AbilSetId value="Stimpack"/>
+        <Abil value="Stimpack"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadStimpackRedirect" Requirements="UseStimpack">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilRedirectInstant>
+    <CAbilRedirectInstant id="SquadStopRedirect">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Abil value="stop"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadStopRedirect">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilRedirectInstant>
+    <CAbilEffectTarget id="SquadFeedback">
         <Alignment value="Negative"/>
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
         <DataCollection value="Feedback"/>
@@ -301,6 +385,7 @@
         <ConstructionMover value="Construction"/>
     </CAbilBuild>
     <CAbilStop id="SquadBunkerStop">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <CmdButtonArray index="Stop" DefaultButtonFace="StopBunker"/>
         <CmdButtonArray index="HoldFire" DefaultButtonFace="HoldFireSpecial"/>
         <CmdButtonArray index="Cheer" DefaultButtonFace=""/>
@@ -328,9 +413,12 @@
         <Flags index="AutoCastOffOwnerLeave" value="1"/>
         <Flags index="AutoCastOn" value="1"/>
         <Flags index="BestUnit" value="0"/>
+        <Flags index="RangeUseCasterRadius" value="0"/>
         <Flags index="ReExecutable" value="1"/>
         <Flags index="Smart" value="1"/>
+        <Flags index="PassengerAcquireExternal" value="1"/>
         <Flags index="PassengerAcquirePassengers" value="1"/>
+        <Flags index="PassengerAcquireTransport" value="1"/>
         <TargetFilters value="Mechanical,Visible;Self,Enemy,Missile,Stasis,UnderConstruction,Dead,Hidden"/>
         <RangeSlop value="0.2"/>
         <AutoCastAcquireLevel value="Defensive"/>
@@ -656,10 +744,6 @@
     <CAbilTrain id="SquadFactoryTrain">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <Activity value="UI/Building"/>
-        <InfoArray index="Train1">
-            <Charge Link="Abil/##id##"/>
-            <Cooldown Link="Abil/##id##"/>
-        </InfoArray>
         <InfoArray index="Train2" Time="45">
             <Button DefaultButtonFace="BuildSquadSiegeTank" State="Restricted" Requirements="HaveAttachedTechLab"/>
         </InfoArray>
@@ -1059,6 +1143,22 @@
         </Cost>
         <CmdButtonArray index="Execute" DefaultButtonFace="UltraliskWeaponCooldown"/>
     </CAbilEffectInstant>
+    <CAbilMorph id="SquadSiegeTankUnsiege">
+        <AbilSetId value="Unsieged"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Unsiege">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Flags index="IgnoreFacing" value="1"/>
+        <InfoArray Unit="SquadSiegeTank" RandomDelayMax="0.5">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="3.5417"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Duration" value="3.5417"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
     <CAbilEffectTarget id="VanillaScannerSweep">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Effect index="0" value="RedScannerSweep"/>
@@ -1230,8 +1330,8 @@
         <UnloadPeriod value="0.2"/>
         <CalldownEffect value="TerranInstantJustice"/>
         <DeathUnloadEffect value="RescuePodsSet"/>
-        <LoadCargoEffect value="PassengerAutoFire"/>
-        <UnloadCargoEffect value="RemoveBasicModification"/>
+        <LoadCargoEffect value="PassengerAutoFireApply"/>
+        <UnloadCargoEffect value="PassengerAutoFireRemove"/>
     </CAbilTransport>
     <CAbilArmMagazine id="NuclearWarheadVanilla">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
@@ -1509,18 +1609,20 @@
         <Alignment value="Positive"/>
         <AbilSetId value="Repair"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Effect index="0" value="SCVRepair"/>
+        <Effect index="0" value="SquadRepair"/>
         <Flags index="AutoCast" value="1"/>
         <Flags index="AutoCastOffOwnerLeave" value="1"/>
         <Flags index="AutoCastOn" value="1"/>
         <Flags index="BestUnit" value="0"/>
+        <Flags index="RangeUseCasterRadius" value="0"/>
         <Flags index="ReExecutable" value="1"/>
         <Flags index="Smart" value="1"/>
+        <Flags index="PassengerAcquireExternal" value="1"/>
         <Flags index="PassengerAcquirePassengers" value="1"/>
-        <TargetFilters value="Mechanical,Visible;Self,Enemy,Missile,Stasis,UnderConstruction,Dead,Hidden"/>
-        <RangeSlop value="0.2"/>
+        <Flags index="PassengerAcquireTransport" value="1"/>
+        <TargetFilters value="Visible;Enemy,Biological,Missile,Stasis,UnderConstruction,Dead,Hidden"/>
         <AutoCastAcquireLevel value="Defensive"/>
-        <AutoCastFilters value="Visible;Neutral,Enemy"/>
+        <AutoCastFilters value="-;Neutral,Enemy"/>
         <AutoCastRange value="7"/>
         <Marker>
             <MatchFlags index="Link" value="0"/>
@@ -1535,9 +1637,10 @@
         <InheritAttackPriorityArray index="Channel" value="1"/>
         <AINotifyEffect value="SCVRepair"/>
         <DefaultError value="RequiresRepairTarget"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="Repair">
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadRepair">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
+        <Range value="2"/>
     </CAbilEffectTarget>
     <CAbilEffectTarget id="AddSCVToSquad">
         <Alignment value="Positive"/>
@@ -1797,7 +1900,9 @@
             </SectionArray>
         </InfoArray>
     </CAbilMorph>
-    <CAbilRedirectTarget id="SquadBunkerHealRedirect"/>
+    <CAbilRedirectTarget id="SquadHealRedirect">
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadHealRedirect"/>
+    </CAbilRedirectTarget>
     <CAbilMorph id="DefenderCoreUnburrow">
         <AbilSetId value="BrwU"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
