@@ -1,5 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorBuff id="SquadMedivacHealBeamBusy">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <MaxStackCount value="3"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadAfterburnersActive">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-upgrade-terran-jotunboosters.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <Duration value="8"/>
+        <Modification MoveSpeedMultiplier="1.7" AccelerationBonus="500" DecelerationBonus="500"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadMedivacTargetBeingHealed">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="ScavengingSystemsMechDeath2">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Requirements value="ScavengingSystemsResearched"/>
+        <Modification>
+            <DeathResponse Chance="1" Effect="ScavengingSystemsSearchArea"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadDistortionBlasters">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Requirements value="DistortionBlastersResearched"/>
+        <DisableValidatorArray value="IsCloaked"/>
+        <Modification>
+            <DamageDealtFraction index="Ranged" value="0.25"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadWraithDisplacementField">
+        <Alignment value="Positive"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-cloak.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DamageResponse ModifyFraction="0" ModifyMinimumDamage="1">
+            <Chance value="0.75"/>
+        </DamageResponse>
+    </CBehaviorBuff>
     <CBehaviorBuff id="PassgenerAutoRepair">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Modification>
@@ -126,7 +170,7 @@
         <LandArrivalRange value="0.05"/>
         <LandCheckRadius value="5"/>
     </CBehaviorJump>
-    <CBehaviorBuff id="SquadScoutAfterburner">
+    <CBehaviorBuff id="ExcavatorAfterburner">
         <InfoIcon value="Assets\Textures\btn-upgrade-terran-jotunboosters.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <DisplayDuration index="Self" value="1"/>
@@ -261,6 +305,23 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Duration value="15"/>
         <Modification MoveSpeedMultiplier="1.5" AttackSpeedMultiplier="1.5"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadWraithPeriodCloak">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-ability-mengsk-medivac-permanentcloak.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Period value="5"/>
+        <PeriodicEffect value="SquadWraithUnstableCloakApply"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadWraithUnstableCloak">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-ability-mengsk-ghost-supercloak.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <MaxStackCountPerCaster value="1"/>
+        <Duration value="2.5"/>
+        <Modification>
+            <StateFlags index="Cloak" value="1"/>
+        </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="VampireOrb">
         <InfoIcon value="Assets\Textures\btn-vampire-orb.dds"/>

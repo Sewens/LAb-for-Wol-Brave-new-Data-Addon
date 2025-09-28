@@ -1,5 +1,268 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CEffectApplyBehavior id="ExcavatorAfterburnerSmashApplyDebuff">
+        <EditorCategories value=""/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="ExcavatorAfterburnerSmashDamage">
+        <EditorCategories value=""/>
+        <Amount value="45"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="ExcavatorAfterburnerSmashSearch">
+        <EditorCategories value=""/>
+        <SearchFilters value="Ground;Player,Ally,Neutral"/>
+        <AreaArray Radius="5" Effect="ExcavatorAfterburnerSmashSet"/>
+    </CEffectEnumArea>
+    <CEffectSet id="ExcavatorAfterburnerSmashSet">
+        <EditorCategories value=""/>
+        <EffectArray value="ExcavatorAfterburnerSmashApplyDebuff"/>
+        <EffectArray value="ExcavatorAfterburnerSmashDamage"/>
+    </CEffectSet>
+    <CEffectRemoveBehavior id="SquadMedivacHealRemoveTargetBehavior">
+        <EditorCategories value="Race:Terran"/>
+        <BehaviorLink value="MedivacTargetBeingHealed"/>
+    </CEffectRemoveBehavior>
+    <CEffectCreatePersistent id="SquadMedivacHealScanPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="CasterUnit"/>
+        <Flags index="Channeled" value="1"/>
+        <Flags index="PersistUntilDestroyed" value="1"/>
+        <FinalEffect value="SquadMedivacHealIssueStopOrder"/>
+        <PeriodicValidator value="HealScanPeriodicCombine"/>
+        <PeriodicEffectArray value="SquadMedivacHealSearch"/>
+        <PeriodicPeriodArray value="0.0625"/>
+    </CEffectCreatePersistent>
+    <CEffectCreateHealer id="SquadMedivacCreateHealer">
+        <ValidatorArray value="noMarkers"/>
+        <ValidatorArray value="NotWarpingIn"/>
+        <ValidatorArray value="HiddenCompareAB"/>
+        <ValidatorArray value="HiddenCompareBA"/>
+        <ValidatorArray value="NotSpineCrawlerUprooted"/>
+        <ValidatorArray value="NotSporeCrawlerUprooted"/>
+        <ValidatorArray value="NotVortexd"/>
+        <ValidatorArray value="NotUncommandable"/>
+        <ValidatorArray value="SourceNotHidden"/>
+        <ValidatorArray value="IsBiological"/>
+        <EditorCategories value="Race:Terran"/>
+        <DrainVital value="Energy"/>
+        <DrainVitalCostFactor value="0.33"/>
+        <RechargeVitalRate value="9"/>
+    </CEffectCreateHealer>
+    <CEffectSet id="SquadMedivacHealApplyBehaviorSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadMedivacHealApplyCasterBehavior"/>
+        <EffectArray value="SquadMedivacHealApplyTargetBehavior"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="SquadMedivacHealApplyCasterBehavior">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="SquadMedivacHealBeamBusy"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadMedivacHealApplyTargetBehavior">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadMedivacTargetBeingHealed"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="SquadMedivacHealInitialSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadMedivacHealTargetPersistent"/>
+        <EffectArray value="SquadMedivacHealScanPersistent"/>
+    </CEffectSet>
+    <CEffectSwitch id="SquadMedivacHealInitialSwitch">
+        <ValidatorArray value="NotMaxHP"/>
+        <ValidatorArray value="NotWarpingIn"/>
+        <ValidatorArray value="TargetNotBeingHealed"/>
+        <EditorCategories value="Race:Terran"/>
+        <CaseArray Validator="HealBeamAvailable" Effect="SquadMedivacHealInitialSet"/>
+        <CaseDefault value="SquadMedivacHealIssueOrderSet"/>
+    </CEffectSwitch>
+    <CEffectIssueOrder id="SquadMedivacHealIssueHealOrder">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Abil value="MedivacDoubleBeamHeal"/>
+        <Player Value="Caster"/>
+        <Target Value="TargetUnit"/>
+    </CEffectIssueOrder>
+    <CEffectCreatePersistent id="SquadMedivacHealIssueHealOrderDelay">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <InitialDelay value="0.125"/>
+        <InitialEffect value="SquadMedivacHealIssueHealOrder"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="SquadMedivacHealIssueOrderSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadMedivacHealIssueStopOrder"/>
+        <EffectArray value="SquadMedivacHealIssueHealOrderDelay"/>
+    </CEffectSet>
+    <CEffectIssueOrder id="SquadMedivacHealIssueStopOrder">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Abil value="stop"/>
+        <Player Value="Caster"/>
+    </CEffectIssueOrder>
+    <CEffectModifyUnit id="SquadMedivacHealModifyCasterEnergy">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchUnit Value="Caster"/>
+        <ImpactUnit Value="Caster"/>
+        <VitalArray index="Energy">
+            <Change value="-0.33"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectSet id="SquadMedivacHealModifySet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadMedivacHealModifyCasterEnergy"/>
+        <EffectArray value="SquadMedivacHealModifyTargetLife"/>
+    </CEffectSet>
+    <CEffectModifyUnit id="SquadMedivacHealModifyTargetLife">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchUnit Value="Caster"/>
+        <VitalArray index="Life">
+            <Change value="1"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectSet id="SquadMedivacHealRemoveBehaviorSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadMedivacHealRemoveCasterBehavior"/>
+        <EffectArray value="SquadMedivacHealRemoveTargetBehavior"/>
+    </CEffectSet>
+    <CEffectRemoveBehavior id="SquadMedivacHealRemoveCasterBehavior">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="MedivacHealBeamBusy"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectEnumArea id="SquadMedivacHealSearch">
+        <ValidatorArray value="HealBeamAvailable"/>
+        <ValidatorArray value="healCasterMinEnergy"/>
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="CasterUnit"/>
+        <SearchFilters value="Biological;Neutral,Enemy,Structure,Stasis,Dead,Hidden"/>
+        <TargetSorts>
+            <SortArray value="TSAlliancePassive"/>
+            <SortArray value="TSLife"/>
+            <SortArray value="TSDistance"/>
+        </TargetSorts>
+        <AreaArray MaxCount="1" Radius="4.5" Effect="SquadMedivacHealTargetPersistent"/>
+        <MaxCount value="1"/>
+    </CEffectEnumArea>
+    <CEffectCreatePersistent id="SquadMedivacHealTargetPersistent">
+        <ValidatorArray value="TargetNotBeingHealed"/>
+        <ValidatorArray value="NotWarpingIn"/>
+        <ValidatorArray value="NotMaxHP"/>
+        <ValidatorArray value="HealBeamAvailable"/>
+        <ValidatorArray value="noMarkers"/>
+        <EditorCategories value="Race:Terran"/>
+        <Marker Link="Abil/MedivacHeal">
+            <MatchFlags index="Link" value="1"/>
+        </Marker>
+        <WhichLocation Value="TargetUnit"/>
+        <Flags index="PersistUntilDestroyed" value="1"/>
+        <InitialEffect value="SquadMedivacHealApplyBehaviorSet"/>
+        <FinalEffect value="SquadMedivacHealRemoveBehaviorSet"/>
+        <PeriodicValidator value="HealPeriodicCombine"/>
+        <PeriodicEffectArray value="SquadMedivacHealModifySet"/>
+        <PeriodicPeriodArray value="0.111"/>
+    </CEffectCreatePersistent>
+    <CEffectApplyBehavior id="SquadMedivacSpeedBoost">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadAfterburnersActive"/>
+    </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="MengskBansheeCP2">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <ExpireDelay value="0.8"/>
+        <PeriodCount value="2"/>
+        <PeriodicEffectArray value="SquadBansheeLM"/>
+        <PeriodicEffectArray value="SquadBansheeLM"/>
+        <PeriodicPeriodArray value="0.15"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="SquadBansheeDamage">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <ArmorReduction value="1"/>
+        <Visibility value="Visible"/>
+        <Flags index="Notification" value="1"/>
+        <Kind value="Ranged"/>
+        <Amount value="16"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="OffsetByUnitRadius" value="1"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="SquadBansheeLM">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="SquadBansheeScreecherMissilesSet"/>
+        <AmmoUnit value="SquadBansheeWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="SquadBansheeScreecherMissilesCarpetBombDamage">
+        <ValidatorArray value="noMarkers"/>
+        <EditorCategories value="Race:Terran"/>
+        <ArmorReduction value="1"/>
+        <Visibility value="Visible"/>
+        <Kind value="Splash"/>
+        <Amount value="16"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="SquadBansheeScreecherMissilesCarpetBombSearchArea">
+        <ValidatorArray value="ClusterWarheadsPurchased"/>
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <SearchFilters value="Ground,Visible;Player,Ally,Neutral,Air,Missile,Stasis,Dead,Hidden,Invulnerable,Benign,Passive"/>
+        <AreaArray Radius="0.5" Effect="SquadBansheeScreecherMissilesCarpetBombDamage"/>
+        <SearchFlags index="ExtendByUnitRadius" value="1"/>
+    </CEffectEnumArea>
+    <CEffectCreatePersistent id="SquadBansheeScreecherMissilesCreateCarpetBombPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <OffsetVectorStartLocation Value="TargetPoint"/>
+        <OffsetVectorEndLocation Value="CasterPoint"/>
+        <PeriodCount value="4"/>
+        <PeriodicEffectArray value="SquadBansheeScreecherMissilesCarpetBombSearchArea"/>
+        <PeriodicOffsetArray value="0,0.5,0"/>
+        <PeriodicOffsetArray value="0,1,0"/>
+        <PeriodicOffsetArray value="0,1.5,0"/>
+        <PeriodicOffsetArray value="0,2,0"/>
+        <PeriodicPeriodArray value="0.125"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="SquadBansheeScreecherMissilesSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadBansheeDamage"/>
+        <EffectArray value="SquadBansheeScreecherMissilesCreateCarpetBombPersistent"/>
+    </CEffectSet>
+    <CEffectDamage id="SquadWraithADamage" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Terran"/>
+        <AttributeBonus index="Armored" value="5"/>
+        <Visibility value="Visible"/>
+        <Amount value="10"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="SquadWraithALeftLaunchMissile">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="SquadWraithADamage"/>
+        <AmmoUnit value="SquadWraithAirWeaponLeft"/>
+    </CEffectLaunchMissile>
+    <CEffectCreatePersistent id="SquadWraithAPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnitOrPoint"/>
+        <Flags index="Channeled" value="1"/>
+        <PeriodCount value="2"/>
+        <PeriodicEffectArray value="SquadWraithALeftLaunchMissile"/>
+        <PeriodicEffectArray value="SquadWraithARightLaunchMissile"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectLaunchMissile id="SquadWraithARightLaunchMissile">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="SquadWraithADamage"/>
+        <AmmoUnit value="SquadWraithAirWeaponRight"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="SquadWraithGDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Visibility value="Visible"/>
+        <Kind value="Ranged"/>
+        <Amount value="10"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="SquadWraithGLaunchMissile">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="SquadWraithGDamage"/>
+        <AmmoUnit value="SquadWraithGroundWeapon"/>
+    </CEffectLaunchMissile>
     <CEffectDamage id="SquadSiegeTankArcliteShockCannonEnemyDamage" parent="DU_WEAP">
         <ValidatorArray value="TargetRadiusSmall"/>
         <ValidatorArray value="HasShapedBlast"/>
@@ -251,7 +514,7 @@
     </CEffectApplyBehavior>
     <CEffectApplyBehavior id="SquadScoutAfterburnerBoost">
         <EditorCategories value="Race:Terran"/>
-        <Behavior value="SquadScoutAfterburner"/>
+        <Behavior value="ExcavatorAfterburner"/>
     </CEffectApplyBehavior>
     <CEffectEnumArea id="SquadShooterAuraSearch">
         <SearchFilters value="-;Enemy,Air,Structure,Worker,Missile,Dead,AirUnit"/>
@@ -360,6 +623,10 @@
         <EffectArray value="SquadSuperStimpack"/>
         <EffectArray value="CaptainSuperStimpackRedirector"/>
     </CEffectSet>
+    <CEffectApplyBehavior id="SquadWraithUnstableCloakApply">
+        <EditorCategories value=""/>
+        <Behavior value="SquadWraithUnstableCloak"/>
+    </CEffectApplyBehavior>
     <CEffectRemoveBehavior id="VampireOrbRemove">
         <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="CasterOuter"/>

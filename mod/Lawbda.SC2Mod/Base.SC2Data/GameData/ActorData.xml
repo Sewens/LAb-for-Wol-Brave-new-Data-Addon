@@ -68,6 +68,286 @@
         <Icon value="Assets\Textures\RadarIcon2.dds"/>
         <IconArcLength value="3.250000"/>
     </CActorRange>
+    <CActorUnit id="SquadMedivac" parent="GenericUnitStandard" unitName="SquadMedivac">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="MedivacTransportAnim"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <Macros value="PhysicsDeathsSwarmAir"/>
+        <Macros value="PhysicsDeathsVoidAir"/>
+        <On Terms="Abil.MedivacHeal.SourceChannelStart" Send="$Spell PlayForever"/>
+        <On Terms="Abil.MedivacHeal.SourceChannelStop" Send="AnimClear Spell"/>
+        <On Terms="AbilTransport.MedivacTransport.TransportLoad; AbilTransport Thor" Send="Create ThorTransit"/>
+        <On Terms="Signal.*.ThorTransit" Send="RefSetFromMsg ::actor.Thor ::Sender"/>
+        <On Terms="AbilTransport.MedivacTransport.PassengerKilled; AbilTransport Thor" Target="::actor.Thor" Send="Signal Dead"/>
+        <On Terms="UnitDeath" Target="::actor.Thor" Send="Signal Dead"/>
+        <On Terms="ActorCreation; ValidateUnit MedivacUpgrade" Send="ModelSwap MedivacUpgrade"/>
+        <On Terms="Abil.MedivacDoubleBeamHeal.SourceChannelStart" Send="$Spell PlayForever"/>
+        <On Terms="Abil.MedivacDoubleBeamHeal.SourceChannelStop" Send="AnimClear Spell"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create Medivac_Land"/>
+        <On Terms="Behavior.MedivacSpeedBoost.On" Send="AnimPlay Turbo Spell,B"/>
+        <On Terms="Behavior.MedivacSpeedBoost.On" Send="StatusSet Turbo 1"/>
+        <On Terms="Behavior.MedivacSpeedBoost.Off" Send="StatusSet Turbo 0"/>
+        <On Terms="UnitMovementUpdate.*.Walk; IsStatus Turbo 1" Send="Create Medivac_MovementAfterburner"/>
+        <On Terms="AbilTransport.MedivacTransport.TransportLoad; AbilTransport ThorAP" Send="Create ThorTransit"/>
+        <On Terms="AbilTransport.MedivacTransport.PassengerKilled; AbilTransport ThorAP" Target="::actor.Thor" Send="Signal Dead"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit HaveVoidShade" Send="DeathCustomize Shadow"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
+        <On Terms="ActorCreation; ValidateUnit MedivacUpgrade" Send="ModelSwap MedivacUpgrade"/>
+        <On Terms="Abil.MedivacDoubleBeamHeal.SourceChannelStart" Send="$Spell PlayForever"/>
+        <On Terms="Abil.MedivacDoubleBeamHeal.SourceChannelStop" Send="AnimClear Spell"/>
+        <HostSiteOps Ops="SOpBankerMedivac"/>
+        <Model value="Medivac"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <Baselines index="Walk" BlendIn="1.500000" BlendOut="2.000000"/>
+        <BuildModel value="Medivac"/>
+        <DeathArray index="Normal" ModelLink="MedivacDeath" SoundLink="Medivac_Explode"/>
+        <DeathCustoms>
+            <ActorModel value="MedivacDeathRagdoll"/>
+            <ModelLink value="MedivacDeathRagdoll"/>
+            <Name value="RagdollBasic"/>
+            <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+            <BodySquibs Name="Basic" Model="TerranSquibDeathRagdoll"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms>
+            <ModelLink value="DeathVoidShadowMedium"/>
+            <SoundLink value="ShadowUnit_DeathFX"/>
+            <VoiceLink value="ShadowUnit_DeathVox"/>
+            <Name value="Shadow"/>
+        </DeathCustoms>
+        <DeathActorModel value="UnitDeathModelWithDeathMotionFlier"/>
+        <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+        <PlacementModel value="Medivac"/>
+        <PortraitModel value="MedivacPortrait"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.250000,0.500000"/>
+            <RangeDown value="5.000000"/>
+            <RangeDownFade value="1.000000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleMassive15"/>
+        </TerrainSquibs>
+        <AbilSoundArray AbilCmd="SquadMedivacHeal,Execute" Sound="Medivac_HealVO"/>
+        <AbilSoundArray AbilCmd="SquadMedivacCargo,Load" Sound="Medivac_LoadVO"/>
+        <AbilSoundArray AbilCmd="SquadMedivacCargo,UnloadAt" Sound="Medivac_UnloadVO"/>
+        <BarOffset value="50"/>
+        <BarWidth value="80"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Medivac.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-medivac.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
+        <NameOffset value="50"/>
+        <SoundArray index="Ready" value="Medivac_Ready"/>
+        <SoundArray index="Help" value="Medivac_Help"/>
+        <SoundArray index="What" value="Medivac_What"/>
+        <SoundArray index="Yes" value="Medivac_Yes"/>
+        <SoundArray index="Attack" value="Medivac_Attack"/>
+        <SoundArray index="Pissed" value="Medivac_Pissed"/>
+        <SoundArray index="Movement" value="Medivac_Movement"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-medivac.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Medivac.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorSite id="SquadMedivacDoubleHealBeamImpactSite" parent="SiteCenter">
+        <On Terms="Effect.SquadMedivacHealTargetPersistent.Start; At Target" Send="Create"/>
+        <On Terms="Effect.SquadMedivacHealTargetPersistent.Stop" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="RefSetFromRequest ::scope.MedivacHealLaunch MedivacDoubleHealBeamLaunchSite Caster Find"/>
+        <On Terms="ActorCreation" Send="Create MedivacDoubleHealBeam"/>
+    </CActorSite>
+    <CActorModel id="SquadMedivacDoubleHealModel">
+        <On Terms="ActorCreation" Send="$Birth PlayForever"/>
+        <On Terms="Effect.SquadMedivacHealTargetPersistent.Start; At Target" Send="Create"/>
+        <On Terms="Effect.SquadMedivacHealTargetPersistent.Stop" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Model value="MedicHealModel"/>
+    </CActorModel>
+    <CActorSound id="SquadMedivacDoubleHealSound" parent="SoundContinuous">
+        <On Terms="Effect.SquadMedivacHealTargetPersistent.Start; At Target" Send="Create"/>
+        <On Terms="ActorCreation" Send="Create MedivacHealSoundStart"/>
+        <On Terms="ActorDestruction" Send="Create MedivacHealSoundStop"/>
+        <On Terms="Effect.SquadMedivacHealTargetPersistent.Stop" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Sound value="Medivac_HealLoop"/>
+    </CActorSound>
+    <CActorBeamSimple id="SquadMedivacHealBeamRev1" parent="BeamSimpleAnimationStyleContinuous">
+        <Inherits index="Visibility" value="1"/>
+        <Supporter Subject="_Unit" Scope="Caster" Actor="Find"/>
+        <On Terms="Effect.SquadMedivacCreateHealer.TargetStart" Send="Create"/>
+        <On Terms="Effect.SquadMedivacCreateHealer.TargetStop" Send="Destroy"/>
+        <HostForProps Subject="_Unit" Scope="Caster" Actor="Find"/>
+        <Host Subject="_Unit" Scope="Caster" Actor="Find"/>
+        <Model value="MedivacHealBeam"/>
+        <HostLaunch Subject="_Unit" Scope="Caster" Actor="Find"/>
+        <HostLaunchSiteOps Ops="SOpAttachCenter"/>
+        <HostImpact Subject="_Unit" Scope="Target" Actor="Find"/>
+        <HostImpactSiteOps Ops="SOpAttachCenter"/>
+    </CActorBeamSimple>
+    <CActorModel id="SquadMedivacHealModelRev1" parent="ModelAnimationStyleContinuous">
+        <On Terms="ActorCreation" Send="$Birth PlayForever"/>
+        <On Terms="Effect.SquadMedivacCreateHealer.TargetStart; At Target" Send="Create"/>
+        <On Terms="Effect.SquadMedivacCreateHealer.TargetStop; At Target" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Model value="MedicHealModel"/>
+    </CActorModel>
+    <CActorSound id="SquadMedivacHealSoundRev1" parent="SoundContinuous">
+        <On Terms="Effect.SquadMedivacCreateHealer.TargetStart; At Target" Send="Create"/>
+        <On Terms="Effect.SquadMedivacCreateHealer.TargetStop; At Target" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="Create MedivacHealSoundStart"/>
+        <On Terms="ActorDestruction" Send="Create MedivacHealSoundStop"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Sound value="Medivac_HealLoop"/>
+    </CActorSound>
+    <CActorSound id="SquadMedivacIgniteAfterburners2" parent="SoundOneShot">
+        <On Terms="Behavior.SquadAfterburnersActive.On" Send="Create"/>
+        <Sound value="Medivac_IgniteAfterburners2"/>
+    </CActorSound>
+    <CActorSound id="SquadMedivacIgniteAfterburners" parent="SoundOneShot">
+        <On Terms="Behavior.SquadAfterburnersActive.On" Send="Create"/>
+        <Sound value="Medivac_IgniteAfterburners"/>
+    </CActorSound>
+    <CActorUnit id="SquadBanshee" parent="GenericUnitStandard" unitName="SquadBanshee">
+        <Aliases value="_UnitLarge"/>
+        <On Terms="Behavior.MercAirDropB.Create" Send="Create MengskBansheeReentry"/>
+        <HostSiteOps Ops="SOpBanker"/>
+        <Model value="Banshee_CovertsOps_Collection"/>
+        <Baselines index="Walk" BlendIn="1.500000" BlendOut="2.000000"/>
+        <BuildModel value="Banshee_CovertsOps_Collection"/>
+        <DeathArray index="Normal" ModelLink="Banshee_CovertsOps_Collection_Death" SoundLink="Banshee_Explode"/>
+        <PlacementModel value="Banshee_CovertsOps_Collection"/>
+        <PortraitModel value="Banshee_CovertOps_Portrait"/>
+        <BarOffset value="60"/>
+        <BarWidth value="90"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-banshee-mercenary.dds"/>
+        </GroupIcon>
+        <DeathCustoms ModelLink="Banshee_CovertOps_DeathRagdoll" Name="RagdollBasic"/>
+        <GroupSoundArray index="What" value="BansheeGroupWhat"/>
+        <GroupSoundArray index="Yes" value="BansheeGroupYes"/>
+        <GroupSoundArray index="Attack" value="BansheeGroupAttack"/>
+        <GroupSoundArray index="Board" value="BansheeGroupBoard"/>
+        <HeroIcon value="Assets\Textures\BTN-Unit-Terran-BansheeMercenary.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
+        <NameOffset value="60"/>
+        <SoundArray index="Birth" value="BansheeBirth"/>
+        <SoundArray index="Ready" value="Banshee_Ready"/>
+        <SoundArray index="Help" value="Banshee_Help"/>
+        <SoundArray index="What" value="Banshee_What"/>
+        <SoundArray index="Yes" value="Banshee_Yes"/>
+        <SoundArray index="Attack" value="Banshee_Attack"/>
+        <SoundArray index="Pissed" value="Banshee_Pissed"/>
+        <SoundArray index="Movement" value="Banshee_Movement"/>
+        <SoundArray index="Turning" value="BansheeTurning"/>
+        <SoundArray index="Board" value="BansheeBoard"/>
+        <SoundArray index="Click" value="BansheeClick"/>
+        <SoundArray index="ClickError" value="BansheeClickError"/>
+        <SoundArray index="Highlight" value="BansheeHighlight"/>
+        <UnitIcon value="Assets\Textures\BTN-Unit-Terran-BansheeMercenary.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-banshee-mercenary.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="SquadBansheeAttack" parent="GenericAttack" effectImpact="SquadBansheeDamage" effectLaunch="SquadBansheeLM">
+        <LaunchAttachQuery Methods="AMPatternMengskBanshee"/>
+        <LaunchAssets Sound="Banshee_AttackLaunch2"/>
+        <ImpactMap index="None" Model="BansheeAttackImpact" Sound="Banshee_AttackImpact2"/>
+        <ImpactPhysics Name="BacklashRocketsImpact" MatchKeys="Basic" Physics="BansheeAttackForce"/>
+    </CActorAction>
+    <CActorMissile id="SquadBansheeAttackMissile" parent="GenericAttackMissile" unitName="SquadBansheeWeapon">
+        <Model value="MengskBansheeWeapon"/>
+    </CActorMissile>
+    <CActorModel id="SquadBansheeCarpetBombModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.SquadBansheeScreecherMissilesCarpetBombSearchArea.Start" Send="Create"/>
+        <Model value="BansheeCarpetBombImpact"/>
+    </CActorModel>
+    <CActorSound id="SquadBansheeCarpetBombSound" parent="SoundOneShot">
+        <On Terms="Effect.SquadBansheeScreecherMissilesCarpetBombSearchArea.Start" Send="Create"/>
+        <Sound value="BansheeCarpetBombImpact"/>
+    </CActorSound>
+    <CActorUnit id="SquadWraith" parent="GenericUnitBase" unitName="SquadWraith">
+        <Aliases value="_UnitLarge"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="WeaponStart.SquadWraithA.AttackStart" Send="AnimBracketStart Attack Attack,Superior"/>
+        <On Terms="WeaponStart.SquadWraithG.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <HostSiteOps Ops="SOpBankerWraith"/>
+        <Model value="MengskWraith"/>
+        <AnimBlendTime value="0.300000"/>
+        <BuildModel value="MengskWraith"/>
+        <DeathArray index="Normal" ModelLink="MengskWraithDeath" SoundLink="Wraith_Explode"/>
+        <PlacementModel value="MengskWraith"/>
+        <PortraitModel value="WraithPortrait"/>
+        <BarOffset value="55"/>
+        <BarWidth value="66"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-wraith.dds"/>
+        </GroupIcon>
+        <GroupSoundArray index="Birth" value="Wraith_Birth"/>
+        <GroupSoundArray index="Ready" value="Wraith_Ready"/>
+        <GroupSoundArray index="Help" value="Wraith_Help"/>
+        <GroupSoundArray index="What" value="Wraith_What"/>
+        <GroupSoundArray index="Yes" value="Wraith_Yes"/>
+        <GroupSoundArray index="Attack" value="Wraith_Attack"/>
+        <GroupSoundArray index="Pissed" value="Wraith_Pissed"/>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-wraith.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
+        <SoundArray index="Birth" value="Wraith_Birth"/>
+        <SoundArray index="Ready" value="Wraith_Ready"/>
+        <SoundArray index="Help" value="Wraith_Help"/>
+        <SoundArray index="What" value="Wraith_What"/>
+        <SoundArray index="Yes" value="Wraith_Yes"/>
+        <SoundArray index="Attack" value="Wraith_Attack"/>
+        <SoundArray index="Pissed" value="Wraith_Pissed"/>
+        <SoundArray index="Movement" value="Wraith_Movement"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-wraith.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-wraith.dds"/>
+        </Wireframe>
+        <Scale value="0.750000"/>
+    </CActorUnit>
+    <CActorAction id="SquadWraithAirAttackLeft" parent="GenericAttack" effectImpact="SquadWraithADamage" effectLaunch="SquadWraithALeftLaunchMissile">
+        <LaunchAttachQuery Methods="AMFilterWeaponLeft"/>
+        <LaunchAssets Sound="WraithAWeaponBirth"/>
+        <ImpactMap index="None" Model="MengskWraithAirAttackImpact" Sound="WraithAWeaponImpact"/>
+    </CActorAction>
+    <CActorMissile id="SquadWraithAirAttackLeftMissile" parent="GenericAttackMissile" unitName="SquadWraithAirWeaponLeft">
+        <Model value="MengskWraithAirWeaponLeft"/>
+    </CActorMissile>
+    <CActorAction id="SquadWraithAirAttackRight" parent="GenericAttack" effectImpact="SquadWraithADamage" effectLaunch="SquadWraithARightLaunchMissile">
+        <LaunchAttachQuery Methods="AMFilterWeaponRight"/>
+        <LaunchAssets Sound="WraithAWeaponBirth"/>
+        <ImpactMap index="None" Model="MengskWraithAirAttackImpact" Sound="WraithAWeaponImpact"/>
+    </CActorAction>
+    <CActorMissile id="SquadWraithAirAttackRightMissile" parent="GenericAttackMissile" unitName="SquadWraithAirWeaponRight">
+        <Model value="MengskWraithAirWeaponRight"/>
+    </CActorMissile>
+    <CActorAction id="SquadWraithGroundAttack" parent="GenericAttack" effectImpact="SquadWraithGDamage" effectLaunch="SquadWraithGLaunchMissile">
+        <LaunchAttachQuery Methods="AMFilterWeaponBottom"/>
+        <ImpactMap index="None" Model="MengskWraithGroundAttackImpact" Sound="Wraith_GroundAttackImpact"/>
+    </CActorAction>
+    <CActorMissile id="SquadWraithGroundAttackMissile" parent="GenericAttackMissile" unitName="SquadWraithGroundWeapon">
+        <Model value="MengskWraithGroundWeapon"/>
+    </CActorMissile>
     <CActorUnit id="SquadSiegeTankSiegeModeMorphModel" parent="GenericUnitBaseMorphTransition" unitName="SquadSiegeTankSiegeModeMorphModel">
         <Aliases value="_UnitLarge"/>
         <On Terms="UnitHeightUpdate.*.Land" Send="Create SiegeTank_Land"/>
@@ -468,12 +748,12 @@
         <On Terms="Behavior.SquadJump.Launch" Send="Create"/>
         <Sound value="Reaper_JumpLaunch"/>
     </CActorSound>
-    <CActorSound id="SquadScoutAfterburner2" parent="SoundOneShot">
-        <On Terms="Behavior.SquadScoutAfterburner.On" Send="Create"/>
+    <CActorSound id="ExcavatorAfterburner2" parent="SoundOneShot">
+        <On Terms="Behavior.ExcavatorAfterburner.On" Send="Create"/>
         <Sound value="Scout_Afterburner2"/>
     </CActorSound>
-    <CActorSound id="SquadScoutAfterburner" parent="SoundOneShot">
-        <On Terms="Behavior.SquadScoutAfterburner.On" Send="Create"/>
+    <CActorSound id="ExcavatorAfterburner" parent="SoundOneShot">
+        <On Terms="Behavior.ExcavatorAfterburner.On" Send="Create"/>
         <Sound value="Scout_Afterburner"/>
     </CActorSound>
     <CActorRange id="SquadShooterAureRange">
@@ -4971,5 +5251,11 @@
         <HostSiteOps Ops="SOpAttachCenter SOpShadow"/>
         <Model value="UnloadFX"/>
         <AutoScaleFactor value="1.000000"/>
+    </CActorModel>
+    <CActorModel id="SquadWraithEvade" parent="ModelAnimationStyleOneShot">
+        <On Terms="Behavior.SquadWraithDisplacementField.DamageHandled" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="WraithEvade"/>
     </CActorModel>
 </Catalog>
