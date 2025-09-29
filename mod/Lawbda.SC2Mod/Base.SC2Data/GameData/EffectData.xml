@@ -1,5 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CEffectApplyBehavior id="SquadIrradiateApplyBehavior">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value=""/>
+        <Behavior value="SquadIrradiated"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumArea id="SquadIrradiateInitialDamage">
+        <EditorCategories value="Race:Terran"/>
+        <SearchFilters value="Biological;Structure,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="1.5" Effect="SquadIrradiateInitialDamageApply"/>
+    </CEffectEnumArea>
+    <CEffectDamage id="SquadIrradiateInitialDamageApply">
+        <EditorCategories value=""/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Amount value="10"/>
+        <SearchFilters value="Biological;Ally,Neutral,Structure,RawResource,HarvestableResource,Item,Dead,Hidden"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="SameCliff" value="0"/>
+    </CEffectDamage>
+    <CEffectDamage id="SquadIrradiatePeriodicDamage">
+        <EditorCategories value=""/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Amount value="8"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="SquadIrradiateSearchArea">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <SearchFilters value="Biological;Structure,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="1.5" Effect="SquadIrradiatePeriodicDamage"/>
+    </CEffectEnumArea>
+    <CEffectSet id="SquadIrradiateSet">
+        <EditorCategories value=""/>
+        <EffectArray value="SquadIrradiateInitialDamage"/>
+        <EffectArray value="SquadIrradiateApplyBehavior"/>
+    </CEffectSet>
+    <CEffectCreateHealer id="SquadNanoRepair">
+        <ValidatorArray value="noMarkers"/>
+        <ValidatorArray value="NotHidden"/>
+        <ValidatorArray value="NotWarpingIn"/>
+        <ValidatorArray value="NotThorWreckage"/>
+        <ValidatorArray value="NotOdinWreckage"/>
+        <ValidatorArray value="NotVortexd"/>
+        <ValidatorArray value="NoSOATimeFreeze"/>
+        <EditorCategories value="Race:Terran"/>
+        <DrainVital value="Energy"/>
+        <DrainVitalCostFactor value="0.33"/>
+        <RechargeVitalRate value="9"/>
+    </CEffectCreateHealer>
     <CEffectApplyBehavior id="SquadPointDefenseLaser">
         <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="Caster"/>
@@ -3147,6 +3195,49 @@
         <EditorCategories value=""/>
         <Behavior value="SquadDisableAttack"/>
     </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="SquadVoidNanoRepairCP">
+        <ValidatorArray value="VoidScienceVesselNanoRepairNotCasting"/>
+        <ValidatorArray value="VoidScienceVesselNanoRepairTargetNotBeingHealed"/>
+        <ValidatorArray value="NotFullLife"/>
+        <WhichLocation Value="TargetUnit"/>
+        <Flags index="PersistUntilDestroyed" value="1"/>
+        <InitialEffect value="SquadVoidNanoRepairStartSet"/>
+        <FinalEffect value="SquadVoidNanoRepairStopSet"/>
+        <PeriodicValidator value="VoidScienceVesselNanoRepairCombine"/>
+        <PeriodicPeriodArray value="1"/>
+    </CEffectCreatePersistent>
+    <CEffectApplyBehavior id="SquadVoidNanoRepairControllerAB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="SquadVoidNanoRepairController"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="SquadVoidNanoRepairControllerRB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="VoidScienceVesselNanoRepairController"/>
+    </CEffectRemoveBehavior>
+    <CEffectModifyUnit id="SquadVoidNanoRepairHealTarget">
+        <EditorCategories value="Race:Terran"/>
+        <VitalArray index="Life">
+            <Change value="0.5625"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectSet id="SquadVoidNanoRepairStartSet">
+        <EffectArray value="SquadVoidNanoRepairControllerAB"/>
+        <EffectArray value="SquadVoidNanoRepairTargetAB"/>
+    </CEffectSet>
+    <CEffectSet id="SquadVoidNanoRepairStopSet">
+        <EffectArray value="SquadVoidNanoRepairControllerRB"/>
+        <EffectArray value="SquadVoidNanoRepairTargetRB"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="SquadVoidNanoRepairTargetAB">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadVoidNanoRepairTarget"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="SquadVoidNanoRepairTargetRB">
+        <EditorCategories value="Race:Terran"/>
+        <BehaviorLink value="VoidScienceVesselNanoRepairTarget"/>
+    </CEffectRemoveBehavior>
     <CEffectApplyBehavior id="VoodooOrbApply">
         <EditorCategories value=""/>
         <Behavior value="VoodooOrb"/>

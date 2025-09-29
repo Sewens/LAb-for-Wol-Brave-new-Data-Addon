@@ -1,5 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CAbilEffectTarget id="SquadIrradiate">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Effect index="0" value="SquadIrradiateSet"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="25"/>
+        </Cost>
+        <TargetFilters value="-;Structure,RawResource,HarvestableResource,Item,Dead,Hidden,Invulnerable"/>
+        <Range value="9"/>
+        <Arc value="360"/>
+        <CancelableArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <AINotifyEffect value=""/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Irradiate"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadNanoRepair">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Flags index="ReExecutable" value="1"/>
+        <Flags index="Smart" value="1"/>
+        <Flags index="TransportAcquirePassengers" value="1"/>
+        <TargetFilters value="Mechanical,Visible;Self,Enemy,Structure,Missile,Uncommandable,Dead,Hidden,Invulnerable"/>
+        <TargetSorts RequestCount="1">
+            <SortArray value="TSAlliancePassive"/>
+            <SortArray value="TSLifeFraction"/>
+            <SortArray value="TSDistance"/>
+        </TargetSorts>
+        <Range value="4"/>
+        <Arc value="360"/>
+        <SmartValidatorArray value="healSmartTargetFilters"/>
+        <SmartValidatorArray value="NotWarpingIn"/>
+        <AutoCastAcquireLevel value="Defensive"/>
+        <AutoCastFilters value="-;Neutral,Enemy"/>
+        <AutoCastRange value="6"/>
+        <AutoCastValidatorArray value="healCasterMinEnergy"/>
+        <AutoCastValidatorArray value="NotWarpingIn"/>
+        <UseMarkerArray index="Approach" value="0"/>
+        <UseMarkerArray index="Prep" value="0"/>
+        <DefaultError value="RequiresHealTarget"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Heal"/>
+        <AcquireAttackers value="1"/>
+    </CAbilEffectTarget>
     <CAbilEffectTarget id="SquadRavenPlaceAutoTurret">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <InfoTooltipPriority value="21"/>
@@ -331,7 +377,7 @@
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectInstant>
-    <CAbilTransport id="SquadMedivacCargo">
+    <CAbilTransport id="SquadMedivacTransport">
         <AbilSetId value="ULdM"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <CmdButtonArray index="Load" DefaultButtonFace="MedivacLoad"/>
@@ -969,32 +1015,29 @@
     <CAbilTrain id="SquadFactoryTrain">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <Activity value="UI/Building"/>
-        <InfoArray index="Train2" Time="45">
-            <Button DefaultButtonFace="BuildSquadSiegeTank" State="Restricted" Requirements="HaveAttachedTechLab"/>
+        <InfoArray index="Train1" Time="45">
+            <Button DefaultButtonFace="BuildSquadSiegeTank" State="Restricted"/>
+            <Unit value="SquadSiegeTank"/>
         </InfoArray>
-        <InfoArray index="Train3" Time="40">
+        <InfoArray index="Train2" Time="40">
             <Button DefaultButtonFace="BuildSquadGoliath" State="Restricted"/>
             <Unit value="SquadGoliath"/>
         </InfoArray>
-        <InfoArray index="Train4" Time="50">
-            <Button DefaultButtonFace="BuildSquadDiamondback" State="Restricted" Requirements="HaveAttachedTechLab"/>
+        <InfoArray index="Train3" Time="50">
+            <Button DefaultButtonFace="BuildSquadDiamondback" State="Restricted"/>
             <Unit value="SquadDiamondback"/>
         </InfoArray>
-        <InfoArray index="Train5" Time="60">
-            <Button DefaultButtonFace="BuildSquadThor" State="Restricted" Requirements="HaveArmoryAndAttachedTechLabOrAttachedTechReactor"/>
+        <InfoArray index="Train4" Time="60">
+            <Button DefaultButtonFace="BuildSquadThor" State="Restricted"/>
+            <Unit value="SquadThorEP"/>
         </InfoArray>
-        <InfoArray index="Train6" Time="30">
+        <InfoArray index="Train5" Time="30">
             <Button DefaultButtonFace="BuildSquadHellion" State="Restricted"/>
+            <Unit value="SquadHellion"/>
         </InfoArray>
-        <InfoArray index="Train7" Time="40">
-            <Button DefaultButtonFace="BuildSquadGoliath" State="Restricted"/>
-        </InfoArray>
-        <InfoArray index="Train9" Time="25">
+        <InfoArray index="Train6" Time="25">
             <Button DefaultButtonFace="BuildSquadVulture" State="Restricted"/>
             <Unit value="SquadVulture"/>
-        </InfoArray>
-        <InfoArray index="Train13" Time="45">
-            <Button Requirements="HaveArmoryAndAttachedTechLabOrAttachedTechReactor"/>
         </InfoArray>
     </CAbilTrain>
     <CAbilMorph id="SquadMorphToTechReactor">
@@ -1111,23 +1154,23 @@
             <Unit value="SquadReaper"/>
         </InfoArray>
         <InfoArray index="Train3" Time="40">
-            <Button DefaultButtonFace="SquadGhost" State="Restricted" Requirements="HaveAttachedBarrTechLabOrAttachedTechReactorAndShadowOps"/>
+            <Button DefaultButtonFace="SquadGhost" State="Restricted"/>
             <Unit value="SquadGhost"/>
         </InfoArray>
         <InfoArray index="Train4" Time="30">
-            <Button DefaultButtonFace="SquadMarauder" State="Restricted" Requirements="HaveAttachedTechLab"/>
+            <Button DefaultButtonFace="SquadMarauder" State="Restricted"/>
             <Unit value="SquadMarauder"/>
         </InfoArray>
         <InfoArray index="Train5" Time="25">
-            <Button DefaultButtonFace="SquadMedic" State="Restricted" Requirements="HaveAttachedTechLab"/>
+            <Button DefaultButtonFace="SquadMedic" State="Restricted"/>
             <Unit value="SquadMedic"/>
         </InfoArray>
         <InfoArray index="Train6" Time="30">
-            <Button DefaultButtonFace="SquadFirebat" State="Restricted" Requirements="HaveAttachedTechLab"/>
+            <Button DefaultButtonFace="SquadFirebat" State="Restricted"/>
             <Unit value="SquadFirebat"/>
         </InfoArray>
         <InfoArray index="Train7" Time="50">
-            <Button DefaultButtonFace="SquadSpectre" State="Restricted" Requirements="HaveAttachedBarrTechLabOrAttachedTechReactorAndShadowOps"/>
+            <Button DefaultButtonFace="SquadSpectre" State="Restricted"/>
             <Unit value="SquadSpectre"/>
         </InfoArray>
         <InfoArray index="Train8" Time="25">
@@ -1156,7 +1199,7 @@
     </CAbilEffectInstant>
     <CAbilTrain id="SquadCommandCenterTrain">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
-        <InfoArray index="Train1" Time="17">
+        <InfoArray index="Train1" Time="12">
             <Button DefaultButtonFace="SquadSCV" State="Restricted">
                 <Flags index="ToSelection" value="1"/>
             </Button>
@@ -1210,18 +1253,18 @@
         <Activity value="UI/Building"/>
         <InfoArray index="Train1" Time="42">
             <Button DefaultButtonFace="BuildSquadMedivac" State="Restricted"/>
-            <Unit value="Medivac"/>
+            <Unit value="SquadMedivac"/>
         </InfoArray>
         <InfoArray index="Train2" Time="60">
-            <Button DefaultButtonFace="BuildSquadBanshee" State="Restricted" Requirements="HaveAttachedTechLab"/>
-            <Unit value="Banshee"/>
+            <Button DefaultButtonFace="BuildSquadBanshee" State="Restricted"/>
+            <Unit value="SquadBanshee"/>
         </InfoArray>
         <InfoArray index="Train3" Time="60">
-            <Button DefaultButtonFace="BuildSquadRaven" State="Restricted" Requirements="HaveAttachedTechLab"/>
-            <Unit value="Raven"/>
+            <Button DefaultButtonFace="BuildSquadRaven" State="Restricted"/>
+            <Unit value="SquadRaven"/>
         </InfoArray>
         <InfoArray index="Train4" Time="90">
-            <Button DefaultButtonFace="BuildSquadBattlecruiser" State="Restricted" Requirements="HaveAttachedStarportTechLabAndFusionCore"/>
+            <Button DefaultButtonFace="BuildSquadBattlecruiser" State="Restricted"/>
             <Unit value="Battlecruiser"/>
         </InfoArray>
         <InfoArray index="Train5" Time="42">
@@ -1229,22 +1272,16 @@
             <Unit value="VikingFighter"/>
         </InfoArray>
         <InfoArray index="Train6" Time="70">
-            <Button DefaultButtonFace="BuildSquadHercules" State="Restricted" Requirements="HaveAttachedStarportTechLabAndFusionCore"/>
-            <Unit value="Hercules"/>
-            <Unit value="Hercules"/>
+            <Button DefaultButtonFace="BuildSquadHercules" State="Restricted"/>
+            <Unit value="SquadHercules"/>
         </InfoArray>
         <InfoArray index="Train7" Time="60">
-            <Button DefaultButtonFace="BuildSquadScienceVessel" State="Restricted" Requirements="BuildScienceVessel"/>
-            <Unit value="Liberator"/>
-            <Unit value="ScienceVessel"/>
+            <Button DefaultButtonFace="BuildSquadScienceVessel" State="Restricted"/>
+            <Unit value="SquadScienceVessel"/>
         </InfoArray>
         <InfoArray index="Train8" Time="50">
-            <Button DefaultButtonFace="BuildSquadWraith" State="Restricted" Requirements="HaveAttachedTechLab"/>
-            <Unit value="Wraith"/>
-            <Unit value="Wraith"/>
-        </InfoArray>
-        <InfoArray index="Train9" Time="60">
-            <Button State="Restricted" Requirements="HaveCommandCenter"/>
+            <Button DefaultButtonFace="BuildSquadWraith" State="Restricted"/>
+            <Unit value="SquadWraith"/>
         </InfoArray>
     </CAbilTrain>
     <CAbilEffectTarget id="SquadSupplyDrop">
@@ -2302,4 +2339,28 @@
         <AutoCastRange value="2"/>
         <AutoCastCountMin value="1"/>
     </CAbilMorph>
+    <CAbilEffectTarget id="SquadScienceVesselNanoRepair">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadVoidNanoRepairCP"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <TargetFilters value="Mechanical,Visible;Self,Neutral,Enemy,Missile,Dead,Hidden,Invulnerable"/>
+        <TargetSorts RequestCount="1">
+            <SortArray value="TSAlliancePassive"/>
+            <SortArray value="TSLifeFraction"/>
+            <SortArray value="TSDistance"/>
+        </TargetSorts>
+        <Range value="6"/>
+        <Arc value="360"/>
+        <AutoCastAcquireLevel value="Defensive"/>
+        <AutoCastFilters value="Visible;Neutral,Enemy"/>
+        <AutoCastRange value="7"/>
+        <AutoCastValidatorArray value="NotWarpingIn"/>
+        <AutoCastValidatorArray value="VoidScienceVesselNanoRepairNotCasting"/>
+        <DefaultError value="RequiresHealTarget"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Heal" Requirements="VoidScienceVesselNanoRepairEnabled"/>
+        <AcquireAttackers value="1"/>
+    </CAbilEffectTarget>
 </Catalog>
