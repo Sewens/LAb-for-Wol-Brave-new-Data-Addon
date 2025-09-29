@@ -1,5 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorBuff id="PointDefenseReady2">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="3"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadPointDefenseReady">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="3"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadRavenSeekerMissiletimeout">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="NotInLastMotionPhase"/>
+        <Duration value="5"/>
+        <Modification MoveSpeedMaximum="0"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadRavenDefenceDroneTimedLife" parent="TimedLife">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Enemy" value="1"/>
+        <Duration value="180"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadRavenSeekerMissile">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-huntermissile-color.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Duration value="0.2"/>
+        <AINotifyEffect value="SeekerMissileDamage"/>
+    </CBehaviorBuff>
     <CBehaviorBuff id="SquadArmorpiercingMode">
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
@@ -402,6 +430,14 @@
         <DamageResponse Fatal="1" Handled="SquadThorWreckage" ModifyFraction="0">
             <Chance value="1"/>
         </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="TerranBuildingBurnDown2">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <Requirements value="FireSuppressionSystemsNotResearched"/>
+        <DisableValidatorArray value="BurnDownFire"/>
+        <Period value="0.3332"/>
+        <PeriodicEffect value="BurndownDamage"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="VampireOrb">
         <InfoIcon value="Assets\Textures\btn-vampire-orb.dds"/>

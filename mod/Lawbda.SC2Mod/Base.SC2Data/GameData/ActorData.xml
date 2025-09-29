@@ -1,6 +1,468 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
     <CActorAction default="1" id="SquadMarauderAttackBase" parent="MarauderAttackBase"/>
+    <CActorRange id="SquadPointDefenseDroneRange" parent="RangeAbil" abil="SquadRavenPlacePointDefenseDrone">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorModel id="SquadPointDefenseDronePlacementModel">
+        <Aliases value="_Main"/>
+        <Aliases value="_Unit"/>
+        <Aliases value="_Selectable"/>
+        <Filter index="Neutral" value="1"/>
+        <Filter index="Enemy" value="1"/>
+        <FogVisibility value="Visible"/>
+        <On Terms="ActorCreation; ModelIsLowQuality" Send="SetOpacity 0.300000"/>
+        <On Terms="ActorCreation" Send="AnimGroupApply Placement"/>
+        <On Terms="ActorCreation" Send="$Stand PlayForever"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="Signal.*.HidePlacement" Send="SetVisibility"/>
+        <On Terms="Signal.*.ShowPlacement" Send="SetVisibility 1"/>
+        <On Terms="ActorCreation" Send="Create FlyerHelperSplat"/>
+        <HostSiteOps Ops="SOpShadowSyncAir SOpHigherBy3"/>
+        <Model value="PlacementModel"/>
+    </CActorModel>
+    <CActorModel id="SquadPointDefenseDronePlaceholderModel">
+        <Aliases value="_Main"/>
+        <Aliases value="_Unit"/>
+        <Aliases value="_Selectable"/>
+        <Filter index="Neutral" value="1"/>
+        <Filter index="Enemy" value="1"/>
+        <FogVisibility value="Visible"/>
+        <On Terms="ActorCreation; ModelIsLowQuality" Send="SetOpacity 0.300000"/>
+        <On Terms="ActorCreation" Send="AnimGroupApply Placement"/>
+        <On Terms="ActorCreation" Send="$Stand PlayForever"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="Signal.*.HidePlacement" Send="SetVisibility"/>
+        <On Terms="Signal.*.ShowPlacement" Send="SetVisibility 1"/>
+        <On Terms="ActorCreation" Send="Create FlyerHelperSplat"/>
+        <HostSiteOps Ops="SOpShadowSyncAir SOpHigherBy3"/>
+        <Model value="PlacementModel"/>
+    </CActorModel>
+    <CActorModel id="SquadAttackDummyCursorModel" parent="TerranCursorModel" abil="attack">
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death"/>
+        <On Terms="ActorCreation; ValidatePlayer PlayerIsZerg" Send="ModelSwap AttackDummyCursorModelZerg"/>
+        <On Terms="ActorCreation; ValidatePlayer PlayerIsTerran" Send="ModelSwap AttackDummyCursorModelTerran"/>
+        <On Terms="ActorCreation; ValidatePlayer PlayerIsProtoss" Send="ModelSwap AttackDummyCursorModelProtoss"/>
+        <On Terms="ModelSwap" Send="$Stand PlayForever"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Model value="AttackDummyCursorModel"/>
+    </CActorModel>
+    <CActorModel id="SquadPointDefenseBeamImpact" parent="ModelAnimationStyleContinuous">
+        <On Terms="Effect.SqudPointDefenseLaserDamage.Start; At Target" Send="Create"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.125000 Die"/>
+        <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="$Death"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Host Subject="_Missile"/>
+        <Model value="PointDefenseBeamImpact"/>
+    </CActorModel>
+    <CActorUnit id="SquadPointDefenseDrone" parent="GenericUnitBase" unitName="SquadPointDefenseDrone">
+        <Aliases value="_UnitMedium"/>
+        <On Terms="Behavior.SquadPointDefenseReady.On" Send="AnimBracketStart Work Work,Start Work Work,End"/>
+        <On Terms="Behavior.SquadPointDefenseReady.Off" Send="AnimBracketStop Work"/>
+        <Model value="PointDefenseDrone"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="PointDefenseDrone"/>
+        <DeathArray index="Normal" ModelLink="PointDefenseDroneDeath" SoundLink="Raven_TargetingDroneExplode"/>
+        <PlacementModel value="PointDefenseDronePlacement"/>
+        <PlacementSound value="Terran_BuildingPlacement"/>
+        <PlacementActorModel value="SquadPointDefenseDronePlacementModel"/>
+        <PlaceholderActorModel value="PointDefenseDronePlaceholderModel"/>
+        <PortraitModel value="AdjutantPortrait"/>
+        <BarOffset value="20"/>
+        <BarWidth value="36"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-PointDefenseDrone.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-targetingdrone.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-buildingarmor.dds"/>
+        <SoundArray index="What" value="Raven_PointDefenseDroneWhat"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-targetingdrone.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-PointDefenseDrone.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorBeamSimple id="SquadPointDefenseDroneAttackBeam" parent="BeamSimpleAnimationStyleContinuous">
+        <On Terms="Effect.SqudPointDefenseLaserDamage.Start; At Caster" Send="Create"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.125000 Die"/>
+        <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
+        <Model value="PointDefenseDroneAttackBeam"/>
+        <HostLaunch Subject="_Selectable" Actor="Find"/>
+        <HostLaunchSiteOps Ops="SOpAttachCenter"/>
+        <HostImpact Subject="_Missile" Actor="Find"/>
+        <HostImpactSiteOps Ops="SOpAttachCenter"/>
+    </CActorBeamSimple>
+    <CActorSound id="SquadPointDefenseDroneAttackImpactSound" parent="SoundOneShot">
+        <On Terms="Effect.SqudPointDefenseLaserDamage.Start; At Caster" Send="Create"/>
+        <Host Subject="::Creator"/>
+        <Sound value="Raven_PointDefenseDroneAttackImpact"/>
+    </CActorSound>
+    <CActorSound id="SquadPointDefenseDroneAttackLaunchSound" parent="SoundOneShot">
+        <On Terms="Effect.SqudPointDefenseLaserDamage.Start; At Caster" Send="Create"/>
+        <Host Subject="PointDefenseDrone"/>
+        <Sound value="Raven_PointDefenseDroneAttackLaunch"/>
+    </CActorSound>
+    <CActorRange id="SquadPointDefenseDroneWeaponRange">
+        <On Terms="SelectionLocalUpdate.SquadPointDefenseDrone.Start" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.SquadPointDefenseDrone.StartEditorGround" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.SquadPointDefenseDrone.StartEditorFlyer" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.SquadPointDefenseDrone.Stop" Send="Destroy"/>
+        <On Terms="UnitDeath" Send="Destroy"/>
+        <Weapon value="PointDefenseLaser"/>
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorSound id="SquadRavenHunterSeekerHappySound" parent="SoundOneShot">
+        <Host Subject="HunterSeekerTrackingBeam"/>
+        <Sound value="Raven_HunterSeekerTargetLock"/>
+    </CActorSound>
+    <CActorBeamSimple id="SquadRavenHunterSeekerTrackingBeam" parent="BeamSimpleAnimationStyleContinuous">
+        <Model value="HunterSeekerTrackingBeam"/>
+        <HostLaunch Subject="_Missile" Actor="Find"/>
+        <HostLaunchSiteOps Ops="SOpAttachCenter"/>
+        <HostImpactSiteOps Ops="SOpTargetUnit SOpAttachCenter"/>
+    </CActorBeamSimple>
+    <CActorForceSphere id="SquadRavenHunterSeekerAttackForceAir">
+        <Host Subject="_ImpactGuide"/>
+        <HostSiteOps Ops="SOpTargetPoint SOpRandomPointOnCircleDot25"/>
+        <Duration value="0.150000"/>
+        <Magnitude value="38.250000,20.250000"/>
+        <Radius value="5.000000"/>
+    </CActorForceSphere>
+    <CActorForceSphere id="SquadRavenHunterSeekerAttackForce">
+        <On Terms="ActorCreation" Send="Create SquadRavenHunterSeekerAttackForceUpward"/>
+        <Host Subject="_ImpactGuide"/>
+        <HostSiteOps Ops="SOpTargetPoint SOpRandomPointOnCircleDot25"/>
+        <Duration value="0.150000"/>
+        <Magnitude value="35.000000,12.500000"/>
+        <Radius value="4.500000"/>
+    </CActorForceSphere>
+    <CActorForceCylinder id="SquadRavenHunterSeekerAttackForceUpward">
+        <HostSiteOps Ops="SOpTargetPoint"/>
+        <Duration value="0.150000"/>
+        <Magnitude value="5.000000,2.500000"/>
+        <HostEndSiteOps Ops="SOpTargetPoint SOpHigherBy3 SOpRandomPointInCircle1Dot5"/>
+        <Radius value="3.000000"/>
+    </CActorForceCylinder>
+    <CActorRange id="SquadRavenHunterSeekerRange" parent="RangeAbil" abil="SquadRavenSeekerMissile">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorSound id="SquadRavenHunterSeekerLaunchSound" parent="SoundOneShot">
+        <Remove Terms="Abil.SquadRavenSeekerMissile.SourcePrepStart" Send="Create"/>
+        <On Terms="Abil.SquadRavenSeekerMissile.SourcePrepStart" Send="Create"/>
+        <Sound value="Raven_HunterSeekerLaunch"/>
+    </CActorSound>
+    <CActorSound id="SquadRavenHunterSeekerMissileFizzleSound" parent="SoundOneShot">
+        <Sound value="Raven_HunterSeekerMissileFizzle"/>
+    </CActorSound>
+    <CActorSound id="SquadRavenHunterSeekerMissileSadSound" parent="SoundOneShot">
+        <Sound value="Raven_HunterSeekerMissileSad"/>
+    </CActorSound>
+    <CActorModel id="SquadAutoTurretReleaseMissileImpact">
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <On Terms="ActorCreation" Send="$Death"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+        <Model value="AutoTurretReleaseMissileImpact"/>
+    </CActorModel>
+    <CActorRange id="SquadAutoTurretRange" parent="RangeAbil" abil="SquadRavenPlaceAutoTurret">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorSiteOpRotationRandom id="SquadAutoTurretForceDirectionRandomizer">
+        <YawHalfAngle value="10.000000"/>
+        <PitchHalfAngle value="5.000000"/>
+    </CActorSiteOpRotationRandom>
+    <CActorProgress id="SquadAutoTurretConstruction">
+        <On Terms="Abil.SquadRavenPlaceAutoTurret.BuiltStart" Send="Create"/>
+        <StageArray AnimProps="Build" BlendTime="0.000000"/>
+    </CActorProgress>
+    <CActorForceSphere id="SquadAutoTurretAttackDeathForce">
+        <HostSiteOps Ops="SOpIncomingDirectDot25 SOpPointUp1ByDot25 AutoTurretForceDirectionRandomizer"/>
+        <Receiver Subject="::Main"/>
+        <Field value="Directional"/>
+        <Duration value="0.150000"/>
+        <Magnitude value="21.150000,7.650000"/>
+        <Radius value="0.750000"/>
+        <Direction value="Forward"/>
+    </CActorForceSphere>
+    <CActorUnit id="SquadAutoTurret" parent="GenericUnitStandard" unitName="SquadAutoTurret">
+        <Aliases value="_CreepEngulfable"/>
+        <Aliases value="_UnitMedium"/>
+        <Macros value="PhysicsDeathsSwarmGround"/>
+        <Macros value="PhysicsDeathsVoidGround"/>
+        <On Terms="Behavior.Precursor.Off" Send="Create SquadAutoTurretReleaseMissileImpact"/>
+        <On Terms="Behavior.Precursor.Off" Send="$Birth"/>
+        <On Terms="WeaponStart.*.AttackStart" Send="AnimClear Birth"/>
+        <Model value="AutoTurret"/>
+        <CreepHeightClass value="Small"/>
+        <BuildModel value="AutoTurret"/>
+        <DeathArray index="Normal" ModelLink="AutoTurretDeath" SoundLink="Raven_AutoTurretExplode"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="Raven_AutoTurretExplode"/>
+        <DeathCustoms ModelLink="AutoTurretDeathRagdoll" Name="RagdollBasic">
+            <BodySquibs Name="None"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollSiegeTank" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollBaneling" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollUltraUnburrow" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms ActorModel="SpineCrawlerHurlDeathRagdollBloodPrevent" ModelLink="AutoTurretDeathRagdoll" Name="RagdollSpineCrawlerHurl">
+            <BodySquibs Name="None"/>
+        </DeathCustoms>
+        <PlacementModel value="AutoTurretPlacement"/>
+        <PlacementSound value="Terran_BuildingPlacement"/>
+        <PortraitModel value="AdjutantPortrait"/>
+        <BarOffset value="50"/>
+        <ErrorArray Error="CantBuildLocationInvalid" Sound="Raven_Pissed"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-AutoTurret.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-terran-autoturret.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-buildingarmor.dds"/>
+        <SoundArray index="Birth" value="Raven_AutoTurretBirth"/>
+        <SoundArray index="Ready" value="Raven_AutoTurretReady"/>
+        <SoundArray index="What" value="Raven_AutoTurretWhat"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-terran-autoturret.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-AutoTurret.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="SquadAutoTurretAttack" parent="GenericAttack" effectAttack="SquadAutoTurrectTwinAutocannonsDamage">
+        <LaunchAssets Model="AutoTurretAttackLaunch" Sound="Raven_AutoTurretAttackLaunch"/>
+        <ImpactMap index="None" Model="AutoTurretAttackImpact" Sound="Raven_AutoTurretAttackImpact"/>
+        <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
+        <ImpactPhysics Name="GauseCannonImpact" MatchKeys="Basic" Physics="AutoTurretAttackDeathForce"/>
+    </CActorAction>
+    <CActorForceSphere id="MedivacDeathRagdollDetonationForce2" parent="DeathRagdollDetonationForce">
+        <Magnitude value="10.000000,5.000000"/>
+        <Radius value="1.250000,0.250000"/>
+    </CActorForceSphere>
+    <CActorSound id="SquadRavenLand" parent="SoundOneShot">
+        <Sound value="Raven_Land"/>
+    </CActorSound>
+    <CActorForceSphere id="SquadRavenDeathRagdollDetonationForce" parent="DeathRagdollDetonationForce">
+        <Magnitude value="10.000000,5.000000"/>
+        <Radius value="1.150000,0.250000"/>
+    </CActorForceSphere>
+    <CActorModel id="SquadRavenDeathRagdoll">
+        <Aliases value="_Main"/>
+        <Aliases value="_Unit"/>
+        <Aliases value="_DeathModel"/>
+        <Macros value="DeadAnimationMacro"/>
+        <Macros value="DeadAnimationRemoveMacro"/>
+        <Macros value="UnitDeathRagdollTerminateExtrasMacro"/>
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="CastShadows" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="TeamColor" value="1"/>
+        <Inherits index="TintColor" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <AcceptedHostedPropTransfers index="TimeScale" value="0"/>
+        <On Terms="ActorCreation" Send="RefClear ::Host"/>
+        <On Terms="ActorCreation" Send="SetTintColor 255,255,255 0.600000"/>
+        <On Terms="ActorCreation" Send="SetTeamColor {0,0,0 0.000000} {0,0,0 0.000000}"/>
+        <On Terms="ActorCreation" Target="ModelPretargetGround" Send="Destroy"/>
+        <On Terms="ActorCreation" Target="GroundPreSelection" Send="Destroy"/>
+        <On Terms="Signal.*.ClearDeathModel" Send="Destroy"/>
+        <On Terms="TimerExpired; TimerName TerminateExtras" Send="Signal TerminateExtras"/>
+        <On Terms="Signal.*.TerminateExtras" Send="PhysicsImpactsEnable"/>
+        <On Terms="Signal.*.TerminateExtras" Target="_BodySquib" Send="Signal Terminate"/>
+        <On Terms="AnimDone; AnimName Death" Send="PhysicsTerminate"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="Create SquadRavenDeathRagdollDetonationForce"/>
+        <Host Subject="::Creator"/>
+        <HostSiteOps Ops="SOpDeathMotionFlier"/>
+        <Model value="UnitDeathModelNoTeamColor"/>
+        <ModelFlags index="UpdateVisibility" value="0"/>
+        <ModelFlags index="UseSyncSeed" value="1"/>
+        <EventDataSound Name="NydusCanalThud" Actor="UnitSound" Sound="NydusWorm_DeathThud"/>
+        <EventDataSound Name="ZergExplosionSlime" Actor="UnitSound" Sound="Zerg_ExplosionSlime"/>
+        <EventDataSound Name="ZergPreExplosionSmall" Actor="UnitSound" Sound="Zerg_PreExplosionSmall"/>
+        <EventDataSound Name="ZergExplosionTiny" Actor="UnitSound" Sound="Zerg_ExplosionTiny"/>
+        <EventDataSound Name="ZergExplosionSmall" Actor="UnitSound" Sound="Zerg_ExplosionSmall"/>
+        <EventDataSound Name="ZergExplosionMedium" Actor="UnitSound" Sound="Zerg_ExplosionMedium"/>
+        <EventDataSound Name="ZergExplosionLarge" Actor="UnitSound" Sound="Zerg_ExplosionLarge"/>
+        <EventDataSound Name="ProtossPreExplosionSmall" Actor="UnitSound" Sound="Protoss_PreExplosionSmall"/>
+        <EventDataSound Name="ProtossExplosionSmall" Actor="UnitSound" Sound="Protoss_ExplosionSmall"/>
+        <EventDataSound Name="ProtossExplosionMedium" Actor="UnitSound" Sound="Protoss_ExplosionMedium"/>
+        <EventDataSound Name="ProtossExplosionLarge" Actor="UnitSound" Sound="Protoss_ExplosionLarge"/>
+        <EventDataSound Name="TerranPreExplosionSmall" Actor="UnitSound" Sound="Terran_PreExplosionSmall"/>
+        <EventDataSound Name="TerranExplosionSmall" Actor="UnitSound" Sound="Terran_ExplosionSmall"/>
+        <EventDataSound Name="TerranExplosionMedium" Actor="UnitSound" Sound="Terran_ExplosionMedium"/>
+        <EventDataSound Name="TerranExplosionLarge" Actor="UnitSound" Sound="Terran_ExplosionLarge"/>
+        <PhysicsImpactDefault ActorModel="PhysicsImpactHarness" ActorSound="PhysicsImpactSound" OccuranceThrottlingDistance="0.500000,0.500000"/>
+    </CActorModel>
+    <CActorAction id="SquadRavenReleaseAutoTurret" parent="GenericAttack" effectImpact="RemovePrecursor" effectLaunch="SquadRavenAutoTurretReleaseLM">
+        <LaunchAssets Sound="Raven_AutoTurretReleaseLaunch"/>
+        <ImpactSiteOps Ops="SOpAttachOrigin SOpShadow"/>
+        <ImpactMap index="None" Sound="Raven_AutoTurretReleaseImpact"/>
+        <ShieldFlashType value="None"/>
+    </CActorAction>
+    <CActorMissile id="SquadRavenReleaseAutoTurretMissile" parent="GenericAttackMissile" unitName="SquadRavenAutoTurretReleaseWeapon">
+        <Model value="AutoTurretReleaseWeapon"/>
+    </CActorMissile>
+    <CActorAction id="SquadRavenHunterSeekerAttack" parent="GenericAttack" effectImpact="SquadRavenSeekerDamage" effectLaunch="SquadRavenSeekerLaunchMissile">
+        <ImpactSiteOps Ops="SOpTargetPoint SOp2DRotation"/>
+        <ImpactAttachQuery Methods="Origin"/>
+        <ImpactMap index="None" Model="Invisible" Sound="Raven_HunterSeekerAttackImpact"/>
+        <ImpactPhysics Name="HunterSeekerImpact" MatchKeys="Basic" Physics="SquadRavenHunterSeekerAttackForce"/>
+        <ImpactPhysics Name="HunterSeekerImpactAir" MatchKeys="BasicAir" Physics="SquadRavenHunterSeekerAttackForceAir"/>
+        <ShieldFlashType value="Full"/>
+    </CActorAction>
+    <CActorModel id="SquadRavenHunterSeekerAttackImpactModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.SquadRavenSeekerDamage.Start" Send="Create"/>
+        <Model value="HunterSeekerAttackImpact"/>
+    </CActorModel>
+    <CActorMissile id="SquadRavenHunterSeekerAttackMissile" parent="GenericAttackMissile" unitName="SquadRavenHunterSeekerWeapon">
+        <Remove Terms="MotionPhaseStart; MotionPhase 3" Send="Create HunterSeekerHappySound"/>
+        <On Terms="MotionPhaseStart; MotionPhase 1" Send="Create SquadRavenHunterSeekerTrackingBeam"/>
+        <On Terms="MotionPhaseStart; MotionPhase 3" Send="Create SquadRavenHunterSeekerHappySound"/>
+        <On Terms="MotionPhaseStart; MotionPhase" Send="Create SquadRavenHunterSeekerLaunchSound"/>
+        <On Terms="MotionPhaseStart; MotionPhase 2" Target="SquadRavenHunterSeekerLaunchSound" Send="Destroy"/>
+        <On Terms="UnitDeath" Target="SquadRavenHunterSeekerLaunchSound" Send="Destroy"/>
+        <On Terms="MotionPhaseStart; MotionPhase 2" Send="Create SquadRavenHunterSeekerHappySound"/>
+        <Model value="HunterSeekerWeapon"/>
+    </CActorMissile>
+    <CActorModel id="SquadRavenHunterSeekerFailDeath">
+        <CopySource value="HunterSeekerWeapon"/>
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <AcceptedTransfers index="Textures" value="1"/>
+        <Remove Terms="Behavior.SquadRavenSeekerMissiletimeout.Off; ValidateUnit IsDead" Send="Create"/>
+        <On Terms="ActorCreation" Send="$Death"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <On Terms="Behavior.SquadRavenSeekerMissiletimeout.Off; ValidateUnit IsDead" Send="Create"/>
+        <On Terms="ActorCreation" Send="Create SquadRavenHunterSeekerMissileFizzleSound"/>
+        <On Terms="ActorCreation" Send="Create SquadRavenHunterSeekerMissileSadSound"/>
+        <On Terms="Effect.SquadRavenSeekerMissileSuicide.Start" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+        <Model value="HunterSeekerFailDeath"/>
+    </CActorModel>
+    <CActorAction id="SquadPointDefenseDroneRelease" parent="GenericAttack" effectImpact="RemovePrecursor" effectLaunch="SquadRavenPointDefenseDroneReleaseLaunchMissile">
+        <LaunchAssets Sound="Raven_PointDefenseDroneReleaseLaunch"/>
+        <ImpactMap index="None" Model="PointDefenseDroneAttackBeamImpact" Sound="Raven_PointDefenseDroneReleaseImpact"/>
+    </CActorAction>
+    <CActorMissile id="SquadPointDefenseDroneReleaseMissile" parent="GenericAttackMissile" unitName="SquadPointDefenseDroneRelease">
+        <Model value="PointDefenseDroneReleaseWeapon"/>
+    </CActorMissile>
+    <CActorUnit id="SquadRaven" parent="GenericUnitStandard" unitName="SquadRaven">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="BuildAnim"/>
+        <Macros value="RavenSpellAnim"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <Macros value="PhysicsDeathsSwarmAir"/>
+        <Macros value="PhysicsDeathsVoidAir"/>
+        <On Terms="Abil.SquadRavenSeekerMissile.SourceCastStart" Send="$Spell"/>
+        <On Terms="Abil.SquadRavenPlacePointDefenseDrone.SourceCastStart" Send="$Spell"/>
+        <On Terms="Abil.SquadRavenBuildAutoTurret.SourceCastStart" Send="$Spell"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create SquadRavenLand"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit HaveVoidShade" Send="DeathCustomize Shadow"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
+        <HostSiteOps Ops="SOpBankerRaven"/>
+        <Model value="Raven_Junker_Collection_MP"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="Raven_Junker_Collection_MP"/>
+        <DeathArray index="Normal" ModelLink="Raven_Junker_Collection_MP_Death" SoundLink="Raven_Explode"/>
+        <DeathCustoms>
+            <ActorModel value="SquadRavenDeathRagdoll"/>
+            <ModelLink value="Raven_Junker_Collection_MP_DeathRagdoll"/>
+            <Name value="RagdollBasic"/>
+            <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+            <BodySquibs Name="Basic" Model="TerranSquibDeathRagdoll"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms>
+            <ModelLink value="DeathVoidShadowSmall"/>
+            <SoundLink value="ShadowUnit_DeathFX"/>
+            <VoiceLink value="ShadowUnit_DeathVox"/>
+            <Name value="Shadow"/>
+        </DeathCustoms>
+        <DeathActorModel value="UnitDeathModelWithDeathMotionFlier"/>
+        <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+        <PlacementModel value="Raven_Junker_Collection_MP"/>
+        <PortraitModel value="Raven_Junker_Collection_MP_Portrait"/>
+        <StandAnimTurnTime value="3"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.250000,0.500000"/>
+            <RangeDown value="5.000000"/>
+            <RangeDownFade value="1.000000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleMassive15"/>
+        </TerrainSquibs>
+        <AbilSoundArray AbilCmd="SquadRavenPlaceAutoTurret,Execute" Sound="Raven_AutoTurretVO"/>
+        <AbilSoundArray AbilCmd="SquadRavenSeekerMissile,Execute" Sound="Raven_HunterSeekerVO"/>
+        <AbilSoundArray AbilCmd="SquadRavenPlacePointDefenseDrone,Execute" Sound="Raven_TargetingDroneVO"/>
+        <BarOffset value="55"/>
+        <ErrorArray Error="CantBuildLocationInvalid" Sound="e_cmdBuildTechRequirementsNotMet_Terr"/>
+        <ErrorArray Error="CantFindPlacementLocation" Sound="e_cmdBuildTechRequirementsNotMet_Terr"/>
+        <ErrorArray Error="CantBuildOnThat" Sound="e_cmdBuildTechRequirementsNotMet_Terr"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Raven.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-raven.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
+        <SoundArray index="Ready" value="Raven_Ready"/>
+        <SoundArray index="Help" value="Raven_Help"/>
+        <SoundArray index="What" value="Raven_What"/>
+        <SoundArray index="Yes" value="Raven_Yes"/>
+        <SoundArray index="Pissed" value="Raven_Pissed"/>
+        <SoundArray index="Movement" value="Raven_Movement"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-raven.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Raven.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorSimple id="SquadRavenSeekerMissileTint">
+        <Aliases value="_AngryTinter"/>
+        <Remove Terms="Effect.SquadRavenSeekerLaunchMissile.Start; At Target" Send="Create"/>
+        <Remove Terms="ActorCreation" Send="TimerSet 0.500000 SeekerTintInitialTimer"/>
+        <Remove Terms="TimerExpired; TimerName SeekerTintInitialTimer" Target="_Unit" Send="SetTintColor 255,50,50 0.500000 OneShot SeekerTarget"/>
+        <Remove Terms="TimerExpired; TimerName SeekerTintInitialTimer" Send="TimerSet 2.000000 SeekerTintDuration"/>
+        <Remove Terms="TimerExpired; TimerName SeekerTintDuration" Target="_Unit" Send="ClearTintColor 0.500000 SeekerTarget"/>
+        <Remove Terms="TimerExpired; TimerName SeekerTintDuration" Send="Destroy"/>
+        <On Terms="Effect.SquadRavenSeekerLaunchMissile.Start; At Target" Send="Create"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.500000 SeekerTintInitialTimer"/>
+        <On Terms="TimerExpired; TimerName SeekerTintInitialTimer" Target="_Unit" Send="SetTintColor 255,50,50 0.500000 OneShot SeekerTarget"/>
+        <On Terms="TimerExpired; TimerName SeekerTintInitialTimer" Send="TimerSet 2.000000 SeekerTintDuration"/>
+        <On Terms="TimerExpired; TimerName SeekerTintDuration" Target="_Unit" Send="ClearTintColor 0.500000 SeekerTarget"/>
+        <On Terms="TimerExpired; TimerName SeekerTintDuration" Send="Destroy"/>
+        <On Terms="Behavior.SquadRavenSeekerMissile.On" Send="Create"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="SetTintColor 255,50,50 0.500000 OneShot SeekerTarget"/>
+        <On Terms="Behavior.SquadRavenSeekerMissile.Off" Target="_Unit" Send="ClearTintColor 0.500000 SeekerTarget"/>
+        <On Terms="Behavior.SquadRavenSeekerMissile.Off" Send="Destroy"/>
+    </CActorSimple>
     <CActorModel id="SquadBunkerDropPod" parent="ModelAnimationStyleOneShotNoOrphan">
         <On Terms="Effect.SquadBunkerCalldownCreatePersistent.Start" Send="Create"/>
         <On Terms="AnimBracketState.*.AfterOpening; AnimName BSD" Send="Create DropPodUnload"/>

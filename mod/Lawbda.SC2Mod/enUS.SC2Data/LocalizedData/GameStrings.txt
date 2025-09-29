@@ -80,6 +80,9 @@ Abil/Name/SquadPickupScrapSmall=Squad Pickup Scrap Small
 Abil/Name/SquadProtossBuild=Squad Protoss Build
 Abil/Name/SquadQueue5=Squad Queue 5
 Abil/Name/SquadQueue8=Squad Queue 8
+Abil/Name/SquadRavenPlaceAutoTurret=Squad Raven Place Auto Turret
+Abil/Name/SquadRavenPlacePointDefenseDrone=Squad Raven Place Point Defense Drone
+Abil/Name/SquadRavenSeekerMissile=Squad Raven Seeker Missile
 Abil/Name/SquadRefineryToAutomatedRefinery=Squad Refinery To Automated Refinery
 Abil/Name/SquadRepairRedirect=Squad Repair Redirect
 Abil/Name/SquadSCVGather=Squad SCV Gather
@@ -191,6 +194,8 @@ Behavior/Name/SquadJump=Squad Jump
 Behavior/Name/SquadMarauderGiftFrostOrbSlow=Squad Marauder Gift Frost Orb Slow
 Behavior/Name/SquadMarauderSlow=Squad Marauder Slow
 Behavior/Name/SquadMedicGiftPoisonDOT=Squad Medic Gift Poison DOT
+Behavior/Name/SquadRavenSeekerMissile=Squad Raven Seeker Missile
+Behavior/Name/SquadRavenSeekerMissiletimeout=Squad Raven Seeker Missile timeout
 Behavior/Name/SquadReactorQueueBuff=Squad Reactor Queue Buff
 Behavior/Name/SquadReaperJump=Squad Reaper Jump
 Behavior/Name/SquadShooterAuraBuff=Squad Shooter Aura Buff
@@ -228,6 +233,7 @@ Behavior/Tooltip/SquadGhostEMPDecloak=Target was recently hit by an EMP Round, m
 Behavior/Tooltip/SquadMarauderGiftFrostOrbSlow=Target's movement speed is reduced for a short period of time.
 Behavior/Tooltip/SquadMarauderSlow=Target's movement speed is reduced for a short period of time.
 Behavior/Tooltip/SquadMedicGiftPoisonDOT=Irradiated unit. All Biological units in or near the radiation field will take damage.
+Behavior/Tooltip/SquadRavenSeekerMissile=This unit is being targeted by a Seeker Missile.
 Behavior/Tooltip/SquadStimpack=This unit moves and attacks more quickly while under the effects of Stimpack.
 Behavior/Tooltip/SquadSuperStimpack=This unit moves and attacks more quickly while under the effects of Stimpack.
 Behavior/Tooltip/SquadSupplydrop=This Supply Depot is providing an additional 8 supply.
@@ -283,6 +289,7 @@ Button/Name/CaptainFreeman=Captain Freeman
 Button/Name/CommandCenterUpgrade=Command Center Upgrade
 Button/Name/DefenderCoreSentinelMissiles=Defender Core Sentinel Missiles
 Button/Name/DeploySquadSpiderMine=Deploy Squad Spider Mine
+Button/Name/Detector2=Detector
 Button/Name/ExcavatorGather=Excavator Gather
 Button/Name/HarvestDropPoint=Harvest Drop Point
 Button/Name/HarvestResourceMessage=Harvest Resource Message
@@ -307,6 +314,7 @@ Button/Name/ScavageStructure=Scavage Structure
 Button/Name/ShooterAura=Shooter Aura
 Button/Name/SquadAfterburner=Squad Afterburner
 Button/Name/SquadAttackRedirect=Squad Attack Redirect
+Button/Name/SquadAutoTurret=Squad Auto Turret
 Button/Name/SquadBanshee=Squad Banshee
 Button/Name/SquadBansheeResearchCloakingField=Squad Banshee Research Cloaking Field
 Button/Name/SquadBansheeShockwaveMissileBattery=Squad Banshee Shockwave Missile Battery
@@ -376,13 +384,17 @@ Button/Name/SquadNukeCalldown=Squad Nuke Calldown
 Button/Name/SquadOrbOrb=Squad Orb Orb
 Button/Name/SquadOverjobOrb=Squad Overjob Orb
 Button/Name/SquadPlanetaryFortressStop=Squad Planetary Fortress Stop
+Button/Name/SquadPointDefenseLaser=Squad Point Defense Laser
 Button/Name/SquadPoisonOrb=Squad Poison Orb
 Button/Name/SquadPredator=Squad Predator
 Button/Name/SquadPredatorLightningField=Squad Predator Lightning Field
 Button/Name/SquadRavenAutoTurret=Squad Raven Auto-Turret
+Button/Name/SquadRavenBuildAutoTurret=Squad Raven Build Auto Turret
+Button/Name/SquadRavenBuildPointDefenseDrone=Squad Raven Build Point Defense Drone
 Button/Name/SquadRavenResearchCorvidReactor=Squad Raven Research Corvid Reactor
 Button/Name/SquadRavenResearchDurableMaterials=Squad Raven Research Durable Materials
 Button/Name/SquadRavenResearchSeekerMissile=Squad Raven Research Seeker Missile
+Button/Name/SquadRavenSeekerMissile=Squad Raven Seeker Missile
 Button/Name/SquadReaper=Squad Reaper
 Button/Name/SquadReaperCombatDrugs=Squad Reaper Combat Drugs
 Button/Name/SquadReaperG4ClusterBombs=Squad Reaper G-4 Cluster Bombs
@@ -492,6 +504,7 @@ Button/Tooltip/ConcussiveGrenade2=Units hit by the Marauder are temporarily slow
 Button/Tooltip/DefenderCoreArchor=Robotic mine. Launches missiles at nearby enemy units while burrowed. Attacks deal splash damage in a small area around the target. <n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/DefenderCoreSentinelMissiles=Attacks by launching missiles at enemy ground and air units that get too close. Missiles deal <d ref="Effect,WidowMineExplodeDirect,Amount"/> (+35 vs. shields) damage to their primary target, and <d ref="Effect,WidowMineExplodeSplash,Amount"/> (+<d ref="Effect,WidowMineExplodeSplashShields,VitalBonus[Shields]"/> vs. shields) splash damage to units nearby.<n/><n/><c val="#ColorAttackInfo">Cooldown: <d ref="Abil,WidowMineAttack,Cost[0].Cooldown[0].TimeUse[0]"/> seconds.</c>
 Button/Tooltip/DeploySquadSpiderMine=Spider Mines pursue enemy units that come in range, and detonate for heavy area damage. Buried Spider Mines can only be seen by enemy Detectors.
+Button/Tooltip/Detector2=This unit can detect cloaked, burrowed, and hallucinated units.
 Button/Tooltip/ExcavatorGather=Orders MULE to gather minerals from a selected Mineral Field.
 Button/Tooltip/GhostHoldFire2=Orders selected units to holster their weapons and avoid engaging enemies, unless given a direct command. Units holding fire will flee if attacked.
 Button/Tooltip/HarvestResourceMessage=Give a message to nearby resource.
@@ -524,6 +537,7 @@ Button/Tooltip/ShooterAura=Captain Freeman offer +<d ref="Behavior,SquadShooterA
 Button/Tooltip/SquadAfterburner=<n/>Increases the Scout's movement speed by 100% for <d time="10"/>.
 Button/Tooltip/SquadArmory=Contains weapon and armor upgrades for Factory and Starport units.
 Button/Tooltip/SquadAttackRedirect=Targets and attacks the target unit until it is destroyed or moves out of range.
+Button/Tooltip/SquadAutoTurret=Automated defensive turret. Times out after <d ref="Behavior,AutoTurretTimedLife,Duration"/> seconds.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/SquadBanshee=Tactical-strike aircraft.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/SquadBansheeResearchCloakingField=Enables <c val="ffff8a">Banshees</c> to use the Cloak ability. Cloak renders the <c val="ffff8a">Banshee</c> invisible to enemies unless the unit is revealed by detectors or effects.
 Button/Tooltip/SquadBansheeShockwaveMissileBattery=Banshee attack fires multiple missile bursts in a straight line.
@@ -612,13 +626,18 @@ Button/Tooltip/SquadPickupScrapMediumText=<s val="Kicker_Minerals">+<d ref="Effe
 Button/Tooltip/SquadPickupScrapSmallText=<s val="Kicker_Minerals">+<d ref="Effect,SquadPickupScrapSmallResources,Resources[0]"/> </s><n/><s val="Kicker_Gas">+<d ref="Effect,SquadPickupScrapSmallResources,Resources[1]"/> </s>
 Button/Tooltip/SquadPlanetaryFortress=Primary structure. Used to train SCVs and receive gathered resources. Has exceptional combat capabilities that are extremely potent against swarms of small units.<n/><n/><c val="ffff8a">Can attack ground units.</c>
 Button/Tooltip/SquadPlanetaryFortressStop=Orders selected units to cancel all orders and stop moving.
+Button/Tooltip/SquadPointDefenseDrone=Uses a laser to shoot down enemy missiles.  <n/>Cannot target special attacks. <n/>Times out after <d ref="Behavior,PointDefenseDroneTimedLife,Duration"/> seconds.<n/><n/><c val="f078ff">Each shot consumes 10 energy.</c>
+Button/Tooltip/SquadPointDefenseLaser=Automated defensive laser that intercepts enemy projectiles.<n/><n/>Effective against Marauders, Vikings, Banshees, Battlecruisers, Cyclones, Thors, Missile Turrets, Stalkers, Phoenixes, Tempests, Photon Cannons, Mothership Cores, Nexus, Queens, Mutalisks, Corruptors, Hydralisks, Ravagers, Locusts, and Spore Crawlers.<n/><n/><c val="f078ff">Each shot consumes 10 energy.</c>
 Button/Tooltip/SquadPredator=Anti-infantry specialist that deals area damage with each attack.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/SquadPredatorLightningField=The Predator unleashes a deadly field of electricity each time it attacks. Deals 20 damage.
 Button/Tooltip/SquadPylon=Provides supply.<n/>Supply allows you to warp in more units.<n/>Creates power for nearby structures.
-Button/Tooltip/SquadRavenAutoTurret=Automated defensive turret. <n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
+Button/Tooltip/SquadRaven=Aerial support unit. Can use Auto-Turret, Point Defense Drone and Seeker Missile.<n/><n/><c val="FFE303">Detector</c>
+Button/Tooltip/SquadRavenBuildAutoTurret=Automated defensive turret. Times out after <d ref="Behavior,AutoTurretTimedLife,Duration"/> seconds.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
+Button/Tooltip/SquadRavenBuildPointDefenseDrone=Uses a laser to shoot down enemy missiles.  <n/>Cannot target special attacks. <n/>Times out after <d ref="Behavior,PointDefenseDroneTimedLife,Duration"/> seconds.<n/><n/><c val="f078ff">Each shot consumes 10 energy.</c>
 Button/Tooltip/SquadRavenResearchCorvidReactor=Increases the starting energy of <c val="ffff8a">Ravens</c> by <d ref="Upgrade,RavenCorvidReactor,EffectArray[0].Value"/>.
 Button/Tooltip/SquadRavenResearchDurableMaterials=Extends the timed duration of Raven <c val="ffff8a">Auto-Turrets</c> and <c val="ffff8a">Point Defense Drones</c>.
 Button/Tooltip/SquadRavenResearchSeekerMissile=Enables <c val="ffff8a">Ravens</c> to use the Seeker Missile armament. This missile activates after <d ref="Behavior,SeekerMissileTimeout,Duration[0]"/> seconds, dealing <d ref="Effect,SeekerMissileDamage,Amount"/> AoE damage to the target if they are still within range.
+Button/Tooltip/SquadRavenSeekerMissile=Deploys a Seeker Missile which activates after <d time="5"/> and pursues the target unit, dealing <d ref="Effect,SeekerMissileDamage,Amount"/> splash damage upon contact.
 Button/Tooltip/SquadReactor=Allows 2 units to be created simultaneously.
 Button/Tooltip/SquadReaper=Raider. Capable of jumping up and down cliffs. Throws explosive mines.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/SquadReaperCombatDrugs=Regenerates life quickly while out of combat.
@@ -825,6 +844,7 @@ Effect/Name/PassengerAutoFireApply=Passenger Auto Fire Apply
 Effect/Name/PassengerAutoFireRemove=Passenger Auto Fire Remove
 Effect/Name/PassengerAutoRepair=Passenger Auto Repair
 Effect/Name/PeriodMagazineIterate=Period Magazine Iterate
+Effect/Name/PointDefenseDroneReleaseSet2=Squad Raven Point Defense Drone Release Set
 Effect/Name/PoisonOrbApply=Poison Orb Apply
 Effect/Name/PoisonOrbRemove=Poison Orb Remove
 Effect/Name/PoweredByBarrackApply=Powered By Barrack Apply
@@ -885,6 +905,7 @@ Effect/Name/SpriteLinkRemove=Sprite Link Remove
 Effect/Name/Squad250mmStrikeCannonsSet=Squad 250mm Strike Cannons Set
 Effect/Name/SquadAlphaInfantryDeathResponseChain=Squad Alpha Infantry Death Response Chain
 Effect/Name/SquadAutoHarvestVespene=Squad Auto Harvest Vespene
+Effect/Name/SquadAutoTurrectTwinAutocannonsDamage=Squad Auto Turrect Twin Autocannons Damage
 Effect/Name/SquadBansheeCP=Squad Banshee CP
 Effect/Name/SquadBansheeDamage=Squad Banshee Damage
 Effect/Name/SquadBansheeLM=Squad Banshee LM
@@ -1040,12 +1061,34 @@ Effect/Name/SquadPickupScrapMediumSet=Squad Pickup Scrap Medium Set
 Effect/Name/SquadPickupScrapSmallResources=Squad Pickup Scrap Small Resources
 Effect/Name/SquadPickupScrapSmallSet=Squad Pickup Scrap Small Set
 Effect/Name/SquadPlanetaryFortressTwinIbiksCannon=Squad Planetary Fortress Twin Ibiks Cannon
+Effect/Name/SquadPointDefenseLaser=Squad Point Defense Laser
+Effect/Name/SquadPointDefenseLaserDummy=Squad Point Defense Laser Dummy
+Effect/Name/SquadPointDefenseLaserEnergy=Squad Point Defense Laser Energy
+Effect/Name/SquadPointDefenseLaserInitialSet=Squad Point Defense Laser Initial Set
+Effect/Name/SquadPointDefenseLaserSearch=Squad Point Defense Laser Search
+Effect/Name/SquadPointDefenseLaserSet=Squad Point Defense Laser Set
 Effect/Name/SquadPredatorDeathResponseChain=Squad Predator Death Response Chain
 Effect/Name/SquadPredatorRetributionFieldDamage=Squad Predator Retribution Field Damage
 Effect/Name/SquadPredatorRetributionFieldSearch=Squad Predator Retribution Field Search
 Effect/Name/SquadPredatorRetributionFieldSet=Squad Predator Retribution Field Set
 Effect/Name/SquadPredatorTitaniumClaws=Squad Predator Titanium Claws
 Effect/Name/SquadProjectileAcceleratorsApply=Squad Projectile Accelerators Apply
+Effect/Name/SquadRavenAutoTurretRelease=Squad Raven Auto Turret Release
+Effect/Name/SquadRavenAutoTurretReleaseLM=Squad Raven Auto Turret Release LM
+Effect/Name/SquadRavenAutoTurretReleaseLaunch=Squad Raven Auto Turret Release Launch
+Effect/Name/SquadRavenAutoTurretSet=Squad Raven Auto Turret Set
+Effect/Name/SquadRavenAutoturretTimedLife=Squad Raven Auto turret Timed Life
+Effect/Name/SquadRavenPointDefenseDroneReleaseCreateUnit=Squad Raven Point Defense Drone Release Create Unit
+Effect/Name/SquadRavenPointDefenseDroneReleaseLaunchMissile=Squad Raven Point Defense Drone Release Launch Missile
+Effect/Name/SquadRavenPointDefenseDroneTimedLife=Squad Raven Point Defense Drone Timed Life
+Effect/Name/SquadRavenSeekerDamage=Squad Raven Seeker Damage
+Effect/Name/SquadRavenSeekerLaunchMissile=Squad Raven Seeker Launch Missile
+Effect/Name/SquadRavenSeekerMissileApplyBehavior=Squad Raven Seeker Missile Apply Behavior
+Effect/Name/SquadRavenSeekerMissileLaunchCP=Squad Raven Seeker Missile Launch CP
+Effect/Name/SquadRavenSeekerMissileLaunchSet=Squad Raven Seeker Missile Launch Set
+Effect/Name/SquadRavenSeekerMissileLaunchTintCP=Squad Raven Seeker Missile Launch Tint CP
+Effect/Name/SquadRavenSeekerMissileSuicide=Squad Raven Seeker Missile Suicide
+Effect/Name/SquadRavenSeekerMissileSuicideSet=Squad Raven Seeker Missile Suicide Set
 Effect/Name/SquadReactorPowerQueueRemove=Squad Reactor Power Queue Remove
 Effect/Name/SquadReaperD8ChargeDamage=Squad Reaper D8 Charge Damage
 Effect/Name/SquadReaperD8ChargeLaunchMissile=Squad Reaper D8 Charge Launch Missile
@@ -1146,6 +1189,7 @@ Effect/Name/SquadWraithARightLaunchMissile=Squad Wraith A Right Launch Missile
 Effect/Name/SquadWraithGDamage=Squad Wraith G Damage
 Effect/Name/SquadWraithGLaunchMissile=Squad Wraith G Launch Missile
 Effect/Name/SquadWraithUnstableCloakApply=Squad Wraith Unstable Cloak Apply
+Effect/Name/SqudPointDefenseLaserDamage=Squd Point Defense Laser Damage
 Effect/Name/UnitHugeMaxLifeApply=Unit Huge Max Life Apply
 Effect/Name/UnitHugeMaxLifeRemove=Unit Huge Max Life Remove
 Effect/Name/UnitMediumMaxLifeApply=Unit Medium Max Life Apply
@@ -1185,6 +1229,7 @@ Unit/Name/SiegeTank=Squad Siege Tank Sieged
 Unit/Name/SmallScrapSalvagex11=Small Scrap Salvagex11
 Unit/Name/SpiderMine=Squad Spider Mine Burrowed
 Unit/Name/SquadArmory=Squad Armory
+Unit/Name/SquadAutoTurret=Squad Auto Turret
 Unit/Name/SquadAutomatedRefinery=Automated Refinery
 Unit/Name/SquadBanshee=Squad Banshee
 Unit/Name/SquadBansheeWeapon=Squad Banshee Weapon
@@ -1223,8 +1268,13 @@ Unit/Name/SquadMissileTurretLongboltMissile=Squad Missile Turret Longbolt Missil
 Unit/Name/SquadOrbitalCommand=Squad Orbital Command
 Unit/Name/SquadOrbitalCommandFlying=Squad Orbital Command Flying
 Unit/Name/SquadPlanetaryFortress=Squad Planetary Fortress
+Unit/Name/SquadPointDefenseDrone=Squad Point Defense Drone
+Unit/Name/SquadPointDefenseDroneRelease=Squad Point Defense Drone Release
 Unit/Name/SquadPredator=Squad Predator
 Unit/Name/SquadPylon=Squad Pylon
+Unit/Name/SquadRaven=Squad Raven
+Unit/Name/SquadRavenAutoTurretReleaseWeapon=Squad Raven Auto Turret Release Weapon
+Unit/Name/SquadRavenHunterSeekerWeapon=Squad Raven Hunter Seeker Weapon
 Unit/Name/SquadReactor=Squad Reactor
 Unit/Name/SquadReaper=Squad Reaper
 Unit/Name/SquadReaperD8Charge=Squad Reaper D8 Charge
@@ -1301,6 +1351,7 @@ Weapon/Name/ExcavatorD888Charge=Excavator D888 Charge
 Weapon/Name/FreemanGaussRifle=Freeman Gauss Rifle
 Weapon/Name/MedicFlashGrenade=Medic Flash Grenade
 Weapon/Name/SCVFusionCutter=SCV Fusion Cutter
+Weapon/Name/SquadAutoTurret=Squad Auto Turret
 Weapon/Name/SquadBacklashRockets=Squad Backlash Rockets
 Weapon/Name/SquadBunkerShrikeAutoGun=Squad Bunker Shrike Auto Gun
 Weapon/Name/SquadDiamondbackEvisceratorRailGun=Squad Diamondback Eviscerator Rail Gun
@@ -1316,6 +1367,7 @@ Weapon/Name/SquadMarineGaussRifle=Squad Marine Gauss Rifle
 Weapon/Name/SquadMissileTurretHellstormMissilePods=Squad Missile Turret Hellstorm Missile Pods
 Weapon/Name/SquadMissileTurretLongboltMissile=Squad Missile Turret Longbolt Missile
 Weapon/Name/SquadPlanetaryFortressIbiksCannon=Squad Planetary Fortress Ibiks Cannon
+Weapon/Name/SquadPointDefenseLaser=Squad Point Defense Laser
 Weapon/Name/SquadPredatorTitaniumClaws=Squad Predator Titanium Claws
 Weapon/Name/SquadReaperD8Charge=Squad Reaper D8 Charge
 Weapon/Name/SquadReaperP45GaussPistol=Squad Reaper P-45 Gauss Pistol

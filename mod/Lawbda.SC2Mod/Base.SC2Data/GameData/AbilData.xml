@@ -1,5 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CAbilEffectTarget id="SquadRavenPlaceAutoTurret">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoTooltipPriority value="21"/>
+        <Effect index="0" value="SquadRavenAutoTurretRelease"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+            <Charge Link="Abil/SquadAutoTurret"/>
+            <Cooldown Link="SquadRaven Build Link" Location="Unit"/>
+        </Cost>
+        <Placeholder value="SquadAutoTurret"/>
+        <Range value="3"/>
+        <Marker Link="Abil/SquadAutoTurret"/>
+        <ErrorAlert value="Error"/>
+        <AINotifyEffect value="SquadAutoTurret"/>
+        <ProducedUnitArray value="SquadAutoTurret"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadAutoTurret"/>
+        <PlaceUnit value="SquadAutoTurret"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadRavenPlacePointDefenseDrone">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoTooltipPriority value="11"/>
+        <Effect index="0" value="SquadRavenPointDefenseDroneReleaseCreateUnit"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="100"/>
+            <Cooldown Link="Raven Build Link" Location="Unit"/>
+        </Cost>
+        <Placeholder value="PointDefenseDrone"/>
+        <Range value="3"/>
+        <ProducedUnitArray value="SquadPointDefenseDrone"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadRavenBuildPointDefenseDrone"/>
+        <PlaceUnit value="SquadPointDefenseDrone"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadRavenSeekerMissile">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoTooltipPriority value="1"/>
+        <Effect index="0" value="SquadRavenSeekerLaunchMissile"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="75"/>
+            <Charge Link="Abil/HunterSquadRavenSeekerMissile"/>
+            <Cooldown Link="Abil/HunterSquadRavenSeekerMissile"/>
+        </Cost>
+        <TargetFilters value="Visible;Self,Neutral,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="10"/>
+        <Arc value="29.9926"/>
+        <ArcSlop value="0"/>
+        <Marker Link="Abil/HunterSquadRavenSeekerMissile"/>
+        <AINotifyEffect value="HunterSeekerMissile"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadRavenSeekerMissile"/>
+    </CAbilEffectTarget>
     <CAbilEffectTarget id="SquadBunkerInstantJustice">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <SharedFlags index="TargetCursorVisibleInBlackMask" value="1"/>
