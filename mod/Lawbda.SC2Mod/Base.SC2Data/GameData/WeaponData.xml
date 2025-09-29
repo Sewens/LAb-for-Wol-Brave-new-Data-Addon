@@ -1,20 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
-    <CWeaponLegacy id="MengskBanshee2">
+    <CWeaponLegacy id="SquadThor250mmPunisherCannons">
         <EditorCategories value="Race:Terran"/>
-        <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel0.dds"/>
-        <DisplayEffect value="MengskBansheeDamage"/>
-        <DisplayAttackCount value="2"/>
-        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
-        <MinScanRange value="6"/>
-        <Range value="6"/>
-        <Marker>
-            <MatchFlags index="Id" value="1"/>
-        </Marker>
-        <Period value="1.25"/>
-        <Effect value="MengskBansheeCP"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel0.dds"/>
+        <DisplayEffect value="SquadThorLanceMissileLaunchersDamage"/>
+        <TargetFilters value="Air,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AcquirePrioritization value="ByAngle"/>
+        <Range value="10"/>
+        <Arc value="5.625"/>
+        <Period value="2"/>
+        <Effect value="SquadThorLanceMissileLaunchersDamage"/>
         <LegacyOptions index="KeepChanneling" value="1"/>
-        <AllowedMovement value="Slowing"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="SquadThorJavelinMissileLaunchers">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel0.dds"/>
+        <DisplayEffect value="SquadThorJavelinMissileLaunchersDamage"/>
+        <DisplayAttackCount value="4"/>
+        <TargetFilters value="Air,Visible;Ground,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AcquirePrioritization value="ByAngle"/>
+        <Range value="10"/>
+        <Arc value="5.625"/>
+        <Period value="3"/>
+        <Effect value="SquadThorJavelinMissileLaunchersPersistent"/>
+        <LegacyOptions index="KeepChanneling" value="1"/>
     </CWeaponLegacy>
     <CWeaponLegacy id="SquadBacklashRockets">
         <EditorCategories value="Race:Terran"/>
@@ -28,7 +37,7 @@
             <MatchFlags index="Id" value="1"/>
         </Marker>
         <Period value="1.25"/>
-        <Effect value="MengskBansheeCP2"/>
+        <Effect value="SquadBansheeCP"/>
         <LegacyOptions index="KeepChanneling" value="1"/>
         <AllowedMovement value="Slowing"/>
     </CWeaponLegacy>
@@ -162,7 +171,7 @@
         <Backswing value="0.25"/>
         <Effect value="SquadMissileTurretHellstormMissilePodsCreatePersistent"/>
     </CWeaponLegacy>
-    <CWeaponLegacy id="KaiserBlades2">
+    <CWeaponLegacy id="SquadUltraliskKaiserBlades">
         <EditorCategories value="Race:Zerg"/>
         <Options index="Melee" value="1"/>
         <Icon value="Assets\Textures\btn-upgrade-zerg-meleeattacks-level0.dds"/>
@@ -223,60 +232,6 @@
         <DamagePoint value="0.083"/>
         <Backswing value="1.167"/>
         <Effect value="SquadC10CanisterRifle"/>
-    </CWeaponLegacy>
-    <CWeaponLegacy id="DRBattlecruiserA2">
-        <EditorCategories value="Race:Terran"/>
-        <Options index="Hidden" value="1"/>
-        <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel0.dds"/>
-        <DisplayEffect value="DRBattlecruiserAU2"/>
-        <TargetFilters value="Air,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
-        <AcquirePrioritization value="ByAngle"/>
-        <Range value="2"/>
-        <Period value="0.225"/>
-        <Effect value="DRBattlecruiserALM2"/>
-        <AllowedMovement value="Slowing"/>
-        <RandomDelayMax value="0.1875"/>
-    </CWeaponLegacy>
-    <CWeaponLegacy id="DRBattlecruiserG2">
-        <EditorCategories value="Race:Terran"/>
-        <Options index="Hidden" value="1"/>
-        <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel0.dds"/>
-        <DisplayEffect value="DRBattlecruiserGU2"/>
-        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
-        <AcquirePrioritization value="ByAngle"/>
-        <Range value="2"/>
-        <Period value="0.225"/>
-        <Effect value="DRBattlecruiserGLM2"/>
-        <AllowedMovement value="Slowing"/>
-        <RandomDelayMax value="0.1875"/>
-    </CWeaponLegacy>
-    <CWeaponLegacy id="DRCannonsA2">
-        <EditorCategories value="Race:Terran"/>
-        <Options index="Hidden" value="1"/>
-        <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel0.dds"/>
-        <DisplayEffect value="DRBattlecruiserAU2"/>
-        <TargetFilters value="Air,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
-        <AcquirePrioritization value="ByAngle"/>
-        <Range value="6"/>
-        <MinimumRange value="2"/>
-        <Period value="0.3"/>
-        <AllowedMovement value="Slowing"/>
-        <RandomDelayMin value="0"/>
-        <RandomDelayMax value="0"/>
-    </CWeaponLegacy>
-    <CWeaponLegacy id="DRCannonsG2">
-        <EditorCategories value="Race:Terran"/>
-        <Options index="Hidden" value="1"/>
-        <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel0.dds"/>
-        <DisplayEffect value="DRBattlecruiserGU2"/>
-        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
-        <AcquirePrioritization value="ByAngle"/>
-        <Range value="6"/>
-        <MinimumRange value="2"/>
-        <Period value="0.3"/>
-        <AllowedMovement value="Slowing"/>
-        <RandomDelayMin value="0"/>
-        <RandomDelayMax value="0"/>
     </CWeaponLegacy>
     <CWeaponLegacy id="SquadFirebatPerditionFlamethrower">
         <EditorCategories value="Race:Terran"/>
@@ -452,5 +407,19 @@
         <Range value="0.1"/>
         <Period value="0.833"/>
         <Effect value="SquadSpiderMinesSet"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="SquadThorsHammer">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel0.dds"/>
+        <DisplayEffect value="SquadThorHammerDamage"/>
+        <DisplayAttackCount value="2"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AcquirePrioritization value="ByAngle"/>
+        <Range value="7"/>
+        <Period value="1.28"/>
+        <DamagePoint value="0.831"/>
+        <Backswing value="0.25"/>
+        <Effect value="SquadThorHammerPersistent"/>
+        <LegacyOptions index="KeepChanneling" value="1"/>
     </CWeaponLegacy>
 </Catalog>

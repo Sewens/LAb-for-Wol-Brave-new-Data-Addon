@@ -1,5 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CEffectCreatePersistent id="SquadBunkerCalldownDetonate">
+        <EditorCategories value="Race:Terran"/>
+        <InitialDelay value="1.25"/>
+        <InitialEffect value="SquadRemovePrecursor"/>
+        <ExpireDelay value="4"/>
+        <RevealRadius value="8"/>
+        <RevealFlags index="Unfog" value="1"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="SquadBunkerCalldownCreatePersistent">
+        <EditorCategories value="Race:Terran"/>
+        <InitialEffect value="SquadBunkerCalldownDetonate"/>
+        <ExpireDelay value="4"/>
+        <ExpireEffect value="SquadMakePrecursor"/>
+        <FinalEffect value="SquadBunkerCalldownTransport"/>
+    </CEffectCreatePersistent>
+    <CEffectApplyBehavior id="SquadThorLanceMissileLaunchers">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="SquadArmorpiercingMode"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="SquadThorLanceMissileLaunchersDamage" parent="DU_WEAP_SPLASH">
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Ranged"/>
+        <KindSplash value="Splash"/>
+        <Amount value="24"/>
+        <Death value="Blast"/>
+        <SearchFilters value="Air;Self,Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <SearchFlags index="OffsetByUnitRadius" value="0"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="SquadThorLanceMissileLaunchersLaunchMissile">
+        <ValidatorArray index="0" value="ThorAALaunchMissileTargetFilters"/>
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="SquadThorLanceMissileLaunchersDamage"/>
+        <AmmoUnit value="SquadThorAALance"/>
+    </CEffectLaunchMissile>
+    <CEffectApplyBehavior id="SquadThorSelfRepairApplyBehavior">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadThorSelfRepair"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadThorSelfRepairEndApplyBehavior">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadThorSelfRepairEnd"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadThor250mmStrikeCannonsApplyBehavior">
+        <ValidatorArray index="0" value="NotHeroic"/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadThor250mmStrikeCannons"/>
+    </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="SquadThor250mmStrikeCannonsCreatePersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <Flags index="Channeled" value="1"/>
+        <InitialEffect value="Squad250mmStrikeCannonsSet"/>
+        <PeriodCount value="25"/>
+        <PeriodicValidator value="250mmCannonValidators"/>
+        <PeriodicEffectArray value="SquadThor250mmStrikeCannonsDamage"/>
+        <PeriodicPeriodArray value="0.24"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="SquadThor250mmStrikeCannonsDamage">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <Flags index="Notification" value="1"/>
+        <Amount value="20"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="SameCliff" value="0"/>
+    </CEffectDamage>
+    <CEffectDamage id="SquadThor250mmStrikeCannonsDummy">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Flags index="Notification" value="1"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectDamage>
+    <CEffectSet id="Squad250mmStrikeCannonsSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadThor250mmStrikeCannonsApplyBehavior"/>
+        <EffectArray value="SquadThor250mmStrikeCannonsDummy"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="SquadThor330mmBarrageCannonsApplyBehavior">
+        <ValidatorArray index="0" value="330mmCannonValidators"/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadThor330mmBarrageCannon"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="SquadThor330mmBarrageCannonsDamage">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Kind value="Splash"/>
+        <KindSplash value="Splash"/>
+        <Amount value="20"/>
+        <Death value="Blast"/>
+        <AreaArray Radius="0.5" Fraction="1"/>
+        <AreaArray Radius="1" Fraction="0.5"/>
+        <AreaArray Radius="2" Fraction="0.25"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="SameCliff" value="0"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="SquadThor330mmBarrageCannonsPersistent">
+        <ValidatorArray value="CliffLevelGE1"/>
+        <EditorCategories value="Race:Terran"/>
+        <Flags index="Channeled" value="1"/>
+        <PeriodCount value="25"/>
+        <PeriodicEffectArray value="SquadThor330mmBarrageCannonsSet"/>
+        <PeriodicPeriodArray value="0.24"/>
+        <RevealRadius value="4"/>
+        <RevealFlags index="Unfog" value="1"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="SquadThor330mmBarrageCannonsSearch">
+        <EditorCategories value="Race:Terran"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="0.5" Effect="SquadThor330mmBarrageCannonsApplyBehavior"/>
+    </CEffectEnumArea>
+    <CEffectSet id="SquadThor330mmBarrageCannonsSet">
+        <ValidatorArray value="330mmBarrageCannonsSetTargetFilters"/>
+        <EditorCategories value=""/>
+        <EffectArray value="SquadThor330mmBarrageCannonsDamage"/>
+        <EffectArray value="SquadThor330mmBarrageCannonsSearch"/>
+    </CEffectSet>
     <CEffectApplyBehavior id="ExcavatorAfterburnerSmashApplyDebuff">
         <EditorCategories value=""/>
     </CEffectApplyBehavior>
@@ -17,6 +138,36 @@
         <EffectArray value="ExcavatorAfterburnerSmashApplyDebuff"/>
         <EffectArray value="ExcavatorAfterburnerSmashDamage"/>
     </CEffectSet>
+    <CEffectDamage id="SquadThorJavelinMissileLaunchersDamage" parent="DU_WEAP_SPLASH">
+        <EditorCategories value="Race:Terran"/>
+        <AttributeBonus index="Light" value="6"/>
+        <Kind value="Ranged"/>
+        <KindSplash value="Splash"/>
+        <Amount value="6"/>
+        <Death value="Blast"/>
+        <AreaArray Radius="0.5" Fraction="1"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Air;Self,Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <SearchFlags index="OffsetByUnitRadius" value="0"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="SquadThorJavelinMissileLaunchersLM">
+        <ValidatorArray index="0" value="RangeCheckLE15"/>
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="SquadThorJavelinMissileLaunchersDamage"/>
+        <AmmoUnit value="SquadThorAAWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectCreatePersistent id="SquadThorJavelinMissileLaunchersPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="Channeled" value="1"/>
+        <PeriodCount value="4"/>
+        <PeriodicEffectArray value="SquadThorJavelinMissileLaunchersLM"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0.125"/>
+        <PeriodicPeriodArray value="0.25"/>
+        <PeriodicPeriodArray value="0.125"/>
+    </CEffectCreatePersistent>
     <CEffectRemoveBehavior id="SquadMedivacHealRemoveTargetBehavior">
         <EditorCategories value="Race:Terran"/>
         <BehaviorLink value="MedivacTargetBeingHealed"/>
@@ -167,7 +318,7 @@
         <EditorCategories value="Race:Terran"/>
         <Behavior value="SquadAfterburnersActive"/>
     </CEffectApplyBehavior>
-    <CEffectCreatePersistent id="MengskBansheeCP2">
+    <CEffectCreatePersistent id="SquadBansheeCP">
         <EditorCategories value="Race:Terran"/>
         <WhichLocation Value="TargetUnit"/>
         <ExpireDelay value="0.8"/>
@@ -627,6 +778,55 @@
         <EditorCategories value=""/>
         <Behavior value="SquadWraithUnstableCloak"/>
     </CEffectApplyBehavior>
+    <CEffectIssueOrder id="SquadThorCancel250">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Source"/>
+        <Abil value="SquadThor250mmStrikeCannons"/>
+        <AbilCmdIndex value="1"/>
+        <CmdFlags index="Preempt" value="1"/>
+    </CEffectIssueOrder>
+    <CEffectIssueOrder id="SquadThorCancel330">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Source"/>
+        <Abil value="SquadThor330mmBarrageCannons"/>
+        <AbilCmdIndex value="1"/>
+        <CmdFlags index="Preempt" value="1"/>
+    </CEffectIssueOrder>
+    <CEffectSet id="SquadThorWreckage">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadThorCancel250"/>
+        <EffectArray value="SquadThorCancel330"/>
+        <EffectArray value="SquadThorWreckageAbil"/>
+    </CEffectSet>
+    <CEffectIssueOrder id="SquadThorWreckageAbil">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Source"/>
+        <Abil value="SquadThorWreckage"/>
+        <CmdFlags index="Preempt" value="1"/>
+    </CEffectIssueOrder>
+    <CEffectCreatePersistent id="SquadThorHammerPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnitOrPoint"/>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="Channeled" value="1"/>
+        <PeriodCount value="2"/>
+        <PeriodicEffectArray value="SquadThorHammerDamage"/>
+        <PeriodicEffectArray value="SquadThorHammerDamage"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0.375"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="SquadThorHammerDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Ranged"/>
+        <Amount value="30"/>
+        <Death value="Blast"/>
+    </CEffectDamage>
+    <CEffectSet id="SquadThorSelfRepairSet">
+        <ValidatorArray value="ThorLifeNotFull"/>
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadThorSelfRepairApplyBehavior"/>
+        <EffectArray value="SquadThorSelfRepairEndApplyBehavior"/>
+    </CEffectSet>
     <CEffectRemoveBehavior id="VampireOrbRemove">
         <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="CasterOuter"/>
@@ -1053,6 +1253,7 @@
         <WhichLocation Value="TargetUnitOrPoint"/>
         <SpawnEffect value="SquadCalldownMULECreateSet"/>
         <SpawnUnit value="Mulelisk"/>
+        <CreateFlags index="Precursor" value="1"/>
     </CEffectCreateUnit>
     <CEffectSet id="SquadCalldownMULEFinalSet">
         <EditorCategories value="Race:Terran"/>
@@ -1492,12 +1693,6 @@
         <EffectArray value="BlueScannerSheildDamage"/>
         <EffectArray value="BlueScannerSweepEnergyDamage"/>
     </CEffectSet>
-    <CEffectCreateUnit id="CreatDropPodUnit">
-        <EditorCategories value="Race:Terran"/>
-        <Origin Value="Unknown"/>
-        <WhichLocation Value="TargetPoint"/>
-        <CreateFlags index="Precursor" value="1"/>
-    </CEffectCreateUnit>
     <CEffectApplyBehavior id="DistributeBuffTrackerApply">
         <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
@@ -1715,14 +1910,6 @@
         <SearchFlags index="OffsetAreaByAngle" value="1"/>
         <SearchFlags index="SameCliff" value="0"/>
     </CEffectDamage>
-    <CEffectSet id="EffectPackCallDown">
-        <EditorCategories value="Race:Terran"/>
-        <EffectArray value="JoinAbilityDisableRemove"/>
-        <EffectArray value="MagazineTracker1StackRemove"/>
-        <EffectArray value="RemoveBasicModification"/>
-        <EffectArray value="TerranInstantJustice"/>
-        <TargetLocationType value="UnitOrPoint"/>
-    </CEffectSet>
     <CEffectApplyBehavior id="EnergyHugeMaxandMediumRegenerationApply">
         <EditorCategories value="Race:Terran"/>
         <Behavior value="EnergyHugeMaxandMediumRegeneration"/>
@@ -1900,9 +2087,6 @@
         <EffectArray value="SpriteLinkApply"/>
         <EffectArray value="GiveKillsToCaster"/>
     </CEffectSet>
-    <CEffectEnumMagazine id="IterateMagazineCallDown">
-        <EditorCategories value="Race:Terran"/>
-    </CEffectEnumMagazine>
     <CEffectApplyBehavior id="LootOnDealDamage">
         <EditorCategories value="Race:Terran"/>
     </CEffectApplyBehavior>
@@ -1946,24 +2130,6 @@
         <EditorCategories value="Race:Terran"/>
         <Behavior value="MultiMineralAutoHarvestAura"/>
     </CEffectApplyBehavior>
-    <CEffectCreatePersistent id="DropPodDetonate">
-        <EditorCategories value="Race:Terran"/>
-        <InitialDelay value="1.25"/>
-        <ExpireDelay value="8.75"/>
-        <RevealRadius value="8"/>
-        <RevealFlags index="Unfog" value="1"/>
-        <ExpireEffect value="CreatDropPodUnit"/>
-    </CEffectCreatePersistent>
-    <CEffectCreatePersistent id="DropPodPersistent">
-        <EditorCategories value="Race:Terran"/>
-        <Alert value="CalldownLaunchObserver"/>
-        <Flags index="Channeled" value="1"/>
-        <InitialDelay value="8.75"/>
-        <ExpireEffect value="DropPodDetonate"/>
-        <PeriodCount value="50"/>
-        <PeriodicPeriodArray value="0.2"/>
-        <AINotifyEffect value="NukeDamage"/>
-    </CEffectCreatePersistent>
     <CEffectEnumArea id="RedNuclearSearhVictim">
         <EditorCategories value=""/>
         <OwningPlayer Value="Source"/>
@@ -2003,12 +2169,6 @@
         <Abil value="RefineryToAutomatedRefinery"/>
         <Player Value="Source"/>
     </CEffectIssueOrder>
-    <!--Remove Magazine Unit on iterate magazine.-->
-    <!--Then these units will call down to target location.-->
-    <CEffectReleaseMagazine id="ReleaseMagazineCallDown">
-        <EditorCategories value="Race:Terran"/>
-        <WhichUnit Effect="RemoveUnit" Value="Target"/>
-    </CEffectReleaseMagazine>
     <CEffectRemoveBehavior id="RemoveBasicModification">
         <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
@@ -2337,11 +2497,10 @@
         <Abil value="SquadDropToSupplyDepot"/>
         <Player Value="Source"/>
     </CEffectIssueOrder>
-    <CEffectUseCalldown id="TerranInstantJustice">
+    <CEffectUseCalldown id="SquadBunkerCalldownTransport">
         <EditorCategories value="Race:Terran"/>
         <WhichLocation Value="TargetPoint"/>
         <CalldownCount value="200"/>
-        <CalldownEffect value="DropPodPersistent"/>
     </CEffectUseCalldown>
     <CEffectModifyUnit id="SquadTissueAssimilation">
         <ValidatorArray value="HaveHotSTissueAssimilation"/>
@@ -2781,11 +2940,6 @@
         <DrainVitalCostFactor value="0.33"/>
         <RechargeVitalRate value="9"/>
     </CEffectCreateHealer>
-    <CEffectSet id="OnIterMagazineCallDown">
-        <EditorCategories value="Race:Terran"/>
-        <EffectArray value="ReleaseMagazineCallDown"/>
-        <EffectArray value="TerranInstantJustice"/>
-    </CEffectSet>
     <CEffectLaunchMissile id="SquadVultureFragmentationGrenade2">
         <EditorCategories value="Race:Terran"/>
         <ImpactEffect value="SquadVultureFragmentationGrenade"/>

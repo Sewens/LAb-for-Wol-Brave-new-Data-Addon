@@ -1,6 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
     <CActorAction default="1" id="SquadMarauderAttackBase" parent="MarauderAttackBase"/>
+    <CActorModel id="SquadBunkerDropPod" parent="ModelAnimationStyleOneShotNoOrphan">
+        <On Terms="Effect.SquadBunkerCalldownCreatePersistent.Start" Send="Create"/>
+        <On Terms="AnimBracketState.*.AfterOpening; AnimName BSD" Send="Create DropPodUnload"/>
+        <HostSiteOps Ops="MercDropSOpShadow"/>
+        <Model value="DropPodFalling"/>
+    </CActorModel>
+    <CActorSound id="SquadBunkerDropPodFall" parent="SoundOneShot">
+        <On Terms="Effect.SquadBunkerCalldownCreatePersistent.Start" Send="Create"/>
+        <On Terms="Effect.DropTrainReaper.Start" Send="Create"/>
+        <Sound value="Barracks_DropPodFall"/>
+    </CActorSound>
+    <CActorSound id="SquadBunkerDropPodUnload" parent="SoundOneShot">
+        <On Terms="Effect.SquadBunkerCalldownCreatePersistent.Stop" Send="Create"/>
+        <On Terms="Effect.DropTrainReaper.Stop" Send="Create"/>
+        <Sound value="Barracks_DropPodUnload"/>
+    </CActorSound>
+    <CActorSound id="SquadThor330mmBarrageCannonsUnMorph" parent="SoundOneShot">
+        <On Terms="Abil.SquadThor330mmBarrageCannons.SourceFinishStart" Send="Create"/>
+        <Sound value="330mmBarrageCannonsUnMorph"/>
+    </CActorSound>
+    <CActorSiteOpRandomPointInCircle id="SquadThor330mmBarrageCannonsVariance">
+        <Radius value="2.000000"/>
+        <Variance value="11.000000"/>
+    </CActorSiteOpRandomPointInCircle>
+    <CActorRange id="SquadThor330mmBarrageCannonsRange" parent="RangeAbil" abil="SquadThor330mmBarrageCannons"/>
+    <CActorSound id="SquadThor330mmBarrageCannonsMorph" parent="SoundOneShot">
+        <On Terms="Abil.SquadThor330mmBarrageCannons.SourceCastStart" Send="Create"/>
+        <Sound value="330mmBarrageCannonsMorph"/>
+    </CActorSound>
+    <CActorSplat id="SquadThor330mmBarrageCannonsCursorSplat" parent="TerranCursorSplat" abil="SquadThor330mmBarrageCannons"/>
+    <CActorSplat id="SquadBunkerCalldownCursorSplat" parent="TerranCursorSplat" abil="SquadBunkerInstantJustice"/>
+    <CActorSound id="SquadThor250mmStrikeCannonsUnMorph" parent="SoundOneShot">
+        <On Terms="Abil.SquadThor250mmStrikeCannons.SourceFinishStart" Send="Create"/>
+        <On Terms="Abil.ExplosiveMissiles.SourceCastStart" Send="Create"/>
+        <Sound value="250mmStrikeCannonsUnMorph"/>
+    </CActorSound>
+    <CActorRange id="SquadThor250mmStrikeCannonsRange" parent="RangeAbil" abil="SquadThor250mmStrikeCannons">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorSound id="SquadThor250mmStrikeCannonsMorph" parent="SoundOneShot">
+        <On Terms="Abil.SquadThor250mmStrikeCannons.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.ArmorpiercingMissiles.SourceCastStart" Send="Create"/>
+        <Sound value="250mmStrikeCannonsMorph"/>
+    </CActorSound>
+    <CActorModel id="SquadThor250mmStrikeCannonsImpact" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.SquadThor250mmStrikeCannonsDamage.Start; At Target" Send="Create"/>
+        <HostSiteOps Ops="SOpShadow ThorBarrageVariance"/>
+        <Model value="250mmStrikeCannonsImpact"/>
+    </CActorModel>
+    <CActorSound id="SquadThor250mmStrikeCannonsSound" parent="SoundOneShot">
+        <On Terms="Effect.SquadThor250mmStrikeCannonsDamage.Start; At Target" Send="Create"/>
+        <Sound value="250mmStrikeCannonsSound"/>
+    </CActorSound>
+    <CActorModel id="SquadThor330mmBarrageCannonsImpact" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.SquadThor330mmBarrageCannonsSearch.Impact" Send="Create"/>
+        <HostSiteOps Ops="SOpTargetPoint 330mmBarrageCannonsVariance"/>
+        <Model value="330mmBarrageCannonsImpact"/>
+    </CActorModel>
+    <CActorSound id="SquadThor330mmBarrageCannonsSound" parent="SoundOneShot">
+        <On Terms="Effect.SquadThor330mmBarrageCannonsSearch.Impact" Send="Create"/>
+        <Sound value="330mmBarrageCannonsSound"/>
+    </CActorSound>
     <CActorModel id="AddSquadImpact" parent="ModelAnimationStyleOneShot">
         <On Terms="Effect.AddMarine.Start" Send="Create"/>
         <On Terms="Effect.AddMarauder.Start" Send="Create"/>
@@ -1616,14 +1679,13 @@
         <On Terms="Abil.SquadMuleliskGather.Stop" Send="Destroy"/>
         <Sound value="Mule_GatherMinerals"/>
     </CActorSound>
-    <CActorModel id="SquadMercDropModel" parent="ModelAnimationStyleOneShotNoOrphan">
+    <CActorModel id="SquadMuleliskDropModel" parent="ModelAnimationStyleOneShotNoOrphan">
         <On Terms="Effect.SquadCalldownMULECreatePersistent.Start" Send="Create"/>
-        <On Terms="Effect.CalldownMULETimedLife.Start" Send="AnimBracketStop BSD"/>
         <On Terms="AnimBracketState.*.AfterOpening; AnimName BSD" Send="Create DropPodUnload"/>
         <HostSiteOps Ops="MercDropSOpShadow"/>
         <Model value="DropPodFalling"/>
     </CActorModel>
-    <CActorSound id="SquadOrbitalCommandCalldownMuleDrop" parent="SoundOneShot">
+    <CActorSound id="SquadOrbitalCommandCalldownMuleliskDrop" parent="SoundOneShot">
         <On Terms="Effect.SquadCalldownMULECreatePersistent.Start; At Target" Send="Create"/>
         <On Terms="ActorCreation" Send="TimerSet 2.100000 DelayDropPod"/>
         <On Terms="TimerExpired; TimerName DelayDropPod" Send="Create OrbitalCommand_CalldownMuleImpact"/>
@@ -2706,18 +2768,6 @@
         <On Terms="ActorDestruction" Target="ScannerSweepVisual" Send="Destroy"/>
         <HostSiteOps Ops="SOpShadow"/>
         <Model value="ScannerSweepModel"/>
-    </CActorModel>
-    <CActorModel id="CallDownDropPod">
-        <Flags index="SuppressSaveLoad" value="1"/>
-        <On Terms="Effect.DropPodDetonate.Start" Send="Create"/>
-        <On Terms="Effect.DropTrainReaper.Start" Send="Create"/>
-        <On Terms="ActorCreation" Send="TimerSet 3.000000 DropRelase"/>
-        <On Terms="ActorCreation" Send="AnimBracketStart Drop Birth IGNORE Death ContentPlayOnce"/>
-        <On Terms="AnimBracketState.*.AfterClosing; AnimName Drop" Send="Destroy"/>
-        <On Terms="TimerExpired; TimerName DropRelease" Send="AnimBracketStop Drop"/>
-        <HostSiteOps Ops="SOpShadow"/>
-        <Model value="BarracksDropPod"/>
-        <EventDataSound Name="BarracksDropPodLand" Actor="UnitSound" Sound="Barracks_DropPodLand"/>
     </CActorModel>
     <CActorModel id="DistributeDamageImpactModel" parent="ModelAnimationStyleOneShot">
         <On Terms="ActorCreation" Send="SetTintColor 255,0,0"/>
@@ -5258,4 +5308,374 @@
         <HostSiteOps Ops="SOpAttachCenter"/>
         <Model value="WraithEvade"/>
     </CActorModel>
+    <CActorUnit id="SquadThor" parent="GenericUnitBase" unitName="SquadThorEP">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <Macros value="PhysicsDeathsSwarmGround"/>
+        <Macros value="PhysicsDeathsVoidGround"/>
+        <Remove Terms="AbilMorph.*.Finish; MorphTo SquadThorEP" Send="Create"/>
+        <Remove Terms="AbilMorph.*.Start; MorphFrom SquadThorEP" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo SquadThorEP" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom SquadThorEP" Send="Destroy"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="ActorCreation" Send="AnimPlay CoverStand Cover,Stand PlayForever 0.000000"/>
+        <On Terms="WeaponStart.SquadThorJavelinMissileLaunchers.AttackStart" Send="TimerKill CoverDelay"/>
+        <On Terms="WeaponStart.SquadThorJavelinMissileLaunchers.AttackStart" Send="AnimClear CoverStand"/>
+        <On Terms="WeaponStart.SquadThorJavelinMissileLaunchers.AttackStart" Send="AnimPlay Cover Cover PlayForever"/>
+        <On Terms="WeaponStop.SquadThorJavelinMissileLaunchers.AttackStop" Send="TimerSet 2.500000 CoverDelay"/>
+        <On Terms="TimerExpired; TimerName CoverDelay" Send="AnimClear Cover"/>
+        <On Terms="TimerExpired; TimerName CoverDelay" Send="AnimPlay CoverStand Cover,Stand PlayForever"/>
+        <On Terms="WeaponStart.SquadThorsHammer.AttackStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart Attack Attack,Superior"/>
+        <On Terms="WeaponStart.SquadThorsHammer.AttackStart; WeaponTargetElevation LE -20.000000" Send="AnimBracketStart Attack Attack,Inferior"/>
+        <On Terms="WeaponStart.SquadThorsHammer.AttackStart; WeaponTargetDistance LE 1.000000" Send="AnimBracketStart Attack Spell,B"/>
+        <On Terms="WeaponStart.SquadThorsHammer.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <On Terms="Abil.SquadThor250mmStrikeCannons.SourceCastStart" Send="AnimPlay Morph Morph NonLooping"/>
+        <On Terms="Abil.SquadThor250mmStrikeCannons.SourceCastStop" Send="AnimClear Morph"/>
+        <On Terms="Abil.SquadThor250mmStrikeCannons.SourceCastStop" Target="SquadThor250mmStrikeCannonsMorph" Send="SoundSetMuted 1 0"/>
+        <On Terms="Abil.SquadThor250mmStrikeCannons.SourceChannelStart" Send="$Spell PlayForever"/>
+        <On Terms="Abil.SquadThor250mmStrikeCannons.SourceChannelStop" Send="AnimClear Spell"/>
+        <On Terms="Abil.SquadThor250mmStrikeCannons.SourceFinishStart" Send="AnimPlay MorphEnd Morph,End NonLooping"/>
+        <On Terms="Abil.SquadThor250mmStrikeCannons.SourceFinishStop" Send="AnimClear MorphEnd"/>
+        <On Terms="AbilTransport.MedivacTransport.CargoUnload" Send="AnimPlay Unload Spell,A 0 0.000000"/>
+        <On Terms="WeaponStart.*.AttackStart; AnimPlaying Unload" Send="AnimClear Unload"/>
+        <On Terms="UnitMovementUpdate.*.Walk; AnimPlaying Unload" Send="AnimClear Unload"/>
+        <On Terms="ModelEvent; ModelEventName SquibStartLeft" Send="Create ThorLeftCheerSquib"/>
+        <On Terms="ModelEvent; ModelEventName SquibStartRight" Send="Create ThorRightCheerSquib"/>
+        <On Terms="AbilTransport.SpecOpsDropshipTransport.CargoUnload" Send="AnimPlay Unload Spell,A 0 0.000000"/>
+        <On Terms="AbilTransport.HerculesTransport.CargoUnload" Send="AnimPlay Unload Spell,A 0 0.000000"/>
+        <On Terms="Abil.SquadThor330mmBarrageCannons.SourceCastStart" Send="AnimPlay Morph Morph NonLooping"/>
+        <On Terms="Abil.SquadThor330mmBarrageCannons.SourceCastStop" Send="AnimClear Morph"/>
+        <On Terms="Abil.SquadThor330mmBarrageCannons.SourceCastStop" Target="SquadThor330mmBarrageCannonsMorph" Send="SoundSetMuted 1 0"/>
+        <On Terms="Abil.SquadThor330mmBarrageCannons.SourceChannelStart" Send="$Spell PlayForever"/>
+        <On Terms="Abil.SquadThor330mmBarrageCannons.SourceChannelStop" Send="AnimClear Spell"/>
+        <On Terms="Abil.SquadThor330mmBarrageCannons.SourceFinishStart" Send="AnimPlay MorphEnd Morph,End NonLooping"/>
+        <On Terms="Abil.SquadThor330mmBarrageCannons.SourceFinishStop" Send="AnimClear MorphEnd"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create SquadThorLand"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo SquadThorEP; MorphFrom SquadThorWreckage" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom SquadThorEP; MorphTo SquadThorWreckage" Send="Destroy"/>
+        <On Terms="UnitBirth.SquadThorAP" Send="Create"/>
+        <On Terms="UnitBirth.SquadThorAP" Send="AnimBracketStart Morph IGNORE Morph,Stand Morph,End"/>
+        <On Terms="AbilMorph.*.Start; MorphTo SquadThorAP; MorphFrom SquadThorEP" Send="AnimBracketStart Morph Morph Morph,Stand Morph,End"/>
+        <On Terms="AbilMorph.*.Start; MorphTo SquadThorEP; MorphFrom SquadThorAP" Send="AnimBracketStop Morph"/>
+        <On Terms="AbilMorph.*.Start; MorphTo SquadThorAP; MorphFrom SquadThorEP" Send="Create SquadThor250mmStrikeCannonsUnMorph"/>
+        <On Terms="AbilMorph.*.Start; MorphTo SquadThorEP; MorphFrom SquadThorAP" Send="Create SquadThor250mmStrikeCannonsMorph"/>
+        <On Terms="Abil.ArmorpiercingMissiles.SourceCastStart" Send="AnimPlay ArmStart Morph 0 0.500000 0.500000 4.050000 AsDuration"/>
+        <On Terms="Abil.ArmorpiercingMissiles.SourceCancel" Send="AnimClear Armed"/>
+        <On Terms="Abil.ArmorpiercingMissiles.SourceCancel" Send="AnimClear ArmStart"/>
+        <On Terms="Abil.ExplosiveMissiles.SourceCastStart" Send="AnimPlay ArmStop Morph,End 0 0.500000 0.500000 4.050000 AsDuration"/>
+        <On Terms="Abil.ExplosiveMissiles.SourceCancel" Send="AnimClear ArmStop"/>
+        <On Terms="ActorCreation" Send="StatusSet WeaponNext 0"/>
+        <On Terms="Effect.SquadThorLanceMissileLaunchersDamage.Start; At Caster" Send="AnimPlay SpellD Spell,D"/>
+        <On Terms="Effect.SquadThorLanceMissileLaunchersDamage.Start; At Caster" Send="StatusIncrement WeaponNext"/>
+        <On Terms="Effect.SquadThorLanceMissileLaunchersDamage.Start; At Caster; IsStatus WeaponNext 4" Send="StatusSet WeaponNext 0"/>
+        <On Terms="Effect.SquadThorLanceMissileLaunchersDamage.Start; At Caster; IsStatus WeaponNext 0" Send="AnimClear Attack3"/>
+        <On Terms="Effect.SquadThorLanceMissileLaunchersDamage.Start; At Caster; IsStatus WeaponNext 0" Send="AnimPlay Attack4 Spell,C,02"/>
+        <On Terms="Effect.SquadThorLanceMissileLaunchersDamage.Start; At Caster; IsStatus WeaponNext 1" Send="AnimClear Attack4"/>
+        <On Terms="Effect.SquadThorLanceMissileLaunchersDamage.Start; At Caster; IsStatus WeaponNext 1" Send="AnimPlay Attack1 Spell,C,01"/>
+        <On Terms="Effect.SquadThorLanceMissileLaunchersDamage.Start; At Caster; IsStatus WeaponNext 2" Send="AnimClear Attack1"/>
+        <On Terms="Effect.SquadThorLanceMissileLaunchersDamage.Start; At Caster; IsStatus WeaponNext 2" Send="AnimPlay Attack2 Spell,C,03"/>
+        <On Terms="Effect.SquadThorLanceMissileLaunchersDamage.Start; At Caster; IsStatus WeaponNext 3" Send="AnimClear Attack2"/>
+        <On Terms="Effect.SquadThorLanceMissileLaunchersDamage.Start; At Caster; IsStatus WeaponNext 3" Send="AnimPlay Attack3 Spell,C,00"/>
+        <On Terms="Behavior.SquadThorSelfRepair.On" Send="AnimBracketStart Work Stand,Work,Start Stand,Work Stand,Work,End"/>
+        <On Terms="Behavior.SquadThorSelfRepair.Off" Send="AnimBracketStop Work"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit HaveVoidShade" Send="DeathCustomize Shadow"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
+        <On Terms="AbilTransport.SpecOpsDropshipTransport.CargoUnload" Send="AnimPlay Unload Spell,A 0 0.000000"/>
+        <On Terms="AbilTransport.HerculesTransport.CargoUnload" Send="AnimPlay Unload Spell,A 0 0.000000"/>
+        <On Terms="Abil.SquadThor330mmBarrageCannons.SourceCastStart" Send="AnimPlay Morph Morph NonLooping"/>
+        <On Terms="Abil.SquadThor330mmBarrageCannons.SourceCastStop" Send="AnimClear Morph"/>
+        <On Terms="Abil.SquadThor330mmBarrageCannons.SourceCastStop" Target="SquadThor330mmBarrageCannonsMorph" Send="SoundSetMuted 1 0"/>
+        <On Terms="Abil.SquadThor330mmBarrageCannons.SourceChannelStart" Send="$Spell PlayForever"/>
+        <On Terms="Abil.SquadThor330mmBarrageCannons.SourceChannelStop" Send="AnimClear Spell"/>
+        <On Terms="Abil.SquadThor330mmBarrageCannons.SourceFinishStart" Send="AnimPlay MorphEnd Morph,End NonLooping"/>
+        <On Terms="Abil.SquadThor330mmBarrageCannons.SourceFinishStop" Send="AnimClear MorphEnd"/>
+        <Model value="Thor_Umojan"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <EventDataFootprint index="0" Actor="" Model=""/>
+        <BuildModel value="Thor_Umojan"/>
+        <DeathArray index="Normal" ModelLink="Thor_Umojan_Death" SoundLink=""/>
+        <DeathCustoms ModelLink="ThorDeathLow" Name="AntiGravTerran"/>
+        <DeathCustoms ActorModel="ThorDeathRagdoll" ModelLink="Thor_Umojan_DeathRagdoll" Name="RagdollBasic">
+            <BodySquibs Name="Basic" Model="TerranSquibDeathRagdoll"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollSiegeTank" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="FireHeavy"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="FireHeavy"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollBaneling" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollUltraUnburrow" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms>
+            <ModelLink value="DeathVoidShadowLarge"/>
+            <SoundLink value="ShadowUnit_DeathFX"/>
+            <VoiceLink value="ShadowUnit_DeathVox"/>
+            <Name value="Shadow"/>
+        </DeathCustoms>
+        <PlacementModel value="Thor_Umojan"/>
+        <PortraitModel value="Thor_Umojan_Portrait"/>
+        <StandAnimTurnTime value="5"/>
+        <StandAnimTurnTimeScaleMin value="0.850000"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.250000,0.500000"/>
+            <RangeDown value="5.000000"/>
+            <RangeDownFade value="1.000000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleMassive2"/>
+        </TerrainSquibs>
+        <WalkAnimMoveSpeed value="1.8671"/>
+        <BarOffset value="120"/>
+        <BarWidth value="140"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Thor.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-thor.dds"/>
+        <HighlightTooltip value="Unit/Name/SquadThor"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <NameOffset value="80"/>
+        <SoundArray index="Ready" value="Thor_Ready"/>
+        <SoundArray index="Help" value="Thor_Help"/>
+        <SoundArray index="What" value="Thor_What"/>
+        <SoundArray index="Yes" value="Thor_Yes"/>
+        <SoundArray index="Attack" value="Thor_Attack"/>
+        <SoundArray index="Pissed" value="Thor_Pissed"/>
+        <SoundArray index="Movement" value="Thor_Movement"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-thor.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Thor.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorForceCylinder id="SquadThor250mmStrikeCannonForce">
+        <On Terms="Effect.SquadThor250mmStrikeCannonsDamage.Stop; At Caster" Send="Create"/>
+        <On Terms="ActorCreation" Send="Create Thor250mmStrikeCannonForce01"/>
+        <On Terms="ActorCreation" Send="Create Thor250mmStrikeCannonForce02"/>
+        <On Terms="ActorCreation" Send="Create Thor250mmStrikeCannonForce03"/>
+        <HostSiteOps Ops="SOpTargetPoint SOpRandomPointInCircleDot35"/>
+        <Field value="Radial"/>
+        <Duration value="0.250000"/>
+        <Magnitude value="32.500000,12.500000"/>
+        <HostEnd Subject="::Self"/>
+        <HostEndSiteOps Ops="SOpPointUpWorld SOpMoveBy1"/>
+        <Radius value="2.500000"/>
+    </CActorForceCylinder>
+    <CActorAction id="SquadThorAAAttack" parent="GenericAttack" effectImpact="SquadThorJavelinMissileLaunchersDamage" effectLaunch="SquadThorJavelinMissileLaunchersLM">
+        <LaunchAttachQuery Methods="AMFilterWeaponSetA1 AMPatternThorAA"/>
+        <LaunchAssets Model="ThorAAAttackLaunch" Sound="Thor_AntiAirAttackLaunch"/>
+        <ImpactMap index="None" Model="ThorAAAttackImpact" Sound="Thor_AntiAirAttackImpact"/>
+        <ImpactPhysics Name="JavelinImpact" MatchKeys="Basic" Physics="ThorAAAttackForce"/>
+    </CActorAction>
+    <CActorMissile id="SquadThorAAAttackMissile" parent="GenericAttackMissile" unitName="SquadThorAAWeapon">
+        <Model value="ThorAAWeapon"/>
+    </CActorMissile>
+    <CActorAction id="SquadThorAttack" parent="GenericAttack" effectAttack="SquadThorHammerDamage">
+        <LaunchAttachQuery Methods="AMFilterWeaponSetA0 AMPatternThor"/>
+        <LaunchAssets Model="ThorHandGunAttackLaunch" Sound="Thor_HandGunAttackLaunch"/>
+        <ImpactMap index="None" Model="ThorHandGunAttackImpact" Sound="Thor_HandGunAttackImpact"/>
+        <ImpactPhysics Name="GunImpact" MatchKeys="Basic" Physics="ThorAttackForce"/>
+    </CActorAction>
+    <CActorUnit id="SquadThorWreckage" parent="GenericUnitMorph" unitName="SquadThorWreckage">
+        <On Terms="AbilMorph.*.Finish; MorphTo SquadThorWreckage" Send="$Birth 0 1.000000 1.000000"/>
+        <On Terms="AnimDone; AnimName Birth" Send="$Stand PlayForever,NonLooping"/>
+        <On Terms="UnitBirth.SquadThorWreckage.Suppressed" Send="$Stand PlayForever,NonLooping"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo SquadThorWreckage; PlayerHasReward ThorCE" Send="ModelSwap ThorCEWreckage"/>
+        <Baselines index="Stand" AnimProps=""/>
+        <DeathArray index="Normal" ModelLink="ThorWreckageDeath" SoundLink="Thor_Explode"/>
+        <PortraitModel value="ThorPortrait"/>
+        <StandAnimTurnTime value="5"/>
+        <WalkAnimMoveSpeed value="1.75"/>
+        <BarOffset value="170"/>
+        <BarWidth value="160"/>
+        <GroupSoundArray index="What" value="ThorGroupWhat"/>
+        <GroupSoundArray index="Yes" value="ThorGroupYes"/>
+        <GroupSoundArray index="Attack" value="ThorGroupAttack"/>
+        <GroupSoundArray index="Board" value="ThorGroupBoard"/>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-thor.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <SoundArray index="Birth" value="ThorBirth"/>
+        <SoundArray index="Ready" value="Thor_Ready"/>
+        <SoundArray index="Help" value="Thor_Help"/>
+        <SoundArray index="What" value="Thor_What"/>
+        <SoundArray index="Yes" value="Thor_Yes"/>
+        <SoundArray index="Attack" value="Thor_Attack"/>
+        <SoundArray index="Pissed" value="Thor_Pissed"/>
+        <SoundArray index="Movement" value="Thor_Movement"/>
+        <SoundArray index="Turning" value="ThorTurning"/>
+        <SoundArray index="Board" value="ThorBoard"/>
+        <SoundArray index="Click" value="ThorClick"/>
+        <SoundArray index="ClickError" value="ThorClickError"/>
+        <SoundArray index="Highlight" value="ThorHighlight"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-thor.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-ThorWreckage.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorModel id="SquadThorSelfRepair" parent="ModelAnimationStyleContinuous">
+        <On Terms="Behavior.SquadThorSelfRepair.On" Send="Create"/>
+        <On Terms="Behavior.SquadThorSelfRepair.Off" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+        <Model value="ThorSelfRepair"/>
+    </CActorModel>
+    <CActorSound id="SquadThorSelfRepairHealLoopActorSound" parent="SoundOneShot">
+        <On Terms="Behavior.SquadThorSelfRepair.On" Send="Create"/>
+        <On Terms="Behavior.SquadThorSelfRepair.Off" Send="Destroy"/>
+        <Sound value="Thor_EmergencyRepair_Elec_1Shot"/>
+    </CActorSound>
+    <CActorSound id="SquadThorSelfRepairHealStartActorSound" parent="SoundOneShot">
+        <On Terms="Behavior.SquadThorSelfRepair.On" Send="Create"/>
+        <Sound value="Thor_EmergencyRepairHeal"/>
+    </CActorSound>
+    <CActorSound id="SquadThorSelfRepairSelfActorSound" parent="SoundOneShot">
+        <Filter index="Ally" value="1"/>
+        <Filter index="Neutral" value="1"/>
+        <Filter index="Enemy" value="1"/>
+        <On Terms="Behavior.SquadThorSelfRepair.On" Send="Create"/>
+        <Sound value="Thor_EmergencyRepair_Self"/>
+    </CActorSound>
+    <CActorSound id="SquadThorSelfRepairStartSound" parent="SoundOneShot">
+        <On Terms="Behavior.SquadThorSelfRepair.On" Send="Create"/>
+        <Sound value="Thor_EmergencyRepair_Self_Start"/>
+    </CActorSound>
+    <CActorSound id="SquadThorSelfRepairStopSound" parent="SoundOneShot">
+        <On Terms="Behavior.SquadThorSelfRepair.Off" Send="Create"/>
+        <Sound value="Thor_EmergencyRepair_Self_End"/>
+    </CActorSound>
+    <CActorSound id="SquadThorLand" parent="SoundOneShot">
+        <Sound value="Thor_Land"/>
+    </CActorSound>
+    <CActorForceSphere id="SquadThorAttackForce">
+        <On Terms="ActorCreation" Send="Create SquadThorAttackForceUp"/>
+        <Host Subject="_ImpactGuide"/>
+        <HostSiteOps Ops="SOpIncomingDirectDot15 SOpRandomPointInSphereDot25"/>
+        <Duration value="0.150000"/>
+        <Magnitude value="30.000000,12.000000"/>
+        <Radius value="1.250000"/>
+    </CActorForceSphere>
+    <CActorForceSphere id="SquadThorAttackForceUp">
+        <HostSiteOps Ops="SOpIncomingDirectDot15 SOpRandomPointInSphereDot25 SOpRotVariancerUp25"/>
+        <Field value="Directional"/>
+        <Duration value="0.150000"/>
+        <Magnitude value="17.500000,7.500000"/>
+        <Radius value="1.000000,0.250000"/>
+    </CActorForceSphere>
+    <CActorModel id="SquadThorTransit">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="TeamColor" value="1"/>
+        <Inherits index="TintColor" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <Inherits index="WarpGroup" value="1"/>
+        <On Terms="ActorCreation" Target="::Creator" Send="Signal ThorTransit"/>
+        <On Terms="ActorCreation" Send="AnimPlay Start Stand,Work,Start"/>
+        <On Terms="AnimDone; AnimName Start" Send="AnimPlay Work Stand,Work PlayForever"/>
+        <On Terms="AbilTransport.MedivacTransport.TransportUnload" Send="Destroy"/>
+        <On Terms="Signal.*.Dead" Send="Create SquadThorTransitDeath"/>
+        <On Terms="Signal.*.Dead" Send="Destroy"/>
+        <On Terms="ActorCreation; PlayerHasReward ThorCE" Send="ModelSwap ThorCETransit"/>
+        <On Terms="AbilTransport.SpecOpsDropshipTransport.TransportUnload; AbilTransport Thor" Send="Destroy"/>
+        <On Terms="AbilTransport.SpecOpsDropshipTransport.CargoUnload; AbilTransport Thor" Send="Destroy"/>
+        <On Terms="AbilTransport.SpecOpsDropshipTransport.TransportUnload; AbilTransport Thor" Send="Destroy"/>
+        <On Terms="AbilTransport.SpecOpsDropshipTransport.CargoUnload; AbilTransport Thor" Send="Destroy"/>
+        <Host Subject="::Creator"/>
+        <HostSiteOps Ops="SOpAttachCenter ThorCargoSOpOffset"/>
+        <Model value="Thor_Umojan_Transit"/>
+    </CActorModel>
+    <CActorModel id="SquadThorTransitDeath">
+        <On Terms="ActorCreation" Send="$Death"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <HostSiteOps Ops="SOpBasicCreatorStationary"/>
+        <Model value="TerranLargeUnitDeath"/>
+    </CActorModel>
+    <CActorModel id="SquadThorDeathRagdoll">
+        <Aliases value="_Main"/>
+        <Aliases value="_Unit"/>
+        <Aliases value="_DeathModel"/>
+        <Macros value="DeadAnimationMacro"/>
+        <Macros value="DeadAnimationRemoveMacro"/>
+        <Macros value="UnitDeathRagdollTerminateExtrasMacro"/>
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="CastShadows" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="TeamColor" value="1"/>
+        <Inherits index="TintColor" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <AcceptedHostedPropTransfers index="TimeScale" value="0"/>
+        <On Terms="ActorCreation" Send="RefClear ::Host"/>
+        <On Terms="ActorCreation" Send="SetTintColor 255,255,255 0.600000"/>
+        <On Terms="ActorCreation" Send="SetTeamColor {0,0,0 0.000000} {0,0,0 0.000000}"/>
+        <On Terms="ActorCreation" Target="ModelPretargetGround" Send="Destroy"/>
+        <On Terms="ActorCreation" Target="GroundPreSelection" Send="Destroy"/>
+        <On Terms="Signal.*.ClearDeathModel" Send="Destroy"/>
+        <On Terms="TimerExpired; TimerName TerminateExtras" Send="Signal TerminateExtras"/>
+        <On Terms="Signal.*.TerminateExtras" Send="PhysicsImpactsEnable"/>
+        <On Terms="Signal.*.TerminateExtras" Target="_BodySquib" Send="Signal Terminate"/>
+        <On Terms="AnimDone; AnimName Death" Send="PhysicsTerminate"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="Create SquadThorDeathRagdollDetonationForce"/>
+        <Host Subject="::Creator"/>
+        <HostSiteOps Ops="SOpDeathMotionGround"/>
+        <Model value="UnitDeathModelNoTeamColor"/>
+        <ModelFlags index="UpdateVisibility" value="0"/>
+        <ModelFlags index="UseSyncSeed" value="1"/>
+        <EventDataSound Name="NydusCanalThud" Actor="UnitSound" Sound="NydusWorm_DeathThud"/>
+        <EventDataSound Name="ZergExplosionSlime" Actor="UnitSound" Sound="Zerg_ExplosionSlime"/>
+        <EventDataSound Name="ZergPreExplosionSmall" Actor="UnitSound" Sound="Zerg_PreExplosionSmall"/>
+        <EventDataSound Name="ZergExplosionTiny" Actor="UnitSound" Sound="Zerg_ExplosionTiny"/>
+        <EventDataSound Name="ZergExplosionSmall" Actor="UnitSound" Sound="Zerg_ExplosionSmall"/>
+        <EventDataSound Name="ZergExplosionMedium" Actor="UnitSound" Sound="Zerg_ExplosionMedium"/>
+        <EventDataSound Name="ZergExplosionLarge" Actor="UnitSound" Sound="Zerg_ExplosionLarge"/>
+        <EventDataSound Name="ProtossPreExplosionSmall" Actor="UnitSound" Sound="Protoss_PreExplosionSmall"/>
+        <EventDataSound Name="ProtossExplosionSmall" Actor="UnitSound" Sound="Protoss_ExplosionSmall"/>
+        <EventDataSound Name="ProtossExplosionMedium" Actor="UnitSound" Sound="Protoss_ExplosionMedium"/>
+        <EventDataSound Name="ProtossExplosionLarge" Actor="UnitSound" Sound="Protoss_ExplosionLarge"/>
+        <EventDataSound Name="TerranPreExplosionSmall" Actor="UnitSound" Sound="Terran_PreExplosionSmall"/>
+        <EventDataSound Name="TerranExplosionSmall" Actor="UnitSound" Sound="Terran_ExplosionSmall"/>
+        <EventDataSound Name="TerranExplosionMedium" Actor="UnitSound" Sound="Terran_ExplosionMedium"/>
+        <EventDataSound Name="TerranExplosionLarge" Actor="UnitSound" Sound="Terran_ExplosionLarge"/>
+        <PhysicsImpactDefault ActorModel="PhysicsImpactHarness" ActorSound="PhysicsImpactSound" OccuranceThrottlingDistance="0.500000,0.500000"/>
+    </CActorModel>
+    <CActorForceSphere id="SquadThorDeathRagdollDetonationForce" parent="DeathRagdollDetonationForce">
+        <Magnitude value="25.650000,11.250000"/>
+        <Radius value="0.750000,0.500000"/>
+    </CActorForceSphere>
+    <CActorForceConeRoundedEnd id="SquadThorAAAttackForce">
+        <On Terms="ActorCreation" Send="Create ThorAAAttackSprayForce"/>
+        <HostSiteOps Ops="SOpIncomingMissileDot5"/>
+        <Field value="Radial"/>
+        <Duration value="0.250000"/>
+        <Magnitude value="19.500000,12.500000"/>
+        <HostEndSiteOps Ops="SOpIncomingMissileDot5 SOpMoveBy1Dot5"/>
+        <Angle value="110.000000"/>
+    </CActorForceConeRoundedEnd>
+    <CActorForceCylinder id="SquadThorAAAttackSprayForce">
+        <HostSiteOps Ops="SOpIncomingMissileDot5 SOpMoveByDot5"/>
+        <Field value="Radial"/>
+        <Duration value="0.250000"/>
+        <Magnitude value="19.000000,10.000000"/>
+        <HostEndSiteOps Ops="SOpIncomingMissileDot5 SOpMoveBy1"/>
+        <Radius value="1.000000,0.350000"/>
+    </CActorForceCylinder>
+    <CActorAction id="SquadThorAALanceAttack" parent="GenericAttack" effectAttack="SquadThorLanceMissileLaunchersDamage">
+        <LaunchAttachQuery Methods="AMFilterWeaponSetA2 AMPatternThorAALance"/>
+        <LaunchAssets Model="" Sound=""/>
+        <ImpactMap index="None" Model="ThorAAAttackImpactLance" Sound="250mmStrikeCannonsSound"/>
+        <ImpactPhysics Name="JavelinImpact" MatchKeys="Basic" Physics="ThorAAAttackForce"/>
+        <DamageMap index="None" Sound=""/>
+        <AcquisitionYawHalfArc value="10.000000"/>
+        <AcquisitionPitchHalfArc value="15.000000"/>
+        <AccuracyHalfArc value="5.000000"/>
+    </CActorAction>
 </Catalog>

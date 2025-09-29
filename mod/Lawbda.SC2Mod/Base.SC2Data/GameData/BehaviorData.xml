@@ -1,5 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorBuff id="SquadArmorpiercingMode">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Modification>
+            <WeaponEnableArray value="LanceMissileLaunchers"/>
+            <WeaponDisableArray value="JavelinMissileLaunchers"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadThorSelfRepair">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-techupgrade-terran-immortalityprotocol.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="ThorLifeNotFull"/>
+        <BuffFlags index="Channeled" value="1"/>
+        <Duration value="20.0625"/>
+        <Modification>
+            <ModifyFlags index="SuppressMoving" value="1"/>
+            <ModifyFlags index="SuppressTurning" value="1"/>
+            <VitalRegenArray index="Life" value="20"/>
+            <BehaviorLinkDisableArray value="SquadThorSelfRepairEnd"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadThorSelfRepairEnd">
+        <Alignment value="Positive"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-techupgrade-terran-immortalityprotocol.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="1"/>
+        <Modification>
+            <ModifyFlags index="SuppressMoving" value="1"/>
+            <ModifyFlags index="SuppressTurning" value="1"/>
+            <StateFlags index="Stun" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadThor250mmStrikeCannons">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-bombardmentstrike.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="NotFrenzied"/>
+        <BuffFlags index="Channeling" value="1"/>
+        <MaxStackCount value="20"/>
+        <Duration value="10"/>
+        <Period value="0.25"/>
+        <Modification>
+            <ModifyFlags index="DisableAbils" value="1"/>
+            <ModifyFlags index="SuppressMoving" value="1"/>
+            <ModifyFlags index="SuppressTurning" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadThor330mmBarrageCannon">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-bombardmentstrike.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <BuffFlags index="Channeling" value="1"/>
+        <MaxStackCount value="20"/>
+        <Duration value="10"/>
+        <Period value="0.25"/>
+        <Modification>
+            <ModifyFlags index="DisableAbils" value="1"/>
+            <ModifyFlags index="SuppressMoving" value="1"/>
+            <ModifyFlags index="SuppressTurning" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="ScavengingSystemsMechDeath3">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Requirements value="ScavengingSystemsResearched"/>
+        <Modification>
+            <DeathResponse Chance="1" Effect="ScavengingSystemsSearchArea"/>
+        </Modification>
+    </CBehaviorBuff>
     <CBehaviorBuff id="SquadMedivacHealBeamBusy">
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -322,6 +393,15 @@
         <Modification>
             <StateFlags index="Cloak" value="1"/>
         </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadThorDontDie">
+        <Alignment value="Positive"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\BTN-techupgrade-terran-combatshield-color.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DamageResponse Fatal="1" Handled="SquadThorWreckage" ModifyFraction="0">
+            <Chance value="1"/>
+        </DamageResponse>
     </CBehaviorBuff>
     <CBehaviorBuff id="VampireOrb">
         <InfoIcon value="Assets\Textures\btn-vampire-orb.dds"/>

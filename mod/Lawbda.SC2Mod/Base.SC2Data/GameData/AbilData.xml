@@ -1,5 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CAbilEffectTarget id="SquadBunkerInstantJustice">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <SharedFlags index="TargetCursorVisibleInBlackMask" value="1"/>
+        <Effect index="0" value="SquadBunkerCalldownCreatePersistent"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Flags index="Transient" value="1"/>
+        <Range value="500"/>
+        <Arc value="360"/>
+        <AutoCastFilters value="-;-"/>
+        <CalldownEffect value="SquadBunkerCalldownTransport"/>
+        <AINotifyEffect value="Nuke"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadCalldownMulelisk"/>
+    </CAbilEffectTarget>
+    <CAbilEffectInstant id="SquadThorEmergencyRepair">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadThorSelfRepairSet"/>
+        <Flags index="DeferCooldown" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="60"/>
+        </Cost>
+        <CancelableArray index="Prep" value="1"/>
+        <CancelableArray index="Cast" value="1"/>
+        <CancelableArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadThorEmergencyRepair2"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+    </CAbilEffectInstant>
+    <CAbilEffectTarget id="SquadThor250mmStrikeCannons">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoTooltipPriority value="1"/>
+        <Effect index="0" value="SquadThor250mmStrikeCannonsCreatePersistent"/>
+        <Cost>
+            <Vital index="Energy" value="150"/>
+        </Cost>
+        <TargetFilters value="Ground,Visible;Self,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="7"/>
+        <RangeSlop value="4"/>
+        <CastIntroTime value="2"/>
+        <FinishTime value="2"/>
+        <CancelableArray index="Prep" value="1"/>
+        <CancelableArray index="Cast" value="1"/>
+        <CancelableArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadThor250mmStrikeCannons"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadThor330mmBarrageCannons">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoTooltipPriority value="1"/>
+        <Effect index="0" value="SquadThor330mmBarrageCannonsPersistent"/>
+        <Cost>
+            <Vital index="Energy" value="100"/>
+        </Cost>
+        <TargetFilters value="Ground,Visible;Self,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="7"/>
+        <CastIntroTime value="2"/>
+        <FinishTime value="2"/>
+        <CancelableArray index="Prep" value="1"/>
+        <CancelableArray index="Cast" value="1"/>
+        <CancelableArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <CursorEffect value="SquadThor330mmBarrageCannonsDamage"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadThor330mmBarrageCannons"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+    </CAbilEffectTarget>
     <CAbilEffectTarget id="AddGhostToSquad">
         <Alignment value="Positive"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -558,6 +629,7 @@
     <CAbilEffectTarget id="SquadCalldownMulelisk">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Effect index="0" value="SquadCalldownMULECreateUnit"/>
+        <Flags index="RequireTargetVision" value="0"/>
         <Flags index="Transient" value="1"/>
         <Cost>
             <Vital index="Energy" value="50"/>
@@ -877,11 +949,11 @@
         <Flags index="IgnoreUnitCost" value="1"/>
         <InfoArray Unit="SquadTechReactor"/>
     </CAbilMorph>
-    <CAbilTransport id="SquadBunkerLoadUnload">
+    <CAbilTransport id="SquadBunkerTransport">
         <AbilSetId value="ULdS"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
-        <CmdButtonArray index="Load" DefaultButtonFace="BunkerLoad"/>
-        <CmdButtonArray index="UnloadAll" DefaultButtonFace="BunkerUnloadAll">
+        <CmdButtonArray index="Load" DefaultButtonFace="SquadBunkerLoad"/>
+        <CmdButtonArray index="UnloadAll" DefaultButtonFace="SquadBunkerUnloadAll">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
         <CmdButtonArray index="UnloadAt">
@@ -897,8 +969,8 @@
         <MaxCargoCount value="6"/>
         <MaxCargoSize value="2"/>
         <TotalCargoSpace value="6"/>
-        <LoadCargoBehavior value="SquadBunkerWeaponRangeBonus"/>
         <TargetFilters value="Biological,Visible;Ally,Neutral,Enemy,Dead,Hidden"/>
+        <CalldownEffect value="SquadBunkerCalldownTransport"/>
     </CAbilTransport>
     <CAbilRally id="SquadStructureRally">
         <EditorCategories value="Race:Neutral,AbilityorEffectType:Structures"/>
@@ -1259,6 +1331,95 @@
             </SectionArray>
         </InfoArray>
     </CAbilMorph>
+    <CAbilMorph id="SquadThorAPMode">
+        <AbilSetId value="ThorAPMode"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadThorAPMode">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <Flags index="Interruptible" value="1"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="SuppressMovement" value="1"/>
+        <InfoArray Unit="SquadThorAP" RandomDelayMax="0.5">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="3.9"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="4"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="4"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilMorph id="SquadThorWreckage">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="BuildSquadThor"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="IgnoreUnitCost" value="1"/>
+        <Flags index="SuppressMovement" value="1"/>
+        <InfoArray Unit="SquadThorWreckage">
+            <SectionArray index="Stats">
+                <EffectArray index="Finish" value="PostMorphHeal"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilMorph id="SquadThorEPMode">
+        <AbilSetId value="NormalMode"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadThorEPMode">
+            <Flags index="ShowInGlossary" value="0"/>
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <Flags index="Interruptible" value="1"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="SuppressMovement" value="1"/>
+        <InfoArray Unit="SquadThorEP" RandomDelayMax="0.5">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="3.9"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="4"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="4"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilMorph id="SquadThorReborn">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="BuildSquadThor"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="DisableAbils" value="1"/>
+        <Flags index="FastBuild" value="1"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="ShowProgress" value="1"/>
+        <Flags index="SuppressMovement" value="1"/>
+        <RefundFraction>
+            <Resource index="Minerals" value="0"/>
+            <Resource index="Vespene" value="0"/>
+            <Resource index="Terrazine" value="0"/>
+            <Resource index="Custom" value="0"/>
+        </RefundFraction>
+        <InfoArray Score="1" Unit="SquadThorAP">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="12"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="12"/>
+            </SectionArray>
+            <SectionArray index="Collide">
+                <DurationArray index="Delay" value="12"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="12"/>
+            </SectionArray>
+        </InfoArray>
+        <Alert value="RebornComplete"/>
+    </CAbilMorph>
     <CAbilEffectTarget id="VanillaScannerSweep">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Effect index="0" value="RedScannerSweep"/>
@@ -1410,25 +1571,23 @@
     <CAbilTransport id="SquadHerculesTransport">
         <AbilSetId value="ULdM"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <CmdButtonArray index="Load" DefaultButtonFace="MedivacLoad"/>
+        <CmdButtonArray index="Load" DefaultButtonFace="SquadHerculesLoad"/>
         <CmdButtonArray index="UnloadAll">
             <Flags index="Hidden" value="1"/>
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
-        <CmdButtonArray index="UnloadAt" DefaultButtonFace="MedivacUnloadAll"/>
+        <CmdButtonArray index="UnloadAt" DefaultButtonFace="SquadHerculesUnloadAll"/>
         <CmdButtonArray index="UnloadUnit">
             <Flags index="Hidden" value="1"/>
         </CmdButtonArray>
         <CmdButtonArray index="LoadAll">
             <Flags index="Hidden" value="1"/>
         </CmdButtonArray>
-        <Flags index="ShowCargoSize" value="0"/>
         <MaxCargoCount value="30"/>
         <MaxCargoSize value="8"/>
         <TotalCargoSpace value="30"/>
         <LoadCargoBehavior value="SquadHerculesTransportDummy"/>
         <UnloadPeriod value="0.2"/>
-        <CalldownEffect value="TerranInstantJustice"/>
         <DeathUnloadEffect value="RescuePodsSet"/>
         <LoadCargoEffect value="PassengerAutoFireApply"/>
         <UnloadCargoEffect value="PassengerAutoFireRemove"/>
@@ -1701,7 +1860,7 @@
     <CAbilQueue id="QueueMagazine">
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <SharedFlags index="RegisterChargeEvent" value="1"/>
-        <QueueSize value="1"/>
+        <QueueSize value="8"/>
         <Flags index="Hidden" value="1"/>
         <Flags index="Passive" value="1"/>
     </CAbilQueue>
@@ -1891,20 +2050,6 @@
         <FidgetDelayMax value="10"/>
         <ConstructionMover value="Construction"/>
     </CAbilBuild>
-    <CAbilEffectTarget id="TerranInstantJustice">
-        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
-        <Range value="1000"/>
-        <AutoCastAcquireLevel value="None"/>
-        <CursorEffect value="CreatDropPodUnit"/>
-        <CalldownEffect value="TerranInstantJustice"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="TerranInstantJustis"/>
-        <Cost>
-            <Charge Link="Abil/SquadHerculesTransport" Location="Unit"/>
-        </Cost>
-        <Marker Link="Abil/SquadHerculesTransport">
-            <MismatchFlags index="Id" value="0"/>
-        </Marker>
-    </CAbilEffectTarget>
     <CAbilEffectTarget id="SquadSpectreUltrasonicPulse">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Effect index="0" value="SquadSpectreUltrasonicPulseLaunchMissile"/>

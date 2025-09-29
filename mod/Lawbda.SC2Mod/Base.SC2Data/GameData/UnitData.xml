@@ -1749,7 +1749,8 @@
         <AbilArray Link="SquadHealRedirect"/>
         <AbilArray Link="SquadBunkerAttack"/>
         <AbilArray Link="SquadBunkerStop"/>
-        <AbilArray Link="SquadBunkerLoadUnload"/>
+        <AbilArray Link="SquadBunkerTransport"/>
+        <AbilArray Link="SquadBunkerInstantJustice"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="SuqadBunkerShrikeTurret"/>
         <BehaviorArray Link="FireSuppressionSystem"/>
@@ -1760,15 +1761,13 @@
             <LayoutButtons Face="StopBunker" Type="AbilCmd" AbilCmd="SquadBunkerStop,Stop" Row="0" Column="1"/>
             <LayoutButtons Face="StopRedirect" Type="AbilCmd" AbilCmd="StopRedirect,Execute" Row="0" Column="1"/>
             <LayoutButtons Face="SetBunkerRallyPoint" Type="AbilCmd" AbilCmd="SquadStructureRally,Rally1" Row="1" Column="4"/>
-            <LayoutButtons Face="BunkerLoad" Type="AbilCmd" AbilCmd="SquadBunkerLoadUnload,Load" Row="2" Column="1"/>
-            <LayoutButtons Face="BunkerUnloadAll" Type="AbilCmd" AbilCmd="SquadBunkerLoadUnload,UnloadAll" Row="2" Column="2"/>
+            <LayoutButtons Face="SquadBunkerLoad" Type="AbilCmd" AbilCmd="SquadBunkerTransport,Load" Row="2" Column="1"/>
+            <LayoutButtons Face="SquadBunkerUnloadAll" Type="AbilCmd" AbilCmd="SquadBunkerTransport,UnloadAll" Row="2" Column="2"/>
             <LayoutButtons Face="Salvage" Type="AbilCmd" AbilCmd="SquadStructureSalvageShared,On" Row="2" Column="3"/>
             <LayoutButtons Face="Halt" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Halt" Row="2" Column="3"/>
             <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Cancel" Row="2" Column="4"/>
             <LayoutButtons Face="SquadSelectBuilder" Type="SelectBuilder" Row="1" Column="3"/>
-            <LayoutButtons Face="ShrikeTurret" Type="Passive" Row="1" Column="2"/>
-            <LayoutButtons Face="NeoSteelFrame" Type="Passive" AbilCmd="255,255" Row="1" Column="1"/>
-            <LayoutButtons Face="ProjectileAccelerators" Type="Passive" AbilCmd="255,255" Row="1" Column="0"/>
+            <LayoutButtons Face="SquadBunkerInstantJustis" Type="AbilCmd" AbilCmd="SquadBunkerInstantJustice,Execute" Row="0" Column="0"/>
         </CardLayouts>
         <Radius value="1.25"/>
         <SeparationRadius value="1.25"/>
@@ -2912,7 +2911,6 @@
         <AbilArray Link="stop"/>
         <AbilArray Link="move"/>
         <AbilArray Link="SquadHerculesTransport"/>
-        <AbilArray Link="TerranInstantJustice"/>
         <AbilArray Link="SquadAttackRedirect"/>
         <AbilArray Link="SquadRepairRedirect"/>
         <BehaviorArray Link="ScavengingSystemsMechDeath2"/>
@@ -2926,7 +2924,6 @@
             <LayoutButtons Face="SquadAttackRedirect" Type="AbilCmd" AbilCmd="SquadAttackRedirect,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="AcquireMove" Type="AbilCmd" AbilCmd="move,AcquireMove" Row="0" Column="4"/>
             <LayoutButtons Face="RapidDeployment" Type="Passive" Row="1" Column="0"/>
-            <LayoutButtons Face="TerranInstantJustis" Type="AbilCmd" AbilCmd="TerranInstantJustice,Execute" Row="2" Column="2"/>
             <LayoutButtons Face="SquadRepair" Type="AbilCmd" AbilCmd="SquadRepairRedirect,Execute" Row="1" Column="2"/>
         </CardLayouts>
         <Radius value="1.5"/>
@@ -4693,7 +4690,7 @@
         <BehaviorArray Link="SquadBehemothFrenzy"/>
         <BehaviorArray Link="SquadBehemothFrenzy"/>
         <BehaviorArray Link="SquadUltraliskOutOfCombat1"/>
-        <WeaponArray Link="KaiserBlades2"/>
+        <WeaponArray Link="SquadUltraliskKaiserBlades"/>
         <WeaponArray/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -4706,7 +4703,7 @@
             <LayoutButtons Face="TissueAssimilation" Type="Passive" Requirements="HaveHotSTissueAssimilation" Row="2" Column="1"/>
             <LayoutButtons Face="BurrowChargeCampaign" Type="AbilCmd" AbilCmd="UltraliskBurrowCharge,Execute" Row="2" Column="0"/>
             <LayoutButtons Face="MonarchBlades" Type="Passive" Requirements="HaveHotSMonarchBlades" Row="2" Column="2"/>
-            <LayoutButtons Face="TerranInstantJustis" Type="AbilCmd" AbilCmd="SquadUltraliskBurrowCharge,Execute" Row="1" Column="0"/>
+            <LayoutButtons Face="SquadBunkerInstantJustis" Type="AbilCmd" AbilCmd="SquadUltraliskBurrowCharge,Execute" Row="1" Column="0"/>
         </CardLayouts>
         <Radius value="1"/>
         <SeparationRadius value="1"/>
@@ -4868,6 +4865,252 @@
     <CUnit id="SquadVultureWeapon" parent="MISSILE">
         <Race value="Terr"/>
         <Mover value="MissileDefault"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
+    <CUnit id="SquadThorEP">
+        <DeathRevealRadius value="3"/>
+        <Facing value="135"/>
+        <Race value="Terr"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TurnBeforeMove" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Colossus" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Massive" value="1"/>
+        <LifeStart value="400"/>
+        <LifeMax value="400"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranVehiclePlating"/>
+        <Speed value="1.875"/>
+        <Acceleration value="1000"/>
+        <LateralAcceleration value="46.0625"/>
+        <TurningRate value="360"/>
+        <Sight value="11"/>
+        <Food value="-6"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="300"/>
+        <CostResource index="Vespene" value="200"/>
+        <RepairTime value="60"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="160"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="SquadThorAPMode"/>
+        <AbilArray Link="SquadThorWreckage"/>
+        <AbilArray Link="SquadThor330mmBarrageCannons"/>
+        <AbilArray Link="QueueMagazine"/>
+        <AbilArray Link="SquadInfantry"/>
+        <BehaviorArray Link="SquadThorDontDie"/>
+        <WeaponArray Link="SquadThorsHammer"/>
+        <WeaponArray Link="SquadThorJavelinMissileLaunchers"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="SquadThor330mmBarrageCannons" Type="AbilCmd" AbilCmd="SquadThor330mmBarrageCannons,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="SquadThor330mmBarrageCannons,Cancel" Row="2" Column="4"/>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="SquadThorAPMode,Cancel" Row="2" Column="4"/>
+            <LayoutButtons Face="SquadThorImmortalityProtocol" Type="Passive" AbilCmd="255,255" Row="1" Column="0"/>
+            <LayoutButtons Face="SquadThorAPMode" Type="AbilCmd" AbilCmd="SquadThorAPMode,Execute" Row="2" Column="1"/>
+        </CardLayouts>
+        <Radius value="1"/>
+        <SeparationRadius value="1"/>
+        <InnerRadius value="1"/>
+        <CargoSize value="8"/>
+        <ScoreMake value="500"/>
+        <ScoreKill value="500"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="10"/>
+        <MinimapRadius value="1"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
+        <TacticalAIThink value="AIThinkThor"/>
+        <TechAliasArray value="Alias_Thor"/>
+        <GlossaryCategory value="Unit/Category/TerranUnits"/>
+        <GlossaryPriority value="140"/>
+        <GlossaryStrongArray value="Mutalisk"/>
+        <GlossaryStrongArray value="Stalker"/>
+        <GlossaryStrongArray value="Marine"/>
+        <GlossaryWeakArray value="Zergling"/>
+        <GlossaryWeakArray value="Immortal"/>
+        <GlossaryWeakArray value="Marauder"/>
+        <HotkeyCategory value="Unit/Category/TerranUnits"/>
+        <Fidget>
+            <ChanceArray index="Anim" value="10"/>
+            <ChanceArray index="Idle" value="90"/>
+        </Fidget>
+        <TauntDuration index="Cheer" value="5"/>
+        <TauntDuration index="Dance" value="5"/>
+    </CUnit>
+    <CUnit id="SquadThorAAWeapon" parent="MISSILE">
+        <Race value="Terr"/>
+        <Mover value="ThorAA"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
+    <CUnit id="SquadThorAP">
+        <Name value="Unit/Name/Thor"/>
+        <Description value="Button/Tooltip/Thor"/>
+        <DeathRevealRadius value="3"/>
+        <Facing value="135"/>
+        <Race value="Terr"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TurnBeforeMove" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Massive" value="1"/>
+        <LifeStart value="400"/>
+        <LifeMax value="400"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranVehiclePlating"/>
+        <Speed value="1.875"/>
+        <Acceleration value="1000"/>
+        <LateralAcceleration value="46.0625"/>
+        <TurningRate value="360"/>
+        <Sight value="11"/>
+        <Food value="-6"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="300"/>
+        <CostResource index="Vespene" value="200"/>
+        <RepairTime value="60"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="160"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="SquadThorEPMode"/>
+        <AbilArray Link="SquadThorWreckage"/>
+        <AbilArray Link="SquadThor330mmBarrageCannons"/>
+        <AbilArray Link="QueueMagazine"/>
+        <AbilArray Link="SquadInfantry"/>
+        <WeaponArray Link="SquadThorsHammer"/>
+        <WeaponArray Link="SquadThor250mmPunisherCannons"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="SquadThorEPMode" Type="AbilCmd" AbilCmd="SquadThorEPMode,Execute" Row="2" Column="1"/>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="SquadThorEPMode,Cancel" Row="2" Column="4"/>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="SquadThor330mmBarrageCannons,Cancel" Row="2" Column="4"/>
+            <LayoutButtons Face="SquadThorImmortalityProtocol" Row="1" Column="0"/>
+            <LayoutButtons Face="SquadThor330mmBarrageCannons" Type="AbilCmd" AbilCmd="SquadThor330mmBarrageCannons,Execute" Row="2" Column="0"/>
+        </CardLayouts>
+        <Radius value="1"/>
+        <SeparationRadius value="1"/>
+        <InnerRadius value="1"/>
+        <CargoSize value="8"/>
+        <ScoreMake value="500"/>
+        <ScoreKill value="500"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="10"/>
+        <MinimapRadius value="1"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
+        <TacticalAIThink value="AIThinkThor"/>
+        <LeaderAlias value="Thor"/>
+        <HotkeyAlias value="Thor"/>
+        <SelectAlias value="Thor"/>
+        <SubgroupAlias value="Thor"/>
+        <TechAliasArray value="Alias_Thor"/>
+        <GlossaryCategory value="Unit/Category/TerranUnits"/>
+        <GlossaryPriority value="141"/>
+        <GlossaryStrongArray value="Marine"/>
+        <GlossaryStrongArray value="Mutalisk"/>
+        <GlossaryStrongArray value="Stalker"/>
+        <GlossaryWeakArray value="Marauder"/>
+        <GlossaryWeakArray value="Zergling"/>
+        <GlossaryWeakArray value="Immortal"/>
+        <HotkeyCategory value="Unit/Category/TerranUnits"/>
+        <Fidget>
+            <ChanceArray index="Anim" value="10"/>
+            <ChanceArray index="Idle" value="90"/>
+        </Fidget>
+        <TauntDuration index="Cheer" value="5"/>
+        <TauntDuration index="Dance" value="5"/>
+    </CUnit>
+    <CUnit id="SquadThorWreckage">
+        <DeathRevealRadius value="3"/>
+        <ReviveType value="Thor"/>
+        <Facing value="135"/>
+        <Race value="Terr"/>
+        <FlagArray index="Movable" value="0"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Massive" value="1"/>
+        <LifeStart value="400"/>
+        <LifeMax value="400"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranVehiclePlating"/>
+        <Speed value="1.875"/>
+        <Acceleration value="1000"/>
+        <LateralAcceleration value="46.0625"/>
+        <TurningRate value="360"/>
+        <Sight value="11"/>
+        <Food value="-6"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="300"/>
+        <RepairTime value="60"/>
+        <AttackTargetPriority value="18"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="160"/>
+        <AbilArray Link="SquadThorReborn"/>
+        <WeaponArray Link="JavelinMissileLaunchers"/>
+        <WeaponArray Link="ThorsHammer"/>
+        <CardLayouts>
+            <LayoutButtons Face="ImmortalityProtocol" Type="AbilCmd" AbilCmd="SquadThorReborn,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="SquadThorReborn,Cancel" Row="2" Column="4"/>
+        </CardLayouts>
+        <Radius value="1.375"/>
+        <SeparationRadius value="1"/>
+        <InnerRadius value="0.8125"/>
+        <CargoSize value="8"/>
+        <ScoreMake value="500"/>
+        <ScoreKill value="500"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="2"/>
+        <MinimapRadius value="1"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
+        <TacticalAIThink value="AIThinkThor"/>
+        <HotkeyAlias value="Thor"/>
+        <HotkeyCategory value="Unit/Category/TerranUnits"/>
+        <Fidget>
+            <ChanceArray index="Anim" value="10"/>
+            <ChanceArray index="Idle" value="90"/>
+        </Fidget>
+        <TauntDuration index="Cheer" value="5"/>
+        <TauntDuration index="Dance" value="5"/>
+        <ReviveInfoBase>
+            <Charge Link="Thor/Revive"/>
+            <Cooldown Link="Thor/Revive"/>
+        </ReviveInfoBase>
+    </CUnit>
+    <CUnit id="SquadThorAALance" parent="MISSILE">
+        <Race value="Terr"/>
+        <Mover value="ThorAALance"/>
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
     </CUnit>
 </Catalog>
