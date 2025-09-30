@@ -138,20 +138,22 @@
         <EffectArray value="SquadBattlecruiserFleetwideJumpTeleport"/>
         <EffectArray value="SquadBattlecruiserFleetwideJumpTeleportAB"/>
     </CEffectSet>
-    <CEffectLaunchMissile id="SquadBattlecruiserATALaserBatteryLM">
+    <CEffectLaunchMissile id="SquadBattlecruiserLaserBatteryLM">
         <EditorCategories value="Race:Terran"/>
-        <ImpactEffect value="SquadBattlecruiserATALaserBatteryU"/>
+        <ImpactEffect value="SquadBattlecruiserLaserBatteryU"/>
+        <AmmoUnit value="SquadBattlecruiserATALaserBattery"/>
     </CEffectLaunchMissile>
-    <CEffectDamage id="SquadBattlecruiserATALaserBatteryU" parent="DU_WEAP_MISSILE">
+    <CEffectDamage id="SquadBattlecruiserLaserBatteryU" parent="DU_WEAP_MISSILE">
         <EditorCategories value="Race:Terran"/>
         <Visibility value="Visible"/>
         <Amount value="18"/>
     </CEffectDamage>
-    <CEffectLaunchMissile id="SquadBattlecruiserLaserBatteryLM">
+    <CEffectLaunchMissile id="SquadBattlecruiserMiniYamatoLM">
         <EditorCategories value="Race:Terran"/>
-        <ImpactEffect value="SquadBattlecruiserLaserBatteryU"/>
+        <ImpactEffect value="SquadBattlecruiserMiniYamatoU"/>
+        <AmmoUnit value="SquadBattlecruiserMiniYamato"/>
     </CEffectLaunchMissile>
-    <CEffectDamage id="SquadBattlecruiserLaserBatteryU" parent="DU_WEAP_MISSILE">
+    <CEffectDamage id="SquadBattlecruiserMiniYamatoU" parent="DU_WEAP_MISSILE">
         <EditorCategories value="Race:Terran"/>
         <Visibility value="Visible"/>
         <Amount value="200"/>
@@ -3444,4 +3446,35 @@
         <BehaviorLink value="VoodooOrb"/>
         <Count value="1"/>
     </CEffectRemoveBehavior>
+    <CEffectCreatePersistent id="SquadVikingAHaloRocketsPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <PeriodCount value="2"/>
+        <PeriodicEffectArray value="SquadVikingAHaloRocketsLM"/>
+        <PeriodicEffectArray value="SquadVikingAHaloRocketsLM"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0.21"/>
+    </CEffectCreatePersistent>
+    <CEffectLaunchMissile id="SquadVikingAHaloRocketsLM">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="SquadVikingAHaloRocketsDamage"/>
+        <AmmoUnit value="SquadVikingAWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="SquadVikingAHaloRocketsDamage" parent="DU_WEAP_SPLASH">
+        <EditorCategories value="Race:Terran"/>
+        <AttributeBonus index="Armored" value="6"/>
+        <Visibility value="Visible"/>
+        <Kind value="Ranged"/>
+        <Amount value="14"/>
+        <AreaArray Radius="0.3" Fraction="1" Validator="HALORocketsResearched"/>
+        <AreaArray Radius="0.6" Fraction="0.5" Validator="HALORocketsResearched"/>
+        <AreaArray Radius="1.2" Fraction="0.25" Validator="HALORocketsResearched"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Air;Self,Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+    </CEffectDamage>
+    <CEffectDamage id="SquadVikingGTwinGatlingCannonDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Ranged"/>
+        <Amount value="18"/>
+    </CEffectDamage>
 </Catalog>

@@ -4,6 +4,177 @@
     <!--outer impor end-->
     <!--outer impor end-->
     <CActorAction default="1" id="SquadMarauderAttackBase" parent="MarauderAttackBase"/>
+    <CActorModel id="SquadVikingGDeathRagdoll">
+        <Aliases value="_Main"/>
+        <Aliases value="_Unit"/>
+        <Aliases value="_DeathModel"/>
+        <Macros value="DeadAnimationMacro"/>
+        <Macros value="DeadAnimationRemoveMacro"/>
+        <Macros value="UnitDeathRagdollTerminateExtrasMacro"/>
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="CastShadows" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="TeamColor" value="1"/>
+        <Inherits index="TintColor" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <AcceptedHostedPropTransfers index="TimeScale" value="0"/>
+        <On Terms="ActorCreation" Send="RefClear ::Host"/>
+        <On Terms="ActorCreation" Send="SetTintColor 255,255,255 0.600000"/>
+        <On Terms="ActorCreation" Send="SetTeamColor {0,0,0 0.000000} {0,0,0 0.000000}"/>
+        <On Terms="ActorCreation" Target="ModelPretargetGround" Send="Destroy"/>
+        <On Terms="ActorCreation" Target="GroundPreSelection" Send="Destroy"/>
+        <On Terms="Signal.*.ClearDeathModel" Send="Destroy"/>
+        <On Terms="TimerExpired; TimerName TerminateExtras" Send="Signal TerminateExtras"/>
+        <On Terms="Signal.*.TerminateExtras" Send="PhysicsImpactsEnable"/>
+        <On Terms="Signal.*.TerminateExtras" Target="_BodySquib" Send="Signal Terminate"/>
+        <On Terms="AnimDone; AnimName Death" Send="PhysicsTerminate"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="Create SquadVikingGDeathRagdollDetonationForce"/>
+        <Host Subject="::Creator"/>
+        <HostSiteOps Ops="SOpDeathMotionGround"/>
+        <Model value="UnitDeathModelNoTeamColor"/>
+        <ModelFlags index="UpdateVisibility" value="0"/>
+        <ModelFlags index="UseSyncSeed" value="1"/>
+        <EventDataSound Name="NydusCanalThud" Actor="UnitSound" Sound="NydusWorm_DeathThud"/>
+        <EventDataSound Name="ZergExplosionSlime" Actor="UnitSound" Sound="Zerg_ExplosionSlime"/>
+        <EventDataSound Name="ZergPreExplosionSmall" Actor="UnitSound" Sound="Zerg_PreExplosionSmall"/>
+        <EventDataSound Name="ZergExplosionTiny" Actor="UnitSound" Sound="Zerg_ExplosionTiny"/>
+        <EventDataSound Name="ZergExplosionSmall" Actor="UnitSound" Sound="Zerg_ExplosionSmall"/>
+        <EventDataSound Name="ZergExplosionMedium" Actor="UnitSound" Sound="Zerg_ExplosionMedium"/>
+        <EventDataSound Name="ZergExplosionLarge" Actor="UnitSound" Sound="Zerg_ExplosionLarge"/>
+        <EventDataSound Name="ProtossPreExplosionSmall" Actor="UnitSound" Sound="Protoss_PreExplosionSmall"/>
+        <EventDataSound Name="ProtossExplosionSmall" Actor="UnitSound" Sound="Protoss_ExplosionSmall"/>
+        <EventDataSound Name="ProtossExplosionMedium" Actor="UnitSound" Sound="Protoss_ExplosionMedium"/>
+        <EventDataSound Name="ProtossExplosionLarge" Actor="UnitSound" Sound="Protoss_ExplosionLarge"/>
+        <EventDataSound Name="TerranPreExplosionSmall" Actor="UnitSound" Sound="Terran_PreExplosionSmall"/>
+        <EventDataSound Name="TerranExplosionSmall" Actor="UnitSound" Sound="Terran_ExplosionSmall"/>
+        <EventDataSound Name="TerranExplosionMedium" Actor="UnitSound" Sound="Terran_ExplosionMedium"/>
+        <EventDataSound Name="TerranExplosionLarge" Actor="UnitSound" Sound="Terran_ExplosionLarge"/>
+        <PhysicsImpactDefault ActorModel="PhysicsImpactHarness" ActorSound="PhysicsImpactSound" OccuranceThrottlingDistance="0.500000,0.500000"/>
+    </CActorModel>
+    <CActorForceSphere id="SquadVikingGDeathRagdollDetonationForce" parent="DeathRagdollDetonationForce">
+        <HostSiteOps Ops="SOpAttachInternalDetonationSiegeTank SOpMoveDownByDot15 SOpRandomPointInSphereDot15"/>
+        <Magnitude value="13.950000,6.750000"/>
+        <Radius value="0.900000,0.450000"/>
+    </CActorForceSphere>
+    <CActorModel id="SquadVikingADeathRagdoll">
+        <Aliases value="_Main"/>
+        <Aliases value="_Unit"/>
+        <Aliases value="_DeathModel"/>
+        <Macros value="DeadAnimationMacro"/>
+        <Macros value="DeadAnimationRemoveMacro"/>
+        <Macros value="UnitDeathRagdollTerminateExtrasMacro"/>
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="CastShadows" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="TeamColor" value="1"/>
+        <Inherits index="TintColor" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <AcceptedHostedPropTransfers index="TimeScale" value="0"/>
+        <On Terms="ActorCreation" Send="RefClear ::Host"/>
+        <On Terms="ActorCreation" Send="SetTintColor 255,255,255 0.600000"/>
+        <On Terms="ActorCreation" Send="SetTeamColor {0,0,0 0.000000} {0,0,0 0.000000}"/>
+        <On Terms="ActorCreation" Target="ModelPretargetGround" Send="Destroy"/>
+        <On Terms="ActorCreation" Target="GroundPreSelection" Send="Destroy"/>
+        <On Terms="Signal.*.ClearDeathModel" Send="Destroy"/>
+        <On Terms="TimerExpired; TimerName TerminateExtras" Send="Signal TerminateExtras"/>
+        <On Terms="Signal.*.TerminateExtras" Send="PhysicsImpactsEnable"/>
+        <On Terms="Signal.*.TerminateExtras" Target="_BodySquib" Send="Signal Terminate"/>
+        <On Terms="AnimDone; AnimName Death" Send="PhysicsTerminate"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="Create SquadVikingADeathRagdollDetonationForce"/>
+        <Host Subject="::Creator"/>
+        <HostSiteOps Ops="SOpDeathMotionFlier"/>
+        <Model value="UnitDeathModelNoTeamColor"/>
+        <ModelFlags index="UpdateVisibility" value="0"/>
+        <ModelFlags index="UseSyncSeed" value="1"/>
+        <EventDataSound Name="NydusCanalThud" Actor="UnitSound" Sound="NydusWorm_DeathThud"/>
+        <EventDataSound Name="ZergExplosionSlime" Actor="UnitSound" Sound="Zerg_ExplosionSlime"/>
+        <EventDataSound Name="ZergPreExplosionSmall" Actor="UnitSound" Sound="Zerg_PreExplosionSmall"/>
+        <EventDataSound Name="ZergExplosionTiny" Actor="UnitSound" Sound="Zerg_ExplosionTiny"/>
+        <EventDataSound Name="ZergExplosionSmall" Actor="UnitSound" Sound="Zerg_ExplosionSmall"/>
+        <EventDataSound Name="ZergExplosionMedium" Actor="UnitSound" Sound="Zerg_ExplosionMedium"/>
+        <EventDataSound Name="ZergExplosionLarge" Actor="UnitSound" Sound="Zerg_ExplosionLarge"/>
+        <EventDataSound Name="ProtossPreExplosionSmall" Actor="UnitSound" Sound="Protoss_PreExplosionSmall"/>
+        <EventDataSound Name="ProtossExplosionSmall" Actor="UnitSound" Sound="Protoss_ExplosionSmall"/>
+        <EventDataSound Name="ProtossExplosionMedium" Actor="UnitSound" Sound="Protoss_ExplosionMedium"/>
+        <EventDataSound Name="ProtossExplosionLarge" Actor="UnitSound" Sound="Protoss_ExplosionLarge"/>
+        <EventDataSound Name="TerranPreExplosionSmall" Actor="UnitSound" Sound="Terran_PreExplosionSmall"/>
+        <EventDataSound Name="TerranExplosionSmall" Actor="UnitSound" Sound="Terran_ExplosionSmall"/>
+        <EventDataSound Name="TerranExplosionMedium" Actor="UnitSound" Sound="Terran_ExplosionMedium"/>
+        <EventDataSound Name="TerranExplosionLarge" Actor="UnitSound" Sound="Terran_ExplosionLarge"/>
+        <PhysicsImpactDefault ActorModel="PhysicsImpactHarness" ActorSound="PhysicsImpactSound" OccuranceThrottlingDistance="0.500000,0.500000"/>
+    </CActorModel>
+    <CActorForceSphere id="SquadVikingADeathRagdollDetonationForce" parent="DeathRagdollDetonationForce">
+        <Magnitude value="8.000000,4.000000"/>
+        <Radius value="1.000000,0.125000"/>
+    </CActorForceSphere>
+    <CActorSound id="SquadVikingAMode" parent="SoundOneShot">
+        <On Terms="AbilMorph.*.Start; MorphTo SquadVikingA" Send="Create"/>
+        <Sound value="Viking_MorphToFighter"/>
+    </CActorSound>
+    <CActorSound id="SquadVikingGMode" parent="SoundOneShot">
+        <On Terms="AbilMorph.*.Start; MorphTo MengskVikingAssault" Send="Create"/>
+        <Sound value="Viking_MorphToAssault"/>
+    </CActorSound>
+    <CActorUnit id="SquadVikingAMorphModel" parent="GenericUnitBaseMorphTransition" unitName="SquadVikingAMorphModel">
+        <Aliases value="_UnitMedium"/>
+        <On Terms="AbilMorph.*.Start; MorphTo SquadVikingA" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo SquadVikingA" Send="AnimPlay End Morph,End PlayForever,NonLooping"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom SquadVikingA" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom SquadVikingG" Send="Destroy"/>
+        <Model value="Viking_Mecha_Morph"/>
+        <DeathArray index="Normal" ModelLink="Viking_Mecha_Assault_Death"/>
+        <PortraitModel value="Viking_Mecha_Portrait"/>
+        <AbilSoundArray AbilCmd="SquadVikingGMode,Execute" Sound="Viking_AssaultModeVO"/>
+        <BarOffset value="50"/>
+        <BarWidth value="70"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Viking-mercenary-Fighter.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-vikingfighter.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
+        <SoundArray index="Ready" value="Viking_Ready"/>
+        <SoundArray index="Help" value="Viking_Help"/>
+        <SoundArray index="What" value="Viking_What"/>
+        <SoundArray index="Yes" value="Viking_Yes"/>
+        <SoundArray index="Attack" value="Viking_Attack"/>
+        <SoundArray index="Pissed" value="Viking_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-vikingfighter.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Viking-mercenary-Fighter.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorUnit id="SquadVikingGMorphModel" parent="GenericUnitBaseMorphTransition" unitName="SquadVikingGMorphModel">
+        <Aliases value="_UnitMedium"/>
+        <On Terms="AbilMorph.*.Start; MorphTo SquadVikingG" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo SquadVikingG" Send="AnimPlay Start Morph,Start PlayForever,NonLooping"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom SquadVikingG" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom SquadVikingA" Send="Destroy"/>
+        <Model value="Viking_Mecha_Morph"/>
+        <DeathArray index="Normal" ModelLink="Viking_Mecha_Fighter_Death"/>
+        <PortraitModel value="Viking_Mecha_Portrait"/>
+        <AbilSoundArray AbilCmd="SquadVikingAMode,Execute" Sound="Viking_FighterModeVO"/>
+        <BarOffset value="70"/>
+        <BarWidth value="70"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Viking-mercenary-assault.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-vikingassault.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
+        <SoundArray index="Ready" value="Viking_Ready"/>
+        <SoundArray index="Help" value="Viking_Help"/>
+        <SoundArray index="What" value="Viking_What"/>
+        <SoundArray index="Yes" value="Viking_Yes"/>
+        <SoundArray index="Attack" value="Viking_Attack"/>
+        <SoundArray index="Pissed" value="Viking_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-vikingassault.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Viking-mercenary-Assault.dds"/>
+        </Wireframe>
+    </CActorUnit>
     <CActorSound id="SquadBattlecruiserLand" parent="SoundOneShot">
         <Sound value="Battlecruiser_Land"/>
     </CActorSound>
@@ -61,9 +232,9 @@
         <Inherits index="Visibility" value="1"/>
         <Inherits index="WarpGroup" value="1"/>
         <On Terms="ActorCreation" Send="AnimPlay Birth Stand NonLooping -1.000000 -1.000000 2.000000 AsDuration"/>
-        <On Terms="Behavior.HHYamatoShots.Off" Send="AnimClear Birth"/>
+        <On Terms="Behavior.SquadBattlecruiserYamatoShots.Off" Send="AnimClear Birth"/>
         <On Terms="Abil.attack.ReadyStop" Send="Destroy"/>
-        <On Terms="WeaponStart.HHLaserBattery.AttackStart" Send="Create"/>
+        <On Terms="WeaponStart.SquadBattlecruiserMiniYamatoGun.AttackStart" Send="Create"/>
         <On Terms="AnimDone; AnimName Birth" Send="Destroy"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachCustomA"/>
@@ -136,11 +307,11 @@
         <Macros value="TerrainSquibAnimations"/>
         <Macros value="PhysicsDeathsSwarmAir"/>
         <Macros value="PhysicsDeathsVoidAir"/>
-        <On Terms="Behavior.SquadBattlecruiserYamatoShotsActivate.On" Send="AnimBlendTimeApply 5.000000"/>
-        <On Terms="Behavior.SquadBattlecruiserYamatoShotsActivate.On" Send="AnimPlay GLBirth,A"/>
-        <On Terms="Behavior.SquadBattlecruiserYamatoShotsActivate.On" Send="AnimGroupApply A"/>
-        <On Terms="Behavior.SquadBattlecruiserYamatoShotsActivate.On" Send="AnimBlendTimeApply"/>
-        <On Terms="Behavior.SquadBattlecruiserYamatoShotsActivate.Off" Send="AnimGroupRemove A"/>
+        <On Terms="Behavior.SquadBattlecruiserYamatoShots.On" Send="AnimBlendTimeApply 5.000000"/>
+        <On Terms="Behavior.SquadBattlecruiserYamatoShots.On" Send="AnimPlay Morph,A"/>
+        <On Terms="Behavior.SquadBattlecruiserYamatoShots.On" Send="AnimGroupApply A"/>
+        <On Terms="Behavior.SquadBattlecruiserYamatoShots.On" Send="AnimBlendTimeApply"/>
+        <On Terms="Behavior.SquadBattlecruiserYamatoShots.Off" Send="AnimGroupRemove A"/>
         <On Terms="UnitHeightUpdate.*.Land" Send="Create SquadBattlecruiserLand"/>
         <On Terms="Behavior.SquadBattlecruiserFleetwideJumpTeleportOut.On" Send="SetOpacity"/>
         <On Terms="Behavior.SquadBattlecruiserFleetwideJumpTeleportIn.Off" Send="SetOpacity 1.000000"/>
@@ -156,11 +327,12 @@
         <On Terms="ActorCreation" Send="Create BattlecruiserLookAt05"/>
         <On Terms="ActorCreation" Send="Create BattlecruiserLookAt06"/>
         <On Terms="ActorCreation" Send="Create BattlecruiserLookAt07"/>
-        <On Terms="WeaponStart.SquadBattlecruiserATXLaserBattery.AttackStart" Target="_BattlecruiserTurretATS" Send="LookAtEngage Continue"/>
-        <On Terms="WeaponStart.SquadBattlecruiserATXLaserBattery.AttackStart" Target="_BattlecruiserTurretATA" Send="LookAtEngage Continue"/>
+        <On Terms="WeaponStart.SquadBattlecruiserATXLaserBattery.AttackStart" Target="SquadBattlecruiser" Send="LookAtEngage Continue"/>
+        <On Terms="WeaponStart.SquadBattlecruiserATXLaserBattery.AttackStart" Target="SquadBattlecruiser" Send="LookAtEngage Continue"/>
         <On Terms="Abil.attack.ReadyStop" Target="_BattlecruiserTurretATS" Send="LookAtDisengage"/>
         <On Terms="Abil.attack.ReadyStop" Target="_BattlecruiserTurretATA" Send="LookAtDisengage"/>
-        <On Terms="WeaponStart.SquadBattlecruiserATXLaserBattery.AttackStart" Send="AnimPlay Attack Spell,A,End"/>
+        <On Terms="WeaponStart.SquadBattlecruiserATXLaserBattery.AttackStart" Send="AnimPlay Attack,A,End"/>
+        <On Terms="WeaponStart.SquadBattlecruiserMiniYamatoGun.AttackStart" Send="AnimPlay Attack Spell,A,End"/>
         <On Terms="Behavior.MercAirDropB.Create" Send="Create SquadBattlecruiserReentryB"/>
         <!--
         <On Terms="ActorCreation" Send="Create AC_HHBattlecruiser_AirDrop_AS"/>
@@ -171,8 +343,8 @@
         <Model value="BattleCruiser_Junker_Collection"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
         <BuildModel value="BattleCruiser_Junker_Collection"/>
-        <DeathArray index="Normal" ModelLink="BattleCruiser_Junker_Collection_Death" SoundLink="SS_Battlecruiser_Explode" VoiceLink="Battlecruiser_Death"/>
-        <DeathCustoms ModelLink="SquadBattlecruiserDeathA" Name="Upgrade"/>
+        <DeathArray index="Normal" ModelLink="BattleCruiser_Junker_Collection_Death" SoundLink="Battlecruiser_Explode" VoiceLink="Battlecruiser_Death"/>
+        <DeathCustoms ModelLink="BattleCruiser_Junker_Collection_Death" Name="Upgrade"/>
         <DeathCustoms>
             <ActorModel value="BattlecruiserDeathRagdoll"/>
             <ModelLink value="BattleCruiser_Junker_Collection_DeathRagdoll"/>
@@ -240,10 +412,13 @@
             <Image value="Assets\Textures\Wireframe-Terran-Battlecruiser.dds"/>
         </Wireframe>
     </CActorUnit>
-    <CActorAction id="SquadBattlecruiserAirAttack" parent="GenericAttack" effectImpact="SquadBattlecruiserATALaserBatteryU" effectLaunch="SquadBattlecruiserATALaserBatteryLM">
+    <CActorAction id="SquadBattlecruiserLaserBatteryAirAttack" parent="GenericAttack" effectImpact="SquadBattlecruiserLaserBatteryU" effectLaunch="SquadBattlecruiserLaserBatteryLM">
+        <LaunchAttachQuery Methods="Weapon 9"/>
+        <!--        
         <LaunchAttachQuery Methods="AMFilterWeaponSetA0 AMRandomUniform"/>
         <LaunchAssets Sound="Battlecruiser_AirAttackLaunch"/>
         <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeStandard SOpForwardLaunchGuide"/>
+-->
         <ImpactMap index="None" Sound="Battlecruiser_AirAttackImpact"/>
         <ImpactMap index="Shield" Sound="Battlecruiser_AirAttackImpact2"/>
         <ImpactPhysics Name="ATAImpact" MatchKeys="BasicAir" Physics="BattlecruiserAttackAirForce"/>
@@ -251,17 +426,20 @@
         <DamageMap index="Shield" Sound="BattlecruiserAirAttackDamageShield"/>
         <ActionFlags index="LaunchForceSite" value="1"/>
     </CActorAction>
-    <CActorMissile id="SquadBattlecruiserAirAttackMissile" parent="GenericAttackMissile" unitName="SquadBattlecruiserATALaserBatteryLMWeapon"/>
-    <CActorAction id="SquadBattlecruiserAttack" parent="GenericAttack" effectImpact="SquadBattlecruiserLaserBatteryU" effectLaunch="SquadBattlecruiserLaserBatteryLM">
-        <LaunchAttachQuery Methods="Weapon 9"/>
+    <CActorMissile id="SquadBattlecruiserLaserBatteryAirAttackMissile" parent="GenericAttackMissile" unitName="SquadBattlecruiserATALaserBattery">
+        <Model value="SquadBattlecruiserLaserBatteryLMWeapon"/>
+    </CActorMissile>
+    <CActorAction id="SquadBattlecruiserMiniYamatoAttack" parent="GenericAttack" effectImpact="SquadBattlecruiserMiniYamatoU" effectLaunch="SquadBattlecruiserMiniYamatoLM">
+        <LaunchAttachQuery Methods="AMFilterWeaponSetA0 AMRandomUniform"/>
         <LaunchAssets Sound="Battlecruiser_GroundAttackLaunch"/>
-        <ImpactMap index="None" Model="SquadBattlecruiserYamatoImpact" Sound="Battlecruiser_YamatoAttackImpact" ModelReaction="CapitalShipWeaponAttackImpactReaction"/>
+        <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeStandard SOpForwardLaunchGuide"/>
+        <ImpactMap index="None" Model="SquadBattlecruiserMiniYamatoImpact" Sound="Battlecruiser_YamatoAttackImpact" ModelReaction="CapitalShipWeaponAttackImpactReaction"/>
         <ImpactMap index="Shield" Sound="CapitalShipWeaponAttackImpactShield" ModelReaction="CapitalShipWeaponAttackImpactReactionShield"/>
         <DamageMap index="None" Sound="BattlecruiserAttackDamage"/>
         <DamageMap index="Shield" Sound="BattlecruiserAttackDamageShield"/>
     </CActorAction>
-    <CActorMissile id="SquadBattlecruiserAttackMissile" parent="GenericAttackMissile" unitName="SquadBattlecruiserLaserBatteryLMWeapon">
-        <Model value="SquadLaserBatteryLMWeapon"/>
+    <CActorMissile id="SquadBattlecruiserMiniYamatoAttackMissile" parent="GenericAttackMissile" unitName="SquadBattlecruiserMiniYamato">
+        <Model value="SquadBattlecruiserMiniYamatoLMWeapon"/>
     </CActorMissile>
     <CActorModel id="SquadHyperionHyperjumpLaunch" parent="ModelAnimationStyleOneShot">
         <EditorCategories value=""/>
@@ -5098,19 +5276,13 @@
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachCenter"/>
     </CActorModel>
-    <CActorUnit id="SquadSCVJumper" parent="GenericUnitMorph" unitName="SquadSCV">
+    <CActorUnit id="SquadSCVJumper" parent="GenericUnitMorph" unitName="SquadSCVJumper">
         <Aliases value="_UnitSmall"/>
         <Macros value="CarryAnim"/>
         <Macros value="UnloadDropAnim"/>
         <Macros value="MacroWorkerHat"/>
         <Macros value="PhysicsDeathsSwarmGround"/>
         <Macros value="PhysicsDeathsVoidGround"/>
-        <On index="0" Terms="UnitBirth.SquadSCVJumper"/>
-        <On index="1" Terms="UnitBirth.SquadSCVJumper"/>
-        <On index="2" Terms="UnitRevive.SquadSCVJumper"/>
-        <On index="3" Terms="UnitRevive.SquadSCVJumper"/>
-        <On index="4" Terms="UnitConstruction.SquadSCVJumper.Start"/>
-        <On index="5" Terms="UnitConstruction.SquadSCVJumper.Finish"/>
         <On Terms="Abil.SquadSCVGather" Send="TimerSet 0.000000,0.300000 SquadSCVGather"/>
         <On Terms="Abil.SquadSCVGather" Send="AnimClear SquadSCVGather"/>
         <On Terms="Abil.SCVHarvest.Stop" Send="TimerKill SquadSCVGather"/>
@@ -5138,7 +5310,7 @@
         <On Terms="Behavior.CloakFieldEffect.Destroy; IsStatus CloakSound 0" Send="Create Worker_CloakFieldOff"/>
         <On Terms="Behavior.OracleCloakFieldEffect.Create; IsStatus CloakSound 0" Send="Create Worker_CloakFieldOn"/>
         <On Terms="Behavior.OracleCloakFieldEffect.Destroy; IsStatus CloakSound 0" Send="Create Worker_CloakFieldOff"/>
-        <On Terms="UnitHeightUpdate.*.Land" Send="Create SquadSCV_Land"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create SquadSCVLand"/>
         <Model value="SCV_Remastered"/>
         <AnimBlendTime value="0.500000"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
@@ -5175,7 +5347,6 @@
             <Image value="Assets\Textures\Wireframe-Terran-SCV.dds"/>
         </GroupIcon>
         <HeroIcon value="Assets\Textures\btn-unit-terran-scv.dds"/>
-        <HighlightTooltip value="Unit/Name/SquadSCVJumper"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
         <SoundArray index="Ready" value="SCV_Ready"/>
         <SoundArray index="Help" value="Alert_TerranEconomyUnderAttack2"/>
@@ -6591,4 +6762,126 @@
         <Model value="VoidStalkerBlinkShieldRestore"/>
         <ModelFlags index="AutomateGlobalLoops" value="1"/>
     </CActorModel>
+    <CActorUnit id="SquadVikingG" parent="GenericUnitMorph" unitName="SquadVikingG">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="UnloadDropAnim"/>
+        <Model value="Viking_Mecha_Assault"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo SquadVikingA" Target="FlyerHelperSplat" Send="Destroy"/>
+        <DeathArray index="Normal" ModelLink="Viking_Mecha_Assault_Death" SoundLink="Viking_Explode"/>
+        <DeathArray index="Blast" AnimProps="Death,Blast" ModelLink="Viking_Mecha_Assault_Death"/>
+        <PortraitModel value="Viking_Mecha_Portrait"/>
+        <PlacementModel value="Viking_Mecha_Assault"/>
+        <WalkAnimMoveSpeed value="2.5468"/>
+        <BuildModel value="Viking_Mecha_Assault"/>
+        <AbilSoundArray AbilCmd="SquadVikingAMode,Execute" Sound="Viking_FighterModeVO"/>
+        <BarOffset value="70"/>
+        <BarWidth value="70"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Viking-mercenary-assault.dds"/>
+        </GroupIcon>
+        <DeathCustoms>
+            <ActorModel value="SquadVikingADeathRagdoll"/>
+            <ModelLink value="Viking_Mecha_Assault_DeathRagdoll"/>
+            <Name value="RagdollBasic"/>
+            <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+            <BodySquibs Name="Basic" Model="TerranSquibDeathRagdoll"/>
+        </DeathCustoms>
+        <HeroIcon value="Assets\Textures\BTN-Unit-Terran-VikingMercenary-Assault.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
+        <SoundArray index="Ready" value="Viking_Ready"/>
+        <SoundArray index="Help" value="Viking_Help"/>
+        <SoundArray index="What" value="Viking_What"/>
+        <SoundArray index="Yes" value="Viking_Yes"/>
+        <SoundArray index="Attack" value="Viking_Attack"/>
+        <SoundArray index="Pissed" value="Viking_Pissed"/>
+        <UnitIcon value="Assets\Textures\BTN-Unit-Terran-VikingMercenary-Assault.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Viking-mercenary-assault.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="SquadVikingGAttack" parent="GenericAttack" effectAttack="SquadVikingGTwinGatlingCannonDamage">
+        <LaunchAttachQuery Methods="AMFilterWeaponSetA0"/>
+        <LaunchAssets Model="WreckingCrewAssaultAttackLaunch" Sound="VikingAssault_AttackLaunch"/>
+        <ImpactMap index="None" Model="WreckingCrewAssaultAttackImpact" Sound="Viking_AssaultAttackImpact"/>
+        <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
+    </CActorAction>
+    <CActorUnit id="SquadVikingA" parent="GenericUnitMorph" unitName="SquadVikingA">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="AssaultModeAnim"/>
+        <AcceptedTransfers index="Status" value="0"/>
+        <On Terms="ActorDestruction; HasStatus FlyerHelper" Send="StatusDecrement FlyerHelper"/>
+        <On Terms="Behavior.MercAirDropB.Create" Send="Create SquadVikingAReentry"/>
+        <HostSiteOps Ops="SOpBankerViking"/>
+        <Model value="Viking_Mecha_Fighter"/>
+        <Baselines index="Walk" BlendIn="1.500000" BlendOut="2.000000"/>
+        <BuildModel value="Viking_Mecha_Fighter"/>
+        <DeathArray index="Normal" ModelLink="Viking_Mecha_Fighter_Death" SoundLink="Viking_Explode"/>
+        <PlacementModel value="Viking_Mecha_Fighter"/>
+        <PortraitModel value="Viking_Mecha_Portrait"/>
+        <AbilSoundArray AbilCmd="SquadVikingGMode,0" Sound="Viking_AssaultModeVO"/>
+        <BarOffset value="50"/>
+        <BarWidth value="70"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Viking-mercenary-fighter.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\BTN-Unit-Terran-VikingMercenary-Fighter.dds"/>
+        <HighlightTooltip value="Unit/Name/HelsAngelFighter"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
+        <NameOffset value="50"/>
+        <DeathCustoms>
+            <ActorModel value="SquadVikingADeathRagdoll"/>
+            <ModelLink value="Viking_Mecha_Fighter_DeathRagdoll"/>
+            <Name value="RagdollBasic"/>
+            <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+            <BodySquibs Name="Basic" Model="TerranSquibDeathRagdoll"/>
+        </DeathCustoms>
+        <SoundArray index="Ready" value="Viking_Ready"/>
+        <SoundArray index="Help" value="Viking_Help"/>
+        <SoundArray index="What" value="Viking_What"/>
+        <SoundArray index="Yes" value="Viking_Yes"/>
+        <SoundArray index="Attack" value="Viking_Attack"/>
+        <SoundArray index="Pissed" value="Viking_Pissed"/>
+        <SoundArray index="Movement" value="Viking_FighterMovement"/>
+        <UnitIcon value="Assets\Textures\BTN-Unit-Terran-VikingMercenary-Fighter.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Viking-mercenary-fighter.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="SquadVikingAAttack" parent="WreckingCrewFighterAttackBase" effectImpact="SquadVikingAHaloRocketsDamage" effectLaunch="SquadVikingAHaloRocketsLM">
+        <On Terms="Effect.SquadVikingAHaloRocketsLM.Start; At Caster; !ValidateEffect HALORocketsResearched" Send="Create"/>
+        <LaunchAssets Model="WreckingCrewFighterAttackLaunch"/>
+        <Missile value="SquadVikingAAttackMissile"/>
+        <ImpactMap index="None" Model="WreckingCrewFighterAttackImpact"/>
+        <ImpactPhysics Name="LanzerTorpedoImpact" MatchKeys="Basic" Physics="LanzerTorpedoAttackDeathForce"/>
+    </CActorAction>
+    <CActorMissile id="SquadVikingAAttackMissile">
+        <Aliases value="_Unit"/>
+        <Aliases value="_Missile"/>
+        <On Terms="UnitBirth.SquadVikingAWeapon" Send="Create"/>
+        <On Terms="UnitBirth" Send="$Birth PlayForever,NonLooping"/>
+        <On Terms="MotionPhaseStart; MotionPhase 2" Send="AnimClear Birth"/>
+        <On Terms="MotionPhaseStart; MotionPhase 2" Send="AnimPlay Turbo Turbo PlayForever"/>
+        <On Terms="MotionPhaseStart; MotionPhase 3" Send="AnimClear Turbo"/>
+        <On Terms="MotionPhaseStart; MotionPhase 3" Send="$Stand PlayForever"/>
+        <On Terms="UnitDeath" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Model value="WreckingCrewFighterWeapon"/>
+        <BarHeight value="1"/>
+        <BarWidth value="1"/>
+        <PreHost value="_ActorAction"/>
+    </CActorMissile>
+    <CActorAction id="SquadVikingAUpgradedAttack" parent="WreckingCrewFighterAttackBase" effectImpact="SquadVikingAHaloRocketsDamage" effectLaunch="SquadVikingAHaloRocketsLM">
+        <On Terms="Effect.SquadVikingAHaloRocketsLM.Start; At Caster; ValidateEffect HALORocketsResearched" Send="Create"/>
+        <Missile value="SquadVikingAAttackMissile"/>
+        <ImpactMap index="None" Model="VikingFighterRipWaveAttackImpact" Sound="Viking_RipwaveMissileImpact"/>
+        <ImpactPhysics Name="LanzerTorpedoImpact" MatchKeys="Basic" Physics="LanzerTorpedoAttackDeathForce"/>
+    </CActorAction>
+    <CActorModel id="SquadVikingAReentry" parent="ModelAdditionNoAnims">
+        <On Terms="ActorCreation" Send="AnimBracketStart BSDb Birth Stand Death ContentPlayOnce"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSDb" Send="Destroy"/>
+        <Model value="VikingMercenaryFighterReentry"/>
+    </CActorModel>
+    <CActorSound id="SquadVikingLand" parent="SoundOneShot">
+        <Sound value="Viking_Land"/>
+    </CActorSound>
 </Catalog>
