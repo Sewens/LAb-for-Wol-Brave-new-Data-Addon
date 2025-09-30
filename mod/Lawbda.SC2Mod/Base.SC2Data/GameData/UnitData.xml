@@ -1,5 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CUnit id="SquadBansheeBacklashRockets" parent="MISSILE">
+        <Race value="Terr"/>
+        <Mover value="BacklashRocketsLMWeapon"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
+    <!--outer import start-->
+    <!--outer import start-->
+    <!--outer import start-->
+    <CUnit id="SquadBomberAreaBombMissile" parent="MISSILE">
+        <DeathRevealRadius value="3"/>
+        <DeathRevealDuration value="3"/>
+        <Race value="Terr"/>
+        <FlagArray index="NoDeathEvent" value="0"/>
+        <Mover value="BacklashRocketsLMWeapon"/>
+        <Sight value="3"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
+    <CUnit id="SquadBattlecruiserATALaserBatteryLMWeapon" parent="MISSILE">
+        <Race value="Terr"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
+    <CUnit id="SquadBattlecruiser">
+        <DeathRevealRadius value="3"/>
+        <Race value="Terr"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Air" value="1"/>
+        <Collide index="Flying" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Massive" value="1"/>
+        <LifeStart value="900"/>
+        <LifeMax value="900"/>
+        <LifeArmor value="3"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranShipPlating"/>
+        <Mover value="fly"/>
+        <Speed value="1.875"/>
+        <Acceleration value="1"/>
+        <Sight value="12"/>
+        <Height value="3.75"/>
+        <VisionHeight value="4"/>
+        <Food value="-10"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="1000"/>
+        <CostResource index="Vespene" value="800"/>
+        <RepairTime value="90"/>
+        <AttackTargetPriority value="20"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="SquadBattlecruiserYamatoGun"/>
+        <AbilArray Link="que1"/>
+        <AbilArray Link="SquadBattlecruiserTacticalJump"/>
+        <AbilArray Link="SquadYamatoShots"/>
+        <BehaviorArray Link="SquadBattlecruiserYamatoShotsActivate"/>
+        <BehaviorArray Link="SquadBattlecruiserRegenSpeed"/>
+        <WeaponArray Link="SquadBattlecruiserATXLaserBattery" Turret="SquadBattlecruiser"/>
+        <WeaponArray Link="SquadBattlecruiserMiniYamatoGun" Turret="SquadBattlecruiser"/>
+        <EffectArray index="Create" value="TheHornersStatUpdate"/>
+        <EffectArray index="Birth" value="HHYamatoShotsUpgradeActivateIssueOrder"/>
+        <EffectArray index="Death" value="TheHornersStatUpdate"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="SquadBattlecruiserTacticalJump" Type="AbilCmd" AbilCmd="SquadBattlecruiserTacticalJump,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="SquadMiniYmatoShot" Type="AbilCmd" AbilCmd="SquadYamatoShots,On" Row="2" Column="1"/>
+            <LayoutButtons Face="SquadATXLaserBattery" Type="AbilCmd" AbilCmd="SquadYamatoShots,Off" Row="2" Column="2"/>
+        </CardLayouts>
+        <Radius value="1.25"/>
+        <SeparationRadius value="2.5"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="160"/>
+        <MinimapRadius value="1.25"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
+        <AIEvalFactor value="0.9"/>
+        <Mass value="0.6"/>
+        <TechAliasArray value="Alias_BattlecruiserClass"/>
+        <GlossaryCategory value="Unit/Category/TerranUnits"/>
+        <GlossaryPriority value="80"/>
+        <GlossaryStrongArray value="Thor"/>
+        <GlossaryStrongArray value="Mutalisk"/>
+        <GlossaryStrongArray value="Carrier"/>
+        <GlossaryWeakArray value="VikingFighter"/>
+        <GlossaryWeakArray value="Corruptor"/>
+        <GlossaryWeakArray value="VoidRay"/>
+        <HotkeyCategory value="Unit/Category/TerranMarauder"/>
+    </CUnit>
+    <CUnit id="SquadBattlecruiserLaserBatteryLMWeapon" parent="MISSILE">
+        <Race value="Terr"/>
+        <Mover value="SquadBattlecruiserATSLaserBatteryLMWeapon"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
+    <CUnit id="SquadBattlecruiserYamato" parent="MISSILE_INVULNERABLE">
+        <Race value="Terr"/>
+        <Mover value="SquadYamatoWeapon"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
+    <!--outer import end-->
+    <!--outer import end-->
+    <!--outer import end-->
+    <!--outer import end-->
     <CUnit id="SquadScienceVessel">
         <DeathRevealRadius value="3"/>
         <Race value="Terr"/>
@@ -474,30 +579,18 @@
         <AbilArray Link="stop"/>
         <AbilArray Link="attack"/>
         <AbilArray Link="move"/>
+        <AbilArray Link="SquadBansheeBomberMode"/>
         <BehaviorArray Link="SquadDistortionBlasters"/>
         <WeaponArray Link="SquadBacklashRockets"/>
+        <WeaponArray Link="SquadFireBomber"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
             <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
-            <LayoutButtons>
-                <Face value="SquadBansheeShockwaveMissileBattery"/>
-                <Type value="Passive"/>
-                <AbilCmd value="255,255"/>
-                <Requirements value="ClusterWarheadsResearched"/>
-                <Row value="2"/>
-                <Column value="2"/>
-            </LayoutButtons>
-            <LayoutButtons>
-                <Face value="SquadCrossSpectrumDampeners"/>
-                <Type value="Passive"/>
-                <AbilCmd value="255,255"/>
-                <Requirements value="CrossSpectrumDampenersResearched"/>
-                <Row value="2"/>
-                <Column value="3"/>
-            </LayoutButtons>
+            <LayoutButtons Face="BansheeBomberMode" Type="AbilCmd" AbilCmd="SquadBansheeBomberMode,On" Row="2" Column="0"/>
+            <LayoutButtons Face="BansheeRocketMode" Type="AbilCmd" AbilCmd="SquadBansheeBomberMode,Off" Row="2" Column="1"/>
         </CardLayouts>
         <Radius value="0.75"/>
         <SeparationRadius value="0.75"/>

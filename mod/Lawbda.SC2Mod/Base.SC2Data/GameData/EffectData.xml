@@ -1,5 +1,191 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <!--outer import start-->
+    <!--outer import start-->
+    <!--outer import start-->
+    <CEffectSet id="SquadBomberAreaBombInitialSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadBomberAreaBombLM"/>
+        <TargetLocationType value="Point"/>
+    </CEffectSet>
+    <CEffectDamage id="SquadBomberAreaBombDamage" parent="DU_WEAP_SPLASH">
+        <ValidatorArray value="IsNotPhasedUnit"/>
+        <EditorCategories value="Race:Terran"/>
+        <AttributeBonus index="Structure" value="125"/>
+        <ArmorReduction value="0"/>
+        <Kind value="Spell"/>
+        <Amount value="75"/>
+        <Death value="Blast"/>
+        <SearchFilters value="-;Player,Ally,Air,AirUnit"/>
+    </CEffectDamage>
+    <CEffectDamage id="SquadBomberAreaBombDamageBossOrHeroic" parent="DU_WEAP_SPLASH">
+        <ValidatorArray value="IsNotPhasedUnit"/>
+        <EditorCategories value="Race:Terran"/>
+        <ArmorReduction value="0"/>
+        <Kind value="Spell"/>
+        <Amount value="175"/>
+        <Death value="Blast"/>
+    </CEffectDamage>
+    <CEffectSwitch id="SquadBomberAreaBombDamageSwitch">
+        <EditorCategories value="Race:Terran"/>
+        <CaseArray Validator="NotMapBossOrHeroic" Effect="SquadBomberAreaBombDamage"/>
+        <CaseDefault value="SquadBomberAreaBombDamageBossOrHeroic"/>
+    </CEffectSwitch>
+    <CEffectCreatePersistent id="SquadBomberAreaBombFireInitialCP">
+        <EditorCategories value="Race:Terran"/>
+        <TimeScaleSource Value="Caster"/>
+        <InitialEffect value="SquadBomberAreaBombFireSearch"/>
+        <PeriodCount value="19"/>
+        <PeriodicEffectArray value="SquadBomberAreaBombFireSearch"/>
+        <PeriodicPeriodArray value="0.5"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="SquadBomberAreaBombFireSearch">
+        <AINotifyFlags index="HurtEnemy" value="1"/>
+        <SearchFilters value="-;Player,Ally,Air,AirUnit"/>
+        <AreaArray Radius="1.5" Effect="HHBomberAreaBombFireAB2"/>
+    </CEffectEnumArea>
+    <CEffectSet id="SquadBomberAreaBombImpactSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadBomberAreaBombSearchArea"/>
+        <EffectArray value="SquadBomberAreaBombFireInitialCP"/>
+        <EffectArray value="SquadBomberAreaBombReveal"/>
+        <TargetLocationType value="Point"/>
+    </CEffectSet>
+    <CEffectLaunchMissile id="SquadBomberAreaBombLM">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <ImpactEffect value="SquadBomberAreaBombImpactSet"/>
+        <AmmoUnit value="SquadBomberAreaBombMissile"/>
+        <Movers Link="BacklashRocketsLMWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectCreatePersistent id="SquadBomberAreaBombReveal">
+        <EditorCategories value="Race:Terran"/>
+        <ExpireDelay value="5"/>
+        <RevealRadius value="7"/>
+        <RevealFlags index="Unfog" value="1"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="SquadBomberAreaBombSearchArea">
+        <AINotifyFlags index="HurtEnemy" value="1"/>
+        <AINotifyFlags index="MinorDanger" value="1"/>
+        <SearchFilters value="-;Player,Ally,Air,AirUnit"/>
+        <AreaArray Radius="1.5" Effect="SquadBomberAreaBombDamageSwitch"/>
+    </CEffectEnumArea>
+    <CEffectApplyBehavior id="SquadBomberAreaBombFireAB">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadBomberAreaBombFire"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="SquadBomberAreaBombFireDamage">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Visibility value="Hidden"/>
+        <Amount value="5"/>
+        <Death value="Fire"/>
+        <SearchFilters value="-;Player,Ally,Air,AirUnit"/>
+    </CEffectDamage>
+    <CEffectCreateUnit id="SquadBattlecruiserFleetwideJumpCreatePrecursor">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetPoint"/>
+        <CreateFlags index="PlacementIgnoreBlockers" value="1"/>
+        <CreateFlags index="Precursor" value="1"/>
+        <CreateFlags index="ProvideFood" value="0"/>
+        <CreateFlags index="SetFacing" value="1"/>
+        <CreateFlags index="TechComplete" value="0"/>
+        <CreateFlags index="UseFood" value="0"/>
+        <SpawnEffect value="SquadBattlecruiserFleetwideJumpTeleportOutABSet"/>
+        <SpawnRange value="3"/>
+    </CEffectCreateUnit>
+    <CEffectTeleport id="SquadBattlecruiserFleetwideJumpTeleport">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <ClearQueuedOrders value="0"/>
+        <PlacementAround Effect="FleetwideJumpCreatePrecursor"/>
+        <PlacementRange value="15"/>
+        <TargetLocation Effect="FleetwideJumpCreatePrecursor" Value="TargetPoint"/>
+        <TeleportFlags index="TestFog" value="0"/>
+    </CEffectTeleport>
+    <CEffectApplyBehavior id="SquadBattlecruiserFleetwideJumpTeleportAB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="SquadBattlecruiserFleetwideJumpTeleport"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadBattlecruiserFleetwideJumpTeleportInAB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="SquadBattlecruiserFleetwideJumpTeleportIn"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadBattlecruiserFleetwideJumpTeleportOutAB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="SquadBattlecruiserFleetwideJumpTeleportOut"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="SquadBattlecruiserFleetwideJumpTeleportOutABSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadBattlecruiserFleetwideJumpTeleportOutAB"/>
+        <EffectArray value="SquadBattlecruiserFleetwideJumpTeleportOutTargetAB"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="SquadBattlecruiserFleetwideJumpTeleportOutTargetAB">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadBattlecuriserTeleportSuppressCollision"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="SquadBattlecruiserFleetwideJumpTeleportSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadBattlecruiserFleetwideJumpTeleport"/>
+        <EffectArray value="SquadBattlecruiserFleetwideJumpTeleportAB"/>
+    </CEffectSet>
+    <CEffectLaunchMissile id="SquadBattlecruiserATALaserBatteryLM">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="SquadBattlecruiserATALaserBatteryU"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="SquadBattlecruiserATALaserBatteryU" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Terran"/>
+        <Visibility value="Visible"/>
+        <Amount value="18"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="SquadBattlecruiserLaserBatteryLM">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="SquadBattlecruiserLaserBatteryU"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="SquadBattlecruiserLaserBatteryU" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Terran"/>
+        <Visibility value="Visible"/>
+        <Amount value="200"/>
+        <Death value="Fire"/>
+    </CEffectDamage>
+    <CEffectIssueOrder id="SquadBattlecruiserYamatoShotsUpgradeActivateIssueOrder">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Abil value="SquadYamatoShots"/>
+        <CmdFlags index="Preempt" value="1"/>
+    </CEffectIssueOrder>
+    <CEffectApplyBehavior id="SquadBattlercruiserStunResistanceApply">
+        <ValidatorArray index="0" value="IsHornerCoopCommander"/>
+        <ValidatorArray value="IsHornerUnit"/>
+        <Behavior value="SquadStunResistance"/>
+    </CEffectApplyBehavior>
+    <CEffectLaunchMissile id="SquadYamatoCannonMissile">
+        <ValidatorArray index="0" value="YamatoTargetFilters"/>
+        <ValidatorArray value="IsNotWarpBubble"/>
+        <ValidatorArray value="YamatoTargetFilters"/>
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="SquadYamatoCannonDamage"/>
+        <AmmoUnit value="SquadBattlecruiserYamato"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="SquadYamatoCannonDamage">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Visibility value="Visible"/>
+        <Flags index="Notification" value="1"/>
+        <Amount value="300"/>
+        <Death value="Blast"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectDamage>
+    <!--outer impor end-->
+    <!--outer impor end-->
+    <!--outer impor end-->
+    <!--outer impor end-->
+    <!--outer impor end-->
     <CEffectApplyBehavior id="SquadIrradiateApplyBehavior">
         <ValidatorArray index="0" value=""/>
         <EditorCategories value=""/>
@@ -552,7 +738,8 @@
     <CEffectLaunchMissile id="SquadBansheeLM">
         <EditorCategories value="Race:Terran"/>
         <ImpactEffect value="SquadBansheeScreecherMissilesSet"/>
-        <AmmoUnit value="SquadBansheeWeapon"/>
+        <AmmoUnit value="SquadBansheeBacklashRockets"/>
+        <Movers Link="BacklashRocketsLMWeapon"/>
     </CEffectLaunchMissile>
     <CEffectDamage id="SquadBansheeScreecherMissilesCarpetBombDamage">
         <ValidatorArray value="noMarkers"/>

@@ -1,5 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <!--outer import start-->
+    <!--outer import start-->
+    <!--outer import start-->
+    <CBehaviorBuff id="SquadBattlecruiserYamatoShots">
+        <Alignment value="Positive"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-ability-hornerhan-battlecruiser-yamato.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Modification>
+            <WeaponEnableArray value="SquadBattlecruiserMiniYamatoGun"/>
+            <WeaponDisableArray value="SquadBattlecruiserATXLaserBattery"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadBansheeBomberMode">
+        <Alignment value="Positive"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-top-hornerhan-bombers.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Modification>
+            <StateFlags index="Cloak" value="1"/>
+            <WeaponEnableArray value="SquadFireBomber"/>
+            <WeaponDisableArray value="SquadBacklashRockets"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadBomberAreaBombFire">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\firefight_coop.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <TimeScaleSource Value="Global"/>
+        <Duration value="10"/>
+        <Period value="0.5"/>
+        <PeriodicEffect value="SquadBomberAreaBombFireDamage"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadBattlecruiserFleetwideJumpTeleport">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Duration value="0.0625"/>
+        <ExpireEffect value="SquadBattlecruiserFleetwideJumpTeleportInAB"/>
+        <Modification>
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="SuppressAttack" value="1"/>
+            <StateFlags index="SuppressCloak" value="1"/>
+            <StateFlags index="Untargetable" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadBattlecruiserFleetwideJumpTeleportIn">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Duration value="0.6"/>
+        <Modification>
+            <ModifyFlags index="SuppressMoving" value="1"/>
+            <ModifyFlags index="SuppressTurning" value="1"/>
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="SuppressCloak" value="1"/>
+            <StateFlags index="Untargetable" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadBattlecruiserFleetwideJumpTeleportOut">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Duration value="0.6"/>
+        <ExpireEffect value="SquadBattlecruiserFleetwideJumpTeleportSet"/>
+        <Modification>
+            <ModifyFlags index="SuppressMoving" value="1"/>
+            <ModifyFlags index="SuppressTurning" value="1"/>
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="SuppressCloak" value="1"/>
+            <StateFlags index="Untargetable" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadBattlecruiserRegenSpeed">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Modification>
+            <VitalRegenArray index="Life" value="3.75"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadBattlecruiserYamatoShotsActivate">
+        <Alignment value="Positive"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-ability-hornerhan-battlecruiser-yamato.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <FinalEffect value="SquadBattlecruiserYamatoShotsUpgradeActivateIssueOrder"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadStunResistance">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\stimboltgreen.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Modification>
+            <BehaviorCategoryDurationFactor index="Stun" value="-0.5"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadBattlecuriserTeleportSuppressCollision">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Duration value="0.0625"/>
+        <ExpireEffect value="SuicideRemove"/>
+        <Modification>
+            <ModifyFlags index="SuppressMoving" value="1"/>
+            <ModifyFlags index="SuppressTurning" value="1"/>
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="Stasis" value="1"/>
+            <StateFlags index="SuppressCloak" value="1"/>
+            <StateFlags index="SuppressCollision" value="1"/>
+            <StateFlags index="Untargetable" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <!--outerimport end-->
+    <!--outerimport end-->
+    <!--outerimport end-->
+    <!--outerimport end-->
     <CBehaviorBuff id="SquadIrradiated">
         <Alignment value="Negative"/>
         <InfoIcon value="Assets\Textures\btn-ability-terran-irradiate.dds"/>
@@ -8,7 +120,7 @@
         <Period value="1"/>
         <PeriodicEffect value="SquadIrradiateSearchArea"/>
     </CBehaviorBuff>
-    <CBehaviorBuff id="PointDefenseReady2">
+    <CBehaviorBuff id="SquadPointDefenseReady2">
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Duration value="3"/>
@@ -99,14 +211,6 @@
             <ModifyFlags index="SuppressTurning" value="1"/>
         </Modification>
     </CBehaviorBuff>
-    <CBehaviorBuff id="ScavengingSystemsMechDeath3">
-        <InfoFlags index="Hidden" value="1"/>
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Requirements value="ScavengingSystemsResearched"/>
-        <Modification>
-            <DeathResponse Chance="1" Effect="ScavengingSystemsSearchArea"/>
-        </Modification>
-    </CBehaviorBuff>
     <CBehaviorBuff id="SquadMedivacHealBeamBusy">
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -124,14 +228,6 @@
     <CBehaviorBuff id="SquadMedivacTargetBeingHealed">
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
-    </CBehaviorBuff>
-    <CBehaviorBuff id="ScavengingSystemsMechDeath2">
-        <InfoFlags index="Hidden" value="1"/>
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Requirements value="ScavengingSystemsResearched"/>
-        <Modification>
-            <DeathResponse Chance="1" Effect="ScavengingSystemsSearchArea"/>
-        </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadDistortionBlasters">
         <InfoFlags index="Hidden" value="1"/>
@@ -438,14 +534,6 @@
         <DamageResponse Fatal="1" Handled="SquadThorWreckage" ModifyFraction="0">
             <Chance value="1"/>
         </DamageResponse>
-    </CBehaviorBuff>
-    <CBehaviorBuff id="TerranBuildingBurnDown2">
-        <InfoFlags index="Hidden" value="1"/>
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
-        <Requirements value="FireSuppressionSystemsNotResearched"/>
-        <DisableValidatorArray value="BurnDownFire"/>
-        <Period value="0.3332"/>
-        <PeriodicEffect value="BurndownDamage"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="VampireOrb">
         <InfoIcon value="Assets\Textures\btn-vampire-orb.dds"/>

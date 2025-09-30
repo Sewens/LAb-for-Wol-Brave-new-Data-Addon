@@ -1,5 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <!-- Add by copy from outer xml-->
+    <!-- Add by copy from outer xml-->
+    <!-- Add by copy from outer xml-->
+    <CAbilEffectTarget id="SquadBomberAreaBomb">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadBomberAreaBombInitialSet"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Range value="2"/>
+        <RangeSlop value="0"/>
+        <CursorEffect value="SquadBomberAreaBombSearchArea"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="FighterBoomber"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadBattlecruiserTacticalJump">
+        <AbilSetId value="FleetwideJump"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Effect index="0" value="SquadBattlecruiserFleetwideJumpCreatePrecursor"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="BestUnit" value="0"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Cost>
+            <Charge Link="Abil/FleetwideJump"/>
+            <Cooldown Link="Abil/FleetwideJump" TimeUse="60"/>
+        </Cost>
+        <InterruptCost>
+            <Charge Link="Abil/FleetwideJump"/>
+            <Cooldown Link="Abil/FleetwideJump"/>
+        </InterruptCost>
+        <Range value="500"/>
+        <PrepTime value="0.0625"/>
+        <CastIntroTime value="0"/>
+        <CastOutroTime value="1.2624"/>
+        <ShowProgressArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <AINotifyEffect value="FleetwideJump"/>
+        <ProgressButtonArray index="Channel" value="Hyperjump"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="FleetwideJump">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectTarget>
+    <CAbilBehavior id="SquadYamatoShots">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="On" DefaultButtonFace="HHYamatoShots">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="Off" DefaultButtonFace="HHBattlecruiserShots">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Flags index="Toggle" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <BehaviorArray value="SquadBattlecruiserYamatoShots"/>
+    </CAbilBehavior>
+    <CAbilEffectTarget id="SquadBattlecruiserYamatoGun">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadYamatoCannonMissile"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="100"/>
+            <Cooldown Link="YamatoYamato2YamatoSquadBattlecruiserYamatoGun" TimeUse="0.8332"/>
+        </Cost>
+        <Range value="10"/>
+        <RangeSlop value="10"/>
+        <PrepTime value="1.5"/>
+        <ShowProgressArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <AINotifyEffect value="SquadYamatoCannonMissile"/>
+        <ProgressButtonArray index="Prep" value="YamatoGun"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="YamatoGun" Requirements="UseBattlecruiserSpecializations"/>
+    </CAbilEffectTarget>
+    <!--Outer import end-->
+    <!--Outer import end-->
+    <!--Outer import end-->
     <CAbilEffectTarget id="SquadIrradiate">
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <Effect index="0" value="SquadIrradiateSet"/>
@@ -753,6 +833,18 @@
             </SectionArray>
         </InfoArray>
     </CAbilMorphPlacement>
+    <CAbilBehavior id="SquadBansheeBomberMode">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="On" DefaultButtonFace="BansheeBomberMode">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="Off" DefaultButtonFace="BansheeRocketMode">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Flags index="Toggle" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <BehaviorArray value="SquadBansheeBomberMode"/>
+    </CAbilBehavior>
     <CAbilResearch id="SuqadArmoryResearchVechileandStarship">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <InfoArray index="Research1" Time="160" Upgrade="TerranVehicleAndShipWeaponsLevel1">
