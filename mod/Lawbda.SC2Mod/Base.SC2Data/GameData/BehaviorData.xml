@@ -85,6 +85,15 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <FinalEffect value="SquadBattlecruiserYamatoShotsUpgradeActivateIssueOrder"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="SquadJumpShield">
+        <Cost>
+            <Vital index="Shields" value="50"/>
+        </Cost>
+        <BuffFlags index="RefreshStack" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-ability-spearofadun-shieldovercharge.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="5"/>
+    </CBehaviorBuff>
     <CBehaviorBuff id="SquadStunResistance">
         <InfoFlags index="Hidden" value="1"/>
         <InfoIcon value="Assets\Textures\stimboltgreen.dds"/>
@@ -372,6 +381,8 @@
         <LandAdjustmentDown value="1"/>
         <LandArrivalRange value="0.05"/>
         <LandCheckRadius value="5"/>
+        <JumpEffectUp value="SquadJumpShieldApply"/>
+        <JumpEffectDown value="SquadJumpShieldApply"/>
     </CBehaviorJump>
     <CBehaviorBuff id="ExcavatorAfterburner">
         <InfoIcon value="Assets\Textures\btn-upgrade-terran-jotunboosters.dds"/>
@@ -1503,6 +1514,8 @@
         <LandArrivalRange value="0.05"/>
         <LandCheckRadius value="5"/>
         <InfoFlags index="AlwaysUseGameText" value="1"/>
+        <JumpEffectUp value="SquadJumpShieldApply"/>
+        <JumpEffectDown value="SquadJumpShieldApply"/>
     </CBehaviorJump>
     <CBehaviorBuff id="ResourceMineralRobbery">
         <InfoIcon value="Assets\Textures\btn-tips-resourcecaches.dds"/>
