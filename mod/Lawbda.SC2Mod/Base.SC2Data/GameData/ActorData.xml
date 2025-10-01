@@ -4,36 +4,47 @@
     <!--outer impor end-->
     <!--outer impor end-->
     <CActorAction default="1" id="SquadMarauderAttackBase" parent="MarauderAttackBase"/>
-    <CActorUnit id="SquadAdvanceEngineBay" parent="TerranBuildingFlyerEx" unitName="AdvanceEngineBay">
+    <CActorRange id="ChargeSquadMuleliskRange" parent="RangeAbil" abil="AddMuleliskToSquad">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorModel id="SquadAdvanceEngineBayBuild" parent="TerranBuildingBuild">
+        <On Terms="ActorCreation" Send="AnimBracketStart BSDb Birth Stand Death ContentPlayOnce"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSDb" Send="Destroy"/>
+        <Model value="AdvanceEngineBayReentry"/>
+        <Scale value="0.750000"/>
+    </CActorModel>
+    <CActorUnit id="SquadAdvanceEngineBay" parent="TerranBuildingEx" unitName="AdvanceEngineBay">
         <Macros value="SnowVisualBuildingMacro"/>
-        <Model value="Starport_CovertOps"/>
-        <BuildModel value="Starport_CovertOps_Build"/>
-        <DeathArray index="Normal" ModelLink="Starport_CovertOps_Death"/>
         <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="Starport_Explode"/>
-        <DeathCustoms index="5" ModelLink="StarportFlyDeath" SoundLink="Starport_Explode" Name="Flying"/>
-        <PlacementModel value="Starport_CovertOps_Placement"/>
+        <DeathCustoms ModelLink="AdvanceEngineBayDeath" SoundLink="Starport_Explode" Name="Flying"/>
         <PortraitModel value="HornerPortrait"/>
         <BarOffset value="155"/>
         <BarWidth value="160"/>
         <GroupIcon>
-            <Image value="Assets\Textures\Wireframe-Terran-Starport.dds"/>
+            <Image value="Assets\Textures\wireframe-hornerhan-starport.dds"/>
         </GroupIcon>
-        <HeroIcon value="Assets\Textures\btn-building-terran-Starport.dds"/>
+        <HeroIcon value="Assets\Textures\btn-building-hornerhan-starport.dds"/>
         <HighlightTooltip value="Unit/Name/SquadAdvanceEngineBay"/>
         <NameOffset value="110"/>
         <SoundArray index="Ready" value="HornerHanAnnouncer_StartGame"/>
+        <SoundArray index="Help" value="HornerPissedLinesHorner00004"/>
         <SoundArray index="What" value="HornerPissedLinesHorner00001"/>
+        <SoundArray index="Yes" value="HornerPissedLinesHorner00002"/>
+        <SoundArray index="Pissed" value="HornerPissedLinesHorner00007"/>
         <SoundArray index="Movement" value="HornerPissedLinesHorner00002"/>
+        <SoundArray index="Highlight" value="HornerHanAnnouncer_GGWin"/>
         <UnitIcon value="Assets\Textures\btn-building-terran-Starport.dds"/>
         <Wireframe>
             <Image value="Assets\Textures\Wireframe-Terran-Starport.dds"/>
         </Wireframe>
+        <Scale value="0.700000"/>
+        <BuildModel value="AdvanceEngineBayReentry"/>
+        <On index="69" Terms="UnitConstruction.AdvanceEngineBay.Start" Send="Create SquadAdvanceEngineBayBuild"/>
+        <EventDataFootprint index="0" removed="1"/>
     </CActorUnit>
-    <CActorModel id="SquadAdvanceEngineBayBuild" parent="TerranBuildingBuild" unitName="AdvanceEngineBay">
-        <Model value="EngineeringBay_CovertOps_Build"/>
-    </CActorModel>
     <CActorSplat id="SquadAdvanceEngineBaySplat" parent="GenericUnitSplat" unitName="AdvanceEngineBay">
-        <Model value="EngineeringBaySplat"/>
+        <Model value="AdvanceEngineBaySplat"/>
     </CActorSplat>
     <CActorRange id="SquadTechlabPowerRange">
         <On Terms="Behavior.SquadTechlabPowerSource.Create" Send="Create"/>

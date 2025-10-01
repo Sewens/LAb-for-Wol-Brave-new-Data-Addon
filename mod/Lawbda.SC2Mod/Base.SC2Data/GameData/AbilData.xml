@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CAbilEffectTarget id="AddMuleliskToSquad">
+        <Alignment value="Positive"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DataCollection value="ChargeInfantry"/>
+        <Effect index="0" value="AddSCVChain"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Charge Link=""/>
+            <Cooldown Link=""/>
+        </Cost>
+        <Range value="9"/>
+        <AutoCastAcquireLevel value="None"/>
+        <AutoCastFilters value="Visible;Enemy"/>
+        <AINotifyEffect value=""/>
+        <IgnoreFilters value="-;Enemy"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Enband"/>
+    </CAbilEffectTarget>
     <!-- Add by copy from outer xml-->
     <!-- Add by copy from outer xml-->
     <!-- Add by copy from outer xml-->
@@ -2013,6 +2030,20 @@
             <Flags index="External" value="1"/>
             <Flags index="LeashRetarget" value="1"/>
         </InfoArray>
+        <InfoArray index="Ammo10" Unit="Mulelisk">
+            <Charge>
+                <CountMax value="1"/>
+                <CountUse value="1"/>
+                <Link value="Abil/AddMuleliskToSquad"/>
+                <Location value="Unit"/>
+            </Charge>
+            <Cooldown Link="Abil/##id##"/>
+            <Button DefaultButtonFace="SquadMuleliskGather"/>
+            <Flags index="AutoBuild" value="1"/>
+            <Flags index="AutoBuildOn" value="1"/>
+            <Flags index="External" value="1"/>
+            <Flags index="LeashRetarget" value="1"/>
+        </InfoArray>
         <EffectArray index="Create" value="OnMagazineAdded"/>
         <EffectArray index="Release" value="OnMagazineRelease"/>
         <ExternalAngle value="225"/>
@@ -2210,7 +2241,7 @@
         <InfoArray index="Build12" Unit="SquadStarport" Time="50">
             <Button DefaultButtonFace="BuildSquadStarport" State="Suppressed" Requirements="HaveSquadFactory"/>
         </InfoArray>
-        <InfoArray index="Build13" Unit="AdvanceEngineBay" Time="50">
+        <InfoArray index="Build13" Unit="AdvanceEngineBay" Time="5">
             <Button DefaultButtonFace="SquadAdvanceEngineBay" State="Suppressed" Requirements="HaveSquadFusionCore"/>
         </InfoArray>
         <InfoArray index="Build14" Unit="SquadArmory" Time="65">

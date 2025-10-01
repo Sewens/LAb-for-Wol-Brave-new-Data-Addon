@@ -1,5 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CEffectModifyUnit id="AddMulelisk">
+        <EditorCategories value="Race:Terran"/>
+        <Cost Abil="SquadInfantry,Ammo10" ChargeCountUse="-1"/>
+    </CEffectModifyUnit>
+    <CEffectSet id="AddMuleliskChain">
+        <ValidatorArray value="IsMagazineFull"/>
+        <ValidatorArray value="TargetNotSelf"/>
+        <ValidatorArray value="HaveSquadInfantryMagazine"/>
+        <EditorCategories value="Race:Terran"/>
+        <DamageModifierSource Value="Outer"/>
+        <EffectArray value="AddMulelisk"/>
+        <EffectArray value="InfantryChargeBasicChain"/>
+        <EffectArray value="UnitHugeMaxLifeApply"/>
+        <EffectArray value="RecycleStructureCauseDropPickupApply"/>
+        <EffectArray value="EnergyMediumMaxandHugeRegenerationApply"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="PoweredByCommandCenterApply">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="PoweredByCommandCenter"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="PoweredByCommandCenterRemove">
+        <EditorCategories value="Race:Terran"/>
+        <BehaviorLink value="PoweredByCommandCenter"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
     <CEffectApplyBehavior id="PoweredByTechlabUnlockApply">
         <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
@@ -180,6 +205,13 @@
         <EditorCategories value="Race:Terran"/>
         <BehaviorLink value="PoweredByTechlab"/>
     </CEffectRemoveBehavior>
+    <CEffectSet id="SquadMuleliskDeathResponseChain">
+        <EditorCategories value="Race:Terran"/>
+        <DamageModifierSource Value="Outer"/>
+        <EffectArray value="UnitHugeMaxLifeRemove"/>
+        <EffectArray value="RecycleStructureCauseDropPickupRemove"/>
+        <EffectArray value="EnergyMediumMaxandHugeRegenerationRemove"/>
+    </CEffectSet>
     <CEffectLaunchMissile id="SquadYamatoCannonMissile">
         <ValidatorArray index="0" value="YamatoTargetFilters"/>
         <ValidatorArray value="IsNotWarpBubble"/>
@@ -1804,6 +1836,7 @@
         <CaseArray Validator="IsSquadFirebat" Effect="SquadFirebatDeathResponseChain" FallThrough="1"/>
         <CaseArray Validator="IsSquadGhost" Effect="SquadGhostDeathResponseChain" FallThrough="1"/>
         <CaseArray Validator="IsSquadSpectre" Effect="SquadSpectreDeathResponseChain" FallThrough="1"/>
+        <CaseArray Validator="IsSquadMulelisk" Effect="SquadMuleliskDeathResponseChain" FallThrough="1"/>
         <CaseArray Validator="IsCaptainMagazineEmpty" Effect="SquadAlphaInfantryDeathResponseChain" FallThrough="1"/>
     </CEffectSwitch>
     <CEffectRemoveBehavior id="MoveSpeedTier3Remove">

@@ -52,6 +52,12 @@
     <CValidatorUnitType id="IsSquadGhost">
         <Value value="SquadGhost"/>
     </CValidatorUnitType>
+    <CValidatorUnitType id="IsSquadMulelisk">
+        <Value value="Mulelisk"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="IsExcavator">
+        <Value value="CaptainExcavator"/>
+    </CValidatorUnitType>
     <CValidatorUnitType id="IsSquadSpectre">
         <Value value="SquadSpectre"/>
     </CValidatorUnitType>
@@ -146,10 +152,11 @@
     <CValidatorUnitType id="IsVespeneCommon">
         <Value value="VespeneGeyser"/>
     </CValidatorUnitType>
-    <CValidatorUnitAbil id="IsWorker">
-        <ResultNoUnit value="MustTargetUnit,MustWorker"/>
-        <AbilClass value="CAbilHarvest"/>
-    </CValidatorUnitAbil>
+    <CValidatorCombine id="IsWorker">
+        <CombineArray value="IsSquadSCV"/>
+        <CombineArray value="IsSquadMulelisk"/>
+        <CombineArray value="IsExcavator"/>
+    </CValidatorCombine>
     <CValidatorUnitCompareVital id="StructureLifeBelow1500">
         <Compare value="LE"/>
         <Type value="Maximum"/>
