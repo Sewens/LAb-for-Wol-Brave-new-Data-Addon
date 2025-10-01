@@ -1229,7 +1229,7 @@
         <AbilArray Link="SquadBuildinProgress"/>
         <AbilArray Link="SquadQueue5"/>
         <AbilArray Link="ForgeResearch"/>
-        <BehaviorArray Link="SquadTechlabBarrackPowerUser"/>
+        <BehaviorArray Link="SquadBarrackPowerUser"/>
         <CardLayouts>
             <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="SquadQueue5,CancelLast" Row="2" Column="4"/>
             <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Cancel" Row="2" Column="4"/>
@@ -2083,6 +2083,8 @@
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="FireSuppressionSystem"/>
         <BehaviorArray Link="SquadFactoryPowerSource"/>
+        <BehaviorArray Link="SquadReactorPowerUser"/>
+        <BehaviorArray Link="SquadTechlabPowerUser"/>
         <CardLayouts>
             <LayoutButtons Face="Rally" Type="AbilCmd" AbilCmd="SquadStructureRally,Rally1" Row="1" Column="4"/>
             <LayoutButtons Face="Lift" Type="AbilCmd" AbilCmd="SquadFactoryLiftOff,Execute" Row="2" Column="3"/>
@@ -2623,6 +2625,8 @@
         <BehaviorArray Link="FireSuppressionSystem"/>
         <BehaviorArray Link="GameTime5Seconds"/>
         <BehaviorArray Link="SquadCommandCenterPowerSource"/>
+        <BehaviorArray Link="SquadReactorPowerUser"/>
+        <BehaviorArray Link="SquadTechlabPowerUser"/>
         <EffectArray index="Create" value="CCCreateSet"/>
         <EffectArray index="Birth" value="CCBirthSet"/>
         <CardLayouts>
@@ -2763,6 +2767,8 @@
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="FireSuppressionSystem"/>
         <BehaviorArray Link="SquadBarrackPowerSource"/>
+        <BehaviorArray Link="SquadReactorPowerUser"/>
+        <BehaviorArray Link="SquadTechlabPowerUser"/>
         <CardLayouts>
             <LayoutButtons Face="SquadMarine" Type="AbilCmd" AbilCmd="SquadBarracksTrain,Train1" Row="0" Column="0"/>
             <LayoutButtons Face="SquadReaper" Type="AbilCmd" AbilCmd="SquadBarracksTrain,Train2" Row="0" Column="3"/>
@@ -2864,7 +2870,9 @@
             <Charge Link="SquadBarracksFlying/Revive"/>
             <Cooldown Link="SquadBarracksFlying/Revive"/>
         </ReviveInfoBase>
-        <BehaviorArray index="2" Link="SquadTechlabBarrackPowerUser"/>
+        <BehaviorArray index="2" removed="1"/>
+        <BehaviorArray index="3" removed="1"/>
+        <BehaviorArray index="4" removed="1"/>
     </CUnit>
     <CUnit id="SquadGhostEMPWeapon" parent="MISSILE_INVULNERABLE">
         <Race value="Terr"/>
@@ -4594,6 +4602,8 @@
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="FireSuppressionSystem"/>
         <BehaviorArray Link="SquadStarportPowerSource"/>
+        <BehaviorArray Link="SquadReactorPowerUser"/>
+        <BehaviorArray Link="SquadTechlabPowerUser"/>
         <CardLayouts>
             <LayoutButtons Face="Rally" Type="AbilCmd" AbilCmd="SquadStructureRally,Rally1" Row="1" Column="4"/>
             <LayoutButtons Face="Lift" Type="AbilCmd" AbilCmd="SquadStarportLiftOff,Execute" Row="2" Column="3"/>
@@ -4726,10 +4736,10 @@
         <AbilArray Link="SquadQueue8"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="FireSuppressionSystem"/>
-        <BehaviorArray Link="SquadTechlabBarrackPowerUser"/>
-        <BehaviorArray Link="SquadTechlabCommandCenterPowerUser"/>
-        <BehaviorArray Link="SquadTechlabFactoryPowerUser"/>
-        <BehaviorArray Link="SquadTechlabStarportPowerUser"/>
+        <BehaviorArray Link="SquadBarrackPowerUser"/>
+        <BehaviorArray Link="SquadCommandCenterPowerUser"/>
+        <BehaviorArray Link="SquadFactoryPowerUser"/>
+        <BehaviorArray Link="SquadStarportPowerUser"/>
         <CardLayouts>
             <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="SquadQueue8,CancelLast" Row="2" Column="4"/>
             <LayoutButtons>
@@ -4823,7 +4833,7 @@
             <Cooldown Link="TechLab/Revive"/>
         </ReviveInfoBase>
     </CUnit>
-    <CUnit id="SquadTechLab">
+    <CUnit id="SquadTechlab">
         <DeathRevealRadius value="3"/>
         <Facing value="315"/>
         <Race value="Terr"/>
@@ -4864,10 +4874,11 @@
         <AbilArray Link="SquadQueue5"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="MorphToTechReactor"/>
-        <BehaviorArray Link="SquadTechlabBarrackPowerUser"/>
-        <BehaviorArray Link="SquadTechlabCommandCenterPowerUser"/>
-        <BehaviorArray Link="SquadTechlabFactoryPowerUser"/>
-        <BehaviorArray Link="SquadTechlabStarportPowerUser"/>
+        <BehaviorArray Link="SquadTechlabPowerSource"/>
+        <BehaviorArray Link="SquadBarrackPowerUser"/>
+        <BehaviorArray Link="SquadCommandCenterPowerUser"/>
+        <BehaviorArray Link="SquadFactoryPowerUser"/>
+        <BehaviorArray Link="SquadStarportPowerUser"/>
         <CardLayouts>
             <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="SquadQueue5,CancelSlot" Row="2" Column="4"/>
             <LayoutButtons>

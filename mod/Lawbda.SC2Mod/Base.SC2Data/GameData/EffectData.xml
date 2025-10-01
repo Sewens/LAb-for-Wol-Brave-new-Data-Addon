@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CEffectApplyBehavior id="PoweredByTechlabUnlockApply">
+        <ValidatorArray index="0" removed="1"/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="PoweredByTechlab"/>
+    </CEffectApplyBehavior>
     <CEffectApplyBehavior id="SquadJumpShieldApply">
         <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
@@ -170,6 +175,11 @@
         <ValidatorArray value="IsHornerUnit"/>
         <Behavior value="SquadStunResistance"/>
     </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="PoweredByTechlabUnlockRemove">
+        <ValidatorArray index="0" removed="1"/>
+        <EditorCategories value="Race:Terran"/>
+        <BehaviorLink value="PoweredByTechlab"/>
+    </CEffectRemoveBehavior>
     <CEffectLaunchMissile id="SquadYamatoCannonMissile">
         <ValidatorArray index="0" value="YamatoTargetFilters"/>
         <ValidatorArray value="IsNotWarpBubble"/>
@@ -2087,10 +2097,10 @@
         <ImpactEffect value="SquadReaperD8ChargeDamage"/>
         <AmmoUnit value="SquadReaperD8Charge"/>
     </CEffectLaunchMissile>
-    <CEffectRemoveBehavior id="SquadReactorPowerQueueRemove">
+    <CEffectRemoveBehavior id="PoweredByReactorQueueRemove">
         <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
-        <BehaviorLink value="SquadReactorQueueBuff"/>
+        <BehaviorLink value="PoweredByReactor"/>
     </CEffectRemoveBehavior>
     <CEffectSet id="BlueScannerDamageSet">
         <EditorCategories value="Race:Terran"/>
@@ -2859,10 +2869,10 @@
         <OwningPlayer Value="Caster"/>
         <EffectExternal value="DistributeAddTrackMagazineUnit"/>
     </CEffectEnumMagazine>
-    <CEffectApplyBehavior id="AddSquadReactorPowerQueue">
+    <CEffectApplyBehavior id="PoweredByReactorQueueApply">
         <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
-        <Behavior value="SquadReactorQueueBuff"/>
+        <Behavior value="PoweredByReactor"/>
     </CEffectApplyBehavior>
     <CEffectLaunchMissile id="ExcavatorD888ChargeLaunchMissile">
         <EditorCategories value="Race:Terran"/>

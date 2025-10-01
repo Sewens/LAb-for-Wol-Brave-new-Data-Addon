@@ -94,6 +94,25 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Duration value="5"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="PoweredByTechlab">
+        <InfoIcon value="Assets\Textures\btn-building-terran-techlab-silver.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <Modification QueueCount="1" QueueSize="3"/>
+    </CBehaviorBuff>
+    <CBehaviorPowerUser id="SquadTechlabPowerUser">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <PowerLink value="SquadTechlabPowerSource"/>
+        <PowerStageArray/>
+        <PowerStageArray MinPowerLevel="1" LevelGainEffect="PoweredByTechlabUnlockApply" LevelLossEffect="PoweredByTechlabUnlockRemove">
+            <Modification>
+                <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Energy" value="0"/>
+            </Modification>
+        </PowerStageArray>
+    </CBehaviorPowerUser>
     <CBehaviorBuff id="SquadStunResistance">
         <InfoFlags index="Hidden" value="1"/>
         <InfoIcon value="Assets\Textures\stimboltgreen.dds"/>
@@ -750,7 +769,7 @@
         <Duration value="0.001"/>
         <ExpireEffect value="SquadSupplyDepotDropMorph"/>
     </CBehaviorBuff>
-    <CBehaviorPowerUser id="SquadTechlabCommandCenterPowerUser">
+    <CBehaviorPowerUser id="SquadCommandCenterPowerUser">
         <BehaviorFlags index="Permanent" value="1"/>
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
@@ -764,13 +783,13 @@
             </Modification>
         </PowerStageArray>
     </CBehaviorPowerUser>
-    <CBehaviorPowerUser id="SquadTechlabFactoryPowerUser">
+    <CBehaviorPowerUser id="SquadFactoryPowerUser">
         <BehaviorFlags index="Permanent" value="1"/>
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <PowerLink value="SquadFactoryPowerSource"/>
         <PowerStageArray/>
-        <PowerStageArray MinPowerLevel="1" LevelGainEffect="PoweredByBarrackApply" LevelLossEffect="PoweredByBarrackRemove">
+        <PowerStageArray MinPowerLevel="1" LevelGainEffect="PoweredByFactoryApply" LevelLossEffect="PoweredByFactoryRemove">
             <Modification>
                 <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
                 <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
@@ -778,13 +797,13 @@
             </Modification>
         </PowerStageArray>
     </CBehaviorPowerUser>
-    <CBehaviorPowerUser id="SquadTechlabStarportPowerUser">
+    <CBehaviorPowerUser id="SquadStarportPowerUser">
         <BehaviorFlags index="Permanent" value="1"/>
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <PowerLink value="SquadStarportPowerSource"/>
         <PowerStageArray/>
-        <PowerStageArray MinPowerLevel="1" LevelGainEffect="PoweredByBarrackApply" LevelLossEffect="PoweredByBarrackRemove">
+        <PowerStageArray MinPowerLevel="1" LevelGainEffect="PoweredByStarportApply" LevelLossEffect="PoweredByStarportRemove">
             <Modification>
                 <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
                 <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
@@ -860,7 +879,7 @@
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <PowerLink value="SquadReactorPowerSource"/>
         <PowerStageArray/>
-        <PowerStageArray MinPowerLevel="1" LevelGainEffect="AddSquadReactorPowerQueue" LevelLossEffect="SquadReactorPowerQueueRemove">
+        <PowerStageArray MinPowerLevel="1" LevelGainEffect="PoweredByReactorQueueApply" LevelLossEffect="PoweredByReactorQueueRemove">
             <Modification>
                 <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
                 <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
@@ -1096,7 +1115,7 @@
             <AbilClassEnableArray index="CAbilAttack" value="1"/>
         </Modification>
     </CBehaviorBuff>
-    <CBehaviorPowerUser id="SquadTechlabBarrackPowerUser">
+    <CBehaviorPowerUser id="SquadBarrackPowerUser">
         <BehaviorFlags index="Permanent" value="1"/>
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
@@ -1114,9 +1133,9 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <Modification WeaponRange="1"/>
     </CBehaviorBuff>
-    <CBehaviorBuff id="SquadReactorQueueBuff">
+    <CBehaviorBuff id="PoweredByReactor">
+        <InfoIcon value="Assets\Textures\btn-building-terran-reactor-covertops.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
-        <RemoveValidatorArray value="IsInReactorPowerFeild"/>
         <Modification QueueCount="1" QueueSize="3"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="RedScannerFireDOT">
