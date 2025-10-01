@@ -9,10 +9,6 @@
     <CRequirementAllowBehavior id="AllowBehaviorPoweredByStarport">
         <Link value="PoweredByStarport"/>
     </CRequirementAllowBehavior>
-    <CRequirementAllowBehavior id="AllowBehaviorPoweredByTechlab">
-        <Tooltip value="RequirementNode/Tooltip/##id##"/>
-        <Link value="PoweredByTechlab"/>
-    </CRequirementAllowBehavior>
     <CRequirementAllowBehavior id="AllowBehaviorPoweredByReactor">
         <Link value="PoweredByReactor"/>
     </CRequirementAllowBehavior>
@@ -25,6 +21,85 @@
     <CRequirementAllowUnit id="AllowUnitSquadSpectre">
         <Link value="SquadSpectre"/>
     </CRequirementAllowUnit>
+    <CRequirementCountUnit id="HaveAdvanceEngineBay">
+        <Tooltip value="RequirementNode/Tooltip/##id##"/>
+        <Count Link="AdvanceEngineBay" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="HaveSquadCommandCenter">
+        <Tooltip value="RequirementNode/Tooltip/##id##"/>
+        <Count Link="SquadCommandCenter" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="HaveSquadBarracks">
+        <Tooltip value="RequirementNode/Tooltip/##id##"/>
+        <Count Link="SquadBarracks" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="HaveSquadPlanetaryFortress">
+        <Tooltip value="RequirementNode/Tooltip/##id##"/>
+        <Count Link="SquadPlanetaryFortress" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="HaveSquadEngineeringBay2">
+        <Tooltip value="RequirementNode/Tooltip/##id##"/>
+        <Count Link="SquadEngineeringBay" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="HaveSquadFactory">
+        <Tooltip value="RequirementNode/Tooltip/##id##"/>
+        <Count Link="SquadFactory" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="HaveSquadOrbitalCommand">
+        <Tooltip value="RequirementNode/Tooltip/##id##"/>
+        <Count Link="SquadOrbitalCommand" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="HaveSquadStarport">
+        <Tooltip value="RequirementNode/Tooltip/##id##"/>
+        <Count Link="SquadStarport" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="HaveSquadFusionCore">
+        <Tooltip value="RequirementNode/Tooltip/##id##"/>
+        <Count Link="SquadFusionCore" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="HaveSquadArmory">
+        <Tooltip value="RequirementNode/Tooltip/##id##"/>
+        <Count Link="SquadArmory" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="HaveSquadSupplyDepotNormal">
+        <Tooltip value="RequirementNode/Tooltip/##id##"/>
+        <Count Link="SquadSupplyDepot" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="HaveSquadSupplyDepotLower">
+        <Tooltip value="RequirementNode/Tooltip/##id##"/>
+        <Count Link="SquadSupplyDepotLower" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountBehavior id="PoweredByTechlab">
+        <Count Link="PoweredByTechlab" State="CompleteOnlyAtUnit"/>
+    </CRequirementCountBehavior>
+    <CRequirementOr id="SupplyDepotNormalOrLower">
+        <OperandArray value="HaveSquadSupplyDepotLower"/>
+        <OperandArray value="HaveSquadSupplyDepotNormal"/>
+    </CRequirementOr>
+    <CRequirementOr id="CCorOCorPF">
+        <OperandArray value="HaveSquadCommandCenter"/>
+        <OperandArray value="HaveSquadOrbitalCommand"/>
+        <OperandArray value="HaveSquadPlanetaryFortress"/>
+    </CRequirementOr>
+    <CRequirementAnd id="TechlabAndFusionCore">
+        <Tooltip value="RequirementNode/Tooltip/##id##"/>
+        <OperandArray value="HaveSquadFusionCore"/>
+        <OperandArray value="PoweredByTechlab"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="TechlabAndNucolorAcademy">
+        <Tooltip value="RequirementNode/Tooltip/##id##"/>
+        <OperandArray value="HaveSquadNucolorAcademy"/>
+        <OperandArray value="PoweredByTechlab"/>
+    </CRequirementAnd>
+    <CRequirementCountUnit id="HaveSquadNucolorAcademy">
+        <Tooltip value="RequirementNode/Tooltip/##id##"/>
+        <Count Link="SquadGhostAcademy" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementAnd id="TechlabAndArmory">
+        <Tooltip value="RequirementNode/Tooltip/##id##"/>
+        <OperandArray value="HaveSquadArmory"/>
+        <OperandArray value="PoweredByTechlab"/>
+    </CRequirementAnd>
     <CRequirementCountUpgrade id="UpgradeUltralisk2CompleteOnly">
         <Count Link="SquadUltralisk"/>
     </CRequirementCountUpgrade>

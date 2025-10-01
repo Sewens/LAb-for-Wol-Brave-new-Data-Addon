@@ -4,6 +4,37 @@
     <!--outer impor end-->
     <!--outer impor end-->
     <CActorAction default="1" id="SquadMarauderAttackBase" parent="MarauderAttackBase"/>
+    <CActorUnit id="SquadAdvanceEngineBay" parent="TerranBuildingFlyerEx" unitName="AdvanceEngineBay">
+        <Macros value="SnowVisualBuildingMacro"/>
+        <Model value="Starport_CovertOps"/>
+        <BuildModel value="Starport_CovertOps_Build"/>
+        <DeathArray index="Normal" ModelLink="Starport_CovertOps_Death"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="Starport_Explode"/>
+        <DeathCustoms index="5" ModelLink="StarportFlyDeath" SoundLink="Starport_Explode" Name="Flying"/>
+        <PlacementModel value="Starport_CovertOps_Placement"/>
+        <PortraitModel value="HornerPortrait"/>
+        <BarOffset value="155"/>
+        <BarWidth value="160"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Starport.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-terran-Starport.dds"/>
+        <HighlightTooltip value="Unit/Name/SquadAdvanceEngineBay"/>
+        <NameOffset value="110"/>
+        <SoundArray index="Ready" value="HornerHanAnnouncer_StartGame"/>
+        <SoundArray index="What" value="HornerPissedLinesHorner00001"/>
+        <SoundArray index="Movement" value="HornerPissedLinesHorner00002"/>
+        <UnitIcon value="Assets\Textures\btn-building-terran-Starport.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Starport.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorModel id="SquadAdvanceEngineBayBuild" parent="TerranBuildingBuild" unitName="AdvanceEngineBay">
+        <Model value="EngineeringBay_CovertOps_Build"/>
+    </CActorModel>
+    <CActorSplat id="SquadAdvanceEngineBaySplat" parent="GenericUnitSplat" unitName="AdvanceEngineBay">
+        <Model value="EngineeringBaySplat"/>
+    </CActorSplat>
     <CActorRange id="SquadTechlabPowerRange">
         <On Terms="Behavior.SquadTechlabPowerSource.Create" Send="Create"/>
         <On Terms="Behavior.SquadTechlabPowerSource.Destroy" Send="Destroy"/>
@@ -4123,31 +4154,6 @@
         <UnitIcon value="Assets\Textures\BTN-Unit-Terran-Predator.dds"/>
         <Wireframe>
             <Image value="Assets\Textures\Wireframe-Terran-predator.dds"/>
-        </Wireframe>
-    </CActorUnit>
-    <CActorUnit id="AdvanceEngineBay" parent="GenericUnitStandardNoAutoSoundLinks" unitName="AdvanceEngineBay">
-        <On index="0" Terms="UnitBirth.ShadowScrambler" Send="Create SoundEmitter ShadowScrambler_Ambience"/>
-        <On Terms="ActorCreation" Send="AnimGroupApply Work {} {} Instant"/>
-        <On Terms="Abil.EMPNova.SourcePrepStart" Send="AnimPlay SpellA Attack"/>
-        <On Terms="AnimDone; AnimName SpellA" Send="AnimPlay SpellB Attack"/>
-        <On Terms="AnimDone; AnimName SpellB" Send="AnimPlay SpellA Attack"/>
-        <On Terms="ActorCreation" Send="Create SoundEmitter EMP_Generator_Pwr_Loop"/>
-        <Model value="ShadowScrambler"/>
-        <Scale value="0.500000"/>
-        <BuildModel value="ShadowScrambler"/>
-        <DeathArray index="Normal" ModelLink="ShadowScramblerDeath" SoundLink="ShadowScrambler_Explode"/>
-        <DeathActorModel value="ShadowScramblerDeath"/>
-        <PlacementModel value="ShadowScrambler"/>
-        <BarOffset value="135"/>
-        <BarWidth value="85"/>
-        <GroupIcon>
-            <Image value="Assets\Textures\Wireframe-Terran-EMPGenerator.dds"/>
-        </GroupIcon>
-        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-buildingarmor.dds"/>
-        <NameOffset value="135"/>
-        <UnitIcon value="Assets\Textures\Wireframe-Terran-EMPGenerator.dds"/>
-        <Wireframe>
-            <Image value="Assets\Textures\Wireframe-Terran-EMPGenerator.dds"/>
         </Wireframe>
     </CActorUnit>
     <CActorModel id="RedScannerCircle" parent="ModelAnimationStyleContinuous">
