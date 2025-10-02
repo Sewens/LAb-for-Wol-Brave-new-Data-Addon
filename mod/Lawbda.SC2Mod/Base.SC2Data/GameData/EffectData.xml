@@ -16,6 +16,37 @@
         <EffectArray value="RecycleStructureCauseDropPickupApply"/>
         <EffectArray value="EnergyMediumMaxandHugeRegenerationApply"/>
     </CEffectSet>
+    <CEffectApplyBehavior id="SquadDiamondbackBlastEvisceratorApplyAttackingBehavior">
+        <ValidatorArray index="0" removed="1"/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="SquadDiamondbackBlastEvisceratorAttacking"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadDiamondbackBlastEvisceratorApplyChargeBehavior">
+        <ValidatorArray index="0" removed="1"/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadDiamondbackBlastEvisceratorCharging"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadDiamondbackBlastEvisceratorApplyDamageBuff">
+        <ValidatorArray index="0" removed="1"/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadDiamondbackBlastEvisceratorDamageBuff"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="SquadDiamondbackBlastEvisceratorSet">
+        <ValidatorArray value="CasterIsNotHidden"/>
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadDiamondbackBlastEvisceratorBeam"/>
+        <EffectArray value="SquadDiamondbackBlastEvisceratorApplyAttackingBehavior"/>
+    </CEffectSet>
+    <CEffectDamage id="SquadDiamondbackBlastEvisceratorBeam" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <AttributeBonus index="Armored" value="20"/>
+        <AttributeBonus index="Mechanical" value="20"/>
+        <AttributeBonus index="Massive" value="20"/>
+        <Kind value="Ranged"/>
+        <Amount value="100"/>
+        <Death value="Blast"/>
+    </CEffectDamage>
     <CEffectApplyBehavior id="PoweredByCommandCenterApply">
         <EditorCategories value="Race:Terran"/>
         <Behavior value="PoweredByCommandCenter"/>
@@ -36,11 +67,16 @@
         <PeriodCount value="1"/>
         <PeriodicPeriodArray value="3"/>
     </CEffectCreatePersistent>
+    <CEffectSet id="SquadDiamondbackMultiEvisceratorImpactSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadDiamondbackMultiEvisceratorBeam"/>
+        <EffectArray value="SquadShortlyStunApply"/>
+    </CEffectSet>
     <CEffectEnumArea id="SquadDiamondbackMultiEvisceratorSearchArea">
         <ValidatorArray value="SquadDiamondbackMultiRailgunCharged"/>
         <EditorCategories value=""/>
         <SearchFilters value="Visible;Self,Player,Ally,Neutral,Air,Stasis,Dead,Invulnerable,AirUnit"/>
-        <AreaArray MaxCount="3" Radius="7" Effect="SquadDiamondbackMultiEvisceratorBeam"/>
+        <AreaArray MaxCount="3" Radius="7" Effect="SquadDiamondbackMultiEvisceratorImpactSet"/>
     </CEffectEnumArea>
     <CEffectSet id="SquadHellionInfernalFlameThrowerSet">
         <EditorCategories value="Race:Terran"/>
@@ -229,6 +265,11 @@
         <EffectArray value="RecycleStructureCauseDropPickupRemove"/>
         <EffectArray value="EnergyMediumMaxandHugeRegenerationRemove"/>
     </CEffectSet>
+    <CEffectApplyBehavior id="SquadShortlyStunApply">
+        <ValidatorArray index="0" removed="1"/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadShortlyStun"/>
+    </CEffectApplyBehavior>
     <CEffectApplyBehavior id="SquadVikingAttackSpeederApply">
         <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
@@ -1770,10 +1811,10 @@
         <EffectArray value="LootOnDealDamage"/>
         <EffectArray value="VampireOrbApply"/>
     </CEffectSet>
-    <CEffectSet id="SquadDiamondbackMultiEvisceratorSet">
+    <CEffectSet id="SquadDiamondbackMultiEvisceratorWeaponSet">
         <ValidatorArray value="CasterIsNotHidden"/>
         <EditorCategories value="Race:Terran"/>
-        <EffectArray value="SquadDiamondbackMultiEvisceratorBeam"/>
+        <EffectArray value="SquadDiamondbackMultiEvisceratorImpactSet"/>
         <EffectArray value="SquadDiamondbackMultiEvisceratorChargingPersistent"/>
         <EffectArray value="SquadDiamondbackMultiEvisceratorSearchArea"/>
     </CEffectSet>

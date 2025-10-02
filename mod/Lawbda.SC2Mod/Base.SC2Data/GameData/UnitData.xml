@@ -741,8 +741,8 @@
             <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
-            <LayoutButtons Face="BansheeBomberMode" Type="AbilCmd" AbilCmd="SquadBansheeBomberMode,On" Row="2" Column="0"/>
-            <LayoutButtons Face="BansheeRocketMode" Type="AbilCmd" AbilCmd="SquadBansheeBomberMode,Off" Row="2" Column="1"/>
+            <LayoutButtons Face="SquadBansheeBomberMode" Type="AbilCmd" AbilCmd="SquadBansheeBomberMode,On" Row="2" Column="0"/>
+            <LayoutButtons Face="SquadBansheeRocketMode" Type="AbilCmd" AbilCmd="SquadBansheeBomberMode,Off" Row="2" Column="1"/>
         </CardLayouts>
         <Radius value="0.75"/>
         <SeparationRadius value="0.75"/>
@@ -1392,31 +1392,20 @@
         <AbilArray Link="QueueMagazine"/>
         <AbilArray Link="SquadInfantry"/>
         <AbilArray Link="DisbandSquad"/>
+        <AbilArray Link="SquadDiamondbackBlastRailgun"/>
         <WeaponArray Link="SquadDiamondbackMultiEviscerator" Turret="SquadDiamondback"/>
+        <WeaponArray Link="SquadDiamondbackBlastEviscerator" Turret="SquadDiamondback"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
             <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
-            <LayoutButtons Face="FireOnTheMove" Type="Passive" Row="2" Column="0"/>
-            <LayoutButtons>
-                <Face value="TriLithiumPowerCells"/>
-                <Type value="Passive"/>
-                <AbilCmd value="255,255"/>
-                <Requirements value="UseTriLithiumPowerCells"/>
-                <Row value="2"/>
-                <Column value="1"/>
-            </LayoutButtons>
-            <LayoutButtons>
-                <Face value="ShapedHull"/>
-                <Type value="Passive"/>
-                <AbilCmd value="255,255"/>
-                <Requirements value="UseShapedHull"/>
-                <Row value="2"/>
-                <Column value="2"/>
-            </LayoutButtons>
             <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="4"/>
+            <LayoutButtons Face="SquadDiamondbackBlastMode" Type="AbilCmd" AbilCmd="SquadDiamondbackBlastRailgun,On" Row="2" Column="0"/>
+            <LayoutButtons Face="SquadDiamondbackBlastMode" Type="Passive" Row="2" Column="0"/>
+            <LayoutButtons Face="SquadDiamondbackMultiMode" Type="AbilCmd" AbilCmd="SquadDiamondbackBlastRailgun,Off" Row="2" Column="1"/>
+            <LayoutButtons Face="SquadDiamondbackMultiMode" Type="Passive" Row="2" Column="1"/>
         </CardLayouts>
         <Radius value="0.6875"/>
         <SeparationRadius value="0.65"/>

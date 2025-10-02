@@ -1,5 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorBuff id="SquadDiamondbackBlastEvisceratorAttacking">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="0.5"/>
+        <FinalEffect value="SquadDiamondbackBlastEvisceratorApplyChargeBehavior"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadDiamondbackBlastEvisceratorCharging">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <RemoveValidatorArray value="SquadDiamondbackBlastEvisceratorNotAttacking"/>
+        <Duration value="3"/>
+        <FinalEffect value="SquadDiamondbackBlastEvisceratorApplyDamageBuff"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadDiamondbackBlastEvisceratorDamageBuff">
+        <InfoIcon value="Assets\Textures\btn-ability-zeratul-topbar-stasisbeam.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="SquadDiamondbackBlastEvisceratorNotAttacking"/>
+        <Modification WeaponRange="5">
+            <DamageDealtScaled index="Spell" value="40"/>
+            <DamageDealtScaled index="Melee" value="40"/>
+            <DamageDealtScaled index="Ranged" value="40"/>
+            <DamageDealtScaled index="Splash" value="40"/>
+        </Modification>
+    </CBehaviorBuff>
     <CBehaviorBuff id="PoweredByCommandCenter">
         <InfoIcon value="Assets\Textures\btn-building-terran-commandcenter-covertops.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -90,6 +115,14 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <FinalEffect value="SquadBattlecruiserYamatoShotsUpgradeActivateIssueOrder"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="SquadDiamondbackBlastEvisceratorRailgun">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Modification>
+            <WeaponEnableArray value="SquadDiamondbackBlastEviscerator"/>
+            <WeaponDisableArray value="SquadDiamondbackMultiEviscerator"/>
+        </Modification>
+    </CBehaviorBuff>
     <CBehaviorBuff id="SquadJumpShield">
         <Cost>
             <Vital index="Shields" value="50"/>
@@ -103,6 +136,16 @@
         <InfoIcon value="Assets\Textures\btn-building-terran-techlab-silver.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <Modification QueueCount="1" QueueSize="3"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadShortlyStun">
+        <InfoIcon value="Assets\Textures\btn-upgrade-vorazun-shadowstun.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="0.5"/>
+        <Modification>
+            <StateFlags index="Silence" value="1"/>
+            <StateFlags index="Stun" value="1"/>
+        </Modification>
+        <DeathType value="Blast"/>
     </CBehaviorBuff>
     <CBehaviorPowerUser id="SquadTechlabPowerUser">
         <BehaviorFlags index="Permanent" value="1"/>
