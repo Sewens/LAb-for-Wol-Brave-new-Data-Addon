@@ -30,6 +30,18 @@
         <EditorCategories value="Race:Terran"/>
         <Behavior value="PoweredByTechlab"/>
     </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="SquadDiamondbackMultiEvisceratorChargingPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <FinalEffect value="SquadDiamondbackMultiEvisceratorApplyMultiTarget"/>
+        <PeriodCount value="1"/>
+        <PeriodicPeriodArray value="3"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="SquadDiamondbackMultiEvisceratorSearchArea">
+        <ValidatorArray value="SquadDiamondbackMultiRailgunCharged"/>
+        <EditorCategories value=""/>
+        <SearchFilters value="Visible;Self,Player,Ally,Neutral,Air,Stasis,Dead,Invulnerable,AirUnit"/>
+        <AreaArray MaxCount="3" Radius="7" Effect="SquadDiamondbackMultiEvisceratorBeam"/>
+    </CEffectEnumArea>
     <CEffectSet id="SquadHellionInfernalFlameThrowerSet">
         <EditorCategories value="Race:Terran"/>
         <EffectArray value="SquadHellionInfernalFlameThrower"/>
@@ -1729,19 +1741,11 @@
         <CaseArray Validator="UnitLifeBelow1000" Effect="LootonDealDamageTier5"/>
         <CaseDefault value="LootonDealDamageTier1"/>
     </CEffectSwitch>
-    <CEffectApplyBehavior id="SquadDiamondbackBurstCapacitorsApplyAttackingBehavior">
-        <ValidatorArray index="0" value="BurstCapacitorsPurchased"/>
+    <CEffectApplyBehavior id="SquadDiamondbackMultiEvisceratorApplyMultiTarget">
+        <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="Caster"/>
-        <Behavior value="SquadDiamondbackBurstCapacitorsAttacking"/>
-    </CEffectApplyBehavior>
-    <CEffectApplyBehavior id="SquadDiamondbackBurstCapacitorsApplyChargeBehavior">
-        <EditorCategories value="Race:Terran"/>
-        <Behavior value="SquadDiamondbackBurstCapacitorsCharging"/>
-    </CEffectApplyBehavior>
-    <CEffectApplyBehavior id="SquadDiamondbackBurstCapacitorsApplyDamageBuff">
-        <EditorCategories value="Race:Terran"/>
-        <Behavior value="BurstSquadDiamondbackCapacitors"/>
+        <Behavior value="SquadDiamondbackMultiEviscerator"/>
     </CEffectApplyBehavior>
     <CEffectSet id="SquadMarineDeatheResponseChain">
         <EditorCategories value="Race:Terran"/>
@@ -1766,15 +1770,18 @@
         <EffectArray value="LootOnDealDamage"/>
         <EffectArray value="VampireOrbApply"/>
     </CEffectSet>
-    <CEffectSet id="SquadDiamondbackEvisceratorSet">
+    <CEffectSet id="SquadDiamondbackMultiEvisceratorSet">
         <ValidatorArray value="CasterIsNotHidden"/>
         <EditorCategories value="Race:Terran"/>
-        <EffectArray value="SquadDiamondbackEvisceratorBeam"/>
-        <EffectArray value="SquadDiamondbackBurstCapacitorsApplyAttackingBehavior"/>
+        <EffectArray value="SquadDiamondbackMultiEvisceratorBeam"/>
+        <EffectArray value="SquadDiamondbackMultiEvisceratorChargingPersistent"/>
+        <EffectArray value="SquadDiamondbackMultiEvisceratorSearchArea"/>
     </CEffectSet>
-    <CEffectDamage id="SquadDiamondbackEvisceratorBeam" parent="DU_WEAP">
+    <CEffectDamage id="SquadDiamondbackMultiEvisceratorBeam" parent="DU_WEAP">
         <EditorCategories value="Race:Terran"/>
-        <AttributeBonus index="Armored" value="20"/>
+        <AttributeBonus index="Armored" value="10"/>
+        <AttributeBonus index="Mechanical" value="10"/>
+        <AttributeBonus index="Psionic" value="10"/>
         <Kind value="Ranged"/>
         <Amount value="20"/>
         <Death value="Blast"/>

@@ -706,29 +706,19 @@
         <Duration value="0.1"/>
         <ExpireEffect value="SquadMorphToTechReactor"/>
     </CBehaviorBuff>
-    <CBehaviorBuff id="SquadDiamondbackBurstCapacitorsAttacking">
-        <InfoFlags index="Hidden" value="1"/>
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <DisableValidatorArray value="BurstCapacitorsPurchased"/>
-        <Duration value="2"/>
-        <FinalEffect value="SquadDiamondbackBurstCapacitorsApplyChargeBehavior"/>
-    </CBehaviorBuff>
-    <CBehaviorBuff id="SquadDiamondbackBurstCapacitorsCharging">
-        <InfoFlags index="Hidden" value="1"/>
+    <CBehaviorBuff id="SquadDiamondbackMultiEviscerator">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <DisplayDuration index="Self" value="1"/>
-        <RemoveValidatorArray value="DiamondbackNotAttacking"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <DisplayDuration index="Neutral" value="1"/>
+        <RemoveValidatorArray value="SquadDiamondbackAttacking"/>
+        <BuffFlags index="RefreshStack" value="1"/>
         <Duration value="5"/>
-        <FinalEffect value="SquadDiamondbackBurstCapacitorsApplyDamageBuff"/>
-    </CBehaviorBuff>
-    <CBehaviorBuff id="BurstSquadDiamondbackCapacitors">
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <RemoveValidatorArray value="DiamondbackNotAttacking"/>
         <Modification>
-            <DamageDealtScaled index="Spell" value="10"/>
-            <DamageDealtScaled index="Melee" value="10"/>
-            <DamageDealtScaled index="Ranged" value="10"/>
-            <DamageDealtScaled index="Splash" value="10"/>
+            <DamageDealtScaled index="Spell" value="5"/>
+            <DamageDealtScaled index="Melee" value="5"/>
+            <DamageDealtScaled index="Ranged" value="5"/>
+            <DamageDealtScaled index="Splash" value="5"/>
         </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="RecycleStructureCauseDropPickup">
