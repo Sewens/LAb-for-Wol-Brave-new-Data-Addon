@@ -64,6 +64,7 @@ Abil/Name/SquadFeedback=Squad Feedback
 Abil/Name/SquadGhostAcademyResearch=Squad Ghost Academy Research
 Abil/Name/SquadGhostEMP=Squad Ghost EMP
 Abil/Name/SquadGhostSnipe=Squad Ghost Snipe
+Abil/Name/SquadGoliathAirFocus=Squad Goliath Air Focus
 Abil/Name/SquadHealRedirect=Squad Heal Redirect
 Abil/Name/SquadHellionTransport=Squad Hellion Transport
 Abil/Name/SquadHerculesTransport=Squad Hercules Transport
@@ -158,6 +159,7 @@ Behavior/Name/InfantryLevelUpto10=Infantry Level Up to10
 Behavior/Name/LightingOrb=Lighting Orb
 Behavior/Name/LootOnDealDamage=Loot On Deal Damage
 Behavior/Name/MagazineDeathResponse=Magazine Death Response
+Behavior/Name/MagazineUnitTracker=Alpha Magazine Unit Tracker
 Behavior/Name/MarauderUnitTracker=Marauder Unit Tracker
 Behavior/Name/MarineUnitTracker=Marine Unit Tracker
 Behavior/Name/MedicFlashbangGrenade=Squad Medic Flashbang Grenade
@@ -223,6 +225,7 @@ Behavior/Name/SquadSupplydrop=Squad Supply drop
 Behavior/Name/SquadThor250mmStrikeCannons=Squad Thor 250mm Strike Cannons
 Behavior/Name/SquadThor330mmBarrageCannon=Squad Thor 330mm Barrage Cannon
 Behavior/Name/SquadThorSelfRepair=Squad Thor Self Repair
+Behavior/Name/SquadVikingAttackSpeeder=Squad Viking Attack Speeder
 Behavior/Name/SuqadBunkerShrikeTurret=Suqad Bunker Shrike Turret
 Behavior/Name/UnitHugeAddMaxLife=Unit Huge Add Max Life
 Behavior/Name/UnitMediumAddMaxLife=Unit Medium Add Max Life
@@ -236,6 +239,7 @@ Behavior/Tooltip/MagazineGhostTracker22=<c val="000000">Current Magazine unit:</
 Behavior/Tooltip/MagazineMarineTracker2=<c val="000000">Current Magazine unit:</c>
 Behavior/Tooltip/MagazineMedicTracker2=<c val="000000">Current Magazine unit:</c>
 Behavior/Tooltip/MagazineReaperTracker2=<c val="000000">Current Magazine unit:</c>
+Behavior/Tooltip/MagazineUnitTracker=<c val="F0F50A"></c>Current Magazine unit: </c><d ref="$BehaviorStackCount:MagazineUnitTracker$"/>
 Behavior/Tooltip/MultiMineralAutoHarvest=Marauder helping you harvest now.
 Behavior/Tooltip/ObserverTargetLock2=This unit is taking increased damage.
 Behavior/Tooltip/OrbOrb=Increase all kinds of damage by <d ref="Behavior,OrbOrb,Modification.DamageDealtFraction[Ranged]"/>.
@@ -257,6 +261,7 @@ Behavior/Tooltip/SquadSupplydrop=This Supply Depot is providing an additional 8 
 Behavior/Tooltip/SquadThor250mmStrikeCannons=Target is currently stunned and unable to use any abilities.
 Behavior/Tooltip/SquadThor330mmBarrageCannon=Target is currently stunned and unable to use any abilities.
 Behavior/Tooltip/SquadThorSelfRepair=Repairing Damage
+Behavior/Tooltip/SquadVikingAttackSpeeder=<c val="F0F50A"></c>Current Speed Stack: </c><d ref="$BehaviorStackCount:SquadVikingAttackSpeeder$"/>
 Behavior/Tooltip/StimpackMarauder2=This unit moves and attacks more quickly while under the effects of Stimpack.
 Behavior/Tooltip/UnitSmallAddMaxLife=<c val="F0F50A"></c>Current Magazine unit: </c><d ref="$BehaviorStackCount:Unit Small Add Max Life$"/>
 Behavior/Tooltip/VampireOrb=Leach life on damage dealt 5%.
@@ -369,8 +374,10 @@ Button/Name/SquadGhostOcularImplants=Squad Ghost Ocular Implants
 Button/Name/SquadGhostResearchCaduceusReactor=Squad Ghost Research Caduceus Reactor
 Button/Name/SquadGhostResearchMoebiusReactor=Squad Ghost Research Moebius Reactor
 Button/Name/SquadGhostSniperRound=Squad Ghost Sniper Round
+Button/Name/SquadGoliathAirFocusMode=Squad Goliath Air Focus Mode
 Button/Name/SquadGoliathAresClassTargetingSystem=Squad Goliath Ares-Class Targeting System
 Button/Name/SquadGoliathMultiLockWeaponsSystem=Squad Goliath Multi-Lock Weapons System
+Button/Name/SquadGoliathMutilockMode=Squad Goliath Mutilock Mode
 Button/Name/SquadGoliathSpartanCompany=Squad Goliath Spartan Company
 Button/Name/SquadHailofLead=Squad Hail of Lead
 Button/Name/SquadHealRedirect=Squad Heal Redirect
@@ -538,6 +545,7 @@ Button/Tooltip/GhostHoldFire2=Orders selected units to holster their weapons and
 Button/Tooltip/HarvestResourceMessage=Give a message to nearby resource.
 Button/Tooltip/IncineratorNozzles3=Increases the Firebat's damage radius by 40%.
 Button/Tooltip/InfantryFightingVehicle=Infantry Fighting Vehicle. Providing a shelter for infantry duration. Passenger can attack, repair and cast ability from this vehicle.
+Button/Tooltip/InfantrySquadCover=Bunker Cargo load accumulator: <d ref="Accumulator,CargoSizeBunker,"/>
 Button/Tooltip/JuggernautPlating3=Increases the Firebat's armor by 2.
 Button/Tooltip/LootGasTextTier12=<IMG path="Assets\Textures\climax-impact01.dds" height="96" width="96"/>
 Button/Tooltip/LootGasTextTier2=<s val="Kicker_Gas">+50 </s><IMG path="Assets\Textures\icon-gas-terran.dds" height="28" width="28"/>
@@ -607,8 +615,10 @@ Button/Tooltip/SquadGhostResearchCaduceusReactor=Increases the starting energy o
 Button/Tooltip/SquadGhostResearchMoebiusReactor=Increases the starting energy of <c val="ffff8a">Ghosts</c> by <d ref="Upgrade,GhostMoebiusReactor,EffectArray[0].Value"/>.
 Button/Tooltip/SquadGhostSniperRound=A careful shot, dealing <d ref="Effect,SnipeDamage,Amount"/> (<d ref="Effect,SnipeDamage,Amount + Effect,SnipeDamage,AttributeBonus[5]"/> vs. Psionic) damage. Ignores armor.<n/><n/><c val="#ColorAttackInfo">Can only target biological units.</c>
 Button/Tooltip/SquadGoliath=Heavy-fire support unit.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
+Button/Tooltip/SquadGoliathAirFocusMode=Goliath will focus on air target only increase weapon range for+<d ref="Behavior,SquadGoliathAirFocuseMode,Modification.WeaponRange"/> and +<d ref="Behavior,SquadGoliathAirFocuseMode,Modification.DamageDealtAttributeScaled[Massive]"/> damage dealt vs massive.
 Button/Tooltip/SquadGoliathAresClassTargetingSystem=Increases missile range by 3 and Autocannon range by 1.
 Button/Tooltip/SquadGoliathMultiLockWeaponsSystem=The Goliath can target ground and air units simultaneously.
+Button/Tooltip/SquadGoliathMutilockMode=Goliath can target both ground and air unit simultanesously.
 Button/Tooltip/SquadGoliathSpartanCompany=Request 2 Spartan Company Mercenaries.<n/><n/>UED veterans using advanced Goliath prototypes.
 Button/Tooltip/SquadGreaterNydusNetwork=Friendly ground units can use the Nydus Network to instantly travel to any other Nydus Network or Nydus Worm owned by the player.<n/><n/><c val="ffff8a">Enables:</c><n/>- Nydus Worm
 Button/Tooltip/SquadGreaterNydusWorm=Powerful Nydus worm strain capable of tunneling across incredible distances.
@@ -733,8 +743,8 @@ Button/Tooltip/SquadVikingA=Durable support flyer. Loaded with strong anti-capit
 Button/Tooltip/SquadVikingAMode=Transforms the Viking to Fighter Mode. In this mode Vikings fly, but they can only attack air targets.
 Button/Tooltip/SquadVikingG=Durable support unit. Can switch into Fighter Mode to attack air units.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/SquadVikingGMode=Transforms the Viking to Assault Mode. In this mode Vikings move on the ground and can only attack ground targets.
-Button/Tooltip/SquadVikingPhobosClassWeaponsSystem=Increases missile range by 2 and Autocannon range by 1.
-Button/Tooltip/SquadVikingRipwaveMissiles=Viking missiles deal area damage.
+Button/Tooltip/SquadVikingPhobosClassWeaponsSystem=Increases missile range by 2 and Autocannon range by 1. Viking will increase attack speed by 10% in Assault Mode when continuing attack, max stack for 5 times.
+Button/Tooltip/SquadVikingRipwaveMissiles=Viking missiles deal area damage in Fighter Mode.
 Button/Tooltip/SquadVultreReplenishSpiderMine=Constructs a new Spider Mine to replace those used.<n/><n/>A Vulture can only carry 3 Spider Mines at a time.
 Button/Tooltip/SquadVulture=Fast skirmish unit. Can use the Spider Mine ability.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/SquadVultureCerberusMine=Increases blast radius and trigger radius by 33%.
@@ -1060,8 +1070,6 @@ Effect/Name/SquadGoliathTwinAutocannons=Squad Goliath Twin Autocannons
 Effect/Name/SquadGuassRifleDamage=Squad Guass Rifle Damage
 Effect/Name/SquadHellionInfernalFlameThrower=Squad Hellion Infernal Flame Thrower
 Effect/Name/SquadHellionInfernalFlameThrowerCP=Squad Hellion Infernal Flame Thrower CP
-Effect/Name/SquadHellionInfernalFlameThrowerDummyDamage=Squad Hellion Infernal Flame Thrower Dummy Damage
-Effect/Name/SquadHellionInfernalFlameThrowerDummyPersistent=Squad Hellion Infernal Flame Thrower Dummy Persistent
 Effect/Name/SquadHellionInfernalFlameThrowerE=Squad Hellion Infernal Flame Thrower E
 Effect/Name/SquadHellionInfernalFlameThrowerSet=Squad Hellion Infernal Flame Thrower Set
 Effect/Name/SquadHiveMindEmulatorMindControl=Squad Hive Mind Emulator Mind Control
@@ -1258,7 +1266,9 @@ Effect/Name/SquadUltraliskWeaponCooldown=Squad Ultralisk Weapon Cooldown
 Effect/Name/SquadVikingAHaloRocketsDamage=Squad Viking A Halo Rockets Damage
 Effect/Name/SquadVikingAHaloRocketsLM=Squad Viking A Halo Rockets LM
 Effect/Name/SquadVikingAHaloRocketsPersistent=Squad Viking A Halo Rockets Persistent
+Effect/Name/SquadVikingAttackSpeederApply=Squad Viking Attack Speeder Apply
 Effect/Name/SquadVikingGTwinGatlingCannonDamage=Squad Viking G Twin Gatling Cannon Damage
+Effect/Name/SquadVikingGTwinGatlingCannonSet=Squad Viking G Twin Gatling Cannon Set
 Effect/Name/SquadVoidNanoRepairCP=Squad Void Nano Repair CP
 Effect/Name/SquadVoidNanoRepairControllerAB=Squad Void Nano Repair Controller AB
 Effect/Name/SquadVoidNanoRepairControllerRB=Squad Void Nano Repair Controller RB
@@ -1304,6 +1314,7 @@ Reward/Name/Decal_Terran_0062_012=Enband
 Reward/Name/Disband=DisbandSquad
 SimpleDisplay/SquadSCVGather=<IMG path="Assets\Textures\tutorialmouserightbuttondown.dds" alignment="absolutemiddle"/> <s val="@@@SimpleCommandRow">to Gather Resources</s>
 SimpleDisplay/SquadStructureAttack=<s val="@@@SimpleCommandRow">%hotkey</c> then</s> <IMG path="Assets\Textures\tutorialmouseleftbuttondown.dds" alignment="absolutemiddle"/> <s val="@@@SimpleCommandRow">to Attack</s>
+SuqadMagazineCount=<d ref="Accumulator,CargoSizeBunker,"/>
 Unit/Name/AdvanceEngineBay=Advance EngineBay
 Unit/Name/Barracks=Squad Barracks Flying
 Unit/Name/CaptainExcavator=Mobile Destruction Vehicle
@@ -1470,7 +1481,7 @@ Weapon/Name/SquadFirebatPerditionFlamethrower=Squad Firebat Perdition Flamethrow
 Weapon/Name/SquadGhostC10CanisterRifle=Squad Ghost C-10 Canister Rifle
 Weapon/Name/SquadGoliathAutocannon=Squad Goliath Autocannon
 Weapon/Name/SquadGoliathAutocannonG2=Squad Goliath Autocannon G2
-Weapon/Name/SquadGoliathHellfireMissiles=Squad Goliath Hellfire Missiles
+Weapon/Name/SquadGoliathHellfireMissilesAirFocuse=Squad Goliath Hellfire Missiles Air Focuse
 Weapon/Name/SquadGoliathHellfireMissilesMultiLock=Squad Goliath Hellfire Missiles Multi-Lock
 Weapon/Name/SquadHellionHellfireFlamethrower=Squad Hellion Hellfire Flamethrower
 Weapon/Name/SquadMarauderPunisherGrenades=Squad Marauder Punisher Grenades

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CAccumulatorCargo id="CargoSizeBunker">
+        <UnitSource Value="Source"/>
+    </CAccumulatorCargo>
     <CAccumulatorBehavior id="DamageBufferDamageResponseReceiver">
         <UnitSource Effect="DamageBufferPersistent" Value="Source"/>
         <Type value="DamageModifyRemaining"/>
@@ -14,4 +17,15 @@
     <CAccumulatorConstant id="MagazineMaxUnit">
         <Amount value="4"/>
     </CAccumulatorConstant>
+    <CAccumulatorArithmetic id="MagazineUnitCounWrapper">
+        <Parameters value="0">
+            <AccumulatorArray value="MagazineUnitCount"/>
+        </Parameters>
+        <Parameters value="0"/>
+    </CAccumulatorArithmetic>
+    <CAccumulatorBehavior id="SquadDiamondbackChargeStack"/>
+    <CAccumulatorBehavior id="MagazineUnitCount">
+        <Behavior value="MagazineUnitTracker"/>
+        <UnitSource Value="Target"/>
+    </CAccumulatorBehavior>
 </Catalog>

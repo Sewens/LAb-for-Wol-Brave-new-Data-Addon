@@ -181,12 +181,12 @@
         <Duration value="0.2"/>
         <AINotifyEffect value="SeekerMissileDamage"/>
     </CBehaviorBuff>
-    <CBehaviorBuff id="SquadArmorpiercingMode">
+    <CBehaviorBuff id="SquadArmorPiercingMode">
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <Modification>
-            <WeaponEnableArray value="LanceMissileLaunchers"/>
-            <WeaponDisableArray value="JavelinMissileLaunchers"/>
+            <WeaponEnableArray value="SquadThor250mmPunisherCannons"/>
+            <WeaponDisableArray value="SquadThorJavelinMissileLaunchers"/>
         </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadThorSelfRepair">
@@ -270,6 +270,15 @@
         <Modification>
             <DamageDealtFraction index="Ranged" value="0.25"/>
         </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadVikingAttackSpeeder">
+        <InfoIcon value="Assets\Textures\btn-upgrade-raynor-phobosclassweaponssystem.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <BuffFlags index="RefreshStack" value="1"/>
+        <MaxStackCount value="5"/>
+        <MaxStackCountPerCaster value="5"/>
+        <Duration value="10"/>
+        <Modification AttackSpeedMultiplier="1.1"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadWraithDisplacementField">
         <Alignment value="Positive"/>
@@ -387,7 +396,6 @@
         </Modification>
     </CBehaviorBuff>
     <CBehaviorJump id="SquadJump">
-        <InfoFlags index="AlwaysUseGameText" value="1"/>
         <InfoIcon value="Assets\Textures\btn-upgrade-terran-ui-jumpjets.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <TriggerHeightDeltaMin value="1.5"/>
@@ -637,23 +645,17 @@
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
     </CBehaviorBuff>
-    <CBehaviorBuff id="SquadMultilockTargetingSystems">
+    <CBehaviorBuff id="SquadGoliathAirFocuseMode">
         <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-upgrade-swann-aresclasstargetingsystem.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
-        <Requirements value="UseMultilockTargetingSystems"/>
-        <Modification>
-            <WeaponEnableArray value="GoliathAUpgraded"/>
-            <WeaponEnableArray value="GoliathGUpgraded"/>
-            <WeaponEnableArray value="SpartanCompanyAUpgraded"/>
-            <WeaponEnableArray value="SpartanCompanyGUpgraded"/>
-            <WeaponEnableArray value="MengskGoliathAUpgraded"/>
-            <WeaponEnableArray value="MengskGoliathGUpgraded"/>
-            <WeaponDisableArray value="GoliathA"/>
-            <WeaponDisableArray value="GoliathG"/>
-            <WeaponDisableArray value="SpartanCompanyA"/>
-            <WeaponDisableArray value="SpartanCompanyG"/>
-            <WeaponDisableArray value="MengskGoliathA"/>
-            <WeaponDisableArray value="MengskGoliathG"/>
+        <Modification WeaponRange="5">
+            <DamageDealtAttributeScaled index="Armored" value="5"/>
+            <DamageDealtAttributeScaled index="Massive" value="10"/>
+            <WeaponEnableArray value="SquadGoliathHellfireMissilesAirFocuse"/>
+            <WeaponDisableArray value="SquadGoliathAutocannon"/>
+            <WeaponDisableArray value="SquadGoliathAutocannonG2"/>
+            <WeaponDisableArray value="SquadGoliathHellfireMissilesMultiLock"/>
         </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="PoweredByBarrack">
@@ -1440,7 +1442,6 @@
         <BuffFlags index="RefreshStack" value="1"/>
         <MaxStackCount value="8"/>
         <MaxStackCountPerCaster value="1"/>
-        <InfoFlags index="Hidden" value="1"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="MarineUnitTracker">
         <BehaviorFlags index="Permanent" value="1"/>
@@ -1537,7 +1538,6 @@
         <LandAdjustmentDown value="1"/>
         <LandArrivalRange value="0.05"/>
         <LandCheckRadius value="5"/>
-        <InfoFlags index="AlwaysUseGameText" value="1"/>
         <JumpEffectUp value="SquadJumpShieldApply"/>
         <JumpEffectDown value="SquadJumpShieldApply"/>
     </CBehaviorJump>

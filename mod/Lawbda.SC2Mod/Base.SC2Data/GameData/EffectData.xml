@@ -30,6 +30,11 @@
         <EditorCategories value="Race:Terran"/>
         <Behavior value="PoweredByTechlab"/>
     </CEffectApplyBehavior>
+    <CEffectSet id="SquadHellionInfernalFlameThrowerSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadHellionInfernalFlameThrower"/>
+        <EffectArray value="SquadHellionInfernalFlameThrowerCP"/>
+    </CEffectSet>
     <CEffectApplyBehavior id="SquadJumpShieldApply">
         <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
@@ -211,6 +216,17 @@
         <EffectArray value="UnitHugeMaxLifeRemove"/>
         <EffectArray value="RecycleStructureCauseDropPickupRemove"/>
         <EffectArray value="EnergyMediumMaxandHugeRegenerationRemove"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="SquadVikingAttackSpeederApply">
+        <ValidatorArray index="0" removed="1"/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Source"/>
+        <Behavior value="SquadVikingAttackSpeeder"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="SquadVikingGTwinGatlingCannonSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadVikingGTwinGatlingCannonDamage"/>
+        <EffectArray value="SquadVikingAttackSpeederApply"/>
     </CEffectSet>
     <CEffectLaunchMissile id="SquadYamatoCannonMissile">
         <ValidatorArray index="0" value="YamatoTargetFilters"/>
@@ -463,7 +479,7 @@
     <CEffectApplyBehavior id="SquadThorLanceMissileLaunchers">
         <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="Caster"/>
-        <Behavior value="SquadArmorpiercingMode"/>
+        <Behavior value="SquadArmorPiercingMode"/>
     </CEffectApplyBehavior>
     <CEffectDamage id="SquadThorLanceMissileLaunchersDamage" parent="DU_WEAP_SPLASH">
         <EditorCategories value="Race:Terran"/>
@@ -1024,13 +1040,11 @@
     </CEffectApplyBehavior>
     <CEffectDamage id="SquadHellionInfernalFlameThrower" parent="DU_WEAP">
         <ValidatorArray value="noMarkers"/>
-        <ValidatorArray value=""/>
         <EditorCategories value="Race:Terran"/>
         <AttributeBonus index="Light" value="6"/>
         <Kind value="Splash"/>
         <Amount value="10"/>
         <Death value="Fire"/>
-        <SearchFilters value="-;Player,Ally"/>
     </CEffectDamage>
     <CEffectCreatePersistent id="SquadHellionInfernalFlameThrowerCP">
         <EditorCategories value="Race:Terran"/>
@@ -1064,29 +1078,13 @@
         <PeriodicOffsetArray value="0,-6,0"/>
         <PeriodicPeriodArray value="0"/>
     </CEffectCreatePersistent>
-    <CEffectDamage id="SquadHellionInfernalFlameThrowerDummyDamage">
-        <EditorCategories value="Race:Terran"/>
-        <Kind value="Splash"/>
-        <Death value="Fire"/>
-        <Amount value="5"/>
-        <SearchFilters value="-;Player,Ally"/>
-    </CEffectDamage>
-    <CEffectCreatePersistent id="SquadHellionInfernalFlameThrowerDummyPersistent">
-        <EditorCategories value="Race:Terran"/>
-        <InitialEffect value="SquadHellionInfernalFlameThrowerDummyDamage"/>
-    </CEffectCreatePersistent>
     <CEffectEnumArea id="SquadHellionInfernalFlameThrowerE">
         <EditorCategories value="Race:Terran"/>
-        <IncludeArray Effect="MengskHellionInfernalFlameThrowerCP" Value="Target"/>
-        <SearchFilters value="Ground;Self,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <IncludeArray Effect="SquadHellionInfernalFlameThrowerCP" Value="Target"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
         <AreaArray Radius="0.15" Effect="SquadHellionInfernalFlameThrower"/>
         <SearchFlags index="CallForHelp" value="1"/>
     </CEffectEnumArea>
-    <CEffectSet id="SquadHellionInfernalFlameThrowerSet">
-        <EditorCategories value="Race:Terran"/>
-        <EffectArray value="SquadHellionInfernalFlameThrowerCP"/>
-        <EffectArray value="SquadHellionInfernalFlameThrowerDummyPersistent"/>
-    </CEffectSet>
     <CEffectRemoveBehavior id="OrbOrbRemove">
         <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="CasterOuter"/>
