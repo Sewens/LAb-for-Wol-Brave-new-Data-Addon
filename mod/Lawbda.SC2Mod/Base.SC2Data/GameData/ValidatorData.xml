@@ -4,6 +4,46 @@
         <Compare value="GE"/>
         <Value value="6"/>
     </CValidatorUnitCompareSpeed>
+    <CValidatorCombine id="NotPowerdByTrainingBuilding">
+        <CombineArray value="PoweredByBarracks"/>
+        <CombineArray value="PoweredByCommandCenter"/>
+        <CombineArray value="PoweredByFactory"/>
+        <CombineArray value="PoweredByStarport"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="PoweredByBarracks">
+        <ResultFailed value="NotEnoughRoomToLoadUnit"/>
+        <Compare value="GE"/>
+        <Value value="1"/>
+        <Behavior value="PoweredByBarrack"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="PoweredByFactory">
+        <ResultFailed value="NotEnoughRoomToLoadUnit"/>
+        <Compare value="GE"/>
+        <Value value="1"/>
+        <Behavior value="PoweredByFactory"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="PoweredByStarport">
+        <ResultFailed value="NotEnoughRoomToLoadUnit"/>
+        <Compare value="GE"/>
+        <Value value="1"/>
+        <Behavior value="PoweredByStarport"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="PoweredByCommandCenter">
+        <ResultFailed value="NotEnoughRoomToLoadUnit"/>
+        <Compare value="GE"/>
+        <Value value="1"/>
+        <Behavior value="PoweredByCommandCenter"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="PoweredByTrainingBuilding">
+        <CombineArray value="PoweredByBarracks"/>
+        <CombineArray value="PoweredByCommandCenter"/>
+        <CombineArray value="PoweredByFactory"/>
+        <CombineArray value="PoweredByStarport"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
+    <CValidatorUnitFilters id="TargetisEnemy">
+        <Filters value="-;Self,Player,Ally,Neutral"/>
+    </CValidatorUnitFilters>
     <CValidatorUnitCompareBehaviorCount id="HasVampireOrb">
         <Compare value="GT"/>
         <Behavior value="VampireOrb"/>
@@ -14,6 +54,7 @@
         <Find value="1"/>
         <AbilLink value="SquadInfantry"/>
     </CValidatorUnitAbil>
+    <CValidatorPlayerAlliance id="IsAlliance"/>
     <CValidatorUnitComparePowerUserLevel id="IsInReactorPowerFeild">
         <Compare value="GE"/>
         <Behavior value="SquadReactorPowerSource"/>

@@ -14,6 +14,28 @@
         <Model value="AdvanceEngineBayReentry"/>
         <Scale value="0.750000"/>
     </CActorModel>
+    <CActorEventMacro id="SquadQueueAnim">
+        <On Terms="Abil.que1.Start" Send="StatusIncrement Queuing"/>
+        <On Terms="Abil.que1.Stop" Send="StatusDecrement Queuing"/>
+        <On Terms="Abil.que5.Start" Send="StatusIncrement Queuing"/>
+        <On Terms="Abil.que5.Stop" Send="StatusDecrement Queuing"/>
+        <On Terms="Abil.SquadQueue5.Start" Send="StatusIncrement Queuing"/>
+        <On Terms="Abil.SquadQueue5.Stop" Send="StatusDecrement Queuing"/>
+        <On Terms="Abil.SquadQueue8.Start" Send="StatusIncrement Queuing"/>
+        <On Terms="Abil.SquadQueue8.Stop" Send="StatusDecrement Queuing"/>
+        <On Terms="Abil.que5LongBlend.Start" Send="StatusIncrement Queuing"/>
+        <On Terms="Abil.que5LongBlend.Stop" Send="StatusDecrement Queuing"/>
+        <On Terms="Abil.que5Passive.Start" Send="StatusIncrement Queuing"/>
+        <On Terms="Abil.que5Passive.Stop" Send="StatusDecrement Queuing"/>
+        <On Terms="Abil.que9Passive.Start" Send="StatusIncrement Queuing"/>
+        <On Terms="Abil.que9Passive.Stop" Send="StatusDecrement Queuing"/>
+        <On Terms="Abil.que5CancelToSelection.Start" Send="StatusIncrement Queuing"/>
+        <On Terms="Abil.que5CancelToSelection.Stop" Send="StatusDecrement Queuing"/>
+        <On Terms="Abil.que5PassiveCancelToSelection.Start" Send="StatusIncrement Queuing"/>
+        <On Terms="Abil.que5PassiveCancelToSelection.Stop" Send="StatusDecrement Queuing"/>
+        <On Terms="StatusOn.*.Queuing" Send="AnimBracketStart Queuing Work,Start Work Work,End"/>
+        <On Terms="StatusOff.*.Queuing" Send="AnimBracketStop Queuing"/>
+    </CActorEventMacro>
     <CActorUnit id="SquadAdvanceEngineBay" parent="TerranBuildingEx" unitName="AdvanceEngineBay">
         <Macros value="SnowVisualBuildingMacro"/>
         <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="Starport_Explode"/>
@@ -2393,8 +2415,8 @@
         <On Terms="AbilMorph.*.Start; MorphTo SquadSpiderMineBurrowed" Send="AnimClear Unburrow"/>
         <On Terms="AbilMorph.*.Start; MorphTo SquadSpiderMine" Send="AnimClear Burrow"/>
         <On Terms="AbilMorph.*.Start; MorphTo SquadSpiderMine" Send="AnimPlay Unburrow Unburrow"/>
-        <On Terms="AbilMorph.SquadVultureSpiderMineBurrow.Start" Send="Create VultureSpiderMineBurrowSound"/>
-        <On Terms="Abil.attack.ReadyStart" Send="Create VultureSpiderMineSeekSound"/>
+        <On Terms="AbilMorph.SquadSpiderMineBurrow.Start" Send="Create SquadSpiderMineBurrowSound"/>
+        <On Terms="Abil.attack.ReadyStart" Send="Create SquadSpiderMineSeekSound"/>
         <On Terms="ActorCreation; ValidateUnit HasCerberusMines" Send="ModelSwap CerberusMine"/>
         <DeathArray index="Normal" ModelLink="SpiderMineExplosion" SoundLink="Terran_ExplosionSmall"/>
         <PlacementModel value="SpiderMinePlacement"/>
@@ -2428,6 +2450,8 @@
         <Wireframe>
             <Image value="Assets\Textures\Wireframe-Terran-SpiderMine.dds"/>
         </Wireframe>
+        <Model value="SpiderMine"/>
+        <BuildModel value="SpiderMine"/>
     </CActorUnit>
     <CActorAction id="SquadSpiderMineAttack" parent="GenericAttack" effectAttack="SquadSpiderMinesDamage">
         <ImpactMap index="None" Model="VultureSpiderMineAttackImpact" Sound="VultureSpiderMineAttackImpact"/>
@@ -2529,7 +2553,7 @@
         <Aliases value="_UnitHuge"/>
         <Macros value="ProtossBuildingPowerUp"/>
         <Macros value="VoidMPUnpoweredAnim"/>
-        <Macros value="QueueAnim"/>
+        <Macros value="SquadQueueAnim"/>
         <Macros value="GlobalLoopMacro"/>
         <Macros value="GlobalLoopMacroMore"/>
         <Remove Terms="Upgrade.DarkProtoss.Add" Send="TextureSelectById ForgeDarkDiffuse"/>
@@ -3134,7 +3158,7 @@
     </CActorSplat>
     <CActorUnit id="SquadFusionCore" parent="TerranBuildingEx" unitName="SquadFusionCore">
         <Aliases value="_UnitHuge"/>
-        <Macros value="QueueAnim"/>
+        <Macros value="SquadQueueAnim"/>
         <Macros value="SnowVisualBuildingMacro"/>
         <Model value="FusionCore_CovertOps"/>
         <CreepHeightClass value="Medium"/>
@@ -3299,7 +3323,7 @@
     </CActorRange>
     <CActorUnit id="SquadPlanetaryFortress" parent="TerranBuildingEx" unitName="SquadPlanetaryFortress">
         <Aliases value="_UnitHuge"/>
-        <Macros value="QueueAnim"/>
+        <Macros value="SquadQueueAnim"/>
         <Macros value="BuildingFlattenTerrainMacro"/>
         <Macros value="MacroTownhallDeco_Terran"/>
         <Macros value="TerranPlanetaryFortressPlayerDecalMacro"/>
@@ -3712,7 +3736,7 @@
     </CActorSplat>
     <CActorUnit id="SquadEngineeringBay" parent="TerranBuildingEx" unitName="SquadEngineeringBay">
         <Aliases value="_UnitHuge"/>
-        <Macros value="QueueAnim"/>
+        <Macros value="SquadQueueAnim"/>
         <Macros value="SnowVisualBuildingMacro"/>
         <On Terms="Behavior.ColonyInfestation.On" Send="Create InfestationEngineeringBay"/>
         <Model value="EngineeringBay_CovertOps"/>
@@ -3939,8 +3963,6 @@
         <On Terms="UnitDeathCustomize; PassChance 10.000000; !ValidateUnit IsNotNeuralParasited" Send="Create Marauder_Death_NP"/>
         <On Terms="UnitDeathCustomize; ValidateUnit HaveVoidShade" Send="DeathCustomize Shadow"/>
         <On Terms="UnitDeathCustomize; ValidateUnit HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
-        <On Terms="Upgrade.SuperStimpackMarauder.Add" Send="Create StimPackDevice_Marauder"/>
-        <On Terms="UnitBirth; ValidateUnit HaveSuperStimpackMarauder" Send="Create StimPackDevice_Marauder"/>
         <Model value="Marauder_Umojan"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
         <BuildModel value="Marauder_Umojan"/>
@@ -4109,7 +4131,7 @@
     </CActorSplat>
     <CActorUnit id="SquadWOLGlobalCaster" parent="ProtossBuilding" unitName="SquadGlobalCaster">
         <Macros value="GlobalLoopMacro"/>
-        <Macros value="QueueAnim"/>
+        <Macros value="SquadQueueAnim"/>
         <Macros value="UnpoweredAnim"/>
         <Macros value="BuildingFlattenTerrainMacro"/>
         <Macros value="ProtossBuildingPowerUp"/>
@@ -4201,7 +4223,7 @@
     </CActorText>
     <CActorUnit id="SquadGhostAcademy" parent="TerranBuildingEx" unitName="SquadGhostAcademy">
         <Aliases value="_UnitHuge"/>
-        <Macros value="QueueAnim"/>
+        <Macros value="SquadQueueAnim"/>
         <Macros value="SnowVisualBuildingMacro"/>
         <Model value="GhostAcademy_Silver"/>
         <BuildModel value="GhostAcademy_Silver_Build"/>
@@ -5024,7 +5046,7 @@
     </CActorSound>
     <CActorUnit id="SquadMercCompound" parent="TerranBuilding" unitName="SquadMercCompound">
         <Aliases value="_UnitHuge"/>
-        <Macros value="QueueAnim"/>
+        <Macros value="SquadQueueAnim"/>
         <On Terms="Behavior.ColonyInfestation.On" Send="Create InfestationMercCompound"/>
         <Model value="MercCompound"/>
         <CreepHeightClass value="Medium"/>
@@ -5346,7 +5368,7 @@
         <On Terms="TimerExpired; TimerName Build" Send="Create SquadSCVBuildSound"/>
         <On Terms="Abil.SquadSCVGather" Send="StatusSet CloakSound 1"/>
         <On Terms="Behavior.CarryHarvestableVespeneGeyserGas.Create" Send="StatusSet CloakSound 1"/>
-        <On Terms="Confirmation.SCV.Start" Send="StatusSet CloakSound 0"/>
+        <On Terms="Confirmation.SquadSCV.Start" Send="StatusSet CloakSound 0"/>
         <On Terms="Behavior.CloakFieldEffect.Create; IsStatus CloakSound 0" Send="Create Worker_CloakFieldOn"/>
         <On Terms="Behavior.CloakFieldEffect.Destroy; IsStatus CloakSound 0" Send="Create Worker_CloakFieldOff"/>
         <On Terms="Behavior.OracleCloakFieldEffect.Create; IsStatus CloakSound 0" Send="Create Worker_CloakFieldOn"/>
@@ -5445,7 +5467,7 @@
         <On Terms="TimerExpired; TimerName Build" Send="Create SquadSCVBuildSound"/>
         <On Terms="Abil.SquadSCVGather" Send="StatusSet CloakSound 1"/>
         <On Terms="Behavior.SquadCarryHarvestableVespeneGeyserGas.Create" Send="StatusSet CloakSound 1"/>
-        <On Terms="Confirmation.SCV.Start" Send="StatusSet CloakSound 0"/>
+        <On Terms="Confirmation.SquadSCV.Start" Send="StatusSet CloakSound 0"/>
         <On Terms="Behavior.CloakFieldEffect.Create; IsStatus CloakSound 0" Send="Create Worker_CloakFieldOn"/>
         <On Terms="Behavior.CloakFieldEffect.Destroy; IsStatus CloakSound 0" Send="Create Worker_CloakFieldOff"/>
         <On Terms="Behavior.OracleCloakFieldEffect.Create; IsStatus CloakSound 0" Send="Create Worker_CloakFieldOn"/>
@@ -5792,27 +5814,69 @@
         <Model value="SupplyDepot_Silver"/>
         <BuildModel value="SupplyDepot_Silver"/>
     </CActorUnit>
-    <CActorUnit id="SquadTechlab" parent="TechLabBase" unitName="SquadTechlab">
+    <CActorEventMacro id="SquadTerranAttachmentAnims">
+        <On Terms="UnitBirth.*.Suppressed" Send="StatusSet Created 1"/>
+        <On Terms="UnitBirth.*.Suppressed" Send="TimerSet 0.100000 CreatedTimer"/>
+        <On Terms="TimerExpired; TimerName CreatedTimer" Send="StatusSet Created 0"/>
+        <On Terms="UnitBirth.*.Normal; IsStatus Created 0; ValidateUnit PoweredByTrainingBuilding" Send="AnimGroupApply Attached Attached,Start Attached,End"/>
+        <On Terms="UnitBirth.*.Normal; IsStatus Created 1; ValidateUnit PoweredByTrainingBuilding" Send="AnimGroupApply Attached Attached,Start Attached,End Instant"/>
+        <On Terms="UnitBirth.*.Normal; ValidateUnit NotPowerdByTrainingBuilding" Send="AnimGroupRemove Attached"/>
+        <On Terms="UnitBirth.*.Normal; ValidateUnit PoweredByTrainingBuilding" Send="AnimGroupApply Attached Attached,Start Attached,End"/>
+        <On Terms="UnitBirth.*.EditorPlaced" Send="AnimGroupApply Attached Attached,Start Attached,End"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit NotPoweredByTrainingBuilding" Send="DeathCustomize Detached"/>
+    </CActorEventMacro>
+    <CActorUnit id="SquadTechlab" parent="TerranBuildingEx" unitName="SquadTechlab">
         <Macros value="SnowVisualBuildingMacro"/>
-        <On Terms="AbilMorph.*.Finish; MorphTo SquadTechReactor" Target="SquadTechlabSplat" Send="Destroy"/>
-        <On Terms="AbilMorph.*.Finish; MorphTo SquadTechReactor" Send="Destroy"/>
-        <On Terms="AbilMorph.*.Finish; MorphTo SquadTechReactor" Target="SquadTechlabSplat" Send="Destroy"/>
-        <On Terms="AbilMorph.*.Finish; MorphTo SquadTechReactor" Send="Destroy"/>
+        <Macros value="SquadQueueAnim"/>
+        <Macros value="SquadTerranAttachmentAnims"/>
+        <Aliases value="_UnitLarge"/>
+        <DeathArray index="Normal" ModelLink="TechLab_Silver_Death" SoundLink="TechLab_Explode"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="TechLab_Explode"/>
+        <DeathCustoms ModelLink="TechLab_Silver_Detached_Death" Name="Detached"/>
+        <PlacementModel value="TechLab_Silver_Placement"/>
+        <BarOffset value="80"/>
+        <BarWidth value="75"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <CreepHeightClass value="Small"/>
+        <GlossaryAnim value="Stand,Attached"/>
         <Model value="TechLab_Silver"/>
         <Scale value="1.160000"/>
         <EventDataFootprint index="0" removed="1"/>
         <BuildModel value="TechLab_Silver_Build"/>
-        <DeathArray index="Normal" ModelLink="TechLab_Silver_Death"/>
         <EditorModel value="TechLab_Silver"/>
-        <PlacementModel value="TechLab_Silver_Placement"/>
         <PortraitModel value="Reactor_Silver_Portrait"/>
         <HeroIcon value="Assets\Textures\btn-building-terran-techlab-silver.dds"/>
-        <HighlightTooltip value="Unit/Name/SquadTechlab"/>
+        <UnitIcon value="Assets\Textures\btn-building-terran-techlab-silver.dds"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-TechLab.dds"/>
+        </GroupIcon>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-TechLab.dds"/>
+        </Wireframe>
+        <GroupSoundArray index="What" value="TechLabGroupWhat"/>
+        <GroupSoundArray index="Yes" value="TechLabGroupYes"/>
+        <GroupSoundArray index="Attack" value="TechLabGroupAttack"/>
+        <GroupSoundArray index="Board" value="TechLabGroupBoard"/>
+        <SoundArray index="Birth" value="TechLab_Birth"/>
+        <SoundArray index="Ready" value="TechLab_Ready"/>
+        <SoundArray index="Help" value="TechLabHelp"/>
+        <SoundArray index="What" value="TechLab_What"/>
+        <SoundArray index="Yes" value="TechLabYes"/>
+        <SoundArray index="Attack" value="TechLabAttack"/>
+        <SoundArray index="Pissed" value="TechLabPissed"/>
+        <SoundArray index="Movement" value="TechLabMovement"/>
+        <SoundArray index="Turning" value="TechLabTurning"/>
+        <SoundArray index="Board" value="TechLabBoard"/>
+        <SoundArray index="Click" value="TechLabClick"/>
+        <SoundArray index="ClickError" value="TechLabClickError"/>
+        <SoundArray index="Highlight" value="TechLabHighlight"/>
     </CActorUnit>
     <CActorUnit id="SquadTechReactor" parent="TerranBuilding" unitName="SquadTechReactor">
-        <Macros value="QueueAnim"/>
+        <Macros value="SquadQueueAnim"/>
         <Macros value="TerranAttachmentAnims"/>
         <Macros value="BuildingFlattenTerrainMacro"/>
+        <Macros value="SquadSquadQueueAnim"/>
+        <Macros value="SquadTerranAttachmentAnims"/>
         <Macros value="SnowVisualBuildingMacro"/>
         <On Terms="AbilMorph.SquadMorphToTechReactor.Finish; MorphTo SquadTechReactor" Send="Create"/>
         <Model value="TechReactor"/>
@@ -6925,4 +6989,28 @@
     <CActorSound id="SquadVikingLand" parent="SoundOneShot">
         <Sound value="Viking_Land"/>
     </CActorSound>
+    <CActorSound id="SquadSpiderMineBirthSound" parent="SoundOneShot">
+        <On Terms="AbilMorph.SquadSpiderMineUnburrow.Start" Send="Create"/>
+        <Sound value="Vulture_SpiderMinePlace"/>
+    </CActorSound>
+    <CActorSound id="SquadSpiderMineSeekSound" parent="SoundOneShot">
+        <Sound value="Vulture_SpiderMineSeek"/>
+    </CActorSound>
+    <CActorSound id="SquadSpiderMineBury" parent="SoundOneShot">
+        <On Terms="AbilMorph.*.Start; MorphTo SquadSpiderMine" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo SquadSpiderMineBurrowed" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+        <Sound value="SpiderMineBurrow"/>
+    </CActorSound>
+    <CActorRange id="SquadVultureSpiderMinesRange" parent="RangeAbil" abil="SquadVultureUseSpiderMines"/>
+    <CActorSound id="SquadSpiderMineBurrowSound" parent="SoundOneShot">
+        <Sound value="Vulture_SpiderMineBurrow"/>
+    </CActorSound>
+    <CActorRange id="SquadSpiderMineUnburrowRange">
+        <On Terms="SelectionLocalUpdate.SquadSpiderMineBurrowed.Start" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.SquadSpiderMineBurrowed.Stop" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom SquadSpiderMineBurrowed" Send="Destroy"/>
+        <Abil Link="SquadSpiderMineUnburrowRangeDummy"/>
+    </CActorRange>
 </Catalog>

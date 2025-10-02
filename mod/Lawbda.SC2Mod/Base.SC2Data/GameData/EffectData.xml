@@ -1024,11 +1024,13 @@
     </CEffectApplyBehavior>
     <CEffectDamage id="SquadHellionInfernalFlameThrower" parent="DU_WEAP">
         <ValidatorArray value="noMarkers"/>
+        <ValidatorArray value=""/>
         <EditorCategories value="Race:Terran"/>
         <AttributeBonus index="Light" value="6"/>
         <Kind value="Splash"/>
         <Amount value="10"/>
         <Death value="Fire"/>
+        <SearchFilters value="-;Player,Ally"/>
     </CEffectDamage>
     <CEffectCreatePersistent id="SquadHellionInfernalFlameThrowerCP">
         <EditorCategories value="Race:Terran"/>
@@ -1066,6 +1068,8 @@
         <EditorCategories value="Race:Terran"/>
         <Kind value="Splash"/>
         <Death value="Fire"/>
+        <Amount value="5"/>
+        <SearchFilters value="-;Player,Ally"/>
     </CEffectDamage>
     <CEffectCreatePersistent id="SquadHellionInfernalFlameThrowerDummyPersistent">
         <EditorCategories value="Race:Terran"/>
@@ -1074,7 +1078,7 @@
     <CEffectEnumArea id="SquadHellionInfernalFlameThrowerE">
         <EditorCategories value="Race:Terran"/>
         <IncludeArray Effect="MengskHellionInfernalFlameThrowerCP" Value="Target"/>
-        <SearchFilters value="Ground;Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <SearchFilters value="Ground;Self,Missile,Stasis,Dead,Hidden,Invulnerable"/>
         <AreaArray Radius="0.15" Effect="SquadHellionInfernalFlameThrower"/>
         <SearchFlags index="CallForHelp" value="1"/>
     </CEffectEnumArea>
@@ -1652,7 +1656,7 @@
     </CEffectRemoveBehavior>
     <CEffectModifyUnit id="SquadVultureReplenishNanoConstructor">
         <ImpactUnit Value="Source"/>
-        <Cost Abil="MakeVultureSpiderMines,Specialize1" ChargeCountUse="-1"/>
+        <Cost Abil="SquadVultureUseSpiderMines,Execute" ChargeCountUse="-1"/>
     </CEffectModifyUnit>
     <CEffectCreateUnit id="SquadVultureSpawnSpiderMine">
         <EditorCategories value="Race:Terran"/>
@@ -3400,7 +3404,7 @@
     <CEffectIssueOrder id="SquadSpiderMineBurrowOrder">
         <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="Caster"/>
-        <Abil value="SquadVultureSpiderMineBurrow"/>
+        <Abil value="SquadSpiderMineBurrow"/>
         <CmdFlags index="Preempt" value="1"/>
     </CEffectIssueOrder>
     <CEffectDamage id="SquadSpiderMinesDamage">
