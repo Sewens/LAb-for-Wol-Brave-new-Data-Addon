@@ -8,6 +8,24 @@
         <Icon value="Assets\Textures\RadarIcon2.dds"/>
         <IconArcLength value="3.250000"/>
     </CActorRange>
+    <CActorModel id="SquadHyperjumpImpact" parent="ModelAnimationStyleOneShot">
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <EditorCategories value=""/>
+        <On Terms="ActorCreation; ValidatePlayer BattlecruiserUpgraded" Send="ModelSwap HyperjumpImpactUpgraded"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter" HoldPosition="1"/>
+        <Model value="HyperjumpImpact"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorSound id="SquadHyperjumpJumpIn">
+        <Sound value="Spell_HyperionJumpIn"/>
+    </CActorSound>
+    <CActorSound id="SquadHyperjumpJumpOut">
+        <On Terms="Abil.SquadBattlecruiserTacticalJump.SourceCastStart" Send="Create"/>
+        <Sound value="Spell_HyperionJumpOut"/>
+    </CActorSound>
     <CActorAction id="SquadDiamondbackBlastEvisceratorAttack" parent="GenericAttack" effectAttack="SquadDiamondbackBlastEvisceratorBeam">
         <LaunchAttachQuery Methods="AMFilterWeapon"/>
         <LaunchAssets Sound="Diamondback_AttackImpact"/>
@@ -439,10 +457,10 @@
         <On Terms="UnitHeightUpdate.*.Land" Send="Create SquadBattlecruiserLand"/>
         <On Terms="Behavior.SquadBattlecruiserFleetwideJumpTeleportOut.On" Send="SetOpacity"/>
         <On Terms="Behavior.SquadBattlecruiserFleetwideJumpTeleportIn.Off" Send="SetOpacity 1.000000"/>
-        <On Terms="Behavior.SquadBattlecruiserFleetwideJumpTeleportOut.On" Send="Create SquadHyperionHyperjumpLaunch"/>
-        <On Terms="Behavior.SquadBattlecruiserFleetwideJumpTeleportIn.On" Send="Create SquadHyperionHyperjumpImpact"/>
+        <On Terms="Behavior.SquadBattlecruiserFleetwideJumpTeleportOut.On" Send="Create SquadHyperjumpLaunch"/>
+        <On Terms="Behavior.SquadBattlecruiserFleetwideJumpTeleportIn.On" Send="Create SquadHyperjumpImpact"/>
         <On Terms="Behavior.SquadBattlecruiserFleetwideJumpTeleportOut.On" Send="SetOpacity"/>
-        <On Terms="Behavior.SquadBattlecruiserFleetwideJumpTeleportOut.On" Send="Create SquadHyperionHyperjumpLaunch"/>
+        <On Terms="Behavior.SquadBattlecruiserFleetwideJumpTeleportOut.On" Send="Create SquadHyperjumpLaunch"/>
         <On Terms="ActorCreation" Send="Create BattlecruiserLookAt00"/>
         <On Terms="ActorCreation" Send="Create BattlecruiserLookAt01"/>
         <On Terms="ActorCreation" Send="Create BattlecruiserLookAt02"/>
@@ -565,13 +583,14 @@
     <CActorMissile id="SquadBattlecruiserMiniYamatoAttackMissile" parent="GenericAttackMissile" unitName="SquadBattlecruiserMiniYamato">
         <Model value="SquadBattlecruiserMiniYamatoLMWeapon"/>
     </CActorMissile>
-    <CActorModel id="SquadHyperionHyperjumpLaunch" parent="ModelAnimationStyleOneShot">
+    <CActorModel id="SquadHyperjumpLaunch" parent="ModelAnimationStyleOneShot">
         <EditorCategories value=""/>
         <On Terms="Behavior.SquadBattlecruiserFleetwideJumpTeleportOut.On" Send="Create"/>
         <On Terms="ActorCreation" Target="_Unit" Send="SetOpacity"/>
-        <On Terms="ActorCreation" Target="_Unit" Send="Create SquadHyperionJumpOutSound"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="Create SquadHyperjumpJumpOut"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="HyperjumpLaunch"/>
     </CActorModel>
     <CActorSound id="SquadBattlecruiserFleetwideJumpwideJumpIn" parent="SoundOneShot">
         <On Terms="Behavior.SquadBattlecruiserFleetwideJumpTeleportIn.On" Send="Create"/>

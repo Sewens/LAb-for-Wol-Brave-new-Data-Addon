@@ -741,8 +741,10 @@
             <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
-            <LayoutButtons Face="SquadBansheeBomberMode" Type="AbilCmd" AbilCmd="SquadBansheeBomberMode,On" Row="2" Column="0"/>
-            <LayoutButtons Face="SquadBansheeRocketMode" Type="AbilCmd" AbilCmd="SquadBansheeBomberMode,Off" Row="2" Column="1"/>
+            <LayoutButtons Face="SquadBansheeRocketMode" Type="AbilCmd" AbilCmd="SquadBansheeBomberMode,Off" Row="2" Column="2"/>
+            <LayoutButtons Face="SquadBansheeBomberMode" Type="AbilCmd" AbilCmd="SquadBansheeBomberMode,On" Row="2" Column="1"/>
+            <LayoutButtons Face="SquadBansheeBomberMode" Type="Passive" Row="2" Column="1"/>
+            <LayoutButtons Face="SquadBansheeRocketMode" Type="Passive" Row="2" Column="2"/>
         </CardLayouts>
         <Radius value="0.75"/>
         <SeparationRadius value="0.75"/>
@@ -986,6 +988,9 @@
         <AbilArray Link="move"/>
         <AbilArray Link="SquadHellionTransport"/>
         <AbilArray Link="SquadAttackRedirect"/>
+        <AbilArray Link="QueueMagazine"/>
+        <AbilArray Link="SquadInfantry"/>
+        <AbilArray Link="DisbandSquad"/>
         <WeaponArray Link="SquadHellionHellfireFlamethrower" Turret="SquadHellion"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -997,6 +1002,7 @@
             <LayoutButtons Face="InfernalPreIgniter" Type="Passive" Requirements="UseInfernalPreIgniter" Row="2" Column="0"/>
             <LayoutButtons Face="SquadHellionLoad" Type="AbilCmd" AbilCmd="SquadHellionTransport,Load" Row="1" Column="0"/>
             <LayoutButtons Face="SquadHellionUnloadAll" Type="AbilCmd" AbilCmd="SquadHellionTransport,UnloadAll" Row="1" Column="1"/>
+            <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="4"/>
         </CardLayouts>
         <Radius value="0.625"/>
         <SeparationRadius value="0.625"/>
@@ -1067,9 +1073,11 @@
             <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
-            <LayoutButtons Face="SquadGoliathAirFocusMode" Type="AbilCmd" AbilCmd="SquadGoliathAirFocus,On" Row="2" Column="0"/>
-            <LayoutButtons Face="SquadGoliathMutilockMode" Type="AbilCmd" AbilCmd="SquadGoliathAirFocus,Off" Row="2" Column="1"/>
+            <LayoutButtons Face="SquadGoliathMultilockMode" Type="AbilCmd" AbilCmd="SquadGoliathAirFocus,Off" Row="2" Column="2"/>
+            <LayoutButtons Face="SquadGoliathAirFocusMode" Type="AbilCmd" AbilCmd="SquadGoliathAirFocus,On" Row="2" Column="1"/>
             <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="4"/>
+            <LayoutButtons Face="SquadGoliathAirFocusMode" Type="Passive" Row="2" Column="1"/>
+            <LayoutButtons Face="SquadGoliathMultilockMode" Type="Passive" Row="2" Column="2"/>
         </CardLayouts>
         <Radius value="0.6875"/>
         <SeparationRadius value="0.65"/>
@@ -1402,10 +1410,10 @@
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
             <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="4"/>
-            <LayoutButtons Face="SquadDiamondbackBlastMode" Type="AbilCmd" AbilCmd="SquadDiamondbackBlastRailgun,On" Row="2" Column="0"/>
-            <LayoutButtons Face="SquadDiamondbackBlastMode" Type="Passive" Row="2" Column="0"/>
-            <LayoutButtons Face="SquadDiamondbackMultiMode" Type="AbilCmd" AbilCmd="SquadDiamondbackBlastRailgun,Off" Row="2" Column="1"/>
-            <LayoutButtons Face="SquadDiamondbackMultiMode" Type="Passive" Row="2" Column="1"/>
+            <LayoutButtons Face="SquadDiamondbackBlastMode" Type="AbilCmd" AbilCmd="SquadDiamondbackBlastRailgun,On" Row="2" Column="1"/>
+            <LayoutButtons Face="SquadDiamondbackBlastMode" Type="Passive" Row="2" Column="1"/>
+            <LayoutButtons Face="SquadDiamondbackMultiMode" Type="Passive" Row="2" Column="2"/>
+            <LayoutButtons Face="SquadDiamondbackMultiMode" Type="AbilCmd" AbilCmd="SquadDiamondbackBlastRailgun,Off" Row="2" Column="2"/>
         </CardLayouts>
         <Radius value="0.6875"/>
         <SeparationRadius value="0.65"/>
@@ -1479,15 +1487,15 @@
         <AttackTargetPriority value="11"/>
         <AbilArray Link="Rally"/>
         <AbilArray Link="BuildinProgressNydusCanal"/>
-        <AbilArray Link="GreaterNydusWormTransport"/>
+        <AbilArray Link="SquadNydusCanalTransport"/>
         <AbilArray Link="stop"/>
         <BehaviorArray Link="SquadCreepGrowthMedium4x42"/>
         <EffectArray index="Birth" value="SquadBurrowChargeImpactSet"/>
         <CardLayouts>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
             <LayoutButtons Face="SetRallyPoint" Type="AbilCmd" AbilCmd="Rally,Rally1" Row="2" Column="4"/>
-            <LayoutButtons Face="Load" Type="AbilCmd" AbilCmd="GreaterNydusWormTransport,Load" Row="2" Column="0"/>
-            <LayoutButtons Face="NydusCanalUnloadAll" Type="AbilCmd" AbilCmd="GreaterNydusWormTransport,UnloadAll" Row="2" Column="1"/>
+            <LayoutButtons Face="Load" Type="AbilCmd" AbilCmd="SquadNydusCanalTransport,Load" Row="2" Column="0"/>
+            <LayoutButtons Face="NydusCanalUnloadAll" Type="AbilCmd" AbilCmd="SquadNydusCanalTransport,UnloadAll" Row="2" Column="1"/>
         </CardLayouts>
         <Radius value="1"/>
         <SeparationRadius value="1"/>
@@ -5137,7 +5145,7 @@
         <AbilArray Link="attack"/>
         <AbilArray Link="move"/>
         <AbilArray Link="SquadUltraliskBurrow"/>
-        <AbilArray Link="UltraliskBurrowCharge"/>
+        <AbilArray Link="SquadUltraliskBurrowCharge"/>
         <AbilArray Link="SquadUltraliskWeaponCooldown"/>
         <AbilArray Link="SquadUltraliskBurrowCharge"/>
         <BehaviorArray Link="SquadBehemothFrenzy"/>
@@ -5154,9 +5162,8 @@
             <LayoutButtons Face="BurrowDown" Type="AbilCmd" AbilCmd="SquadUltraliskBurrow,255" Row="2" Column="4"/>
             <LayoutButtons Face="Frenzied" Type="Passive" Behavior="SquadBehemothFrenzy" Row="2" Column="3"/>
             <LayoutButtons Face="TissueAssimilation" Type="Passive" Requirements="HaveHotSTissueAssimilation" Row="2" Column="1"/>
-            <LayoutButtons Face="BurrowChargeCampaign" Type="AbilCmd" AbilCmd="UltraliskBurrowCharge,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="BurrowChargeCampaign" Type="AbilCmd" AbilCmd="SquadUltraliskBurrowCharge,Execute" Row="2" Column="0"/>
             <LayoutButtons Face="MonarchBlades" Type="Passive" Requirements="HaveHotSMonarchBlades" Row="2" Column="2"/>
-            <LayoutButtons Face="SquadBunkerInstantJustis" Type="AbilCmd" AbilCmd="SquadUltraliskBurrowCharge,Execute" Row="1" Column="0"/>
         </CardLayouts>
         <Radius value="1"/>
         <SeparationRadius value="1"/>
@@ -5275,7 +5282,9 @@
         <AbilArray Link="move"/>
         <AbilArray Link="SquadVultureUseSpiderMines"/>
         <AbilArray Link="SquadVultureMakeSpiderMines"/>
-        <AbilArray Link="SquadVultureMakeSpiderMineQueue"/>
+        <AbilArray Link="QueueMagazine"/>
+        <AbilArray Link="SquadInfantry"/>
+        <AbilArray Link="DisbandSquad"/>
         <BehaviorArray Link="ScavengingSystemsMechDeath"/>
         <WeaponArray Link="SquadVultureFragmentationGrenade"/>
         <CardLayouts>
@@ -5295,6 +5304,7 @@
             </LayoutButtons>
             <LayoutButtons Face="SquadVultreReplenishSpiderMine" Type="AbilCmd" AbilCmd="SquadVultureMakeSpiderMines,Specialize1" Row="2" Column="1"/>
             <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="SquadVultureMakeSpiderMineQueue,CancelLast" Row="2" Column="4"/>
+            <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="4"/>
         </CardLayouts>
         <Radius value="0.625"/>
         <SeparationRadius value="0.625"/>
@@ -5362,6 +5372,7 @@
         <AbilArray Link="SquadThor330mmBarrageCannons"/>
         <AbilArray Link="QueueMagazine"/>
         <AbilArray Link="SquadInfantry"/>
+        <AbilArray Link="DisbandSquad"/>
         <BehaviorArray Link="SquadThorDontDie"/>
         <WeaponArray Link="SquadThorsHammer"/>
         <WeaponArray Link="SquadThorJavelinMissileLaunchers"/>
@@ -5376,6 +5387,7 @@
             <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="SquadThorAPMode,Cancel" Row="2" Column="4"/>
             <LayoutButtons Face="SquadThorImmortalityProtocol" Type="Passive" AbilCmd="255,255" Row="1" Column="0"/>
             <LayoutButtons Face="SquadThorAPMode" Type="AbilCmd" AbilCmd="SquadThorAPMode,Execute" Row="2" Column="1"/>
+            <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="4"/>
         </CardLayouts>
         <Radius value="1"/>
         <SeparationRadius value="1"/>
@@ -5453,6 +5465,7 @@
         <AbilArray Link="SquadThor330mmBarrageCannons"/>
         <AbilArray Link="QueueMagazine"/>
         <AbilArray Link="SquadInfantry"/>
+        <AbilArray Link="DisbandSquad"/>
         <WeaponArray Link="SquadThorsHammer"/>
         <WeaponArray Link="SquadThor250mmPunisherCannons"/>
         <CardLayouts>
@@ -5466,6 +5479,7 @@
             <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="SquadThor330mmBarrageCannons,Cancel" Row="2" Column="4"/>
             <LayoutButtons Face="SquadThorImmortalityProtocol" Row="1" Column="0"/>
             <LayoutButtons Face="SquadThor330mmBarrageCannons" Type="AbilCmd" AbilCmd="SquadThor330mmBarrageCannons,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="4"/>
         </CardLayouts>
         <Radius value="1"/>
         <SeparationRadius value="1"/>

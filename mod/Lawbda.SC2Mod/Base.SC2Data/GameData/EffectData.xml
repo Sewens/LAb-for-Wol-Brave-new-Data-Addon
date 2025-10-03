@@ -23,6 +23,25 @@
         <PeriodicEffectArray value="BehemothAfterburnerApply"/>
         <PeriodicPeriodArray value="0.5"/>
     </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="SquadBattlecruiserLaserBatteryPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <InitialEffect value="SquadBattlecruiserLaserBatteryLM"/>
+        <PeriodCount value="12"/>
+        <PeriodicEffectArray value="SquadBattlecruiserLaserBatterySearch"/>
+        <PeriodicPeriodArray value="0.125"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="SquadBattlecruiserLaserBatterySearch">
+        <EditorCategories value="Race:Terran"/>
+        <IncludeArray Effect="SquadBattlecruiserLaserBatteryPersistent" Value="Target"/>
+        <SearchFilters value="Visible;Self,Player,Ally,Enemy,Stasis,Dead,Invulnerable"/>
+        <AreaArray MaxCount="3" Radius="3" Effect="SquadBattlecruiserLaserBatteryLM"/>
+        <RecycleCount value="3"/>
+    </CEffectEnumArea>
+    <CEffectSet id="SquadBattlecruiserLaserBatterySet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadBattlecruiserLaserBatteryPersistent"/>
+    </CEffectSet>
     <CEffectApplyBehavior id="SquadMagazineUnitRecallApply">
         <EditorCategories value="Race:Terran"/>
         <Behavior value="SquadMagazineUnitRecall"/>
@@ -209,9 +228,9 @@
         <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="Caster"/>
         <ClearQueuedOrders value="0"/>
-        <PlacementAround Effect="FleetwideJumpCreatePrecursor"/>
+        <PlacementAround Effect="SquadBattlecruiserFleetwideJumpCreatePrecursor"/>
         <PlacementRange value="15"/>
-        <TargetLocation Effect="FleetwideJumpCreatePrecursor" Value="TargetPoint"/>
+        <TargetLocation Effect="SquadBattlecruiserFleetwideJumpCreatePrecursor" Value="TargetPoint"/>
         <TeleportFlags index="TestFog" value="0"/>
     </CEffectTeleport>
     <CEffectApplyBehavior id="SquadBattlecruiserFleetwideJumpTeleportAB">
@@ -251,7 +270,9 @@
     <CEffectDamage id="SquadBattlecruiserLaserBatteryU" parent="DU_WEAP_MISSILE">
         <EditorCategories value="Race:Terran"/>
         <Visibility value="Visible"/>
-        <Amount value="18"/>
+        <Amount value="10"/>
+        <AttributeBonus index="Light" value="10"/>
+        <AttributeBonus index="Biological" value="10"/>
     </CEffectDamage>
     <CEffectLaunchMissile id="SquadBattlecruiserMiniYamatoLM">
         <EditorCategories value="Race:Terran"/>
@@ -2000,7 +2021,7 @@
     </CEffectApplyBehavior>
     <CEffectLaunchMissile id="SquadBurrowChargeCreatePHLM">
         <EditorCategories value="Race:Zerg"/>
-        <LaunchLocation Effect="BurrowChargeMPForcePersistent" Value="TargetUnit"/>
+        <LaunchLocation Effect="SquadBurrowChargeMPForcePersistent" Value="TargetUnit"/>
         <ImpactEffect value="SquadBurrowChargeImpactLandSet"/>
         <Flags index="2D" value="1"/>
         <Movers Link="BurrowChargeImpactMover"/>
@@ -2032,7 +2053,7 @@
         <WhichUnit Value="Caster"/>
         <Abil value="move"/>
         <CmdFlags index="Preempt" value="1"/>
-        <Target Effect="BurrowChargePoint" Value="TargetPoint"/>
+        <Target Effect="SquadBurrowChargePoint" Value="TargetPoint"/>
     </CEffectIssueOrder>
     <CEffectCreateUnit id="SquadBurrowChargeMPForcePersistent">
         <EditorCategories value="Race:Zerg"/>
@@ -2049,13 +2070,13 @@
         <TypeFallbackUnit Value="Target"/>
     </CEffectCreateUnit>
     <CEffectApplyBehavior id="SquadBurrowChargeMPKnockbackAB">
-        <WhichUnit Effect="BurrowChargeMPForcePersistent"/>
+        <WhichUnit Effect="SquadBurrowChargeMPForcePersistent"/>
         <Behavior value="SquadBurrowChargeMPKnockback"/>
     </CEffectApplyBehavior>
     <CEffectRemoveBehavior id="SquadBurrowChargeMPKnockbackRB">
         <EditorCategories value="Race:Zerg"/>
-        <WhichUnit Effect="BurrowChargeMPForcePersistent"/>
-        <BehaviorLink value="BurrowChargeMPKnockback"/>
+        <WhichUnit Effect="SquadBurrowChargeMPForcePersistent"/>
+        <BehaviorLink value="SquadBurrowChargeMPKnockback"/>
         <Count value="1"/>
     </CEffectRemoveBehavior>
     <CEffectCreatePersistent id="SquadBurrowChargePoint">
@@ -2066,7 +2087,9 @@
         <FinalEffect value="SquadBurrowChargeImpactSet"/>
         <FinalOffset value="0,-1,0"/>
         <PeriodCount value="5"/>
+        <!--
         <PeriodicValidator value="BurrowChargeValidators"/>
+-->
         <PeriodicPeriodArray value="0.5"/>
     </CEffectCreatePersistent>
     <CEffectSet id="SquadBurrowChargePointSet">
@@ -2079,7 +2102,7 @@
     <CEffectRemoveBehavior id="SquadBurrowChargeRemoveCasterBehavior">
         <EditorCategories value="Race:Zerg"/>
         <WhichUnit Value="Caster"/>
-        <BehaviorLink value="BurrowCharging"/>
+        <BehaviorLink value="SquadBurrowCharging"/>
     </CEffectRemoveBehavior>
     <CEffectCreatePersistent id="SquadBurrowChargeStructure">
         <EditorCategories value="Race:Zerg"/>
@@ -2088,7 +2111,9 @@
         <InitialEffect value="SquadBurrowChargeStructureIssueOrder"/>
         <FinalEffect value="SquadBurrowChargeStructureImpactSet"/>
         <PeriodCount value="5"/>
+        <!--
         <PeriodicValidator value="BurrowChargeStructureValidators"/>
+-->
         <PeriodicPeriodArray value="0.5"/>
     </CEffectCreatePersistent>
     <CEffectSet id="SquadBurrowChargeStructureImpactSet">
@@ -2103,7 +2128,7 @@
         <WhichUnit Value="Caster"/>
         <Abil value="move"/>
         <CmdFlags index="Preempt" value="1"/>
-        <Target Effect="BurrowChargeStructure" Value="TargetUnit"/>
+        <Target Effect="SquadBurrowChargeStructure" Value="TargetUnit"/>
     </CEffectIssueOrder>
     <CEffectSet id="SquadBurrowChargeStructureSet">
         <ValidatorArray value="TargetIsPathable"/>
@@ -2159,8 +2184,10 @@
     </CEffectEnumArea>
     <CEffectSet id="SquadBurrowChargeTargetSet">
         <ValidatorArray value="CasterIsNotHidden"/>
-        <ValidatorArray value="NotBurrowCharging"/>
-        <ValidatorArray value="NotBurrowChargingRevD"/>
+        <!--
+        <ValidatorArray value="NotSquadBurrowCharging"/>
+        <ValidatorArray value="NotSquadBurrowChargingRevD"/>
+-->
         <EditorCategories value="Race:Zerg"/>
         <EffectArray value="SquadBurrowChargeMPForcePersistent"/>
         <EffectArray value="SquadBurrowChargeTargetDamage"/>
@@ -3053,7 +3080,9 @@
         <SearchFlags index="OffsetByUnitRadius" value="0"/>
     </CEffectDamage>
     <CEffectApplyBehavior id="SquadUltraliskApplyBurrowChargeStun">
-        <ValidatorArray value="BurrowChargeEnemyTarget"/>
+        <!--        
+<ValidatorArray value="BurrowChargeEnemyTarget"/>
+-->
         <EditorCategories value="Race:Zerg"/>
         <WhichUnit Effect="BurrowChargeMPForcePersistent"/>
         <Behavior value="SquadBurrowChargeStun"/>
