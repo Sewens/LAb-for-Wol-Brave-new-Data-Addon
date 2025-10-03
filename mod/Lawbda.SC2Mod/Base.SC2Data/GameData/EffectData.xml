@@ -23,20 +23,146 @@
         <PeriodicEffectArray value="BehemothAfterburnerApply"/>
         <PeriodicPeriodArray value="0.5"/>
     </CEffectCreatePersistent>
+    <CEffectLaunchMissile id="SquadHyperionAirLM">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <ImpactEffect value="SquadHyperionAirU"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="SquadHyperionAirU" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <AttributeBonus index="Light" value="5"/>
+        <AttributeBonus index="Biological" value="5"/>
+        <ArmorReduction value="0"/>
+        <Visibility value="Visible"/>
+        <Amount value="5"/>
+        <Death value="Fire"/>
+        <AreaArray Radius="1" Fraction="1"/>
+        <SearchFilters value="Air;Self,Player,Ally,Neutral,Missile,Dead,Hidden,Invulnerable"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="SquadHyperionAirCP">
+        <EditorCategories value="Race:Terran"/>
+        <InitialEffect value="SquadHyperionAirLM"/>
+        <PeriodCount value="24"/>
+        <PeriodicValidator value="NotDead"/>
+        <PeriodicEffectArray value="SquadHyperionAirLM"/>
+        <PeriodicOffsetArray value="3,0,0"/>
+        <PeriodicOffsetArray value="0,3,0"/>
+        <PeriodicOffsetArray value="1.5,0,0"/>
+        <PeriodicOffsetArray value="-3,0,0"/>
+        <PeriodicOffsetArray value="0,1.5,0"/>
+        <PeriodicOffsetArray value="0,-3,0"/>
+        <PeriodicOffsetArray value="0,-1.5,0"/>
+        <PeriodicOffsetArray value="1.5,1.5,0"/>
+        <PeriodicOffsetArray value="1.5,-1.5,0"/>
+        <PeriodicOffsetArray value="-1.5,0,0"/>
+        <PeriodicOffsetArray value="-1.5,-1.5,0"/>
+        <PeriodicOffsetArray value="-1.5,1.5,0"/>
+        <PeriodicPeriodArray value="0.0625"/>
+        <PeriodicPeriodArray value="0.07"/>
+        <PeriodicPeriodArray value="0.0625"/>
+        <PeriodicPeriodArray value="0.0625"/>
+        <PeriodicPeriodArray value="0.0825"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="SquadHyperionGroundCP">
+        <EditorCategories value="Race:Terran"/>
+        <InitialEffect value="SquadHyperionGroundLM"/>
+        <PeriodCount value="24"/>
+        <PeriodicValidator value="NotDead"/>
+        <PeriodicEffectArray value="SquadHyperionGroundLMSwitch"/>
+        <PeriodicOffsetArray value="3,0,0"/>
+        <PeriodicOffsetArray value="0,3,0"/>
+        <PeriodicOffsetArray value="1.5,0,0"/>
+        <PeriodicOffsetArray value="-3,0,0"/>
+        <PeriodicOffsetArray value="0,1.5,0"/>
+        <PeriodicOffsetArray value="0,-3,0"/>
+        <PeriodicOffsetArray value="0,-1.5,0"/>
+        <PeriodicOffsetArray value="1.5,1.5,0"/>
+        <PeriodicOffsetArray value="1.5,-1.5,0"/>
+        <PeriodicOffsetArray value="-1.5,0,0"/>
+        <PeriodicOffsetArray value="-1.5,-1.5,0"/>
+        <PeriodicOffsetArray value="-1.5,1.5,0"/>
+        <PeriodicPeriodArray value="0.0625"/>
+        <PeriodicPeriodArray value="0.07"/>
+        <PeriodicPeriodArray value="0.0625"/>
+        <PeriodicPeriodArray value="0.0625"/>
+        <PeriodicPeriodArray value="0.0825"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="SquadHyperionGroundDamageDirect" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Terran"/>
+        <ArmorReduction value="0"/>
+        <Visibility value="Visible"/>
+        <Amount value="25"/>
+        <Death value="Fire"/>
+        <AreaArray Radius="1" Fraction="1"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Neutral,Missile,Dead,Hidden,Invulnerable"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="SquadHyperionGroundLM">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <ImpactEffect value="SquadHyperionGroundU"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="SquadHyperionGroundLMDirect">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="SquadHyperionGroundDamageDirect"/>
+        <AmmoUnit value="SquadHyperionGroundDirectLMWeapon"/>
+        <Movers Link="HyperionLMWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectEnumArea id="SquadHyperionGroundLMSearch">
+        <EditorCategories value="Race:Terran"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Neutral,Missile,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="1" Effect="SquadHyperionGroundLMDirect"/>
+        <MaxCount value="1"/>
+    </CEffectEnumArea>
+    <CEffectSwitch id="SquadHyperionGroundLMSwitch">
+        <EditorCategories value="Race:Terran"/>
+        <CaseArray Validator="HyperionLMUnitSearch" Effect="SquadHyperionGroundLMSearch"/>
+        <CaseDefault value="SquadHyperionGroundLM"/>
+    </CEffectSwitch>
+    <CEffectDamage id="SquadHyperionGroundU" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <AttributeBonus index="Light" value="5"/>
+        <AttributeBonus index="Biological" value="5"/>
+        <ArmorReduction value="0"/>
+        <Visibility value="Visible"/>
+        <Amount value="5"/>
+        <Death value="Fire"/>
+        <AreaArray Radius="1" Fraction="1"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Neutral,Missile,Dead,Hidden,Invulnerable"/>
+    </CEffectDamage>
     <CEffectCreatePersistent id="SquadBattlecruiserLaserBatteryPersistent">
         <EditorCategories value="Race:Terran"/>
         <WhichLocation Value="TargetUnit"/>
         <InitialEffect value="SquadBattlecruiserLaserBatteryLM"/>
         <PeriodCount value="12"/>
-        <PeriodicEffectArray value="SquadBattlecruiserLaserBatterySearch"/>
+        <PeriodicEffectArray value="SquadBattlecruiserLaserBatteryLM"/>
+        <PeriodicOffsetArray value="3,0,0"/>
+        <PeriodicOffsetArray value="0,3,0"/>
+        <PeriodicOffsetArray value="1.5,0,0"/>
+        <PeriodicOffsetArray value="-3,0,0"/>
+        <PeriodicOffsetArray value="0,1.5,0"/>
+        <PeriodicOffsetArray value="0,-3,0"/>
+        <PeriodicOffsetArray value="0,-1.5,0"/>
+        <PeriodicOffsetArray value="1.5,1.5,0"/>
+        <PeriodicOffsetArray value="1.5,-1.5,0"/>
+        <PeriodicOffsetArray value="-1.5,0,0"/>
+        <PeriodicOffsetArray value="-1.5,-1.5,0"/>
+        <PeriodicOffsetArray value="-1.5,1.5,0"/>
+        <PeriodicPeriodArray value="0.0625"/>
+        <PeriodicPeriodArray value="0.07"/>
+        <PeriodicPeriodArray value="0.0625"/>
+        <PeriodicPeriodArray value="0.0625"/>
+        <PeriodicPeriodArray value="0.0825"/>
         <PeriodicPeriodArray value="0.125"/>
+        <PeriodicValidator value="NotDead"/>
     </CEffectCreatePersistent>
     <CEffectEnumArea id="SquadBattlecruiserLaserBatterySearch">
         <EditorCategories value="Race:Terran"/>
-        <IncludeArray Effect="SquadBattlecruiserLaserBatteryPersistent" Value="Target"/>
+        <IncludeArray Effect="SquadBattlecruiserLaserBatterySet" Value="Target"/>
         <SearchFilters value="Visible;Self,Player,Ally,Enemy,Stasis,Dead,Invulnerable"/>
-        <AreaArray MaxCount="3" Radius="3" Effect="SquadBattlecruiserLaserBatteryLM"/>
-        <RecycleCount value="3"/>
+        <AreaArray MaxCount="3" Radius="7" Effect="SquadBattlecruiserLaserBatteryPersistent"/>
+        <MaxCount value="3"/>
     </CEffectEnumArea>
     <CEffectSet id="SquadBattlecruiserLaserBatterySet">
         <EditorCategories value="Race:Terran"/>

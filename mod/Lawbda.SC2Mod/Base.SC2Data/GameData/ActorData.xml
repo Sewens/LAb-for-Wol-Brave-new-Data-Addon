@@ -8,6 +8,50 @@
         <Icon value="Assets\Textures\RadarIcon2.dds"/>
         <IconArcLength value="3.250000"/>
     </CActorRange>
+    <CActorAction id="SquadHyperionAirAttack" parent="GenericAttack" effectImpact="SquadHyperionAirU" effectLaunch="SquadHyperionAirLM">
+        <LaunchAttachQuery Methods="AMFilterWeaponSetA0 AMRandomUniform"/>
+        <LaunchAssets Model="HyperionAirAttackLaunch" Sound="HyperionAirAttackLaunch"/>
+        <ImpactMap index="None" Model="HyperionAirAttackImpact" Sound="HyperionAirAttackImpact"/>
+        <ImpactModel value="SquadHyperionAirPlasmaAttackImpactModel"/>
+    </CActorAction>
+    <CActorMissile id="SquadHyperionAirAttackMissile" parent="GenericAttackMissile" unitName="SquadHyperionAirLMWeapon">
+        <Model value="HyperionALMWeapon"/>
+    </CActorMissile>
+    <CActorAction id="SquadHyperionGroundAttack" parent="GenericAttack" effectImpact="SquadHyperionGroundU" effectLaunch="SquadHyperionGroundLM">
+        <LaunchAttachQuery Methods="AMFilterWeaponSetA0 AMRandomUniform"/>
+        <LaunchAssets Model="HyperionAttackLaunch" Sound="HyperionAttackLaunch"/>
+        <ImpactMap index="None" Model="HyperionAttackImpact" Sound="HyperionAttackImpact"/>
+        <ImpactModel value="SquadHyperionGroundPlasmaAttackImpactModel"/>
+    </CActorAction>
+    <CActorSound id="SquadHyperionAttackEndSound" parent="SoundOneShot">
+        <On Terms="Effect.SquadHyperionGroundCP.Stop" Send="Create"/>
+        <On Terms="Effect.SquadHyperionAirCP.Stop" Send="Create"/>
+        <Sound value="HyperionAttackEndSound"/>
+    </CActorSound>
+    <CActorMissile id="SquadHyperionGroundAttackMissile" parent="GenericAttackMissile" unitName="SquadHyperionGroundLMWeapon">
+        <Model value="HyperionLMWeapon"/>
+    </CActorMissile>
+    <CActorSound id="SquadHyperionAttackStartSound" parent="SoundOneShot">
+        <On Terms="Effect.SquadHyperionGroundCP.Start" Send="Create"/>
+        <On Terms="Effect.SquadHyperionAirCP.Start" Send="Create"/>
+        <Sound value="HyperionAttackStartSound"/>
+    </CActorSound>
+    <CActorAction id="SquadHyperionGroundDirectAttack" parent="GenericAttack" effectImpact="SquadHyperionGroundDamageDirect" effectLaunch="SquadHyperionGroundLMDirect">
+        <LaunchAttachQuery Methods="AMFilterWeaponSetA0 AMPatternHyperionFlashyAttack"/>
+        <ImpactMap index="None" Model="HyperionDirectAttackImpact"/>
+        <ImpactModel value="SquadHyperionGroundPlasmaAttackImpactModel"/>
+    </CActorAction>
+    <CActorMissile id="SquadHyperionGroundDirectAttackMissile" parent="GenericAttackMissile" unitName="SquadHyperionGroundDirectLMWeapon">
+        <Model value="HyperionDirectLMWeapon"/>
+    </CActorMissile>
+    <CActorModel id="SquadHyperionAirPlasmaAttackImpactModel">
+        <On Terms="ActorCreation" Send="$Death"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+    </CActorModel>
+    <CActorModel id="SquadHyperionGroundPlasmaAttackImpactModel">
+        <On Terms="ActorCreation" Send="$Death"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+    </CActorModel>
     <CActorModel id="SquadHyperjumpImpact" parent="ModelAnimationStyleOneShot">
         <Inherits index="BaseModelScale" value="1"/>
         <Inherits index="Scale" value="1"/>
