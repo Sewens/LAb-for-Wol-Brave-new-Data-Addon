@@ -1752,10 +1752,15 @@
         <Grown value="Footprint4x4CreepSourceGrown"/>
     </CBehaviorCreepSource>
     <CBehaviorBuff id="SquadVultureSpiderMineBurrowFirst">
+        <BehaviorFlags index="Permanent" value="1"/>
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Duration value="5"/>
-        <InitialEffect value="SquadSpiderMineBurrowOrder"/>
+        <Period value="3"/>
+        <PeriodicEffect value="SquadSpiderMineBurrowOrder"/>
+        <Modification>
+            <WeaponEnableArray value="SquadSpiderMinesSuicide"/>
+            <WeaponDisableArray value="SquadSpiderSilk"/>
+        </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadVoidNanoRepairController">
         <InfoFlags index="Hidden" value="1"/>

@@ -23,6 +23,45 @@
         <PeriodicEffectArray value="BehemothAfterburnerApply"/>
         <PeriodicPeriodArray value="0.5"/>
     </CEffectCreatePersistent>
+    <CEffectUseMagazine id="SquadSpiderLanuchUseMagazine">
+        <EditorCategories value="Race:Terran"/>
+        <AmmoUnit value="SquadSpiderMine"/>
+        <AmmoEffect value="SquadSpiderLaunchSet"/>
+    </CEffectUseMagazine>
+    <CEffectSet id="SquadSpiderLaunchSet">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectSet>
+    <CEffectCreatePersistent id="SquadSpiderLaunchPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="Channeled" value="1"/>
+        <PeriodCount value="8"/>
+        <PeriodicValidator value="CasterNotDead"/>
+        <PeriodicEffectArray value="SquadSpiderLanuchUseMagazine"/>
+        <PeriodicPeriodArray value="0.5"/>
+    </CEffectCreatePersistent>
+    <CEffectReleaseMagazine id="SquadSpiderReleasePlace">
+        <EditorCategories value="Race:Terran"/>
+        <OwningPlayer Value="Source"/>
+        <WhichUnit Effect="SquadSpiderLanuchUseMagazine"/>
+    </CEffectReleaseMagazine>
+    <CEffectDamage id="SquadSpiderSilkDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Visibility value="Visible"/>
+        <Kind value="Ranged"/>
+        <Amount value="5"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="SquadSpiderSilkBeamPersistent">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <InitialEffect value="SquadSpiderSilkDamage"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffectArray value="SquadSpiderSilkDamage"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
     <CEffectLaunchMissile id="SquadHyperionAirLM">
         <EditorCategories value="Race:Terran"/>
         <ImpactLocation Value="TargetPoint"/>
@@ -1867,32 +1906,14 @@
         <EffectArray value="ResourceFragileRemove"/>
         <EffectArray value="FireOrbRemove"/>
     </CEffectSet>
-    <CEffectApplyBehavior id="SquadSpiderMineInvulnerable">
+    <CEffectApplyBehavior id="SquadSpiderMineInvulnerableApply">
         <EditorCategories value="Race:Terran"/>
         <Behavior value="SquadVultureSpiderMineInvulnerable"/>
     </CEffectApplyBehavior>
-    <CEffectRemoveBehavior id="SquadSpiderMineVulnerable">
+    <CEffectRemoveBehavior id="SquadSpiderMineVulnerableRemove">
         <EditorCategories value="Race:Terran"/>
         <BehaviorLink value="SquadVultureSpiderMineInvulnerable"/>
     </CEffectRemoveBehavior>
-    <CEffectModifyUnit id="SquadVultureReplenishNanoConstructor">
-        <ImpactUnit Value="Source"/>
-        <Cost Abil="SquadVultureUseSpiderMines,Execute" ChargeCountUse="-1"/>
-    </CEffectModifyUnit>
-    <CEffectCreateUnit id="SquadVultureSpawnSpiderMine">
-        <EditorCategories value="Race:Terran"/>
-        <WhichLocation Value="TargetPoint"/>
-        <CreateFlags index="ProvideFood" value="0"/>
-        <CreateFlags index="UseFood" value="0"/>
-        <SpawnEffect value="GiveKillsToCaster"/>
-        <SpawnUnit value="SquadSpiderMine"/>
-    </CEffectCreateUnit>
-    <CEffectSet id="SquadVultureSpawnSpiderMineSet">
-        <EditorCategories value="Race:Terran"/>
-        <EffectArray value="SquadVultureSpawnSpiderMine"/>
-        <EffectArray value="SquadVultureReplenishNanoConstructor"/>
-        <TargetLocationType value="UnitOrPoint"/>
-    </CEffectSet>
     <CEffectIssueOrder id="SquadMorphToTechReactor">
         <EditorCategories value="Race:Terran"/>
         <Abil value="SquadMorphToTechReactor"/>
@@ -1906,32 +1927,31 @@
         <RechargeVitalRate value="1"/>
         <TimeFactor value="1"/>
     </CEffectCreateHealer>
-    <CEffectCreatePersistent id="SquadCalldownMULECreatePersistent">
+    <CEffectCreatePersistent id="SquadCalldownMuleliskCreatePersistent">
         <EditorCategories value="Race:Terran"/>
         <WhichLocation Value="TargetUnitOrPoint"/>
         <ExpireDelay value="4"/>
-        <FinalEffect value="SquadCalldownMULEFinalSet"/>
+        <FinalEffect value="SquadCalldownMuleliskFinalSet"/>
     </CEffectCreatePersistent>
-    <CEffectSet id="SquadCalldownMULECreateSet">
+    <CEffectSet id="SquadCalldownMuleliskCreateSet">
         <EditorCategories value="Race:Terran"/>
         <EffectArray value="MakePrecursor"/>
-        <EffectArray value="SquadCalldownMULECreatePersistent"/>
+        <EffectArray value="SquadCalldownMuleliskCreatePersistent"/>
     </CEffectSet>
-    <CEffectCreateUnit id="SquadCalldownMULECreateUnit">
-        <ValidatorArray value="MULETargetCheck"/>
-        <ValidatorArray value="MULETargetCheck"/>
+    <CEffectCreateUnit id="SquadCalldownMuleliskCreateUnit">
         <EditorCategories value="Race:Terran"/>
         <WhichLocation Value="TargetUnitOrPoint"/>
-        <SpawnEffect value="SquadCalldownMULECreateSet"/>
-        <SpawnUnit value="Mulelisk"/>
         <CreateFlags index="Precursor" value="1"/>
+        <CreateFlags index="UseFood" value="0"/>
+        <SpawnEffect value="SquadCalldownMuleliskCreateSet"/>
+        <SpawnUnit value="Mulelisk"/>
     </CEffectCreateUnit>
-    <CEffectSet id="SquadCalldownMULEFinalSet">
+    <CEffectSet id="SquadCalldownMuleliskFinalSet">
         <EditorCategories value="Race:Terran"/>
         <EffectArray value="RemovePrecursor"/>
-        <EffectArray value="SquadCalldownMULEIssueOrder"/>
+        <EffectArray value="SquadCalldownMuleliskIssueOrder"/>
     </CEffectSet>
-    <CEffectIssueOrder id="SquadCalldownMULEIssueOrder">
+    <CEffectIssueOrder id="SquadCalldownMuleliskIssueOrder">
         <EditorCategories value="Race:Terran"/>
         <Abil value="SquadMuleliskGather"/>
         <Target Effect="CalldownMULECreateUnit" Value="TargetUnit"/>
@@ -2056,7 +2076,7 @@
         <CaseArray Validator="IsSquadFirebat" Effect="SquadFirebatDeathResponseChain" FallThrough="1"/>
         <CaseArray Validator="IsSquadGhost" Effect="SquadGhostDeathResponseChain" FallThrough="1"/>
         <CaseArray Validator="IsSquadSpectre" Effect="SquadSpectreDeathResponseChain" FallThrough="1"/>
-        <CaseArray Validator="IsSquadMulelisk" Effect="SquadMuleliskDeathResponseChain" FallThrough="1"/>
+        <CaseArray Validator="IsMulelisk" Effect="SquadMuleliskDeathResponseChain" FallThrough="1"/>
         <CaseArray Validator="IsCaptainMagazineEmpty" Effect="SquadAlphaInfantryDeathResponseChain" FallThrough="1"/>
     </CEffectSwitch>
     <CEffectRemoveBehavior id="MoveSpeedTier3Remove">

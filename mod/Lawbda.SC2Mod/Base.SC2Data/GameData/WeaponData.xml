@@ -1,5 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CWeaponLegacy id="SquadVultureSpiderLaunch">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-ability-terran-spidermine.dds"/>
+        <DisplayEffect value="SquadSpiderSilkDamage"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="13"/>
+        <Arc value="360"/>
+        <Period value="0.5"/>
+        <DamagePoint value="0"/>
+        <Backswing value="0"/>
+        <Effect value="SquadSpiderLaunchPersistent"/>
+        <AllowedMovement value="Moving"/>
+    </CWeaponLegacy>
+    <CWeaponStrafe id="SquadSpiderSilk">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-airweaponslevel0.dds"/>
+        <DisplayEffect value="SquadSpiderSilkDamage"/>
+        <DisplayAttackCount value="2"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="2"/>
+        <TeleportResetRange value="0"/>
+        <Arc value="19.6875"/>
+        <Period value="0.5"/>
+        <Effect value="SquadSpiderSilkBeamPersistent"/>
+    </CWeaponStrafe>
     <CWeaponLegacy id="SquadHyperionAirLaserBattery">
         <EditorCategories value="Race:Terran"/>
         <Options index="OnlyFireWhileInAttackOrder" value="0"/>
@@ -525,9 +550,11 @@
         <Period value="1.694"/>
         <Backswing value="0"/>
         <Effect value="SquadVultureFragmentationGrenade2"/>
+        <Options index="Disabled" value="1"/>
     </CWeaponLegacy>
-    <CWeaponLegacy id="SquadSpiderMines">
+    <CWeaponLegacy id="SquadSpiderMinesSuicide">
         <EditorCategories value="Race:Terran"/>
+        <Options index="Disabled" value="1"/>
         <Options index="Melee" value="1"/>
         <Icon value="Assets\Textures\btn-unit-terran-spidermine.dds"/>
         <DisplayEffect value="SquadSpiderMinesDamage"/>

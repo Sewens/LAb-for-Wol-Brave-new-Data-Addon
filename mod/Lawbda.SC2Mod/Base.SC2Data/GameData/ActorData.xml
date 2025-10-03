@@ -8,6 +8,28 @@
         <Icon value="Assets\Textures\RadarIcon2.dds"/>
         <IconArcLength value="3.250000"/>
     </CActorRange>
+    <CActorAction id="SquadSpiderSilkShoot" parent="GenericAttackBase">
+        <On Terms="Effect.SquadSpiderSilkBeamPersistent.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.SquadSpiderSilkDamage.Start; At Caster; FromEffectTreeDescendant" Send="ActionDamage"/>
+        <On Terms="Effect.SquadSpiderSilkDamage.Stop; At Caster; FromEffectTreeDescendant" Send="ActionDamagePhysics"/>
+        <LaunchAttachQuery Methods="AMFilterWeapon"/>
+        <LaunchAssets Sound="Interceptor_AttackLaunch"/>
+        <Beam value="SquadSpiderSilkBeam"/>
+        <BeamScope value="Caster"/>
+        <ImpactMap index="None" Model="InterceptorAttackImpact" Sound="Interceptor_AttackImpact"/>
+        <ImpactModel value="DarkInterceptorTestImpact"/>
+        <DamagePhysics Name="InterceptorBeamImpact" MatchKeys="Basic" Physics="InterceptorAttackDeathForce"/>
+        <DamagePhysics Name="InterceptorBeamImpact" MatchKeys="BasicAir" Physics="InterceptorAttackAirDeathForce"/>
+        <ActionFlags index="ImpactMonitorsTeleports" value="1"/>
+    </CActorAction>
+    <CActorBeamSimple id="SquadSpiderSilkBeam">
+        <Macros value="ActionTargetTeleportDestroy"/>
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death ContentPlayOnce"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+        <Model value="DarkInterceptorAttackBeam"/>
+    </CActorBeamSimple>
     <CActorAction id="SquadHyperionAirAttack" parent="GenericAttack" effectImpact="SquadHyperionAirU" effectLaunch="SquadHyperionAirLM">
         <LaunchAttachQuery Methods="AMFilterWeaponSetA0 AMRandomUniform"/>
         <LaunchAssets Model="HyperionAirAttackLaunch" Sound="HyperionAirAttackLaunch"/>
@@ -2507,7 +2529,7 @@
         <On Terms="AbilMorph.SquadSpiderMineBurrow.Start" Send="Create SquadSpiderMineBurrowSound"/>
         <On Terms="Abil.attack.ReadyStart" Send="Create SquadSpiderMineSeekSound"/>
         <On Terms="ActorCreation; ValidateUnit HasCerberusMines" Send="ModelSwap CerberusMine"/>
-        <DeathArray index="Normal" ModelLink="SpiderMineExplosion" SoundLink="Terran_ExplosionSmall"/>
+        <DeathArray index="Normal" ModelLink="VultureSpiderMineAttackImpact" SoundLink="Terran_ExplosionSmall"/>
         <PlacementModel value="SpiderMinePlacement"/>
         <PortraitModel value="AdjutantPortrait"/>
         <BarOffset value="10"/>
@@ -2925,13 +2947,13 @@
         <Sound value="Mule_GatherMinerals"/>
     </CActorSound>
     <CActorModel id="SquadMuleliskDropModel" parent="ModelAnimationStyleOneShotNoOrphan">
-        <On Terms="Effect.SquadCalldownMULECreatePersistent.Start" Send="Create"/>
+        <On Terms="Effect.SquadCalldownMuleliskCreatePersistent.Start" Send="Create"/>
         <On Terms="AnimBracketState.*.AfterOpening; AnimName BSD" Send="Create DropPodUnload"/>
         <HostSiteOps Ops="MercDropSOpShadow"/>
         <Model value="DropPodFalling"/>
     </CActorModel>
     <CActorSound id="SquadOrbitalCommandCalldownMuleliskDrop" parent="SoundOneShot">
-        <On Terms="Effect.SquadCalldownMULECreatePersistent.Start; At Target" Send="Create"/>
+        <On Terms="Effect.SquadCalldownMuleliskCreatePersistent.Start; At Target" Send="Create"/>
         <On Terms="ActorCreation" Send="TimerSet 2.100000 DelayDropPod"/>
         <On Terms="TimerExpired; TimerName DelayDropPod" Send="Create OrbitalCommand_CalldownMuleImpact"/>
         <On Terms="TimerExpired; TimerName DelayDropPod" Send="Destroy"/>
@@ -6516,7 +6538,7 @@
         <DeathArray index="Normal" ModelLink="VultureDeath" SoundLink="Vulture_Explode"/>
         <PlacementModel value="Vulture"/>
         <PortraitModel value="VulturePortrait"/>
-        <AbilSoundArray AbilCmd="SquadVultureUseSpiderMines,Execute" Sound="Vulture_SpiderMinePlace"/>
+        <AbilSoundArray AbilCmd="SquadVultureReleaseSpiderMines,255" Sound="Vulture_SpiderMinePlace"/>
         <BarOffset value="80"/>
         <BarWidth value="102"/>
         <GroupIcon>
@@ -7095,7 +7117,7 @@
         <HostSiteOps Ops="SOpAttachOriginStationary"/>
         <Sound value="SpiderMineBurrow"/>
     </CActorSound>
-    <CActorRange id="SquadVultureSpiderMinesRange" parent="RangeAbil" abil="SquadVultureUseSpiderMines"/>
+    <CActorRange id="SquadVultureSpiderMinesRange" parent="RangeAbil" abil="SquadVultureReleaseSpiderMines"/>
     <CActorSound id="SquadSpiderMineBurrowSound" parent="SoundOneShot">
         <Sound value="Vulture_SpiderMineBurrow"/>
     </CActorSound>

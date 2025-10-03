@@ -1,11 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CValidatorLocationPlacement id="MuleliskPlacementCheck">
+        <Range value="2"/>
+        <Unit value="MULE"/>
+    </CValidatorLocationPlacement>
+    <CValidatorCombine id="MuleliskUnitCheck">
+        <ResultFailed value="CantFindPlacementLocation"/>
+        <Type value="And"/>
+        <CombineArray value="Minerals"/>
+        <CombineArray value="MuleliskPlacementCheck"/>
+    </CValidatorCombine>
+    <CValidatorLocationType id="MuleliskTargetCheck">
+        <ResultFailed value="CantFindPlacementLocation"/>
+        <Point value="MuleliskPlacementCheck"/>
+        <Unit value="MuleliskUnitCheck"/>
+    </CValidatorLocationType>
     <CValidatorUnitCompareBehaviorCount id="NotSquadBurrowChargingRevD">
         <Behavior value="SquadBurrowChargingRevD"/>
     </CValidatorUnitCompareBehaviorCount>
     <CValidatorUnitCompareBehaviorCount id="NotSquadBurrowCharging">
         <Behavior value="SquadBurrowCharging"/>
     </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareChargeUsed id="SquadSpiderMineUsed">
+        <ResultFailed value="Error,VultureMineMax"/>
+        <Compare value="GT"/>
+        <ChargeLink value="Abil/SquadVultureUseSpiderMines"/>
+        <Location value="Unit"/>
+    </CValidatorUnitCompareChargeUsed>
     <CValidatorLocationCompareRange id="SquadMagazineTeleportRecallRange20">
         <WhichLocation Value="TargetUnit"/>
         <Compare value="GT"/>
@@ -117,7 +138,7 @@
     <CValidatorUnitType id="IsSquadGhost">
         <Value value="SquadGhost"/>
     </CValidatorUnitType>
-    <CValidatorUnitType id="IsSquadMulelisk">
+    <CValidatorUnitType id="IsMulelisk">
         <Value value="Mulelisk"/>
     </CValidatorUnitType>
     <CValidatorUnitType id="IsExcavator">
@@ -219,7 +240,7 @@
     </CValidatorUnitType>
     <CValidatorCombine id="IsWorker">
         <CombineArray value="IsSquadSCV"/>
-        <CombineArray value="IsSquadMulelisk"/>
+        <CombineArray value="IsMulelisk"/>
         <CombineArray value="IsExcavator"/>
     </CValidatorCombine>
     <CValidatorUnitCompareVital id="StructureLifeBelow1500">

@@ -17,6 +17,25 @@
         <IgnoreFilters value="-;Enemy"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="Enband"/>
     </CAbilEffectTarget>
+    <CAbilArmMagazine id="SquadSpiderMineMagazine">
+        <AbilSetId value="SpiderMine"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Flags index="AutoCreate" value="1"/>
+        <Leash value="20"/>
+        <InfoArray index="Ammo1" Time="12" CountStart="5" Manage="Ignore" Unit="SquadSpiderMine">
+            <Resource index="Minerals" value="15"/>
+            <Charge Link="ReaverScarabs" Location="Unit"/>
+            <Cooldown Link="Abil/##id##"/>
+            <Button DefaultButtonFace="SpiderMineMagazine">
+                <Flags index="ToSelection" value="1"/>
+            </Button>
+            <Flags index="AutoBuild" value="1"/>
+            <Flags index="AutoBuildOn" value="1"/>
+        </InfoArray>
+        <Alert value="TrainComplete"/>
+        <MaxCount value="5"/>
+        <EffectArray index="Death" value="SquadSpiderMinesSet"/>
+    </CAbilArmMagazine>
     <CAbilBehavior id="SquadDiamondbackBlastRailgun">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <CmdButtonArray index="On" DefaultButtonFace="SquadDiamondbackBlastMode">
@@ -676,24 +695,6 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Range value="2"/>
     </CAbilEffectTarget>
-    <CAbilSpecialize id="SquadVultureMakeSpiderMines">
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Activity value="UI/SpiderMineBuilding"/>
-        <InfoArray index="Specialize1" Time="12" Effect="SquadVultureReplenishNanoConstructor">
-            <Resource index="Minerals" value="15"/>
-            <Display index="Minerals" value="1"/>
-            <Charge>
-                <CountMax value="3"/>
-                <CountUse value="1"/>
-                <HideCount value="1"/>
-                <Location value="Unit"/>
-            </Charge>
-            <Button DefaultButtonFace="SquadVultreReplenishSpiderMine"/>
-            <Flags index="AutoCast" value="1"/>
-        </InfoArray>
-        <Alert value="BuildComplete"/>
-        <Flags index="BestUnit" value="0"/>
-    </CAbilSpecialize>
     <CAbilMorph id="SquadRefineryToAutomatedRefinery">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="Raise"/>
@@ -849,12 +850,10 @@
     </CAbilHarvest>
     <CAbilEffectTarget id="SquadCalldownMulelisk">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Effect index="0" value="SquadCalldownMULECreateUnit"/>
+        <Effect index="0" value="SquadCalldownMuleliskCreateUnit"/>
         <Flags index="RequireTargetVision" value="0"/>
         <Flags index="Transient" value="1"/>
-        <Cost>
-            <Vital index="Energy" value="50"/>
-        </Cost>
+        <Cost/>
         <Range value="500"/>
         <Arc value="360"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadCalldownMulelisk"/>
@@ -2445,20 +2444,24 @@
         <AutoCastFilters value="Ground,Visible;Player,Ally,Neutral,Structure,Worker,Missile,Stasis,Dead,Hidden,Invulnerable,Benign"/>
         <AutoCastRange value="2"/>
     </CAbilMorph>
-    <CAbilEffectTarget id="SquadVultureUseSpiderMines">
+    <CAbilEffectTarget id="SquadVultureReleaseSpiderMines">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Effect index="0" value="SquadVultureSpawnSpiderMineSet"/>
+        <Effect index="0" value="SquadSpiderReleasePlace"/>
+        <Flags index="AutoCast" value="1"/>
         <Cost>
             <Charge>
                 <CountMax value="3"/>
                 <CountStart value="3"/>
                 <CountUse value="1"/>
+                <Link value="SquadSpiderMineMagazine"/>
                 <Location value="Unit"/>
             </Charge>
         </Cost>
-        <Placeholder value="SpiderMine"/>
+        <Placeholder value="SquadSpiderMine"/>
         <Range value="3"/>
+        <AutoCastFilters value="Visible;-"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="DeploySquadSpiderMine"/>
+        <AINotifyEffect value="SquadSpiderReleasePlace"/>
     </CAbilEffectTarget>
     <CAbilMorph id="SquadSpiderMineUnburrow">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
