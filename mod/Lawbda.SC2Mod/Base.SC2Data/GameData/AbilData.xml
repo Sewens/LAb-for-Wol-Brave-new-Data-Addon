@@ -86,10 +86,10 @@
     </CAbilEffectTarget>
     <CAbilBehavior id="SquadYamatoShots">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <CmdButtonArray index="On" DefaultButtonFace="HHYamatoShots">
+        <CmdButtonArray index="On" DefaultButtonFace="SquadMiniYmatoShot">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
-        <CmdButtonArray index="Off" DefaultButtonFace="HHBattlecruiserShots">
+        <CmdButtonArray index="Off" DefaultButtonFace="SquadATXLaserBattery">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
         <Flags index="Toggle" value="1"/>
@@ -486,15 +486,15 @@
         <CmdButtonArray index="Execute" DefaultButtonFace="Heal" Requirements="AdvancedHealingAINotPurchased"/>
         <AcquireAttackers value="1"/>
     </CAbilEffectTarget>
-    <CAbilEffectInstant id="SquadEmergencyThrustersBoost">
+    <CAbilEffectInstant id="SquadAfterburnersBoost">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Effect index="0" value="SquadMedivacSpeedBoost"/>
+        <Effect index="0" value="SquadAfterburnersActive"/>
         <Flags index="Transient" value="1"/>
         <Cost>
             <Cooldown TimeUse="20"/>
         </Cost>
-        <AINotifyEffect value="SquadMedivacSpeedBoost"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="MedivacSpeedBoost">
+        <AINotifyEffect value="SquadAfterburnersActive"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadAfterburner">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectInstant>
@@ -591,15 +591,16 @@
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilRedirectTarget>
-    <CAbilEffectInstant id="ExcavatorAfterburnerSmash">
+    <CAbilEffectInstant id="BehemothAfterburner">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Effect index="0" value="SquadScoutAfterburnerBoost"/>
+        <Effect index="0" value="BehemothAfterburnerPersistent"/>
+        <Effect value="BehemothAfterburnerApply"/>
         <Flags index="Transient" value="1"/>
         <Cost>
             <Cooldown TimeUse="20"/>
         </Cost>
-        <AINotifyEffect value="SquadScoutAfterburnerBoost"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="ScoutSpeedBoost"/>
+        <AINotifyEffect value="BehemothAfterburnerApply"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="BehemothIgniteAfterburners"/>
     </CAbilEffectInstant>
     <CAbilEffectTarget id="SquadHiveMindEmulatorMindControl">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>

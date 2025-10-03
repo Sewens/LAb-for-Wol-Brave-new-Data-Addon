@@ -203,17 +203,14 @@
         <AbilArray Link="stop"/>
         <AbilArray Link="attack"/>
         <AbilArray Link="move"/>
-        <AbilArray Link="SquadBattlecruiserYamatoGun"/>
         <AbilArray Link="que1"/>
         <AbilArray Link="SquadBattlecruiserTacticalJump"/>
         <AbilArray Link="SquadYamatoShots"/>
+        <AbilArray Link="BehemothAfterburner"/>
         <BehaviorArray Link="SquadBattlecruiserYamatoShotsActivate"/>
         <BehaviorArray Link="SquadBattlecruiserRegenSpeed"/>
         <WeaponArray Link="SquadBattlecruiserATXLaserBattery" Turret="SquadBattlecruiser"/>
         <WeaponArray Link="SquadBattlecruiserMiniYamatoGun" Turret="SquadBattlecruiser"/>
-        <EffectArray index="Create" value="TheHornersStatUpdate"/>
-        <EffectArray index="Birth" value="HHYamatoShotsUpgradeActivateIssueOrder"/>
-        <EffectArray index="Death" value="TheHornersStatUpdate"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
@@ -221,8 +218,11 @@
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="SquadBattlecruiserTacticalJump" Type="AbilCmd" AbilCmd="SquadBattlecruiserTacticalJump,Execute" Row="2" Column="0"/>
-            <LayoutButtons Face="SquadMiniYmatoShot" Type="AbilCmd" AbilCmd="SquadYamatoShots,On" Row="2" Column="1"/>
-            <LayoutButtons Face="SquadATXLaserBattery" Type="AbilCmd" AbilCmd="SquadYamatoShots,Off" Row="2" Column="2"/>
+            <LayoutButtons Face="SquadATXLaserBattery" Type="AbilCmd" AbilCmd="SquadYamatoShots,Off" Row="2" Column="3"/>
+            <LayoutButtons Face="SquadATXLaserBattery" Type="Passive" Row="2" Column="3"/>
+            <LayoutButtons Face="SquadMiniYmatoShot" Type="AbilCmd" AbilCmd="SquadYamatoShots,On" Row="2" Column="2"/>
+            <LayoutButtons Face="SquadMiniYmatoShot" Type="Passive" Row="2" Column="2"/>
+            <LayoutButtons Face="BehemothIgniteAfterburners" Type="AbilCmd" AbilCmd="BehemothAfterburner,Execute" Row="2" Column="1"/>
         </CardLayouts>
         <Radius value="1.25"/>
         <SeparationRadius value="2.5"/>
@@ -584,7 +584,7 @@
         <AbilArray Link="stop"/>
         <AbilArray Link="move"/>
         <AbilArray Link="SquadMedivacTransport"/>
-        <AbilArray Link="SquadEmergencyThrustersBoost"/>
+        <AbilArray Link="SquadAfterburnersBoost"/>
         <AbilArray Link="SquadMedivacDoubleBeamHeal"/>
         <AbilArray Link="SquadMedivacDoubleBeamHeal"/>
         <CardLayouts>
@@ -599,7 +599,7 @@
             <LayoutButtons Face="Heal" Type="AbilCmd" AbilCmd="SquadMedivacDoubleBeamHeal,Execute" Row="2" Column="0"/>
             <LayoutButtons Face="Heal" Type="AbilCmd" AbilCmd="SquadMedivacDoubleBeamHeal,Execute" Row="2" Column="0"/>
             <LayoutButtons Face="SquadMedivacUnloadAll" Type="AbilCmd" AbilCmd="SquadMedivacTransport,255" Row="2" Column="3"/>
-            <LayoutButtons Face="SquadMedivacIgniteAfterburners" Type="AbilCmd" AbilCmd="SquadEmergencyThrustersBoost,Execute" Row="2" Column="1"/>
+            <LayoutButtons Face="SquadAfterburner" Type="AbilCmd" AbilCmd="SquadAfterburnersBoost,255" Row="2" Column="1"/>
             <LayoutButtons Face="AdvancedHealingAI" Type="Passive" Requirements="AdvancedHealingAIPurchased" Row="1" Column="1"/>
             <LayoutButtons Face="SquadMedivacRapidDeployment2" Type="Passive" Requirements="RapidDeploymentResearched" Row="1" Column="0"/>
         </CardLayouts>
@@ -1608,7 +1608,7 @@
         <AbilArray Link="QueueMagazine"/>
         <AbilArray Link="DisbandSquad"/>
         <AbilArray Link="SquadExcavatorGather"/>
-        <AbilArray Link="SquadAfterburner"/>
+        <AbilArray Link="BehemothAfterburner"/>
         <BehaviorArray Link="ExcavatorRecycleStructureCauseDropPickup"/>
         <BehaviorArray Link="SquadStructureFireSuppressionSystem"/>
         <BehaviorArray Link="Frenzy"/>
@@ -1626,7 +1626,7 @@
             <LayoutButtons Face="ReturnCargo" Type="AbilCmd" AbilCmd="SquadExcavatorGather,Return" Row="1" Column="0"/>
             <LayoutButtons Face="ScavageStructure" Type="Passive" Behavior="ExcavatorRecycleStructureCauseDropPickup" Row="1" Column="2"/>
             <LayoutButtons Face="BehemothProtocal" Type="Passive" Row="2" Column="2"/>
-            <LayoutButtons Face="SquadAfterburner" Type="AbilCmd" AbilCmd="SquadAfterburner,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="BehemothIgniteAfterburners" Type="AbilCmd" AbilCmd="BehemothAfterburner,Execute" Row="2" Column="0"/>
         </CardLayouts>
         <Radius value="1"/>
         <SeparationRadius value="1"/>

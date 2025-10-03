@@ -16,6 +16,13 @@
         <EffectArray value="RecycleStructureCauseDropPickupApply"/>
         <EffectArray value="EnergyMediumMaxandHugeRegenerationApply"/>
     </CEffectSet>
+    <CEffectCreatePersistent id="BehemothAfterburnerPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="CasterUnit"/>
+        <PeriodCount value="10"/>
+        <PeriodicEffectArray value="BehemothAfterburnerApply"/>
+        <PeriodicPeriodArray value="0.5"/>
+    </CEffectCreatePersistent>
     <CEffectApplyBehavior id="SquadDiamondbackBlastEvisceratorApplyAttackingBehavior">
         <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
@@ -828,9 +835,9 @@
         <PeriodicEffectArray value="SquadMedivacHealModifySet"/>
         <PeriodicPeriodArray value="0.111"/>
     </CEffectCreatePersistent>
-    <CEffectApplyBehavior id="SquadMedivacSpeedBoost">
+    <CEffectApplyBehavior id="SquadAfterburnersActive">
+        <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
-        <Behavior value="SquadAfterburnersActive"/>
     </CEffectApplyBehavior>
     <CEffectCreatePersistent id="SquadBansheeCP">
         <EditorCategories value="Race:Terran"/>
@@ -1164,9 +1171,10 @@
         <EditorCategories value="Race:Terran"/>
         <Behavior value="SquadMagazineInvulnerable"/>
     </CEffectApplyBehavior>
-    <CEffectApplyBehavior id="SquadScoutAfterburnerBoost">
+    <CEffectApplyBehavior id="BehemothAfterburnerApply">
+        <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
-        <Behavior value="ExcavatorAfterburner"/>
+        <Behavior value="BehemothAfterburner"/>
     </CEffectApplyBehavior>
     <CEffectEnumArea id="SquadShooterAuraSearch">
         <SearchFilters value="-;Enemy,Air,Structure,Worker,Missile,Dead,AirUnit"/>
