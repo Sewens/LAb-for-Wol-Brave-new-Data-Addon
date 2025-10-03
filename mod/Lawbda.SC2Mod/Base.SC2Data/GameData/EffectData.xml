@@ -25,9 +25,18 @@
     </CEffectCreatePersistent>
     <CEffectUseMagazine id="SquadSpiderLanuchUseMagazine">
         <EditorCategories value="Race:Terran"/>
-        <AmmoUnit value="SquadSpiderMine"/>
         <AmmoEffect value="SquadSpiderLaunchSet"/>
     </CEffectUseMagazine>
+    <CEffectCreatePersistent id="SquadSpiderReleasePersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="Channeled" value="1"/>
+        <PeriodCount value="8"/>
+        <PeriodicValidator value="CasterNotDead"/>
+        <PeriodicEffectArray value="SquadSpiderRelease"/>
+        <PeriodicPeriodArray value="0.5"/>
+    </CEffectCreatePersistent>
     <CEffectSet id="SquadSpiderLaunchSet">
         <EditorCategories value="Race:Terran"/>
     </CEffectSet>
@@ -41,7 +50,7 @@
         <PeriodicEffectArray value="SquadSpiderLanuchUseMagazine"/>
         <PeriodicPeriodArray value="0.5"/>
     </CEffectCreatePersistent>
-    <CEffectReleaseMagazine id="SquadSpiderReleasePlace">
+    <CEffectReleaseMagazine id="SquadSpiderRelease">
         <EditorCategories value="Race:Terran"/>
         <OwningPlayer Value="Source"/>
         <WhichUnit Effect="SquadSpiderLanuchUseMagazine"/>
@@ -3661,7 +3670,7 @@
         <Flags index="Notification" value="1"/>
         <Kind value="Splash"/>
         <KindSplash value="Splash"/>
-        <Amount value="70"/>
+        <Amount value="35"/>
         <Death value="Blast"/>
         <AreaArray Radius="0.4687" Fraction="1"/>
         <AreaArray Radius="0.7812" Fraction="0.5"/>

@@ -1167,43 +1167,11 @@
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
         </CardLayouts>
     </CUnit>
-    <CUnit id="SquadSpiderMineBurrowed">
-        <Name value="Unit/Name/SpiderMine"/>
-        <Description value="Button/Tooltip/SpiderMineVulture"/>
-        <DeathRevealRadius value="3"/>
-        <Race value="Terr"/>
-        <FlagArray index="Uncommandable" value="1"/>
-        <FlagArray index="UseLineOfSight" value="1"/>
-        <FlagArray index="Cloaked" value="1"/>
-        <FlagArray index="Buried" value="1"/>
-        <FlagArray index="NoScore" value="1"/>
-        <FlagArray index="NoPortraitTalk" value="1"/>
-        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
-        <PlaneArray index="Ground" value="1"/>
-        <Collide index="Burrow" value="1"/>
-        <Attributes index="Light" value="1"/>
-        <Attributes index="Mechanical" value="1"/>
-        <Attributes index="Structure" value="1"/>
-        <LifeStart value="25"/>
-        <LifeMax value="25"/>
-        <LifeArmorName value="Unit/LifeArmorName/TerranVehiclePlating"/>
-        <Acceleration value="1000"/>
-        <StationaryTurningRate value="2292.8906"/>
-        <Sight value="4"/>
-        <CostResource index="Minerals" value="25"/>
-        <RepairTime value="33.3332"/>
-        <AbilArray Link="SquadSpiderMineUnburrow"/>
-        <Radius value="0.125"/>
-        <SeparationRadius value="0"/>
-        <SubgroupPriority value="15"/>
-        <MinimapRadius value="0.25"/>
-        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
-        <TacticalAI value="SpiderMineVultureBurrowed"/>
-        <LeaderAlias value="SpiderMine"/>
-        <SelectAlias value="SpiderMine"/>
-        <EquipmentArray Weapon="VultureSpiderMines"/>
-        <WeaponArray Link="SquadSpiderSilk"/>
-        <WeaponArray Link="SquadSpiderMinesSuicide"/>
+    <CUnit id="SquadSpiderMineBurrowed" parent="SquadSpiderMine">
+        <Name value="Unit/Name/SquadSpiderMineBurrowed"/>
+        <Description value="Button/Tooltip/SquadSpiderMineBurrowed"/>
+        <AbilArray index="0" Link="SquadSpiderMineUnburrow"/>
+        <BehaviorArray Link="SquadVultureSpiderMineBurrowFirst"/>
     </CUnit>
     <CUnit id="SquadForge">
         <DeathRevealRadius value="3"/>
