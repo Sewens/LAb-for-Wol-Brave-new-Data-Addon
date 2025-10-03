@@ -23,6 +23,21 @@
         <PeriodicEffectArray value="BehemothAfterburnerApply"/>
         <PeriodicPeriodArray value="0.5"/>
     </CEffectCreatePersistent>
+    <CEffectApplyBehavior id="SquadMagazineUnitRecallApply">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadMagazineUnitRecall"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="SquadMagazineUnitRecallRemove">
+        <ValidatorArray index="0" removed="1"/>
+        <EditorCategories value="Race:Terran"/>
+        <BehaviorLink value="SquadMagazineUnitRecall"/>
+    </CEffectRemoveBehavior>
+    <CEffectTeleport id="SquadMagazineUnitTeleport">
+        <ValidatorArray value="SquadMagazineTeleportRecallRange20"/>
+        <EditorCategories value="Race:Terran"/>
+        <PlacementAround Value="CasterUnit"/>
+        <SourceLocation Value="TargetUnit"/>
+    </CEffectTeleport>
     <CEffectApplyBehavior id="SquadDiamondbackBlastEvisceratorApplyAttackingBehavior">
         <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
@@ -3179,6 +3194,7 @@
         <EffectArray value="DistributeBuffTrackerApply"/>
         <EffectArray value="AddDeathResponseSquad"/>
         <EffectArray value="SquadDisableAttackApply"/>
+        <EffectArray value="SquadMagazineUnitRecallApply"/>
     </CEffectSet>
     <CEffectSet id="OnMagazineRelease">
         <EditorCategories value="Race:Terran"/>
