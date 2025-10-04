@@ -23,20 +23,21 @@
         <PeriodicEffectArray value="BehemothAfterburnerApply"/>
         <PeriodicPeriodArray value="0.5"/>
     </CEffectCreatePersistent>
+    <CEffectUseCalldown id="SquadSpiderMineCalldown">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetPoint"/>
+        <CalldownCount value="1"/>
+        <CalldownEffect value="SquadSpiderMineTeleport"/>
+    </CEffectUseCalldown>
+    <CEffectTeleport id="SquadSpiderMineTeleport">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Source"/>
+        <SourceLocation Value="SourceUnit"/>
+        <TargetLocation Value="TargetPoint"/>
+    </CEffectTeleport>
     <CEffectUseMagazine id="SquadSpiderLanuchUseMagazine">
         <EditorCategories value="Race:Terran"/>
-        <AmmoEffect value="SquadSpiderLaunchSet"/>
     </CEffectUseMagazine>
-    <CEffectCreatePersistent id="SquadSpiderReleasePersistent">
-        <EditorCategories value="Race:Terran"/>
-        <WhichLocation Value="TargetUnit"/>
-        <TimeScaleSource Value="Caster"/>
-        <Flags index="Channeled" value="1"/>
-        <PeriodCount value="8"/>
-        <PeriodicValidator value="CasterNotDead"/>
-        <PeriodicEffectArray value="SquadSpiderRelease"/>
-        <PeriodicPeriodArray value="0.5"/>
-    </CEffectCreatePersistent>
     <CEffectSet id="SquadSpiderLaunchSet">
         <EditorCategories value="Race:Terran"/>
     </CEffectSet>
@@ -50,11 +51,6 @@
         <PeriodicEffectArray value="SquadSpiderLanuchUseMagazine"/>
         <PeriodicPeriodArray value="0.5"/>
     </CEffectCreatePersistent>
-    <CEffectReleaseMagazine id="SquadSpiderRelease">
-        <EditorCategories value="Race:Terran"/>
-        <OwningPlayer Value="Source"/>
-        <WhichUnit Effect="SquadSpiderLanuchUseMagazine"/>
-    </CEffectReleaseMagazine>
     <CEffectDamage id="SquadSpiderSilkDamage" parent="DU_WEAP">
         <EditorCategories value="Race:Terran"/>
         <Visibility value="Visible"/>
@@ -338,14 +334,14 @@
         <EditorCategories value="Race:Terran"/>
         <TimeScaleSource Value="Caster"/>
         <InitialEffect value="SquadBomberAreaBombFireSearch"/>
-        <PeriodCount value="19"/>
+        <PeriodCount value="9"/>
         <PeriodicEffectArray value="SquadBomberAreaBombFireSearch"/>
         <PeriodicPeriodArray value="0.5"/>
     </CEffectCreatePersistent>
     <CEffectEnumArea id="SquadBomberAreaBombFireSearch">
         <AINotifyFlags index="HurtEnemy" value="1"/>
         <SearchFilters value="-;Player,Ally,Air,AirUnit"/>
-        <AreaArray Radius="1.5" Effect="HHBomberAreaBombFireAB2"/>
+        <AreaArray Radius="1.5" Effect="SquadBomberAreaBombFireAB"/>
     </CEffectEnumArea>
     <CEffectSet id="SquadBomberAreaBombImpactSet">
         <EditorCategories value="Race:Terran"/>
@@ -1402,30 +1398,24 @@
     </CEffectApplyBehavior>
     <CEffectDamage id="SquadFirbatGiftFireOrbBurningGroundDamage">
         <EditorCategories value="Race:Terran"/>
-        <Visibility value="Hidden"/>
-        <Amount value="1"/>
-    </CEffectDamage>
-    <CEffectDamage id="SquadFirbatGiftFireOrbBurningGroundDamage2">
-        <EditorCategories value="Race:Terran"/>
         <ResponseFlags index="Acquire" value="1"/>
         <ResponseFlags index="Flee" value="1"/>
         <Flags index="Notification" value="1"/>
-        <Amount value="1"/>
+        <Amount value="2"/>
     </CEffectDamage>
     <CEffectCreatePersistent id="SquadFirbatGiftFireOrbBurningGroundPersistent">
         <EditorCategories value="Race:Terran"/>
-        <InitialEffect value="SquadFirbatGiftFireOrbBurningGroundSearch"/>
-        <PeriodCount value="6"/>
+        <PeriodCount value="19"/>
         <PeriodicEffectArray value="SquadFirbatGiftFireOrbBurningGroundSearch"/>
-        <PeriodicPeriodArray value="0.5712"/>
+        <PeriodicPeriodArray value="0.5"/>
         <AINotifyEffect value="PsiStormSearch"/>
     </CEffectCreatePersistent>
     <CEffectEnumArea id="SquadFirbatGiftFireOrbBurningGroundSearch">
         <EditorCategories value="Race:Terran"/>
         <AINotifyFlags index="HurtFriend" value="1"/>
         <AINotifyFlags index="HurtEnemy" value="1"/>
-        <SearchFilters value="-;Player,Ally,Neutral,Structure,Missile,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
-        <AreaArray Radius="1.5" Effect="SquadFirbatGiftFireOrbBurningGroundApply"/>
+        <SearchFilters value="-;Player,Ally,Neutral,Air,Missile,Destructible,Stasis,Dead,Hidden,Invulnerable,AirUnit"/>
+        <AreaArray Radius="0.5" Effect="SquadFirbatGiftFireOrbBurningGroundApply"/>
         <SearchFlags index="CallForHelp" value="1"/>
     </CEffectEnumArea>
     <CEffectApplyBehavior id="FireOrbApply">
@@ -3645,15 +3635,16 @@
         <DrainVitalCostFactor value="0.33"/>
         <RechargeVitalRate value="9"/>
     </CEffectCreateHealer>
-    <CEffectLaunchMissile id="SquadVultureFragmentationGrenade2">
+    <CEffectLaunchMissile id="SquadVultureFragmentationGrenadeLM">
         <EditorCategories value="Race:Terran"/>
-        <ImpactEffect value="SquadVultureFragmentationGrenade"/>
+        <ImpactEffect value="SquadVultureFragmentationGrenadeDamage"/>
         <AmmoUnit value="SquadVultureWeapon"/>
     </CEffectLaunchMissile>
-    <CEffectDamage id="SquadVultureFragmentationGrenade" parent="DU_WEAP_MISSILE">
+    <CEffectDamage id="SquadVultureFragmentationGrenadeDamage" parent="DU_WEAP_MISSILE">
         <EditorCategories value="Race:Terran"/>
         <AttributeBonus index="Light" value="15"/>
         <Amount value="10"/>
+        <AreaArray Radius="1"/>
     </CEffectDamage>
     <CEffectIssueOrder id="SquadSpiderMineBurrowOrder">
         <EditorCategories value="Race:Terran"/>

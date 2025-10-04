@@ -17,27 +17,6 @@
         <IgnoreFilters value="-;Enemy"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="Enband"/>
     </CAbilEffectTarget>
-    <CAbilArmMagazine id="SquadSpiderMineMagazine">
-        <AbilSetId value="SpiderMine"/>
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Flags index="AutoCreate" value="1"/>
-        <Leash value="20"/>
-        <InfoArray index="Ammo1" Time="12" CountStart="5" Manage="Ignore" Unit="SquadSpiderMine">
-            <Resource index="Minerals" value="15"/>
-            <Charge Link="Abil/SquadVultureReleaseSpiderMines" Location="Unit"/>
-            <Cooldown Link="Abil/##id##"/>
-            <Button DefaultButtonFace="SpiderMineMagazine">
-                <Flags index="ToSelection" value="1"/>
-            </Button>
-            <Flags index="AutoBuild" value="1"/>
-            <Flags index="AutoBuildOn" value="1"/>
-        </InfoArray>
-        <Alert value="TrainComplete"/>
-        <MaxCount value="5"/>
-        <EffectArray index="Death" value="SquadSpiderMinesSet"/>
-        <SharedFlags index="RegisterChargeEvent" value="1"/>
-        <SharedFlags index="RegisterCooldownEvent" value="1"/>
-    </CAbilArmMagazine>
     <CAbilBehavior id="SquadDiamondbackBlastRailgun">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <CmdButtonArray index="On" DefaultButtonFace="SquadDiamondbackBlastMode">
@@ -105,6 +84,32 @@
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectTarget>
+    <CAbilBehavior id="ExcavatorGatherMode">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="On" DefaultButtonFace="ExcavatorHarvestDropPoint">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="Off" DefaultButtonFace="ExcavatorBehemothProtocal">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Flags index="Toggle" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <BehaviorArray value="ExcavatorGatherMode"/>
+    </CAbilBehavior>
+    <CAbilArmMagazine id="SquadSpiderMineMagazine">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Leash value="20"/>
+        <InfoArray index="Ammo1" Time="8" CountStart="3" Manage="Ignore" Unit="SquadSpiderMine">
+            <Resource index="Minerals" value="25"/>
+            <Charge Link="Abil/##id##" Location="Unit"/>
+            <Cooldown Link="Abil/##id##"/>
+            <Button DefaultButtonFace="SpiderMineMagazine" State="Restricted"/>
+            <Flags index="AutoBuild" value="1"/>
+            <Flags index="AutoBuildOn" value="1"/>
+        </InfoArray>
+        <MaxCount value="5"/>
+        <CalldownEffect value="SquadSpiderMineCalldown"/>
+    </CAbilArmMagazine>
     <CAbilBehavior id="SquadYamatoShots">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <CmdButtonArray index="On" DefaultButtonFace="SquadMiniYmatoShot">
@@ -649,6 +654,7 @@
         <ResourceAllowed index="Custom" value="0"/>
         <ResourceAmountRequest index="Minerals" value="100"/>
         <AbilityCategories index="User1" value="1"/>
+        <SharedFlags index="Disabled" value="1"/>
     </CAbilHarvest>
     <CAbilEffectInstant id="SquadSuperStimpack">
         <AbilSetId value="Stimpack"/>
@@ -1281,35 +1287,35 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <Range value="5"/>
         <InfoArray index="Train1" Time="5">
-            <Button DefaultButtonFace="SquadMarine" State="Restricted"/>
+            <Button DefaultButtonFace="BuildSquadMarine" State="Restricted"/>
             <Unit value="SquadMarine"/>
         </InfoArray>
         <InfoArray index="Train2" Time="45">
-            <Button DefaultButtonFace="SquadReaper" State="Restricted"/>
+            <Button DefaultButtonFace="BuildSquadReaper" State="Restricted"/>
             <Unit value="SquadReaper"/>
         </InfoArray>
         <InfoArray index="Train3" Time="40">
-            <Button DefaultButtonFace="SquadGhost" State="Restricted" Requirements="GhostandSpectreUnlockCombine"/>
+            <Button DefaultButtonFace="BuildSquadGhost" State="Restricted" Requirements="GhostandSpectreUnlockCombine"/>
             <Unit value="SquadGhost"/>
         </InfoArray>
         <InfoArray index="Train4" Time="30">
-            <Button DefaultButtonFace="SquadMarauder" State="Restricted" Requirements="PoweredByTechlab"/>
+            <Button DefaultButtonFace="BuildSquadMarauder" State="Restricted" Requirements="PoweredByTechlab"/>
             <Unit value="SquadMarauder"/>
         </InfoArray>
         <InfoArray index="Train5" Time="25">
-            <Button DefaultButtonFace="SquadMedic" State="Restricted" Requirements="PoweredByTechlab"/>
+            <Button DefaultButtonFace="BuildSquadMedic" State="Restricted" Requirements="PoweredByTechlab"/>
             <Unit value="SquadMedic"/>
         </InfoArray>
         <InfoArray index="Train6" Time="30">
-            <Button DefaultButtonFace="SquadFirebat" State="Restricted" Requirements="PoweredByTechlab"/>
+            <Button DefaultButtonFace="BuildSquadFirebat" State="Restricted" Requirements="PoweredByTechlab"/>
             <Unit value="SquadFirebat"/>
         </InfoArray>
         <InfoArray index="Train7" Time="50">
-            <Button DefaultButtonFace="SquadSpectre" State="Restricted" Requirements="GhostandSpectreUnlockCombine"/>
+            <Button DefaultButtonFace="BuildSquadSpectre" State="Restricted" Requirements="GhostandSpectreUnlockCombine"/>
             <Unit value="SquadSpectre"/>
         </InfoArray>
         <InfoArray index="Train8" Time="25">
-            <Button DefaultButtonFace="SquadPredator" State="Restricted"/>
+            <Button DefaultButtonFace="BuildSquadPredator" State="Restricted"/>
             <Unit value="SquadPredator"/>
         </InfoArray>
     </CAbilTrain>
@@ -1335,7 +1341,7 @@
     <CAbilTrain id="SquadCommandCenterTrain">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <InfoArray index="Train1" Time="12">
-            <Button DefaultButtonFace="SquadSCV" State="Restricted">
+            <Button DefaultButtonFace="BuildSquadSCV" State="Restricted">
                 <Flags index="ToSelection" value="1"/>
             </Button>
             <Unit value="SquadSCV"/>
@@ -1938,7 +1944,7 @@
                 <Location value="Unit"/>
             </Charge>
             <Cooldown Link="Abil/##id##"/>
-            <Button DefaultButtonFace="SquadSCV"/>
+            <Button DefaultButtonFace="BuildSquadSCV"/>
             <Flags index="AutoBuild" value="1"/>
             <Flags index="AutoBuildOn" value="1"/>
             <Flags index="External" value="1"/>
@@ -1952,7 +1958,7 @@
                 <Location value="Unit"/>
             </Charge>
             <Cooldown Link="Abil/##id##"/>
-            <Button DefaultButtonFace="SquadMarine"/>
+            <Button DefaultButtonFace="BuildSquadMarine"/>
             <Flags index="AutoBuild" value="1"/>
             <Flags index="AutoBuildOn" value="1"/>
             <Flags index="External" value="1"/>
@@ -1966,7 +1972,7 @@
                 <Location value="Unit"/>
             </Charge>
             <Cooldown Link="Abil/##id##"/>
-            <Button DefaultButtonFace="SquadMedic"/>
+            <Button DefaultButtonFace="BuildSquadMedic"/>
             <Flags index="AutoBuild" value="1"/>
             <Flags index="AutoBuildOn" value="1"/>
             <Flags index="External" value="1"/>
@@ -1980,7 +1986,7 @@
                 <Location value="Unit"/>
             </Charge>
             <Cooldown Link="Abil/##id##"/>
-            <Button DefaultButtonFace="SquadFirebat"/>
+            <Button DefaultButtonFace="BuildSquadFirebat"/>
             <Flags index="AutoBuild" value="1"/>
             <Flags index="AutoBuildOn" value="1"/>
             <Flags index="External" value="1"/>
@@ -1994,7 +2000,7 @@
                 <Location value="Unit"/>
             </Charge>
             <Cooldown Link="Abil/##id##"/>
-            <Button DefaultButtonFace="SquadMarauder"/>
+            <Button DefaultButtonFace="BuildSquadMarauder"/>
             <Flags index="AutoBuild" value="1"/>
             <Flags index="AutoBuildOn" value="1"/>
             <Flags index="External" value="1"/>
@@ -2008,7 +2014,7 @@
                 <Location value="Unit"/>
             </Charge>
             <Cooldown Link="Abil/##id##"/>
-            <Button DefaultButtonFace="SquadReaper"/>
+            <Button DefaultButtonFace="BuildSquadReaper"/>
             <Flags index="AutoBuild" value="1"/>
             <Flags index="AutoBuildOn" value="1"/>
             <Flags index="External" value="1"/>
@@ -2022,7 +2028,7 @@
                 <Location value="Unit"/>
             </Charge>
             <Cooldown Link="Abil/##id##"/>
-            <Button DefaultButtonFace="SquadGhost"/>
+            <Button DefaultButtonFace="BuildSquadGhost"/>
             <Flags index="AutoBuild" value="1"/>
             <Flags index="AutoBuildOn" value="1"/>
             <Flags index="External" value="1"/>
@@ -2036,7 +2042,7 @@
                 <Location value="Unit"/>
             </Charge>
             <Cooldown Link="Abil/##id##"/>
-            <Button DefaultButtonFace="SquadSpectre"/>
+            <Button DefaultButtonFace="BuildSquadSpectre"/>
             <Flags index="AutoBuild" value="1"/>
             <Flags index="AutoBuildOn" value="1"/>
             <Flags index="External" value="1"/>
@@ -2050,7 +2056,7 @@
                 <Location value="Unit"/>
             </Charge>
             <Cooldown Link="Abil/##id##"/>
-            <Button DefaultButtonFace="SquadPredator"/>
+            <Button DefaultButtonFace="BuildSquadPredator"/>
             <Flags index="AutoBuild" value="1"/>
             <Flags index="AutoBuildOn" value="1"/>
             <Flags index="External" value="1"/>
@@ -2413,7 +2419,7 @@
         <QueueCount value="2"/>
         <QueueSize value="8"/>
     </CAbilQueue>
-    <CAbilQueue id="SquadVultureMakeSpiderMineQueue">
+    <CAbilQueue id="SquadSpiderMineQueue">
         <EditorCategories value="Race:Neutral,AbilityorEffectType:Structures"/>
         <QueueSize value="3"/>
         <Flags index="Passive" value="1"/>
@@ -2442,25 +2448,6 @@
         <AutoCastFilters value="Ground,Visible;Player,Ally,Neutral,Structure,Worker,Missile,Stasis,Dead,Hidden,Invulnerable,Benign"/>
         <AutoCastRange value="2"/>
     </CAbilMorph>
-    <CAbilEffectTarget id="SquadVultureReleaseSpiderMines">
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Effect index="0" value="SquadSpiderReleasePersistent"/>
-        <Flags index="AutoCast" value="1"/>
-        <Cost>
-            <Charge>
-                <CountMax value="5"/>
-                <CountStart value="5"/>
-                <CountUse value="1"/>
-                <Link value="SquadSpiderMineMagazine"/>
-                <Location value="Unit"/>
-            </Charge>
-        </Cost>
-        <Placeholder value="SquadSpiderMine"/>
-        <Range value="3"/>
-        <AutoCastFilters value="Visible;-"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="DeploySquadSpiderMine"/>
-        <AINotifyEffect value="SquadSpiderRelease"/>
-    </CAbilEffectTarget>
     <CAbilMorph id="SquadSpiderMineUnburrow">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <ActorKey value="BurrowUp"/>
@@ -2556,4 +2543,13 @@
             </SectionArray>
         </InfoArray>
     </CAbilMorph>
+    <CAbilEffectTarget id="SquadVultureDeploySpiderMine">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadSpiderMineCalldown"/>
+        <Placeholder value="SquadSpiderMineBurrowed"/>
+        <Range value="3"/>
+        <CalldownEffect value="SquadSpiderMineCalldown"/>
+        <EffectRange index="0" value="0,3"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="DeploySquadSpiderMine"/>
+    </CAbilEffectTarget>
 </Catalog>

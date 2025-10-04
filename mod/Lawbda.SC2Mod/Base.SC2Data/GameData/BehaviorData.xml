@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorBuff id="ExcavatorGatherMode">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-upgrade-swann-aresclasstargetingsystem.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <Modification WeaponRange="5">
+            <StateFlags index="SuppressArmySelect" value="1"/>
+            <DamageDealtAttributeScaled index="Armored" value="5"/>
+            <DamageDealtAttributeScaled index="Massive" value="10"/>
+            <AbilLinkEnableArray value="SquadExcavatorGather"/>
+            <WeaponEnableArray value="SquadGoliathHellfireMissilesAirFocuse"/>
+            <WeaponDisableArray value="SquadGoliathAutocannon"/>
+            <WeaponDisableArray value="SquadGoliathAutocannonG2"/>
+            <WeaponDisableArray value="SquadGoliathHellfireMissilesMultiLock"/>
+        </Modification>
+    </CBehaviorBuff>
     <CBehaviorBuff id="SquadMagazineUnitRecall">
         <BehaviorFlags index="Permanent" value="1"/>
         <InfoIcon value="Assets\Textures\btn-upgrade-vorazun-darkpylonrecall.dds"/>
@@ -401,7 +416,7 @@
         <MaxStackCount value="8"/>
         <MaxStackCountPerCaster value="1"/>
         <DamageResponse>
-            <Handled value="SquadFirbatGiftFireOrbBurningGroundSearch"/>
+            <Handled value="SquadFirbatGiftFireOrbBurningGroundPersistent"/>
             <Location value="Attacker"/>
             <ModifyFraction value="0.99"/>
             <DamageValue value="Original"/>
@@ -474,7 +489,7 @@
         <TimeScaleSource Value="Global"/>
         <Duration value="0.6665"/>
         <Period value="0.571"/>
-        <InitialEffect value="SquadFirbatGiftFireOrbBurningGroundDamage2"/>
+        <InitialEffect value="SquadFirbatGiftFireOrbBurningGroundDamage"/>
         <PeriodicEffect value="SquadFirbatGiftFireOrbBurningGroundDamage"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadMarauderGiftFrostOrbSlow">
