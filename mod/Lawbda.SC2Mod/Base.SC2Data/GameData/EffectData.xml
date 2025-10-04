@@ -1,5 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CEffectSet id="SpectreBuffRedirectPack">
+        <ValidatorArray value="IsMagazineFull"/>
+        <ValidatorArray value="TargetNotSelf"/>
+        <ValidatorArray value="HaveSquadInfantryMagazine"/>
+        <EditorCategories value="Race:Terran"/>
+        <DamageModifierSource Value="Outer"/>
+        <EffectArray value="UnitSmallMaxLifeApply"/>
+        <EffectArray value="EnergyHugeMaxandMediumRegenerationApply"/>
+        <EffectArray value="VoodooOrbApply"/>
+    </CEffectSet>
+    <CEffectSet id="SCVBuffRedirectPack">
+        <ValidatorArray value="IsMagazineFull"/>
+        <ValidatorArray value="TargetNotSelf"/>
+        <ValidatorArray value="HaveSquadInfantryMagazine"/>
+        <EditorCategories value="Race:Terran"/>
+        <DamageModifierSource Value="Outer"/>
+        <EffectArray value="UnitHugeMaxLifeApply"/>
+        <EffectArray value="OverjobOrbApply"/>
+    </CEffectSet>
+    <CEffectSet id="PredatorBuffRedirectPack">
+        <ValidatorArray value="IsMagazineFull"/>
+        <ValidatorArray value="TargetNotSelf"/>
+        <ValidatorArray value="HaveSquadInfantryMagazine"/>
+        <EditorCategories value="Race:Terran"/>
+        <DamageModifierSource Value="Outer"/>
+        <EffectArray value="UnitHugeMaxLifeApply"/>
+        <EffectArray value="VampireOrbApply"/>
+    </CEffectSet>
+    <CEffectSet id="MuleliskBuffRedirectPack">
+        <ValidatorArray value="IsMagazineFull"/>
+        <ValidatorArray value="TargetNotSelf"/>
+        <ValidatorArray value="HaveSquadInfantryMagazine"/>
+        <EditorCategories value="Race:Terran"/>
+        <DamageModifierSource Value="Outer"/>
+        <EffectArray value="UnitHugeMaxLifeApply"/>
+        <EffectArray value="EnergyMediumMaxandHugeRegenerationApply"/>
+    </CEffectSet>
+    <CEffectSet id="MedicBuffRedirectPack">
+        <ValidatorArray value="IsMagazineFull"/>
+        <ValidatorArray value="TargetNotSelf"/>
+        <ValidatorArray value="HaveSquadInfantryMagazine"/>
+        <EditorCategories value="Race:Terran"/>
+        <DamageModifierSource Value="Outer"/>
+        <EffectArray value="UnitHugeMaxLifeApply"/>
+        <EffectArray value="PoisonOrbApply"/>
+    </CEffectSet>
+    <CEffectSet id="MarineBuffRedirectPack">
+        <ValidatorArray value="IsMagazineFull"/>
+        <ValidatorArray value="TargetNotSelf"/>
+        <ValidatorArray value="HaveSquadInfantryMagazine"/>
+        <EditorCategories value="Race:Terran"/>
+        <DamageModifierSource Value="Outer"/>
+        <EffectArray value="UnitSmallMaxLifeApply"/>
+        <EffectArray value="OrbOrbApply"/>
+    </CEffectSet>
+    <CEffectSet id="MarauderBuffRedirectPack">
+        <ValidatorArray value="IsMagazineFull"/>
+        <ValidatorArray value="TargetNotSelf"/>
+        <ValidatorArray value="HaveSquadInfantryMagazine"/>
+        <EditorCategories value="Race:Terran"/>
+        <DamageModifierSource Value="Outer"/>
+        <EffectArray value="UnitMediumMaxLifeApply"/>
+        <EffectArray value="FrostOrbApply"/>
+    </CEffectSet>
+    <CEffectSet id="GhostBuffRedirectPack">
+        <ValidatorArray value="IsMagazineFull"/>
+        <ValidatorArray value="TargetNotSelf"/>
+        <ValidatorArray value="HaveSquadInfantryMagazine"/>
+        <EditorCategories value="Race:Terran"/>
+        <DamageModifierSource Value="Outer"/>
+        <EffectArray value="UnitSmallMaxLifeApply"/>
+        <EffectArray value="EnergyMediumMaxandHugeRegenerationApply"/>
+        <EffectArray value="LightingOrbApply"/>
+    </CEffectSet>
+    <CEffectSet id="ReaperSpecialEffectPack">
+        <ValidatorArray value="IsMagazineFull"/>
+        <ValidatorArray value="TargetNotSelf"/>
+        <ValidatorArray value="HaveSquadInfantryMagazine"/>
+        <EditorCategories value="Race:Terran"/>
+        <DamageModifierSource Value="Outer"/>
+        <EffectArray value="SquadReaperJumpApply"/>
+        <EffectArray value="SCVTransformeJump"/>
+    </CEffectSet>
+    <CEffectSet id="FirebatBuffRedirectPack">
+        <EditorCategories value="Race:Terran"/>
+        <DamageModifierSource Value="Outer"/>
+        <EffectArray value="UnitMediumMaxLifeApply"/>
+        <EffectArray value="FireOrbApply"/>
+    </CEffectSet>
     <CEffectModifyUnit id="AddMulelisk">
         <EditorCategories value="Race:Terran"/>
         <Cost Abil="SquadInfantry,Ammo10" ChargeCountUse="-1"/>
@@ -11,10 +100,10 @@
         <EditorCategories value="Race:Terran"/>
         <DamageModifierSource Value="Outer"/>
         <EffectArray value="AddMulelisk"/>
+        <EffectArray value="SquadMuleliskUnitTrackerApply"/>
         <EffectArray value="InfantryChargeBasicChain"/>
-        <EffectArray value="UnitHugeMaxLifeApply"/>
         <EffectArray value="RecycleStructureCauseDropPickupApply"/>
-        <EffectArray value="EnergyMediumMaxandHugeRegenerationApply"/>
+        <EffectArray value="MuleliskBuffRedirectPack"/>
     </CEffectSet>
     <CEffectCreatePersistent id="BehemothAfterburnerPersistent">
         <EditorCategories value="Race:Terran"/>
@@ -23,6 +112,140 @@
         <PeriodicEffectArray value="BehemothAfterburnerApply"/>
         <PeriodicPeriodArray value="0.5"/>
     </CEffectCreatePersistent>
+    <CEffectSet id="ReaperBuffRedirectPack">
+        <EditorCategories value="Race:Terran"/>
+        <DamageModifierSource Value="Outer"/>
+        <EffectArray value="UnitSmallMaxLifeApply"/>
+        <EffectArray value="SoulOrbApply"/>
+        <EffectArray value="MoveSpeedTier3Apply"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="SquadFirebatUnitTrackerApply">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadFirebatUnitTracker"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadMuleliskUnitTrackerApply">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadMuleliskUnitTracker"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="SquadMuleliskUnitTrackerRemove">
+        <ValidatorArray index="0" removed="1"/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="CasterOuter"/>
+        <BehaviorLink value="SquadMuleliskUnitTracker"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="SquadPredatorUnitTrackerApply">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadPredatorUnitTracker"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadReaperUnitTrackerApply">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadReaperUnitTracker"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="SquadPredatorUnitTrackerRemove">
+        <ValidatorArray index="0" removed="1"/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="CasterOuter"/>
+        <BehaviorLink value="SquadPredatorUnitTracker"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="SquadReaperUnitTrackerRemove">
+        <ValidatorArray index="0" removed="1"/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="CasterOuter"/>
+        <BehaviorLink value="SquadReaperUnitTracker"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="SquadSpectreUnitTrackerApply">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadSpectreUnitTracker"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="SquadSpectreUnitTrackerRemove">
+        <ValidatorArray index="0" removed="1"/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="CasterOuter"/>
+        <BehaviorLink value="SquadSpectreUnitTracker"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="SquadSCVUnitTrackerApply">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadSCVUnitTracker"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="SquadSCVUnitTrackerRemove">
+        <ValidatorArray index="0" removed="1"/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="CasterOuter"/>
+        <BehaviorLink value="SquadSCVUnitTracker"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="SquadGhostUnitTrackerRemove">
+        <ValidatorArray index="0" removed="1"/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="CasterOuter"/>
+        <BehaviorLink value="SquadGhostUnitTracker"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="SquadMarauderUnitTrackerApply">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadMarauderUnitTracker"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadGhostUnitTrackerApply">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadGhostUnitTracker"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="SquadMarineUnitTrackerRemove">
+        <ValidatorArray index="0" removed="1"/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="CasterOuter"/>
+        <BehaviorLink value="SquadMarineUnitTracker"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="SquadMarineUnitTrackerApply">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadMarineUnitTracker"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="SquadMarauderUnitTrackerRemove">
+        <ValidatorArray index="0" removed="1"/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="CasterOuter"/>
+        <BehaviorLink value="SquadMarauderUnitTracker"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="SquadMedicUnitTrackerRemove">
+        <ValidatorArray index="0" removed="1"/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="CasterOuter"/>
+        <BehaviorLink value="SquadMedicUnitTracker"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="SquadMedicUnitTrackerApply">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadMedicUnitTracker"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="SquadFirebatUnitTrackerRemove">
+        <ValidatorArray index="0" removed="1"/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="CasterOuter"/>
+        <BehaviorLink value="SquadFirebatUnitTracker"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectSwitch id="CaptainBuffRedirectorSwtich">
+        <EditorCategories value="Race:Terran"/>
+        <CaseArray Validator="FirebatTrackerOn" Effect="FirebatBuffRedirectPack" FallThrough="1"/>
+        <CaseArray Validator="MarineTrackerOn" Effect="MarineBuffRedirectPack" FallThrough="1"/>
+        <CaseArray Validator="MarauderTrackerOn" Effect="MarauderBuffRedirectPack" FallThrough="1"/>
+        <CaseArray Validator="SCVTrackerOn" Effect="SCVBuffRedirectPack" FallThrough="1"/>
+        <CaseArray Validator="MuleliskTrackerOn" Effect="MuleliskBuffRedirectPack" FallThrough="1"/>
+        <CaseArray Validator="MedicTrackerOn" Effect="MedicBuffRedirectPack" FallThrough="1"/>
+        <CaseArray Validator="GhostTrackerOn" Effect="GhostBuffRedirectPack" FallThrough="1"/>
+        <CaseArray Validator="SpectreTrackerOn" Effect="SpectreBuffRedirectPack" FallThrough="1"/>
+        <CaseArray Validator="ReaperTrackerOn" Effect="ReaperBuffRedirectPack" FallThrough="1"/>
+        <CaseArray Validator="SpectreTrackerOn" Effect="PredatorBuffRedirectPack" FallThrough="1"/>
+    </CEffectSwitch>
+    <CEffectEnumMagazine id="SquadInnermagazineIterator">
+        <EditorCategories value="Race:Terran"/>
+        <EffectInternal value="CaptainBuffRedirectorSwtich"/>
+    </CEffectEnumMagazine>
     <CEffectUseCalldown id="SquadSpiderMineCalldown">
         <EditorCategories value="Race:Terran"/>
         <WhichLocation Value="TargetPoint"/>
@@ -477,6 +700,7 @@
         <EffectArray value="UnitHugeMaxLifeRemove"/>
         <EffectArray value="RecycleStructureCauseDropPickupRemove"/>
         <EffectArray value="EnergyMediumMaxandHugeRegenerationRemove"/>
+        <EffectArray value="SquadMuleliskUnitTrackerRemove"/>
     </CEffectSet>
     <CEffectApplyBehavior id="SquadShortlyStunApply">
         <ValidatorArray index="0" removed="1"/>
@@ -1259,10 +1483,10 @@
         <EditorCategories value="Race:Terran"/>
         <DamageModifierSource Value="Outer"/>
         <EffectArray value="AddFirebat"/>
+        <EffectArray value="SquadFirebatUnitTrackerApply"/>
         <EffectArray value="InfantryChargeBasicChain"/>
-        <EffectArray value="UnitMediumMaxLifeApply"/>
         <EffectArray value="ResourceFragileApply"/>
-        <EffectArray value="FireOrbApply"/>
+        <EffectArray value="FirebatBuffRedirectPack"/>
     </CEffectSet>
     <CEffectModifyUnit id="AddFirebat">
         <EditorCategories value="Race:Terran"/>
@@ -1584,9 +1808,6 @@
         <EditorCategories value=""/>
         <Effect value="SquadHiveMindEmulatorMindControlKill"/>
     </CEffectEnumTransport>
-    <CEffectSwitch id="ModifyMagazineUnitBehaviorSwitch">
-        <EditorCategories value=""/>
-    </CEffectSwitch>
     <CEffectRemoveBehavior id="SquadDisableAttackRemove">
         <EditorCategories value=""/>
         <BehaviorLink value="SquadDisableAttack"/>
@@ -1718,6 +1939,7 @@
         <EffectArray value="UnitHugeMaxLifeRemove"/>
         <EffectArray value="ResourceMessageRemove"/>
         <EffectArray value="PoisonOrbRemove"/>
+        <EffectArray value="SquadMedicUnitTrackerRemove"/>
     </CEffectSet>
     <CEffectSet id="SquadReaperDeathResponseChain">
         <EditorCategories value="Race:Terran"/>
@@ -1726,6 +1948,7 @@
         <EffectArray value="ResourceMineralAssassinRemove"/>
         <EffectArray value="MoveSpeedTier3Remove"/>
         <EffectArray value="SoulOrbRemove"/>
+        <EffectArray value="SquadReaperUnitTrackerRemove"/>
     </CEffectSet>
     <CEffectSet id="SquadAlphaInfantryDeathResponseChain">
         <EditorCategories value="Race:Terran"/>
@@ -1741,6 +1964,7 @@
         <EffectArray value="EnergyHugeMaxandMediumRegenerationRemove"/>
         <EffectArray value="ResourceTerrazineCrazyRemove"/>
         <EffectArray value="VoodooOrbRemove"/>
+        <EffectArray value="SquadSpectreUnitTrackerRemove"/>
     </CEffectSet>
     <CEffectSet id="SquadMarauderDeathResponseChain">
         <EditorCategories value="Race:Terran"/>
@@ -1748,6 +1972,7 @@
         <EffectArray value="UnitMediumMaxLifeRemove"/>
         <EffectArray value="MultiMineralAutoHarvestAuraRemove"/>
         <EffectArray value="FrostOrbRemove"/>
+        <EffectArray value="SquadMarauderUnitTrackerRemove"/>
     </CEffectSet>
     <CEffectSet id="SquadPredatorDeathResponseChain">
         <EditorCategories value="Race:Terran"/>
@@ -1755,6 +1980,7 @@
         <EffectArray value="UnitHugeMaxLifeRemove"/>
         <EffectArray value="LootOnDealDamageRemove"/>
         <EffectArray value="VampireOrbRemove"/>
+        <EffectArray value="SquadPredatorUnitTrackerRemove"/>
     </CEffectSet>
     <CEffectSet id="SquadGhostDeathResponseChain">
         <EditorCategories value="Race:Terran"/>
@@ -1763,6 +1989,7 @@
         <EffectArray value="EnergyMediumMaxandHugeRegenerationRemove"/>
         <EffectArray value="ResourceVespenseCrazyRemove"/>
         <EffectArray value="LightingOrbRemove"/>
+        <EffectArray value="SquadGhostUnitTrackerRemove"/>
     </CEffectSet>
     <CEffectSet id="SquadSCVDeathResponseChain">
         <EditorCategories value="Race:Terran"/>
@@ -1770,6 +1997,7 @@
         <EffectArray value="UnitHugeMaxLifeRemove"/>
         <EffectArray value="RecycleStructureCauseDropPickupRemove"/>
         <EffectArray value="OverjobOrbRemove"/>
+        <EffectArray value="SquadSCVUnitTrackerRemove"/>
     </CEffectSet>
     <CEffectRemoveBehavior id="InfantryEnlargeRadiusRemove">
         <ValidatorArray index="0" removed="1"/>
@@ -1904,6 +2132,7 @@
         <EffectArray value="UnitMediumMaxLifeRemove"/>
         <EffectArray value="ResourceFragileRemove"/>
         <EffectArray value="FireOrbRemove"/>
+        <EffectArray value="SquadFirebatUnitTrackerRemove"/>
     </CEffectSet>
     <CEffectApplyBehavior id="SquadSpiderMineInvulnerableApply">
         <EditorCategories value="Race:Terran"/>
@@ -1983,6 +2212,7 @@
         <EffectArray value="UnitSmallMaxLifeRemove"/>
         <EffectArray value="ResourceMineralRobberyRemove"/>
         <EffectArray value="OrbOrbRemove"/>
+        <EffectArray value="SquadMarineUnitTrackerRemove"/>
     </CEffectSet>
     <CEffectModifyUnit id="AddPredator">
         <EditorCategories value="Race:Terran"/>
@@ -1995,10 +2225,10 @@
         <EditorCategories value="Race:Terran"/>
         <DamageModifierSource Value="Outer"/>
         <EffectArray value="AddPredator"/>
+        <EffectArray value="SquadPredatorUnitTrackerApply"/>
         <EffectArray value="InfantryChargeBasicChain"/>
-        <EffectArray value="UnitHugeMaxLifeApply"/>
         <EffectArray value="LootOnDealDamage"/>
-        <EffectArray value="VampireOrbApply"/>
+        <EffectArray value="PredatorBuffRedirectPack"/>
     </CEffectSet>
     <CEffectSet id="SquadDiamondbackMultiEvisceratorWeaponSet">
         <ValidatorArray value="CasterIsNotHidden"/>
@@ -2396,17 +2626,16 @@
         <ValidatorArray value="HaveSquadInfantryMagazine"/>
         <EditorCategories value="Race:Terran"/>
         <DamageModifierSource Value="Outer"/>
-        <EffectArray value="InfantryChargeBasicChain"/>
         <EffectArray value="AddGhost2"/>
-        <EffectArray value="UnitSmallMaxLifeApply"/>
-        <EffectArray value="EnergyHugeMaxandMediumRegenerationApply"/>
+        <EffectArray value="SquadSpectreUnitTrackerApply"/>
+        <EffectArray value="InfantryChargeBasicChain"/>
         <EffectArray value="ResourceTerrazineCrazyApply"/>
-        <EffectArray value="VoodooOrbApply"/>
+        <EffectArray value="SpectreBuffRedirectPack"/>
     </CEffectSet>
     <CEffectApplyBehavior id="MagazineTrackerApply">
         <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
-        <Behavior value="MagazineUnitTracker"/>
+        <Behavior value="SquadAlphaUnitTracker"/>
     </CEffectApplyBehavior>
     <CEffectModifyUnit id="AddMarauder">
         <EditorCategories value="Race:Terran"/>
@@ -2423,11 +2652,10 @@
         <EditorCategories value="Race:Terran"/>
         <DamageModifierSource Value="Outer"/>
         <EffectArray value="AddGhost"/>
+        <EffectArray value="SquadGhostUnitTrackerApply"/>
         <EffectArray value="InfantryChargeBasicChain"/>
-        <EffectArray value="UnitSmallMaxLifeApply"/>
-        <EffectArray value="EnergyMediumMaxandHugeRegenerationApply"/>
         <EffectArray value="ResourceVespenseCrazyApply"/>
-        <EffectArray value="LightingOrbApply"/>
+        <EffectArray value="GhostBuffRedirectPack"/>
     </CEffectSet>
     <CEffectSet id="AddReaperChain">
         <ValidatorArray value="IsMagazineFull"/>
@@ -2436,13 +2664,10 @@
         <EditorCategories value="Race:Terran"/>
         <DamageModifierSource Value="Outer"/>
         <EffectArray value="AddReaper"/>
+        <EffectArray value="SquadReaperUnitTrackerApply"/>
         <EffectArray value="InfantryChargeBasicChain"/>
-        <EffectArray value="MoveSpeedTier3Apply"/>
-        <EffectArray value="UnitSmallMaxLifeApply"/>
         <EffectArray value="ResourceMineralAssassinApply"/>
-        <EffectArray value="SquadReaperJumpApply"/>
-        <EffectArray value="SCVTransformeJump"/>
-        <EffectArray value="SoulOrbApply"/>
+        <EffectArray value="ReaperBuffRedirectPack"/>
     </CEffectSet>
     <CEffectModifyUnit id="AddReaper">
         <EditorCategories value="Race:Terran"/>
@@ -2455,10 +2680,10 @@
         <EditorCategories value="Race:Terran"/>
         <DamageModifierSource Value="Outer"/>
         <EffectArray value="AddMedic"/>
+        <EffectArray value="SquadMedicUnitTrackerApply"/>
         <EffectArray value="InfantryChargeBasicChain"/>
-        <EffectArray value="UnitHugeMaxLifeApply"/>
         <EffectArray value="ResourceRegenAuraApply"/>
-        <EffectArray value="PoisonOrbApply"/>
+        <EffectArray value="MedicBuffRedirectPack"/>
     </CEffectSet>
     <CEffectModifyUnit id="AddMedic">
         <EditorCategories value="Race:Terran"/>
@@ -2471,10 +2696,10 @@
         <EditorCategories value="Race:Terran"/>
         <DamageModifierSource Value="Outer"/>
         <EffectArray value="AddMarauder"/>
+        <EffectArray value="SquadMarauderUnitTrackerApply"/>
         <EffectArray value="InfantryChargeBasicChain"/>
-        <EffectArray value="UnitMediumMaxLifeApply"/>
         <EffectArray value="MultiMineralAutoHarvestAuraApply"/>
-        <EffectArray value="FrostOrbApply"/>
+        <EffectArray value="MarauderBuffRedirectPack"/>
     </CEffectSet>
     <CEffectApplyBehavior id="AddDeathResponseSquad">
         <EditorCategories value="Race:Terran"/>
@@ -2879,12 +3104,12 @@
         <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="CasterOuter"/>
-        <BehaviorLink value="MagazineUnitTracker"/>
+        <BehaviorLink value="SquadAlphaUnitTracker"/>
         <Count value="1"/>
     </CEffectRemoveBehavior>
     <CEffectRemoveBehavior id="MagazineTrackerAllStackRemove">
         <EditorCategories value="Race:Terran"/>
-        <BehaviorLink value="MagazineUnitTracker"/>
+        <BehaviorLink value="SquadAlphaUnitTracker"/>
     </CEffectRemoveBehavior>
     <CEffectApplyBehavior id="ResourceFragileApply">
         <ValidatorArray index="0" value="IsWorker"/>
@@ -3454,10 +3679,10 @@
         <EditorCategories value="Race:Terran"/>
         <DamageModifierSource Value="Outer"/>
         <EffectArray value="AddSCV"/>
+        <EffectArray value="SquadSCVUnitTrackerApply"/>
         <EffectArray value="InfantryChargeBasicChain"/>
-        <EffectArray value="UnitHugeMaxLifeApply"/>
         <EffectArray value="RecycleStructureCauseDropPickupApply"/>
-        <EffectArray value="OverjobOrbApply"/>
+        <EffectArray value="SCVBuffRedirectPack"/>
     </CEffectSet>
     <CEffectDamage id="SquadPredatorRetributionFieldDamage">
         <EditorCategories value="Race:Terran"/>
@@ -3504,10 +3729,10 @@
         <EditorCategories value="Race:Terran"/>
         <DamageModifierSource Value="Outer"/>
         <EffectArray value="AddMarine"/>
+        <EffectArray value="SquadMarineUnitTrackerApply"/>
         <EffectArray value="InfantryChargeBasicChain"/>
-        <EffectArray value="UnitSmallMaxLifeApply"/>
         <EffectArray value="ResourceMineralRobberyApply"/>
-        <EffectArray value="OrbOrbApply"/>
+        <EffectArray value="MarineBuffRedirectPack"/>
     </CEffectSet>
     <CEffectSet id="ReleaseMagazinePack">
         <EditorCategories value="Race:Terran"/>

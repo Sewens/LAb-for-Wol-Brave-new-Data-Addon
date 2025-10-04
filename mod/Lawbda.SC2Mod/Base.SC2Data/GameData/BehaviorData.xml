@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorBuff id="CaptainBuffRedirectDaemon">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-unit-protoss-blizzcon17-probe.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Period value="5"/>
+        <PeriodicEffect value="SquadInnermagazineIterator"/>
+    </CBehaviorBuff>
     <CBehaviorBuff id="ExcavatorGatherMode">
         <InfoFlags index="Hidden" value="1"/>
         <InfoIcon value="Assets\Textures\btn-upgrade-swann-aresclasstargetingsystem.dds"/>
@@ -14,6 +22,41 @@
             <WeaponDisableArray value="SquadGoliathAutocannonG2"/>
             <WeaponDisableArray value="SquadGoliathHellfireMissilesMultiLock"/>
         </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadMuleliskUnitTracker">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <BuffFlags index="RefreshStack" value="1"/>
+        <MaxStackCount value="8"/>
+        <MaxStackCountPerCaster value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadPredatorUnitTracker">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <BuffFlags index="RefreshStack" value="1"/>
+        <MaxStackCount value="8"/>
+        <MaxStackCountPerCaster value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadReaperUnitTracker">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <BuffFlags index="RefreshStack" value="1"/>
+        <MaxStackCount value="8"/>
+        <MaxStackCountPerCaster value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadSpectreUnitTracker">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <BuffFlags index="RefreshStack" value="1"/>
+        <MaxStackCount value="8"/>
+        <MaxStackCountPerCaster value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadSCVUnitTracker">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <BuffFlags index="RefreshStack" value="1"/>
+        <MaxStackCount value="8"/>
+        <MaxStackCountPerCaster value="1"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadMagazineUnitRecall">
         <BehaviorFlags index="Permanent" value="1"/>
@@ -476,11 +519,11 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <DisplayDuration index="Self" value="1"/>
         <DisplayDuration index="Ally" value="1"/>
-        <Duration value="15"/>
-        <Modification MoveSpeedMultiplier="1.075" AccelerationBonus="50" DecelerationBonus="-25"/>
         <BuffFlags index="RefreshStack" value="1"/>
         <MaxStackCount value="20"/>
         <MaxStackCountPerCaster value="20"/>
+        <Duration value="15"/>
+        <Modification MoveSpeedMultiplier="1.075" AccelerationBonus="50" DecelerationBonus="-25"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadFirbatGiftFireOrbBurningGround">
         <Alignment value="Negative"/>
@@ -1484,70 +1527,42 @@
             <VitalRegenArray index="Life" value="4"/>
         </Modification>
     </CBehaviorBuff>
-    <CBehaviorBuff id="MagazineUnitTracker">
+    <CBehaviorBuff id="SquadAlphaUnitTracker">
         <BehaviorFlags index="Permanent" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <BuffFlags index="RefreshStack" value="1"/>
         <MaxStackCount value="8"/>
         <MaxStackCountPerCaster value="1"/>
     </CBehaviorBuff>
-    <CBehaviorBuff id="MarineUnitTracker">
+    <CBehaviorBuff id="SquadMarineUnitTracker">
         <BehaviorFlags index="Permanent" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <BuffFlags index="RefreshStack" value="1"/>
         <MaxStackCount value="8"/>
         <MaxStackCountPerCaster value="1"/>
     </CBehaviorBuff>
-    <CBehaviorBuff id="MedicUnitTracker">
+    <CBehaviorBuff id="SquadMedicUnitTracker">
         <BehaviorFlags index="Permanent" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <BuffFlags index="RefreshStack" value="1"/>
         <MaxStackCount value="8"/>
         <MaxStackCountPerCaster value="1"/>
     </CBehaviorBuff>
-    <CBehaviorBuff id="SCVUnitTracker">
+    <CBehaviorBuff id="SquadMarauderUnitTracker">
         <BehaviorFlags index="Permanent" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <BuffFlags index="RefreshStack" value="1"/>
         <MaxStackCount value="8"/>
         <MaxStackCountPerCaster value="1"/>
     </CBehaviorBuff>
-    <CBehaviorBuff id="MarauderUnitTracker">
+    <CBehaviorBuff id="SquadGhostUnitTracker">
         <BehaviorFlags index="Permanent" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <BuffFlags index="RefreshStack" value="1"/>
         <MaxStackCount value="8"/>
         <MaxStackCountPerCaster value="1"/>
     </CBehaviorBuff>
-    <CBehaviorBuff id="GhostUnitTracker">
-        <BehaviorFlags index="Permanent" value="1"/>
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <BuffFlags index="RefreshStack" value="1"/>
-        <MaxStackCount value="8"/>
-        <MaxStackCountPerCaster value="1"/>
-    </CBehaviorBuff>
-    <CBehaviorBuff id="SpectreUnitTracker">
-        <BehaviorFlags index="Permanent" value="1"/>
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <BuffFlags index="RefreshStack" value="1"/>
-        <MaxStackCount value="8"/>
-        <MaxStackCountPerCaster value="1"/>
-    </CBehaviorBuff>
-    <CBehaviorBuff id="ReaperUnitTracker">
-        <BehaviorFlags index="Permanent" value="1"/>
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <BuffFlags index="RefreshStack" value="1"/>
-        <MaxStackCount value="8"/>
-        <MaxStackCountPerCaster value="1"/>
-    </CBehaviorBuff>
-    <CBehaviorBuff id="PredatorUnitTracker">
-        <BehaviorFlags index="Permanent" value="1"/>
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <BuffFlags index="RefreshStack" value="1"/>
-        <MaxStackCount value="8"/>
-        <MaxStackCountPerCaster value="1"/>
-    </CBehaviorBuff>
-    <CBehaviorBuff id="FirebatUnitTracker">
+    <CBehaviorBuff id="SquadFirebatUnitTracker">
         <BehaviorFlags index="Permanent" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <BuffFlags index="RefreshStack" value="1"/>
@@ -1817,6 +1832,7 @@
             <DamageDealtFraction index="Splash" value="0.1"/>
             <DamageDealtFraction index="NoProc" value="0.1"/>
         </Modification>
+        <MaxStackCountPerCaster value="1"/>
     </CBehaviorBuff>
     <!--Add 10% heal effect, 25% melee damage increase.-->
     <CBehaviorBuff id="OverjobOrb">

@@ -1,5 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CValidatorUnitCompareBehaviorCount id="FirebatTrackerOn">
+        <ResultFailed value="NotEnoughRoomToLoadUnit,MagazineNoFirbat"/>
+        <WhichUnit Value="TargetOuter"/>
+        <Compare value="GE"/>
+        <Value value="1"/>
+        <Behavior value="SquadFirebatUnitTracker"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="GhostTrackerOn">
+        <ResultFailed value="NotEnoughRoomToLoadUnit,MagazineNoFirbat"/>
+        <WhichUnit Value="TargetOuter"/>
+        <Compare value="GE"/>
+        <Value value="1"/>
+        <Behavior value="SquadGhostUnitTracker"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="MarauderTrackerOn">
+        <ResultFailed value="NotEnoughRoomToLoadUnit,MagazineNoFirbat"/>
+        <WhichUnit Value="TargetOuter"/>
+        <Compare value="GE"/>
+        <Value value="1"/>
+        <Behavior value="SquadMarauderUnitTracker"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="MarineTrackerOn">
+        <ResultFailed value="NotEnoughRoomToLoadUnit,MagazineNoFirbat"/>
+        <WhichUnit Value="TargetOuter"/>
+        <Compare value="GE"/>
+        <Value value="1"/>
+        <Behavior value="SquadMarineUnitTracker"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="MedicTrackerOn">
+        <ResultFailed value="NotEnoughRoomToLoadUnit,MagazineNoFirbat"/>
+        <WhichUnit Value="TargetOuter"/>
+        <Compare value="GE"/>
+        <Value value="1"/>
+        <Behavior value="SquadMedicUnitTracker"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="MuleliskTrackerOn">
+        <ResultFailed value="NotEnoughRoomToLoadUnit,MagazineNoFirbat"/>
+        <WhichUnit Value="TargetOuter"/>
+        <Compare value="GE"/>
+        <Value value="1"/>
+        <Behavior value="SquadMuleliskUnitTracker"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="PredatorTrackerOn">
+        <ResultFailed value="NotEnoughRoomToLoadUnit,MagazineNoFirbat"/>
+        <WhichUnit Value="TargetOuter"/>
+        <Compare value="GE"/>
+        <Value value="1"/>
+        <Behavior value="SquadPredatorUnitTracker"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="ReaperTrackerOn">
+        <ResultFailed value="NotEnoughRoomToLoadUnit,MagazineNoFirbat"/>
+        <WhichUnit Value="TargetOuter"/>
+        <Compare value="GE"/>
+        <Value value="1"/>
+        <Behavior value="SquadReaperUnitTracker"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="SpectreTrackerOn">
+        <ResultFailed value="NotEnoughRoomToLoadUnit,MagazineNoFirbat"/>
+        <WhichUnit Value="TargetOuter"/>
+        <Compare value="GE"/>
+        <Value value="1"/>
+        <Behavior value="SquadSpectreUnitTracker"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="SCVTrackerOn">
+        <ResultFailed value="NotEnoughRoomToLoadUnit,MagazineNoFirbat"/>
+        <WhichUnit Value="TargetOuter"/>
+        <Compare value="GE"/>
+        <Value value="1"/>
+        <Behavior value="SquadSCVUnitTracker"/>
+    </CValidatorUnitCompareBehaviorCount>
     <CValidatorLocationPlacement id="MuleliskPlacementCheck">
         <Range value="2"/>
         <Unit value="MULE"/>
@@ -15,18 +85,9 @@
         <Point value="MuleliskPlacementCheck"/>
         <Unit value="MuleliskUnitCheck"/>
     </CValidatorLocationType>
-    <CValidatorUnitCompareBehaviorCount id="NotSquadBurrowChargingRevD">
-        <Behavior value="SquadBurrowChargingRevD"/>
-    </CValidatorUnitCompareBehaviorCount>
     <CValidatorUnitCompareBehaviorCount id="NotSquadBurrowCharging">
         <Behavior value="SquadBurrowCharging"/>
     </CValidatorUnitCompareBehaviorCount>
-    <CValidatorUnitCompareChargeUsed id="SquadSpiderMineUsed">
-        <ResultFailed value="Error,VultureMineMax"/>
-        <Compare value="GT"/>
-        <ChargeLink value="Abil/SquadVultureUseSpiderMines"/>
-        <Location value="Unit"/>
-    </CValidatorUnitCompareChargeUsed>
     <CValidatorLocationCompareRange id="SquadMagazineTeleportRecallRange20">
         <WhichLocation Value="TargetUnit"/>
         <Compare value="GT"/>
@@ -112,7 +173,7 @@
         <ResultFailed value="NotEnoughRoomToLoadUnit"/>
         <WhichUnit Value="CasterOuter"/>
         <Compare value="LE"/>
-        <Behavior value="MagazineUnitTracker"/>
+        <Behavior value="SquadAlphaUnitTracker"/>
     </CValidatorUnitCompareBehaviorCount>
     <CValidatorUnitType id="IsSquadMarine">
         <Value value="SquadMarine"/>
@@ -227,7 +288,7 @@
         <ResultFailed value="NotEnoughRoomToLoadUnit"/>
         <Compare value="LT"/>
         <Value value="4"/>
-        <Behavior value="MagazineUnitTracker"/>
+        <Behavior value="SquadAlphaUnitTracker"/>
     </CValidatorUnitCompareBehaviorCount>
     <CValidatorUnitType id="IsMineral">
         <Value value="MineralField"/>
