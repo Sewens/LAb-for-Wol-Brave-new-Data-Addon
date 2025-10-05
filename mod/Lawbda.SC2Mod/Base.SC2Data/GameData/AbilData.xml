@@ -17,6 +17,18 @@
         <IgnoreFilters value="-;Enemy"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="Enband"/>
     </CAbilEffectTarget>
+    <CAbilBehavior id="ExcavatorGatherMode">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="On" DefaultButtonFace="ExcavatorHarvestDropPoint">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="Off" DefaultButtonFace="ExcavatorBehemothProtocal">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Flags index="Toggle" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <BehaviorArray value="ExcavatorGatherMode"/>
+    </CAbilBehavior>
     <CAbilBehavior id="SquadDiamondbackBlastRailgun">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <CmdButtonArray index="On" DefaultButtonFace="SquadDiamondbackBlastMode">
@@ -84,17 +96,17 @@
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectTarget>
-    <CAbilBehavior id="ExcavatorGatherMode">
+    <CAbilBehavior id="SquadVultureDisableSpiderSwitch">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <CmdButtonArray index="On" DefaultButtonFace="ExcavatorHarvestDropPoint">
+        <CmdButtonArray index="On" DefaultButtonFace="VanillaVultureMode">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
-        <CmdButtonArray index="Off" DefaultButtonFace="ExcavatorBehemothProtocal">
+        <CmdButtonArray index="Off" DefaultButtonFace="SpiderCarrierMode">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
         <Flags index="Toggle" value="1"/>
         <Flags index="Transient" value="1"/>
-        <BehaviorArray value="ExcavatorGatherMode"/>
+        <BehaviorArray value="DisableSpiderMineMagazine"/>
     </CAbilBehavior>
     <CAbilArmMagazine id="SquadSpiderMineMagazine">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -1842,7 +1854,7 @@
     <CAbilEffectInstant id="DisbandSquad">
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <DebugTrace value="1"/>
-        <Effect index="0" value="Disband"/>
+        <Effect index="0" value="CaptainModificationPack"/>
         <Flags index="AllowMovement" value="1"/>
         <Marker>
             <MatchFlags index="Link" value="0"/>
@@ -2078,13 +2090,14 @@
             <Flags index="LeashRetarget" value="1"/>
         </InfoArray>
         <EffectArray index="Create" value="OnMagazineAdded"/>
-        <EffectArray index="Release" value="OnMagazineRelease"/>
+        <EffectArray index="Release" value="MagazineModificationPack"/>
         <ExternalAngle value="225"/>
         <ExternalAngle value="45"/>
         <ExternalAngle value="315"/>
         <ExternalAngle value="135"/>
         <MaxCount value="4"/>
         <SharedFlags index="TargetSnapToUnitRadius" value="1"/>
+        <CalldownEffect value="ReleaseInfantryMagazineCalldown"/>
     </CAbilArmMagazine>
     <CAbilEffectTarget id="AddMarineToSquad">
         <Alignment value="Positive"/>

@@ -1627,9 +1627,9 @@
             <LayoutButtons Face="ExcavatorGather" Type="AbilCmd" AbilCmd="SquadExcavatorGather,Gather" Row="1" Column="0"/>
             <LayoutButtons Face="ReturnCargo" Type="AbilCmd" AbilCmd="SquadExcavatorGather,Return" Row="1" Column="0"/>
             <LayoutButtons Face="ExcavatorBehemothProtocal" Type="AbilCmd" AbilCmd="ExcavatorGatherMode,Off" Row="1" Column="2"/>
+            <LayoutButtons Face="ExcavatorBehemothProtocal" Type="Passive" Row="1" Column="2"/>
             <LayoutButtons Face="BehemothIgniteAfterburners" Type="AbilCmd" AbilCmd="BehemothAfterburner,Execute" Row="2" Column="0"/>
             <LayoutButtons Face="ScavageStructure" Type="Passive" Behavior="ExcavatorRecycleStructureCauseDropPickup" Row="2" Column="3"/>
-            <LayoutButtons Face="ExcavatorBehemothProtocal" Type="Passive" Row="1" Column="2"/>
         </CardLayouts>
         <Radius value="1"/>
         <SeparationRadius value="1"/>
@@ -2366,6 +2366,8 @@
         <AbilArray Link="stop"/>
         <AbilArray Link="attack"/>
         <AbilArray Link="SquadQueue5"/>
+        <AbilArray Link="SquadInfantry"/>
+        <AbilArray Link="DisbandSquad"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="SquadMissileTurretDetector11"/>
         <BehaviorArray Link="UnderConstruction"/>
@@ -2399,6 +2401,7 @@
                 <Row value="2"/>
                 <Column value="1"/>
             </LayoutButtons>
+            <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="4"/>
         </CardLayouts>
         <Radius value="0.75"/>
         <SeparationRadius value="0.75"/>
@@ -3211,17 +3214,6 @@
             <LayoutButtons Face="Enband" Type="AbilCmd" AbilCmd="AddMarauderToSquad,Execute" Row="1" Column="4"/>
             <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="3"/>
         </CardLayouts>
-        <CardLayouts CardId="SQDS">
-            <LayoutButtons Face="BuildSquadMarine" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo2" Row="0" Column="1"/>
-            <LayoutButtons Face="BuildSquadSCV" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo1" Row="0" Column="0"/>
-            <LayoutButtons Face="BuildSquadMedic" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo3" Row="0" Column="2"/>
-            <LayoutButtons Face="BuildSquadFirebat" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo4" Row="0" Column="3"/>
-            <LayoutButtons Face="BuildSquadMarauder" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo5" Row="0" Column="4"/>
-            <LayoutButtons Face="BuildSquadReaper" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo6" Row="1" Column="0"/>
-            <LayoutButtons Face="BuildSquadGhost" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo7" Row="1" Column="1"/>
-            <LayoutButtons Face="BuildSquadSpectre" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo8" Row="1" Column="2"/>
-            <LayoutButtons Face="BuildSquadPredator" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo9" Row="1" Column="3"/>
-        </CardLayouts>
         <Radius value="0.5625"/>
         <InnerRadius value="0.375"/>
         <CargoSize value="1"/>
@@ -3384,17 +3376,6 @@
             <LayoutButtons Face="RetributionField" Type="Passive" Row="2" Column="0"/>
             <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="3"/>
             <LayoutButtons Face="Enband" Type="AbilCmd" AbilCmd="AddPredatorToSquad,Execute" Row="1" Column="4"/>
-        </CardLayouts>
-        <CardLayouts CardId="SQDS">
-            <LayoutButtons Face="BuildSquadMarine" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo2" Row="0" Column="1"/>
-            <LayoutButtons Face="BuildSquadSCV" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo1" Row="0" Column="0"/>
-            <LayoutButtons Face="BuildSquadMedic" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo3" Row="0" Column="2"/>
-            <LayoutButtons Face="BuildSquadFirebat" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo4" Row="0" Column="3"/>
-            <LayoutButtons Face="BuildSquadMarauder" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo5" Row="0" Column="4"/>
-            <LayoutButtons Face="BuildSquadReaper" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo6" Row="1" Column="0"/>
-            <LayoutButtons Face="BuildSquadGhost" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo7" Row="1" Column="1"/>
-            <LayoutButtons Face="BuildSquadSpectre" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo8" Row="1" Column="2"/>
-            <LayoutButtons Face="BuildSquadPredator" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo9" Row="1" Column="3"/>
         </CardLayouts>
         <Radius value="0.375"/>
         <SeparationRadius value="0.625"/>
@@ -3675,17 +3656,6 @@
             <LayoutButtons Face="Enband" Type="AbilCmd" AbilCmd="AddSpectreToSquad,Execute" Row="1" Column="4"/>
             <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="3"/>
         </CardLayouts>
-        <CardLayouts CardId="SQDS">
-            <LayoutButtons Face="BuildSquadMarine" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo2" Row="0" Column="1"/>
-            <LayoutButtons Face="BuildSquadSCV" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo1" Row="0" Column="0"/>
-            <LayoutButtons Face="BuildSquadMedic" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo3" Row="0" Column="2"/>
-            <LayoutButtons Face="BuildSquadFirebat" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo4" Row="0" Column="3"/>
-            <LayoutButtons Face="BuildSquadMarauder" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo5" Row="0" Column="4"/>
-            <LayoutButtons Face="BuildSquadReaper" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo6" Row="1" Column="0"/>
-            <LayoutButtons Face="BuildSquadGhost" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo7" Row="1" Column="1"/>
-            <LayoutButtons Face="BuildSquadSpectre" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo8" Row="1" Column="2"/>
-            <LayoutButtons Face="BuildSquadPredator" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo9" Row="1" Column="3"/>
-        </CardLayouts>
         <Radius value="0.375"/>
         <SeparationRadius value="0.375"/>
         <CargoSize value="1"/>
@@ -3776,17 +3746,6 @@
             <LayoutButtons Face="Enband" Type="AbilCmd" AbilCmd="AddGhostToSquad,Execute" Row="1" Column="4"/>
             <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="3"/>
         </CardLayouts>
-        <CardLayouts CardId="SQDS">
-            <LayoutButtons Face="BuildSquadMarine" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo2" Row="0" Column="1"/>
-            <LayoutButtons Face="BuildSquadSCV" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo1" Row="0" Column="0"/>
-            <LayoutButtons Face="BuildSquadMedic" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo3" Row="0" Column="2"/>
-            <LayoutButtons Face="BuildSquadFirebat" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo4" Row="0" Column="3"/>
-            <LayoutButtons Face="BuildSquadMarauder" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo5" Row="0" Column="4"/>
-            <LayoutButtons Face="BuildSquadReaper" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo6" Row="1" Column="0"/>
-            <LayoutButtons Face="BuildSquadGhost" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo7" Row="1" Column="1"/>
-            <LayoutButtons Face="BuildSquadSpectre" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo8" Row="1" Column="2"/>
-            <LayoutButtons Face="BuildSquadPredator" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo9" Row="1" Column="3"/>
-        </CardLayouts>
         <Radius value="0.375"/>
         <SeparationRadius value="0.375"/>
         <InnerRadius value="0.375"/>
@@ -3837,17 +3796,6 @@
                 <Column value="3"/>
             </LayoutButtons>
             <LayoutButtons index="9" Face="InfantrySquadCover" Type="Passive" AbilCmd="" Row="1" Column="1"/>
-        </CardLayouts>
-        <CardLayouts CardId="SQDS">
-            <LayoutButtons Face="BuildSquadMarine" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo2" Row="0" Column="1"/>
-            <LayoutButtons Face="BuildSquadSCV" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo1" Row="0" Column="0"/>
-            <LayoutButtons Face="BuildSquadMedic" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo3" Row="0" Column="2"/>
-            <LayoutButtons Face="BuildSquadFirebat" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo4" Row="0" Column="3"/>
-            <LayoutButtons Face="BuildSquadMarauder" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo5" Row="0" Column="4"/>
-            <LayoutButtons Face="BuildSquadReaper" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo6" Row="1" Column="0"/>
-            <LayoutButtons Face="BuildSquadGhost" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo7" Row="1" Column="1"/>
-            <LayoutButtons Face="BuildSquadSpectre" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo8" Row="1" Column="2"/>
-            <LayoutButtons Face="BuildSquadPredator" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo9" Row="1" Column="3"/>
         </CardLayouts>
         <CargoSize value="1"/>
         <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
@@ -3930,17 +3878,6 @@
             <LayoutButtons Face="Enband" Type="AbilCmd" AbilCmd="AddFirebatToSquad,Execute" Row="1" Column="4"/>
             <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="3"/>
             <LayoutButtons Face="SquadStimpack" Type="AbilCmd" AbilCmd="SquadStimpack,Execute" Row="2" Column="0"/>
-        </CardLayouts>
-        <CardLayouts CardId="SQDS">
-            <LayoutButtons Face="BuildSquadMarine" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo2" Row="0" Column="1"/>
-            <LayoutButtons Face="BuildSquadSCV" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo1" Row="0" Column="0"/>
-            <LayoutButtons Face="BuildSquadMedic" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo3" Row="0" Column="2"/>
-            <LayoutButtons Face="BuildSquadFirebat" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo4" Row="0" Column="3"/>
-            <LayoutButtons Face="BuildSquadMarauder" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo5" Row="0" Column="4"/>
-            <LayoutButtons Face="BuildSquadReaper" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo6" Row="1" Column="0"/>
-            <LayoutButtons Face="BuildSquadGhost" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo7" Row="1" Column="1"/>
-            <LayoutButtons Face="BuildSquadSpectre" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo8" Row="1" Column="2"/>
-            <LayoutButtons Face="BuildSquadPredator" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo9" Row="1" Column="3"/>
         </CardLayouts>
         <InnerRadius value="0.4375"/>
         <CargoSize value="1"/>
@@ -4033,17 +3970,6 @@
             </LayoutButtons>
             <LayoutButtons Face="Enband" Type="AbilCmd" AbilCmd="AddMedicToSquad,Execute" Row="1" Column="4"/>
             <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="3"/>
-        </CardLayouts>
-        <CardLayouts CardId="SQDS">
-            <LayoutButtons Face="BuildSquadMarine" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo2" Row="0" Column="1"/>
-            <LayoutButtons Face="BuildSquadSCV" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo1" Row="0" Column="0"/>
-            <LayoutButtons Face="BuildSquadMedic" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo3" Row="0" Column="2"/>
-            <LayoutButtons Face="BuildSquadFirebat" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo4" Row="0" Column="3"/>
-            <LayoutButtons Face="BuildSquadMarauder" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo5" Row="0" Column="4"/>
-            <LayoutButtons Face="BuildSquadReaper" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo6" Row="1" Column="0"/>
-            <LayoutButtons Face="BuildSquadGhost" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo7" Row="1" Column="1"/>
-            <LayoutButtons Face="BuildSquadSpectre" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo8" Row="1" Column="2"/>
-            <LayoutButtons Face="BuildSquadPredator" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo9" Row="1" Column="3"/>
         </CardLayouts>
         <Radius value="0.375"/>
         <SeparationRadius value="0.375"/>
@@ -4188,17 +4114,6 @@
             <LayoutButtons Face="SquadStimpack" Type="AbilCmd" AbilCmd="SquadStimpack,Execute" Row="2" Column="0"/>
             <LayoutButtons Face="Enband" Type="AbilCmd" AbilCmd="AddMarineToSquad,Execute" Row="1" Column="4"/>
             <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="3"/>
-        </CardLayouts>
-        <CardLayouts CardId="SQDS">
-            <LayoutButtons Face="BuildSquadMarine" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo2" Row="0" Column="1"/>
-            <LayoutButtons Face="BuildSquadSCV" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo1" Row="0" Column="0"/>
-            <LayoutButtons Face="BuildSquadMedic" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo3" Row="0" Column="2"/>
-            <LayoutButtons Face="BuildSquadFirebat" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo4" Row="0" Column="3"/>
-            <LayoutButtons Face="BuildSquadMarauder" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo5" Row="0" Column="4"/>
-            <LayoutButtons Face="BuildSquadReaper" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo6" Row="1" Column="0"/>
-            <LayoutButtons Face="BuildSquadGhost" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo7" Row="1" Column="1"/>
-            <LayoutButtons Face="BuildSquadSpectre" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo8" Row="1" Column="2"/>
-            <LayoutButtons Face="BuildSquadPredator" Type="AbilCmd" AbilCmd="SquadInfantry,Ammo9" Row="1" Column="3"/>
         </CardLayouts>
         <Radius value="0.375"/>
         <SeparationRadius value="0.375"/>
@@ -5278,12 +5193,12 @@
         <AbilArray Link="stop"/>
         <AbilArray Link="attack"/>
         <AbilArray Link="move"/>
+        <AbilArray Link="SquadSpiderMineMagazine"/>
         <AbilArray Link="SquadSpiderMineQueue"/>
         <AbilArray Link="QueueMagazine"/>
         <AbilArray Link="SquadInfantry"/>
-        <AbilArray Link="DisbandSquad"/>
         <AbilArray Link="SquadVultureDeploySpiderMine"/>
-        <AbilArray Link="SquadSpiderMineMagazine"/>
+        <AbilArray Link="SquadVultureDisableSpiderSwitch"/>
         <BehaviorArray Link="CaptainBuffRedirectDaemon"/>
         <WeaponArray Link="SquadVultureFragmentationGrenade"/>
         <WeaponArray Link="SquadVultureFragmentationGrenade2nd"/>
@@ -5295,11 +5210,13 @@
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
             <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="SquadSpiderMineQueue,255" Row="2" Column="4"/>
-            <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="4"/>
             <LayoutButtons Face="Minecraft" Row="1" Column="3"/>
             <LayoutButtons Face="SpiderMineMagazine" Type="AbilCmd" AbilCmd="SquadSpiderMineMagazine,Ammo1" Row="1" Column="0"/>
             <LayoutButtons Face="DeploySquadSpiderMine" Type="AbilCmd" AbilCmd="SquadVultureDeploySpiderMine,Execute" Row="2" Column="0"/>
             <LayoutButtons Face="SquadSpiderMineTeleport" Type="Passive" Row="1" Column="2"/>
+            <LayoutButtons Face="VanillaVultureMode" Type="AbilCmd" AbilCmd="SquadVultureDisableSpiderSwitch,On" Row="2" Column="1"/>
+            <LayoutButtons Face="SpiderCarrierMode" Type="AbilCmd" AbilCmd="SquadVultureDisableSpiderSwitch,Off" Row="2" Column="2"/>
+            <LayoutButtons Face="NotDisbandSquad" Type="Passive" Row="1" Column="4"/>
         </CardLayouts>
         <Radius value="0.625"/>
         <SeparationRadius value="0.625"/>

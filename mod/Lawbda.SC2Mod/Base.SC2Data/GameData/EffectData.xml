@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CEffectUseCalldown id="ReleaseInfantryMagazineCalldown">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectUseCalldown>
     <CEffectSet id="SpectreBuffRedirectPack">
         <EditorCategories value="Race:Terran"/>
         <DamageModifierSource Value="Outer"/>
@@ -3085,7 +3088,8 @@
     </CEffectRemoveBehavior>
     <CEffectRemoveBehavior id="MagazineTrackerAllStackRemove">
         <EditorCategories value="Race:Terran"/>
-        <BehaviorLink value="SquadAlphaUnitTracker"/>
+        <BehaviorCategories index="User15" value="1"/>
+        <BehaviorLink value=""/>
     </CEffectRemoveBehavior>
     <CEffectApplyBehavior id="ResourceFragileApply">
         <ValidatorArray index="0" value="IsWorker"/>
@@ -3149,7 +3153,7 @@
         <EditorCategories value="Race:Terran"/>
         <Behavior value="DisableMagazineAbilities"/>
     </CEffectApplyBehavior>
-    <CEffectSet id="Disband">
+    <CEffectSet id="CaptainModificationPack">
         <EditorCategories value="Race:Terran"/>
         <EffectArray value="RemoveBasicModification"/>
         <EffectArray value="RemoveBuffModification"/>
@@ -3571,7 +3575,7 @@
         <EffectArray value="SquadDisableAttackApply"/>
         <EffectArray value="SquadMagazineUnitRecallApply"/>
     </CEffectSet>
-    <CEffectSet id="OnMagazineRelease">
+    <CEffectSet id="MagazineModificationPack">
         <EditorCategories value="Race:Terran"/>
         <EffectArray value="DisableNoCollision"/>
         <EffectArray value="EnableMagazine"/>
