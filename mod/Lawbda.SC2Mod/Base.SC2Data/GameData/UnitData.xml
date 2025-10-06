@@ -1597,7 +1597,7 @@
         <CostResource index="Minerals" value="200"/>
         <CostResource index="Vespene" value="125"/>
         <RepairTime value="50"/>
-        <AttackTargetPriority value="11"/>
+        <AttackTargetPriority value="20"/>
         <DamageDealtXP value="1"/>
         <DamageTakenXP value="5"/>
         <KillXP value="50"/>
@@ -1610,6 +1610,7 @@
         <AbilArray Link="SquadExcavatorGather"/>
         <AbilArray Link="BehemothAfterburner"/>
         <AbilArray Link="ExcavatorGatherMode"/>
+        <AbilArray Link="CaptainExcavatorRevive"/>
         <BehaviorArray Link="ExcavatorRecycleStructureCauseDropPickup"/>
         <BehaviorArray Link="SquadStructureFireSuppressionSystem"/>
         <BehaviorArray Link="Frenzy"/>
@@ -1637,12 +1638,16 @@
         <CargoSize value="4"/>
         <ScoreMake value="350"/>
         <ScoreKill value="700"/>
-        <SubgroupPriority value="16"/>
+        <SubgroupPriority value="35"/>
         <MinimapRadius value="0.7"/>
         <EditorCategories value="ObjectType:Hero,ObjectFamily:Campaign"/>
         <SelectAlias value="Thor"/>
         <HotkeyCategory value="Unit/Category/Lawbda"/>
         <CostCategory value="Army"/>
+        <ReviveInfoBase>
+            <Charge Link="CaptainExcavatorRevive/Revive"/>
+            <Cooldown Link="CaptainExcavatorRevive/Revive"/>
+        </ReviveInfoBase>
     </CUnit>
     <CUnit id="SquadPylon">
         <DeathRevealRadius value="3"/>
@@ -4296,6 +4301,7 @@
         <AbilArray Link="SquadInfantry"/>
         <AbilArray Link="QueueMagazine"/>
         <AbilArray Link="DisbandSquad"/>
+        <AbilArray Link="CaptainFreemanRevive"/>
         <WeaponArray Link="FreemanGaussRifle"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -4324,7 +4330,7 @@
         <CargoSize value="1"/>
         <ScoreMake value="50"/>
         <ScoreKill value="100"/>
-        <SubgroupPriority value="15"/>
+        <SubgroupPriority value="40"/>
         <MinimapRadius value="0.375"/>
         <EditorCategories value="ObjectType:Hero,ObjectFamily:Campaign"/>
         <TacticalAI value="Marine"/>
@@ -4346,13 +4352,14 @@
             <ChanceArray index="Turn" value="33"/>
         </Fidget>
         <ReviveInfoBase>
-            <Charge Link="WarPig/Revive"/>
-            <Cooldown Link="WarPig/Revive"/>
+            <Charge Link="CaptainFreemanRevive/Revive"/>
+            <Cooldown Link="CaptainFreemanRevive/Revive"/>
         </ReviveInfoBase>
         <Mover value="SuqadGround"/>
         <BehaviorArray Link="InfantryLevelUpto10"/>
         <BehaviorArray Link="SquadShooterAura"/>
         <HotkeyCategory value="Unit/Category/Lawbda"/>
+        <DeathTime value="-1"/>
     </CUnit>
     <CUnit id="SquadSCVJumper" parent="SquadSCV">
         <Name value="Unit/Name/SquadSCVJumper"/>

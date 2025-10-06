@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
-    <!--outer impor end-->
-    <!--outer impor end-->
-    <!--outer impor end-->
     <CActorAction default="1" id="SquadMarauderAttackBase" parent="MarauderAttackBase"/>
+    <!--outer impor end-->
+    <!--outer impor end-->
+    <!--outer impor end-->
+    <CActorEventMacro id="MagazineSmallScale">
+        <On Terms="Behavior.InfantryBasicStatesModifies.On" Send="SetScale 0.650000"/>
+        <On Terms="Behavior.InfantryBasicStatesModifies.Off" Send="SetScale"/>
+    </CActorEventMacro>
     <CActorRange id="ChargeSquadMuleliskRange" parent="RangeAbil" abil="AddMuleliskToSquad">
         <Icon value="Assets\Textures\RadarIcon2.dds"/>
         <IconArcLength value="3.250000"/>
@@ -2129,15 +2133,15 @@
         <On Terms="Behavior.SquadStimpack.On" Send="Create"/>
         <Sound value="Marine_Stimpack"/>
     </CActorSound>
-    <CActorSound id="SquadFirbatGiftFireOrbBurningGroundImpactSound" parent="SoundOneShot">
-        <On Terms="Behavior.SquadFirbatGiftFireOrbBurningGround.On" Send="Create"/>
+    <CActorSound id="SquadFirebatGiftFireOrbBurningGroundImpactSound" parent="SoundOneShot">
+        <On Terms="Behavior.SquadFirebatGiftFireOrbBurningGround.On" Send="Create"/>
         <Sound value="Terran_FlameLoopLarge"/>
     </CActorSound>
-    <CActorModel id="SquadFirbatGiftFireOrbBurningGroundImpact" parent="ModelAnimationStyleContinuous">
+    <CActorModel id="SquadFirebatGiftFireOrbBurningGroundImpact" parent="ModelAnimationStyleContinuous">
         <Inherits index="BaseModelScale" value="1"/>
         <Inherits index="Scale" value="1"/>
-        <On Terms="Behavior.SquadFirbatGiftFireOrbBurningGround.On" Send="Create"/>
-        <On Terms="Behavior.SquadFirbatGiftFireOrbBurningGround.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="Behavior.SquadFirebatGiftFireOrbBurningGround.On" Send="Create"/>
+        <On Terms="Behavior.SquadFirebatGiftFireOrbBurningGround.Off" Send="AnimBracketStop BSD"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachCenter"/>
         <Model value="SolarCombustionTastesLikeBurning"/>
@@ -4060,6 +4064,7 @@
         <Macros value="PhysicsDeathsSwarmGround"/>
         <Macros value="PhysicsDeathsVoidGround"/>
         <Macros value="SnowVisualUnitMacro"/>
+        <Macros value="MagazineSmallScale"/>
         <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
         <On Terms="ActorCreation" Send="StatusSet WeaponNext 0"/>
         <On Terms="Effect.SquadMarauderPunisherGrenadesLaunchMissile.Start; At Caster" Send="StatusIncrement WeaponNext"/>
@@ -4283,6 +4288,7 @@
     <CActorUnit id="SquadPredator" parent="GenericUnitStandard" unitName="Predator">
         <Aliases value="_UnitMedium"/>
         <Macros value="UnloadDropAnim"/>
+        <Macros value="MagazineSmallScale"/>
         <On index="0" Terms="UnitBirth.SquadPredator"/>
         <On index="1" Terms="UnitBirth.SquadPredator"/>
         <On index="2" Terms="UnitRevive.SquadPredator"/>
@@ -4559,6 +4565,7 @@
     <CActorUnit id="SquadFirebat" parent="GenericUnitStandard" unitName="SquadFirebat">
         <Aliases value="_UnitMedium"/>
         <Macros value="UnloadDropAnim"/>
+        <Macros value="MagazineSmallScale"/>
         <On Terms="Abil.attack.ReadyStop" Target="FirebatAttackModel" Send="SetOpacity 0.000000 0.050000"/>
         <On Terms="UnitDeathCustomize; ValidateUnit HaveVoidShade" Send="DeathCustomize Shadow"/>
         <On Terms="UnitDeathCustomize; ValidateUnit HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
@@ -4913,7 +4920,7 @@
         <BarOffset value="40"/>
         <BarWidth value="36"/>
         <GroupIcon>
-            <Image value="Assets\Textures\wireframe-terran-marine-mercenary.dds"/>
+            <Image value="Assets\Textures\wireframe-terran-marine-raynorhev.dds"/>
         </GroupIcon>
         <GroupSoundArray index="What" value="Raynor_What"/>
         <GroupSoundArray index="Yes" value="Raynor_Yes"/>
@@ -4937,7 +4944,7 @@
         <SoundArray index="Highlight" value="RaynorA_GGWin"/>
         <UnitIcon value="Assets\Textures\BTN-Unit-Terran-MarineMercenary.dds"/>
         <Wireframe>
-            <Image value="Assets\Textures\wireframe-terran-marine-mercenary.dds"/>
+            <Image value="Assets\Textures\wireframe-terran-marine-raynorhev.dds"/>
         </Wireframe>
     </CActorUnit>
     <CActorAction id="SquadHeroFreemanAttack" parent="GenericAttack" effectAttack="FreemanGaussRifleDamage">
@@ -4953,6 +4960,7 @@
         <Macros value="PhysicsDeathsSwarmGround"/>
         <Macros value="TerrainSquibAnimations"/>
         <Macros value="PhysicsDeathsVoidGround"/>
+        <Macros value="MagazineSmallScale"/>
         <On Terms="ActorCreation; ValidatePlayer NoMarineShield" Send="AnimPlay Cover Cover PlayForever 0.000000"/>
         <On Terms="Upgrade.ShieldWall.Add" Send="AnimClear Cover"/>
         <On Terms="Upgrade.ShieldWall.Remove" Send="AnimPlay Cover Cover PlayForever 0.000000"/>
@@ -5080,6 +5088,7 @@
         <Aliases value="_UnitSmall"/>
         <Macros value="UnloadDropAnim"/>
         <Macros value="TerrainSquibAnimations"/>
+        <Macros value="MagazineSmallScale"/>
         <On Terms="Abil.SquadMedicHeal" Send="$Spell PlayForever"/>
         <On Terms="Abil.SquadMedicHeal" Send="AnimClear Spell"/>
         <!--
@@ -5297,6 +5306,7 @@
     <CActorMissile id="SquadReaper" parent="GenericUnitBase" unitName="SquadReaper">
         <Aliases value="_MissileHybrids"/>
         <Macros value="UnloadDropAnim"/>
+        <Macros value="MagazineSmallScale"/>
         <!--
         <Macros value="D8ChargeAnim"/>
 -->
@@ -5561,6 +5571,7 @@
         <Macros value="MacroWorkerHat"/>
         <Macros value="PhysicsDeathsSwarmGround"/>
         <Macros value="PhysicsDeathsVoidGround"/>
+        <Macros value="MagazineSmallScale"/>
         <On Terms="Abil.SquadSCVGather.Start" Send="TimerSet 0.000000,0.300000 SquadSCVGather"/>
         <On Terms="Abil.SquadSCVGather.stop" Send="AnimClear SquadSCVGather"/>
         <On Terms="Abil.SquadSCVGather.Stop" Send="TimerKill SquadSCVGather"/>
@@ -5640,6 +5651,7 @@
     <CActorUnit id="SquadSpectre" parent="GenericUnitStandard" unitName="SquadSpectre">
         <Aliases value="_UnitSmall"/>
         <Macros value="UnloadDropAnim"/>
+        <Macros value="MagazineSmallScale"/>
         <!--
         <On Terms="Abil.SpectreNuke.SourceCastStart" Send="AnimPlay SpellA Spell,A"/>
         <On Terms="Abil.SpectreNuke.SourceCastStop" Send="AnimClear SpellA"/>

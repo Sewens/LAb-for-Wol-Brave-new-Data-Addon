@@ -1597,7 +1597,7 @@
     </CEffectRemoveBehavior>
     <CEffectApplyBehavior id="SquadFirbatGiftFireOrbBurningGroundApply">
         <EditorCategories value="Race:Terran"/>
-        <Behavior value="SquadFirbatGiftFireOrbBurningGround"/>
+        <Behavior value="SquadFirebatGiftFireOrbBurningGround"/>
     </CEffectApplyBehavior>
     <CEffectDamage id="SquadFirbatGiftFireOrbBurningGroundDamage">
         <EditorCategories value="Race:Terran"/>
@@ -3502,7 +3502,7 @@
         <ArmorReduction value="1"/>
         <Flags index="Notification" value="1"/>
         <Kind value="Ranged"/>
-        <Amount value="1"/>
+        <Amount value="15"/>
         <SearchFlags index="CallForHelp" value="1"/>
         <SearchFlags index="OffsetByUnitRadius" value="1"/>
     </CEffectDamage>
@@ -3681,7 +3681,7 @@
         <EffectArray value="SquadPredatorRetributionFieldSearch"/>
     </CEffectSet>
     <CEffectEnumArea id="ResourceMessageSearch">
-        <SearchFilters value="-;Player,Ally,Enemy,Worker"/>
+        <SearchFilters value="Structure;Enemy,Worker"/>
         <AreaArray Radius="1.5" Effect="ResourceMessageApply"/>
     </CEffectEnumArea>
     <CEffectDamage id="SquadSnipeDamage" parent="DU_WEAP">
@@ -3716,6 +3716,7 @@
     </CEffectSet>
     <CEffectSet id="ReleaseMagazinePack">
         <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadMagazineUnitRecallRemove"/>
         <EffectArray value="ReleaseMagazine"/>
         <EffectArray value="ReleaseSquadPatrolRandomizer"/>
     </CEffectSet>

@@ -17,6 +17,20 @@
         <IgnoreFilters value="-;Enemy"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="Enband"/>
     </CAbilEffectTarget>
+    <CAbilRevive id="CaptainExcavatorRevive">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <SharedFlags index="DisableWhileDead" value="0"/>
+        <CmdButtonArray index="Revive1" DefaultButtonFace="SquadReviveStandard"/>
+        <CmdButtonArray index="ReviveAtTarget1" DefaultButtonFace="SquadRevivePlacement"/>
+        <Flags index="UnitOrderQueue" value="1"/>
+        <BaseInfo>
+            <Cooldown TimeUse="30"/>
+        </BaseInfo>
+        <Effect value="KerriganReviveHeal"/>
+        <Offset value="0,0"/>
+        <Range value="10"/>
+        <SelfReviveCmd value="Revive1"/>
+    </CAbilRevive>
     <CAbilBehavior id="ExcavatorGatherMode">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <CmdButtonArray index="On" DefaultButtonFace="ExcavatorHarvestDropPoint">
@@ -29,6 +43,20 @@
         <Flags index="Transient" value="1"/>
         <BehaviorArray value="ExcavatorGatherMode"/>
     </CAbilBehavior>
+    <CAbilRevive id="CaptainFreemanRevive">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <SharedFlags index="DisableWhileDead" value="0"/>
+        <CmdButtonArray index="Revive1" DefaultButtonFace="SquadReviveStandard"/>
+        <CmdButtonArray index="ReviveAtTarget1" DefaultButtonFace="SquadRevivePlacement"/>
+        <Flags index="UnitOrderQueue" value="1"/>
+        <BaseInfo>
+            <Cooldown TimeUse="30"/>
+        </BaseInfo>
+        <Effect value="KerriganReviveHeal"/>
+        <Offset value="0,0"/>
+        <Range value="10"/>
+        <SelfReviveCmd value="Revive1"/>
+    </CAbilRevive>
     <CAbilTrain id="SquadHeroTrain">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <InfoArray index="Train1" Time="30">
@@ -2017,6 +2045,7 @@
         <DebugTrace value="1"/>
         <Effect index="0" value="CaptainModificationPack"/>
         <Flags index="AllowMovement" value="1"/>
+        <Flags index="Transient" value="1"/>
         <Marker>
             <MatchFlags index="Link" value="0"/>
             <MismatchFlags index="Id" value="0"/>
@@ -2110,7 +2139,7 @@
         <Flags index="Transient" value="1"/>
         <Flags index="WaitForFood" value="0"/>
         <Leash value="1"/>
-        <InfoArray index="Ammo1" Manage="Recall" Unit="SquadSCV">
+        <InfoArray index="Ammo1" Distance="0.25" Manage="Recall" Unit="SquadSCV">
             <Charge>
                 <CountMax value="1"/>
                 <CountUse value="1"/>
@@ -2124,7 +2153,7 @@
             <Flags index="External" value="1"/>
             <Flags index="LeashRetarget" value="1"/>
         </InfoArray>
-        <InfoArray index="Ammo2" Manage="Recall" Unit="SquadMarine">
+        <InfoArray index="Ammo2" Distance="0.25" Manage="Recall" Unit="SquadMarine">
             <Charge>
                 <CountMax value="1"/>
                 <CountUse value="1"/>
@@ -2138,7 +2167,7 @@
             <Flags index="External" value="1"/>
             <Flags index="LeashRetarget" value="1"/>
         </InfoArray>
-        <InfoArray index="Ammo3" Manage="Recall" Unit="SquadMedic">
+        <InfoArray index="Ammo3" Distance="0.25" Manage="Recall" Unit="SquadMedic">
             <Charge>
                 <CountMax value="1"/>
                 <CountUse value="1"/>
@@ -2152,7 +2181,7 @@
             <Flags index="External" value="1"/>
             <Flags index="LeashRetarget" value="1"/>
         </InfoArray>
-        <InfoArray index="Ammo4" Manage="Recall" Unit="SquadFirebat">
+        <InfoArray index="Ammo4" Distance="0.25" Manage="Recall" Unit="SquadFirebat">
             <Charge>
                 <CountMax value="1"/>
                 <CountUse value="1"/>
@@ -2166,7 +2195,7 @@
             <Flags index="External" value="1"/>
             <Flags index="LeashRetarget" value="1"/>
         </InfoArray>
-        <InfoArray index="Ammo5" Manage="Recall" Unit="SquadMarauder">
+        <InfoArray index="Ammo5" Distance="0.25" Manage="Recall" Unit="SquadMarauder">
             <Charge>
                 <CountMax value="1"/>
                 <CountUse value="1"/>
@@ -2180,7 +2209,7 @@
             <Flags index="External" value="1"/>
             <Flags index="LeashRetarget" value="1"/>
         </InfoArray>
-        <InfoArray index="Ammo6" Manage="Recall" Unit="SquadReaper">
+        <InfoArray index="Ammo6" Distance="0.25" Manage="Recall" Unit="SquadReaper">
             <Charge>
                 <CountMax value="1"/>
                 <CountUse value="1"/>
@@ -2194,7 +2223,7 @@
             <Flags index="External" value="1"/>
             <Flags index="LeashRetarget" value="1"/>
         </InfoArray>
-        <InfoArray index="Ammo7" Manage="Recall" Unit="SquadGhost">
+        <InfoArray index="Ammo7" Distance="0.25" Manage="Recall" Unit="SquadGhost">
             <Charge>
                 <CountMax value="1"/>
                 <CountUse value="1"/>
@@ -2208,7 +2237,7 @@
             <Flags index="External" value="1"/>
             <Flags index="LeashRetarget" value="1"/>
         </InfoArray>
-        <InfoArray index="Ammo8" Manage="Recall" Unit="SquadSpectre">
+        <InfoArray index="Ammo8" Distance="0.25" Manage="Recall" Unit="SquadSpectre">
             <Charge>
                 <CountMax value="1"/>
                 <CountUse value="1"/>
@@ -2222,7 +2251,7 @@
             <Flags index="External" value="1"/>
             <Flags index="LeashRetarget" value="1"/>
         </InfoArray>
-        <InfoArray index="Ammo9" Manage="Recall" Unit="SquadPredator">
+        <InfoArray index="Ammo9" Distance="0.25" Manage="Recall" Unit="SquadPredator">
             <Charge>
                 <CountMax value="1"/>
                 <CountUse value="1"/>
@@ -2236,7 +2265,7 @@
             <Flags index="External" value="1"/>
             <Flags index="LeashRetarget" value="1"/>
         </InfoArray>
-        <InfoArray index="Ammo10" Unit="Mulelisk">
+        <InfoArray index="Ammo10" Distance="0.25" Manage="Recall" Unit="Mulelisk">
             <Charge>
                 <CountMax value="1"/>
                 <CountUse value="1"/>
