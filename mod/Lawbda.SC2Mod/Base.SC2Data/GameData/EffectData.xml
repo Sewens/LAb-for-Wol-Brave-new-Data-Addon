@@ -1,5 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CEffectEnumArea id="VanillaScannerSearhVictim">
+        <EditorCategories value="Race:Terran"/>
+        <OwningPlayer Value="Source"/>
+        <SearchFilters value="-;Player,Ally,Neutral"/>
+        <AreaArray MaxCount="5" Radius="13" Effect="SquadHavocTargetLockABTarget"/>
+        <MaxCount value="5"/>
+    </CEffectEnumArea>
+    <CEffectCreatePersistent id="VanillaScannerSweep">
+        <EditorCategories value="Race:Terran"/>
+        <InitialEffect value="VanillaScannerSearhVictim"/>
+        <ExpireDelay value="12.2775"/>
+        <RevealRadius value="13"/>
+        <RevealFlags index="Unfog" value="1"/>
+        <RevealFlags index="Detect" value="1"/>
+    </CEffectCreatePersistent>
+    <CEffectCreateUnit id="SquadForceField">
+        <ValidatorArray value="CliffLevelGE1"/>
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetPoint"/>
+        <CreateFlags index="DropOff" value="0"/>
+        <CreateFlags index="Placement" value="0"/>
+        <CreateFlags index="ProvideFood" value="0"/>
+        <CreateFlags index="UseFood" value="0"/>
+        <SpawnOwner Value="Neutral"/>
+        <SpawnEffect value="SquadForceFieldTimedLife"/>
+        <SpawnUnit value="SquadForceField"/>
+        <SpawnRange value="0"/>
+    </CEffectCreateUnit>
+    <CEffectApplyBehavior id="SquadForceFieldTimedLife">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="SquadForceFieldFate"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="SquadHavocFakeWeapon">
+        <EffectArray value="SquadHavocFakeWeaponTargetLockSearch"/>
+    </CEffectSet>
+    <CEffectEnumArea id="SquadHavocFakeWeaponTargetLockSearch">
+        <ValidatorArray value="CasterNotMaxTargetLocks"/>
+        <ImpactLocation Value="CasterUnit"/>
+        <SearchFilters value="Ground;Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray>
+            <Arc value="169.9914"/>
+            <MaxCount value="1"/>
+            <Radius value="8"/>
+            <FacingAdjustment value="0.9997"/>
+            <Effect value="SquadHavocTargetLockCP"/>
+        </AreaArray>
+        <SearchFlags index="CenterAtLaunch" value="1"/>
+    </CEffectEnumArea>
+    <CEffectApplyBehavior id="SquadSquadSightAB">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="SquadSquadSight"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumArea id="SquadSquadSightSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <SearchFilters value="Visible;Neutral,Enemy,Structure,Missile,Stasis,Dead,Invulnerable"/>
+        <AreaArray Radius="4" Effect="SquadSquadSightAB"/>
+    </CEffectEnumArea>
+    <CEffectApplyBehavior id="SquadHavocTargetLockABCaster">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="SquadHavocTargetLockCaster"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadHavocTargetLockABTarget">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="SquadHavocTargetLock"/>
+    </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="SquadHavocTargetLockCP">
+        <ValidatorArray value="NotHaveTargetLock"/>
+        <ValidatorArray value="CasterNotMaxTargetLocks"/>
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetUnit"/>
+        <Flags index="PersistUntilDestroyed" value="1"/>
+        <InitialEffect value="SquadHavocTargetLockStartSet"/>
+        <FinalEffect value="SquadHavocTargetLockFinishSet"/>
+        <PeriodicValidator value="MonitorTargetLockChecks"/>
+        <PeriodicPeriodArray value="1"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="SquadHavocTargetLockFinishSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="SquadHavocTargetLockRB"/>
+        <EffectArray value="SquadHavocTargetLockRBCaster"/>
+    </CEffectSet>
+    <CEffectRemoveBehavior id="SquadHavocTargetLockRB">
+        <EditorCategories value=""/>
+        <BehaviorLink value="ObserverTargetLock"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="SquadHavocTargetLockRBCaster">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="ObserverTargetLockCaster"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectSet id="SquadHavocTargetLockStartSet">
+        <EffectArray value="SquadHavocTargetLockABTarget"/>
+        <EffectArray value="SquadHavocTargetLockABCaster"/>
+    </CEffectSet>
     <CEffectModifyUnit id="ResourceMessageMU">
         <EditorCategories value="Race:Terran"/>
         <Resources value="1"/>
@@ -1625,7 +1722,7 @@
         <PeriodCount value="19"/>
         <PeriodicEffectArray value="SquadFirbatGiftFireOrbBurningGroundSearch"/>
         <PeriodicPeriodArray value="0.5"/>
-        <AINotifyEffect value="PsiStormSearch"/>
+        <AINotifyEffect value="Firebat"/>
     </CEffectCreatePersistent>
     <CEffectEnumArea id="SquadFirbatGiftFireOrbBurningGroundSearch">
         <EditorCategories value="Race:Terran"/>
@@ -3722,7 +3819,6 @@
         <EditorCategories value="Race:Terran"/>
         <EffectArray value="SquadMagazineUnitRecallRemove"/>
         <EffectArray value="ReleaseMagazine"/>
-        <EffectArray value="ReleaseSquadPatrolRandomizer"/>
     </CEffectSet>
     <CEffectApplyBehavior id="SquadSpectreUltrasonicPulseApplyBehavior">
         <ValidatorArray index="0" removed="1"/>

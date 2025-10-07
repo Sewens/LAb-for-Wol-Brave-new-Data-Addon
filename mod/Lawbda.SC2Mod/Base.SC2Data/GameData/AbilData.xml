@@ -57,6 +57,48 @@
         <Range value="10"/>
         <SelfReviveCmd value="Revive1"/>
     </CAbilRevive>
+    <CAbilRally id="SquadProgressRally">
+        <EditorCategories value="Race:Neutral,AbilityorEffectType:Structures"/>
+        <CmdButtonArray index="Rally1" DefaultButtonFace="SquadSetRallyPoint"/>
+        <Flags index="ShowWhileMerging" value="1"/>
+        <Flags index="ShowWhileWarping" value="1"/>
+    </CAbilRally>
+    <CAbilEffectTarget id="SquadForceField">
+        <AbilSetId value="ForceField"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+        </Cost>
+        <Range value="9"/>
+        <Marker>
+            <MatchFlags index="Link" value="0"/>
+            <MatchFlags index="CasterUnit" value="1"/>
+        </Marker>
+        <CursorEffect value="ForceFieldPlacement"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadHavocForceField"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <PlaceUnit value="ForceField"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadHavocTargetLock">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadHavocTargetLockCP"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Cost>
+            <Cooldown Location="Unit" TimeUse="3"/>
+        </Cost>
+        <TargetFilters value="Visible;Player,Ally,Neutral,Missile,Stasis,Dead,Invulnerable"/>
+        <TargetSorts>
+            <SortArray value="TSLifeLargestFirst"/>
+            <SortArray value="TSDistance"/>
+        </TargetSorts>
+        <Range value="8"/>
+        <AutoCastRange value="8"/>
+        <AutoCastValidatorArray value="NotHaveTargetLock"/>
+        <AutoCastValidatorArray value="NotInterceptor"/>
+        <CastOutroTime value="0.5"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadHavocTargetLock"/>
+    </CAbilEffectTarget>
     <CAbilTrain id="SquadHeroTrain">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <InfoArray index="Train1" Time="30">
@@ -223,7 +265,7 @@
         </CmdButtonArray>
         <Flags index="Toggle" value="1"/>
         <Flags index="Transient" value="1"/>
-        <BehaviorArray value="SquadDiamondbackBlastRailgun"/>
+        <BehaviorArray value="SquadDiamondbackBlastEvisceratorRailgun"/>
     </CAbilBehavior>
     <CAbilBehavior id="SquadGoliathAirFocus">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -290,7 +332,7 @@
         </CmdButtonArray>
         <Flags index="Toggle" value="1"/>
         <Flags index="Transient" value="1"/>
-        <BehaviorArray value="DisableSpiderMineMagazine"/>
+        <BehaviorArray value="VultureVanillaMode"/>
     </CAbilBehavior>
     <CAbilArmMagazine id="SquadSpiderMineMagazine">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -637,7 +679,9 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Flags index="RequireTargetVision" value="0"/>
         <Flags index="Transient" value="1"/>
-        <Cost/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+        </Cost>
         <Range value="500"/>
         <Arc value="360"/>
         <CursorEffect value="AlphaScannerSweep"/>
@@ -1058,7 +1102,9 @@
         <Effect index="0" value="SquadCalldownMuleliskCreateUnit"/>
         <Flags index="RequireTargetVision" value="0"/>
         <Flags index="Transient" value="1"/>
-        <Cost/>
+        <Cost>
+            <Vital index="Energy" value="75"/>
+        </Cost>
         <Range value="500"/>
         <Arc value="360"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadCalldownMulelisk"/>
@@ -1523,7 +1569,9 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Flags index="RequireTargetVision" value="0"/>
         <Flags index="Transient" value="1"/>
-        <Cost/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+        </Cost>
         <Range value="500"/>
         <Arc value="360"/>
         <CursorEffect value="BlueScannerSweep"/>
@@ -1855,13 +1903,14 @@
     </CAbilMorph>
     <CAbilEffectTarget id="VanillaScannerSweep">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Effect index="0" value="RedScannerSweep"/>
         <Flags index="RequireTargetVision" value="0"/>
         <Flags index="Transient" value="1"/>
-        <Cost/>
+        <Cost>
+            <Vital index="Energy" value="25"/>
+        </Cost>
         <Range value="500"/>
         <Arc value="360"/>
-        <CursorEffect value="RedScannerSweep"/>
+        <CursorEffect value="VanillaScannerSweep"/>
         <AINotifyEffect value="RedScannerSweep"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="Scan"/>
     </CAbilEffectTarget>
@@ -1985,7 +2034,9 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Flags index="RequireTargetVision" value="0"/>
         <Flags index="Transient" value="1"/>
-        <Cost/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+        </Cost>
         <Range value="500"/>
         <Arc value="360"/>
         <CursorEffect value="RedScannerSweep"/>
@@ -1995,7 +2046,9 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Flags index="RequireTargetVision" value="0"/>
         <Flags index="Transient" value="1"/>
-        <Cost/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+        </Cost>
         <Range value="500"/>
         <Arc value="360"/>
         <CursorEffect value="GreenScannerSweep"/>
@@ -2759,4 +2812,8 @@
         <EffectRange index="0" value="0,3"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="DeploySquadSpiderMine"/>
     </CAbilEffectTarget>
+    <CAbilWarpable id="SquadWarpable">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <PowerUserBehavior value="SquadWarpingIn"/>
+    </CAbilWarpable>
 </Catalog>

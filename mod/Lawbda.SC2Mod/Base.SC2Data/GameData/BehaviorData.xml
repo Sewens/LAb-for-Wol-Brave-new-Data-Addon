@@ -8,6 +8,53 @@
         <Period value="2"/>
         <PeriodicEffect value="SquadInnermagazineIterator"/>
     </CBehaviorBuff>
+    <CBehaviorPowerUser id="SquadWarpingIn">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-building-protoss-pylon.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <PowerLink value="PowerSource"/>
+        <PlacementMinPowerLevel value="1"/>
+        <Flags index="KillIfUnpowered" value="1"/>
+        <PoweredWhileUnderConstruction value="1"/>
+        <PowerStageArray/>
+    </CBehaviorPowerUser>
+    <CBehaviorBuff id="SquadForceFieldFate" parent="TimedLife">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="0"/>
+        <DisplayDuration index="Ally" value="0"/>
+        <Duration value="15"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadSquadSight">
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-squadsight.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="1"/>
+        <Modification RangedWeaponRange="2"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadHavocTargetLock">
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-targetlock.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <MaxStackCount value="3"/>
+        <Modification>
+            <DamageTakenFraction index="Spell" value="0.3"/>
+            <DamageTakenFraction index="Melee" value="0.3"/>
+            <DamageTakenFraction index="Ranged" value="0.3"/>
+            <DamageTakenFraction index="Splash" value="0.3"/>
+            <DamageTakenFraction index="NoProc" value="0.3"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadHavocTargetLockCaster">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <MaxStackCount value="3"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadSquadSightPersistent">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Protoss"/>
+        <DisableValidatorArray value="IsNotWarpingIn"/>
+        <DisableValidatorArray value="NotOracleStasisTrapped"/>
+        <Period value="0.25"/>
+        <PeriodicEffect value="SquadSquadSightSearch"/>
+    </CBehaviorBuff>
     <CBehaviorBuff id="VultureVanillaMode">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Modification>
@@ -1078,6 +1125,7 @@
             <VitalMaxAdditiveMultiplierArray index="Energy" value="0.25"/>
             <VitalRegenArray index="Energy" value="0.75"/>
         </Modification>
+        <InfoIcon value="Assets\Textures\btn-ability-stetmann-garystetelliteovercharge-energy.dds"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="AlphaScannerInvisible">
         <Alignment value="Positive"/>
@@ -1216,6 +1264,7 @@
         <BuffFlags index="RefreshStack" value="1"/>
         <MaxStackCount value="8"/>
         <MaxStackCountPerCaster value="1"/>
+        <InfoIcon value="Assets\Textures\btn-upgrade-stetmann-infestorbonusravager.dds"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="MagazineDeathResponse">
         <BehaviorFlags index="Permanent" value="1"/>
@@ -1340,7 +1389,7 @@
         <MaxTrackedUnits value="8"/>
     </CBehaviorUnitTracker>
     <CBehaviorBuff id="MultiMineralAutoHarvest">
-        <InfoIcon value="Assets\Textures\btn-tips-resourcecaches.dds"/>
+        <InfoIcon value="Assets\Textures\btn-upgrade-protoss-fenix-colossuschampionslowbeam.dds"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
         <Period value="2"/>
@@ -1356,7 +1405,7 @@
         <Modification RadiusMultiplier="1.75"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="ResourceMineralAssassin">
-        <InfoIcon value="Assets\Textures\btn-tips-resourcecaches.dds"/>
+        <InfoIcon value="Assets\Textures\btn-tips-richminerals.dds"/>
         <BehaviorCategories index="User9" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <MaxStackCount value="8"/>
@@ -1367,7 +1416,7 @@
         <MaxStackCountPerCaster value="1"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="MultiMineralAutoHarvestAura">
-        <InfoIcon value="Assets\Textures\btn-tips-resourcecaches.dds"/>
+        <InfoIcon value="Assets\Textures\btn-upgrade-protoss-fenix-colossuschampionslowbeam.dds"/>
         <BehaviorCategories index="User9" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <MaxStackCount value="8"/>
@@ -1384,7 +1433,7 @@
         </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="ResourceVespenseCrazy">
-        <InfoIcon value="Assets\Textures\btn-tips-droppedterrazine.dds"/>
+        <InfoIcon value="Assets\Textures\btn-ability-kerrigan-vespeneefficiency.dds"/>
         <BehaviorCategories index="User9" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <MaxStackCount value="8"/>
@@ -1492,7 +1541,7 @@
         </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="ResourceMessage">
-        <InfoIcon value="Assets\Textures\btn-upgrade-zerg-stukov-regenrate.dds"/>
+        <InfoIcon value="Assets\Textures\btn-ability-zerg-dehaka-healingaura.dds"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
         <BuffFlags index="RefreshStack" value="1"/>
@@ -1634,7 +1683,7 @@
         <JumpEffectDown value="SquadJumpShieldApply"/>
     </CBehaviorJump>
     <CBehaviorBuff id="ResourceMineralRobbery">
-        <InfoIcon value="Assets\Textures\btn-tips-resourcecaches.dds"/>
+        <InfoIcon value="Assets\Textures\btn-doodad-minerals.dds"/>
         <BehaviorCategories index="User9" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <MaxStackCount value="8"/>
@@ -1656,10 +1705,12 @@
         <AcquirePlayer Value="Origin"/>
         <Modification RadiusMultiplier="0.65">
             <StateFlags index="HideWaypoints" value="1"/>
+            <StateFlags index="SuppressCollision" value="1"/>
             <StateFlags index="SuppressFidgeting" value="1"/>
             <StateFlags index="SuppressFoodUsed" value="1"/>
             <StateFlags index="SuppressArmySelect" value="1"/>
             <StateFlags index="Uncommandable" value="1"/>
+            <StateFlags index="Unselectable" value="1"/>
             <StateFlags index="Untargetable" value="1"/>
             <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
             <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
@@ -1682,7 +1733,7 @@
         <Modification MoveSpeedMultiplier="1.5" AttackSpeedMultiplier="1.5"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="ResourceMessageRegenAura">
-        <InfoIcon value="Assets\Textures\btn-upgrade-zerg-stukov-regenrate.dds"/>
+        <InfoIcon value="Assets\Textures\btn-ability-zerg-dehaka-healingaura.dds"/>
         <BehaviorCategories index="User9" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <MaxStackCount value="8"/>
@@ -1716,7 +1767,7 @@
         <RemoveValidatorArray value="IsConstructing"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="ResourceFragile">
-        <InfoIcon value="Assets\Textures\btn-ability-protoss-firebeam.dds"/>
+        <InfoIcon value="Assets\Textures\btn-progression-hornerhan-6-mirabuildtime.dds"/>
         <BehaviorCategories index="User9" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <DisableValidatorArray value=""/>
@@ -1738,7 +1789,7 @@
             <VitalRegenArray index="Life" value="3.25"/>
         </Modification>
         <BuffFlags index="RefreshStack" value="1"/>
-        <InfoIcon value="Assets\Textures\btn-ability-zerg-regenaura.dds"/>
+        <InfoIcon value="Assets\Textures\btn-upgrade-terran-nova-liferegen.dds"/>
         <MaxStackCountPerCaster value="1"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="UnitHugeAddMaxLife">
@@ -1750,7 +1801,7 @@
             <VitalMaxFractionArray index="Life" value="0.25"/>
             <VitalRegenArray index="Life" value="6.25"/>
         </Modification>
-        <InfoIcon value="Assets\Textures\btn-upgrade-zerg-stukov-regenrate.dds"/>
+        <InfoIcon value="Assets\Textures\btn-progression-hornerhan-11-mechhealing.dds"/>
         <MaxStackCountPerCaster value="1"/>
         <BuffFlags index="RefreshStack" value="1"/>
     </CBehaviorBuff>
@@ -1762,6 +1813,7 @@
             <VitalMaxAdditiveMultiplierArray index="Energy" value="0.15"/>
             <VitalRegenArray index="Energy" value="1.5"/>
         </Modification>
+        <InfoIcon value="Assets\Textures\btn-upgrade-karax-energyregen200.dds"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadFirebatViralPlasma">
         <Alignment value="Negative"/>
