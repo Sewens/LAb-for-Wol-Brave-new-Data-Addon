@@ -1,0 +1,285 @@
+include "TriggerLibs/NativeLib"
+include "TriggerLibs/CampaignLib"
+
+include "LibEA0820A1_h"
+
+//--------------------------------------------------------------------------------------------------
+// Library: LawbdaSquad
+//--------------------------------------------------------------------------------------------------
+// External Library Initialization
+void libEA0820A1_InitLibraries () {
+    libNtve_InitVariables();
+    libCamp_InitVariables();
+}
+
+// Variable Initialization
+bool libEA0820A1_InitVariables_completed = false;
+
+void libEA0820A1_InitVariables () {
+    if (libEA0820A1_InitVariables_completed) {
+        return;
+    }
+
+    libEA0820A1_InitVariables_completed = true;
+
+    libEA0820A1_gv_unitGroupForReplaced = UnitGroupEmpty();
+}
+
+// Functions
+void libEA0820A1_gf_GameStart (trigger t) {
+    // Automatic Variable Declarations
+    // Implementation
+    TriggerAddEventGeneric(t, "GameStarted");
+}
+
+// Triggers
+//--------------------------------------------------------------------------------------------------
+// Trigger: Initialization
+//--------------------------------------------------------------------------------------------------
+bool libEA0820A1_gt_Initialization_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((libCamp_gf_CurrentMap() != libCamp_ge_MapID_MapTStory01))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerExecute(libEA0820A1_gt_Init00ReplaceUnit, true, true);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libEA0820A1_gt_Initialization_Init () {
+    libEA0820A1_gt_Initialization = TriggerCreate("libEA0820A1_gt_Initialization_Func");
+    TriggerAddEventMapInit(libEA0820A1_gt_Initialization);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Init 00 ReplaceUnit
+//--------------------------------------------------------------------------------------------------
+bool libEA0820A1_gt_Init00ReplaceUnit_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    string lv_originUnitType;
+
+    // Automatic Variable Declarations
+    unitgroup auto9BA93C67_g;
+    int auto9BA93C67_u;
+    string auto0E6DA1A2_val;
+
+    // Variable Initialization
+
+    // Conditions
+    if (testConds) {
+        if (!((!((libCamp_gf_CurrentMap() == libCamp_ge_MapID_MapTStory01))))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libEA0820A1_gv_unitGroupForReplaced = UnitGroup(null, libEA0820A1_gv_pLAYER_01_USER, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+    auto9BA93C67_g = libEA0820A1_gv_unitGroupForReplaced;
+    auto9BA93C67_u = UnitGroupCount(auto9BA93C67_g, c_unitCountAll);
+    for (;; auto9BA93C67_u -= 1) {
+        libEA0820A1_gv_unitForReplaced = UnitGroupUnitFromEnd(auto9BA93C67_g, auto9BA93C67_u);
+        if (libEA0820A1_gv_unitForReplaced == null) { break; }
+        lv_originUnitType = UnitGetType(libEA0820A1_gv_unitForReplaced);
+        auto0E6DA1A2_val = lv_originUnitType;
+        if (auto0E6DA1A2_val == "Marine") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadMarine", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "CommandCenter") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadCommandCenter", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "SupplyDepot") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadSupplyDepot", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "SupplyDepotLowered") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadSupplyDepotLowered", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "Barracks") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadBarracks", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "EngineeringBay") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadEngineeringBay", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "Factory") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadFactory", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "Starport") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadStarport", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "Armory") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadArmory", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "MissileTurret") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadMissileTurret", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "Bunker") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadBunker", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "SensorTower") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadSensorTower", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "Refinery") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadRefinery", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "TechLab") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadTechlab", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "BarracksTechLab") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadTechlab", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "FactoryTechLab") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadTechlab", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "StarportTechLab") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadTechlab", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "Reactor") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadReactor", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "BarracksReactor") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadReactor", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "FactoryReactor") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadReactor", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "StarportTechReactor") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadReactor", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "FusionCore") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadFusionCore", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "GhostAcademy") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadGhostAcademy", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "SCV") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadSCV", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "Medic") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadMedic", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "Firebat") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadFirebat", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "Marauder") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadMarauder", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "Reaper") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadReaper", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "Ghost") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadGhost", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "Spectre") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadSpectre", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "Banshee") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadBanshee", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "Wraith") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadWraith", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "VikingFighter") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadVikingA", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "VikingAssault") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadVikingG", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "Battlecruiser") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadBattlecruiser", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "Medivac") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadMedivac", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "ScienceVessel") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadScienceVessel", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "Raven") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadRaven", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "Hellion") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadHellion", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "Diamondback") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadDiamondback", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "Goliath") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadGoliath", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "Vulture") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadVulture", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "ThorAP") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadThorAP", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "SiegeTank") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadSiegeTank", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "SiegeTankSieged") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadSiegeTankSieged", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else {
+        }
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libEA0820A1_gt_Init00ReplaceUnit_Init () {
+    libEA0820A1_gt_Init00ReplaceUnit = TriggerCreate("libEA0820A1_gt_Init00ReplaceUnit_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: OnPlayer1GetUnit
+//--------------------------------------------------------------------------------------------------
+bool libEA0820A1_gt_OnPlayer1GetUnit_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerExecute(libEA0820A1_gt_Init00ReplaceUnit, true, true);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libEA0820A1_gt_OnPlayer1GetUnit_Init () {
+    libEA0820A1_gt_OnPlayer1GetUnit = TriggerCreate("libEA0820A1_gt_OnPlayer1GetUnit_Func");
+    TriggerAddEventUnitChangeOwner(libEA0820A1_gt_OnPlayer1GetUnit, null);
+}
+
+void libEA0820A1_InitTriggers () {
+    libEA0820A1_gt_Initialization_Init();
+    libEA0820A1_gt_Init00ReplaceUnit_Init();
+    libEA0820A1_gt_OnPlayer1GetUnit_Init();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Library Initialization
+//--------------------------------------------------------------------------------------------------
+bool libEA0820A1_InitLib_completed = false;
+
+void libEA0820A1_InitLib () {
+    if (libEA0820A1_InitLib_completed) {
+        return;
+    }
+
+    libEA0820A1_InitLib_completed = true;
+
+    libEA0820A1_InitLibraries();
+    libEA0820A1_InitVariables();
+    libEA0820A1_InitTriggers();
+}
+
