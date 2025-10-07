@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CEffectModifyUnit id="ResourceMessageMU">
+        <EditorCategories value="Race:Terran"/>
+        <Resources value="1"/>
+        <ResourcesHarvestedFraction value="1"/>
+        <ModifyOwnerPlayer Value="Unknown"/>
+    </CEffectModifyUnit>
+    <CEffectCreateUnit id="SquadCalldownMuleliskCreateUnit">
+        <ValidatorArray value="MULETargetCheck"/>
+        <ValidatorArray value="MULETargetCheck"/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnitOrPoint"/>
+        <SpawnEffect value="SquadCalldownMuleliskCreateSet"/>
+        <SpawnUnit value="SquadMulelisk"/>
+    </CEffectCreateUnit>
     <CEffectUseCalldown id="ReleaseInfantryMagazineCalldown">
         <EditorCategories value="Race:Terran"/>
     </CEffectUseCalldown>
@@ -1995,7 +2009,7 @@
         <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="CasterOuter"/>
-        <BehaviorLink value="ResourceMessage2"/>
+        <BehaviorLink value="ResourceMessage"/>
         <Count value="1"/>
     </CEffectRemoveBehavior>
     <CEffectRemoveBehavior id="ResourceMineralRobberyRemove">
@@ -2009,7 +2023,7 @@
         <ValidatorArray index="0" value="IsWorker"/>
         <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="CasterOuter"/>
-        <BehaviorLink value="ResourceRegenAura"/>
+        <BehaviorLink value="ResourceMessageRegenAura"/>
         <Count value="1"/>
     </CEffectRemoveBehavior>
     <CEffectRemoveBehavior id="ResourceTerrazineCrazyRemove">
@@ -2027,7 +2041,7 @@
         <Count value="1"/>
     </CEffectRemoveBehavior>
     <CEffectModifyUnit id="SquadAutoHarvestVespene">
-        <EditorCategories value=""/>
+        <EditorCategories value="Race:Terran"/>
         <Resources value="-4"/>
         <ResourcesHarvestedFraction value="1"/>
     </CEffectModifyUnit>
@@ -2145,14 +2159,6 @@
         <EffectArray value="MakePrecursor"/>
         <EffectArray value="SquadCalldownMuleliskCreatePersistent"/>
     </CEffectSet>
-    <CEffectCreateUnit id="SquadCalldownMuleliskCreateUnit">
-        <EditorCategories value="Race:Terran"/>
-        <WhichLocation Value="TargetUnitOrPoint"/>
-        <CreateFlags index="Precursor" value="1"/>
-        <CreateFlags index="UseFood" value="0"/>
-        <SpawnEffect value="SquadCalldownMuleliskCreateSet"/>
-        <SpawnUnit value="Mulelisk"/>
-    </CEffectCreateUnit>
     <CEffectSet id="SquadCalldownMuleliskFinalSet">
         <EditorCategories value="Race:Terran"/>
         <EffectArray value="RemovePrecursor"/>
@@ -2737,7 +2743,7 @@
         <SearchFilters value="Ground;Self,Player,Ally,Massive,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
         <AreaArray Radius="1" Effect="SquadMarauderPunisherGrenadesSlow"/>
     </CEffectEnumArea>
-    <CEffectApplyBehavior id="MultiApplyAutoMineralHarvest">
+    <CEffectApplyBehavior id="MultiMineralAutoHarvestApply">
         <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
         <Behavior value="MultiMineralAutoHarvest"/>
@@ -3135,9 +3141,6 @@
         <EditorCategories value="Race:Terran"/>
         <Behavior value="ResourceMineralAssassin"/>
     </CEffectApplyBehavior>
-    <CEffectModifyUnit id="ResourceMessage">
-        <Resources value="1"/>
-    </CEffectModifyUnit>
     <CEffectDamage id="SquadStructureBurndownDamage">
         <EditorCategories value="Race:Terran"/>
         <Flags index="NoKillCredit" value="1"/>
@@ -3293,17 +3296,17 @@
     <CEffectApplyBehavior id="ResourceRegenAuraApply">
         <ValidatorArray index="0" value="IsWorker"/>
         <EditorCategories value="Race:Terran"/>
-        <Behavior value="ResourceRegenAura"/>
+        <Behavior value="ResourceMessageRegenAura"/>
     </CEffectApplyBehavior>
     <CEffectApplyBehavior id="ResourceMineralRobberyApply">
         <ValidatorArray index="0" value="IsWorker"/>
         <EditorCategories value="Race:Terran"/>
         <Behavior value="ResourceMineralRobbery"/>
     </CEffectApplyBehavior>
-    <CEffectEnumArea id="MultiAutoMineralHarvestSearch">
-        <SearchFilters value="Structure;Player,Ally,Enemy,Worker"/>
-        <AreaArray Radius="2" Effect="MultiApplyAutoMineralHarvest"/>
-        <MaxCount value="1"/>
+    <CEffectEnumArea id="MultiMineralAutoHarvestSearch">
+        <SearchFilters value="Structure;Ally,Enemy,Worker"/>
+        <AreaArray MaxCount="2" Radius="2" Effect="MultiMineralAutoHarvestApply"/>
+        <MaxCount value="2"/>
     </CEffectEnumArea>
     <CEffectApplyBehavior id="ResourceVespenseCrazyApply">
         <ValidatorArray index="0" value="IsWorker"/>
@@ -3682,7 +3685,8 @@
     </CEffectSet>
     <CEffectEnumArea id="ResourceMessageSearch">
         <SearchFilters value="Structure;Enemy,Worker"/>
-        <AreaArray Radius="1.5" Effect="ResourceMessageApply"/>
+        <AreaArray MaxCount="2" Radius="4" Effect="ResourceMessageApply"/>
+        <MaxCount value="2"/>
     </CEffectEnumArea>
     <CEffectDamage id="SquadSnipeDamage" parent="DU_WEAP">
         <EditorCategories value="Race:Terran"/>
@@ -3742,9 +3746,8 @@
         <SearchFlags index="CallForHelp" value="1"/>
     </CEffectEnumArea>
     <CEffectApplyBehavior id="ResourceMessageApply">
-        <ValidatorArray index="0" value="IsWorker"/>
         <EditorCategories value="Race:Terran"/>
-        <Behavior value="ResourceMessage2"/>
+        <Behavior value="ResourceMessage"/>
     </CEffectApplyBehavior>
     <CEffectApplyBehavior id="MoveSpeedTier3Apply">
         <EditorCategories value="Race:Terran"/>

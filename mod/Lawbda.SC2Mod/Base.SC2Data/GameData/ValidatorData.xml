@@ -14,6 +14,9 @@
         <Value value="1"/>
         <Behavior value="SquadGhostUnitTracker"/>
     </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitType id="IsSquadSupplyDepot">
+        <Value value="SquadSupplyDepot"/>
+    </CValidatorUnitType>
     <CValidatorUnitCompareBehaviorCount id="MarauderTrackerOn">
         <ResultFailed value="NotEnoughRoomToLoadUnit,MagazineNoFirbat"/>
         <WhichUnit Value="TargetOuter"/>
@@ -200,7 +203,7 @@
         <Value value="SquadGhost"/>
     </CValidatorUnitType>
     <CValidatorUnitType id="IsMulelisk">
-        <Value value="Mulelisk"/>
+        <Value value="SquadMulelisk"/>
     </CValidatorUnitType>
     <CValidatorUnitType id="IsExcavator">
         <Value value="CaptainExcavator"/>
@@ -212,11 +215,11 @@
         <WhichUnit Value="Caster"/>
         <Ability value="SquadSuperStimpack"/>
     </CValidatorUnitCompareAbilStage>
-    <CValidatorUnitType id="IsSquadSupplyDepotEitherFlavor">
+    <CValidatorCombine id="IsSquadSupplyDepotEitherFlavor">
         <ResultFailed value="MustTargetStructures,Error/MustTargetSupplyDepot"/>
-        <Value value="SquadSupplyDepot"/>
-        <Type value="SelectAlias"/>
-    </CValidatorUnitType>
+        <CombineArray value="IsSquadSupplyDepot"/>
+        <CombineArray value="IsSquadSupplyDepotLowered"/>
+    </CValidatorCombine>
     <CValidatorUnitType id="IsSquadSupplyDepotLowered">
         <Value value="SquadSupplyDepotLowered"/>
     </CValidatorUnitType>

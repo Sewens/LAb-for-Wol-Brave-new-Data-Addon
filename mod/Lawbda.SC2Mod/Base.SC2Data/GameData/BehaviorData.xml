@@ -1322,6 +1322,7 @@
         <Modification>
             <WeaponEnableArray value="SquadBunkerShrikeAutoGun"/>
         </Modification>
+        <InfoFlags index="Hidden" value="1"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadMarauderSlow">
         <Alignment value="Negative"/>
@@ -1342,12 +1343,11 @@
         <InfoIcon value="Assets\Textures\btn-tips-resourcecaches.dds"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
-        <Duration value="4"/>
         <Period value="2"/>
+        <MaxStackCount value="8"/>
         <PeriodicEffect value="MultiMineralAutoHarvest"/>
-        <DisableValidatorArray value="NotVespenCombine"/>
         <Player Value="Origin"/>
-        <BehaviorCategories index="User9" value="1"/>
+        <Duration value="8"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="InfantryEnlargeRadius">
         <InfoFlags index="Hidden" value="1"/>
@@ -1371,8 +1371,8 @@
         <BehaviorCategories index="User9" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <MaxStackCount value="8"/>
-        <Period value="8"/>
-        <PeriodicEffect value="MultiAutoMineralHarvestSearch"/>
+        <Period value="2"/>
+        <PeriodicEffect value="MultiMineralAutoHarvestSearch"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="ResourceTerrazineCrazy">
         <InfoIcon value="Assets\Textures\btn-tips-droppedterrazine.dds"/>
@@ -1491,19 +1491,16 @@
             <AbilClassDisableArray index="CAbilEffectTarget" value="1"/>
         </Modification>
     </CBehaviorBuff>
-    <CBehaviorBuff id="ResourceMessage2">
+    <CBehaviorBuff id="ResourceMessage">
         <InfoIcon value="Assets\Textures\btn-upgrade-zerg-stukov-regenrate.dds"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
         <BuffFlags index="RefreshStack" value="1"/>
-        <Duration value="8"/>
-        <Period value="2"/>
-        <PeriodicEffect value="ResourceMessage"/>
         <MaxStackCount value="8"/>
         <MaxStackCountPerCaster value="1"/>
-        <Modification>
-            <ResourceHarvestAmountBonus index="Minerals" value="5"/>
-        </Modification>
+        <Period value="2"/>
+        <PeriodicEffect value="ResourceMessageMU"/>
+        <Duration value="8"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="DisableJoinAbility">
         <InfoFlags index="Hidden" value="1"/>
@@ -1684,13 +1681,13 @@
         <Duration value="15"/>
         <Modification MoveSpeedMultiplier="1.5" AttackSpeedMultiplier="1.5"/>
     </CBehaviorBuff>
-    <CBehaviorBuff id="ResourceRegenAura">
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Period value="2"/>
-        <PeriodicEffect value="ResourceMessageSearch"/>
+    <CBehaviorBuff id="ResourceMessageRegenAura">
         <InfoIcon value="Assets\Textures\btn-upgrade-zerg-stukov-regenrate.dds"/>
         <BehaviorCategories index="User9" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <MaxStackCount value="8"/>
+        <Period value="2"/>
+        <PeriodicEffect value="ResourceMessageSearch"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadStructureburnout">
         <InfoFlags index="Hidden" value="1"/>
@@ -1725,10 +1722,10 @@
         <DisableValidatorArray value=""/>
         <MaxStackCount value="8"/>
         <Modification>
-            <ResourceHarvestTimeBonus index="Minerals" value="-0.75"/>
-            <ResourceHarvestTimeBonus index="Vespene" value="-0.75"/>
-            <ResourceHarvestTimeBonus index="Terrazine" value="-0.75"/>
-            <ResourceHarvestTimeBonus index="Custom" value="-0.75"/>
+            <ResourceHarvestTimeBonus index="Minerals" value="-0.4"/>
+            <ResourceHarvestTimeBonus index="Vespene" value="-0.4"/>
+            <ResourceHarvestTimeBonus index="Terrazine" value="-0.4"/>
+            <ResourceHarvestTimeBonus index="Custom" value="-0.4"/>
         </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="UnitMediumAddMaxLife">

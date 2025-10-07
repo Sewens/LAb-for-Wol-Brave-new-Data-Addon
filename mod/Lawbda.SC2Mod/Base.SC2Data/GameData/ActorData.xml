@@ -12,6 +12,11 @@
         <Icon value="Assets\Textures\RadarIcon2.dds"/>
         <IconArcLength value="3.250000"/>
     </CActorRange>
+    <CActorModel id="MultiMinearlAutoHarvestImpact" parent="ModelAnimationStyleOneShot">
+        <On Terms="Behavior.MultiMineralAutoHarvest.On; At Target" Send="Create"/>
+        <On Terms="SetTintColor" Send="SetTintColor 253,29,11 0.000000 Cycle"/>
+        <Host Subject="_Selectable"/>
+    </CActorModel>
     <CActorAction id="SquadSpiderSilkShoot" parent="GenericAttackBase">
         <On Terms="Effect.SquadSpiderSilkBeamPersistent.Start; At Caster" Send="Create"/>
         <On Terms="Effect.SquadSpiderSilkDamage.Start; At Caster; FromEffectTreeDescendant" Send="ActionDamage"/>
@@ -3047,7 +3052,7 @@
     <CActorSplat id="SquadTechReactorSplat" parent="GenericUnitSplat" unitName="TechReactor">
         <Model value="ReactorSplat"/>
     </CActorSplat>
-    <CActorTurret id="SquadBunkerShrikeTurretModel">
+    <CActorTurret id="SquadBunkerShrikeTurretTurret">
         <On Terms="TurretEnable.SquadBunkerShrikeTurret" Send="Create"/>
     </CActorTurret>
     <CActorTurret id="SquadDiamondbackTurret">
@@ -3604,6 +3609,7 @@
     </CActorSplat>
     <CActorUnit id="SquadReactor" parent="ReactorBase" unitName="SquadReactor">
         <Macros value="SnowVisualBuildingMacro"/>
+        <Macros value="SquadTerranAttachmentAnims"/>
         <On Terms="AbilMorph.*.Finish; MorphTo SquadTechReactor" Target="SquadReactorSplat" Send="Destroy"/>
         <On Terms="AbilMorph.*.Finish; MorphTo SquadTechReactor" Send="Destroy"/>
         <On Terms="AbilMorph.*.Finish; MorphTo SquadTechReactor" Target="SquadReactorSplat" Send="Destroy"/>
@@ -4417,7 +4423,7 @@
     <CActorText id="LootResourceTextTier1" parent="PickupTextDefault"/>
     <CActorText id="LootResourceTextTier4" parent="PickupTextDefault"/>
     <CActorText id="LootResourceTextTier5" parent="PickupTextDefault"/>
-    <CActorUnit id="SquadMulelisk" parent="GenericUnitStandard" unitName="Mulelisk">
+    <CActorUnit id="SquadMulelisk" parent="GenericUnitStandard" unitName="SquadMulelisk">
         <Aliases value="_UnitMedium"/>
         <Macros value="CarryAnim"/>
         <Macros value="PhysicsDeathsSwarmGround"/>
@@ -4474,7 +4480,6 @@
         </GroupIcon>
         <GroupSoundArray index="Help" value="Alert_TerranEconomyUnderAttack"/>
         <HeroIcon value="Assets\Textures\btn-unit-terran-mule.dds"/>
-        <HighlightTooltip value="Unit/Name/SquadMulelisk"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
         <SoundArray index="Birth" value=""/>
         <SoundArray index="Ready" value=""/>
@@ -4646,11 +4651,9 @@
         <Scale value="1.500000"/>
     </CActorModel>
     <CActorModel id="MultiMineralAutoHarvestBeam" parent="ModelAddition">
-        <On Terms="Effect.MultiMineralAutoHarvest" Send="Create"/>
-        <On Terms="ActorCreation" Send="AnimBracketStart GL_BSD GLbirth GLstand GLdeath"/>
+        <On Terms="Effect.MultiMineralAutoHarvest.Start" Send="Create"/>
         <On Terms="Effect.MultiMineralAutoHarvest.Start" Send="TimerSet 1.000000 DelayDestroy"/>
-        <On Terms="TimerExpired; TimerName DelayDestroy" Send="AnimBracketStop BSD"/>
-        <On Terms="Effect.DamageBufferDamage" Send="TimerSet 1.000000 DelatDestroy"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart GL_BSD GLbirth GLstand GLdeath"/>
         <On Terms="TimerExpired; TimerName DelayDestroy" Send="AnimBracketStop BSD"/>
         <Model value="SOAMineralBeam"/>
     </CActorModel>
@@ -5447,8 +5450,8 @@
         <Sound value="Reaper_JumpLaunch"/>
     </CActorSound>
     <CActorModel id="ResourceRegenImpact" parent="ModelAnimationStyleOneShot">
-        <On Terms="Effect.ResourceMessageApply.Start; At Target" Send="Create"/>
-        <On Terms="SetTintColor" Send="SetTintColor 66,249,244 0.000000 Cycle"/>
+        <On Terms="Effect.ResourceMessageMU.Start; At Target" Send="Create"/>
+        <On Terms="SetTintColor" Send="SetTintColor 208,79,205 0.000000 Cycle"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachOverhead"/>
         <Model value="RegenImpact"/>
@@ -6001,7 +6004,6 @@
     </CActorUnit>
     <CActorUnit id="SquadTechReactor" parent="TerranBuilding" unitName="SquadTechReactor">
         <Macros value="SquadQueueAnim"/>
-        <Macros value="TerranAttachmentAnims"/>
         <Macros value="BuildingFlattenTerrainMacro"/>
         <Macros value="SquadSquadQueueAnim"/>
         <Macros value="SquadTerranAttachmentAnims"/>

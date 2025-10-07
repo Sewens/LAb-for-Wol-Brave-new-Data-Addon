@@ -2121,7 +2121,6 @@
         <TechTreeProducedUnitArray value="Goliath"/>
     </CUnit>
     <CUnit id="SquadFactoryFlying">
-        <Name value="Unit/Name/Factory"/>
         <DeathRevealRadius value="3"/>
         <Facing value="315"/>
         <Race value="Terr"/>
@@ -2157,7 +2156,9 @@
         <AbilArray Link="move"/>
         <AbilArray Link="stop"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
-        <BehaviorArray Link="FireSuppressionSystem"/>
+        <BehaviorArray Link="SquadFactoryPowerSource"/>
+        <BehaviorArray Link="SquadReactorPowerUser"/>
+        <BehaviorArray Link="SquadTechlabPowerUser"/>
         <BehaviorArray Link="FireSuppressionSystem"/>
         <CardLayouts>
             <LayoutButtons Face="Land" Type="AbilCmd" AbilCmd="SquadFactoryLand,Execute" Row="2" Column="3"/>
@@ -2669,7 +2670,6 @@
         <TechTreeProducedUnitArray value="SquadOrbitalCommand"/>
     </CUnit>
     <CUnit id="SquadCommandCenterFlying">
-        <Name value="Unit/Name/CommandCenter"/>
         <DeathRevealRadius value="3"/>
         <Facing value="315"/>
         <Race value="Terr"/>
@@ -2707,6 +2707,9 @@
         <AbilArray Link="CommandCenterTransport"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="FireSuppressionSystem"/>
+        <BehaviorArray Link="SquadCommandCenterPowerSource"/>
+        <BehaviorArray Link="SquadReactorPowerUser"/>
+        <BehaviorArray Link="SquadTechlabPowerUser"/>
         <CardLayouts>
             <LayoutButtons Face="Land" Type="AbilCmd" AbilCmd="SquadCommandCenterLand,255" Row="2" Column="3"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
@@ -2814,7 +2817,6 @@
         <TechTreeProducedUnitArray value="SquadPredator"/>
     </CUnit>
     <CUnit id="SquadBarracksFlying" parent="SquadBarracks">
-        <Name value="Unit/Name/Barracks"/>
         <Description value="Button/Tooltip/SquadBarracksFlying"/>
         <ReviveType value="SquadBarracksFlying"/>
         <FlagArray index="Turnable" value="1"/>
@@ -2842,6 +2844,8 @@
         <AbilArray index="3" removed="1"/>
         <AbilArray index="4" removed="1"/>
         <AbilArray index="5" removed="1"/>
+        <BehaviorArray index="2" Link="SquadTechlabPowerUser"/>
+        <BehaviorArray index="4" Link="SquadBarrackPowerSource"/>
         <CardLayouts index="0">
             <LayoutButtons index="0" Face="Land" Type="AbilCmd" AbilCmd="SquadBarracksLand,Execute" Row="2" Column="3"/>
             <LayoutButtons index="1" Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
@@ -2875,13 +2879,10 @@
             <Charge Link="SquadBarracksFlying/Revive"/>
             <Cooldown Link="SquadBarracksFlying/Revive"/>
         </ReviveInfoBase>
-        <BehaviorArray index="2" removed="1"/>
-        <BehaviorArray index="3" removed="1"/>
-        <BehaviorArray index="4" removed="1"/>
     </CUnit>
     <CUnit id="SquadGhostEMPWeapon" parent="MISSILE_INVULNERABLE">
         <Race value="Terr"/>
-        <Mover value="EMP2Weapon2"/>
+        <Mover value="SquadEMP2Weapon"/>
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
     </CUnit>
     <CUnit id="CaptainPredator">
@@ -2958,7 +2959,6 @@
             <Charge Link="Predator/Revive"/>
             <Cooldown Link="Predator/Revive"/>
         </ReviveInfoBase>
-        <Mover value="SuqadGround"/>
     </CUnit>
     <CUnit id="AdvanceEngineBay">
         <DeathTime value="-1"/>
@@ -3526,7 +3526,7 @@
         <GlossaryPriority value="318"/>
         <HotkeyCategory value="Unit/Category/Lawbda"/>
     </CUnit>
-    <CUnit id="Mulelisk">
+    <CUnit id="SquadMulelisk">
         <DeathRevealRadius value="3"/>
         <Race value="Terr"/>
         <Mob value="Multiplayer"/>
@@ -3686,7 +3686,6 @@
             <Charge Link="Spectre/Revive"/>
             <Cooldown Link="Spectre/Revive"/>
         </ReviveInfoBase>
-        <Mover value="SuqadGround"/>
         <BehaviorArray Link="SquadCloakandDetectorRadar"/>
     </CUnit>
     <CUnit id="SquadGhost">
@@ -3708,7 +3707,6 @@
         <EnergyStart value="50"/>
         <EnergyMax value="200"/>
         <EnergyRegenRate value="0.5625"/>
-        <Mover value="SuqadGround"/>
         <Speed value="2.25"/>
         <Acceleration value="1000"/>
         <LateralAcceleration value="46.0625"/>
@@ -3913,7 +3911,6 @@
             <Charge Link="Firebat/Revive"/>
             <Cooldown Link="Firebat/Revive"/>
         </ReviveInfoBase>
-        <Mover value="SuqadGround"/>
     </CUnit>
     <CUnit id="SquadMedic">
         <DeathRevealRadius value="3"/>
@@ -4002,7 +3999,6 @@
             <Cooldown Link="Medic/Revive"/>
         </ReviveInfoBase>
         <WeaponArray Link="MedicFlashGrenade"/>
-        <Mover value="SuqadGround"/>
     </CUnit>
     <CUnit id="SquadMercCompound">
         <DeathRevealRadius value="3"/>
@@ -4086,7 +4082,6 @@
         <LifeStart value="45"/>
         <LifeMax value="45"/>
         <LifeArmorName value="Unit/LifeArmorName/TerranInfantryArmor"/>
-        <Mover value="SuqadGround"/>
         <Speed value="2.25"/>
         <Acceleration value="1000"/>
         <LateralAcceleration value="46.0625"/>
@@ -4170,7 +4165,6 @@
         <LifeStart value="45"/>
         <LifeMax value="45"/>
         <LifeArmorName value="Unit/LifeArmorName/TerranInfantryArmor"/>
-        <Mover value="SuqadGround"/>
         <Speed value="2.8125"/>
         <Acceleration value="2.5"/>
         <LateralAcceleration value="46"/>
@@ -4355,7 +4349,6 @@
             <Charge Link="CaptainFreemanRevive/Revive"/>
             <Cooldown Link="CaptainFreemanRevive/Revive"/>
         </ReviveInfoBase>
-        <Mover value="SuqadGround"/>
         <BehaviorArray Link="InfantryLevelUpto10"/>
         <BehaviorArray Link="SquadShooterAura"/>
         <HotkeyCategory value="Unit/Category/Lawbda"/>
@@ -4575,7 +4568,6 @@
         <TechTreeProducedUnitArray value="Hercules"/>
     </CUnit>
     <CUnit id="SquadStarportFlying">
-        <Name value="Unit/Name/Starport"/>
         <DeathRevealRadius value="3"/>
         <Facing value="315"/>
         <Race value="Terr"/>
@@ -4612,7 +4604,9 @@
         <AbilArray Link="stop"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="FireSuppressionSystem"/>
-        <BehaviorArray Link="FireSuppressionSystem"/>
+        <BehaviorArray Link="SquadStarportPowerSource"/>
+        <BehaviorArray Link="SquadReactorPowerUser"/>
+        <BehaviorArray Link="SquadTechlabPowerUser"/>
         <CardLayouts>
             <LayoutButtons Face="Land" Type="AbilCmd" AbilCmd="SquadStarportLand,Execute" Row="2" Column="3"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
