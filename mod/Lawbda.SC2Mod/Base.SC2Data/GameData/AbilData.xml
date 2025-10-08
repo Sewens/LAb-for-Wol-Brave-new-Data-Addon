@@ -102,21 +102,17 @@
     <CAbilTrain id="SquadHeroTrain">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <InfoArray index="Train1" Time="30">
-            <Resource index="Minerals" value="150"/>
-            <Resource index="Vespene" value="50"/>
             <Charge Link="Abil/SquadCommandCenterTrain2"/>
             <Cooldown Link="Abil/SquadCommandCenterTrain2"/>
-            <Button DefaultButtonFace="BuildCaptainFreeman">
+            <Button DefaultButtonFace="BuildCaptainFreeman" Requirements="NoFreeman">
                 <Flags index="ToSelection" value="1"/>
             </Button>
             <Unit value="CaptainFreeman"/>
         </InfoArray>
         <InfoArray index="Train2" Time="30">
-            <Resource index="Minerals" value="250"/>
-            <Resource index="Vespene" value="100"/>
             <Charge Link="Abil/SquadCommandCenterTrain2"/>
             <Cooldown Link="Abil/SquadCommandCenterTrain2"/>
-            <Button DefaultButtonFace="BuildExcavator"/>
+            <Button DefaultButtonFace="BuildExcavator" Requirements="NoExcavator"/>
             <Unit value="CaptainExcavator"/>
         </InfoArray>
         <InfoArray index="Train3">
@@ -1117,6 +1113,7 @@
             </SectionArray>
         </InfoArray>
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadLand"/>
+        <AbilSetId value="landOn"/>
     </CAbilMorphPlacement>
     <CAbilMorphPlacement id="SquadStarportLand" parent="TerranBuildingLand" unit="Starport">
         <Name value="Abil/Name/SquadStarportLand"/>
@@ -1126,6 +1123,7 @@
             </SectionArray>
         </InfoArray>
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadLand"/>
+        <AbilSetId value="landOn"/>
     </CAbilMorphPlacement>
     <CAbilBehavior id="SquadBansheeBomberMode">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -1293,6 +1291,7 @@
             </SectionArray>
         </InfoArray>
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadLand"/>
+        <AbilSetId value="landOn"/>
     </CAbilMorphPlacement>
     <CAbilMorphPlacement id="OrbitalCommandLand2" parent="TerranBuildingLand" unit="SquadOrbitalCommand">
         <Name value="Abil/Name/OrbitalCommandLand2"/>
@@ -1302,10 +1301,12 @@
             </SectionArray>
         </InfoArray>
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadLand"/>
+        <AbilSetId value="landOn"/>
     </CAbilMorphPlacement>
     <CAbilMorph id="SquadCommandCenterLiftOff" parent="TerranBuildingLiftOff" unit="SquadCommandCenterFlying">
         <Name value="Abil/Name/SquadCommandCenterLiftOff"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadLiftOff"/>
+        <AbilSetId value="liftOff"/>
     </CAbilMorph>
     <CAbilEffectTarget id="SquadPickupScrapLarge">
         <Effect index="0" value="SquadPickupScrapLargeSet"/>
@@ -1389,6 +1390,7 @@
             </SectionArray>
         </InfoArray>
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadLand"/>
+        <AbilSetId value="landOn"/>
     </CAbilMorphPlacement>
     <CAbilBuildable id="SquadBuildinProgress">
         <CmdButtonArray index="Halt" DefaultButtonFace="Halt"/>
@@ -1397,6 +1399,7 @@
         <Name value="Abil/Name/SquadFactoryLiftOff"/>
         <InfoArray index="0" Unit="SquadFactoryFlying"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadLiftOff"/>
+        <AbilSetId value="liftOff"/>
     </CAbilMorph>
     <CAbilTrain id="SquadFactoryTrain">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
@@ -1528,6 +1531,7 @@
     <CAbilMorph id="SquadBarracksLiftOff" parent="TerranBuildingLiftOff" unit="SquadBarracksFlying">
         <Name value="Abil/Name/SquadBarracksLiftOff"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadLiftOff"/>
+        <AbilSetId value="liftOff"/>
     </CAbilMorph>
     <CAbilTrain id="SquadBarracksTrain">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
@@ -1610,6 +1614,7 @@
     <CAbilMorph id="SquadOrbitalLiftOff" parent="TerranBuildingLiftOff" unit="SquadOrbitalCommandFlying">
         <Name value="Abil/Name/SquadOrbitalLiftOff"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadLiftOff"/>
+        <AbilSetId value="liftOff"/>
     </CAbilMorph>
     <CAbilRally id="SquadCommandCenterRally">
         <OrderArray index="0">
@@ -1638,6 +1643,7 @@
         <Name value="Abil/Name/SquadStarportLiftOff"/>
         <InfoArray index="0" Unit="SquadStarportFlying"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadLiftOff"/>
+        <AbilSetId value="liftOff"/>
     </CAbilMorph>
     <CAbilTrain id="SquadStarportTrain">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
@@ -1912,7 +1918,7 @@
         <Arc value="360"/>
         <CursorEffect value="VanillaScannerSweep"/>
         <AINotifyEffect value="RedScannerSweep"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="Scan"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="VanillaScannerSweep"/>
     </CAbilEffectTarget>
     <CAbilMorph id="SCVEnableJump">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
