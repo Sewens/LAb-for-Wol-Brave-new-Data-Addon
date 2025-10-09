@@ -1,5 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CEffectCreatePersistent id="SquadBulletTime">
+        <EditorCategories value="Race:Protoss"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffectArray value="SquadBulletTimeSet"/>
+        <PeriodicPeriodArray value="1.2"/>
+    </CEffectCreatePersistent>
+    <CEffectApplyBehavior id="SquadBulletTimeForEnemyAB">
+        <ValidatorArray value="noMarkers"/>
+        <Behavior value="SquadBulletTimeForEnemy"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadBulletTimeForPlayerAB">
+        <ValidatorArray value="noMarkers"/>
+        <Behavior value="SquadBulletTimeForPlayer"/>
+    </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="SquadBulletTimeForEnemyCP">
+        <EditorCategories value="Race:Protoss"/>
+        <Marker>
+            <MatchFlags index="Id" value="1"/>
+        </Marker>
+        <PeriodCount value="100"/>
+        <PeriodicEffectArray value="SquadBulletTimeForEnemySearch"/>
+        <PeriodicPeriodArray value="0.1"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="SquadBulletTimeForPlayerCP">
+        <EditorCategories value="Race:Protoss"/>
+        <Marker>
+            <MatchFlags index="Id" value="1"/>
+        </Marker>
+        <PeriodCount value="100"/>
+        <PeriodicEffectArray value="SquadBulletTimeForPlayerSearch"/>
+        <PeriodicPeriodArray value="0.1"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumTransport id="SquadBulletTimeForEnemyIterateTransport">
+        <ValidatorArray value="IsBunkerCombine"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Effect value="SquadBulletTimeForEnemyAB"/>
+    </CEffectEnumTransport>
+    <CEffectEnumTransport id="SquadBulletTimeForPlayerIterateTransport">
+        <ValidatorArray value="IsBunkerCombine"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Effect value="SquadBulletTimeForPlayerAB"/>
+    </CEffectEnumTransport>
+    <CEffectEnumArea id="SquadBulletTimeForEnemySearch">
+        <SearchFilters value="-;Player,Ally,Neutral,Dead,Hidden"/>
+        <AreaArray Radius="500" Effect="SquadBulletTimeForEnemySet"/>
+    </CEffectEnumArea>
+    <CEffectEnumArea id="SquadBulletTimeForPlayerSearch">
+        <SearchFilters value="-;Enemy,Dead,Hidden"/>
+        <AreaArray Radius="500" Effect="SquadBulletTimeForPlayerSet"/>
+    </CEffectEnumArea>
+    <CEffectSet id="SquadBulletTimeForEnemySet">
+        <ValidatorArray value="noMarkers"/>
+        <ValidatorArray value="NoTimeStopImmune"/>
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="SquadBulletTimeForEnemyAB"/>
+        <EffectArray value="SquadBulletTimeForEnemyIterateTransport"/>
+    </CEffectSet>
+    <CEffectSet id="SquadBulletTimeForPlayerSet">
+        <ValidatorArray value="noMarkers"/>
+        <ValidatorArray value="NoTimeStopImmune"/>
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="SquadBulletTimeForPlayerAB"/>
+        <EffectArray value="SquadBulletTimeForPlayerIterateTransport"/>
+    </CEffectSet>
+    <CEffectSet id="SquadBulletTimeSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadBulletTimeForEnemyCP"/>
+        <EffectArray value="SquadBulletTimeForPlayerCP"/>
+    </CEffectSet>
+    <CEffectEnumArea id="SquadForceFieldPlacement">
+        <EditorCategories value="Race:Protoss"/>
+        <SearchFilters value="-;Air,Ground,Structure,Missile,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="1.7"/>
+    </CEffectEnumArea>
+    <CEffectCreatePersistent id="SquadLurkerChannelingSpinesCP">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <PeriodCount value="1"/>
+        <PeriodicValidator value="CasterIsLurkerStetmannBurrowedandCasterandTargetNotDead"/>
+        <PeriodicEffectArray value="SquadLurkerChannelingSpinesSearch"/>
+        <PeriodicPeriodArray value="1"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="SquadLurkerChannelingSpinesDamage">
+        <EditorCategories value="Race:Terran"/>
+        <Amount value="12"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="SquadLurkerChannelingSpinesSearch">
+        <EditorCategories value="Race:Terran"/>
+        <SearchFilters value="Ground,Visible;Player,Ally,Neutral,Air,Missile,Hidden,Invulnerable,AirUnit"/>
+        <AreaArray Radius="1.5" Effect="SquadLurkerChannelingSpinesDamage"/>
+    </CEffectEnumArea>
+    <CEffectDamage id="SquadBurndownDamage">
+        <EditorCategories value="Race:Terran"/>
+        <Flags index="NoKillCredit" value="1"/>
+        <Amount value="1"/>
+    </CEffectDamage>
+    <CEffectIssueOrder id="SquadSupplyDepotLowerOrder">
+        <EditorCategories value="Race:Terran"/>
+        <Abil value="SquadSupplyDepotLower"/>
+    </CEffectIssueOrder>
+    <CEffectIssueOrder id="SquadSupplyDepotRaiseOrder">
+        <EditorCategories value="Race:Terran"/>
+        <Abil value="SquadSupplyDepotRaise"/>
+    </CEffectIssueOrder>
+    <CEffectApplyBehavior id="squadPsiDisruptionApply">
+        <ValidatorArray index="0" value="IsZerg"/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadPsiDisruption"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumArea id="SquadPsiDisruptionSearch">
+        <EditorCategories value="Race:Terran"/>
+        <SearchFilters value="Visible;Self,Player,Ally,Neutral,Structure,Heroic,Missile,Stasis,Dead,Hidden,Invulnerable,Benign"/>
+        <AreaArray Radius="8" Effect="squadPsiDisruptionApply"/>
+    </CEffectEnumArea>
     <CEffectEnumArea id="VanillaScannerSearhVictim">
         <EditorCategories value="Race:Terran"/>
         <OwningPlayer Value="Source"/>

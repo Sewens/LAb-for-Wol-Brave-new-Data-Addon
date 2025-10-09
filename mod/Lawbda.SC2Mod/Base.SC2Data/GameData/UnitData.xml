@@ -1,5 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CUnit id="SquadHiveMindEmulator">
+        <DeathRevealRadius value="3"/>
+        <Facing value="315"/>
+        <Race value="Terr"/>
+        <Mob value="Campaign"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="PenaltyRevealed" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="AIDefense" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Locust" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="250"/>
+        <LifeMax value="250"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranBuildingPlating"/>
+        <EnergyStart value="50"/>
+        <EnergyMax value="200"/>
+        <EnergyRegenRate value="0.5625"/>
+        <StationaryTurningRate value="0"/>
+        <TurningRate value="0"/>
+        <Sight value="7"/>
+        <CostResource index="Minerals" value="150"/>
+        <CostResource index="Vespene" value="100"/>
+        <RepairTime value="50"/>
+        <AttackTargetPriority value="20"/>
+        <AbilArray Link="SquadBuildinProgress"/>
+        <AbilArray Link="SquadHiveMindEmulatorMindControl"/>
+        <BehaviorArray Link="FireSuppressionSystem"/>
+        <BehaviorArray Link="TerranBuildingBurnDown"/>
+        <WeaponArray Turret="SquadHiveMindEmulatorRotate"/>
+        <CardLayouts>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Cancel" Row="2" Column="4"/>
+            <LayoutButtons Face="SquadMindControl" Type="AbilCmd" AbilCmd="SquadHiveMindEmulatorMindControl,Execute" Row="2" Column="0"/>
+        </CardLayouts>
+        <Radius value="0.75"/>
+        <SeparationRadius value="0.75"/>
+        <Footprint value="Footprint2x2Contour"/>
+        <PlacementFootprint value="Footprint2x2"/>
+        <ScoreMake value="50"/>
+        <ScoreKill value="150"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="3"/>
+        <MinimapRadius value="0.75"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Campaign"/>
+        <TacticalAI value=""/>
+        <LeaderAlias value=""/>
+        <GlossaryCategory value="Unit/Category/TerranUnits"/>
+        <GlossaryPriority value="260"/>
+        <GlossaryStrongArray value="Ultralisk"/>
+        <GlossaryStrongArray value="BroodLord"/>
+        <GlossaryStrongArray value="Mutalisk"/>
+        <HotkeyCategory value="Unit/Category/TerranStory"/>
+        <KillDisplay value="Never"/>
+        <RankDisplay value="Never"/>
+        <AIEvaluateAlias value=""/>
+    </CUnit>
+    <CUnit id="SquadPsiDisrupter">
+        <DeathRevealRadius value="3"/>
+        <Facing value="315"/>
+        <Race value="Terr"/>
+        <Mob value="Campaign"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="PenaltyRevealed" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="AIDefense" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="200"/>
+        <LifeMax value="200"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranBuildingPlating"/>
+        <Sight value="7"/>
+        <CostResource index="Minerals" value="150"/>
+        <CostResource index="Vespene" value="100"/>
+        <RepairTime value="50"/>
+        <AttackTargetPriority value="20"/>
+        <AbilArray Link="SquadBuildinProgress"/>
+        <BehaviorArray Link="FireSuppressionSystem"/>
+        <BehaviorArray Link="TerranBuildingBurnDown"/>
+        <BehaviorArray Link="SquadPsiDisruptionSearch"/>
+        <CardLayouts>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Cancel" Row="2" Column="4"/>
+            <LayoutButtons Face="SquadPsiDisruption" Type="Passive" Row="2" Column="0"/>
+        </CardLayouts>
+        <Radius value="0.75"/>
+        <SeparationRadius value="0.75"/>
+        <Footprint value="Footprint2x2Contour"/>
+        <PlacementFootprint value="Footprint2x2"/>
+        <ScoreMake value="50"/>
+        <ScoreKill value="150"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="3"/>
+        <MinimapRadius value="0.75"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Campaign"/>
+        <TacticalAI value=""/>
+        <LeaderAlias value=""/>
+        <GlossaryCategory value="Unit/Category/TerranUnits"/>
+        <GlossaryPriority value="260"/>
+        <GlossaryStrongArray value="Zergling"/>
+        <GlossaryStrongArray value="Roach"/>
+        <GlossaryStrongArray value="Ultralisk"/>
+        <HotkeyCategory value="Unit/Category/TerranStory"/>
+        <AIEvaluateAlias value=""/>
+    </CUnit>
     <CUnit id="SquadForceField">
         <DeathRevealRadius value="0"/>
         <DeathRevealDuration value="0"/>
@@ -3418,6 +3547,7 @@
         <AbilArray Link="RedScannerSweep"/>
         <AbilArray Link="GreenScannerSweep"/>
         <AbilArray Link="BlueScannerSweep"/>
+        <AbilArray Link="SOATimeStopTest"/>
         <BehaviorArray Link="SOAOverWatch"/>
         <CardLayouts>
             <LayoutButtons Face="BulletTime" Type="AbilCmd" AbilCmd="BulletTime,Execute" Row="0" Column="1"/>
@@ -3425,6 +3555,7 @@
             <LayoutButtons Face="ScannerSweepRed" Type="AbilCmd" AbilCmd="RedScannerSweep,Execute" Row="1" Column="1"/>
             <LayoutButtons Face="ScannerSweepGreen" Type="AbilCmd" AbilCmd="GreenScannerSweep,Execute" Row="1" Column="2"/>
             <LayoutButtons Face="ScannerSweepBlue" Type="AbilCmd" AbilCmd="BlueScannerSweep,Execute" Row="1" Column="3"/>
+            <LayoutButtons Face="SOATimeFreeze" Type="AbilCmd" AbilCmd="SOATimeStopTest,Execute" Row="0" Column="2"/>
         </CardLayouts>
         <Radius value="1.75"/>
         <SeparationRadius value="1.75"/>
@@ -4398,6 +4529,8 @@
             <LayoutButtons Face="BuildSquadMissileTurret" Type="AbilCmd" AbilCmd="SquadTerranBuild,Build6" Row="0" Column="1"/>
             <LayoutButtons Face="BuildSquadSensorTower" Type="AbilCmd" AbilCmd="SquadTerranBuild,Build9" Row="0" Column="2"/>
             <LayoutButtons Face="CancelBuilding" Type="CancelSubmenu" Row="2" Column="4"/>
+            <LayoutButtons Face="BuildSquadHiveMindEmulator" Type="AbilCmd" AbilCmd="SquadTerranBuild,Build18" Row="1" Column="0"/>
+            <LayoutButtons Face="BuildSquadPsiDisrupter" Type="AbilCmd" AbilCmd="SquadTerranBuild,Build17" Row="1" Column="1"/>
         </CardLayouts>
         <CardLayouts CardId="Gift">
             <LayoutButtons Face="HugeLifeandRegen" Type="Passive" Row="0" Column="0"/>
@@ -4525,6 +4658,10 @@
         <Name value="Unit/Name/SquadSCVJumper"/>
         <Description value="Button/Tooltip/SquadSCVJumper"/>
         <Mover value="CliffJumper"/>
+        <CardLayouts index="3" CardId="TBl3">
+            <LayoutButtons index="4" removed="1"/>
+            <LayoutButtons index="5" removed="1"/>
+        </CardLayouts>
     </CUnit>
     <CUnit id="SquadSupplyDepotLowered">
         <DeathRevealRadius value="3"/>
@@ -4564,11 +4701,17 @@
         <AttackTargetPriority value="11"/>
         <AbilArray Link="SquadBuildinProgress"/>
         <AbilArray Link="SquadSupplyDepotRaise"/>
+        <AbilArray Link="SquadSupplyDepotLowerSwitch"/>
+        <AbilArray Link="attack"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="FireSuppressionSystem"/>
         <CardLayouts>
-            <LayoutButtons Face="Raise" Type="AbilCmd" AbilCmd="SquadSupplyDepotRaise,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="SquadLower" Type="AbilCmd" AbilCmd="SquadSupplyDepotLowerSwitch,On" Row="2" Column="0"/>
+            <LayoutButtons Face="SquadLower" Type="Passive" Row="2" Column="0"/>
             <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Cancel" Row="2" Column="4"/>
+            <LayoutButtons Face="SquadRaise" Type="AbilCmd" AbilCmd="SquadSupplyDepotLowerSwitch,Off" Row="2" Column="1"/>
+            <LayoutButtons Face="SquadRaise" Row="2" Column="1"/>
+            <LayoutButtons Face="SquadStructureAttack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
         </CardLayouts>
         <Radius value="1.25"/>
         <SeparationRadius value="1.25"/>
@@ -4581,6 +4724,7 @@
         <HotkeyAlias value="SupplyDepot"/>
         <SelectAlias value="SupplyDepot"/>
         <TechAliasArray value="Alias_SupplyDepot"/>
+        <WeaponArray Link="SquadSupplyDepotChannelingSpines" Turret="SquadSupplyDepot"/>
     </CUnit>
     <CUnit id="SquadSupplyDepot">
         <DeathRevealRadius value="3"/>
@@ -4621,13 +4765,21 @@
         <AttackTargetPriority value="11"/>
         <AbilArray Link="SquadBuildinProgress"/>
         <AbilArray Link="SquadSupplyDepotLower"/>
+        <AbilArray Link="SquadSupplyDepotLowerSwitch"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="SquadSupplyDepotForceFieldWall"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="FireSuppressionSystem"/>
         <CardLayouts>
             <LayoutButtons Face="Halt" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Halt" Row="2" Column="3"/>
             <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Cancel" Row="2" Column="4"/>
-            <LayoutButtons Face="Lower" Type="AbilCmd" AbilCmd="SquadSupplyDepotLower,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="SquadLower" Type="AbilCmd" AbilCmd="SquadSupplyDepotLowerSwitch,On" Row="2" Column="0"/>
+            <LayoutButtons Face="SquadLower" Type="Passive" Row="2" Column="0"/>
             <LayoutButtons Face="SquadSelectBuilder" Type="SelectBuilder" Row="1" Column="3"/>
+            <LayoutButtons Face="SquadRaise" Type="AbilCmd" AbilCmd="SquadSupplyDepotLowerSwitch,Off" Row="2" Column="1"/>
+            <LayoutButtons Face="SquadRaise" Type="Passive" Row="2" Column="1"/>
+            <LayoutButtons Face="SquadStructureAttack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="SquadHavocForceField" Type="AbilCmd" AbilCmd="SquadSupplyDepotForceFieldWall,Execute" Row="1" Column="0"/>
         </CardLayouts>
         <Radius value="1.25"/>
         <SeparationRadius value="1.25"/>
@@ -4643,6 +4795,7 @@
         <TechAliasArray value="Alias_SupplyDepot"/>
         <GlossaryPriority value="248"/>
         <HotkeyCategory value="Unit/Category/Lawbda"/>
+        <WeaponArray Link="SquadSupplyDepotChannelingSpines" Turret="SquadSupplyDepot"/>
     </CUnit>
     <CUnit id="SquadStarport">
         <DeathRevealRadius value="3"/>
@@ -5382,8 +5535,10 @@
             <LayoutButtons Face="DeploySquadSpiderMine" Type="AbilCmd" AbilCmd="SquadVultureDeploySpiderMine,Execute" Row="2" Column="0"/>
             <LayoutButtons Face="SquadSpiderMineTeleport" Type="Passive" Row="1" Column="2"/>
             <LayoutButtons Face="VanillaVultureMode" Type="AbilCmd" AbilCmd="SquadVultureDisableSpiderSwitch,On" Row="2" Column="1"/>
+            <LayoutButtons Face="VanillaVultureMode" Type="Passive" Row="2" Column="1"/>
             <LayoutButtons Face="SpiderCarrierMode" Type="AbilCmd" AbilCmd="SquadVultureDisableSpiderSwitch,Off" Row="2" Column="2"/>
             <LayoutButtons Face="NotDisbandSquad" Type="Passive" Row="1" Column="4"/>
+            <LayoutButtons Face="SpiderCarrierMode" Type="Passive" Row="2" Column="2"/>
         </CardLayouts>
         <Radius value="0.625"/>
         <SeparationRadius value="0.625"/>

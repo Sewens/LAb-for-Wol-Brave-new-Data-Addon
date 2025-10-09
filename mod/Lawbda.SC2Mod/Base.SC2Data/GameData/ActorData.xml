@@ -1,6 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
     <CActorAction default="1" id="SquadMarauderAttackBase" parent="MarauderAttackBase"/>
+    <CActorModelMaterial id="SquadGlazeBulletTime" parent="GlazeParent">
+        <Terms value="Cap 1"/>
+        <On Terms="Behavior.SquadBulletTimeForPlayer.On" Send="Create"/>
+        <On Terms="Behavior.SquadBulletTimeForPlayer.On" Send="StatusIncrement TimeStopped"/>
+        <On Terms="Behavior.SquadBulletTimeForEnemy.On" Send="Create"/>
+        <On Terms="Behavior.SquadBulletTimeForEnemy.On" Send="StatusIncrement TimeStopped"/>
+        <On Terms="ActorCreation" Send="ModelMaterialApplyTo ::Main"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimPlay FreezeFlail Flail PlayForever,RandomStartOffset"/>
+        <On Terms="Behavior.SquadBulletTimeForPlayer.Off" Send="StatusDecrement TimeStopped"/>
+        <On Terms="Behavior.SquadBulletTimeForEnemy.Off" Send="StatusDecrement TimeStopped"/>
+        <On Terms="StatusDecrement; IsStatus TimeStopped 0" Send="ModelMaterialRemoveFrom ::Main"/>
+        <On Terms="StatusDecrement; IsStatus TimeStopped 0" Target="_Unit" Send="AnimClear FreezeFlail"/>
+        <On Terms="StatusDecrement; IsStatus TimeStopped 0" Send="Destroy"/>
+        <Model value="GlazeTimeStop"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModelMaterial>
+    <CActorModel id="SquadBulletTimeFreezeImpact" parent="ModelAnimationStyleContinuous">
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <On Terms="Behavior.SquadBulletTimeForEnemy.On" Send="Create"/>
+        <On Terms="Behavior.SquadBulletTimeForEnemy.Off" Send="Destroy"/>
+        <On Terms="Behavior.SquadBulletTimeForPlayer.On" Send="Create"/>
+        <On Terms="Behavior.SquadBulletTimeForPlayer.Off" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="SOATimeFreezeImpact"/>
+        <AutoScaleFactor value="1.000000"/>
+    </CActorModel>
+    <CActorDoodad id="SquadForceFieldWall">
+        <On index="0" Terms="ActorCreation" Send="Create SoundEmitter Doodad_ForceFieldWall"/>
+        <Model value="ForceFieldWall"/>
+        <RandomScaleRange value="1.000000,1.000000"/>
+    </CActorDoodad>
+    <CActorSplat id="SquadForceFieldCursorSplat" parent="ProtossCursorSplat" abil="SquadForceField"/>
+    <CActorUnit id="SquadForceField" parent="GenericUnitStandardNoAutoSoundLinks" unitName="SquadForceField">
+        <On Terms="ActorCreation" Send="Create SoundEmitter Sentry_ForceFieldLoop"/>
+        <DeathArray index="Normal" SoundLink="Sentry_ForceFieldDeath"/>
+        <PlacementModel value="Invisible"/>
+        <Model value="ForceField"/>
+        <HeroIcon value="Assets\Textures\BTN-Ability-Terran-ScannerSweep.dds"/>
+        <StatusBarFlags index="Shields" value="0"/>
+        <StatusBarFlags index="Life" value="0"/>
+        <StatusBarFlags index="Energy" value="0"/>
+        <StatusBarFlags index="Cargo" value="0"/>
+        <StatusBarFlags index="Progress" value="0"/>
+        <StatusBarFlags index="Magazine" value="0"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\BTN-Ability-Terran-ScannerSweep.dds"/>
+    </CActorUnit>
+    <CActorSound id="SquadForceFieldLaunch" parent="SoundOneShot">
+        <On Terms="Abil.SquadForceField.SourcePrepStart" Send="Create"/>
+        <Sound value="Sentry_ForceFieldLaunch"/>
+    </CActorSound>
+    <CActorSound id="SquadSupplyDepotChannelingSpinesImpactAS" parent="SoundOneShot">
+        <Sound value="Lurker_Channeling_SpikeImpact"/>
+    </CActorSound>
+    <CActorTurret id="SquadSupplyDepotTurret">
+        <On Terms="TurretEnable.SquadSupplyDepot" Send="Create"/>
+    </CActorTurret>
+    <CActorModel id="SquadPsiDisruptorBuild" parent="TerranBuildingBuildSmall">
+        <Model value="PsiDisruptorBuild"/>
+    </CActorModel>
+    <CActorModel id="SquadSupplyDepotChannelingSpinesImpact" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.SquadLurkerChannelingSpinesSearch.Start" Send="Create"/>
+        <On Terms="ActorCreation" Send="AnimPlay Attack Attack"/>
+        <On Terms="ActorCreation" Send="Create SquadSupplyDepotChannelingSpinesImpactAS"/>
+        <On Terms="ActorCreation" Send="TimerSet 1.500000 DelayDestroy"/>
+        <On Terms="TimerExpired; TimerName DelayDestroy" Send="Destroy"/>
+        <Model value="SquadSupplyDepotSpikeImpact"/>
+    </CActorModel>
+    <CActorModel id="SquadPsiDisruptorPlacementModel">
+        <Aliases value="_Main"/>
+        <Aliases value="_Unit"/>
+        <Aliases value="_Selectable"/>
+        <Filter index="Neutral" value="1"/>
+        <Filter index="Enemy" value="1"/>
+        <FogVisibility value="Visible"/>
+        <On Terms="ActorCreation; ModelIsLowQuality" Send="SetOpacity 0.300000"/>
+        <On Terms="ActorCreation" Send="AnimGroupApply Placement"/>
+        <On Terms="ActorCreation" Send="$Stand PlayForever"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="Signal.*.HidePlacement" Send="SetVisibility"/>
+        <On Terms="Signal.*.ShowPlacement" Send="SetVisibility 1"/>
+        <On Terms="ActorCreation; ModelName EyeserPsiDisruptorPlacement" Send="Create SquadPsiDisruptorProtectRange"/>
+        <On Terms="ActorCreation; ModelName EyeserPsiDisruptor; ModelIsLowQuality" Send="Create SquadPsiDisruptorProtectRange"/>
+        <On Terms="ActorDestruction" Target="SquadPsiDisruptorProtectRange" Send="Destroy"/>
+        <HostSiteOps Ops="SOpTipabilityFloorScope"/>
+        <Model value="EyeserPsiDisruptorPlacement"/>
+    </CActorModel>
+    <CActorRange id="SquadPsiDisruptorProtectRange">
+        <Range value="8.000000"/>
+    </CActorRange>
+    <CActorModel id="SquadHiveMindEmulatorBuild" parent="TerranBuildingBuildSmall">
+        <Model value="HiveMindEmulatorBuild"/>
+    </CActorModel>
+    <CActorTurret id="SquadHiveMindEmulatorRotateTurret">
+        <On Terms="TurretEnable.SquadHiveMindEmulatorRotate" Send="Create"/>
+    </CActorTurret>
+    <CActorUnit id="SquadHiveMindEmulator" parent="TerranBuilding" unitName="SquadHiveMindEmulator">
+        <Aliases value="_UnitLarge"/>
+        <On Terms="Abil.SquadHiveMindEmulatorMindControl.SourceCastStart" Send="AnimPlay Attack Attack"/>
+        <Model value="EyeserHiveEmulator"/>
+        <BuildModel value="HiveMindEmulatorBuild"/>
+        <DeathArray index="Normal" ModelLink="HiveMindEmulatorDeath" SoundLink=""/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="Terran_ExplosionMedium"/>
+        <PlacementModel value="HiveMindEmulatorPlacement"/>
+        <PlacementSound value="Terran_BuildingPlacementSmall"/>
+        <PlacementActorModel value="HiveMindEmulatorPlacementModel"/>
+        <PortraitModel value="AdjutantPortrait"/>
+        <BarOffset value="125"/>
+        <BarWidth value="120"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-hivemindemulator.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\BTN-Building-Terran-HiveMindEmulator.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-buildingarmor.dds"/>
+        <SoundArray index="What" value="HiveMindEmulator_What"/>
+        <SoundArray index="Construction" value="Terran_ConstructionWhat"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\BTN-Building-Terran-HiveMindEmulator.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-hivemindemulator.dds"/>
+        </Wireframe>
+    </CActorUnit>
     <!--outer impor end-->
     <!--outer impor end-->
     <!--outer impor end-->
@@ -12,6 +136,116 @@
         <Icon value="Assets\Textures\RadarIcon2.dds"/>
         <IconArcLength value="3.250000"/>
     </CActorRange>
+    <CActorUnit id="SquadPsiDisruptor" parent="TerranBuilding" unitName="SquadPsiDisrupter">
+        <Aliases value="_UnitLarge"/>
+        <Model value="EyeserPsiDisruptor"/>
+        <BuildModel value="PsiDisruptorBuild"/>
+        <DeathArray index="Normal" ModelLink="EyeserPsiDisruptorDeath" SoundLink="Terran_ExplosionMedium"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="MissileTurret_Explode"/>
+        <PlacementModel value="EyeserPsiDisruptorPlacement"/>
+        <PlacementSound value="Terran_BuildingPlacementSmall"/>
+        <PlacementActorModel value="SquadPsiDisruptorPlacementModel"/>
+        <PortraitModel value="AdjutantPortrait"/>
+        <BarOffset value="125"/>
+        <BarWidth value="120"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-terran-sigmaprojector.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\BTN-Building-Terran-SigmaProjector.dds"/>
+        <HighlightTooltip value="Unit/Name/SquadPsiDisruptor"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-buildingarmor.dds"/>
+        <SoundArray index="What" value="PsiDisruptor_What"/>
+        <SoundArray index="Construction" value="Terran_ConstructionWhat"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\BTN-Building-Terran-SigmaProjector.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-terran-sigmaprojector.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorModel id="SquadPsiDisruptorDebuff" parent="ModelAnimationStyleOneShot">
+        <Terms value="Cap 1"/>
+        <On Terms="Effect.squadPsiDisruptionApply.Start; At Target" Send="Create"/>
+        <On Terms="ActorCreation; ValidateUnit IsUltralisk" Send="SetScale 0.400000"/>
+        <On Terms="ActorCreation; ValidateUnit IsUltraliskBurrowed" Send="SetScale 0.300000"/>
+        <On Terms="ActorCreation; ValidateUnit IsQueen" Send="SetScale 0.500000"/>
+        <On Terms="ActorCreation; ValidateUnit IsQueenBurrowed" Send="SetScale 0.500000"/>
+        <On Terms="ActorCreation; ValidateUnit IsOverseer" Send="SetScale 0.500000"/>
+        <On Terms="ActorCreation; ValidateUnit IsOverlord" Send="SetScale 0.500000"/>
+        <On Terms="ActorCreation; ValidateUnit IsBroodLord" Send="SetScale 0.500000"/>
+        <On Terms="ActorCreation; ValidateUnit IsInfestor" Send="SetScale 0.600000"/>
+        <On Terms="ActorCreation; ValidateUnit IsInfestorBurrowed" Send="SetScale 0.500000"/>
+        <On Terms="ActorCreation; ValidateUnit IsHydralisk" Send="SetScale 0.600000"/>
+        <On Terms="ActorCreation; ValidateUnit IsHydraliskBurrowed" Send="SetScale 0.600000"/>
+        <On Terms="ActorCreation; ValidateUnit IsMutalisk" Send="SetScale 0.800000"/>
+        <On Terms="ActorCreation; ValidateUnit IsCorruptor" Send="SetScale 0.700000"/>
+        <On Terms="ActorCreation; ValidateUnit IsRoach" Send="SetScale 0.800000"/>
+        <On Terms="ActorCreation; ValidateUnit IsRoachBurrowed" Send="SetScale 0.800000"/>
+        <On Terms="ActorCreation; ValidateUnit IsInfestedTerran" Send="SetScale 0.800000"/>
+        <On Terms="ActorCreation; ValidateUnit IsInfestorTerran" Send="SetScale 0.800000"/>
+        <On Terms="ActorCreation; ValidateUnit IsInfestedTerranCampaign" Send="SetScale 0.800000"/>
+        <On Terms="ActorCreation; ValidateUnit IsInfestedTerranCampaignBurrowed" Send="SetScale 0.800000"/>
+        <On Terms="ActorCreation; ValidateUnit IsInfestedCivilian" Send="SetScale 0.600000"/>
+        <On Terms="ActorCreation; ValidateUnit IsInfestedCivilianBurrowed" Send="SetScale 0.600000"/>
+        <On Terms="ActorCreation; ValidateUnit IsHotSNoxious" Send="SetScale 0.400000"/>
+        <On Terms="ActorCreation; ValidateUnit IsHotSNoxiousBurrowed" Send="SetScale 0.300000"/>
+        <On Terms="ActorCreation; ValidateUnit IsHotSTorrasque" Send="SetScale 0.400000"/>
+        <On Terms="ActorCreation; ValidateUnit IsHotSTorrasqueBurrowed" Send="SetScale 0.300000"/>
+        <On Terms="ActorCreation; ValidateUnit IsHydraliskImpaler" Send="SetScale 0.600000"/>
+        <On Terms="ActorCreation; ValidateUnit IsHydraliskImpalerBurrowed" Send="SetScale 0.600000"/>
+        <On Terms="ActorCreation; ValidateUnit IsHydraliskLurker" Send="SetScale 0.600000"/>
+        <On Terms="ActorCreation; ValidateUnit IsHydraliskLurkerBurrowed" Send="SetScale 0.600000"/>
+        <On Terms="ActorCreation; ValidateUnit IsRoachVile" Send="SetScale 0.800000"/>
+        <On Terms="ActorCreation; ValidateUnit IsRoachVileBurrowed" Send="SetScale 0.800000"/>
+        <On Terms="ActorCreation; ValidateUnit IsRoachCorpser" Send="SetScale 0.800000"/>
+        <On Terms="ActorCreation; ValidateUnit IsRoachCorpserBurrowed" Send="SetScale 0.800000"/>
+        <On Terms="ActorCreation; ValidateUnit IsSwarmHost" Send="SetScale 0.600000"/>
+        <On Terms="ActorCreation; ValidateUnit IsSwarmHostRooted" Send="SetScale 0.600000"/>
+        <On Terms="ActorCreation; ValidateUnit IsSwarmHostBurrowed" Send="SetScale 0.600000"/>
+        <On Terms="ActorCreation; ValidateUnit IsSwarmHostSplitA" Send="SetScale 0.600000"/>
+        <On Terms="ActorCreation; ValidateUnit IsSwarmHostSplitARooted" Send="SetScale 0.600000"/>
+        <On Terms="ActorCreation; ValidateUnit IsSwarmHostSplitABurrowed" Send="SetScale 0.600000"/>
+        <On Terms="ActorCreation; ValidateUnit IsSwarmHostSplitB" Send="SetScale 0.600000"/>
+        <On Terms="ActorCreation; ValidateUnit IsSwarmHostSplitBRooted" Send="SetScale 0.600000"/>
+        <On Terms="ActorCreation; ValidateUnit IsSwarmHostSplitBBurrowed" Send="SetScale 0.600000"/>
+        <On Terms="ActorCreation; ValidateUnit IsLurker" Send="SetScale 0.600000"/>
+        <On Terms="ActorCreation; ValidateUnit IsLurkerBurrowed" Send="SetScale 0.600000"/>
+        <On Terms="ActorCreation; ValidateUnit IsImpaler" Send="SetScale 0.600000"/>
+        <On Terms="ActorCreation; ValidateUnit IsImpalerBurrowed" Send="SetScale 0.600000"/>
+        <On Terms="ActorCreation; ValidateUnit IsLocust" Send="SetScale 0.700000"/>
+        <On Terms="ActorCreation; ValidateUnit IsLocustFlying" Send="SetScale 0.600000"/>
+        <On Terms="ActorCreation; ValidateUnit IsViper" Send="SetScale 0.500000"/>
+        <On Terms="ActorCreation; ValidateUnit IsViperCocoon" Send="SetScale 0.700000"/>
+        <On Terms="ActorCreation; ValidateUnit IsBroodLordCocoon" Send="SetScale 0.700000"/>
+        <On Terms="ActorCreation; ValidateUnit IsRoachling" Send="SetScale 0.700000"/>
+        <On Terms="ActorCreation; ValidateUnit IsInfestedAbomination" Send="SetScale 0.500000"/>
+        <On Terms="ActorCreation; ValidateUnit IsPrimalZergling" Send="SetScale 0.600000"/>
+        <On Terms="ActorCreation; ValidateUnit IsPrimalZerglingBurrowed" Send="SetScale 0.600000"/>
+        <On Terms="ActorCreation; ValidateUnit IsPrimalHydralisk" Send="SetScale 0.600000"/>
+        <On Terms="ActorCreation; ValidateUnit IsPrimalHydraliskBurrowed" Send="SetScale 0.600000"/>
+        <On Terms="ActorCreation; ValidateUnit IsPrimalRoach" Send="SetScale 0.900000"/>
+        <On Terms="ActorCreation; ValidateUnit IsPrimalRoachBurrowed" Send="SetScale 0.900000"/>
+        <On Terms="ActorCreation; ValidateUnit IsPrimalUltralisk" Send="SetScale 0.400000"/>
+        <On Terms="ActorCreation; ValidateUnit IsPrimalUltraliskBurrowed" Send="SetScale 0.400000"/>
+        <On Terms="ActorCreation; ValidateUnit IsPrimalFlyer" Send="SetScale 0.700000"/>
+        <On Terms="ActorCreation; ValidateUnit IsMutaliskViper" Send="SetScale 0.800000"/>
+        <On Terms="ActorCreation; ValidateUnit IsMutaliskBroodlord" Send="SetScale 0.800000"/>
+        <Host Subject="_Selectable"/>
+        <Model value="PsiDisruptorDebuff"/>
+        <AutoScaleFactor value="2.000000"/>
+    </CActorModel>
+    <CActorRange id="SquadPsiDisruptorRange">
+        <On Terms="SelectionLocalUpdate.SquadPsiDisrupter.Start" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.SquadPsiDisrupter.StartEditorGround" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.SquadPsiDisrupter.StartEditorFlyer" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.SquadPsiDisrupter.Stop" Send="Destroy"/>
+        <Range value="8.000000"/>
+    </CActorRange>
+    <CActorSplat id="SquadHiveMindEmulatorSplat" parent="GenericUnitSplat" unitName="SquadHiveMindEmulator">
+        <Model value="ReactorSplat"/>
+    </CActorSplat>
+    <CActorSplat id="SquadPsiDisruptorSplat" parent="GenericUnitSplat" unitName="SquadPsiDisrupter">
+        <Model value="ReactorSplat"/>
+    </CActorSplat>
     <CActorModel id="VanillaScannerCircle" parent="ModelAnimationStyleContinuous">
         <On Terms="Effect.VanillaScannerSweep.Start" Send="Create"/>
         <On Terms="Effect.VanillaScannerSweep.Stop" Send="AnimBracketStop BSD"/>
@@ -81,7 +315,7 @@
         <HostSiteOps Ops="SOpAttachOrigin"/>
         <Model value="ProtossFastWarpinMarker"/>
     </CActorModel>
-    <CActorSound id="SquadSentryForceFieldSound" parent="SoundOneShot">
+    <CActorSound id="SquadForceFieldSound" parent="SoundOneShot">
         <On Terms="Effect.SquadForceField.Start" Send="Create"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachTarget"/>
@@ -3181,7 +3415,7 @@
         <Color value="128,255,251,176"/>
         <Model value="PowerVisualFast"/>
     </CActorSplat>
-    <CActorSplat id="SquadTechReactorSplat" parent="GenericUnitSplat" unitName="TechReactor">
+    <CActorSplat id="SquadTechReactorSplat" parent="GenericUnitSplat" unitName="SquadTechReactor">
         <Model value="ReactorSplat"/>
     </CActorSplat>
     <CActorTurret id="SquadBunkerShrikeTurretTurret">
@@ -5951,7 +6185,6 @@
         <On Terms="AbilMorph.*.Finish; MorphFrom SquadSupplyDepotDrop" Send="Create"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom SquadSupplyDepotDrop" Send="Create BuildingTerrainFlatten"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom SquadSupplyDepotDrop" Send="QueryRadius 1.750000 BuildingCrushQueryResponse"/>
-        <On Terms="Behavior.ColonyInfestation.On" Send="Create InfestationSupplyDepot"/>
         <On Terms="Signal.*.Incoming" Send="RefSetFromMsg ::actor.SquadSupplyDropModel ::Sender"/>
         <On Terms="Signal.*.Incoming" Target="::actor.SquadSupplyDropModel" Send="Signal Raised"/>
         <On Terms="ActorCreation; PlayerHasReward SupplyDepotSkin" Send="StatusSet CE 1"/>
@@ -5961,7 +6194,7 @@
         <On Terms="AbilMorph.*.Finish; MorphTo SquadSupplyDepot; MorphFrom SquadSupplyDepotDrop; ValidatePlayer HaveSnowVisual" Target="::Main" Send="ModelMaterialApply GlazeSnowBuilding"/>
         <Model value="SupplyDepot_Silver"/>
         <CreepHeightClass value="Small"/>
-        <BuildModel value="SupplyDepot_Silver"/>
+        <BuildModel value="SupplyDepot_Silver_Build"/>
         <DeathArray index="Normal" ModelLink="SupplyDepot_Silver_Death" SoundLink="SupplyDepot_Explode"/>
         <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="SupplyDepot_Explode"/>
         <PlacementModel value="SupplyDepot_Silver_Placement"/>
@@ -6221,7 +6454,7 @@
         <On Terms="ActorCreation" Send="SetScale 1.350000"/>
         <Model value="TechLabBuild"/>
     </CActorModel>
-    <CActorSplat id="SquadTechlabSplat" parent="GenericUnitSplat" unitName="TechLab">
+    <CActorSplat id="SquadTechlabSplat" parent="GenericUnitSplat" unitName="SquadTechlab">
         <Model value="TechLabSplat"/>
     </CActorSplat>
     <CActorModel id="SquadTechReactorBuild" parent="TerranBuildingBuild">

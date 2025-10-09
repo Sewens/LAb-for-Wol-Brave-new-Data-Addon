@@ -1,5 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CAbilEffectInstant id="BulletTime">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadBulletTime"/>
+        <AINotifyEffect value="SquadBulletTime"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadBulletTime"/>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="SOATimeStopTest">
+        <Effect index="0" value="SOATimeFreeze"/>
+        <AINotifyEffect value="SOATimeFreeze"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SOATimeFreeze"/>
+    </CAbilEffectInstant>
+    <CAbilEffectTarget id="SquadSupplyDepotForceFieldWall">
+        <AbilSetId value="ForceField"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadForceField"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <InterruptCost>
+            <Cooldown TimeUse="20"/>
+        </InterruptCost>
+        <Range value="1"/>
+        <Arc value="360"/>
+        <AutoCastAcquireLevel value="Defensive"/>
+        <AutoCastFilters value="Visible;Player,Ally,Air,AirUnit"/>
+        <Marker>
+            <MatchFlags index="Link" value="0"/>
+            <MatchFlags index="CasterUnit" value="1"/>
+        </Marker>
+        <CursorEffect value="SquadForceFieldPlacement"/>
+        <AINotifyEffect value="SquadForceField"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadHavocForceField"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <PlaceUnit value="SquadForceField"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadLurkerChannelingSpines">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadLurkerChannelingSpinesCP"/>
+        <TargetFilters value="Ground,Visible;Self,Player,Ally,Neutral,Missile,Dead,Hidden,Invulnerable"/>
+        <Range value="0.5"/>
+        <Arc value="360"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="LurkerStetmannChannelingSpines"/>
+    </CAbilEffectTarget>
     <CAbilEffectTarget id="AddMuleliskToSquad">
         <Alignment value="Positive"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -74,10 +117,10 @@
             <MatchFlags index="Link" value="0"/>
             <MatchFlags index="CasterUnit" value="1"/>
         </Marker>
-        <CursorEffect value="ForceFieldPlacement"/>
+        <CursorEffect value="SquadForceFieldPlacement"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadHavocForceField"/>
         <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
-        <PlaceUnit value="ForceField"/>
+        <PlaceUnit value="SquadForceField"/>
     </CAbilEffectTarget>
     <CAbilEffectTarget id="SquadHavocTargetLock">
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
@@ -345,6 +388,18 @@
         <MaxCount value="5"/>
         <CalldownEffect value="SquadSpiderMineCalldown"/>
     </CAbilArmMagazine>
+    <CAbilBehavior id="SquadSupplyDepotLowerSwitch">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="On" DefaultButtonFace="SquadLower">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="Off" DefaultButtonFace="SquadRaise">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Flags index="Toggle" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <BehaviorArray value="SquadSupplyDepotLowered"/>
+    </CAbilBehavior>
     <CAbilBehavior id="SquadYamatoShots">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <CmdButtonArray index="On" DefaultButtonFace="SquadMiniYmatoShot">
@@ -1582,14 +1637,6 @@
         <AINotifyEffect value="GreenScannerSweep"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="ScannerSweepBlue"/>
     </CAbilEffectTarget>
-    <CAbilEffectInstant id="BulletTime">
-        <Effect index="0" value="SOATimeFreeze"/>
-        <Cost>
-            <Cooldown TimeStart="5" TimeUse="5"/>
-        </Cost>
-        <AINotifyEffect value="SOATimeFreeze"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="SOATimeFreeze"/>
-    </CAbilEffectInstant>
     <CAbilTrain id="SquadCommandCenterTrain">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <InfoArray index="Train1" Time="12">
@@ -2547,6 +2594,12 @@
         </InfoArray>
         <InfoArray index="Build16" Unit="SquadFusionCore" Time="65">
             <Button DefaultButtonFace="BuildSquadFusionCore" Requirements="HaveSquadStarport"/>
+        </InfoArray>
+        <InfoArray index="Build17" Unit="SquadPsiDisrupter" Time="45">
+            <Button DefaultButtonFace="BuildSquadPsiDisrupter"/>
+        </InfoArray>
+        <InfoArray index="Build18" Unit="SquadHiveMindEmulator" Time="60">
+            <Button DefaultButtonFace="BuildSquadHiveMindEmulator"/>
         </InfoArray>
         <InfoArray index="Build28" Unit="SquadTechlab" Time="25">
             <Button DefaultButtonFace="BuildSquadTechLab" Requirements="HaveSquadBarracks"/>

@@ -8,6 +8,56 @@
         <Period value="2"/>
         <PeriodicEffect value="SquadInnermagazineIterator"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="SquadBulletTimeForEnemy">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\BTN-Ability-SpearOfAdun-TimeStop.dds"/>
+        <DisableValidatorArray value="NoTimeStopImmune"/>
+        <TimeScaleSource Value="Global"/>
+        <Duration value="20"/>
+        <Modification TimeScale="0.25">
+            <StateFlags index="SuppressAttack" value="1"/>
+            <StateFlags index="SuppressCloak" value="1"/>
+            <StateFlags index="SuppressDetection" value="1"/>
+            <StateFlags index="SuppressRadar" value="1"/>
+            <AbilClassDisableArray index="CAbilAttack" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadBulletTimeForPlayer">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\BTN-Ability-SpearOfAdun-TimeStop.dds"/>
+        <DisableValidatorArray value="NoTimeStopImmune"/>
+        <TimeScaleSource Value="Global"/>
+        <Duration value="20"/>
+        <Modification TimeScale="0.25"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadPsiDisruption">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-psidisruption.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="HasPsiStrike"/>
+        <Duration value="0.1875"/>
+        <Modification MoveSpeedMultiplier="0.5" AttackSpeedMultiplier="0.5">
+            <RateMultiplierArray index="Queueable" value="0.5"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadPsiDisruptionSearch">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <DisableValidatorArray value="NotDeadOrConstruction"/>
+        <Period value="0.125"/>
+        <PeriodicEffect value="SquadPsiDisruptionSearch"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadSupplyDepotLowered">
+        <InfoIcon value="Assets\Textures\btn-building-terran-supplydepotlowered.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InitialEffect value="SquadSupplyDepotLowerOrder"/>
+        <FinalEffect value="SquadSupplyDepotRaiseOrder"/>
+        <Modification>
+            <StateFlags index="Cloak" value="1"/>
+            <AbilLinkDisableArray value="SquadSupplyDepotForceFieldWall"/>
+            <WeaponEnableArray value="SquadSupplyDepotChannelingSpines"/>
+        </Modification>
+    </CBehaviorBuff>
     <CBehaviorPowerUser id="SquadWarpingIn">
         <Alignment value="Positive"/>
         <InfoIcon value="Assets\Textures\btn-building-protoss-pylon.dds"/>
