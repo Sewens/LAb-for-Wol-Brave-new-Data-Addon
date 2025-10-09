@@ -46,6 +46,39 @@
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <AffectedUnitArray value="SquadReaper"/>
     </CUpgrade>
+    <CUpgrade id="TerranStructureEmergencyProtocal">
+        <EffectArray Operation="Set" Reference="Abil,SquadCommandCenterLiftOff,InfoArray[0].SectionArray[Stats].DurationArray[Delay]" Value="0.500000"/>
+        <EffectArray Operation="Set" Reference="Abil,SquadCommandCenterLiftOff,InfoArray[0].SectionArray[Actor].DurationArray[Duration]" Value="0.500000"/>
+        <EffectArray Operation="Set" Reference="Abil,SquadOrbitalLiftOff,InfoArray[0].SectionArray[Stats].DurationArray[Delay]" Value="0.500000"/>
+        <EffectArray Operation="Set" Reference="Abil,SquadOrbitalLiftOff,InfoArray[0].SectionArray[Actor].DurationArray[Duration]" Value="0.500000"/>
+        <EffectArray Operation="Set" Reference="Abil,SquadBarracksLiftOff,InfoArray[0].SectionArray[Stats].DurationArray[Delay]" Value="0.500000"/>
+        <EffectArray Operation="Set" Reference="Abil,SquadBarracksLiftOff,InfoArray[0].SectionArray[Actor].DurationArray[Duration]" Value="0.500000"/>
+        <EffectArray Operation="Set" Reference="Abil,SquadFactoryLiftOff,InfoArray[0].SectionArray[Stats].DurationArray[Delay]" Value="0.500000"/>
+        <EffectArray Operation="Set" Reference="Abil,SquadFactoryLiftOff,InfoArray[0].SectionArray[Actor].DurationArray[Duration]" Value="0.500000"/>
+        <EffectArray Operation="Set" Reference="Abil,SquadStarportLiftOff,InfoArray[0].SectionArray[Stats].DurationArray[Delay]" Value="0.500000"/>
+        <EffectArray Operation="Set" Reference="Abil,SquadStarportLiftOff,InfoArray[0].SectionArray[Actor].DurationArray[Duration]" Value="0.500000"/>
+        <EffectArray Operation="Set" Reference="Unit,SquadCommandCenterFlying,Acceleration" Value="5.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,SquadCommandCenterFlying,Speed" Value="1.879000"/>
+        <EffectArray Operation="Set" Reference="Unit,SquadOrbitalCommandFlying,Acceleration" Value="5.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,SquadOrbitalCommandFlying,Speed" Value="1.879000"/>
+        <EffectArray Operation="Set" Reference="Unit,SquadBarracksFlying,Acceleration" Value="5.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,SquadBarracksFlying,Speed" Value="1.879000"/>
+        <EffectArray Operation="Set" Reference="Unit,SquadFactoryFlying,Acceleration" Value="5.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,SquadFactoryFlying,Speed" Value="1.879000"/>
+        <EffectArray Operation="Set" Reference="Unit,SquadStarportFlying,Acceleration" Value="5.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,SquadStarportFlying,Speed" Value="1.879000"/>
+        <EffectArray Operation="Set" Reference="Abil,SquadCommandCenterLand,InfoArray[0].SectionArray[Stats].DurationArray[Delay]" Value="0.500000"/>
+        <EffectArray Operation="Set" Reference="Abil,SquadCommandCenterLand,InfoArray[0].SectionArray[Actor].DurationArray[Duration]" Value="0.500000"/>
+        <EffectArray Operation="Set" Reference="Abil,SquadOrbitalLand,InfoArray[0].SectionArray[Stats].DurationArray[Delay]" Value="0.500000"/>
+        <EffectArray Operation="Set" Reference="Abil,SquadOrbitalLand,InfoArray[0].SectionArray[Actor].DurationArray[Duration]" Value="0.500000"/>
+        <EffectArray Operation="Set" Reference="Abil,SquadBarracksLand,InfoArray[0].SectionArray[Stats].DurationArray[Delay]" Value="0.500000"/>
+        <EffectArray Operation="Set" Reference="Abil,SquadBarracksLand,InfoArray[0].SectionArray[Actor].DurationArray[Duration]" Value="0.500000"/>
+        <EffectArray Operation="Set" Reference="Abil,SquadFactoryLand,InfoArray[0].SectionArray[Stats].DurationArray[Delay]" Value="0.500000"/>
+        <EffectArray Operation="Set" Reference="Abil,SquadFactoryLand,InfoArray[0].SectionArray[Actor].DurationArray[Duration]" Value="0.500000"/>
+        <EffectArray Operation="Set" Reference="Abil,SquadStarportLand,InfoArray[0].SectionArray[Stats].DurationArray[Delay]" Value="0.500000"/>
+        <EffectArray Operation="Set" Reference="Abil,SquadStarportLand,InfoArray[0].SectionArray[Actor].DurationArray[Duration]" Value="0.500000"/>
+        <EditorCategories value="Race:Terran"/>
+    </CUpgrade>
     <CUpgrade id="SquadReaperCombatDrugs">
         <Flags index="TechTreeCheat" value="1"/>
         <Icon value="Assets\Textures\btn-upgrade-terran-reapercombatdrugs.dds"/>
@@ -132,23 +165,6 @@
         <AffectedUnitArray value="HellionTank"/>
         <AffectedUnitArray value="NovaHero"/>
         <AffectedUnitArray value="NovaHoloDecoy"/>
-    </CUpgrade>
-    <CUpgrade id="SquadMicroFiltering">
-        <Flags index="UpgradeCheat" value="0"/>
-        <EffectArray Operation="Set" Reference="Abil,SquadSCVGather,ResourceAmountBonus[Vespene]" Value="1"/>
-        <EffectArray Operation="Set" Reference="Effect,AutoHarvestVespene,Resources" Value="-5"/>
-        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
-    </CUpgrade>
-    <CUpgrade id="SquadDualFusionWelders">
-        <Flags index="UpgradeCheat" value="0"/>
-        <EffectArray Operation="Set" Reference="Effect,SCVRepair,TimeFactor" Value="1"/>
-        <EffectArray Operation="Set" Reference="Button,Repair,Tooltip" Value="Button/Tooltip/DualFusionRepair"/>
-        <EffectArray Operation="Set" Reference="Button,Repair,Name" Value="Button/Name/DualFusionRepair"/>
-        <EffectArray Operation="Set" Reference="Button,Repair,AlertTooltip" Value="Button/Tooltip/DualFusionRepair"/>
-        <EffectArray Operation="Set" Reference="Button,Repair,AlertName" Value="Button/Name/DualFusionRepair"/>
-        <EffectArray Operation="Set" Reference="Actor,SquadSCV,UnitIcon" Value="Assets\Textures\btn-unit-terran-scv.dds"/>
-        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
-        <AffectedUnitArray value="SquadSCV"/>
     </CUpgrade>
     <CUpgrade id="EnergyStorage2">
         <Flags index="UpgradeCheat" value="0"/>
@@ -356,8 +372,8 @@
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <AffectedUnitArray value="SquadMarine"/>
     </CUpgrade>
-    <CUpgrade id="SquadTerranInfantryWeaponsLevel22" parent="TerranInfantryWeapons">
-        <Name value="Upgrade/Name/SquadTerranInfantryWeaponsLevel22"/>
+    <CUpgrade id="SquadTerranInfantryWeaponsLevel2" parent="TerranInfantryWeapons">
+        <Name value="Upgrade/Name/SquadTerranInfantryWeaponsLevel2"/>
         <InfoTooltipPriority value="0"/>
         <Icon value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
         <ScoreAmount value="350"/>
@@ -451,23 +467,49 @@
         <InfoTooltipPriority value="0"/>
         <Icon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
         <ScoreAmount value="200"/>
-        <EffectArray index="0" Reference="Unit,SquadSCV,LifeArmorLevel" Value="1"/>
-        <EffectArray index="1" Reference="Unit,SquadSCV,LifeArmor" Value="1"/>
-        <EffectArray index="2" Reference="Unit,SquadMarine,LifeArmorLevel" Value="1"/>
-        <EffectArray index="3" Reference="Unit,SquadMarine,LifeArmor" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,SCV,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,MULE,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Marine,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Reaper,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Marauder,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Ghost,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,HERC,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
-        <EffectArray Reference="Unit,HERC,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,HERC,LifeArmorLevel" Value="1"/>
-        <EffectArray Operation="Set" Reference="Unit,SquadMedic,LifeArmorLevel" Value="1"/>
+        <!--unit modify-->
+        <!--icon set-->
+        <EffectArray index="0" Operation="Set" Reference="Actor,SquadSCV,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray index="1" Operation="Set" Reference="Actor,SquadMulelisk,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray index="2" Operation="Set" Reference="Actor,SquadMarine,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray index="3" Operation="Set" Reference="Actor,SquadReaper,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray index="4" Operation="Set" Reference="Actor,SquadMarauder,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray index="5" Operation="Set" Reference="Actor,SquadGhost,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray index="6" Operation="Set" Reference="Actor,SquadFirebat,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray index="7" Operation="Set" Reference="Actor,SquadMedic,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray index="8" Operation="Set" Reference="Actor,SquadSpectre,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray index="9" Operation="Set" Reference="Actor,SquadPredator,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray index="10" Reference="Unit,SquadGhost,LifeArmorLevel" Value="1"/>
+        <EffectArray index="11" Reference="Unit,SquadGhost,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadFirebat,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadFirebat,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadMedic,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadMedic,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadSpectre,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadSpectre,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadPredator,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadPredator,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadSCV,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadSCV,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadMulelisk,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadMulelisk,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadMarine,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadMarine,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadReaper,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadReaper,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadMarauder,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadMarauder,LifeArmor" Value="1"/>
+        <!-- unit list -->
+        <AffectedUnitArray index="0" value="SquadSCV"/>
+        <AffectedUnitArray index="1" value="SquadMulelisk"/>
         <AffectedUnitArray index="2" value="SquadMarine"/>
-        <AffectedUnitArray index="4" value="SquadSCV"/>
-        <AffectedUnitArray value="HERC"/>
+        <AffectedUnitArray index="3" value="SquadReaper"/>
+        <AffectedUnitArray index="4" value="SquadMarauder"/>
+        <AffectedUnitArray value="SquadGhost"/>
+        <AffectedUnitArray value="SquadFirebat"/>
+        <AffectedUnitArray value="SquadMedic"/>
+        <AffectedUnitArray value="SquadSpectre"/>
+        <AffectedUnitArray value="SquadPredator"/>
         <LeaderLevel value="1"/>
     </CUpgrade>
     <CUpgrade id="SquadTerranInfantryArmorLevel2" parent="TerranInfantryArmors">
@@ -475,19 +517,47 @@
         <InfoTooltipPriority value="0"/>
         <Icon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
         <ScoreAmount value="350"/>
-        <EffectArray index="0" Reference="Unit,SquadSCV,LifeArmorLevel" Value="1"/>
-        <EffectArray index="1" Reference="Unit,SquadSCV,LifeArmor" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,SCV,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,MULE,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Marine,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Reaper,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Marauder,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Ghost,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,HERC,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
-        <EffectArray Reference="Unit,HERC,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,HERC,LifeArmorLevel" Value="1"/>
-        <AffectedUnitArray index="4" value="SquadSCV"/>
-        <AffectedUnitArray value="HERC"/>
+        <EffectArray index="0" Operation="Set" Reference="Actor,SquadSCV,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray index="1" Operation="Set" Reference="Actor,SquadMulelisk,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray index="2" Operation="Set" Reference="Actor,SquadMarine,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray index="3" Operation="Set" Reference="Actor,SquadReaper,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray index="4" Operation="Set" Reference="Actor,SquadMarauder,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray index="5" Operation="Set" Reference="Actor,SquadGhost,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray index="6" Operation="Set" Reference="Actor,SquadFirebat,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray index="7" Operation="Set" Reference="Actor,SquadMedic,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray index="8" Operation="Set" Reference="Actor,SquadSpectre,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray index="9" Operation="Set" Reference="Actor,SquadPredator,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray index="10" Reference="Unit,SquadGhost,LifeArmorLevel" Value="1"/>
+        <EffectArray index="11" Reference="Unit,SquadGhost,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadFirebat,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadFirebat,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadMedic,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadMedic,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadSpectre,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadSpectre,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadPredator,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadPredator,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadSCV,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadSCV,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadMulelisk,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadMulelisk,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadMarine,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadMarine,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadReaper,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadReaper,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadMarauder,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadMarauder,LifeArmor" Value="1"/>
+        <!-- unit list -->
+        <AffectedUnitArray index="0" value="SquadSCV"/>
+        <AffectedUnitArray index="1" value="SquadMulelisk"/>
+        <AffectedUnitArray index="2" value="SquadMarine"/>
+        <AffectedUnitArray index="3" value="SquadReaper"/>
+        <AffectedUnitArray index="4" value="SquadMarauder"/>
+        <AffectedUnitArray value="SquadGhost"/>
+        <AffectedUnitArray value="SquadFirebat"/>
+        <AffectedUnitArray value="SquadMedic"/>
+        <AffectedUnitArray value="SquadSpectre"/>
+        <AffectedUnitArray value="SquadPredator"/>
         <LeaderLevel value="2"/>
     </CUpgrade>
     <CUpgrade id="SquadTerranInfantryArmorLevel3" parent="TerranInfantryArmors">
@@ -495,79 +565,47 @@
         <InfoTooltipPriority value="0"/>
         <Icon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
         <ScoreAmount value="500"/>
-        <EffectArray index="2" Reference="Unit,SquadMarine,LifeArmorLevel" Value="1"/>
-        <EffectArray index="3" Reference="Unit,SquadMarine,LifeArmor" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,SCV,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,MULE,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Marine,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Reaper,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Marauder,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Ghost,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
-        <EffectArray Reference="Unit,Firebat,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,Firebat,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,Medic,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,Medic,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,Spectre,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,Spectre,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,WarPig,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,WarPig,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,HammerSecurity,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,HammerSecurity,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,DevilDog,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,DevilDog,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,DominionKillTeam,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,DominionKillTeam,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,RaynorCommando,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,RaynorCommando,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,Raynor,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,Raynor,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,TychusCommando,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,TychusCommando,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,TychusChaingun,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,TychusChaingun,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,Swann,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,Swann,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,Stetmann,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,Stetmann,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,Nova,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,Nova,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,Tosh,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,Tosh,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,MengskMarine,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,MengskMarine,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,MengskMarauder,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,MengskMarauder,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,MengskFirebat,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,MengskFirebat,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,MengskMedic,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,MengskMedic,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,MengskReaper,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,MengskReaper,LifeArmor" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,MengskMarine,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,MengskMarauder,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,MengskFirebat,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,MengskMedic,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,MengskReaper,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Firebat,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Medic,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,SpecterUnit,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,KelmorianMiner,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,HammerSecurity,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,DevilDog,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,DominionKillTeam,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,RaynorCommando,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Raynor,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,TychusCommando,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,TychusChaingun,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Dutch,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Bones,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Nova,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Tosh,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,HERC,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
-        <EffectArray Reference="Unit,HERC,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,HERC,LifeArmorLevel" Value="1"/>
+        <EffectArray index="0" Operation="Set" Reference="Actor,SquadSCV,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray index="1" Operation="Set" Reference="Actor,SquadMulelisk,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray index="2" Operation="Set" Reference="Actor,SquadMarine,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray index="3" Operation="Set" Reference="Actor,SquadReaper,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray index="4" Operation="Set" Reference="Actor,SquadMarauder,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray index="5" Operation="Set" Reference="Actor,SquadGhost,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray index="6" Operation="Set" Reference="Actor,SquadFirebat,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray index="7" Operation="Set" Reference="Actor,SquadMedic,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray index="8" Operation="Set" Reference="Actor,SquadSpectre,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray index="9" Operation="Set" Reference="Actor,SquadPredator,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray index="10" Reference="Unit,SquadGhost,LifeArmorLevel" Value="1"/>
+        <EffectArray index="11" Reference="Unit,SquadGhost,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadFirebat,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadFirebat,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadMedic,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadMedic,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadSpectre,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadSpectre,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadPredator,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadPredator,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadSCV,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadSCV,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadMulelisk,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadMulelisk,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadMarine,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadMarine,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadReaper,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadReaper,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadMarauder,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadMarauder,LifeArmor" Value="1"/>
+        <!-- unit list -->
+        <AffectedUnitArray index="0" value="SquadSCV"/>
+        <AffectedUnitArray index="1" value="SquadMulelisk"/>
         <AffectedUnitArray index="2" value="SquadMarine"/>
-        <AffectedUnitArray value="HERC"/>
+        <AffectedUnitArray index="3" value="SquadReaper"/>
+        <AffectedUnitArray index="4" value="SquadMarauder"/>
+        <AffectedUnitArray value="SquadGhost"/>
+        <AffectedUnitArray value="SquadFirebat"/>
+        <AffectedUnitArray value="SquadMedic"/>
+        <AffectedUnitArray value="SquadSpectre"/>
+        <AffectedUnitArray value="SquadPredator"/>
         <LeaderLevel value="3"/>
     </CUpgrade>
     <CUpgrade id="SquadTerranInfantryWeaponsLevel1" parent="TerranInfantryWeapons">
@@ -575,81 +613,31 @@
         <InfoTooltipPriority value="0"/>
         <Icon value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
         <ScoreAmount value="200"/>
-        <EffectArray Operation="Set" Reference="Weapon,GuassRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Weapon,D8Charge,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Weapon,P38ScytheGuassPistol,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Weapon,PunisherGrenades,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Weapon,C10CanisterRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
-        <EffectArray Reference="Weapon,DominionKillTeam,Level" Value="1"/>
-        <EffectArray Reference="Effect,DominionKillTeamDamage,Amount" Value="1.000000"/>
-        <EffectArray Reference="Weapon,Firebat,Level" Value="1"/>
-        <EffectArray Reference="Effect,FirebatUFull,Amount" Value="1.000000"/>
-        <EffectArray Reference="Effect,SpecterU,Amount" Value="1.000000"/>
-        <EffectArray Reference="Weapon,KelmorianMinerGaussRifle,Level" Value="1"/>
-        <EffectArray Reference="Effect,KelmorianMinerDamage,Amount" Value="1"/>
-        <EffectArray Reference="Weapon,HammerSecurity,Level" Value="1"/>
-        <EffectArray Reference="Effect,HammerSecurityDamage,Amount" Value="1"/>
-        <EffectArray Reference="Effect,HammerSecurityDamage,AttributeBonus[Armored]" Value="1.000000"/>
-        <EffectArray Reference="Weapon,DevilDogFlameThrower,Level" Value="1"/>
-        <EffectArray Reference="Effect,DevilDogDamage,Amount" Value="1"/>
-        <EffectArray Reference="Weapon,CommandoRifle,Level" Value="1"/>
-        <EffectArray Reference="Effect,CommandoRifle,Amount" Value="3"/>
-        <EffectArray Reference="Weapon,RaynorWeapon,Level" Value="1"/>
-        <EffectArray Reference="Effect,RaynorWeaponU,Amount" Value="2"/>
-        <EffectArray Reference="Weapon,TychusCommandoChaingun,Level" Value="1"/>
-        <EffectArray Reference="Effect,TychusCommandoAttackDamage,Amount" Value="1"/>
-        <EffectArray Reference="Weapon,TychusChaingun,Level" Value="1"/>
-        <EffectArray Reference="Effect,TychusChaingun,Amount" Value="2"/>
-        <EffectArray Reference="Weapon,DutchConcussiveGrenade,Level" Value="1"/>
-        <EffectArray Reference="Weapon,SwannMelee,Level" Value="1"/>
-        <EffectArray Reference="Effect,DutchConcussiveGrenadeDamage,Amount" Value="3"/>
-        <EffectArray Reference="Weapon,Nova,Level" Value="1"/>
-        <EffectArray Reference="Effect,Nova,Amount" Value="3"/>
-        <EffectArray Reference="Weapon,Tosh,Level" Value="1"/>
-        <EffectArray Reference="Effect,ToshU,Amount" Value="4"/>
-        <EffectArray Reference="Weapon,MengskMarine,Level" Value="1"/>
-        <EffectArray Reference="Effect,MengskMarineDamage,Amount" Value="1"/>
-        <EffectArray Reference="Weapon,MengskMarauder,Level" Value="1"/>
-        <EffectArray Reference="Effect,MengskMarauderDamage,Amount" Value="1"/>
-        <EffectArray Reference="Effect,MengskMarauderDamage,AttributeBonus[Armored]" Value="1.000000"/>
-        <EffectArray Reference="Weapon,MengskFirebat,Level" Value="1"/>
-        <EffectArray Reference="Effect,MengskFirebatDamage,Amount" Value="1"/>
-        <EffectArray Reference="Effect,MengskFirebatDamage,AttributeBonus[Light]" Value="1.000000"/>
-        <EffectArray Reference="Weapon,MengskReaperP38ScytheGuassPistol,Level" Value="1"/>
-        <EffectArray Reference="Effect,MengskReaperP38ScytheGuassPistol,Amount" Value="1"/>
-        <EffectArray Reference="Effect,MengskReaperP38ScytheGuassPistol,AttributeBonus[Light]" Value="1.000000"/>
-        <EffectArray Reference="Weapon,MengskReaperD8Charge,Level" Value="1"/>
-        <EffectArray Reference="Effect,MengskReaperD8ChargeDamage,Amount" Value="3"/>
-        <EffectArray Operation="Set" Reference="Weapon,MengskMarine,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Weapon,MengskMarauder,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Weapon,MengskReaperP38ScytheGuassPistol,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Weapon,MengskReaperD8Charge,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Weapon,MengskFirebat,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Weapon,DominionKillTeam,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Weapon,Firebat,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Weapon,Specter,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Weapon,KelmorianMinerGaussRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Weapon,HammerSecurity,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Weapon,DevilDogFlameThrower,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Weapon,CommandoRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Weapon,RaynorWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Weapon,TychusCommandoChaingun,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Weapon,TychusChaingun,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Weapon,DutchConcussiveGrenade,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Weapon,SwannMelee,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Weapon,Nova,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Weapon,Tosh,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Weapon,Nova,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Weapon,HERCWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
-        <EffectArray Reference="Weapon,HERCWeapon,Level" Value="1"/>
-        <EffectArray Reference="Effect,HERCWeaponDamage,Amount" Value="2.000000"/>
-        <EffectArray Operation="Set" Reference="Weapon,MedicFlashGrenade,DisplayAttackCount" Value="2"/>
-        <EffectArray Operation="Set" Reference="Weapon,MedicFlashGrenade,Cost.Charge.CountMax" Value="2"/>
-        <EffectArray Reference="Effect,SquadMedicHeal,RechargeVitalRate" Value="1.000000"/>
-        <AffectedUnitArray index="0" value="SquadMarine"/>
-        <AffectedUnitArray index="1" value="SquadMedic"/>
-        <AffectedUnitArray index="2" value="SquadSCV"/>
-        <AffectedUnitArray index="3" value="SquadFirebat"/>
+        <EffectArray index="0" Operation="Set" Reference="Weapon,SCVFusionCutter,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray index="1" Operation="Set" Reference="Weapon,SquadReaperP45GaussPistol,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray index="2" Operation="Set" Reference="Weapon,SquadMarineGaussRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray index="3" Operation="Set" Reference="Weapon,SquadReaperD8Charge,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray index="4" Operation="Set" Reference="Weapon,SquadMarauderPunisherGrenades,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray index="5" Operation="Set" Reference="Weapon,SquadGhostC10CanisterRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray index="6" Operation="Set" Reference="Weapon,SquadFirebatPerditionFlamethrower,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray index="7" Operation="Set" Reference="Weapon,SquadPredatorTitaniumClaws,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray index="8" Operation="Set" Reference="Weapon,SquadSpecterAGR14GaussRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray index="9" Operation="Set" Reference="Weapon,MedicFlashGrenade,DisplayAttackCount" Value="2"/>
+        <EffectArray index="10" Operation="Set" Reference="Weapon,MedicFlashGrenade,Cost.Charge.CountMax" Value="2"/>
+        <EffectArray index="11" Reference="Effect,SquadMedicHeal,RechargeVitalRate" Value="3.000000"/>
+        <EffectArray Reference="Weapon,SCVFusionCutter,Level" Value="1"/>
+        <EffectArray Reference="Effect,SquadC10CanisterRifle,Amount" Value="5"/>
+        <EffectArray Reference="Effect,SquadFirebatFlameThrowerDamage,Amount" Value="2"/>
+        <EffectArray Operation="Set" Reference="Weapon,FreemanGaussRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <AffectedUnitArray index="0" value="SquadSCV"/>
+        <AffectedUnitArray index="1" value="SquadMarine"/>
+        <AffectedUnitArray index="2" value="SquadReaper"/>
+        <AffectedUnitArray index="3" value="SquadMarauder"/>
+        <AffectedUnitArray value="SquadGhost"/>
+        <AffectedUnitArray value="SquadFirebat"/>
+        <AffectedUnitArray value="SquadMedic"/>
+        <AffectedUnitArray value="SquadSpectre"/>
+        <AffectedUnitArray value="SquadPredator"/>
         <LeaderLevel value="1"/>
     </CUpgrade>
     <CUpgrade id="SquadTerranInfantryWeaponsLevel3" parent="TerranInfantryWeapons">
@@ -754,297 +742,207 @@
         <Name value="Upgrade/Name/SquadTerranVehicleAndShipPlatingLevel1"/>
         <Icon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
         <ScoreAmount value="200"/>
-        <EffectArray Operation="Set" Reference="Actor,Thor,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,SiegeTank,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,SiegeTankSieged,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Hellion,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,HellionTank,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,WidowMine,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Banshee,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Battlecruiser,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Raven,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Medivac,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,VikingAssault,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,VikingFighter,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Cyclone,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
-        <EffectArray Reference="Unit,Cyclone,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,Cyclone,LifeArmorLevel" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,Liberator,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,LiberatorAG,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
-        <EffectArray Reference="Unit,Liberator,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,Liberator,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,LiberatorAG,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,LiberatorAG,LifeArmorLevel" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,Diamondback,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
-        <EffectArray Reference="Unit,Diamondback,LifeArmor" Value="1.000000"/>
-        <EffectArray Reference="Unit,Diamondback,LifeArmorLevel" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,Vulture,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
-        <EffectArray Reference="Unit,Vulture,LifeArmor" Value="1.000000"/>
-        <EffectArray Reference="Unit,Vulture,LifeArmorLevel" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,Goliath,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
-        <EffectArray Reference="Unit,Goliath,LifeArmor" Value="1.000000"/>
-        <EffectArray Reference="Unit,Goliath,LifeArmorLevel" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,Wraith,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
-        <EffectArray Reference="Unit,Wraith,LifeArmor" Value="1.000000"/>
-        <EffectArray Reference="Unit,Wraith,LifeArmorLevel" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,WarHound,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
-        <EffectArray Reference="Unit,WarHound,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,WarHound,LifeArmorLevel" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,ScienceVessel,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
-        <EffectArray Reference="Unit,ScienceVessel,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,ScienceVessel,LifeArmorLevel" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,DukesRevenge,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
-        <EffectArray Reference="Unit,CaptainDukesRevenge,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,CaptainDukesRevenge,LifeArmorLevel" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,SpartanCompany,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
-        <EffectArray Reference="Unit,SpartanCompany,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,SpartanCompany,LifeArmor" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,DuskWingBanshee,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
-        <EffectArray Reference="Unit,DuskWing,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,DuskWing,LifeArmor" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,SiegeBreaker,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
-        <EffectArray Reference="Unit,SiegeBreaker,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,SiegeBreaker,LifeArmor" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,SiegeBreakerSieged,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
-        <EffectArray Reference="Unit,SiegeBreakerSieged,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,SiegeBreakerSieged,LifeArmor" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,WreckingCrewAssault,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
-        <EffectArray Reference="Unit,HelsAngelAssault,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,HelsAngelAssault,LifeArmor" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,WreckingCrewFighter,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
-        <EffectArray Reference="Unit,HelsAngelFighter,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,HelsAngelFighter,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,MengskDiamondback,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,MengskDiamondback,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,MengskGoliath,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,MengskGoliath,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,MengskHellion,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,MengskHellion,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,MengskSiegeTank,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,MengskSiegeTank,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,MengskSiegeTankSieged,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,MengskSiegeTankSieged,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,MengskThor,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,MengskThor,LifeArmorLevel" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,MengskDiamondback,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,MengskGoliath,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,MengskHellion,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,MengskSiegeTankSieged,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,MengskSiegeTank,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,MengskSiegeTankTankModeMorphModel,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,MengskSiegeTankSiegeModeMorphModel,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,MengskThor,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
-        <AffectedUnitArray value="WarHound"/>
-        <AffectedUnitArray value="Diamondback"/>
-        <AffectedUnitArray value="Vulture"/>
-        <AffectedUnitArray value="Goliath"/>
-        <AffectedUnitArray value="Wraith"/>
-        <AffectedUnitArray value="ScienceVessel"/>
-        <AffectedUnitArray value="CaptainDukesRevenge"/>
-        <AffectedUnitArray value="SpartanCompany"/>
-        <AffectedUnitArray value="DuskWing"/>
-        <AffectedUnitArray value="SiegeBreakerSieged"/>
-        <AffectedUnitArray value="SiegeBreaker"/>
-        <AffectedUnitArray value="HelsAngelAssault"/>
-        <AffectedUnitArray value="HelsAngelFighter"/>
+        <EffectArray index="0" Operation="Set" Reference="Actor,SquadHellion,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray index="1" Operation="Set" Reference="Actor,SquadDiamondback,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray index="2" Operation="Set" Reference="Actor,SquadSiegeTank,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray index="3" Operation="Set" Reference="Actor,SquadSiegeTankSieged,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray index="4" Operation="Set" Reference="Actor,SquadGoliath,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray index="5" Operation="Set" Reference="Actor,SquadThor,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray index="6" Operation="Set" Reference="Actor,SquadWraith,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray index="7" Operation="Set" Reference="Actor,SquadMedivac,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray index="8" Operation="Set" Reference="Actor,SquadHercules,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray index="9" Operation="Set" Reference="Actor,SquadVikingG,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray index="10" Operation="Set" Reference="Actor,SquadBattlecruiser,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray index="11" Operation="Set" Reference="Actor,SquadRaven,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray index="12" Operation="Set" Reference="Actor,SquadScienceVessel,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray index="13" Reference="Unit,SquadHellion,LifeArmorLevel" Value="1"/>
+        <EffectArray index="14" Reference="Unit,SquadHellion,LifeArmor" Value="1"/>
+        <EffectArray index="15" Reference="Unit,SquadDiamondback,LifeArmorLevel" Value="1"/>
+        <EffectArray index="16" Reference="Unit,SquadDiamondback,LifeArmor" Value="1"/>
+        <EffectArray index="17" Reference="Unit,SquadSiegeTank,LifeArmorLevel" Value="1"/>
+        <EffectArray index="18" Reference="Unit,SquadSiegeTank,LifeArmor" Value="1"/>
+        <EffectArray index="19" Reference="Unit,SquadSiegeTankSieged,LifeArmorLevel" Value="1"/>
+        <EffectArray index="20" Reference="Unit,SquadSiegeTankSieged,LifeArmor" Value="1"/>
+        <EffectArray index="21" Reference="Unit,SquadGoliath,LifeArmorLevel" Value="1"/>
+        <EffectArray index="22" Reference="Unit,SquadGoliath,LifeArmor" Value="1"/>
+        <EffectArray index="23" Reference="Unit,SquadThorAP,LifeArmorLevel" Value="1"/>
+        <EffectArray index="24" Reference="Unit,SquadThorAP,LifeArmor" Value="1"/>
+        <EffectArray index="25" Reference="Unit,SquadThorEP,LifeArmorLevel" Value="1"/>
+        <EffectArray index="26" Reference="Unit,SquadThorEP,LifeArmor" Value="1"/>
+        <EffectArray index="27" Reference="Unit,SquadWraith,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Set" Reference="Actor,SquadExcavator,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray Reference="Unit,SquadWraith,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadMedivac,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadMedivac,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadHercules,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadHercules,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadVikingG,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadVikingG,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadVikingA,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadVikingA,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadBanshee,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadBanshee,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadBattlecruiser,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadBattlecruiser,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadRaven,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadRaven,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadScienceVessel,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadScienceVessel,LifeArmor" Value="1"/>
+        <AffectedUnitArray index="0" value="CaptainExcavator"/>
+        <AffectedUnitArray index="1" value="SquadHellion"/>
+        <AffectedUnitArray index="2" value="SquadDiamondback"/>
+        <AffectedUnitArray index="3" value="SquadSiegeTank"/>
+        <AffectedUnitArray index="4" value="SquadSiegeTankSieged"/>
+        <AffectedUnitArray index="5" value="SquadGoliath"/>
+        <AffectedUnitArray index="6" value="SquadThorAP"/>
+        <AffectedUnitArray index="7" value="SquadThorEP"/>
+        <AffectedUnitArray index="8" value="SquadWraith"/>
+        <AffectedUnitArray index="9" value="SquadMedivac"/>
+        <AffectedUnitArray index="10" value="SquadHercules"/>
+        <AffectedUnitArray index="11" value="SquadVikingG"/>
+        <AffectedUnitArray index="12" value="SquadVikingA"/>
+        <AffectedUnitArray index="13" value="SquadBanshee"/>
+        <AffectedUnitArray index="14" value="SquadBattlecruiser"/>
+        <AffectedUnitArray index="15" value="SquadRaven"/>
+        <AffectedUnitArray value="SquadScienceVessel"/>
         <LeaderLevel value="1"/>
     </CUpgrade>
     <CUpgrade id="SquadTerranVehicleAndShipPlatingLevel2" parent="TerranVehicleAndShipArmors">
         <Name value="Upgrade/Name/SquadTerranVehicleAndShipPlatingLevel2"/>
         <Icon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
         <ScoreAmount value="350"/>
-        <EffectArray Operation="Set" Reference="Actor,Thor,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,SiegeTank,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,SiegeTankSieged,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Hellion,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,HellionTank,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,WidowMine,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Banshee,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Battlecruiser,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Raven,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Medivac,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,VikingAssault,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,VikingFighter,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Cyclone,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
-        <EffectArray Reference="Unit,Cyclone,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,Cyclone,LifeArmorLevel" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,Liberator,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,LiberatorAG,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
-        <EffectArray Reference="Unit,Liberator,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,Liberator,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,LiberatorAG,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,LiberatorAG,LifeArmorLevel" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,Diamondback,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
-        <EffectArray Reference="Unit,Diamondback,LifeArmor" Value="1.000000"/>
-        <EffectArray Reference="Unit,Diamondback,LifeArmorLevel" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,Vulture,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
-        <EffectArray Reference="Unit,Vulture,LifeArmor" Value="1.000000"/>
-        <EffectArray Reference="Unit,Vulture,LifeArmorLevel" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,Goliath,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
-        <EffectArray Reference="Unit,Goliath,LifeArmor" Value="1.000000"/>
-        <EffectArray Reference="Unit,Goliath,LifeArmorLevel" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,Wraith,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
-        <EffectArray Reference="Unit,Wraith,LifeArmor" Value="1.000000"/>
-        <EffectArray Reference="Unit,Wraith,LifeArmorLevel" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,WarHound,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
-        <EffectArray Reference="Unit,WarHound,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,WarHound,LifeArmorLevel" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,ScienceVessel,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
-        <EffectArray Reference="Unit,ScienceVessel,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,ScienceVessel,LifeArmorLevel" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,DukesRevenge,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
-        <EffectArray Reference="Unit,CaptainDukesRevenge,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,CaptainDukesRevenge,LifeArmorLevel" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,SpartanCompany,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
-        <EffectArray Reference="Unit,SpartanCompany,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,SpartanCompany,LifeArmor" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,DuskWingBanshee,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
-        <EffectArray Reference="Unit,DuskWing,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,DuskWing,LifeArmor" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,SiegeBreaker,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
-        <EffectArray Reference="Unit,SiegeBreaker,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,SiegeBreaker,LifeArmor" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,SiegeBreakerSieged,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
-        <EffectArray Reference="Unit,SiegeBreakerSieged,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,SiegeBreakerSieged,LifeArmor" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,WreckingCrewAssault,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
-        <EffectArray Reference="Unit,HelsAngelAssault,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,HelsAngelAssault,LifeArmor" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,WreckingCrewFighter,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
-        <EffectArray Reference="Unit,HelsAngelFighter,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,HelsAngelFighter,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,MengskDiamondback,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,MengskDiamondback,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,MengskGoliath,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,MengskGoliath,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,MengskHellion,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,MengskHellion,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,MengskSiegeTank,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,MengskSiegeTank,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,MengskSiegeTankSieged,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,MengskSiegeTankSieged,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,MengskThor,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,MengskThor,LifeArmorLevel" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,MengskDiamondback,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,MengskGoliath,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,MengskHellion,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,MengskSiegeTankSieged,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,MengskSiegeTank,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,MengskSiegeTankTankModeMorphModel,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,MengskSiegeTankSiegeModeMorphModel,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,MengskThor,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
-        <AffectedUnitArray value="WarHound"/>
-        <AffectedUnitArray value="Diamondback"/>
-        <AffectedUnitArray value="Vulture"/>
-        <AffectedUnitArray value="Goliath"/>
-        <AffectedUnitArray value="Wraith"/>
-        <AffectedUnitArray value="ScienceVessel"/>
-        <AffectedUnitArray value="CaptainDukesRevenge"/>
-        <AffectedUnitArray value="SpartanCompany"/>
-        <AffectedUnitArray value="DuskWing"/>
-        <AffectedUnitArray value="SiegeBreakerSieged"/>
-        <AffectedUnitArray value="SiegeBreaker"/>
-        <AffectedUnitArray value="HelsAngelAssault"/>
-        <AffectedUnitArray value="HelsAngelFighter"/>
+        <EffectArray index="0" Operation="Set" Reference="Actor,SquadHellion,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray index="1" Operation="Set" Reference="Actor,SquadDiamondback,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray index="2" Operation="Set" Reference="Actor,SquadSiegeTank,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray index="3" Operation="Set" Reference="Actor,SquadSiegeTankSieged,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray index="4" Operation="Set" Reference="Actor,SquadGoliath,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray index="5" Operation="Set" Reference="Actor,SquadThor,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray index="6" Operation="Set" Reference="Actor,SquadWraith,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray index="7" Operation="Set" Reference="Actor,SquadMedivac,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray index="8" Operation="Set" Reference="Actor,SquadHercules,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray index="9" Operation="Set" Reference="Actor,SquadVikingG,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray index="10" Operation="Set" Reference="Actor,SquadBattlecruiser,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray index="11" Operation="Set" Reference="Actor,SquadRaven,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray index="12" Operation="Set" Reference="Actor,SquadScienceVessel,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray index="13" Reference="Unit,SquadHellion,LifeArmorLevel" Value="1"/>
+        <EffectArray index="14" Reference="Unit,SquadHellion,LifeArmor" Value="1"/>
+        <EffectArray index="15" Reference="Unit,SquadDiamondback,LifeArmorLevel" Value="1"/>
+        <EffectArray index="16" Reference="Unit,SquadDiamondback,LifeArmor" Value="1"/>
+        <EffectArray index="17" Reference="Unit,SquadSiegeTank,LifeArmorLevel" Value="1"/>
+        <EffectArray index="18" Reference="Unit,SquadSiegeTank,LifeArmor" Value="1"/>
+        <EffectArray index="19" Reference="Unit,SquadSiegeTankSieged,LifeArmorLevel" Value="1"/>
+        <EffectArray index="20" Reference="Unit,SquadSiegeTankSieged,LifeArmor" Value="1"/>
+        <EffectArray index="21" Reference="Unit,SquadGoliath,LifeArmorLevel" Value="1"/>
+        <EffectArray index="22" Reference="Unit,SquadGoliath,LifeArmor" Value="1"/>
+        <EffectArray index="23" Reference="Unit,SquadThorAP,LifeArmorLevel" Value="1"/>
+        <EffectArray index="24" Reference="Unit,SquadThorAP,LifeArmor" Value="1"/>
+        <EffectArray index="25" Reference="Unit,SquadThorEP,LifeArmorLevel" Value="1"/>
+        <EffectArray index="26" Reference="Unit,SquadThorEP,LifeArmor" Value="1"/>
+        <EffectArray index="27" Reference="Unit,SquadWraith,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadWraith,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadMedivac,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadMedivac,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadHercules,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadHercules,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadVikingG,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadVikingG,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadVikingA,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadVikingA,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadBanshee,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadBanshee,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadBattlecruiser,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadBattlecruiser,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadRaven,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadRaven,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadScienceVessel,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadScienceVessel,LifeArmor" Value="1"/>
+        <EffectArray Operation="Set" Reference="Actor,SquadExcavator,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <AffectedUnitArray index="0" value="CaptainExcavator"/>
+        <AffectedUnitArray index="1" value="SquadHellion"/>
+        <AffectedUnitArray index="2" value="SquadDiamondback"/>
+        <AffectedUnitArray index="3" value="SquadSiegeTank"/>
+        <AffectedUnitArray index="4" value="SquadSiegeTankSieged"/>
+        <AffectedUnitArray index="5" value="SquadGoliath"/>
+        <AffectedUnitArray index="6" value="SquadThorAP"/>
+        <AffectedUnitArray index="7" value="SquadThorEP"/>
+        <AffectedUnitArray index="8" value="SquadWraith"/>
+        <AffectedUnitArray index="9" value="SquadMedivac"/>
+        <AffectedUnitArray index="10" value="SquadHercules"/>
+        <AffectedUnitArray index="11" value="SquadVikingG"/>
+        <AffectedUnitArray index="12" value="SquadVikingA"/>
+        <AffectedUnitArray index="13" value="SquadBanshee"/>
+        <AffectedUnitArray index="14" value="SquadBattlecruiser"/>
+        <AffectedUnitArray index="15" value="SquadRaven"/>
+        <AffectedUnitArray value="SquadScienceVessel"/>
         <LeaderLevel value="2"/>
     </CUpgrade>
     <CUpgrade id="SquadTerranVehicleAndShipPlatingLevel3" parent="TerranVehicleAndShipArmors">
         <Name value="Upgrade/Name/SquadTerranVehicleAndShipPlatingLevel3"/>
         <Icon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
         <ScoreAmount value="500"/>
-        <EffectArray Operation="Set" Reference="Actor,Thor,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,SiegeTank,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,SiegeTankSieged,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Hellion,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,HellionTank,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,WidowMine,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Banshee,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Battlecruiser,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Raven,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Medivac,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,VikingAssault,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,VikingFighter,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Cyclone,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
-        <EffectArray Reference="Unit,Cyclone,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,Cyclone,LifeArmorLevel" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,Liberator,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,LiberatorAG,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
-        <EffectArray Reference="Unit,Liberator,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,Liberator,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,LiberatorAG,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,LiberatorAG,LifeArmorLevel" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,Diamondback,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
-        <EffectArray Reference="Unit,Diamondback,LifeArmor" Value="1.000000"/>
-        <EffectArray Reference="Unit,Diamondback,LifeArmorLevel" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,Vulture,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
-        <EffectArray Reference="Unit,Vulture,LifeArmor" Value="1.000000"/>
-        <EffectArray Reference="Unit,Vulture,LifeArmorLevel" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,Goliath,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
-        <EffectArray Reference="Unit,Goliath,LifeArmor" Value="1.000000"/>
-        <EffectArray Reference="Unit,Goliath,LifeArmorLevel" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,Wraith,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
-        <EffectArray Reference="Unit,Wraith,LifeArmor" Value="1.000000"/>
-        <EffectArray Reference="Unit,Wraith,LifeArmorLevel" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,WarHound,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
-        <EffectArray Reference="Unit,WarHound,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,WarHound,LifeArmorLevel" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,ScienceVessel,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
-        <EffectArray Reference="Unit,ScienceVessel,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,ScienceVessel,LifeArmorLevel" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,DukesRevenge,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
-        <EffectArray Reference="Unit,CaptainDukesRevenge,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,CaptainDukesRevenge,LifeArmorLevel" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,SpartanCompany,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
-        <EffectArray Reference="Unit,SpartanCompany,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,SpartanCompany,LifeArmor" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,DuskWingBanshee,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
-        <EffectArray Reference="Unit,DuskWing,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,DuskWing,LifeArmor" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,SiegeBreaker,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
-        <EffectArray Reference="Unit,SiegeBreaker,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,SiegeBreaker,LifeArmor" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,SiegeBreakerSieged,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
-        <EffectArray Reference="Unit,SiegeBreakerSieged,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,SiegeBreakerSieged,LifeArmor" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,WreckingCrewAssault,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
-        <EffectArray Reference="Unit,HelsAngelAssault,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,HelsAngelAssault,LifeArmor" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,WreckingCrewFighter,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
-        <EffectArray Reference="Unit,HelsAngelFighter,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,HelsAngelFighter,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,MengskDiamondback,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,MengskDiamondback,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,MengskGoliath,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,MengskGoliath,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,MengskHellion,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,MengskHellion,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,MengskSiegeTank,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,MengskSiegeTank,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,MengskSiegeTankSieged,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,MengskSiegeTankSieged,LifeArmorLevel" Value="1"/>
-        <EffectArray Reference="Unit,MengskThor,LifeArmor" Value="1"/>
-        <EffectArray Reference="Unit,MengskThor,LifeArmorLevel" Value="1"/>
-        <EffectArray Operation="Set" Reference="Actor,MengskDiamondback,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,MengskGoliath,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,MengskHellion,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,MengskSiegeTankSieged,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,MengskSiegeTank,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,MengskSiegeTankTankModeMorphModel,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,MengskSiegeTankSiegeModeMorphModel,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,MengskThor,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
-        <AffectedUnitArray value="WarHound"/>
-        <AffectedUnitArray value="Diamondback"/>
-        <AffectedUnitArray value="Vulture"/>
-        <AffectedUnitArray value="Goliath"/>
-        <AffectedUnitArray value="Wraith"/>
-        <AffectedUnitArray value="ScienceVessel"/>
-        <AffectedUnitArray value="CaptainDukesRevenge"/>
-        <AffectedUnitArray value="SpartanCompany"/>
-        <AffectedUnitArray value="DuskWing"/>
-        <AffectedUnitArray value="SiegeBreakerSieged"/>
-        <AffectedUnitArray value="SiegeBreaker"/>
-        <AffectedUnitArray value="HelsAngelAssault"/>
-        <AffectedUnitArray value="HelsAngelFighter"/>
+        <EffectArray index="0" Operation="Set" Reference="Actor,SquadHellion,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray index="1" Operation="Set" Reference="Actor,SquadDiamondback,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray index="2" Operation="Set" Reference="Actor,SquadSiegeTank,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray index="3" Operation="Set" Reference="Actor,SquadSiegeTankSieged,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray index="4" Operation="Set" Reference="Actor,SquadGoliath,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray index="5" Operation="Set" Reference="Actor,SquadThor,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray index="6" Operation="Set" Reference="Actor,SquadWraith,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray index="7" Operation="Set" Reference="Actor,SquadMedivac,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray index="8" Operation="Set" Reference="Actor,SquadHercules,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray index="9" Operation="Set" Reference="Actor,SquadVikingG,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray index="10" Operation="Set" Reference="Actor,SquadBattlecruiser,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray index="11" Operation="Set" Reference="Actor,SquadRaven,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray index="12" Operation="Set" Reference="Actor,SquadScienceVessel,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray index="13" Reference="Unit,SquadHellion,LifeArmorLevel" Value="1"/>
+        <EffectArray index="14" Reference="Unit,SquadHellion,LifeArmor" Value="1"/>
+        <EffectArray index="15" Reference="Unit,SquadDiamondback,LifeArmorLevel" Value="1"/>
+        <EffectArray index="16" Reference="Unit,SquadDiamondback,LifeArmor" Value="1"/>
+        <EffectArray index="17" Reference="Unit,SquadSiegeTank,LifeArmorLevel" Value="1"/>
+        <EffectArray index="18" Reference="Unit,SquadSiegeTank,LifeArmor" Value="1"/>
+        <EffectArray index="19" Reference="Unit,SquadSiegeTankSieged,LifeArmorLevel" Value="1"/>
+        <EffectArray index="20" Reference="Unit,SquadSiegeTankSieged,LifeArmor" Value="1"/>
+        <EffectArray index="21" Reference="Unit,SquadGoliath,LifeArmorLevel" Value="1"/>
+        <EffectArray index="22" Reference="Unit,SquadGoliath,LifeArmor" Value="1"/>
+        <EffectArray index="23" Reference="Unit,SquadThorAP,LifeArmorLevel" Value="1"/>
+        <EffectArray index="24" Reference="Unit,SquadThorAP,LifeArmor" Value="1"/>
+        <EffectArray index="25" Reference="Unit,SquadThorEP,LifeArmorLevel" Value="1"/>
+        <EffectArray index="26" Reference="Unit,SquadThorEP,LifeArmor" Value="1"/>
+        <EffectArray index="27" Reference="Unit,SquadWraith,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Set" Reference="Actor,SquadExcavator,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray Reference="Unit,SquadWraith,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadMedivac,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadMedivac,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadHercules,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadHercules,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadVikingG,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadVikingG,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadVikingA,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadVikingA,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadBanshee,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadBanshee,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadBattlecruiser,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadBattlecruiser,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadRaven,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadRaven,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,SquadScienceVessel,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SquadScienceVessel,LifeArmor" Value="1"/>
+        <AffectedUnitArray index="0" value="CaptainExcavator"/>
+        <AffectedUnitArray index="1" value="SquadHellion"/>
+        <AffectedUnitArray index="2" value="SquadDiamondback"/>
+        <AffectedUnitArray index="3" value="SquadSiegeTank"/>
+        <AffectedUnitArray index="4" value="SquadSiegeTankSieged"/>
+        <AffectedUnitArray index="5" value="SquadGoliath"/>
+        <AffectedUnitArray index="6" value="SquadThorAP"/>
+        <AffectedUnitArray index="7" value="SquadThorEP"/>
+        <AffectedUnitArray index="8" value="SquadWraith"/>
+        <AffectedUnitArray index="9" value="SquadMedivac"/>
+        <AffectedUnitArray index="10" value="SquadHercules"/>
+        <AffectedUnitArray index="11" value="SquadVikingG"/>
+        <AffectedUnitArray index="12" value="SquadVikingA"/>
+        <AffectedUnitArray index="13" value="SquadBanshee"/>
+        <AffectedUnitArray index="14" value="SquadBattlecruiser"/>
+        <AffectedUnitArray index="15" value="SquadRaven"/>
+        <AffectedUnitArray value="SquadScienceVessel"/>
         <LeaderLevel value="3"/>
     </CUpgrade>
     <CUpgrade id="TerranVehicleAndShipWeaponsLevel12" parent="TerranVehicleAndShipWeapons">

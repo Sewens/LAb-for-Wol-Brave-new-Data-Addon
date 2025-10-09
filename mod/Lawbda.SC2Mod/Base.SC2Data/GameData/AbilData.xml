@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CAbilSpecialize id="AdvanceScannerSweep">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+    </CAbilSpecialize>
     <CAbilEffectInstant id="BulletTime">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Effect index="0" value="SquadBulletTime"/>
@@ -806,12 +809,12 @@
     </CAbilEffectTarget>
     <CAbilEffectInstant id="SquadAfterburnersBoost">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Effect index="0" value="SquadAfterburnersActive"/>
+        <Effect index="0" value="SquadAfterburnerApply"/>
         <Flags index="Transient" value="1"/>
         <Cost>
             <Cooldown TimeUse="20"/>
         </Cost>
-        <AINotifyEffect value="SquadAfterburnersActive"/>
+        <AINotifyEffect value="SquadAfterburnerApply"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadAfterburner">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
@@ -1240,80 +1243,46 @@
     </CAbilResearch>
     <CAbilResearch id="SquadEngineeringBayResearch">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
-        <InfoArray index="Research1" Time="80" Upgrade="HiSecAutoTracking">
+        <InfoArray index="Research1" Upgrade="TerranStructureEmergencyProtocal">
             <Resource index="Minerals" value="100"/>
-            <Resource index="Vespene" value="100"/>
-            <Button DefaultButtonFace="ResearchHiSecAutoTracking" Requirements="LearnTerranDefenseRangeBonus"/>
+            <Resource index="Vespene" value="50"/>
+            <Cooldown TimeUse="30"/>
+            <Button DefaultButtonFace="StructureEmergencyProtocal"/>
         </InfoArray>
         <InfoArray index="Research2" Time="140" Upgrade="TerranBuildingArmor">
             <Resource index="Minerals" value="150"/>
             <Resource index="Vespene" value="150"/>
-            <Button DefaultButtonFace="UpgradeBuildingArmorLevel1" Requirements="LearnTerranBuildingArmor"/>
+            <Button DefaultButtonFace="SquadUpgradeStructureArmor" Requirements="LearnTerranBuildingArmor"/>
         </InfoArray>
-        <InfoArray index="Research3" Time="160" Upgrade="TerranInfantryWeaponsLevel1">
+        <InfoArray index="Research3" Time="160" Upgrade="SquadTerranInfantryWeaponsLevel1">
             <Resource index="Minerals" value="100"/>
             <Resource index="Vespene" value="100"/>
-            <Button DefaultButtonFace="TerranInfantryWeaponsLevel1" Requirements="LearnTerranInfantryWeapon1"/>
+            <Button DefaultButtonFace="SquadTerranInfantryWeaponsLevel1" Requirements="LearnTerranInfantryWeapon1"/>
         </InfoArray>
-        <InfoArray index="Research4" Time="190" Upgrade="TerranInfantryWeaponsLevel2">
+        <InfoArray index="Research4" Time="190" Upgrade="SquadTerranInfantryWeaponsLevel2">
             <Resource index="Minerals" value="175"/>
             <Resource index="Vespene" value="175"/>
-            <Button DefaultButtonFace="TerranInfantryWeaponsLevel2" Requirements="LearnTerranInfantryWeapon2"/>
+            <Button DefaultButtonFace="SquadTerranInfantryWeaponsLevel2" Requirements="LearnTerranInfantryWeapon2"/>
         </InfoArray>
-        <InfoArray index="Research5" Time="220" Upgrade="TerranInfantryWeaponsLevel3">
+        <InfoArray index="Research5" Time="220" Upgrade="SquadTerranInfantryWeaponsLevel3">
             <Resource index="Minerals" value="250"/>
             <Resource index="Vespene" value="250"/>
-            <Button DefaultButtonFace="TerranInfantryWeaponsLevel3" Requirements="LearnTerranInfantryWeapon3"/>
+            <Button DefaultButtonFace="SquadTerranInfantryWeaponsLevel3" Requirements="LearnTerranInfantryWeapon3"/>
         </InfoArray>
-        <InfoArray index="Research6" Time="110" Upgrade="NeosteelFrame">
+        <InfoArray index="Research7" Time="160" Upgrade="SquadTerranInfantryArmorLevel1">
             <Resource index="Minerals" value="100"/>
             <Resource index="Vespene" value="100"/>
-            <Button DefaultButtonFace="ResearchNeosteelFrame" Requirements="LearnNeosteelFrame"/>
+            <Button DefaultButtonFace="SquadTerranInfantryArmorLevel1" Requirements="LearnTerranInfantryArmor1"/>
         </InfoArray>
-        <InfoArray index="Research7" Time="160" Upgrade="TerranInfantryArmorsLevel1">
-            <Resource index="Minerals" value="100"/>
-            <Resource index="Vespene" value="100"/>
-            <Button DefaultButtonFace="TerranInfantryArmorLevel1" Requirements="LearnTerranInfantryArmor1"/>
-        </InfoArray>
-        <InfoArray index="Research8" Time="190" Upgrade="TerranInfantryArmorsLevel2">
+        <InfoArray index="Research8" Time="190" Upgrade="SquadTerranInfantryArmorLevel2">
             <Resource index="Minerals" value="175"/>
             <Resource index="Vespene" value="175"/>
-            <Button DefaultButtonFace="TerranInfantryArmorLevel2" Requirements="LearnTerranInfantryArmor2"/>
+            <Button DefaultButtonFace="SquadTerranInfantryArmorLevel2" Requirements="LearnTerranInfantryArmor2"/>
         </InfoArray>
-        <InfoArray index="Research9" Time="220" Upgrade="TerranInfantryArmorsLevel3">
+        <InfoArray index="Research9" Time="220" Upgrade="SquadTerranInfantryArmorLevel3">
             <Resource index="Minerals" value="250"/>
             <Resource index="Vespene" value="250"/>
-            <Button DefaultButtonFace="TerranInfantryArmorLevel3" Requirements="LearnTerranInfantryArmor3"/>
-        </InfoArray>
-        <InfoArray index="Research11" Time="170" Upgrade="TerranInfantryWeaponsUltraCapacitorsLevel1">
-            <Resource index="Minerals" value="100"/>
-            <Resource index="Vespene" value="100"/>
-            <Button DefaultButtonFace="TerranInfantryWeaponsUltraCapacitorsLevel1" Requirements="LearnTerranInfantryWeaponUltraCapacitors1"/>
-        </InfoArray>
-        <InfoArray index="Research12" Time="200" Upgrade="TerranInfantryWeaponsUltraCapacitorsLevel2">
-            <Resource index="Minerals" value="175"/>
-            <Resource index="Vespene" value="175"/>
-            <Button DefaultButtonFace="TerranInfantryWeaponsUltraCapacitorsLevel2" Requirements="LearnTerranInfantryWeaponUltraCapacitors2"/>
-        </InfoArray>
-        <InfoArray index="Research13" Time="230" Upgrade="TerranInfantryWeaponsUltraCapacitorsLevel3">
-            <Resource index="Minerals" value="250"/>
-            <Resource index="Vespene" value="250"/>
-            <Button DefaultButtonFace="TerranInfantryWeaponsUltraCapacitorsLevel3" Requirements="LearnTerranInfantryWeaponUltraCapacitors3"/>
-        </InfoArray>
-        <InfoArray index="Research14" Time="170" Upgrade="TerranInfantryArmorsVanadiumPlatingLevel1">
-            <Resource index="Minerals" value="100"/>
-            <Resource index="Vespene" value="100"/>
-            <Button DefaultButtonFace="TerranInfantryArmorVanadiumPlatingLevel1" Requirements="LearnTerranInfantryArmorVanadiumPlating1"/>
-        </InfoArray>
-        <InfoArray index="Research15" Time="200" Upgrade="TerranInfantryArmorsVanadiumPlatingLevel2">
-            <Resource index="Minerals" value="175"/>
-            <Resource index="Vespene" value="175"/>
-            <Button DefaultButtonFace="TerranInfantryArmorVanadiumPlatingLevel2" Requirements="LearnTerranInfantryArmorVanadiumPlating2"/>
-        </InfoArray>
-        <InfoArray index="Research16" Time="230" Upgrade="TerranInfantryArmorsVanadiumPlatingLevel3">
-            <Resource index="Minerals" value="250"/>
-            <Resource index="Vespene" value="250"/>
-            <Button DefaultButtonFace="TerranInfantryArmorVanadiumPlatingLevel3" Requirements="LearnTerranInfantryArmorVanadiumPlating3"/>
+            <Button DefaultButtonFace="SquadTerranInfantryArmorLevel3" Requirements="LearnTerranInfantryArmor3"/>
         </InfoArray>
     </CAbilResearch>
     <CAbilMorph id="SquadUltraliskBurrow">
@@ -1348,15 +1317,15 @@
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadLand"/>
         <AbilSetId value="landOn"/>
     </CAbilMorphPlacement>
-    <CAbilMorphPlacement id="OrbitalCommandLand2" parent="TerranBuildingLand" unit="SquadOrbitalCommand">
-        <Name value="Abil/Name/OrbitalCommandLand2"/>
+    <CAbilMorphPlacement id="SquadOrbitalLand" parent="TerranBuildingLand" unit="SquadOrbitalCommand">
+        <Name value="Abil/Name/SquadOrbitalLand"/>
+        <AbilSetId value="landOn"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadLand"/>
         <InfoArray index="0" Unit="SquadOrbitalCommand" CollideRange="0">
             <SectionArray index="Abils">
                 <DurationArray index="Delay" value="2"/>
             </SectionArray>
         </InfoArray>
-        <CmdButtonArray index="Execute" DefaultButtonFace="SquadLand"/>
-        <AbilSetId value="landOn"/>
     </CAbilMorphPlacement>
     <CAbilMorph id="SquadCommandCenterLiftOff" parent="TerranBuildingLiftOff" unit="SquadCommandCenterFlying">
         <Name value="Abil/Name/SquadCommandCenterLiftOff"/>

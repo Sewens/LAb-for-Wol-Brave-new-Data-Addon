@@ -1761,9 +1761,9 @@
         <On Terms="Abil.SquadMedivacDoubleBeamHeal.SourceChannelStart" Send="$Spell PlayForever"/>
         <On Terms="Abil.SquadMedivacDoubleBeamHeal.SourceChannelStop" Send="AnimClear Spell"/>
         <On Terms="UnitHeightUpdate.*.Land" Send="Create Medivac_Land"/>
-        <On Terms="Behavior.SquadAfterburnersActive.On" Send="AnimPlay Turbo Spell,B"/>
-        <On Terms="Behavior.SquadAfterburnersActive.On" Send="StatusSet Turbo 1"/>
-        <On Terms="Behavior.SquadAfterburnersActive.Off" Send="StatusSet Turbo 0"/>
+        <On Terms="Behavior.SquadAfterburner.On" Send="AnimPlay Turbo Spell,B"/>
+        <On Terms="Behavior.SquadAfterburner.On" Send="StatusSet Turbo 1"/>
+        <On Terms="Behavior.SquadAfterburner.Off" Send="StatusSet Turbo 0"/>
         <On Terms="UnitMovementUpdate.*.Walk; IsStatus Turbo 1" Send="Create Medivac_MovementAfterburner"/>
         <On Terms="AbilTransport.SquadMedivacTransport.TransportLoad; AbilTransport SquadThorAP" Send="Create SquadThorTransit"/>
         <On Terms="AbilTransport.SquadMedivacTransport.PassengerKilled; AbilTransport SquadThorAP" Target="::actor.SquadThorAP" Send="Signal Dead"/>
@@ -1894,7 +1894,7 @@
         <Sound value="Medivac_HealLoop"/>
     </CActorSound>
     <CActorSound id="SquadMedivacIgniteAfterburners" parent="SoundOneShot">
-        <On Terms="Behavior.SquadAfterburnersActive.On" Send="Create"/>
+        <On Terms="Behavior.SquadAfterburner.On" Send="Create"/>
         <Sound value="Medivac_IgniteAfterburners"/>
     </CActorSound>
     <CActorUnit id="SquadBanshee" parent="GenericUnitStandard" unitName="SquadBanshee">

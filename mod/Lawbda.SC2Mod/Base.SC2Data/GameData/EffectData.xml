@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CEffectApplyBehavior id="SquadAfterburnerApply">
+        <ValidatorArray index="0" removed="1"/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadAfterburner"/>
+    </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="SquadAfterburnerPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="CasterUnit"/>
+        <PeriodCount value="10"/>
+        <PeriodicEffectArray value="SquadAfterburnerApply"/>
+        <PeriodicPeriodArray value="0.5"/>
+    </CEffectCreatePersistent>
     <CEffectCreatePersistent id="SquadBulletTime">
         <EditorCategories value="Race:Protoss"/>
         <PeriodCount value="1"/>
@@ -1469,10 +1481,6 @@
         <PeriodicEffectArray value="SquadMedivacHealModifySet"/>
         <PeriodicPeriodArray value="0.111"/>
     </CEffectCreatePersistent>
-    <CEffectApplyBehavior id="SquadAfterburnersActive">
-        <ValidatorArray index="0" removed="1"/>
-        <EditorCategories value="Race:Terran"/>
-    </CEffectApplyBehavior>
     <CEffectCreatePersistent id="SquadBansheeCP">
         <EditorCategories value="Race:Terran"/>
         <WhichLocation Value="TargetUnit"/>
