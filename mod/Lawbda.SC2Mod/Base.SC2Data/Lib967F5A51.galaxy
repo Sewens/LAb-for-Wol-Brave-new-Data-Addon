@@ -1,0 +1,27 @@
+include "TriggerLibs/NativeLib"
+
+include "Lib967F5A51_h"
+
+//--------------------------------------------------------------------------------------------------
+// Library: Effect
+//--------------------------------------------------------------------------------------------------
+// External Library Initialization
+void lib967F5A51_InitLibraries () {
+    libNtve_InitVariables();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Library Initialization
+//--------------------------------------------------------------------------------------------------
+bool lib967F5A51_InitLib_completed = false;
+
+void lib967F5A51_InitLib () {
+    if (lib967F5A51_InitLib_completed) {
+        return;
+    }
+
+    lib967F5A51_InitLib_completed = true;
+
+    lib967F5A51_InitLibraries();
+}
+
