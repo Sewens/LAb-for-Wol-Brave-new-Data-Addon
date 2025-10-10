@@ -22,6 +22,18 @@
         <EditorCategories value="Race:Terran"/>
         <EffectArray value="VanillaScannerSweep"/>
     </CEffectSet>
+    <CEffectSet id="SquadThor330mmBarrageCannonsImpactSet">
+        <ValidatorArray value="330mmBarrageCannonsSetTargetFilters"/>
+        <EditorCategories value=""/>
+        <EffectArray value="SquadThor330mmBarrageCannonsDamage"/>
+        <EffectArray value="SquadThor330mmBarrageCannonsApplyBehavior"/>
+    </CEffectSet>
+    <CEffectRandomPointInCircle id="SquadThor330mmBarrageCannonsRandomPoint">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetPoint"/>
+        <Effect value="SquadThor330mmBarrageCannonsSearch"/>
+        <Radius value="4.5"/>
+    </CEffectRandomPointInCircle>
     <CEffectApplyBehavior id="YellowScannerChronoBeam">
         <EditorCategories value=""/>
     </CEffectApplyBehavior>
@@ -1245,7 +1257,7 @@
         <WhichUnit Value="Caster"/>
         <Behavior value="SquadArmorPiercingMode"/>
     </CEffectApplyBehavior>
-    <CEffectDamage id="SquadThorLanceMissileLaunchersDamage" parent="DU_WEAP_SPLASH">
+    <CEffectDamage id="SquadThorPunisherCannonsDamage" parent="DU_WEAP_SPLASH">
         <EditorCategories value="Race:Terran"/>
         <Kind value="Ranged"/>
         <KindSplash value="Splash"/>
@@ -1257,7 +1269,7 @@
     <CEffectLaunchMissile id="SquadThorLanceMissileLaunchersLaunchMissile">
         <ValidatorArray index="0" value="ThorAALaunchMissileTargetFilters"/>
         <EditorCategories value="Race:Terran"/>
-        <ImpactEffect value="SquadThorLanceMissileLaunchersDamage"/>
+        <ImpactEffect value="SquadThorPunisherCannonsDamage"/>
         <AmmoUnit value="SquadThorAALance"/>
     </CEffectLaunchMissile>
     <CEffectApplyBehavior id="SquadThorSelfRepairApplyBehavior">
@@ -1330,7 +1342,7 @@
         <EditorCategories value="Race:Terran"/>
         <Flags index="Channeled" value="1"/>
         <PeriodCount value="25"/>
-        <PeriodicEffectArray value="SquadThor330mmBarrageCannonsSet"/>
+        <PeriodicEffectArray value="SquadThor330mmBarrageCannonsRandomPoint"/>
         <PeriodicPeriodArray value="0.24"/>
         <RevealRadius value="4"/>
         <RevealFlags index="Unfog" value="1"/>
@@ -1338,14 +1350,8 @@
     <CEffectEnumArea id="SquadThor330mmBarrageCannonsSearch">
         <EditorCategories value="Race:Terran"/>
         <SearchFilters value="Ground;Self,Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
-        <AreaArray Radius="0.5" Effect="SquadThor330mmBarrageCannonsApplyBehavior"/>
+        <AreaArray Radius="0.5" Effect="SquadThor330mmBarrageCannonsImpactSet"/>
     </CEffectEnumArea>
-    <CEffectSet id="SquadThor330mmBarrageCannonsSet">
-        <ValidatorArray value="330mmBarrageCannonsSetTargetFilters"/>
-        <EditorCategories value=""/>
-        <EffectArray value="SquadThor330mmBarrageCannonsDamage"/>
-        <EffectArray value="SquadThor330mmBarrageCannonsSearch"/>
-    </CEffectSet>
     <CEffectApplyBehavior id="ExcavatorAfterburnerSmashApplyDebuff">
         <EditorCategories value=""/>
     </CEffectApplyBehavior>

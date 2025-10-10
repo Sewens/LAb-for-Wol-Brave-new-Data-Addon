@@ -32,6 +32,28 @@
         <HostSiteOps Ops="SOpShadow"/>
         <Model value="ScannerSweepModel"/>
     </CActorModel>
+    <CActorModel id="SquadThor330mmBarrageCannonsIndicator" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.SquadThor330mmBarrageCannonsRandomPoint.Start" Send="Create"/>
+        <On Terms="Effect.SquadThor330mmBarrageCannonsDamage.Start" Send="AnimBracketStop BSD"/>
+        <Model value="HydraliskImpaleIndicator"/>
+        <Host Subject="SquadThor330mmBarrageCannonsImpact"/>
+        <Scale value="1.300000"/>
+    </CActorModel>
+    <CActorModel id="SquadThorDirectAttackThunderBoltImpact">
+        <Terms value="Cap 1"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD {} Stand,02 {} ContentPlayOnce 5.000000 AsTimeScale"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
+        <On Terms="Effect.SquadThorHammerDamage.Start; At Target" Send="Create"/>
+        <On Terms="Effect.SquadThorHammerDamage.End; At Target" Send="AnimBracketStop BSD"/>
+        <On Terms="Effect.SquadThorPunisherCannonsDamage.Start; At Target" Send="Create"/>
+        <On Terms="Effect.SquadThorPunisherCannonsDamage.End; At Target" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="LightningBolt"/>
+        <Scale value="0.700000"/>
+    </CActorModel>
     <CActorModel id="YellowScannerChronoBeamImpact" parent="ModelAnimationStyleContinuous">
         <On Terms="Behavior.YellowScannerChronoBeam.On" Send="Create"/>
         <On Terms="Behavior.YellowScannerChronoBeam.Off" Send="AnimBracketStop BSD"/>
@@ -1741,7 +1763,7 @@
     <CActorModel id="SquadThor250mmStrikeCannonsImpact" parent="ModelAnimationStyleOneShot">
         <On Terms="Effect.SquadThor250mmStrikeCannonsDamage.Start; At Target" Send="Create"/>
         <HostSiteOps Ops="SOpShadow ThorBarrageVariance"/>
-        <Model value="250mmStrikeCannonsImpact"/>
+        <Model value="LightningBolt"/>
     </CActorModel>
     <CActorSound id="SquadThor250mmStrikeCannonsSound" parent="SoundOneShot">
         <On Terms="Effect.SquadThor250mmStrikeCannonsDamage.Start; At Target" Send="Create"/>
@@ -1750,7 +1772,8 @@
     <CActorModel id="SquadThor330mmBarrageCannonsImpact" parent="ModelAnimationStyleOneShot">
         <On Terms="Effect.SquadThor330mmBarrageCannonsSearch.Impact" Send="Create"/>
         <HostSiteOps Ops="SOpTargetPoint 330mmBarrageCannonsVariance"/>
-        <Model value="330mmBarrageCannonsImpact"/>
+        <Model value="LightningBolt"/>
+        <Scale value="0.700000"/>
     </CActorModel>
     <CActorSound id="SquadThor330mmBarrageCannonsSound" parent="SoundOneShot">
         <On Terms="Effect.SquadThor330mmBarrageCannonsSearch.Impact" Send="Create"/>
@@ -7134,17 +7157,17 @@
         <On Terms="Abil.ExplosiveMissiles.SourceCastStart" Send="AnimPlay ArmStop Morph,End 0 0.500000 0.500000 4.050000 AsDuration"/>
         <On Terms="Abil.ExplosiveMissiles.SourceCancel" Send="AnimClear ArmStop"/>
         <On Terms="ActorCreation" Send="StatusSet WeaponNext 0"/>
-        <On Terms="Effect.SquadThorLanceMissileLaunchersDamage.Start; At Caster" Send="AnimPlay SpellD Spell,D"/>
-        <On Terms="Effect.SquadThorLanceMissileLaunchersDamage.Start; At Caster" Send="StatusIncrement WeaponNext"/>
-        <On Terms="Effect.SquadThorLanceMissileLaunchersDamage.Start; At Caster; IsStatus WeaponNext 4" Send="StatusSet WeaponNext 0"/>
-        <On Terms="Effect.SquadThorLanceMissileLaunchersDamage.Start; At Caster; IsStatus WeaponNext 0" Send="AnimClear Attack3"/>
-        <On Terms="Effect.SquadThorLanceMissileLaunchersDamage.Start; At Caster; IsStatus WeaponNext 0" Send="AnimPlay Attack4 Spell,C,02"/>
-        <On Terms="Effect.SquadThorLanceMissileLaunchersDamage.Start; At Caster; IsStatus WeaponNext 1" Send="AnimClear Attack4"/>
-        <On Terms="Effect.SquadThorLanceMissileLaunchersDamage.Start; At Caster; IsStatus WeaponNext 1" Send="AnimPlay Attack1 Spell,C,01"/>
-        <On Terms="Effect.SquadThorLanceMissileLaunchersDamage.Start; At Caster; IsStatus WeaponNext 2" Send="AnimClear Attack1"/>
-        <On Terms="Effect.SquadThorLanceMissileLaunchersDamage.Start; At Caster; IsStatus WeaponNext 2" Send="AnimPlay Attack2 Spell,C,03"/>
-        <On Terms="Effect.SquadThorLanceMissileLaunchersDamage.Start; At Caster; IsStatus WeaponNext 3" Send="AnimClear Attack2"/>
-        <On Terms="Effect.SquadThorLanceMissileLaunchersDamage.Start; At Caster; IsStatus WeaponNext 3" Send="AnimPlay Attack3 Spell,C,00"/>
+        <On Terms="Effect.SquadThorPunisherCannonsDamage.Start; At Caster" Send="AnimPlay SpellD Spell,D"/>
+        <On Terms="Effect.SquadThorPunisherCannonsDamage.Start; At Caster" Send="StatusIncrement WeaponNext"/>
+        <On Terms="Effect.SquadThorPunisherCannonsDamage.Start; At Caster; IsStatus WeaponNext 4" Send="StatusSet WeaponNext 0"/>
+        <On Terms="Effect.SquadThorPunisherCannonsDamage.Start; At Caster; IsStatus WeaponNext 0" Send="AnimClear Attack3"/>
+        <On Terms="Effect.SquadThorPunisherCannonsDamage.Start; At Caster; IsStatus WeaponNext 0" Send="AnimPlay Attack4 Spell,C,02"/>
+        <On Terms="Effect.SquadThorPunisherCannonsDamage.Start; At Caster; IsStatus WeaponNext 1" Send="AnimClear Attack4"/>
+        <On Terms="Effect.SquadThorPunisherCannonsDamage.Start; At Caster; IsStatus WeaponNext 1" Send="AnimPlay Attack1 Spell,C,01"/>
+        <On Terms="Effect.SquadThorPunisherCannonsDamage.Start; At Caster; IsStatus WeaponNext 2" Send="AnimClear Attack1"/>
+        <On Terms="Effect.SquadThorPunisherCannonsDamage.Start; At Caster; IsStatus WeaponNext 2" Send="AnimPlay Attack2 Spell,C,03"/>
+        <On Terms="Effect.SquadThorPunisherCannonsDamage.Start; At Caster; IsStatus WeaponNext 3" Send="AnimClear Attack2"/>
+        <On Terms="Effect.SquadThorPunisherCannonsDamage.Start; At Caster; IsStatus WeaponNext 3" Send="AnimPlay Attack3 Spell,C,00"/>
         <On Terms="Behavior.SquadThorSelfRepair.On" Send="AnimBracketStart Work Stand,Work,Start Stand,Work Stand,Work,End"/>
         <On Terms="Behavior.SquadThorSelfRepair.Off" Send="AnimBracketStop Work"/>
         <On Terms="UnitDeathCustomize; ValidateUnit HaveVoidShade" Send="DeathCustomize Shadow"/>
@@ -7287,6 +7310,7 @@
         <Wireframe>
             <Image value="Assets\Textures\Wireframe-Terran-ThorWreckage.dds"/>
         </Wireframe>
+        <Model value="ThorWreckage"/>
     </CActorUnit>
     <CActorModel id="SquadThorSelfRepair" parent="ModelAnimationStyleContinuous">
         <On Terms="Behavior.SquadThorSelfRepair.On" Send="Create"/>
@@ -7435,7 +7459,7 @@
         <HostEndSiteOps Ops="SOpIncomingMissileDot5 SOpMoveBy1"/>
         <Radius value="1.000000,0.350000"/>
     </CActorForceCylinder>
-    <CActorAction id="SquadThorAALanceAttack" parent="GenericAttack" effectAttack="SquadThorLanceMissileLaunchersDamage">
+    <CActorAction id="SquadThorAAPunisherCannonsAttack" parent="GenericAttack" effectAttack="SquadThorPunisherCannonsDamage">
         <LaunchAttachQuery Methods="AMFilterWeaponSetA2 AMPatternThorAALance"/>
         <LaunchAssets Model="" Sound=""/>
         <ImpactMap index="None" Model="ThorAAAttackImpactLance" Sound="250mmStrikeCannonsSound"/>
