@@ -2,6 +2,27 @@
 <Catalog>
     <CAbilSpecialize id="AdvanceScannerSweep">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoArray index="Specialize1">
+            <Button DefaultButtonFace="ScannerSweepAlpha"/>
+        </InfoArray>
+        <InfoArray index="Specialize2">
+            <Button DefaultButtonFace="ScannerSweepBlack"/>
+        </InfoArray>
+        <InfoArray index="Specialize3">
+            <Button DefaultButtonFace="ScannerSweepBlue"/>
+        </InfoArray>
+        <InfoArray index="Specialize4">
+            <Button DefaultButtonFace="ScannerSweepGreen"/>
+        </InfoArray>
+        <InfoArray index="Specialize5">
+            <Button DefaultButtonFace="ScannerSweepRed"/>
+        </InfoArray>
+        <InfoArray index="Specialize6">
+            <Button DefaultButtonFace="ScannerSweepYellow"/>
+        </InfoArray>
+        <InfoArray index="Specialize7">
+            <Button DefaultButtonFace="ScannerSweepVanilla"/>
+        </InfoArray>
     </CAbilSpecialize>
     <CAbilEffectInstant id="BulletTime">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -9,11 +30,30 @@
         <AINotifyEffect value="SquadBulletTime"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadBulletTime"/>
     </CAbilEffectInstant>
-    <CAbilEffectInstant id="SOATimeStopTest">
-        <Effect index="0" value="SOATimeFreeze"/>
-        <AINotifyEffect value="SOATimeFreeze"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="SOATimeFreeze"/>
-    </CAbilEffectInstant>
+    <CAbilEffectTarget id="BlackScannerSweep">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+        </Cost>
+        <Range value="500"/>
+        <Arc value="360"/>
+        <CursorEffect value="BlackScannerSweep"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="ScannerSweepBlack"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="YellowScannerSweep">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+        </Cost>
+        <Range value="500"/>
+        <Arc value="360"/>
+        <CursorEffect value="YellowScannerSweep"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="ScannerSweepYellow"/>
+    </CAbilEffectTarget>
     <CAbilEffectTarget id="SquadSupplyDepotForceFieldWall">
         <AbilSetId value="ForceField"/>
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
@@ -1934,7 +1974,7 @@
         <Arc value="360"/>
         <CursorEffect value="VanillaScannerSweep"/>
         <AINotifyEffect value="RedScannerSweep"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="VanillaScannerSweep"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="ScannerSweepVanilla"/>
     </CAbilEffectTarget>
     <CAbilMorph id="SCVEnableJump">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -2844,4 +2884,24 @@
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
         <PowerUserBehavior value="SquadWarpingIn"/>
     </CAbilWarpable>
+    <CAbilEffectTarget id="SquadChronoBeam">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="Smart" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="3"/>
+        </Cost>
+        <TargetFilters value="Visible;Self,Neutral,Enemy,Structure,Heroic,Missile,Item,Uncommandable,Stasis,Dead,Hidden"/>
+        <TargetSorts RequestCount="1">
+            <SortArray value="TSVoidSentryChronoBeam"/>
+        </TargetSorts>
+        <Range value="8"/>
+        <Arc value="4.9987"/>
+        <AutoCastFilters value="Visible;Self,Neutral,Enemy,Structure,Missile,Item,Uncommandable,Stasis,Dead,Hidden"/>
+        <AutoCastRange value="8"/>
+        <AutoCastValidatorArray value="TargetIsFiringWeapon"/>
+        <AutoCastValidatorArray value="SentryChronoBeamTargetExlusion"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadChronoBeam"/>
+    </CAbilEffectTarget>
 </Catalog>

@@ -1,5 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CEffectApplyBehavior id="BlackScannerReleaseVoid">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="BlackScannerEndlessSuppression"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumArea id="BlackScannerSearhVictim">
+        <EditorCategories value="Race:Terran"/>
+        <OwningPlayer Value="Source"/>
+        <SearchFilters value="-;Player,Ally,Neutral"/>
+        <AreaArray Radius="13" Effect="BlackScannerReleaseVoid"/>
+    </CEffectEnumArea>
+    <CEffectCreatePersistent id="BlackScannerSweep">
+        <EditorCategories value="Race:Terran"/>
+        <InitialEffect value="BlackScannerSearhVictim"/>
+        <ExpireDelay value="12.2775"/>
+        <RevealRadius value="13"/>
+        <RevealFlags index="Unfog" value="1"/>
+        <RevealFlags index="Detect" value="1"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="DefaultScannerSweep">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="VanillaScannerSweep"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="YellowScannerChronoBeam">
+        <EditorCategories value=""/>
+    </CEffectApplyBehavior>
+    <CEffectEnumArea id="YellowScannerSearhAlia">
+        <EditorCategories value="Race:Terran"/>
+        <OwningPlayer Value="Source"/>
+        <SearchFilters value="-;Enemy"/>
+        <AreaArray Radius="13" Effect="YellowScannerChronoBeam"/>
+    </CEffectEnumArea>
+    <CEffectCreatePersistent id="YellowScannerSweep">
+        <EditorCategories value="Race:Terran"/>
+        <InitialEffect value="YellowScannerSearhAlia"/>
+        <ExpireDelay value="12.2775"/>
+        <RevealRadius value="13"/>
+        <RevealFlags index="Unfog" value="1"/>
+        <RevealFlags index="Detect" value="1"/>
+    </CEffectCreatePersistent>
     <CEffectApplyBehavior id="SquadAfterburnerApply">
         <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
@@ -33,7 +72,7 @@
         </Marker>
         <PeriodCount value="100"/>
         <PeriodicEffectArray value="SquadBulletTimeForEnemySearch"/>
-        <PeriodicPeriodArray value="0.1"/>
+        <PeriodicPeriodArray value="0.125"/>
     </CEffectCreatePersistent>
     <CEffectCreatePersistent id="SquadBulletTimeForPlayerCP">
         <EditorCategories value="Race:Protoss"/>
@@ -42,7 +81,7 @@
         </Marker>
         <PeriodCount value="100"/>
         <PeriodicEffectArray value="SquadBulletTimeForPlayerSearch"/>
-        <PeriodicPeriodArray value="0.1"/>
+        <PeriodicPeriodArray value="0.125"/>
     </CEffectCreatePersistent>
     <CEffectEnumTransport id="SquadBulletTimeForEnemyIterateTransport">
         <ValidatorArray value="IsBunkerCombine"/>
@@ -116,6 +155,25 @@
         <EditorCategories value="Race:Terran"/>
         <Abil value="SquadSupplyDepotRaise"/>
     </CEffectIssueOrder>
+    <CEffectApplyBehavior id="SquadChronoBeam2">
+        <EditorCategories value=""/>
+        <Behavior value="SquadChronoBeam"/>
+    </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="SquadChronoBeam">
+        <ValidatorArray value="NotMaxVoidSentryChronoBeam"/>
+        <ValidatorArray value="noMarkers"/>
+        <EditorCategories value=""/>
+        <WhichLocation Value="TargetUnit"/>
+        <Flags index="Channeled" value="1"/>
+        <ExpireEffect value="SquadChronoBeam2"/>
+        <PeriodCount value="1"/>
+        <PeriodicValidator value="VoidSentryChronoBeam"/>
+        <PeriodicEffectArray value="SquadChronoBeamSet"/>
+        <PeriodicPeriodArray value="1"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="SquadChronoBeamSet">
+        <EffectArray value="SquadChronoBeam2"/>
+    </CEffectSet>
     <CEffectApplyBehavior id="squadPsiDisruptionApply">
         <ValidatorArray index="0" value="IsZerg"/>
         <EditorCategories value="Race:Terran"/>
@@ -3171,13 +3229,6 @@
         <EditorCategories value="Race:Terran"/>
         <Behavior value="RedScannerFireDOT"/>
     </CEffectApplyBehavior>
-    <CEffectDamage id="RedScannerFlameThrowerDamage">
-        <EditorCategories value="Race:Terran"/>
-        <Amount value="2"/>
-        <Flags index="NoKillCredit" value="1"/>
-        <Flags index="NoVitalLeechLife" value="1"/>
-        <Flags index="NoVitalGainLife" value="1"/>
-    </CEffectDamage>
     <CEffectCreatePersistent id="RedNuclearPersistent">
         <EditorCategories value="Race:Terran"/>
         <Alert value="CalldownLaunchObserver"/>

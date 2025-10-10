@@ -8,12 +8,54 @@
         <Period value="2"/>
         <PeriodicEffect value="SquadInnermagazineIterator"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="BlackScannerEndlessSuppression">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-blackhole.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <MaxStackCount value="99"/>
+        <MaxStackCountPerCaster value="99"/>
+        <Duration value="10"/>
+        <Period value="1"/>
+        <Modification>
+            <StateFlags index="UnitAttrOnLight" value="1"/>
+            <StateFlags index="UnitAttrOnArmored" value="1"/>
+            <StateFlags index="UnitAttrOnBiological" value="1"/>
+            <StateFlags index="UnitAttrOnMechanical" value="1"/>
+            <StateFlags index="UnitAttrOnRobotic" value="1"/>
+            <StateFlags index="UnitAttrOnPsionic" value="1"/>
+            <StateFlags index="UnitAttrOnMassive" value="1"/>
+            <StateFlags index="SuppressInvulnerability" value="1"/>
+            <StateFlags index="SuppressLifeRegen" value="1"/>
+            <StateFlags index="SuppressShieldsRegen" value="1"/>
+            <StateFlags index="SuppressEnergyRegen" value="1"/>
+            <AbilCategoriesDisable index="Magic" value="1"/>
+            <AbilCategoriesDisable index="Passive" value="1"/>
+            <AbilCategoriesDisable index="PassiveMagic" value="1"/>
+            <AbilCategoriesDisable index="Heal" value="1"/>
+            <AbilCategoriesDisable index="Repair" value="1"/>
+            <BehaviorCategoriesDisable index="Permanent" value="1"/>
+            <BehaviorCategoriesDisable index="Restorable" value="1"/>
+            <BehaviorCategoriesDisable index="Cloak" value="1"/>
+            <BehaviorCategoriesDisable index="Invulnerable" value="1"/>
+            <BehaviorCategoriesDisable index="Magic" value="1"/>
+            <BehaviorCategoriesDisable index="Aura" value="1"/>
+            <BehaviorCategoriesDisable index="Passive" value="1"/>
+            <BehaviorClassDisableArray index="CBehaviorAttackModifier" value="1"/>
+            <BehaviorClassDisableArray index="CBehaviorAttribute" value="1"/>
+            <BehaviorClassDisableArray index="CBehaviorBuff" value="1"/>
+            <BehaviorClassDisableArray index="CBehaviorPowerSource" value="1"/>
+            <BehaviorClassDisableArray index="CBehaviorVeterancy" value="1"/>
+        </Modification>
+        <DeathType value="Fire"/>
+        <DamageResponse TargetFilters="-;Player,Ally,Neutral"/>
+    </CBehaviorBuff>
     <CBehaviorBuff id="SquadBulletTimeForEnemy">
         <Alignment value="Negative"/>
         <InfoIcon value="Assets\Textures\BTN-Ability-SpearOfAdun-TimeStop.dds"/>
         <DisableValidatorArray value="NoTimeStopImmune"/>
         <TimeScaleSource Value="Global"/>
-        <Duration value="20"/>
+        <Duration value="0.15"/>
+        <BehaviorCategories index="Slow" value="1"/>
         <Modification TimeScale="0.25">
             <StateFlags index="SuppressAttack" value="1"/>
             <StateFlags index="SuppressCloak" value="1"/>
@@ -27,8 +69,20 @@
         <InfoIcon value="Assets\Textures\BTN-Ability-SpearOfAdun-TimeStop.dds"/>
         <DisableValidatorArray value="NoTimeStopImmune"/>
         <TimeScaleSource Value="Global"/>
-        <Duration value="20"/>
+        <BehaviorCategories index="Slow" value="1"/>
+        <Duration value="0.15"/>
         <Modification TimeScale="0.25"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="YellowScannerChronoBeam">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-chronobeam.dds"/>
+        <MaxStackCount value="99"/>
+        <MaxStackCountPerCaster value="99"/>
+        <Duration value="13"/>
+        <Modification>
+            <AdditiveMoveSpeedFactor value="0.05"/>
+            <AdditiveAttackSpeedFactor value="0.05"/>
+        </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadPsiDisruption">
         <Alignment value="Negative"/>
@@ -104,6 +158,15 @@
         <DisableValidatorArray value="NotOracleStasisTrapped"/>
         <Period value="0.25"/>
         <PeriodicEffect value="SquadSquadSightSearch"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadChronoBeam">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-chronobeam.dds"/>
+        <Duration value="10"/>
+        <Modification>
+            <AdditiveMoveSpeedFactor value="0.5"/>
+            <AdditiveAttackSpeedFactor value="0.5"/>
+        </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="VultureVanillaMode">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -1187,7 +1250,7 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <MaxStackCount value="99"/>
         <MaxStackCountPerCaster value="99"/>
-        <Duration value="1"/>
+        <Duration value="5"/>
         <Period value="1"/>
         <Modification>
             <StateFlags index="Cloak" value="1"/>
@@ -1367,7 +1430,7 @@
         <MaxStackCountPerCaster value="99"/>
         <Duration value="5"/>
         <Period value="1"/>
-        <PeriodicEffect value="RedScannerFlameThrowerDamage"/>
+        <PeriodicEffect value="BlackScannerVoidDamage"/>
         <DeathType value="Fire"/>
         <DamageResponse TargetFilters="-;Player,Ally,Neutral"/>
     </CBehaviorBuff>
@@ -1910,7 +1973,6 @@
     <CBehaviorCreepSource id="SquadCreepGrowthMedium4x42">
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Zerg,AbilityorEffectType:Structures"/>
-        <Requirements value="NotHaveK5CreepBonuses"/>
         <Period value="0.75"/>
         <Start value="Footprint4x4CreepSourceGrown"/>
         <Birth value="Footprint4x4CreepSourceStart"/>
