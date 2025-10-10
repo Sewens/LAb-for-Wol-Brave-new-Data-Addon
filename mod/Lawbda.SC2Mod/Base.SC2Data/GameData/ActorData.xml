@@ -32,11 +32,80 @@
         <HostSiteOps Ops="SOpShadow"/>
         <Model value="ScannerSweepModel"/>
     </CActorModel>
+    <CActorSplat id="SquadCommandCenterRadius2" unitName="SquadCommandCenter">
+        <Aliases value="_Snapshot"/>
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Decal" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <Supporter Subject="::Creator"/>
+        <On Terms="SupporterDestruction" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="Behavior.SquadCommandCenterPowerSource.Create" Send="Create"/>
+        <On Terms="Behavior.SquadCommandCenterPowerSource.Destroy" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <Color value="128,255,251,176"/>
+        <Model value="PowerVisualFast"/>
+    </CActorSplat>
+    <CActorUnit id="SquadGalaxyFortress" parent="TerranBuildingEx" unitName="SquadGalaxyFortress">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="SquadQueueAnim"/>
+        <Macros value="BuildingFlattenTerrainMacro"/>
+        <Macros value="MacroTownhallDeco_Terran"/>
+        <Macros value="TerranPlanetaryFortressPlayerDecalMacro"/>
+        <Macros value="SnowVisualBuildingMacro"/>
+        <AcceptedHostedPropTransfers index="Decal" value="0"/>
+        <On Terms="ActorCreation" Send="AnimGroupApply A"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom SquadPlanetaryFortress; MorphTo SquadGalaxyFortress" Send="Create"/>
+        <On Terms="Abil.*.TransportOccupy" Send="AnimPlay StandC Stand,Work,C PlayForever"/>
+        <On Terms="Abil.*.TransportEmpty" Send="AnimClear StandC"/>
+        <On Terms="UnitBirth.SquadGalaxyFortress; PlayerHasClanDecal" Send="Create TerranClanFlag"/>
+        <On Terms="UnitBirth.SquadGalaxyFortress; PlayerHasTrophy" Send="Create TerranPlayerTrophy"/>
+        <Model value="CommandCenter_Remastered"/>
+        <BuildModel value="CommandCenter_Remastered"/>
+        <DeathArray index="Normal" ModelLink="PlanetaryFortress_Remastered_Death"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranLargeBuildingDeath" SoundLink="PlanetaryFortress_Explode"/>
+        <PlacementModel value="CommandCenter_Remastered_Placement"/>
+        <PortraitModel value="CommandCenter_Remastered_Portrait"/>
+        <BarOffset value="180"/>
+        <BarWidth value="200"/>
+        <GlossaryAnim value="Stand,A"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-PlanetaryFortress.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-terran-PlanetaryFortress.dds"/>
+        <NameOffset value="150"/>
+        <SoundArray index="Ready" value="PlanetaryFortress_Ready"/>
+        <SoundArray index="What" value="PlanetaryFortress_What"/>
+        <StatusHarvesterData Text="UI/HarvesterCountMinerals" SearchFilters="HarvestableResource;Player,Ally,Enemy" SearchRadius="8"/>
+        <UnitFlags index="StandAnimBirthVariation" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-terran-PlanetaryFortress.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-PlanetaryFortress.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="SquadGalaxyFortressAttack" parent="GenericAttack" effectAttack="SquadGalaxyFortressBlizzardCannonDamage">
+        <LaunchAttachQuery Methods="Weapon"/>
+        <LaunchAssets Model="PlanetaryFortressAttackLaunch" Sound="PlanetaryFortress_AttackLaunch"/>
+        <ImpactMap index="None" Model="PlanetaryFortressAttackImpact" Sound="PlanetaryFortress_AttackImpact"/>
+        <ImpactPhysics Name="IbiksCannonImpact" MatchKeys="Basic" Physics="SquadPlanetaryFortressAttackForce"/>
+    </CActorAction>
+    <CActorSplat id="SquadGalaxyFortressSplat" parent="TerranBuildingMorphSplat" unitName="SquadGalaxyFortress">
+        <Model value="PlanetaryFortressSplat"/>
+    </CActorSplat>
+    <CActorTurret id="SquadGalaxyFortressTurret">
+        <On Terms="TurretEnable.SquadGalaxyFortress" Send="Create"/>
+    </CActorTurret>
     <CActorModel id="SquadThor330mmBarrageCannonsIndicator" parent="ModelAnimationStyleOneShot">
         <On Terms="Effect.SquadThor330mmBarrageCannonsRandomPoint.Start" Send="Create"/>
         <On Terms="Effect.SquadThor330mmBarrageCannonsDamage.Start" Send="AnimBracketStop BSD"/>
         <Model value="HydraliskImpaleIndicator"/>
-        <Host Subject="SquadThor330mmBarrageCannonsImpact"/>
+        <Scale value="1.300000"/>
+    </CActorModel>
+    <CActorModel id="SquadGalaxyFortressBlizzardCannonsIndicator" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.SquadGalaxyFortressBlizzardCannonDamage.Start" Send="Create"/>
+        <On Terms="Effect.SquadGalaxyFortressBlizzardCannonDamage.Stop" Send="AnimBracketStop BSD"/>
+        <Host Subject="SquadGalaxyFortressAttackImpact"/>
+        <Model value="HydraliskImpaleIndicator"/>
         <Scale value="1.300000"/>
     </CActorModel>
     <CActorModel id="SquadThorDirectAttackThunderBoltImpact">
@@ -1773,6 +1842,12 @@
         <On Terms="Effect.SquadThor330mmBarrageCannonsSearch.Impact" Send="Create"/>
         <HostSiteOps Ops="SOpTargetPoint 330mmBarrageCannonsVariance"/>
         <Model value="LightningBolt"/>
+        <Scale value="0.700000"/>
+    </CActorModel>
+    <CActorModel id="SquadGalaxyFortressAttackImpact" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.SquadGalaxyFortressBlizzardCannonDamage.Start" Send="Create"/>
+        <HostSiteOps Ops="SOpTargetPoint 330mmBarrageCannonsVariance"/>
+        <Model value="330mmBarrageCannonsImpact"/>
         <Scale value="0.700000"/>
     </CActorModel>
     <CActorSound id="SquadThor330mmBarrageCannonsSound" parent="SoundOneShot">
@@ -3925,6 +4000,14 @@
         <Macros value="TerranPlanetaryFortressPlayerDecalMacro"/>
         <Macros value="SnowVisualBuildingMacro"/>
         <AcceptedHostedPropTransfers index="Decal" value="0"/>
+        <!--On Terms="ActorCreation" Send="AnimGroupRemove A"/-->
+        <On Terms="AbilMorph.*.Finish; MorphFrom SquadPlanetaryFortress; MorphTo SquadGalaxyFortress" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom SquadPlanetaryFortress; MorphTo SquadGalaxyFortress" Send="AnimGroupApply A"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom SquadPlanetaryFortress; MorphTo SquadGalaxyFortress" Send="AnimBaselineStop"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom SquadPlanetaryFortress; MorphTo SquadGalaxyFortress" Send="AnimPlay Morph Morph 0 1.500000"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom SquadPlanetaryFortress; MorphTo SquadGalaxyFortress" Send="AnimClear Morph"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom SquadPlanetaryFortress; MorphTo SquadGalaxyFortress" Send="AnimGroupRemove A"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom SquadPlanetaryFortress; MorphTo SquadGalaxyFortress" Send="AnimBaselineStart"/>
         <On Terms="ActorCreation" Send="AnimGroupApply A"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom SquadCommandCenter; MorphTo SquadPlanetaryFortress" Send="Create"/>
         <On Terms="Behavior.ColonyInfestation.On" Send="Create InfestationCommandCenter"/>

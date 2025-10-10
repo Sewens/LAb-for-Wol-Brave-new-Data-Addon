@@ -42,6 +42,32 @@
         <CursorEffect value="BlackScannerSweep"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="ScannerSweepBlack"/>
     </CAbilEffectTarget>
+    <CAbilMorph id="SquadUpgradeToGalaxyFortress">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="UpgradetoPlanetaryFortress"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="CancelUpgradeMorph"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="Birth" value="1"/>
+        <Flags index="DisableAbils" value="1"/>
+        <Flags index="FastBuild" value="1"/>
+        <Flags index="Interruptible" value="1"/>
+        <Flags index="Produce" value="1"/>
+        <Flags index="ShowProgress" value="1"/>
+        <InfoArray Score="1" Unit="SquadGalaxyFortress">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="45"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="45"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="45"/>
+            </SectionArray>
+        </InfoArray>
+        <Alert value="CommandCenterUpgradeComplete"/>
+        <Activity value="UI/Upgrading"/>
+        <ValidatorArray value="HasNoCargo"/>
+    </CAbilMorph>
     <CAbilEffectTarget id="YellowScannerSweep">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Flags index="RequireTargetVision" value="0"/>
@@ -1772,7 +1798,7 @@
     </CAbilMorph>
     <CAbilMorph id="SquadUpgradeToPlanetaryFortress">
         <EditorCategories value="Race:Terran,AbilityorEffectType:MorphsandBurrows"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="PlanetaryFortress"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="UpgradetoPlanetaryFortress"/>
         <CmdButtonArray index="Cancel" DefaultButtonFace="CancelUpgradeMorph"/>
         <Flags index="BestUnit" value="1"/>
         <Flags index="Birth" value="1"/>
