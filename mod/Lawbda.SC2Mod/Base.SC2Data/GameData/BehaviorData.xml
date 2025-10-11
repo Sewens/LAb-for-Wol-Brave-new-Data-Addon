@@ -56,6 +56,61 @@
             <AdditiveAttackSpeedFactor value="0.25"/>
         </Modification>
     </CBehaviorBuff>
+    <CBehaviorBuff id="SquadAddonTacticalJumpTeleport">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Duration value="4.8"/>
+        <ExpireEffect value="SquadAddonTacticalJumpTeleportInAB"/>
+        <Modification>
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="Stasis" value="1"/>
+            <StateFlags index="SuppressAttack" value="1"/>
+            <StateFlags index="SuppressCloak" value="1"/>
+            <StateFlags index="Untargetable" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadAddonTacticalJumpTeleportIn">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Duration value="0.6"/>
+        <Modification>
+            <ModifyFlags index="SuppressMoving" value="1"/>
+            <ModifyFlags index="SuppressTurning" value="1"/>
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="Stasis" value="1"/>
+            <StateFlags index="SuppressCloak" value="1"/>
+            <StateFlags index="Untargetable" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadAddonTacticalJumpTeleportOut">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Duration value="0.6"/>
+        <ExpireEffect value="SquadAddonTacticalJumpTeleportSet"/>
+        <Modification>
+            <ModifyFlags index="SuppressMoving" value="1"/>
+            <ModifyFlags index="SuppressTurning" value="1"/>
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="Stasis" value="1"/>
+            <StateFlags index="SuppressCloak" value="1"/>
+            <StateFlags index="Untargetable" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadAddonTacticalJumpTeleportOutTargetSuppressCollision">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Duration value="0.0625"/>
+        <ExpireEffect value="SquadAddonTacticalJumpSuicideRemove"/>
+        <Modification>
+            <ModifyFlags index="SuppressMoving" value="1"/>
+            <ModifyFlags index="SuppressTurning" value="1"/>
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="Stasis" value="1"/>
+            <StateFlags index="SuppressCloak" value="1"/>
+            <StateFlags index="SuppressCollision" value="1"/>
+            <StateFlags index="Untargetable" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
     <CBehaviorBuff id="SquadBulletTimeForEnemy">
         <Alignment value="Negative"/>
         <InfoIcon value="Assets\Textures\BTN-Ability-SpearOfAdun-TimeStop.dds"/>
@@ -93,6 +148,7 @@
                 <VitalMaxIncreaseAffectsCurrentArray index="Energy" value="0"/>
             </Modification>
         </PowerStageArray>
+        <Requirements value="HaveAddonStructureOptimization"/>
     </CBehaviorPowerUser>
     <!--Add defence strcutre defence tech.-->
     <CBehaviorPowerUser id="SquadTechlabPowerUserForDefenceStructure">
@@ -108,6 +164,7 @@
                 <VitalMaxIncreaseAffectsCurrentArray index="Energy" value="0"/>
             </Modification>
         </PowerStageArray>
+        <Requirements value="HaveAddonStructureOptimization"/>
     </CBehaviorPowerUser>
     <CBehaviorBuff id="YellowScannerChronoBeam">
         <Alignment value="Positive"/>
@@ -578,11 +635,11 @@
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
     </CBehaviorBuff>
-    <CBehaviorBuff id="SquadDistortionBlasters">
+    <CBehaviorBuff id="SquadBansheeDistortionBlasters">
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Requirements value="DistortionBlastersResearched"/>
-        <DisableValidatorArray value="IsCloaked"/>
+        <DisableValidatorArray value="SquadIsCloaked"/>
         <Modification>
             <DamageDealtFraction index="Ranged" value="0.25"/>
         </Modification>
@@ -601,6 +658,7 @@
         <InfoFlags index="Hidden" value="1"/>
         <InfoIcon value="Assets\Textures\btn-ability-terran-cloak.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="SquadIsCloaked"/>
         <DamageResponse ModifyFraction="0" ModifyMinimumDamage="1">
             <Chance value="0.75"/>
         </DamageResponse>

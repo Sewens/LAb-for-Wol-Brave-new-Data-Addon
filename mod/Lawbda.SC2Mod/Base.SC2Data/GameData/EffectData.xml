@@ -30,6 +30,57 @@
         <EditorCategories value="Race:Terran"/>
         <Behavior value="ElectricFieldAccelerator"/>
     </CEffectApplyBehavior>
+    <CEffectCreateUnit id="SquadAddonTacticalJumpCreatePrecursor">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetPoint"/>
+        <CreateFlags index="PlacementIgnoreBlockers" value="1"/>
+        <CreateFlags index="Precursor" value="1"/>
+        <CreateFlags index="ProvideFood" value="0"/>
+        <CreateFlags index="SetFacing" value="1"/>
+        <CreateFlags index="TechComplete" value="0"/>
+        <CreateFlags index="UseFood" value="0"/>
+        <SpawnEffect value="SquadAddonTacticalJumpTeleportOutABSet"/>
+        <SpawnUnit value="SquadTechReactor"/>
+        <SpawnRange value="0.1"/>
+    </CEffectCreateUnit>
+    <CEffectTeleport id="SquadAddonTacticalJumpTeleport">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Effect="SquadAddonTacticalJumpCreatePrecursor" Value="Caster"/>
+        <ClearQueuedOrders value="0"/>
+        <PlacementAround Effect="SquadAddonTacticalJumpCreatePrecursor"/>
+        <PlacementRange value="15"/>
+        <TargetLocation Effect="SquadAddonTacticalJumpCreatePrecursor" Value="TargetPoint"/>
+        <TeleportFlags index="TestFog" value="0"/>
+    </CEffectTeleport>
+    <CEffectApplyBehavior id="SquadAddonTacticalJumpTeleportAB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="SquadAddonTacticalJumpTeleport"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadAddonTacticalJumpTeleportInAB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="SquadAddonTacticalJumpTeleportIn"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadAddonTacticalJumpTeleportOutAB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="SquadAddonTacticalJumpTeleportOut"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="SquadAddonTacticalJumpTeleportOutABSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadAddonTacticalJumpTeleportOutAB"/>
+        <EffectArray value="SquadAddonTacticalJumpTeleportOutTargetAB"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="SquadAddonTacticalJumpTeleportOutTargetAB">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadAddonTacticalJumpTeleportOutTargetSuppressCollision"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="SquadAddonTacticalJumpTeleportSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadAddonTacticalJumpTeleport"/>
+        <EffectArray value="SquadAddonTacticalJumpTeleportAB"/>
+    </CEffectSet>
     <CEffectApplyBehavior id="SquadFireSuppressionSystemApply">
         <EditorCategories value="Race:Terran"/>
         <Behavior value="SquadFireSuppressionSystem"/>
@@ -84,6 +135,11 @@
         <Effect value="SquadThor330mmBarrageCannonsSearch"/>
         <Radius value="4.5"/>
     </CEffectRandomPointInCircle>
+    <CEffectDamage id="SquadAddonTacticalJumpSuicideRemove">
+        <ImpactLocation Value="SourceUnit"/>
+        <Flags index="Kill" value="1"/>
+        <Death value="Remove"/>
+    </CEffectDamage>
     <CEffectApplyBehavior id="YellowScannerChronoBeam">
         <EditorCategories value=""/>
     </CEffectApplyBehavior>

@@ -23,6 +23,25 @@
         <HeightOffset value="1.500000"/>
         <Text value="Button/Tooltip/##id##"/>
     </CActorText>
+    <CActorSound id="SquadAddonTacticalJumpSound" parent="SoundOneShot">
+        <On Terms="Behavior.SquadAddonTacticalJumpTeleportIn.On" Send="Create"/>
+        <Sound value="Battlecruiser_HyperJumpIn"/>
+    </CActorSound>
+    <CActorSound id="SquadAddonTacticalJumpSound2" parent="SoundOneShot">
+        <On Terms="Behavior.SquadAddonTacticalJumpTeleportOut.On" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+        <Sound value="Battlecruiser_HyperJumpOut"/>
+    </CActorSound>
+    <CActorSound id="SquadAddonTacticalJumpCursorSound" parent="SoundOneShot">
+        <On Terms="Abil.SquadAddonTacticalJump.TargetApproachStart" Send="Create"/>
+        <ScopeBearingsTracking value="ForceOff"/>
+        <Sound value="Battlecruiser_TacticalJumpCursor"/>
+    </CActorSound>
+    <CActorSound id="SquadAddonTacticalJumpWireframeSound" parent="SoundOneShot">
+        <On Terms="Behavior.SquadAddonTacticalJumpTeleport.On" Send="Create"/>
+        <Sound value="Battlecruiser_TacticalJumpWireframe"/>
+    </CActorSound>
     <CActorModel id="BlackScannerCircle" parent="ModelAnimationStyleContinuous">
         <On Terms="ActorCreation" Send="SetTintColor {0,0,0 5.000000}"/>
         <On Terms="Effect.BlackScannerSweep.Start" Send="Create"/>
@@ -60,7 +79,7 @@
         <On Terms="Abil.*.TransportEmpty" Send="AnimClear StandC"/>
         <On Terms="UnitBirth.SquadGalaxyFortress; PlayerHasClanDecal" Send="Create TerranClanFlag"/>
         <On Terms="UnitBirth.SquadGalaxyFortress; PlayerHasTrophy" Send="Create TerranPlayerTrophy"/>
-        <Model value="CommandCenter_Remastered"/>
+        <Model value="GalaxyFortressModel"/>
         <BuildModel value="CommandCenter_Remastered"/>
         <DeathArray index="Normal" ModelLink="PlanetaryFortress_Remastered_Death"/>
         <DeathArray index="UnderConstruction" ModelLink="TerranLargeBuildingDeath" SoundLink="PlanetaryFortress_Explode"/>
@@ -122,6 +141,12 @@
         <HostSiteOps Ops="SOpAttachCenter"/>
         <Model value="LightningBolt"/>
         <Scale value="0.700000"/>
+    </CActorModel>
+    <CActorModel id="SquadWraithEvade2" parent="ModelAnimationStyleOneShot">
+        <On Terms="Behavior.SquadWraithDisplacementField2.DamageHandled" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="WraithEvade"/>
     </CActorModel>
     <CActorModel id="YellowScannerChronoBeamImpact" parent="ModelAnimationStyleContinuous">
         <On Terms="Behavior.YellowScannerChronoBeam.On" Send="Create"/>

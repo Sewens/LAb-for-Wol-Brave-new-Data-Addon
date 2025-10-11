@@ -42,6 +42,22 @@
         <CursorEffect value="BlackScannerSweep"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="ScannerSweepBlack"/>
     </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadAddonTacticalJump">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Effect index="0" value="SquadAddonTacticalJumpCreatePrecursor"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="BestUnit" value="0"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Range value="500"/>
+        <CastIntroTime value="0"/>
+        <CastOutroTime value="6"/>
+        <ShowProgressArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <ProgressButtonArray index="Channel" value="Hyperjump"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadAddonTacticalJump" Requirements="HaveAddonStructureRelocation"/>
+        <Arc value="360"/>
+    </CAbilEffectTarget>
     <CAbilMorph id="SquadUpgradeToGalaxyFortress">
         <EditorCategories value="Race:Terran,AbilityorEffectType:MorphsandBurrows"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="UpgradetoPlanetaryFortress"/>
@@ -1329,6 +1345,11 @@
             <Resource index="Vespene" value="250"/>
             <Button DefaultButtonFace="SquadTerranInfantryWeaponsLevel3" Requirements="LearnTerranInfantryWeapon3"/>
         </InfoArray>
+        <InfoArray index="Research6" Upgrade="AddonStructureOptimization">
+            <Resource index="Minerals" value="150"/>
+            <Resource index="Vespene" value="50"/>
+            <Button DefaultButtonFace="AddonStructureOpimization"/>
+        </InfoArray>
         <InfoArray index="Research7" Time="160" Upgrade="SquadTerranInfantryArmorLevel1">
             <Resource index="Minerals" value="100"/>
             <Resource index="Vespene" value="100"/>
@@ -1343,6 +1364,11 @@
             <Resource index="Minerals" value="250"/>
             <Resource index="Vespene" value="250"/>
             <Button DefaultButtonFace="SquadTerranInfantryArmorLevel3" Requirements="LearnTerranInfantryArmor3"/>
+        </InfoArray>
+        <InfoArray index="Research10" Upgrade="AddonStructureRelocation">
+            <Resource index="Minerals" value="200"/>
+            <Resource index="Vespene" value="200"/>
+            <Button DefaultButtonFace="AddonStructureRelocation" Requirements="HaveSquadFusionCore"/>
         </InfoArray>
     </CAbilResearch>
     <CAbilMorph id="SquadUltraliskBurrow">
