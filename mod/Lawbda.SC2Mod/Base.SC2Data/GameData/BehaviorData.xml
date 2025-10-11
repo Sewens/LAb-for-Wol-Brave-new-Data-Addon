@@ -49,6 +49,13 @@
         <DeathType value="Fire"/>
         <DamageResponse TargetFilters="-;Player,Ally,Neutral"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="ElectricFieldAccelerator">
+        <InfoIcon value="Assets\Textures\btn-upgrade-terran-magfieldaccelerator.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Modification WeaponRange="2">
+            <AdditiveAttackSpeedFactor value="0.25"/>
+        </Modification>
+    </CBehaviorBuff>
     <CBehaviorBuff id="SquadBulletTimeForEnemy">
         <Alignment value="Negative"/>
         <InfoIcon value="Assets\Textures\BTN-Ability-SpearOfAdun-TimeStop.dds"/>
@@ -73,6 +80,35 @@
         <Duration value="0.15"/>
         <Modification TimeScale="0.25"/>
     </CBehaviorBuff>
+    <CBehaviorPowerUser id="SquadReactorPowerUserForDefenceStructure">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <PowerLink value="SquadReactorPowerSource"/>
+        <PowerStageArray/>
+        <PowerStageArray MinPowerLevel="1" LevelGainEffect="ElectricFieldAcceleratorApply" LevelLossEffect="ElectricFieldAcceleratorRemove">
+            <Modification>
+                <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Energy" value="0"/>
+            </Modification>
+        </PowerStageArray>
+    </CBehaviorPowerUser>
+    <!--Add defence strcutre defence tech.-->
+    <CBehaviorPowerUser id="SquadTechlabPowerUserForDefenceStructure">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <PowerLink value="SquadTechlabPowerSource"/>
+        <PowerStageArray/>
+        <PowerStageArray MinPowerLevel="1" LevelGainEffect="SquadFireSuppressionSystemApply" LevelLossEffect="SquadFireSuppressionSystemRemove">
+            <Modification>
+                <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Energy" value="0"/>
+            </Modification>
+        </PowerStageArray>
+    </CBehaviorPowerUser>
     <CBehaviorBuff id="YellowScannerChronoBeam">
         <Alignment value="Positive"/>
         <InfoIcon value="Assets\Textures\btn-ability-protoss-chronobeam.dds"/>
@@ -1700,14 +1736,15 @@
             <StateFlags index="SuppressCloak" value="1"/>
         </Modification>
     </CBehaviorBuff>
-    <CBehaviorBuff id="SquadStructureFireSuppressionSystem">
+    <CBehaviorBuff id="SquadFireSuppressionSystem">
         <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-techupgrade-terran-firesuppressionsystem.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Requirements value="FireSuppressionSystemsResearched"/>
         <DisableValidatorArray value="NotDeadOrConstruction"/>
         <DisableValidatorArray value="LifeLTHalf"/>
-        <Modification>
-            <VitalRegenArray index="Life" value="4"/>
+        <Modification ShieldArmorBonus="2">
+            <LifeArmorBonus value="2"/>
+            <VitalRegenArray index="Life" value="5"/>
         </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadAlphaUnitTracker">
