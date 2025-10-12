@@ -81,6 +81,33 @@
         <EffectArray value="SquadAddonTacticalJumpTeleport"/>
         <EffectArray value="SquadAddonTacticalJumpTeleportAB"/>
     </CEffectSet>
+    <CEffectCreatePersistent id="SquadCalldownDefenderCoreAnchorCreatePersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnitOrPoint"/>
+        <ExpireDelay value="4"/>
+        <FinalEffect value="SquadCalldownDefenderCoreAnchorFinalSet"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="SquadCalldownDefenderCoreAnchorCreateSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="MakePrecursor"/>
+        <EffectArray value="SquadCalldownDefenderCoreAnchorCreatePersistent"/>
+    </CEffectSet>
+    <CEffectCreateUnit id="SquadCalldownDefenderCoreAnchorCreateUnit">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnitOrPoint"/>
+        <SpawnEffect value="SquadCalldownDefenderCoreAnchorCreateSet"/>
+        <SpawnUnit value="DefenderCoreArchor"/>
+    </CEffectCreateUnit>
+    <CEffectSet id="SquadCalldownDefenderCoreAnchorFinalSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="RemovePrecursor"/>
+        <EffectArray value="SquadCalldownDefenderCoreAnchorIssueOrder"/>
+    </CEffectSet>
+    <CEffectIssueOrder id="SquadCalldownDefenderCoreAnchorIssueOrder">
+        <EditorCategories value="Race:Terran"/>
+        <Abil value="SquadMuleliskGather"/>
+        <Target Effect="SquadCalldownDefenderCoreAnchorCreateUnit" Value="TargetUnit"/>
+    </CEffectIssueOrder>
     <CEffectApplyBehavior id="SquadFireSuppressionSystemApply">
         <EditorCategories value="Race:Terran"/>
         <Behavior value="SquadFireSuppressionSystem"/>
@@ -2556,7 +2583,7 @@
     <CEffectIssueOrder id="SquadCalldownMuleliskIssueOrder">
         <EditorCategories value="Race:Terran"/>
         <Abil value="SquadMuleliskGather"/>
-        <Target Effect="CalldownMULECreateUnit" Value="TargetUnit"/>
+        <Target Effect="SquadCalldownMuleliskCreateUnit" Value="TargetUnit"/>
     </CEffectIssueOrder>
     <CEffectRemoveBehavior id="LootOnDealDamageRemove">
         <ValidatorArray index="0" removed="1"/>

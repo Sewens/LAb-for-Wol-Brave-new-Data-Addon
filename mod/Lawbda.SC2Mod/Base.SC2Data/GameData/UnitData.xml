@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CActorAction id="CaptainPredatorAttack" parent="GenericAttack" effectAttack="CaptainPredatorTitaniumClaws">
+        <LaunchAttachQuery Methods="Weapon"/>
+        <LaunchAssets Sound="Predator_AttackLaunch"/>
+        <LaunchSound value="GenericAttackSound"/>
+        <ContainerSound value="GenericAttackSound"/>
+        <ImpactMap index="None" Sound="Predator_AttackImpact"/>
+        <ImpactMap index="Flesh" Model="BloodTargetImpact"/>
+        <ImpactModel value="GenericAttackImpactModel1"/>
+        <ShieldFlashType value="Header"/>
+    </CActorAction>
     <CUnit id="SquadHiveMindEmulator">
         <DeathRevealRadius value="3"/>
         <Facing value="315"/>
@@ -121,11 +131,13 @@
         <AbilArray Link="SquadCommandCenterTrain"/>
         <AbilArray Link="SquadQueue5"/>
         <AbilArray Link="CommandCenterTransport"/>
+        <AbilArray Link="SquadCalldownDefenderCoreAnchor"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="SquadReactorPowerUserForDefenceStructure"/>
         <BehaviorArray Link="SquadReactorPowerUser"/>
         <BehaviorArray Link="SquadTechlabPowerUser"/>
         <BehaviorArray Link="SquadTechlabPowerUserForDefenceStructure"/>
+        <BehaviorArray Link="SquadMissileTurretDetector11"/>
         <WeaponArray Link="SquadGalaxyFortressBlizzardCannon" Turret="SquadGalaxyFortress"/>
         <CardLayouts>
             <LayoutButtons Face="PlanetaryFortressLoad" Type="AbilCmd" AbilCmd="CommandCenterTransport,LoadAll" Row="2" Column="0"/>
@@ -136,6 +148,7 @@
             <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Cancel" Row="2" Column="4"/>
             <LayoutButtons Face="SCV" Type="AbilCmd" AbilCmd="SquadCommandCenterTrain,Train1" Row="0" Column="0"/>
             <LayoutButtons Face="Rally" Type="AbilCmd" AbilCmd="SquadCommandCenterRally,Rally1" Row="1" Column="4"/>
+            <LayoutButtons Face="SquadCalldownDefenderCoreAnchor" Type="AbilCmd" AbilCmd="SquadCalldownDefenderCoreAnchor,Execute" Row="0" Column="1"/>
         </CardLayouts>
         <Radius value="2.5"/>
         <SeparationRadius value="2.5"/>
@@ -154,6 +167,8 @@
         <GlossaryCategory value="Unit/Category/TerranUnits"/>
         <GlossaryPriority value="240"/>
         <HotkeyCategory value="Unit/Category/Lawbda"/>
+        <EnergyStart value="75"/>
+        <EnergyMax value="200"/>
     </CUnit>
     <CUnit id="SquadPsiDisrupter">
         <DeathRevealRadius value="3"/>
@@ -2076,6 +2091,7 @@
         <AbilArray Link="SquadQueue5"/>
         <AbilArray Link="CommandCenterTransport"/>
         <AbilArray Link="SquadUpgradeToGalaxyFortress"/>
+        <AbilArray Link="SquadCalldownDefenderCoreAnchor"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="SquadCommandCenterPowerSource"/>
         <BehaviorArray Link="SquadReactorPowerUser"/>
@@ -2090,10 +2106,11 @@
             <LayoutButtons Face="AttackBuildingPFort" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="SquadQueue5,CancelLast" Row="2" Column="4"/>
             <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Cancel" Row="2" Column="4"/>
+            <LayoutButtons Face="CancelUpgradeMorph" Type="AbilCmd" AbilCmd="SquadUpgradeToGalaxyFortress,Cancel" Row="2" Column="4"/>
             <LayoutButtons Face="SCV" Type="AbilCmd" AbilCmd="SquadCommandCenterTrain,Train1" Row="0" Column="0"/>
             <LayoutButtons Face="Rally" Type="AbilCmd" AbilCmd="SquadCommandCenterRally,Rally1" Row="1" Column="4"/>
-            <LayoutButtons Face="UpgradetoGalaxyFortress" Type="AbilCmd" AbilCmd="SquadUpgradeToGalaxyFortress,Execute" Row="0" Column="1"/>
-            <LayoutButtons Face="CancelUpgradeMorph" Type="AbilCmd" AbilCmd="SquadUpgradeToGalaxyFortress,Cancel" Row="2" Column="4"/>
+            <LayoutButtons Face="UpgradetoGalaxyFortress" Type="AbilCmd" AbilCmd="SquadUpgradeToGalaxyFortress,Execute" Row="0" Column="2"/>
+            <LayoutButtons Face="SquadCalldownDefenderCoreAnchor" Type="AbilCmd" AbilCmd="SquadCalldownDefenderCoreAnchor,Execute" Row="0" Column="1"/>
         </CardLayouts>
         <Radius value="2.5"/>
         <SeparationRadius value="2.5"/>
@@ -2112,6 +2129,8 @@
         <GlossaryCategory value="Unit/Category/TerranUnits"/>
         <GlossaryPriority value="240"/>
         <HotkeyCategory value="Unit/Category/Lawbda"/>
+        <EnergyStart value="75"/>
+        <EnergyMax value="200"/>
     </CUnit>
     <CUnit id="SquadRefineryRich">
         <DeathRevealRadius value="3"/>
@@ -5307,8 +5326,9 @@
         <Collide index="Small" value="1"/>
         <Attributes index="Light" value="1"/>
         <Attributes index="Mechanical" value="1"/>
-        <LifeStart value="90"/>
-        <LifeMax value="90"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="120"/>
+        <LifeMax value="120"/>
         <LifeArmorName value="Unit/LifeArmorName/TerranVehiclePlating"/>
         <Speed value="2.8125"/>
         <Acceleration value="1000"/>
@@ -5359,66 +5379,16 @@
         <Mover value="WidowMineAirWeapon"/>
         <EditorCategories value="ObjectFamily:Campaign,ObjectType:Projectile"/>
     </CUnit>
-    <CUnit id="DefenderCoreArchorBurrowed">
-        <Description value="Button/Tooltip/WidowMine"/>
-        <DeathRevealRadius value="7"/>
-        <DeathRevealDuration value="3"/>
-        <Race value="Terr"/>
-        <Mob value="Multiplayer"/>
-        <FlagArray index="Turnable" value="0"/>
-        <FlagArray index="UseLineOfSight" value="1"/>
-        <FlagArray index="Cloaked" value="1"/>
-        <FlagArray index="Buried" value="1"/>
-        <FlagArray index="AlwaysThreatens" value="1"/>
-        <FlagArray index="AIThreatGround" value="1"/>
-        <FlagArray index="AIThreatAir" value="1"/>
-        <FlagArray index="AISplash" value="1"/>
-        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
-        <FlagArray index="ArmySelect" value="1"/>
-        <PlaneArray index="Ground" value="1"/>
-        <Collide index="Burrow" value="1"/>
-        <Attributes index="Light" value="1"/>
-        <Attributes index="Mechanical" value="1"/>
-        <LifeStart value="90"/>
-        <LifeMax value="90"/>
-        <LifeArmorName value="Unit/LifeArmorName/TerranVehiclePlating"/>
-        <Acceleration value="1000"/>
-        <StationaryTurningRate value="2292.8906"/>
-        <Sight value="7"/>
-        <Food value="-2"/>
-        <CostCategory value="Army"/>
-        <CostResource index="Minerals" value="75"/>
-        <CostResource index="Vespene" value="25"/>
-        <RepairTime value="20"/>
-        <AttackTargetPriority value="20"/>
-        <AbilArray Link="DefenderCoreUnburrow"/>
-        <AbilArray Link="WidowMineAttack"/>
-        <BehaviorArray Link="WidowMineArmed"/>
-        <CardLayouts>
-            <LayoutButtons Face="WidowMineBioSplash" Type="Passive" AbilCmd="WidowMineAttack,Execute" Row="2" Column="0"/>
-            <LayoutButtons Face="WidowMineAttack" Type="AbilCmd" AbilCmd="WidowMineAttack,Execute" Row="2" Column="0"/>
-            <LayoutButtons Face="WidowMineUnburrow" Type="AbilCmd" AbilCmd="DefenderCoreUnburrow,Execute" Row="2" Column="2"/>
-            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="WidowMineAttack,Execute" Row="0" Column="4"/>
+    <CUnit id="DefenderCoreArchorBurrowed" parent="DefenderCoreArchor">
+        <Name value="Unit/Name/DefenderCoreArchorBurrowed"/>
+        <Description value="Button/Tooltip/DefenderCoreArchorBurrowed"/>
+        <AbilArray index="0" Link="stop"/>
+        <AbilArray index="1" Link="move"/>
+        <AbilArray index="2" Link="DefenderCoreAttack"/>
+        <AbilArray index="3" removed="1"/>
+        <CardLayouts index="0">
+            <LayoutButtons index="7" removed="1"/>
         </CardLayouts>
-        <ScoreKill value="100"/>
-        <SubgroupPriority value="4"/>
-        <MinimapRadius value="0.375"/>
-        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
-        <TacticalAIThink value="AIThinkWidowMineBurrowed"/>
-        <LeaderAlias value="WidowMine"/>
-        <HotkeyAlias value="WidowMine"/>
-        <SelectAlias value="WidowMine"/>
-        <SubgroupAlias value="WidowMine"/>
-        <TechAliasArray value="Alias_WidowMine"/>
-        <EquipmentArray Weapon="WidowMineDummy"/>
-        <GlossaryStrongArray value="Marauder"/>
-        <GlossaryStrongArray value="Roach"/>
-        <GlossaryStrongArray value="Immortal"/>
-        <GlossaryWeakArray value="Raven"/>
-        <GlossaryWeakArray value="Overseer"/>
-        <GlossaryWeakArray value="Observer"/>
-        <KillDisplay value="Always"/>
-        <RankDisplay value="Always"/>
     </CUnit>
     <CUnit id="DefenderCoreWeaponGround" parent="MISSILE_INVULNERABLE">
         <Race value="Terr"/>

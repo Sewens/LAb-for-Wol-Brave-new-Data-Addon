@@ -23,6 +23,16 @@
         <HeightOffset value="1.500000"/>
         <Text value="Button/Tooltip/##id##"/>
     </CActorText>
+    <CActorSplat id="SquadAddonTacticalJumpCursorSplat" parent="TerranCursorSplat" abil="SquadAddonTacticalJump">
+        <Model value="TechReactorPlacement"/>
+    </CActorSplat>
+    <!--
+    <CActorModel id="SquadAddonTacticalJumpCursorModel" parent="CursorModel" abil="SquadAddonTacticalJump">
+        <On Terms="ActorCreation" Send="SetFacing 135.000000"/>
+        <HostSiteOps Ops="SOpBasicScopeFollow SOpMoveUpBy2 TechReactorPlacement"/>
+        <Model value="TechReactorPlacement"/>
+    </CActorModel>
+    -->
     <CActorSound id="SquadAddonTacticalJumpSound" parent="SoundOneShot">
         <On Terms="Behavior.SquadAddonTacticalJumpTeleportIn.On" Send="Create"/>
         <Sound value="Battlecruiser_HyperJumpIn"/>
@@ -114,6 +124,22 @@
     <CActorTurret id="SquadGalaxyFortressTurret">
         <On Terms="TurretEnable.SquadGalaxyFortress" Send="Create"/>
     </CActorTurret>
+    <CActorModel id="SquadDefenderCoreAnchorDropModel" parent="ModelAnimationStyleOneShotNoOrphan">
+        <On Terms="Effect.SquadCalldownDefenderCoreAnchorCreatePersistent.Start" Send="Create"/>
+        <On Terms="AnimBracketState.*.AfterOpening; AnimName BSD" Send="Create DropPodUnload"/>
+        <HostSiteOps Ops="MercDropSOpShadow"/>
+        <Model value="DropPodFalling"/>
+    </CActorModel>
+    <CActorSound id="SquadFortressCalldownDefenderCoreAnchorDrop" parent="SoundOneShot">
+        <On Terms="Effect.SquadCalldownDefenderCoreAnchorCreatePersistent.Start; At Target" Send="Create"/>
+        <On Terms="ActorCreation" Send="TimerSet 2.100000 DelayDropPod"/>
+        <On Terms="TimerExpired; TimerName DelayDropPod" Send="Create OrbitalCommand_CalldownMuleImpact"/>
+        <On Terms="TimerExpired; TimerName DelayDropPod" Send="Destroy"/>
+        <Sound value="OrbitalCommand_CalldownMuleDrop"/>
+    </CActorSound>
+    <CActorRange id="SquadFortressDropDefenderCoreAnchorRange" parent="RangeAbil" abil="SquadCalldownDefenderCoreAnchor">
+        <Range value="30.000000"/>
+    </CActorRange>
     <CActorModel id="SquadThor330mmBarrageCannonsIndicator" parent="ModelAnimationStyleOneShot">
         <On Terms="Effect.SquadThor330mmBarrageCannonsRandomPoint.Start" Send="Create"/>
         <On Terms="Effect.SquadThor330mmBarrageCannonsDamage.Start" Send="AnimBracketStop BSD"/>
@@ -3952,10 +3978,6 @@
     </CActorUnit>
     <CActorModel id="SquadNydusRumble" parent="ModelAddition">
         <On Terms="ActorOrphan" Send="Destroy"/>
-        <On Terms="UnitConstruction.NydusCanal.Start" Send="Create"/>
-        <On Terms="UnitConstruction.NydusCanal.Finish" Send="Destroy"/>
-        <On Terms="UnitConstruction.NydusCanal.Cancel" Send="Destroy"/>
-        <On Terms="ActorOrphan" Send="Destroy"/>
         <On Terms="UnitConstruction.SquadGreaterNydusWorm.Start" Send="Create"/>
         <On Terms="UnitConstruction.SquadGreaterNydusWorm.Finish" Send="Destroy"/>
         <On Terms="UnitConstruction.SquadGreaterNydusWorm.Cancel" Send="Destroy"/>
@@ -3977,7 +3999,6 @@
         <Sound value="Nydus_ConstructionStart"/>
     </CActorSound>
     <CActorSound id="SquadNydusUnburrow" parent="SoundOneShot">
-        <On Terms="UnitBirth.NydusCanal.Normal" Send="Create"/>
         <On Terms="UnitBirth.SquadGreaterNydusWorm.Normal" Send="Create"/>
         <Sound value="Nydus_Unburrow"/>
     </CActorSound>
@@ -5874,16 +5895,17 @@
     <CActorSound id="SquadSpectreObliterateImpact" parent="SoundOneShot">
         <On Terms="Effect.SquadSpectreObliterate.Start" Send="Create"/>
     </CActorSound>
-    <CActorUnit id="SquadHeroPredator" parent="GenericUnitStandard" unitName="CaptainPredator">
+    <CActorUnit id="CaptainPredator" parent="GenericUnitStandard" unitName="CaptainPredator">
         <Aliases value="_UnitMedium"/>
         <Macros value="UnloadDropAnim"/>
-        <Model value="Predator"/>
+        <Model value="MiazmaticBlackOPSPredator"/>
+        <Scale value="1.250000"/>
         <Baselines index="Walk" AnimProps="Walk,Fast"/>
-        <BuildModel value="Predator"/>
+        <BuildModel value="MiazmaticBlackOPSPredator"/>
         <DeathArray index="Normal" ModelLink="PredatorDeath" SoundLink="Predator_Explode"/>
         <DeathCustoms index="4" ModelLink="Invisible1" Name="Vortex"/>
-        <PlacementModel value="Predator"/>
-        <PortraitModel value="CyberCatPortrait"/>
+        <PlacementModel value="MiazmaticBlackOPSPredator"/>
+        <PortraitModel value="MiazmaticBlackOPSPredatorPortrait"/>
         <BarOffset value="50"/>
         <BarWidth value="102"/>
         <GroupIcon>
@@ -7748,4 +7770,14 @@
         <Abil Link="SquadSpiderMineUnburrowRangeDummy"/>
     </CActorRange>
     <CActorRange id="SquadVultureDeploySpiderMineRange" parent="RangeAbil" abil="SquadVultureDeploySpiderMine"/>
+    <CActorAction id="CaptainPredatorAttack" parent="GenericAttack" effectAttack="CaptainPredatorTitaniumClaws">
+        <LaunchAttachQuery Methods="Weapon"/>
+        <LaunchAssets Sound="Predator_AttackLaunch"/>
+        <LaunchSound value="GenericAttackSound"/>
+        <ContainerSound value="GenericAttackSound"/>
+        <ImpactMap index="None" Sound="Predator_AttackImpact"/>
+        <ImpactMap index="Flesh" Model="BloodTargetImpact"/>
+        <ImpactModel value="GenericAttackImpactModel1"/>
+        <ShieldFlashType value="Header"/>
+    </CActorAction>
 </Catalog>

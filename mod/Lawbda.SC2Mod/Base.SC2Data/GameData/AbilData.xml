@@ -55,8 +55,21 @@
         <ShowProgressArray index="Channel" value="1"/>
         <UninterruptibleArray index="Channel" value="1"/>
         <ProgressButtonArray index="Channel" value="Hyperjump"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="SquadAddonTacticalJump" Requirements="HaveAddonStructureRelocation"/>
+        <!--CmdButtonArray index="Execute" DefaultButtonFace="SquadAddonTacticalJump" Requirements="HaveAddonStructureRelocation"/-->
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadAddonTacticalJump"/>
         <Arc value="360"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadCalldownDefenderCoreAnchor">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadCalldownDefenderCoreAnchorCreateUnit"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="75"/>
+        </Cost>
+        <Range value="500"/>
+        <Arc value="360"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadCalldownDefenderCoreAnchor"/>
     </CAbilEffectTarget>
     <CAbilMorph id="SquadUpgradeToGalaxyFortress">
         <EditorCategories value="Race:Terran,AbilityorEffectType:MorphsandBurrows"/>
@@ -1345,7 +1358,7 @@
             <Resource index="Vespene" value="250"/>
             <Button DefaultButtonFace="SquadTerranInfantryWeaponsLevel3" Requirements="LearnTerranInfantryWeapon3"/>
         </InfoArray>
-        <InfoArray index="Research6" Upgrade="AddonStructureOptimization">
+        <InfoArray index="Research6" Time="60" Upgrade="AddonStructureOptimization">
             <Resource index="Minerals" value="150"/>
             <Resource index="Vespene" value="50"/>
             <Button DefaultButtonFace="AddonStructureOpimization"/>
@@ -1365,7 +1378,7 @@
             <Resource index="Vespene" value="250"/>
             <Button DefaultButtonFace="SquadTerranInfantryArmorLevel3" Requirements="LearnTerranInfantryArmor3"/>
         </InfoArray>
-        <InfoArray index="Research10" Upgrade="AddonStructureRelocation">
+        <InfoArray index="Research10" Time="60" Upgrade="AddonStructureRelocation">
             <Resource index="Minerals" value="200"/>
             <Resource index="Vespene" value="200"/>
             <Button DefaultButtonFace="AddonStructureRelocation" Requirements="HaveSquadFusionCore"/>
