@@ -1,5 +1,289 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CAbilEffectInstant default="1" id="SquadHeroEffectInstant">
+        <Name value="Name/##id##"/>
+        <!--PreEffectBehavior Behavior="SuppressInvisibility" Count="1"/-->
+        <AbilityCategories index="Magic" value="1"/>
+        <VeterancyLevelMin value="1"/>
+        <VeterancyLevelSkip value="2"/>
+        <Flags index="HomogenousInterrupt" value="1"/>
+        <Cost>
+            <Cooldown Location="Unit"/>
+        </Cost>
+        <!--UninterruptibleArray index="Prep" value="1"/-->
+        <LevelButtonTooltip value="Ubertip1/##id##"/>
+        <LevelButtonTooltip value="Ubertip2/##id##"/>
+        <LevelButtonTooltip value="Ubertip3/##id##"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="##id##" Requirements="##id##">
+            <Flags index="UseDefaultButton" value="1"/>
+            <Flags index="CreateDefaultButton" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="CmdCancel"/>
+    </CAbilEffectInstant>
+    <CAbilEffectTarget default="1" id="SquadHeroEffectTarget">
+        <Name value="Name/##id##"/>
+        <!--PreEffectBehavior Behavior="SuppressInvisibility" Count="1"/-->
+        <AbilityCategories index="Magic" value="1"/>
+        <VeterancyLevelMin value="1"/>
+        <VeterancyLevelSkip value="2"/>
+        <Flags index="HomogenousInterrupt" value="1"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Cost>
+            <Cooldown Location="Unit"/>
+        </Cost>
+        <TargetFilters value="-;air,ward,structure,wall,tree,Missile,debris,Dead,invulnerable,immunity,Decaying,ground,item"/>
+        <!--UninterruptibleArray index="Prep" value="1"/-->
+        <LevelButtonTooltip value="Ubertip1/##id##"/>
+        <LevelButtonTooltip value="Ubertip2/##id##"/>
+        <LevelButtonTooltip value="Ubertip3/##id##"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="##id##" Requirements="##id##">
+            <Flags index="UseDefaultButton" value="1"/>
+            <Flags index="CreateDefaultButton" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="CmdCancel"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadHolyLight" parent="SquadHeroEffectTarget">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Hero"/>
+        <AbilityCategories index="Heal" value="1"/>
+        <AbilityCategories index="CanBeDisabled" value="1"/>
+        <AbilityCategories index="CanBeSilenced" value="1"/>
+        <AbilityCategories index="CanBeIllusionDisabled" value="1"/>
+        <Levels value="3"/>
+        <Effect index="0" value="SquadHolyLightTargetSwitch"/>
+        <Cost index="0">
+            <Vital index="Energy" value="65"/>
+            <Cooldown Location="Unit" TimeUse="5"/>
+        </Cost>
+        <Cost>
+            <Vital index="Energy" value="65"/>
+            <Cooldown Location="Unit" TimeUse="5"/>
+        </Cost>
+        <Cost>
+            <Vital index="Energy" value="65"/>
+            <Cooldown Location="Unit" TimeUse="5"/>
+        </Cost>
+        <TargetFilters index="0" value="-;self,ward,mechanical,ancient,structure,wall,tree,debris,dead,item"/>
+        <Range value="12.5"/>
+        <PrepTime value="0.5"/>
+        <CastOutroTime value="1.67"/>
+        <AINotifyEffect value="SquadHolyLightTargetSwitch"/>
+    </CAbilEffectTarget>
+    <CAbilEffectInstant id="SquadWarStomp" parent="SquadHeroEffectInstant">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <TechAliasArray value="_ABILITY_Stomp"/>
+        <AbilityCategories index="CanBeDisabled" value="1"/>
+        <AbilityCategories index="CanBeSilenced" value="1"/>
+        <AbilityCategories index="CanBeIllusionDisabled" value="1"/>
+        <TacticalAIFunc value="libGAwT_gf_AIThinkThunderClap"/>
+        <DataCollection value="AOw2"/>
+        <Levels value="4"/>
+        <Effect index="0" value="SquadWarStompSearch"/>
+        <Cost index="0">
+            <Vital index="Energy" value="90"/>
+            <Cooldown Location="Unit" TimeUse="6"/>
+        </Cost>
+        <Cost>
+            <Vital index="Energy" value="90"/>
+            <Cooldown Location="Unit" TimeUse="6"/>
+        </Cost>
+        <Cost>
+            <Vital index="Energy" value="90"/>
+            <Cooldown Location="Unit" TimeUse="6"/>
+        </Cost>
+        <PrepTime value="0.47"/>
+        <FinishTime value="0.8"/>
+        <CursorEffect value="SquadWarStompSearch"/>
+        <CursorEffect value="SquadWarStompSearch"/>
+    </CAbilEffectInstant>
+    <CAbilEffectTarget id="SquadDeathCoil" parent="SquadHeroEffectTarget">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Hero"/>
+        <AbilityCategories index="Heal" value="1"/>
+        <AbilityCategories index="CanBeDisabled" value="1"/>
+        <AbilityCategories index="CanBeSilenced" value="1"/>
+        <AbilityCategories index="CanBeIllusionDisabled" value="1"/>
+        <Levels value="3"/>
+        <Effect index="0" value="SquadDeathCoilMissile"/>
+        <Cost index="0">
+            <Vital index="Energy" value="75"/>
+            <Cooldown Location="Unit" TimeUse="6"/>
+        </Cost>
+        <Cost>
+            <Vital index="Energy" value="75"/>
+            <Cooldown Location="Unit" TimeUse="6"/>
+        </Cost>
+        <Cost>
+            <Vital index="Energy" value="75"/>
+            <Cooldown Location="Unit" TimeUse="6"/>
+        </Cost>
+        <TargetFilters index="0" value="-;self,ward,mechanical,ancient,structure,wall,tree,debris,dead,item"/>
+        <Range value="12.5"/>
+        <Range value="12.5"/>
+        <Range value="12.5"/>
+        <PrepTime value="0.452"/>
+        <CastOutroTime value="1.008"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadForkedLightning" parent="SquadHeroEffectTarget">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Hero"/>
+        <AbilityCategories index="CanBeDisabled" value="1"/>
+        <AbilityCategories index="CanBeSilenced" value="1"/>
+        <AbilityCategories index="CanBeIllusionDisabled" value="1"/>
+        <Levels value="3"/>
+        <Effect index="0" value="SquadForkedLightningSearch"/>
+        <Cost index="0">
+            <Vital index="Energy" value="110"/>
+            <Cooldown Location="Unit" TimeUse="11"/>
+        </Cost>
+        <Cost>
+            <Vital index="Energy" value="110"/>
+            <Cooldown Location="Unit" TimeUse="11"/>
+        </Cost>
+        <Cost>
+            <Vital index="Energy" value="110"/>
+            <Cooldown Location="Unit" TimeUse="11"/>
+        </Cost>
+        <TargetFilters index="0" value="-;player,allies,ward,mechanical,structure,wall,tree,Missile,debris,Dead,Hidden,invulnerable,immunity,Decaying,item"/>
+        <Range value="9.375"/>
+        <PrepTime value="0.67"/>
+        <CastOutroTime value="0.4"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadChainLightning" parent="SquadHeroEffectTarget">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Hero"/>
+        <TechAliasArray value="_ABILITY_ChainLightning"/>
+        <AbilityCategories index="CanBeDisabled" value="1"/>
+        <AbilityCategories index="CanBeSilenced" value="1"/>
+        <AbilityCategories index="CanBeIllusionDisabled" value="1"/>
+        <DataCollection value="AOcl"/>
+        <Levels value="3"/>
+        <Effect index="0" value="SquadChainLightningMainDelay"/>
+        <Cost>
+            <Vital index="Energy" value="120"/>
+            <Cooldown Location="Unit" TimeUse="9"/>
+        </Cost>
+        <Cost>
+            <Vital index="Energy" value="120"/>
+            <Cooldown Location="Unit" TimeUse="9"/>
+        </Cost>
+        <Cost>
+            <Vital index="Energy" value="120"/>
+            <Cooldown Location="Unit" TimeUse="9"/>
+        </Cost>
+        <TargetFilters value="-;player,allies,ward,mechanical,structure,wall,tree,debris,Dead,invulnerable,immunity,Decaying,item"/>
+        <TargetFilters value="-;player,allies,ward,mechanical,structure,wall,tree,debris,Dead,invulnerable,immunity,Decaying,item"/>
+        <TargetFilters value="-;player,allies,ward,mechanical,structure,wall,tree,debris,Dead,invulnerable,immunity,Decaying,item"/>
+        <Range value="10.9375"/>
+        <Range value="10.9375"/>
+        <Range value="10.9375"/>
+        <CastOutroTime value="1.07"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadFrostNova" parent="SquadHeroEffectTarget">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Hero"/>
+        <AbilityCategories index="CanBeDisabled" value="1"/>
+        <AbilityCategories index="CanBeSilenced" value="1"/>
+        <AbilityCategories index="CanBeIllusionDisabled" value="1"/>
+        <Levels value="3"/>
+        <Effect index="0" value="SquadFrostNovaFrostNova"/>
+        <Cost index="0">
+            <Vital index="Energy" value="125"/>
+            <Cooldown Location="Unit" TimeUse="8"/>
+        </Cost>
+        <Cost>
+            <Vital index="Energy" value="125"/>
+            <Cooldown Location="Unit" TimeUse="8"/>
+        </Cost>
+        <Cost>
+            <Vital index="Energy" value="125"/>
+            <Cooldown Location="Unit" TimeUse="8"/>
+        </Cost>
+        <TargetFilters index="0" value="-;player,allies,ward,mechanical,structure,wall,tree,debris,Dead,invulnerable,immunity,Decaying,item"/>
+        <Range value="12.5"/>
+        <Range value="12.5"/>
+        <Range value="12.5"/>
+        <PrepTime value="0.4"/>
+        <CastOutroTime value="1.1"/>
+        <AINotifyEffect value="SquadFrostNovaFrostNova"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadBreathofFire" parent="SquadHeroEffectTarget">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <TechAliasArray value="_ABILITY_BreathOfFire"/>
+        <AbilityCategories index="CanBeDisabled" value="1"/>
+        <AbilityCategories index="CanBeSilenced" value="1"/>
+        <AbilityCategories index="CanBeIllusionDisabled" value="1"/>
+        <Levels value="4"/>
+        <Effect index="0" value="SquadBreathofFireTargetStart"/>
+        <Cost index="0">
+            <Vital index="Energy" value="75"/>
+            <Cooldown Location="Unit" TimeUse="10"/>
+        </Cost>
+        <Cost>
+            <Vital index="Energy" value="75"/>
+            <Cooldown Location="Unit" TimeUse="10"/>
+        </Cost>
+        <Cost>
+            <Vital index="Energy" value="75"/>
+            <Cooldown Location="Unit" TimeUse="10"/>
+        </Cost>
+        <Cost>
+            <Vital index="Energy" value="75"/>
+        </Cost>
+        <Range value="7.8125"/>
+        <Range value="10.9375"/>
+        <Range value="10.9375"/>
+        <Range value="10.9375"/>
+        <PrepTime value="0.4"/>
+        <CastOutroTime value="0.5"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadShockwave" parent="SquadHeroEffectTarget">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Orc,AbilityorEffectType:Hero"/>
+        <AbilityCategories index="CanBeDisabled" value="1"/>
+        <AbilityCategories index="CanBeSilenced" value="1"/>
+        <AbilityCategories index="CanBeIllusionDisabled" value="1"/>
+        <Levels value="3"/>
+        <Effect index="0" value="SquadShockwaveTarget"/>
+        <Cost index="0">
+            <Vital index="Energy" value="100"/>
+            <Cooldown Location="Unit" TimeUse="8"/>
+        </Cost>
+        <Cost>
+            <Vital index="Energy" value="100"/>
+            <Cooldown Location="Unit" TimeUse="8"/>
+        </Cost>
+        <Cost>
+            <Vital index="Energy" value="100"/>
+            <Cooldown Location="Unit" TimeUse="8"/>
+        </Cost>
+        <Range value="10.9375"/>
+        <PrepTime value="0.47"/>
+        <FinishTime value="0.8"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadStormBolt" parent="SquadHeroEffectTarget">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Hero"/>
+        <AbilityCategories index="CanBeDisabled" value="1"/>
+        <AbilityCategories index="CanBeSilenced" value="1"/>
+        <AbilityCategories index="CanBeIllusionDisabled" value="1"/>
+        <Levels value="3"/>
+        <Effect index="0" value="SquadStormBoltMissile"/>
+        <Cost index="0">
+            <Vital index="Energy" value="75"/>
+            <Cooldown Location="Unit" TimeUse="9"/>
+        </Cost>
+        <Cost>
+            <Vital index="Energy" value="75"/>
+            <Cooldown Location="Unit" TimeUse="9"/>
+        </Cost>
+        <Cost>
+            <Vital index="Energy" value="75"/>
+            <Cooldown Location="Unit" TimeUse="9"/>
+        </Cost>
+        <TargetFilters index="0" value="-;player,allies,ward,mechanical,structure,wall,tree,Dead,invulnerable,immunity,Decaying,item"/>
+        <Range value="9.375"/>
+        <PrepTime value="0.4"/>
+        <CastOutroTime value="0.5"/>
+    </CAbilEffectTarget>
     <CAbilSpecialize id="AdvanceScannerSweep">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <InfoArray index="Specialize1">

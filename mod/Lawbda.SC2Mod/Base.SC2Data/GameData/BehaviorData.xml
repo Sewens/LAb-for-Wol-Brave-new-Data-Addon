@@ -1,5 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+<CBehaviorBuff id="SquadBreathofFire" parent="BNbf">
+        <Duration value="5"/>
+        <DurationOverride index="0">
+            <Duration value="5"/>
+        </DurationOverride>
+        <InitialEffect value="SquadBreathofFireDamagePerSecond"/>
+        <PeriodicEffect value="SquadBreathofFireDamagePerSecond"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadStormBoltStunned">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\Renee_war3_btnStun.dds"/>
+        <BehaviorCategories index="TeleportRemove" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <MaxStackCount value="0"/>
+        <InitialEffect value="SquadWar3ForceStopChannelOrder"/>
+        <Modification>
+            <StateFlags index="Stun" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadWarStompStunned">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\Renee_war3_btnStun.dds"/>
+        <BehaviorCategories index="TeleportRemove" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <MaxStackCount value="0"/>
+        <InitialEffect value="SquadWar3ForceStopChannelOrder"/>
+        <Modification>
+            <StateFlags index="Stun" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadFrostNovaChilled" parent="War3_BuffSpeedTemplate" alias="Bfro">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\Renee_war3_btnFrost.dds"/>
+        <BehaviorCategories index="Magic" value="0"/>
+        <EditorCategories value="Race:other,AbilityorEffectType:Units"/>
+        <Modification>
+            <AdditiveMoveSpeedFactor value="-0.5"/>
+            <AdditiveAttackSpeedFactor value="-0.25"/>
+        </Modification>
+    </CBehaviorBuff>
     <CBehaviorBuff id="CaptainBuffRedirectDaemon">
         <BehaviorFlags index="Permanent" value="1"/>
         <InfoFlags index="Hidden" value="1"/>

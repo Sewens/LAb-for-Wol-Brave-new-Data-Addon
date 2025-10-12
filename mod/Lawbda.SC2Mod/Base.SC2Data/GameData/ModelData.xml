@@ -1,5 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+<CModel default="1" id="SquadModelBase">
+        <?token id="race" value="Neutral"?>
+        <ScaleMax value="1.562500,1.562500,1.562500"/>
+        <ScaleMin value="1.562500,1.562500,1.562500"/>
+        <Flags index="CloakedUndetectedIsHidden" value="1"/>
+        <Flags index="ForcePortraitModel" value="1"/>
+        <Flags index="FOW" value="0"/>
+        <Flags index="IgnoreAspectRatioScale" value="1"/>
+        <EditorCategories value="Race:##race##"/>
+        <Lighting value="Tyrador"/>
+    </CModel>
+    <CModel default="1" id="SquadSpell" parent="SquadModelBase">
+        <Flags index="Wait" value="0"/>
+        <Priority value="24"/>
+        <Model value="Assets\Abilities\Spells\##race##\##id##\##id##.m3"/>
+    </CModel>
+    <CModel default="1" id="SquadWeapon" parent="SquadModelBase">
+        <Flags index="Wait" value="0"/>
+        <Priority value="24"/>
+        <Model value="Assets\Abilities\Weapons\##id##\##id##.m3"/>
+    </CModel>
+    <CModel id="SquadChainLightningMissileArt" parent="SquadSpell" race="Terran">
+        <Model value="Assets\Abilities\Spells\Orc\War3_LightningBoltMissile\War3_LightningBoltMissile.m3"/>
+        <Events Anim="Death" Type="Sound" Payload="SND_AOLB"/>
+    </CModel>
+    <CModel id="SquadChainLightningTargetArt2" parent="SquadWeapon">
+        <Model value="Assets\Effects\Terran\Electrocute\Electrocute.m3"/>
+        <Events>
+            <Anim value="Death"/>
+            <Type value="Sound"/>
+            <Time value="0.033000"/>
+            <Payload value="SND_AOLB"/>
+        </Events>
+    </CModel>
+    <CModel id="SquadChainLightningSecondary" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Protoss\TempestGroundBeam\TempestGroundBeam.m3"/>
+        <ScaleMax value="1.000000,2.000000,2.000000"/>
+        <ScaleMin value="1.000000,2.000000,2.000000"/>
+    </CModel>
+    <CModel id="SquadHolyLightTargetArt" race="Human">
+        <Model value="Assets\Abilities\Spells\Human\War3_HolyBoltSpecialArt\War3_HolyBoltSpecialArt.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <Events Anim="Birth" Type="Sound" Payload="SND_AHHB"/>
+    </CModel>
+    <CModel id="SquadStormBoltMissileArt" race="Terran">
+        <Model value="Assets\Abilities\Spells\Human\War3_ThunderBoltMissile\War3_ThunderBoltMissile.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <Events Anim="Death" Type="Sound" Payload="SND_AHTB"/>
+        <Events Anim="Birth" Type="Sound" Payload="SND_AHSL"/>
+    </CModel>
+    <CModel id="SquadForkedLightningSpecialArt" parent="SquadWeapon">
+        <Model value="Assets\Abilities\Weapons\War3_BoltImpact\War3_BoltImpact.m3"/>
+        <Events>
+            <Anim value="Stand"/>
+            <Type value="Sound"/>
+            <Time value="0.033000"/>
+            <Payload value="SND_AOLB"/>
+        </Events>
+    </CModel>
+    <CModel id="SquadChainLightningTargetArt" parent="SquadWeapon">
+        <Model value="Assets\Effects\Terran\Electrocute\Electrocute.m3"/>
+        <Events>
+            <Anim value="Death"/>
+            <Type value="Sound"/>
+            <Time value="0.033000"/>
+            <Payload value="SND_AOLB"/>
+        </Events>
+    </CModel>
+    <CModel id="SquadShockwaveMissileArt" race="Terran">
+        <Model value="Assets\Abilities\Spells\Orc\War3_ShockwaveMissile\War3_ShockwaveMissile.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <Events Anim="Birth" Type="Sound" Payload="SND_AOSH"/>
+    </CModel>
+    <CModel id="SquadDeathCoilMissileArt" race="Terran">
+        <Model value="Assets\Abilities\Spells\Undead\War3_DeathCoilMissile\War3_DeathCoilMissile.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <Events Anim="Birth" Type="Sound" Payload="SND_MDCL"/>
+    </CModel>
+    <CModel id="SquadDeathCoilSpecialArt" race="Terran">
+        <Model value="Assets\Abilities\Spells\Undead\War3_DeathCoilSpecialArt\War3_DeathCoilSpecialArt.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <Events>
+            <Anim value="Stand"/>
+            <Type value="Sound"/>
+            <Time value="0.033000"/>
+            <Payload value="SND_AUDC"/>
+        </Events>
+    </CModel>
+    <CModel id="SquadFrostNovaEffectArt" race="Terran">
+        <Model value="Assets\Abilities\Spells\Undead\War3_FrostNovaTarget\War3_FrostNovaTarget.m3"/>
+        <Events Anim="Birth" Type="Sound" Payload="SND_AUFN"/>
+    </CModel>
+    <CModel id="SquadChainLightning">
+        <Model value="Assets\Effects\Protoss\TempestGroundBeam\TempestGroundBeam.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="SquadForkedLightning">
+        <Model value="Assets\Effects\Protoss\TempestGroundBeam\TempestGroundBeam.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
     <CModel id="AdvanceEngineBay" parent="EngineeringBayBase">
         <Model value="Assets\Buildings\Terran\Starport_HornerHan_Coop\Starport_HornerHan_Coop.m3"/>
     </CModel>

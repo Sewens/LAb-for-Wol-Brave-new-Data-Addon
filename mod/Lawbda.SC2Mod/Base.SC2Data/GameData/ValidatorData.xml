@@ -1,5 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+<CValidatorCombine id="SquadDeathCoilDamageTarget">
+        <Type value="And"/>
+        <CombineArray value="SquadDeathCoilEnemyFilter"/>
+    </CValidatorCombine>
+    <CValidatorUnitFilters id="SquadDeathCoilEnemyFilter">
+        <Filters value="-;Player,Ally,Invulnerable,Unstoppable"/>
+    </CValidatorUnitFilters>
+    <CValidatorCombine id="SquadDeathCoilTargetFilter">
+        <ResultFailed value="Error,Errors/Deathcoiltarget"/>
+        <CombineArray value="SquadDeathCoilDamageTarget"/>
+        <CombineArray value="AUdc@HealTarget"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="SquadHolyLightDamageTarget">
+        <Type value="And"/>
+        <CombineArray value="AHhb@EnemyFilter"/>
+        <CombineArray value="TargetIsUndeadOrDemonRace"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="SquadHolyLightHealTarget">
+        <Type value="And"/>
+        <CombineArray value="AHhb@FriendFilter"/>
+        <CombineArray value="TargetIsNotUndeadNorDemonRace"/>
+        <CombineArray value="TargetLifeNotFull"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="SquadHolyLightTargetFilter">
+        <ResultFailed value="Error,Errors/Holybolttarget"/>
+        <CombineArray value="SquadHolyLightDamageTarget"/>
+        <CombineArray value="SquadHolyLightHealTarget"/>
+    </CValidatorCombine>
+    <CValidatorEffectTreeUserData id="SquadCanJumpToBenign">
+        <Compare value="GT"/>
+        <Key value="HitBenign"/>
+    </CValidatorEffectTreeUserData>
+    <CValidatorCombine id="SquadJumpTargetFilters">
+        <CombineArray value="SquadTargetIsNotBenign"/>
+        <CombineArray value="SquadCanJumpToBenign"/>
+    </CValidatorCombine>
+    <CValidatorUnitFilters id="SquadTargetIsNotBenign">
+        <Filters value="-;Benign"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitCompareMarkerCount id="SquadNoMarkers">
+        <ResultFailed value="AlreadyTargeted"/>
+    </CValidatorUnitCompareMarkerCount>
     <CValidatorUnitCompareBehaviorCount id="FirebatTrackerOn">
         <ResultFailed value="NotEnoughRoomToLoadUnit,MagazineNoFirbat"/>
         <WhichUnit Value="TargetOuter"/>

@@ -1,5 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CActorModel default="1" id="SquadEffectArt" parent="ModelAnimationStyleOneShot">
+        <ModelFlags index="AllowHitTest" value="0"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+        <FogVisibility value="Hidden"/>
+        <On Terms="ActorCreation" Send="SetCastShadows"/>
+    </CActorModel>
+    <CActorModel default="1" id="SquadSpecialArt" parent="ModelAnimationStyleOneShot">
+        <ModelFlags index="AllowHitTest" value="0"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+        <FogVisibility value="Hidden"/>
+        <On Terms="ActorCreation" Send="SetCastShadows"/>
+        <Inherits index="Scale" value="1"/>
+    </CActorModel>
+    <CActorModel default="1" id="SquadTargetArtX" parent="ModelAnimationStyleContinuous">
+        <ModelFlags index="AllowHitTest" value="0"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+        <Host Subject="_Selectable"/>
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <AutoScaleFromSelectionFactor value="1.000000"/>
+        <On Terms="AnimBracketState.*.AfterOpening; AnimName BSD; !AnimPlayable Stand" Send="AnimBracketStop BSD"/>
+    </CActorModel>
+    <CActorSimple default="1" id="SquadSimpleCastAnim">
+        <?token id="anim" type="CAnimProps" value="Spell"?>
+        <On Terms="Abil.##id##.SourcePrepStart" Target="_Selectable" Send="AnimPlay spell ##anim## NonLooping -1.000000 -1.000000 1.000000 AsTimeScaleAbsolute"/>
+        <On Terms="Abil.##id##.SourcePrepStart" Send="Create EffectSoundOneShot ##effectsound##"/>
+        <On Terms="Abil.##id##.SourcePrepStart" Send="Create"/>
+        <On Terms="Abil.##id##.SourcePrepStop" Send="Destroy"/>
+        <!--On Terms="Abil.##id##.SourcePrepStart" Send="Create EffectSoundLooped ##effectsoundlooped##"/-->
+    </CActorSimple>
+    <CActorSimple default="1" id="SquadSimpleCastAnimWcArt" parent="SquadSimpleCastAnim">
+        <On Terms="Abil.##id##.SourceCastStart" Send="Create ##id##@Caster"/>
+        <On Terms="Abil.##id##.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.##id##.SourceCastStop" Send="Destroy"/>
+        <!--On Terms="Abil.##id##.SourcePrepStart" Send="Create EffectSoundLooped ##effectsoundlooped##"/-->
+    </CActorSimple>
+    <CActorAction default="1" id="SquadInstantBeamAction" parent="GenericAttack">
+        <?token id="beam" type="CActorLink" value="Bogus"?>
+        <Beam value="##beam##"/>
+        <BeamScope value="Caster"/>
+        <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeNoVizEnhance SOpForwardLaunchGuide"/>
+        <CombatRevealDurationType value="ByVictim"/>
+    </CActorAction>
+    <CActorBeamSimple default="1" id="SquadBeamOneShotDamage" parent="BeamSimpleAnimationStyleOneShot">
+        <Supporter Subject="::Creator"/>
+        <On Terms="SupporterDestruction" Send="AnimBracketStop BSD"/>
+    </CActorBeamSimple>
+    <CActorAction default="1" id="SquadGenericMissileAttack" parent="GenericAttack">
+        <?token id="missile" type="CActorLink"?>
+        <Missile value="##missile##"/>
+        <ImpactMap index="None" Model="##missile##"/>
+        <ImpactModel value="SquadGenericAttackImpactModel"/>
+    </CActorAction>
+    <CActorMissile default="1" id="SquadMissile" parent="GenericAttackMissile">
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+        <On Terms="ActorCreation" Send="SetCastShadows"/>
+    </CActorMissile>
     <CActorAction default="1" id="SquadMarauderAttackBase" parent="MarauderAttackBase"/>
     <CActorModel default="1" id="SquadFloatingTextActorDefault">
         <?token id="effectCondition" value="Bogus"?>
@@ -23,6 +81,118 @@
         <HeightOffset value="1.500000"/>
         <Text value="Button/Tooltip/##id##"/>
     </CActorText>
+    <CActorModel id="SquadGenericAttackImpactModel">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD IGNORE IGNORE Death ContentPlayOnce"/>
+        <On Terms="ActorCreation" Send="SetCastShadows"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorMissile id="SquadChainLightningMissileArt" parent="SquadMissile" unitName="SquadChainLightningMissile">
+        <Model value="SquadChainLightningMissileArt"/>
+    </CActorMissile>
+    <CActorAction id="ChainLightningMissileAttack" parent="SquadGenericMissileAttack" effectImpact="SquadChainLightningMissileImpactSet" effectLaunch="SquadChainLightningMissile" missile="SquadChainLightningMissileArt"/>
+    <CActorBeamSimple id="SquadChainLightningSecondaryBeamArt" parent="SquadBeamOneShotDamage">
+        <Model value="SquadChainLightningSecondary"/>
+    </CActorBeamSimple>
+    <CActorAction id="SquadChainLightningSecondaryBeamAction" parent="SquadInstantBeamAction" effectAttack="SquadChainLightningSecondaryDamage" beam="SquadChainLightningSecondaryBeamArt">
+        <ImpactMap index="None" Model="SquadChainLightningTargetArt2"/>
+        <Lifetime value="1.000000"/>
+    </CActorAction>
+    <CActorSimple id="SquadHolyLightCasterAnim" parent="SquadSimpleCastAnim"/>
+    <CActorModel id="SquadHolyLightTargetArt" parent="SquadTargetArtX">
+        <On Terms="Effect.SquadHolyLightTargetSwitch.Start; At Target" Send="Create"/>
+        <On Terms="ActorCreation" Send="SetCastShadows"/>
+    </CActorModel>
+    <CActorSimple id="SquadStormBoltCasterAnim" parent="SquadSimpleCastAnim" anim="Spell,Throw">
+        <On index="0" Terms="Abil.SquadStormBolt.SourcePrepStart" Target="_Selectable" Send="AnimPlay spell Spell,Throw NonLooping -1.000000 -1.000000 1.000000 AsTimeScaleAbsolute"/>
+        <On index="1" Terms="Abil.SquadStormBolt.SourcePrepStart" Send="Create EffectSoundOneShot ##effectsound##"/>
+        <On index="2" Terms="Abil.SquadStormBolt.SourcePrepStart" Send="Create"/>
+        <On index="3" Terms="Abil.SquadStormBolt.SourcePrepStop" Send="Destroy"/>
+    </CActorSimple>
+    <CActorMissile id="SquadStormBoltMissileArt" parent="SquadMissile" unitName="SquadStormBoltMissile">
+        <Model value="SquadStormBoltMissileArt"/>
+    </CActorMissile>
+    <CActorAction id="SquadStromBoltMissileAttackAction" parent="SquadGenericMissileAttack" effectImpact="SquadStormBoltMissileImpactSet" effectLaunch="SquadStormBoltMissile" missile="SquadStormBoltMissileArt"/>
+    <CActorSimple id="SquadBreathofFireCasterAnim" parent="SquadSimpleCastAnim" anim="Spell,Slam">
+        <On index="0" Terms="Abil.SquadBreathofFire.SourcePrepStart" Target="_Selectable" Send="AnimPlay spell Spell,Slam NonLooping -1.000000 -1.000000 1.000000 AsTimeScaleAbsolute"/>
+        <On index="1" Terms="Abil.SquadBreathofFire.SourcePrepStart" Send="Create EffectSoundOneShot ##effectsound##"/>
+        <On index="2" Terms="Abil.SquadBreathofFire.SourcePrepStart" Send="Create"/>
+        <On index="3" Terms="Abil.SquadBreathofFire.SourcePrepStop" Send="Destroy"/>
+    </CActorSimple>
+    <CActorSimple id="SquadForkedLightningCasterAnim" parent="SquadSimpleCastAnim">
+        <On index="0" Terms="Abil.SquadForkedLightning.SourcePrepStart" Target="_Selectable" Send="AnimPlay spell Spell NonLooping -1.000000 -1.000000 1.000000 AsTimeScaleAbsolute"/>
+        <On index="1" Terms="Abil.SquadForkedLightning.SourcePrepStart" Send="Create EffectSoundOneShot ##effectsound##"/>
+        <On index="2" Terms="Abil.SquadForkedLightning.SourcePrepStart" Send="Create"/>
+        <On index="3" Terms="Abil.SquadForkedLightning.SourcePrepStop" Send="Destroy"/>
+    </CActorSimple>
+    <CActorAction id="SquadForkedLightningAttack" parent="GenericAttack" effectAttack="SquadForkedLightningDamage">
+        <LaunchSiteOps Ops="$weaponStationary"/>
+        <Beam value="SquadForkedLightningBeamArt"/>
+        <BeamScope value="Caster"/>
+        <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeNoVizEnhance SOpForwardLaunchGuide"/>
+        <ImpactMap index="None" Model="SquadForkedLightningSpecialArt"/>
+        <Lifetime value="0.700000"/>
+    </CActorAction>
+    <CActorBeamSimple id="SquadForkedLightningBeamArt" parent="SquadBeamOneShotDamage">
+        <Model value="SquadForkedLightning"/>
+        <Scale value="0.700000"/>
+    </CActorBeamSimple>
+    <CActorSimple id="SquadChainLightningCasterAnim" parent="SquadSimpleCastAnim" anim="Spell,Chain,Lighting">
+        <On index="0" Terms="Abil.SquadChainLightning.SourcePrepStart" Target="_Selectable" Send="AnimPlay spell Spell,Chain,Lighting NonLooping -1.000000 -1.000000 1.000000 AsTimeScaleAbsolute"/>
+        <On index="1" Terms="Abil.SquadChainLightning.SourcePrepStart" Send="Create EffectSoundOneShot ##effectsound##"/>
+        <On index="2" Terms="Abil.SquadChainLightning.SourcePrepStart" Send="Create"/>
+        <On index="3" Terms="Abil.SquadChainLightning.SourcePrepStop" Send="Destroy"/>
+    </CActorSimple>
+    <CActorBeamSimple id="SquadChainLightningBeamArt" parent="SquadBeamOneShotDamage">
+        <Model value="SquadChainLightning"/>
+    </CActorBeamSimple>
+    <CActorAction id="SquadChainLightningMainBeamAction" parent="SquadInstantBeamAction" effectAttack="SquadChainLightningMainDamage" beam="SquadChainLightningBeamArt">
+        <ImpactMap index="None" Model="SquadChainLightningTargetArt"/>
+        <Lifetime value="1.000000"/>
+    </CActorAction>
+    <CActorSimple id="SquadShockwaveCasterAnim" parent="SquadSimpleCastAnim" anim="Attack,Slam">
+        <On index="0" Terms="Abil.SquadShockwave.SourcePrepStart" Target="_Selectable" Send="AnimPlay spell Attack,Slam NonLooping -1.000000 -1.000000 1.000000 AsTimeScaleAbsolute"/>
+        <On index="1" Terms="Abil.SquadShockwave.SourcePrepStart" Send="Create EffectSoundOneShot ##effectsound##"/>
+        <On index="2" Terms="Abil.SquadShockwave.SourcePrepStart" Send="Create"/>
+        <On index="3" Terms="Abil.SquadShockwave.SourcePrepStop" Send="Destroy"/>
+    </CActorSimple>
+    <CActorMissile id="SquadShockwaveMissileArt" parent="SquadMissile" unitName="SquadShockWaveMissile">
+        <HostSiteOps Ops="SOpShadow"/>
+        <Model value="SquadShockwaveMissileArt"/>
+    </CActorMissile>
+    <CActorAction id="SquadShockwaveMissileAttackAction" parent="SquadGenericMissileAttack" effectImpact="SquadShockwaveMissileImpactSet" effectLaunch="SquadShockwaveMissile" missile="SquadShockwaveMissileArt"/>
+    <CActorSimple id="SquadWarStompCasterAnim" parent="SquadSimpleCastAnimWcArt" anim="Spell,Slam"/>
+    <CActorSimple id="SquadDeathCoilCasterAnim" parent="SquadSimpleCastAnim"/>
+    <CActorMissile id="SquadDeathCoilMissileArt" parent="SquadMissile" unitName="SquadDeathCoilMissile">
+        <Model value="SquadDeathCoilMissileArt"/>
+    </CActorMissile>
+    <CActorAction id="SquadDeathCoilMissileAttackAction" parent="SquadGenericMissileAttack" effectImpact="SquadDeathCoilMissileImpactSet" effectLaunch="SquadDeathCoilMissile" missile="SquadDeathCoilMissileArt"/>
+    <CActorModel id="SquadDeathCoilSpecialArt" parent="SquadSpecialArt">
+        <On Terms="Effect.SquadDeathCoilMissileImpactSet.Start; At Target" Send="Create"/>
+        <On Terms="ActorCreation" Send="SetCastShadows"/>
+    </CActorModel>
+    <CActorSimple id="SquadFrostNovaCasterAnim" parent="SquadSimpleCastAnim">
+        <On index="0" Terms="Abil.SquadFrostNova.SourcePrepStart" Target="_Selectable" Send="AnimPlay spell Spell NonLooping -1.000000 -1.000000 1.000000 AsTimeScaleAbsolute"/>
+        <On index="1" Terms="Abil.SquadFrostNova.SourcePrepStart" Send="Create EffectSoundOneShot ##effectsound##"/>
+        <On index="2" Terms="Abil.SquadFrostNova.SourcePrepStart" Send="Create"/>
+        <On index="3" Terms="Abil.SquadFrostNova.SourcePrepStop" Send="Destroy"/>
+    </CActorSimple>
+    <CActorModel id="SquadFrostNovaEffectArt" parent="SquadEffectArt">
+        <On Terms="Effect.SquadFrostNovaFrostNova.Start" Send="Create"/>
+    </CActorModel>
+    <CActorAction id="CaptainPredatorAttack" parent="GenericAttack" effectAttack="CaptainPredatorTitaniumClaws">
+        <LaunchAttachQuery Methods="Weapon"/>
+        <LaunchAssets Sound="Predator_AttackLaunch"/>
+        <LaunchSound value="GenericAttackSound"/>
+        <ContainerSound value="GenericAttackSound"/>
+        <ImpactMap index="None" Sound="Predator_AttackImpact"/>
+        <ImpactMap index="Flesh" Model="BloodTargetImpact"/>
+        <ImpactModel value="GenericAttackImpactModel1"/>
+        <ShieldFlashType value="Header"/>
+    </CActorAction>
     <CActorSplat id="SquadAddonTacticalJumpCursorSplat" parent="TerranCursorSplat" abil="SquadAddonTacticalJump">
         <Model value="TechReactorPlacement"/>
     </CActorSplat>
@@ -7770,14 +7940,4 @@
         <Abil Link="SquadSpiderMineUnburrowRangeDummy"/>
     </CActorRange>
     <CActorRange id="SquadVultureDeploySpiderMineRange" parent="RangeAbil" abil="SquadVultureDeploySpiderMine"/>
-    <CActorAction id="CaptainPredatorAttack" parent="GenericAttack" effectAttack="CaptainPredatorTitaniumClaws">
-        <LaunchAttachQuery Methods="Weapon"/>
-        <LaunchAssets Sound="Predator_AttackLaunch"/>
-        <LaunchSound value="GenericAttackSound"/>
-        <ContainerSound value="GenericAttackSound"/>
-        <ImpactMap index="None" Sound="Predator_AttackImpact"/>
-        <ImpactMap index="Flesh" Model="BloodTargetImpact"/>
-        <ImpactModel value="GenericAttackImpactModel1"/>
-        <ShieldFlashType value="Header"/>
-    </CActorAction>
 </Catalog>

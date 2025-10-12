@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
-    <CActorAction id="CaptainPredatorAttack" parent="GenericAttack" effectAttack="CaptainPredatorTitaniumClaws">
-        <LaunchAttachQuery Methods="Weapon"/>
-        <LaunchAssets Sound="Predator_AttackLaunch"/>
-        <LaunchSound value="GenericAttackSound"/>
-        <ContainerSound value="GenericAttackSound"/>
-        <ImpactMap index="None" Sound="Predator_AttackImpact"/>
-        <ImpactMap index="Flesh" Model="BloodTargetImpact"/>
-        <ImpactModel value="GenericAttackImpactModel1"/>
-        <ShieldFlashType value="Header"/>
-    </CActorAction>
+    <CUnit id="SquadChainLightningMissile"/>
+    <CUnit id="SquadStormBoltMissile">
+        <Race value="Terr"/>
+        <Mover value="StormBoltMissile"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
+    <CUnit id="SquadShockWaveMissile">
+        <Race value="Terr"/>
+        <Mover value="ShockwaveMissile"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
+    <CUnit id="SquadDeathCoilMissile">
+        <Race value="Terr"/>
+        <Mover value="DeathCoilMissile"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
     <CUnit id="SquadHiveMindEmulator">
         <DeathRevealRadius value="3"/>
         <Facing value="315"/>
@@ -3266,6 +3272,7 @@
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="AcquireMove" Type="AbilCmd" AbilCmd="move,AcquireMove" Row="0" Column="4"/>
             <LayoutButtons Face="SquadPredatorLightningField" Type="Passive" Row="2" Column="0"/>
+            <LayoutButtons Face="SquadChainLightning" Row="1" Column="0"/>
         </CardLayouts>
         <Radius value="0.625"/>
         <SeparationRadius value="0.625"/>
