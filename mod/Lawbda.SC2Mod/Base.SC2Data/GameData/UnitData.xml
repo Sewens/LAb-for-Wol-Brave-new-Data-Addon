@@ -3239,10 +3239,9 @@
         <PlaneArray index="Ground" value="1"/>
         <Collide index="Ground" value="1"/>
         <Collide index="Small" value="1"/>
-        <Attributes index="Armored" value="1"/>
         <Attributes index="Mechanical" value="1"/>
-        <LifeStart value="140"/>
-        <LifeMax value="140"/>
+        <LifeStart value="280"/>
+        <LifeMax value="280"/>
         <LifeArmor value="1"/>
         <LifeArmorName value="Unit/LifeArmorName/TerranVehiclePlating"/>
         <Speed value="4"/>
@@ -3263,6 +3262,7 @@
         <AbilArray Link="attack"/>
         <AbilArray Link="move"/>
         <AbilArray Link="stop"/>
+        <AbilArray Link="SquadBreathofFire"/>
         <WeaponArray Link="Predator"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -3272,7 +3272,7 @@
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="AcquireMove" Type="AbilCmd" AbilCmd="move,AcquireMove" Row="0" Column="4"/>
             <LayoutButtons Face="SquadPredatorLightningField" Type="Passive" Row="2" Column="0"/>
-            <LayoutButtons Face="SquadChainLightning" Row="1" Column="0"/>
+            <LayoutButtons Face="SquadBreathofFire" Type="AbilCmd" AbilCmd="SquadBreathofFire,Execute" Row="1" Column="0"/>
         </CardLayouts>
         <Radius value="0.625"/>
         <SeparationRadius value="0.625"/>
@@ -3303,6 +3303,12 @@
             <Charge Link="Predator/Revive"/>
             <Cooldown Link="Predator/Revive"/>
         </ReviveInfoBase>
+        <EnergyStart value="200"/>
+        <EnergyMax value="200"/>
+        <ShieldsStart value="100"/>
+        <ShieldsMax value="100"/>
+        <ShieldRegenRate value="5"/>
+        <BehaviorArray Link="SquadMissileTurretDetector11"/>
     </CUnit>
     <CUnit id="AdvanceEngineBay">
         <DeathTime value="-1"/>

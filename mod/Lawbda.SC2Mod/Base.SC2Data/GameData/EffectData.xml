@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
-<CEffectCreateHealer default="1" id="SquadInstantHeal">
+    <CEffectCreateHealer default="1" id="SquadInstantHeal">
         <AINotifyFlags index="HelpFriend" value="1"/>
         <Flags index="Channeled" value="0"/>
         <PeriodCount value="0"/>
@@ -26,12 +26,15 @@
         <ResponseFlags index="Flee" value="1"/>
         <ValidatorArray index="0" removed="1"/>
     </CEffectApplyBehavior>
-    <CEffectEnumArea default="1" id="SquadAbilSearch">
-        <SearchFilters value="-;air,ward,structure,wall,tree,Missile,debris,Dead,Hidden,invulnerable,immunity,Decaying,ground,item"/>
-    </CEffectEnumArea>
+    <CEffectEnumArea default="1" id="SquadAbilSearch"/>
     <CEffectEnumArea default="1" id="SquadAbilSearchRadiusExt" parent="SquadAbilSearch">
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
+    <CEffectSwitch id="SquadHolyLightSwitch">
+        <EditorCategories value="Race:Terran"/>
+        <CaseArray Validator="SquadHolyLightHealTarget" Effect="SquadHolyLightHeal"/>
+        <CaseArray Validator="SquadHolyLightDamageTarget" Effect="SquadHolyLightDamage"/>
+    </CEffectSwitch>
     <CEffectDamage id="SquadShockwaveDamage">
         <ValidatorArray value="SquadNoMarkers"/>
         <EditorCategories value="Race:Terran"/>
@@ -39,13 +42,16 @@
         <Amount value="0">
             <AccumulatorArray value="SquadShockwaveDamage"/>
         </Amount>
+        <SearchFilters value="Visible;Player,Ally,Neutral,Missile,Stasis,Dead,Invulnerable"/>
     </CEffectDamage>
     <CEffectEnumArea id="SquadShockwaveSearch">
         <EditorCategories value="Race:Terran"/>
-        <SearchFilters value="-;player,allies,neutral,air,ward,wall,tree,Missile,debris,Dead,Hidden,invulnerable,immunity,Decaying,item"/>
+        <SearchFilters value="Visible;Player,Ally,Enemy,Missile,Stasis,Dead,Invulnerable"/>
         <AreaArray RectangleWidth="3.9062" Effect="SquadShockwaveDamage"/>
     </CEffectEnumArea>
-    <CEffectLaunchMissile id="SquadChainLightningMissile" parent="SquadAbilMissile"/>
+    <CEffectLaunchMissile id="SquadChainLightningMissile" parent="SquadAbilMissile">
+        <RetargetFilters value="-;Player,Ally,Neutral"/>
+    </CEffectLaunchMissile>
     <CEffectSet id="SquadChainLightningMissileImpactSet"/>
     <CEffectUserData id="SquadChainLightningDamageLoss">
         <EditorCategories value="Race:Orc"/>
@@ -58,7 +64,7 @@
     <CEffectEnumArea id="SquadChainLightningSearch">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Hero"/>
         <LaunchLocation Value="TargetUnitOrPoint"/>
-        <SearchFilters value="Visible;player,allies,ward,mechanical,structure,wall,tree,debris,Dead,Hidden,invulnerable,immunity,Decaying,item"/>
+        <SearchFilters value="-;Player,Ally,Neutral"/>
         <TargetSorts>
             <SortArray value="TSDistance"/>
         </TargetSorts>
@@ -75,6 +81,7 @@
         <Fraction value="0">
             <AccumulatorArray value="SquadWar3DamageLoss"/>
         </Fraction>
+        <SearchFilters value="-;Player,Ally,Neutral"/>
     </CEffectDamage>
     <CEffectCreatePersistent id="SquadChainLightningSecondaryDelay">
         <EditorCategories value="Race:Orc,AbilityorEffectType:Hero"/>
@@ -101,28 +108,24 @@
         <Amount value="0">
             <AccumulatorArray value="SquadBreathofFireDamage"/>
         </Amount>
+        <RevealerParams DetectFilters="-;Player,Ally,Neutral"/>
     </CEffectDamage>
     <CEffectDamage id="SquadBreathofFireDamagePerSecond">
         <Amount value="0">
             <AccumulatorArray value="SquadBreathofFireDamagePerSecond"/>
         </Amount>
+        <RevealerParams DetectFilters="-;Player,Ally,Neutral"/>
     </CEffectDamage>
     <CEffectEnumArea id="SquadBreathofFireSearch">
-        <SearchFilters value="-;player,allies,ward,wall,tree,debris,Dead,invulnerable,immunity,Decaying,Raisable,item"/>
+        <SearchFilters value="Visible;Player,Ally,Neutral,Air,Missile,Stasis,Dead,AirUnit"/>
         <AreaArray Radius="2.3437" Effect="SquadBreathofFireSearchImpactSet"/>
     </CEffectEnumArea>
     <CEffectSet id="SquadBreathofFireSearchImpactSet">
         <EffectArray value="SquadBreathofFireDamage"/>
         <EffectArray value="SquadBreathOfFireBuff"/>
     </CEffectSet>
-    <CEffectSet id="SquadHolyLightTargetSwitch">
-        <ValidatorArray value="SquadHolyLightTargetFilter"/>
-        <EditorCategories value="Race:Human"/>
-        <EffectArray value="SquadHolyLightHeal"/>
-        <EffectArray value="SquadHolyLightDamage"/>
-    </CEffectSet>
     <CEffectDamage id="SquadHolyLightDamage">
-        <EditorCategories value="Race:Human"/>
+        <EditorCategories value="Race:Terran"/>
         <AINotifyFlags index="HelpFriend" value="1"/>
         <CanBeBlocked value="1"/>
         <ResponseFlags index="Acquire" value="1"/>
@@ -138,7 +141,7 @@
         <SearchFlags index="OffsetAreaByAngle" value="1"/>
     </CEffectDamage>
     <CEffectModifyUnit id="SquadHolyLightHeal">
-        <EditorCategories value="Race:Human"/>
+        <EditorCategories value="Race:Terran"/>
         <VitalArray index="Life">
             <Change value="0">
                 <AccumulatorArray value="SquadHolyLightHeal"/>
@@ -196,7 +199,6 @@
         <EditorCategories value="Race:Creeps,AbilityorEffectType:Hero"/>
         <LaunchLocation Value="CasterUnit"/>
         <ImpactLocation Value="CasterUnit"/>
-        <SearchFilters value="-;player,allies,ward,mechanical,structure,wall,tree,Missile,debris,Dead,Hidden,invulnerable,immunity,Decaying,item"/>
         <TargetSorts>
             <SortArray value="TSDistanceToTarget"/>
         </TargetSorts>
@@ -209,6 +211,8 @@
         <Amount value="0">
             <AccumulatorArray value="ChainLightningDamage"/>
         </Amount>
+        <SearchFilters value="Visible;Player,Ally,Neutral,Missile,Stasis,Dead"/>
+        <SearchFlags index="SameCliff" value="0"/>
     </CEffectDamage>
     <CEffectCreatePersistent id="SquadChainLightningMainDelay">
         <EditorCategories value="Race:Orc,AbilityorEffectType:Hero"/>
@@ -275,7 +279,6 @@
         <EffectArray value="SquadWarStompDamage"/>
     </CEffectSet>
     <CEffectEnumArea id="SquadWarStompSearch">
-        <SearchFilters value="-;player,allies,neutral,air,ward,mechanical,structure,wall,tree,debris,Dead,Hidden,invulnerable,immunity,Decaying,item"/>
         <AreaArray Radius="3.9062" Effect="SquadWarStompImpactSet"/>
     </CEffectEnumArea>
     <CEffectDamage id="SquadDeathCoilDamage">
@@ -319,13 +322,14 @@
         <Amount value="0">
             <AccumulatorArray value="SquadFrostNovaAreaTargetDamage"/>
         </Amount>
+        <SearchFilters value="Visible;Player,Ally,Neutral,Dead,Invulnerable"/>
     </CEffectDamage>
     <CEffectApplyBehavior id="SquadFrostNovaBuffFrost" parent="SquadApplyBuff">
         <Behavior value="SquadFrostNovaChilled"/>
     </CEffectApplyBehavior>
     <CEffectEnumArea id="SquadFrostNovaSearch" parent="SquadAbilSearchRadiusExt">
-        <SearchFilters value="-;player,allies,ward,mechanical,structure,wall,tree,debris,Dead,invulnerable,immunity,Decaying,item"/>
         <AreaArray Radius="3.125" Effect="SquadFrostNovaSearchImpact"/>
+        <RevealerParams DetectFilters="Visible;Player,Ally,Neutral,Missile,Stasis,Dead"/>
     </CEffectEnumArea>
     <CEffectSet id="SquadFrostNovaSearchImpact">
         <EditorCategories value="Race:Terran"/>
@@ -338,6 +342,7 @@
         <Amount value="0">
             <AccumulatorArray value="SquadFrostNovaSpecialTargetDamage"/>
         </Amount>
+        <RevealerParams DetectFilters="Visible;Player,Ally,Neutral,Missile,Stasis,Dead"/>
     </CEffectDamage>
     <CEffectCancelOrder id="SquadWar3ForceStopChannelOrder">
         <ValidatorArray value="UnitIsChanneling"/>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
-<CValidatorCombine id="SquadDeathCoilDamageTarget">
+    <CValidatorCombine id="SquadDeathCoilDamageTarget">
         <Type value="And"/>
         <CombineArray value="SquadDeathCoilEnemyFilter"/>
     </CValidatorCombine>
@@ -14,13 +14,12 @@
     </CValidatorCombine>
     <CValidatorCombine id="SquadHolyLightDamageTarget">
         <Type value="And"/>
-        <CombineArray value="AHhb@EnemyFilter"/>
-        <CombineArray value="TargetIsUndeadOrDemonRace"/>
+        <CombineArray value="IsAlliance"/>
+        <Negate value="1"/>
     </CValidatorCombine>
     <CValidatorCombine id="SquadHolyLightHealTarget">
         <Type value="And"/>
-        <CombineArray value="AHhb@FriendFilter"/>
-        <CombineArray value="TargetIsNotUndeadNorDemonRace"/>
+        <CombineArray value="IsAlliance"/>
         <CombineArray value="TargetLifeNotFull"/>
     </CValidatorCombine>
     <CValidatorCombine id="SquadHolyLightTargetFilter">
