@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CValidatorUnitCompareVital id="LifeBelow75Percent">
+        <Compare value="LE"/>
+        <Type value="Fraction"/>
+        <Value value="0.75"/>
+    </CValidatorUnitCompareVital>
+    <CValidatorCombine id="MedicHealGunTargetSearch">
+        <Type value="And"/>
+        <CombineArray value="IsNotEnemy"/>
+        <CombineArray value="LifeBelow75Percent"/>
+    </CValidatorCombine>
     <CValidatorCombine id="SquadDeathCoilDamageTarget">
         <Type value="And"/>
         <CombineArray value="SquadDeathCoilEnemyFilter"/>
@@ -14,12 +24,22 @@
     </CValidatorCombine>
     <CValidatorCombine id="SquadHolyLightDamageTarget">
         <Type value="And"/>
-        <CombineArray value="IsAlliance"/>
+        <CombineArray value="IsNotEnemy"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="SquadMedicHealGunDamageTarget">
+        <Type value="And"/>
+        <CombineArray value="IsNotEnemy"/>
         <Negate value="1"/>
     </CValidatorCombine>
     <CValidatorCombine id="SquadHolyLightHealTarget">
         <Type value="And"/>
-        <CombineArray value="IsAlliance"/>
+        <CombineArray value="IsNotEnemy"/>
+        <CombineArray value="TargetLifeNotFull"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="SquadMedicHealGunHealTarget">
+        <Type value="And"/>
+        <CombineArray value="IsNotEnemy"/>
         <CombineArray value="TargetLifeNotFull"/>
     </CValidatorCombine>
     <CValidatorCombine id="SquadHolyLightTargetFilter">
@@ -211,7 +231,9 @@
         <Find value="1"/>
         <AbilLink value="SquadInfantry"/>
     </CValidatorUnitAbil>
-    <CValidatorPlayerAlliance id="IsAlliance"/>
+    <CValidatorUnitFilters id="IsNotEnemy">
+        <Filters value="-;Enemy"/>
+    </CValidatorUnitFilters>
     <CValidatorUnitComparePowerUserLevel id="IsInReactorPowerFeild">
         <Compare value="GE"/>
         <Behavior value="SquadReactorPowerSource"/>

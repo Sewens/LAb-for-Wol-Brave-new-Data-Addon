@@ -30,6 +30,111 @@
     <CEffectEnumArea default="1" id="SquadAbilSearchRadiusExt" parent="SquadAbilSearch">
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
+    <CEffectApplyBehavior id="SquadMedicHealGunApply">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadMedicHealGun"/>
+    </CEffectApplyBehavior>
+    <CEffectLaunchMissile id="SquadMedicHealGunLaunchMissile">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="SquadMedicHealGunApply"/>
+        <AmmoUnit value="SquadMdeicHealGunWeapon"/>
+        <Movers Link="RaynorRailGunSnipe"/>
+        <ValidatorArray index="0" value=""/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="SquadMedicHealGunDamageonTime">
+        <EditorCategories value="Race:Terran"/>
+        <AINotifyFlags index="HelpFriend" value="1"/>
+        <CanBeBlocked value="1"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Visibility value="Visible"/>
+        <Flags index="Notification" value="1"/>
+        <Type value="Fire"/>
+        <Amount value="1"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="OffsetAreaByAngle" value="1"/>
+    </CEffectDamage>
+    <CEffectModifyUnit id="SquadMedicHealGunHealonTime">
+        <EditorCategories value="Race:Terran"/>
+        <VitalArray index="Life">
+            <Change value="1"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectSwitch id="SquadMedicHealGunSearch">
+        <EditorCategories value="Race:Terran"/>
+        <CaseArray Validator="TargetisEnemy" Effect="SquadMedicHealGunLaunchMissile" FallThrough="1"/>
+        <CaseArray Validator="SquadMedicHealGunHealTarget" Effect="SquadMedicHealGunLaunchMissile"/>
+    </CEffectSwitch>
+    <CEffectSwitch id="SquadMedicHealGunSwitch">
+        <EditorCategories value="Race:Terran"/>
+        <CaseArray Validator="SquadMedicHealGunHealTarget" Effect="SquadMedicHealGunHealonTime"/>
+        <CaseArray Validator="TargetisEnemy" Effect="SquadMedicHealGunDamageonTime"/>
+    </CEffectSwitch>
+    <CEffectApplyBehavior id="SquadNeuralParasiteApplyBehaviorNormal">
+        <ValidatorArray index="0" value="IsNotWarpingIn"/>
+        <ValidatorArray value="IsNotPhaseShifted"/>
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Effect="NeuralParasiteLaunchMissile"/>
+        <Behavior value="SquadNeuralParasite"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadNeuralParasiteDroneCheck">
+        <ValidatorArray index="0" value="IsDrone"/>
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Effect="NeuralParasiteLaunchMissile"/>
+        <Behavior value="SquadNeuralParasiteDrone"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="SquadNeuralParasiteDroneRemoveCheck">
+        <ValidatorArray index="0" value="NeuralParasiteDroneChecks"/>
+        <EditorCategories value="Race:Terran"/>
+        <BehaviorLink value="NeuralParasiteDrone"/>
+    </CEffectRemoveBehavior>
+    <CEffectSet id="SquadNeuralParasiteExpireSet">
+        <EffectArray value="SquadNeuralParasiteLockOnRemove"/>
+    </CEffectSet>
+    <CEffectLaunchMissile id="SquadNeuralParasiteLaunchMissile">
+        <ValidatorArray index="0" value="noMarkers"/>
+        <ValidatorArray value="NotWarpingIn"/>
+        <ValidatorArray value="NotFrenzied"/>
+        <ValidatorArray value="HasNoCargo"/>
+        <ValidatorArray value="NotPointDefenseDrone"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Marker Link="Abil/NeuralParasiteMissile">
+            <MatchFlags index="Link" value="1"/>
+        </Marker>
+        <ImpactEffect value="SquadNeuralParasitePersistentSet"/>
+        <Flags index="Channeled" value="1"/>
+        <Flags index="PointFallback" value="0"/>
+        <AmmoUnit value="SquadNeuralParasiteWeapon"/>
+        <Movers Link="InfestorNeuralParasite" IfRangeLTE="500"/>
+    </CEffectLaunchMissile>
+    <CEffectRemoveBehavior id="SquadNeuralParasiteLockOnRemove">
+        <EditorCategories value=""/>
+        <WhichUnit Effect="NeuralParasiteLaunchMissile"/>
+        <BehaviorLink value="LockOnDisableAttack"/>
+    </CEffectRemoveBehavior>
+    <CEffectCreatePersistent id="SquadNeuralParasiteCreatePersistent">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichLocation Value="CasterUnit"/>
+        <Flags index="Channeled" value="1"/>
+        <InitialEffect value="SquadNeuralParasiteApplyBehaviorNormal"/>
+        <PeriodCount value="30"/>
+        <PeriodicValidator value="NeuralParasitePeriodicValidator"/>
+        <PeriodicEffectArray value="SquadNeuralParasitePersistentDestroy"/>
+        <PeriodicPeriodArray value="0.5"/>
+    </CEffectCreatePersistent>
+    <CEffectDestroyPersistent id="SquadNeuralParasitePersistentDestroy">
+        <EditorCategories value="Race:Terran"/>
+        <Effect value="NeuralParasitePersistent"/>
+        <Count value="1"/>
+        <Radius value="0.1"/>
+    </CEffectDestroyPersistent>
+    <CEffectSet id="SquadNeuralParasitePersistentSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadNeuralParasiteDroneCheck"/>
+        <EffectArray value="SquadNeuralParasiteCreatePersistent"/>
+        <EffectArray value="SquadNeuralParasiteLockOnRemove"/>
+    </CEffectSet>
     <CEffectSwitch id="SquadHolyLightSwitch">
         <EditorCategories value="Race:Terran"/>
         <CaseArray Validator="SquadHolyLightHealTarget" Effect="SquadHolyLightHeal"/>
@@ -148,7 +253,7 @@
             </Change>
         </VitalArray>
     </CEffectModifyUnit>
-    <CEffectApplyBehavior id="SquadStormBoltBuffPause" parent="SquadApplyBuff">
+    <CEffectApplyBehavior id="SquadStormBoltBuffApply" parent="SquadApplyBuff">
         <Behavior value="SquadStormBoltStunned"/>
     </CEffectApplyBehavior>
     <CEffectDamage id="SquadStormBoltDamage">
@@ -157,16 +262,18 @@
         <Amount value="0">
             <AccumulatorArray value="SquadWarStompDamage"/>
         </Amount>
+        <SearchFilters value="Visible;Player,Ally,Neutral,Missile,Stasis,Dead"/>
     </CEffectDamage>
     <CEffectLaunchMissile id="SquadStormBoltMissile" parent="SquadAbilMissile">
-        <EditorCategories value="Race:Human"/>
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
     </CEffectLaunchMissile>
     <CEffectSet id="SquadStormBoltMissileImpactSet">
         <ValidatorArray value="TargetIsVisible"/>
-        <EditorCategories value="Race:Human"/>
+        <EditorCategories value="Race:Terran"/>
         <CanBeBlocked value="1"/>
         <EffectArray value="SquadStormBoltDamage"/>
-        <EffectArray value="SquadStormBoltBuffPause"/>
+        <EffectArray value="SquadStormBoltBuffApply"/>
     </CEffectSet>
     <CEffectLaunchMissile id="SquadBreathofFireMissile">
         <LaunchLocation Effect="SquadBreathofFireTargetEnd" Value="TargetPoint"/>
@@ -194,11 +301,13 @@
         <Amount value="0">
             <AccumulatorArray value="SquadForkedLightningDamage"/>
         </Amount>
+        <SearchFilters value="Visible;Player,Ally,Neutral,Missile,Stasis,Dead,Invulnerable"/>
     </CEffectDamage>
     <CEffectEnumArea id="SquadForkedLightningSearch" parent="SquadAbilSearchRadiusExt">
-        <EditorCategories value="Race:Creeps,AbilityorEffectType:Hero"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Hero"/>
         <LaunchLocation Value="CasterUnit"/>
         <ImpactLocation Value="CasterUnit"/>
+        <SearchFilters value="Visible;Player,Ally,Neutral,Stasis,Dead,Invulnerable"/>
         <TargetSorts>
             <SortArray value="TSDistanceToTarget"/>
         </TargetSorts>
@@ -266,19 +375,24 @@
         <ExpireOffset value="0,-12.5,0"/>
     </CEffectCreatePersistent>
     <CEffectApplyBehavior id="SquadWarStompBuffPause" parent="SquadApplyBuff">
+        <EditorCategories value="Race:Terran"/>
         <Behavior value="SquadWarStompStunned"/>
     </CEffectApplyBehavior>
     <CEffectDamage id="SquadWarStompDamage">
+        <EditorCategories value="Race:Terran"/>
         <Type value="Sonic"/>
         <Amount value="0">
             <AccumulatorArray value="SquadWarStompDamage"/>
         </Amount>
     </CEffectDamage>
     <CEffectSet id="SquadWarStompImpactSet">
+        <EditorCategories value="Race:Terran"/>
         <EffectArray value="SquadWarStompBuffPause"/>
         <EffectArray value="SquadWarStompDamage"/>
     </CEffectSet>
     <CEffectEnumArea id="SquadWarStompSearch">
+        <EditorCategories value="Race:Terran"/>
+        <SearchFilters value="-;Player,Ally,Neutral,Air,Missile,Stasis,Dead,Stunned,AirUnit"/>
         <AreaArray Radius="3.9062" Effect="SquadWarStompImpactSet"/>
     </CEffectEnumArea>
     <CEffectDamage id="SquadDeathCoilDamage">
@@ -344,7 +458,7 @@
         </Amount>
         <RevealerParams DetectFilters="Visible;Player,Ally,Neutral,Missile,Stasis,Dead"/>
     </CEffectDamage>
-    <CEffectCancelOrder id="SquadWar3ForceStopChannelOrder">
+    <CEffectCancelOrder id="SquadForceStopChannelOrder">
         <ValidatorArray value="UnitIsChanneling"/>
         <EditorCategories value="Race:Terran"/>
         <Flags index="Uninterruptible" value="1"/>

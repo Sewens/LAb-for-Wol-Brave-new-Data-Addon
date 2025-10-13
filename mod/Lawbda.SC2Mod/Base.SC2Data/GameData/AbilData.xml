@@ -22,6 +22,7 @@
     </CAbilEffectInstant>
     <CAbilEffectTarget default="1" id="SquadHeroEffectTarget">
         <Name value="Name/##id##"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <!--PreEffectBehavior Behavior="SuppressInvisibility" Count="1"/-->
         <AbilityCategories index="Magic" value="1"/>
         <VeterancyLevelMin value="1"/>
@@ -41,6 +42,25 @@
             <Flags index="CreateDefaultButton" value="1"/>
         </CmdButtonArray>
         <CmdButtonArray index="Cancel" DefaultButtonFace="CmdCancel"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadNeuralParasite">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadNeuralParasiteLaunchMissile"/>
+        <Flags index="AbortOnAllianceChange" value="0"/>
+        <Cost>
+            <Vital index="Energy" value="100"/>
+            <Cooldown Link="Abil/Leech" Location="Unit" TimeUse="5"/>
+        </Cost>
+        <TargetFilters value="Visible;Self,Player,Ally,Neutral,Structure,Heroic,Stasis,Invulnerable"/>
+        <Range value="7"/>
+        <RangeSlop value="5"/>
+        <CancelableArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <AINotifyEffect value="SquadNeuralParasiteApplyBehaviorNormal"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadNeuralParasite" Requirements="UseNeuralParasite"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
     </CAbilEffectTarget>
     <CAbilEffectTarget id="SquadHolyLight" parent="SquadHeroEffectTarget">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Hero"/>
@@ -70,12 +90,10 @@
     <CAbilEffectInstant id="SquadWarStomp" parent="SquadHeroEffectInstant">
         <Alignment value="Negative"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <TechAliasArray value="_ABILITY_Stomp"/>
         <AbilityCategories index="CanBeDisabled" value="1"/>
         <AbilityCategories index="CanBeSilenced" value="1"/>
         <AbilityCategories index="CanBeIllusionDisabled" value="1"/>
         <TacticalAIFunc value="libGAwT_gf_AIThinkThunderClap"/>
-        <DataCollection value="AOw2"/>
         <Levels value="4"/>
         <Effect index="0" value="SquadWarStompSearch"/>
         <Cost index="0">
@@ -129,7 +147,7 @@
         <Levels value="3"/>
         <Effect index="0" value="SquadForkedLightningSearch"/>
         <Cost index="0">
-            <Vital index="Energy" value="110"/>
+            <Vital index="Energy" value="60"/>
             <Cooldown Location="Unit" TimeUse="11"/>
         </Cost>
         <Cost>
@@ -202,7 +220,6 @@
         <AINotifyEffect value="SquadFrostNovaFrostNova"/>
     </CAbilEffectTarget>
     <CAbilEffectTarget id="SquadBreathofFire" parent="SquadHeroEffectTarget">
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <TechAliasArray value="_ABILITY_BreathOfFire"/>
         <AbilityCategories index="CanBeDisabled" value="1"/>
         <AbilityCategories index="CanBeSilenced" value="1"/>
@@ -233,7 +250,7 @@
     </CAbilEffectTarget>
     <CAbilEffectTarget id="SquadShockwave" parent="SquadHeroEffectTarget">
         <Alignment value="Negative"/>
-        <EditorCategories value="Race:Orc,AbilityorEffectType:Hero"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Hero"/>
         <AbilityCategories index="CanBeDisabled" value="1"/>
         <AbilityCategories index="CanBeSilenced" value="1"/>
         <AbilityCategories index="CanBeIllusionDisabled" value="1"/>
@@ -3223,7 +3240,7 @@
         <PowerUserBehavior value="SquadWarpingIn"/>
     </CAbilWarpable>
     <CAbilEffectTarget id="SquadChronoBeam">
-        <EditorCategories value="AbilityorEffectType:Units"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Protoss"/>
         <Flags index="AutoCast" value="1"/>
         <Flags index="AutoCastOn" value="1"/>
         <Flags index="Smart" value="1"/>
@@ -3242,4 +3259,15 @@
         <AutoCastValidatorArray value="SentryChronoBeamTargetExlusion"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadChronoBeam"/>
     </CAbilEffectTarget>
+    <CAbilAttack id="SquadHealAttack">
+        <TargetMessage value="Abil/TargetMessage/SquadHealAttack"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadHealAttack"/>
+        <CmdButtonArray index="Towards" DefaultButtonFace="SquadHealAttackTowards"/>
+        <CmdButtonArray index="Barrage" DefaultButtonFace="SquadHealAttackGround"/>
+        <MinAttackSpeedMultiplier value="0.25"/>
+        <MaxAttackSpeedMultiplier value="128"/>
+        <Alignment value="Positive"/>
+        <AcquireFilters value="-;Dead,Hidden,Invulnerable,Benign"/>
+        <SmartFilters value="-;-"/>
+    </CAbilAttack>
 </Catalog>

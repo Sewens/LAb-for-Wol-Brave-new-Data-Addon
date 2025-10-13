@@ -1,12 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorBuff id="SquadNeuralParasite">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\BTN-Ability-Zerg-NeuralParasite.dds"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Enemy" value="1"/>
+        <RemoveValidatorArray value="NotHidden"/>
+        <RemoveValidatorArray value="NotFrenzied"/>
+        <RemoveValidatorArray value="NotVortexd"/>
+        <RemoveValidatorArray value="NotOracleStasisTrapped"/>
+        <BuffFlags index="Channeled" value="1"/>
+        <Duration value="15"/>
+        <FinalEffect value="SquadNeuralParasiteExpireSet"/>
+        <Player Value="Caster"/>
+        <AcquirePlayer Effect="NeuralParasiteLaunchMissile" Value="Target"/>
+        <Modification>
+            <StateFlags index="SuppressPassenger" value="1"/>
+            <AbilClassDisableArray index="CAbilSpecialize" value="1"/>
+            <AbilClassDisableArray index="CAbilTransport" value="1"/>
+            <AbilLinkDisableArray value="ArchonWarp"/>
+            <AbilLinkDisableArray value="SprayProtoss"/>
+            <AbilLinkDisableArray value="SprayTerran"/>
+            <AbilLinkDisableArray value="SprayZerg"/>
+            <AbilLinkDisableArray value="Clone"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadMedicHealGun">
+        <InfoIcon value="Assets\Textures\btn-ability-terran-advancedhealingai.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Enemy" value="1"/>
+        <BuffFlags index="Channeled" value="1"/>
+        <MaxStackCount value="8"/>
+        <MaxStackCountPerCaster value="1"/>
+        <Period value="0.0625"/>
+        <PeriodCount value="50"/>
+        <PeriodicEffect value="SquadMedicHealGunSwitch"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadNeuralParasiteDrone">
+        <Alignment value="Negative"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\BTN-Ability-Zerg-NeuralParasite.dds"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Period value="0.0625"/>
+        <PeriodicEffect value="SquadNeuralParasiteDroneRemoveCheck"/>
+        <Player Value="Caster"/>
+        <AcquirePlayer Effect="NeuralParasiteLaunchMissile" Value="Target"/>
+        <Modification>
+            <StateFlags index="SuppressPassenger" value="1"/>
+            <AbilClassDisableArray index="CAbilSpecialize" value="1"/>
+            <AbilClassDisableArray index="CAbilTransport" value="1"/>
+            <AbilLinkDisableArray value="ArchonWarp"/>
+        </Modification>
+    </CBehaviorBuff>
     <CBehaviorBuff id="SquadStormBoltStunned">
         <Alignment value="Negative"/>
         <InfoIcon value="Assets\Textures\war3_btn\renee_war3_btnstun.dds"/>
         <BehaviorCategories index="TeleportRemove" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <MaxStackCount value="0"/>
-        <InitialEffect value="SquadWar3ForceStopChannelOrder"/>
+        <Duration value="5"/>
+        <InitialEffect value="SquadForceStopChannelOrder"/>
         <Modification>
             <StateFlags index="Stun" value="1"/>
         </Modification>
@@ -17,7 +72,8 @@
         <BehaviorCategories index="TeleportRemove" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <MaxStackCount value="0"/>
-        <InitialEffect value="SquadWar3ForceStopChannelOrder"/>
+        <Duration value="5"/>
+        <InitialEffect value="SquadForceStopChannelOrder"/>
         <Modification>
             <StateFlags index="Stun" value="1"/>
         </Modification>

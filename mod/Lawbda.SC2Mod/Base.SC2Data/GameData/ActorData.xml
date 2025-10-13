@@ -24,7 +24,7 @@
         <On Terms="AnimBracketState.*.AfterOpening; AnimName BSD; !AnimPlayable Stand" Send="AnimBracketStop BSD"/>
     </CActorModel>
     <CActorSimple default="1" id="SquadSimpleCastAnim">
-        <?token id="anim" type="CAnimProps" value="Spell"?>
+        <?token id="anim" value="Spell"?>
         <On Terms="Abil.##id##.SourcePrepStart" Target="_Selectable" Send="AnimPlay spell ##anim## NonLooping -1.000000 -1.000000 1.000000 AsTimeScaleAbsolute"/>
         <On Terms="Abil.##id##.SourcePrepStart" Send="Create EffectSoundOneShot ##effectsound##"/>
         <On Terms="Abil.##id##.SourcePrepStart" Send="Create"/>
@@ -81,6 +81,137 @@
         <HeightOffset value="1.500000"/>
         <Text value="Button/Tooltip/##id##"/>
     </CActorText>
+    <CActorModel id="SquadHealAttackDummyCursorModel" parent="TerranCursorModel" abil="SquadHealAttack">
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death"/>
+        <On Terms="ActorCreation; ValidatePlayer PlayerIsZerg" Send="ModelSwap AttackDummyCursorModelZerg"/>
+        <On Terms="ActorCreation; ValidatePlayer PlayerIsTerran" Send="ModelSwap AttackDummyCursorModelTerran"/>
+        <On Terms="ActorCreation; ValidatePlayer PlayerIsProtoss" Send="ModelSwap AttackDummyCursorModelProtoss"/>
+        <On Terms="ModelSwap" Send="$Stand PlayForever"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Model value="AttackDummyCursorModel"/>
+    </CActorModel>
+    <CActorAction id="SquadNeuralParasite" parent="GenericAttack" effectImpact="SquadNeuralParasiteCreatePersistent" effectLaunch="SquadNeuralParasiteLaunchMissile">
+        <LaunchSiteOps Ops="SOpAttachHarnessStationary"/>
+        <LaunchSite value="NeuralParasiteTentacleLaunchSite"/>
+        <LaunchAttachQuery Methods="Weapon 1"/>
+        <LaunchAssets Sound="Infestor_NeuralParasiteAttackLaunch"/>
+        <ImpactSiteOps Ops="SOpAttachHarness SOpForwardLaunchGuide"/>
+        <ImpactSiteOpsReaction Ops="SOp2DRotation SOp180" HoldPosition="1" HoldRotation="1"/>
+        <ImpactAttachQuery Methods="Target 0"/>
+        <ImpactMap index="None" Sound="Infestor_NeuralParasiteAttackImpact"/>
+        <ShieldFlashType value="None"/>
+        <ActionFlags index="VictimRevealsAttacker" value="1"/>
+        <CombatRevealDurationType value="ByVictim"/>
+    </CActorAction>
+    <CActorAction id="SquadMedicHealGun" parent="GenericAttack" effectImpact="SquadMedicHealGunApplyBehaviorNormal" effectLaunch="SquadMedicHealGunLaunchMissile">
+        <LaunchSiteOps Ops="SOpAttachHarnessStationary"/>
+        <LaunchSite value="NeuralParasiteTentacleLaunchSite"/>
+        <LaunchAttachQuery Methods="Weapon 1"/>
+        <LaunchAssets Sound="Infestor_NeuralParasiteAttackLaunch"/>
+        <Missile value="SquadMdeicHealGunMissile"/>
+        <ImpactSiteOps Ops="SOpAttachHarness SOpForwardLaunchGuide"/>
+        <ImpactSiteOpsReaction Ops="SOp2DRotation SOp180" HoldPosition="1" HoldRotation="1"/>
+        <ImpactAttachQuery Methods="Target 0"/>
+        <ImpactMap index="None" Sound="Infestor_NeuralParasiteAttackImpact"/>
+        <ShieldFlashType value="None"/>
+        <ActionFlags index="VictimRevealsAttacker" value="1"/>
+        <CombatRevealDurationType value="ByVictim"/>
+    </CActorAction>
+    <CActorSound id="SquadNeuralParasiteBirthSound" parent="SoundOneShot">
+        <On Terms="Behavior.SquadNeuralParasite.On" Send="Create"/>
+        <On Terms="Behavior.NeuralParasiteEffect.On" Send="Create"/>
+        <Sound value="Infestor_AttackImpact_NP"/>
+    </CActorSound>
+    <CActorSound id="SquadMedicHealGunBirthSound" parent="SoundOneShot">
+        <On Terms="Behavior.SquadMedicHealGun.On" Send="Create"/>
+        <Sound value="Infestor_AttackImpact_NP"/>
+    </CActorSound>
+    <CActorMissile id="SquadNeuralParasiteMissile" parent="GenericAttackMissile" unitName="SquadNeuralParasiteWeapon">
+        <Supporter>
+            <Subject value="NeuralParasiteTentacle"/>
+            <Scope value="Caster"/>
+            <Actor value="Find"/>
+            <Effect value="NeuralParasiteLaunchMissile"/>
+        </Supporter>
+        <On Terms="MotionPhaseStart; MotionPhase" Target="::Supporter" Send="RefSet TentacleAttack ::Self"/>
+        <On Terms="MotionPhaseStart; MotionPhase" Target="::Supporter" Send="RefSetFromRequest ::scope.NeuralParasiteTarget _Unit Target Find"/>
+        <Model value="Invisible"/>
+    </CActorMissile>
+    <CActorMissile id="SquadMdeicHealGunMissile" parent="GenericAttackMissile" unitName="SquadMdeicHealGunWeapon">
+        <On Terms="ActorCreation" Send="SetTintColor {0,255,0 5.000000}"/>
+        <Model value="NovaPlasmaBlastWeapon"/>
+    </CActorMissile>
+    <CActorModel id="SquadNeuralParasiteModel" parent="ModelAddition">
+        <On Terms="Behavior.SquadNeuralParasite.On" Send="Create"/>
+        <On Terms="Behavior.SquadNeuralParasite.On" Target="::Main" Send="SetSoundSuffix _NP"/>
+        <On Terms="Behavior.SquadNeuralParasite.On" Target="::Main" Send="PlayUnitSound Ready"/>
+        <On Terms="Behavior.SquadNeuralParasite.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="Behavior.SquadNeuralParasite.Off; ValidateUnit SourceNotDead" Target="::Main" Send="SetSoundSuffix"/>
+        <HostSiteOps Ops="SOpAttachHead"/>
+        <Model value="NeuralParasiteModel"/>
+    </CActorModel>
+    <CActorModel id="SquadMedicHealGunModel" parent="ModelAddition">
+        <On Terms="Behavior.SquadMedicHealGun.On" Send="Create"/>
+        <On Terms="Behavior.SquadMedicHealGun.On" Target="::Main" Send="SetSoundSuffix _NP"/>
+        <On Terms="Behavior.SquadMedicHealGun.On" Target="::Main" Send="PlayUnitSound Ready"/>
+        <On Terms="Behavior.SquadMedicHealGun.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="Behavior.SquadMedicHealGun.Off; ValidateUnit SourceNotDead" Target="::Main" Send="SetSoundSuffix"/>
+        <HostSiteOps Ops="SOpAttachHead"/>
+        <Model value="QueenClassicParasiteMissile"/>
+    </CActorModel>
+    <CActorRange id="SquadNeuralParasiteRange" parent="RangeAbil" abil="SquadNeuralParasite">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorSound id="SquadNeuralParasiteSound" parent="SoundOneShot">
+        <On Terms="Abil.SquadNeuralParasite.SourceCastStart" Send="Create"/>
+        <Host Subject="NeuralParasiteModel"/>
+        <Sound value="Infestor_AttackLaunch_NP"/>
+    </CActorSound>
+    <CActorModel id="SquadNeuralParasiteTentacle">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.SquadNeuralParasiteLaunchMissile.Start; At Caster" Send="Create"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Attack Stand Death"/>
+        <On Terms="ActorCreation" Send="RefSet ::scope.Tentacle ::Self"/>
+        <On Terms="ActorCreation" Send="SetOpacity"/>
+        <On Terms="ActorCreation" Send="SetOpacity 1.000000 0.500000"/>
+        <On Terms="Effect.NeuralParasitePersistent.Start" Send="Create SiphonTentacleImpactHoldingSite"/>
+        <On Terms="Effect.NeuralParasitePersistent.Start" Send="RefSetFromRequest TentacleAttack SiphonTentacleImpactHoldingSite"/>
+        <On Terms="Abil.NeuralParasite.SourceChannelStop" Send="AnimBracketStop BSD"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Target="_Selectable" Send="CombatRevealComplete NeuralParasite"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+        <HostForProps Subject="NeuralParasiteTentacleLaunchHostModel" Scope="Caster" Actor="Find"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachWeapon01Soft"/>
+        <Model value="NeuralParasiteTentacle"/>
+        <HostedAttaches Name="TentacleAttack">
+            <AttachQuery Methods="Weapon"/>
+        </HostedAttaches>
+    </CActorModel>
+    <CActorModel id="SquadNeuralParasiteTentacleImpactHostModel" parent="ModelAnimationStyleContinuous">
+        <Inherits index="CloakEffect" value="1"/>
+        <FogVisibility value="Hidden"/>
+        <On Terms="Effect.SquadNeuralParasiteLaunchMissile.Start; At Caster" Send="Create"/>
+        <On Terms="Abil.NeuralParasite.SourceChannelStop" Send="AnimBracketStop BSD"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+        <On Terms="Signal.*.ImpactCreated" Send="RefSet ::Host SiphonTentacleImpactHoldingSite"/>
+        <On Terms="Signal.*.ImpactCreated" Send="HostSiteOpsSet ::Host"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachWeapon01Soft"/>
+        <Model value="NeuralParasiteTentacleImpactHostModel"/>
+    </CActorModel>
+    <CActorModel id="SquadNeuralParasiteTentacleLaunchHostModel" parent="ModelAnimationStyleContinuous">
+        <Inherits index="CloakEffect" value="1"/>
+        <FogVisibility value="Hidden"/>
+        <On Terms="Effect.SquadNeuralParasiteLaunchMissile.Start; At Caster" Send="Create"/>
+        <On Terms="Abil.NeuralParasite.SourceChannelStop" Send="AnimBracketStop BSD"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachWeapon01Soft"/>
+        <Model value="NeuralParasiteTentacleLaunchHostModel"/>
+        <HostFor2ndVisibilityTest Subject="NeuralParasiteTentacleImpactHostModel" Actor="Find"/>
+    </CActorModel>
     <CActorModel id="SquadGenericAttackImpactModel">
         <Flags index="SuppressCreationErrors" value="1"/>
         <Flags index="SuppressSaveLoad" value="1"/>
@@ -108,7 +239,7 @@
     </CActorModel>
     <CActorSimple id="SquadStormBoltCasterAnim" parent="SquadSimpleCastAnim" anim="Spell,Throw">
         <On index="0" Terms="Abil.SquadStormBolt.SourcePrepStart" Target="_Selectable" Send="AnimPlay spell Spell,Throw NonLooping -1.000000 -1.000000 1.000000 AsTimeScaleAbsolute"/>
-        <On index="1" Terms="Abil.SquadStormBolt.SourcePrepStart" Send="Create EffectSoundOneShot ##effectsound##"/>
+        <On index="1" Terms="Abil.SquadStormBolt.SourcePrepStart" Send="Create SoundOneShot"/>
         <On index="2" Terms="Abil.SquadStormBolt.SourcePrepStart" Send="Create"/>
         <On index="3" Terms="Abil.SquadStormBolt.SourcePrepStop" Send="Destroy"/>
     </CActorSimple>
@@ -118,18 +249,18 @@
     <CActorAction id="SquadStromBoltMissileAttackAction" parent="SquadGenericMissileAttack" effectImpact="SquadStormBoltMissileImpactSet" effectLaunch="SquadStormBoltMissile" missile="SquadStormBoltMissileArt"/>
     <CActorSimple id="SquadBreathofFireCasterAnim" parent="SquadSimpleCastAnim" anim="Spell,Slam">
         <On index="0" Terms="Abil.SquadBreathofFire.SourcePrepStart" Target="_Selectable" Send="AnimPlay spell Spell,Slam NonLooping -1.000000 -1.000000 1.000000 AsTimeScaleAbsolute"/>
-        <On index="1" Terms="Abil.SquadBreathofFire.SourcePrepStart" Send="Create EffectSoundOneShot ##effectsound##"/>
+        <On index="1" Terms="Abil.SquadBreathofFire.SourcePrepStart" Send="Create SoundOneShot"/>
         <On index="2" Terms="Abil.SquadBreathofFire.SourcePrepStart" Send="Create"/>
         <On index="3" Terms="Abil.SquadBreathofFire.SourcePrepStop" Send="Destroy"/>
     </CActorSimple>
     <CActorSimple id="SquadForkedLightningCasterAnim" parent="SquadSimpleCastAnim">
         <On index="0" Terms="Abil.SquadForkedLightning.SourcePrepStart" Target="_Selectable" Send="AnimPlay spell Spell NonLooping -1.000000 -1.000000 1.000000 AsTimeScaleAbsolute"/>
-        <On index="1" Terms="Abil.SquadForkedLightning.SourcePrepStart" Send="Create EffectSoundOneShot ##effectsound##"/>
+        <On index="1" Terms="Abil.SquadForkedLightning.SourcePrepStart" Send="Create SoundOneShot"/>
         <On index="2" Terms="Abil.SquadForkedLightning.SourcePrepStart" Send="Create"/>
         <On index="3" Terms="Abil.SquadForkedLightning.SourcePrepStop" Send="Destroy"/>
     </CActorSimple>
     <CActorAction id="SquadForkedLightningAttack" parent="GenericAttack" effectAttack="SquadForkedLightningDamage">
-        <LaunchSiteOps Ops="$weaponStationary"/>
+        <LaunchSiteOps Ops="SOpAttachWeapon"/>
         <Beam value="SquadForkedLightningBeamArt"/>
         <BeamScope value="Caster"/>
         <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeNoVizEnhance SOpForwardLaunchGuide"/>
@@ -142,7 +273,7 @@
     </CActorBeamSimple>
     <CActorSimple id="SquadChainLightningCasterAnim" parent="SquadSimpleCastAnim" anim="Spell,Chain,Lighting">
         <On index="0" Terms="Abil.SquadChainLightning.SourcePrepStart" Target="_Selectable" Send="AnimPlay spell Spell,Chain,Lighting NonLooping -1.000000 -1.000000 1.000000 AsTimeScaleAbsolute"/>
-        <On index="1" Terms="Abil.SquadChainLightning.SourcePrepStart" Send="Create EffectSoundOneShot ##effectsound##"/>
+        <On index="1" Terms="Abil.SquadChainLightning.SourcePrepStart" Send="Create SoundOneShot"/>
         <On index="2" Terms="Abil.SquadChainLightning.SourcePrepStart" Send="Create"/>
         <On index="3" Terms="Abil.SquadChainLightning.SourcePrepStop" Send="Destroy"/>
     </CActorSimple>
@@ -155,7 +286,7 @@
     </CActorAction>
     <CActorSimple id="SquadShockwaveCasterAnim" parent="SquadSimpleCastAnim" anim="Attack,Slam">
         <On index="0" Terms="Abil.SquadShockwave.SourcePrepStart" Target="_Selectable" Send="AnimPlay spell Attack,Slam NonLooping -1.000000 -1.000000 1.000000 AsTimeScaleAbsolute"/>
-        <On index="1" Terms="Abil.SquadShockwave.SourcePrepStart" Send="Create EffectSoundOneShot ##effectsound##"/>
+        <On index="1" Terms="Abil.SquadShockwave.SourcePrepStart" Send="Create SoundOneShot"/>
         <On index="2" Terms="Abil.SquadShockwave.SourcePrepStart" Send="Create"/>
         <On index="3" Terms="Abil.SquadShockwave.SourcePrepStop" Send="Destroy"/>
     </CActorSimple>
@@ -165,6 +296,32 @@
     </CActorMissile>
     <CActorAction id="SquadShockwaveMissileAttackAction" parent="SquadGenericMissileAttack" effectImpact="SquadShockwaveMissileImpactSet" effectLaunch="SquadShockwaveMissile" missile="SquadShockwaveMissileArt"/>
     <CActorSimple id="SquadWarStompCasterAnim" parent="SquadSimpleCastAnimWcArt" anim="Spell,Slam"/>
+    <CActorModel id="SquadWarStompBuffArt">
+        <Inherits index="Scale" value="1"/>
+        <On Terms="BehaviorStackAlias.SquadWarStompStunned.On" Send="Create"/>
+        <On Terms="BehaviorStackAlias.SquadWarStompStunned.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation" Send="Create SoundOneShot"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="$overhead"/>
+        <!--On Terms="ActorCreation" Send="Create SoundLooped"/-->
+        <AutoScaleFromSelectionFactor value="1.000000"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorModel id="SquadWarStompCaster">
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="ActorCreation; AnimPlayable Birth" Send="AnimBracketStart BSD Birth Stand Death ContentPlayOnce"/>
+        <On Terms="ActorCreation; !AnimPlayable Birth" Send="AnimBracketStart BSD Spell Stand Death ContentPlayOnce"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <AutoScaleFromSelectionFactor value="1.000000"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
     <CActorSimple id="SquadDeathCoilCasterAnim" parent="SquadSimpleCastAnim"/>
     <CActorMissile id="SquadDeathCoilMissileArt" parent="SquadMissile" unitName="SquadDeathCoilMissile">
         <Model value="SquadDeathCoilMissileArt"/>
@@ -6253,6 +6410,17 @@
         <HostSiteOps Ops="SOpAttachOverhead"/>
         <Model value="RegenImpact"/>
     </CActorModel>
+    <CActorModel id="SquadMedicHealGunRegenImpact" parent="ModelAnimationStyleOneShot">
+        <On Terms="UnitRegen.SquadMedicHealGun.LifeOn" Send="Create"/>
+        <On Terms="Behavior.SquadMedicHealGun.On" Send="Create"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart Regen Birth"/>
+        <On Terms="Behavior.SquadMedicHealGun.Off" Send="AnimBracketStop Regen"/>
+        <On Terms="Behavior.SquadMedicHealGun.Off" Send="Destroy"/>
+        <On Terms="UnitRegen.SquadMedicHealGun.LifeOff" Send="Destroy"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachHardPoint"/>
+        <Model value="ReaperHeal"/>
+    </CActorModel>
     <CActorSound id="SquadPredatorRetributionFieldImpactSound" parent="SoundOneShot">
         <On Terms="Effect.SquadPredatorRetributionFieldDamage.Start" Send="Create"/>
         <Sound value="RetributionFieldImpactSound2"/>
@@ -7567,7 +7735,7 @@
         <ImpactPhysics Name="JavelinImpact" MatchKeys="Basic" Physics="ThorAAAttackForce"/>
     </CActorAction>
     <CActorMissile id="SquadThorAAAttackMissile" parent="GenericAttackMissile" unitName="SquadThorAAWeapon">
-        <Model value="ThorAAWeapon"/>
+        <Model value="SquadStormBoltMissileArt"/>
     </CActorMissile>
     <CActorAction id="SquadThorAttack" parent="GenericAttack" effectAttack="SquadThorHammerDamage">
         <LaunchAttachQuery Methods="AMFilterWeaponSetA0 AMPatternThor"/>

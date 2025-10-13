@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CUnit id="SquadNeuralParasiteWeapon" parent="MISSILE_INVULNERABLE">
+        <Race value="Zerg"/>
+        <Mover value="InfestorNeuralParasite"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
     <CUnit id="SquadChainLightningMissile"/>
+    <CUnit id="SquadMdeicHealGunWeapon" parent="MISSILE_INVULNERABLE">
+        <Race value="Terr"/>
+        <Mover value="InfestorNeuralParasite"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
     <CUnit id="SquadStormBoltMissile">
         <Race value="Terr"/>
         <Mover value="StormBoltMissile"/>
@@ -3262,7 +3272,7 @@
         <AbilArray Link="attack"/>
         <AbilArray Link="move"/>
         <AbilArray Link="stop"/>
-        <AbilArray Link="SquadBreathofFire"/>
+        <AbilArray Link="SquadForkedLightning"/>
         <WeaponArray Link="Predator"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -3272,7 +3282,7 @@
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="AcquireMove" Type="AbilCmd" AbilCmd="move,AcquireMove" Row="0" Column="4"/>
             <LayoutButtons Face="SquadPredatorLightningField" Type="Passive" Row="2" Column="0"/>
-            <LayoutButtons Face="SquadBreathofFire" Type="AbilCmd" AbilCmd="SquadBreathofFire,Execute" Row="1" Column="0"/>
+            <LayoutButtons Face="SquadForkedLightning" Type="AbilCmd" AbilCmd="SquadForkedLightning,Execute" Row="1" Column="0"/>
         </CardLayouts>
         <Radius value="0.625"/>
         <SeparationRadius value="0.625"/>
@@ -4340,10 +4350,9 @@
         <DamageDealtXP value="1"/>
         <DamageTakenXP value="1"/>
         <KillXP value="15"/>
-        <AbilArray Link="attack"/>
+        <AbilArray Link="SquadHealAttack"/>
         <AbilArray Link="stop"/>
         <AbilArray Link="move"/>
-        <AbilArray Link="SquadMedicHeal"/>
         <AbilArray Link="SquadInfantry"/>
         <AbilArray Link="QueueMagazine"/>
         <AbilArray Link="DisbandSquad"/>
@@ -4352,18 +4361,9 @@
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
             <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
-            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="SquadHealAttack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="AcquireMove" Type="AbilCmd" AbilCmd="move,AcquireMove" Row="0" Column="4"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
-            <LayoutButtons Face="MedicHeal" Type="AbilCmd" AbilCmd="SquadMedicHeal,Execute" Row="2" Column="0"/>
-            <LayoutButtons>
-                <Face value="StabilizerMedPacks"/>
-                <Type value="Passive"/>
-                <AbilCmd value="255,255"/>
-                <Requirements value="UseStabilizerMedpacks"/>
-                <Row value="2"/>
-                <Column value="1"/>
-            </LayoutButtons>
             <LayoutButtons Face="Enband" Type="AbilCmd" AbilCmd="AddMedicToSquad,Execute" Row="1" Column="4"/>
             <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="3"/>
             <LayoutButtons Face="SquadGiftTooltips" Type="Submenu" SubmenuCardId="Gift" Row="1" Column="2"/>
@@ -4399,7 +4399,7 @@
             <Charge Link="Medic/Revive"/>
             <Cooldown Link="Medic/Revive"/>
         </ReviveInfoBase>
-        <WeaponArray Link="MedicFlashGrenade"/>
+        <WeaponArray Link="SquadMedicHealGun"/>
     </CUnit>
     <CUnit id="SquadMercCompound">
         <DeathRevealRadius value="3"/>
