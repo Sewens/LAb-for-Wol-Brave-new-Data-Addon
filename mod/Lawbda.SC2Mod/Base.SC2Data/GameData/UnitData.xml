@@ -3272,8 +3272,10 @@
         <AbilArray Link="attack"/>
         <AbilArray Link="move"/>
         <AbilArray Link="stop"/>
-        <AbilArray Link="SquadForkedLightning"/>
-        <WeaponArray Link="Predator"/>
+        <AbilArray Link="SquadInfantry"/>
+        <AbilArray Link="QueueMagazine"/>
+        <AbilArray Link="DisbandSquad"/>
+        <WeaponArray Link="CaptainPredatorKaiserBlades"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
@@ -3281,18 +3283,18 @@
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="AcquireMove" Type="AbilCmd" AbilCmd="move,AcquireMove" Row="0" Column="4"/>
-            <LayoutButtons Face="SquadPredatorLightningField" Type="Passive" Row="2" Column="0"/>
-            <LayoutButtons Face="SquadForkedLightning" Type="AbilCmd" AbilCmd="SquadForkedLightning,Execute" Row="1" Column="0"/>
+            <LayoutButtons Face="LootMarsaraHound" Type="Passive" Row="1" Column="0"/>
+            <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="3"/>
         </CardLayouts>
-        <Radius value="0.625"/>
-        <SeparationRadius value="0.625"/>
-        <InnerRadius value="0.5"/>
+        <Radius value="1"/>
+        <SeparationRadius value="1"/>
+        <InnerRadius value="1"/>
         <CargoSize value="2"/>
         <ScoreMake value="300"/>
         <ScoreKill value="600"/>
         <ScoreResult value="BuildOrder"/>
         <SubgroupPriority value="8"/>
-        <MinimapRadius value="0.625"/>
+        <MinimapRadius value="1"/>
         <EditorCategories value="ObjectType:Hero,ObjectFamily:Campaign"/>
         <TacticalAI value=""/>
         <LeaderAlias value=""/>
@@ -3319,6 +3321,9 @@
         <ShieldsMax value="100"/>
         <ShieldRegenRate value="5"/>
         <BehaviorArray Link="SquadMissileTurretDetector11"/>
+        <BehaviorArray Link="SquadJump"/>
+        <BehaviorArray Link="LootOnDealDamage"/>
+        <Mover value="CliffJumper"/>
     </CUnit>
     <CUnit id="AdvanceEngineBay">
         <DeathTime value="-1"/>
@@ -5477,7 +5482,7 @@
         <ScoreResult value="BuildOrder"/>
         <SubgroupPriority value="18"/>
         <MinimapRadius value="1"/>
-        <EditorCategories value="ObjectType:Unit,ObjectFamily:Melee"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
         <TacticalAI value="Ultralisk"/>
         <TacticalAIThink value="AIThinkUltralisk"/>
         <GlossaryCategory value="Unit/Category/ZergUnits"/>

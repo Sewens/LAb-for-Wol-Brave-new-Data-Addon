@@ -62,7 +62,7 @@
     <CActorModel default="1" id="SquadFloatingTextActorDefault">
         <?token id="effectCondition" value="Bogus"?>
         <?token id="actorCreate" value="Bogus"?>
-        <On Terms="Effect.##effectCondition##.Start" Send="Create"/>
+        <On Terms="Effect.##effectCondition##.Start; At Target" Send="Create"/>
         <On Terms="ActorCreation" Send="Create ##actorCreate##"/>
         <On Terms="ActorCreation" Send="TimerSet 3.000000 Die"/>
         <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
@@ -340,7 +340,7 @@
     <CActorModel id="SquadFrostNovaEffectArt" parent="SquadEffectArt">
         <On Terms="Effect.SquadFrostNovaFrostNova.Start" Send="Create"/>
     </CActorModel>
-    <CActorAction id="CaptainPredatorAttack" parent="GenericAttack" effectAttack="CaptainPredatorTitaniumClaws">
+    <CActorAction id="CaptainPredatorAttack" parent="GenericAttack" effectAttack="CaptainPredatorKaiserBladesDamage">
         <LaunchAttachQuery Methods="Weapon"/>
         <LaunchAssets Sound="Predator_AttackLaunch"/>
         <LaunchSound value="GenericAttackSound"/>
@@ -500,6 +500,14 @@
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachCenter"/>
         <Model value="WraithEvade"/>
+    </CActorModel>
+    <CActorModel id="CaptainPredatorTissueAssimilationModel" parent="ModelAnimationStyleOneShot">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.CaptainPredatorTissueAssimilation.Start" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead" HoldRotation="1"/>
+        <Model value="TissueAssimilationModel"/>
     </CActorModel>
     <CActorModel id="YellowScannerChronoBeamImpact" parent="ModelAnimationStyleContinuous">
         <On Terms="Behavior.YellowScannerChronoBeam.On" Send="Create"/>
@@ -5249,37 +5257,38 @@
         <Model value="ScannerSweepModel"/>
     </CActorModel>
     <CActorModel id="FloatingLootResourceTier1" parent="SquadFloatingTextActorDefault" effectCondition="LootonDealDamageTier1" actorCreate="LootResourceTextTier1">
-        <HostSiteOps Ops="SOpAttachOriginStationary"/>
-    </CActorModel>
-    <!--
-    <CActorModel id="FloatingLootResourceTier1">
         <HostSiteOps Ops="SOpAttachOverhead"/>
-        <Model value="Invisible"/>
-        <Aliases value="_FloatingText"/>
-        <On Terms="Effect.Tier1LootWrapper.Start" Send="Create LootResourceTextTier1"/>
-        <On Terms="ActorCreation" Send="Create LootResourceTextTier1"/>
-        <On Terms="ActorCreation" Send="TimerSet 3.000000 Die"/>
-        <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
+        <Host Scope="Effect" Actor="Implicit" Effect="LootonDealDamageTier1"/>
     </CActorModel>
--->
-    <!--
-    <CActorModel id="FloatingClimaxImpact" parent="FloatingTextActorDefault" effectPickup="LootonDealDamageTier1" actorCreate="">
-        <On index="0" Terms="Effect.SCVFusionCutter.Start" Send="Create"/>
-        <On index="1" Terms="ActorCreation" Send="Create ClimaxImpact01"/>
-        <On index="2" Terms="ActorCreation" Send="TimerSet 0.860000 Die"/>
-    </CActorModel>
--->
+    <!--    <CActorModel id="FloatingLootResourceTier1">-->
+    <!--        <HostSiteOps Ops="SOpAttachOverhead"/>-->
+    <!--        <Model value="Invisible"/>-->
+    <!--        <Aliases value="_FloatingText"/>-->
+    <!--        <On Terms="Effect.Tier1LootWrapper.Start" Send="Create LootResourceTextTier1"/>-->
+    <!--        <On Terms="ActorCreation" Send="Create LootResourceTextTier1"/>-->
+    <!--        <On Terms="ActorCreation" Send="TimerSet 3.000000 Die"/>-->
+    <!--        <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>-->
+    <!--    </CActorModel>-->
+    <!--    <CActorModel id="FloatingClimaxImpact" parent="FloatingTextActorDefault" effectPickup="LootonDealDamageTier1" actorCreate="">-->
+    <!--        <On index="0" Terms="Effect.SCVFusionCutter.Start" Send="Create"/>-->
+    <!--        <On index="1" Terms="ActorCreation" Send="Create ClimaxImpact01"/>-->
+    <!--        <On index="2" Terms="ActorCreation" Send="TimerSet 0.860000 Die"/>-->
+    <!--    </CActorModel>-->
     <CActorModel id="FloatingLootResourceTier2" parent="SquadFloatingTextActorDefault" effectCondition="LootonDealDamageTier2" actorCreate="LootResourceTextTier2">
-        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Host Scope="Effect" Actor="Implicit" Effect="LootonDealDamageTier2"/>
     </CActorModel>
     <CActorModel id="FloatingLootResourceTier3" parent="SquadFloatingTextActorDefault" effectCondition="LootonDealDamageTier3" actorCreate="LootResourceTextTier3">
-        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Host Scope="Effect" Actor="Implicit" Effect="LootonDealDamageTier3"/>
     </CActorModel>
     <CActorModel id="FloatingLootResourceTier4" parent="SquadFloatingTextActorDefault" effectCondition="LootonDealDamageTier4" actorCreate="LootResourceTextTier4">
-        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Host Scope="Effect" Actor="Implicit" Effect="LootonDealDamageTier4"/>
     </CActorModel>
     <CActorModel id="FloatingLootResourceTier5" parent="SquadFloatingTextActorDefault" effectCondition="LootonDealDamageTier5" actorCreate="LootResourceTextTier5">
-        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Host Scope="Effect" Actor="Implicit" Effect="LootonDealDamageTier5"/>
     </CActorModel>
     <CActorText id="ClimaxImpact01" parent="PickupTextDefault"/>
     <CActorUnit id="SquadGhostAcademy" parent="TerranBuildingEx" unitName="SquadGhostAcademy">
@@ -5351,21 +5360,11 @@
             <Image value="Assets\Textures\Wireframe-Terran-hercules.dds"/>
         </Wireframe>
     </CActorUnit>
-    <CActorText id="LootResourceTextTier3" parent="SquadFloatingTextDefault">
-        <Host Subject="_FloatingText"/>
-    </CActorText>
-    <CActorText id="LootResourceTextTier2" parent="SquadFloatingTextDefault">
-        <Host Subject="_FloatingText"/>
-    </CActorText>
-    <CActorText id="LootResourceTextTier1" parent="SquadFloatingTextDefault">
-        <Host Subject="_FloatingText"/>
-    </CActorText>
-    <CActorText id="LootResourceTextTier4" parent="SquadFloatingTextDefault">
-        <Host Subject="_FloatingText"/>
-    </CActorText>
-    <CActorText id="LootResourceTextTier5" parent="SquadFloatingTextDefault">
-        <Host Subject="_FloatingText"/>
-    </CActorText>
+    <CActorText id="LootResourceTextTier3" parent="SquadFloatingTextDefault"/>
+    <CActorText id="LootResourceTextTier2" parent="SquadFloatingTextDefault"/>
+    <CActorText id="LootResourceTextTier1" parent="SquadFloatingTextDefault"/>
+    <CActorText id="LootResourceTextTier4" parent="SquadFloatingTextDefault"/>
+    <CActorText id="LootResourceTextTier5" parent="SquadFloatingTextDefault"/>
     <CActorUnit id="SquadMulelisk" parent="GenericUnitStandard" unitName="SquadMulelisk">
         <Aliases value="_UnitMedium"/>
         <Macros value="CarryAnim"/>
@@ -6226,7 +6225,7 @@
         <Aliases value="_UnitMedium"/>
         <Macros value="UnloadDropAnim"/>
         <Model value="MiazmaticBlackOPSPredator"/>
-        <Scale value="1.250000"/>
+        <Scale value="1.750000"/>
         <Baselines index="Walk" AnimProps="Walk,Fast"/>
         <BuildModel value="MiazmaticBlackOPSPredator"/>
         <DeathArray index="Normal" ModelLink="PredatorDeath" SoundLink="Predator_Explode"/>

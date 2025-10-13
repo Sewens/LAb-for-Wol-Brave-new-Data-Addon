@@ -30,6 +30,44 @@
     <CEffectEnumArea default="1" id="SquadAbilSearchRadiusExt" parent="SquadAbilSearch">
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
+    <CEffectSet id="CaptainPredatorKaiserBlades">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="CaptainPredatorKaiserBladesSearch"/>
+        <EffectArray value="CaptainPredatorKaiserBladesDamage"/>
+        <EffectArray value="CaptainPredatorTissueAssimilation"/>
+        <EffectArray value="CaptainPredatorUltraliskOutOfCombatRBSet"/>
+    </CEffectSet>
+    <CEffectDamage id="CaptainPredatorKaiserBladesDamage" parent="DU_WEAP">
+        <KindSplash value="Melee"/>
+        <Amount value="15"/>
+        <Death value="Eviscerate"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="CaptainPredatorKaiserBladesSearch">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <ExcludeArray Effect="HotSUltraliskKaiserBlades" Value="Target"/>
+        <SearchFilters value="Ground,Visible;Self,Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Arc="180" Radius="2" Effect="CaptainPredatorKaiserBladesSecondaryDamageSet"/>
+        <SearchFlags index="OffsetByUnitRadius" value="1"/>
+    </CEffectEnumArea>
+    <CEffectDamage id="CaptainPredatorKaiserBladesSecondaryDamage" parent="DU_WEAP">
+        <ValidatorArray value="NotHaveHotSMonarchBlades"/>
+        <EditorCategories value="Race:Terran"/>
+        <Amount value="5"/>
+        <Death value="Eviscerate"/>
+    </CEffectDamage>
+    <CEffectSet id="CaptainPredatorKaiserBladesSecondaryDamageSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="CaptainPredatorKaiserBladesSecondaryDamage"/>
+        <EffectArray value="CaptainPredatorKaiserBladesSecondaryUpgradeDamage"/>
+        <EffectArray value="CaptainPredatorTissueAssimilationSecondary"/>
+    </CEffectSet>
+    <CEffectDamage id="CaptainPredatorKaiserBladesSecondaryUpgradeDamage" parent="DU_WEAP">
+        <ValidatorArray value="HaveHotSMonarchBlades"/>
+        <EditorCategories value="Race:Terran"/>
+        <Amount value="5"/>
+        <Death value="Eviscerate"/>
+    </CEffectDamage>
     <CEffectApplyBehavior id="SquadMedicHealGunApply">
         <EditorCategories value="Race:Terran"/>
         <Behavior value="SquadMedicHealGun"/>
@@ -630,6 +668,37 @@
         <Flags index="Kill" value="1"/>
         <Death value="Remove"/>
     </CEffectDamage>
+    <CEffectModifyUnit id="CaptainPredatorTissueAssimilation">
+        <ValidatorArray value="HaveHotSTissueAssimilation"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactUnit Value="Caster"/>
+        <VitalArray index="Life">
+            <Change value="10"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectModifyUnit id="CaptainPredatorTissueAssimilationSecondary">
+        <ValidatorArray value="HaveHotSTissueAssimilation"/>
+        <EditorCategories value="Race:Terran"/>
+        <ImpactUnit Value="Caster"/>
+        <VitalArray index="Life">
+            <Change value="2"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectRemoveBehavior id="CaptainPredatorOutOfCombat2RB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="UltraliskOutOfCombat2"/>
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="CaptainPredatorOutOfCombat3RB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="UltraliskOutOfCombat3"/>
+    </CEffectRemoveBehavior>
+    <CEffectSet id="CaptainPredatorUltraliskOutOfCombatRBSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="CaptainPredatorOutOfCombat2RB"/>
+        <EffectArray value="CaptainPredatorOutOfCombat3RB"/>
+    </CEffectSet>
     <CEffectApplyBehavior id="YellowScannerChronoBeam">
         <EditorCategories value=""/>
     </CEffectApplyBehavior>
