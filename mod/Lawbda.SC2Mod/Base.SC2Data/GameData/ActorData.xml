@@ -81,6 +81,46 @@
         <HeightOffset value="1.500000"/>
         <Text value="Button/Tooltip/##id##"/>
     </CActorText>
+    <CActorSimple id="SquadNydusKnockbackImpactAnim">
+        <On Terms="Behavior.SquadNydusKnockbackMPKnockback.On" Send="Create"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimClear Attack"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimClear AttackReady"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimClear AttackLeft"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimClear AttackRight"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimPlay BurrowChargeFlail Flail PlayForever,RandomStartOffset 0.100000 0.300000"/>
+        <On Terms="ActorCreation" Send="TimerSet 1.000000 KnockbackDelay"/>
+        <On Terms="TimerExpired; TimerName KnockbackDelay" Target="_Unit" Send="AnimClear BurrowChargeFlail"/>
+        <On Terms="TimerExpired; TimerName KnockbackDelay" Send="Destroy"/>
+        <On Terms="Behavior.SquadNydusKnockbackMPKnockback.Off" Send="TimerSet 0.250000 KnockbackEndDelay"/>
+        <On Terms="TimerExpired; TimerName KnockbackEndDelay" Target="_Unit" Send="AnimClear BurrowChargeFlail"/>
+        <On Terms="TimerExpired; TimerName KnockbackEndDelay" Send="Destroy"/>
+    </CActorSimple>
+    <CActorModel id="SquadNydusKnockbackStun" parent="ModelAnimationStyleContinuous">
+        <On Terms="Behavior.SquadNydusKnockbackStun.On" Send="Create"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart GL_BSD GLbirth GLstand GLdeath"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart $BSD"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimPlay BurrowChargeKnockback Flail PlayForever,RandomStartOffset 0.100000 0.100000"/>
+        <On Terms="ActorCreation" Send="TimerSet 1.500000 KnockbackDelay"/>
+        <On Terms="TimerExpired; TimerName KnockbackDelay" Target="_Unit" Send="AnimClear BurrowChargeKnockback"/>
+        <On Terms="Behavior.SquadNydusKnockbackStun.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Model value="BurrowChargeStun"/>
+    </CActorModel>
+    <CActorSplat id="SquadNydusKnockbackSplat" parent="BurrowedSplat" unitName="SquadGreaterNydusWorm">
+        <On Terms="TimerExpired; TimerName DelayDestroy" Send="Destroy"/>
+        <On Terms="Effect.SquadNydusKnockbackTargetSearch.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.SquadNydusKnockbackTargetSearch.Start; At Caster" Send="TimerSet 5.000000 DelayDestroy"/>
+        <On Terms="Effect.SquadNydusKnockbackTargetSearch.Start; At Caster" Send="RefClear ::Host"/>
+    </CActorSplat>
+    <CActorForceSphere id="SquadNydusKnockbackDeathForce">
+        <On Terms="Effect.SquadNydusKnockbackImpactSet.Stop; At Caster" Send="Create"/>
+        <On Terms="Effect.BurrowChargeImpactSetRevD.Stop; At Caster" Send="Create"/>
+        <Host Subject="SOpTargetPoint SOpSplashDamagePositionVariance"/>
+        <Duration value="0.150000"/>
+        <Magnitude value="25.000000,10.000000"/>
+        <Radius value="2.500000"/>
+    </CActorForceSphere>
     <CActorModel id="SquadVoidStasisImpact" parent="ModelAddition">
         <Macros value="GlobalLoopMacro"/>
         <On Terms="Behavior.SquadVoidStasis.On" Send="Create"/>
@@ -4471,6 +4511,12 @@
             <Image value="Assets\Textures\Wireframe-Zerg-NydusDragon.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorModel id="SquadNydusWormBirthImpact" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.SquadNydusKnockbackImpactSet.Start; At Caster" Send="Create"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="KerriganApocalypseExplosion"/>
+        <Scale value="0.750000"/>
+    </CActorModel>
     <CActorUnit id="SquadNydusNetwork" parent="ZergBuildingEx" unitName="SquadGreaterNydusNetwork">
         <Aliases value="_UnitHuge"/>
         <On Terms="AbilTransport.NydusCanalTransport.TransportLoad" Send="$Spell"/>

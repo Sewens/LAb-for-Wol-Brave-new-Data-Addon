@@ -68,6 +68,106 @@
         <Amount value="5"/>
         <Death value="Eviscerate"/>
     </CEffectDamage>
+    <CEffectRandomPointInCircle id="RandomGenerator100">
+        <EditorCategories value="Race:Terran"/>
+        <Count value="100"/>
+    </CEffectRandomPointInCircle>
+    <CEffectEnumArea id="SquadNydusKnockbackBirthSearch">
+        <EditorCategories value="Race:Zerg"/>
+        <AreaArray Radius="5" Effect="SquadNydusKnockbackImpactSet"/>
+    </CEffectEnumArea>
+    <CEffectLaunchMissile id="SquadNydusKnockbackCreatePHLM">
+        <EditorCategories value="Race:Zerg"/>
+        <LaunchLocation Effect="SquadNydusKnockbackMPForcePersistent" Value="TargetUnit"/>
+        <ImpactEffect value="SquadNydusKnockbackImpactLandSet"/>
+        <Flags index="2D" value="1"/>
+        <Movers Link="BurrowChargeImpactMover"/>
+        <DeathType value="Unknown"/>
+        <ValidatorArray index="0" removed="1"/>
+        <AmmoUnit value=""/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="SquadNydusKnockbackCreatePHSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="SquadNydusKnockbackImpactAB"/>
+        <EffectArray value="SquadNydusKnockbackMPKnockbackAB"/>
+        <EffectArray value="SquadNydusKnockbackCreatePHLM"/>
+        <EffectArray value="SquadNydusKnockbackStunApply"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="SquadNydusKnockbackImpactAB">
+        <Behavior value="SquadNydusKnockbackPrecursorImpact"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="SquadNydusKnockbackImpactLandSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="SquadNydusKnockbackMPKnockbackRB"/>
+    </CEffectSet>
+    <CEffectSet id="SquadNydusKnockbackImpactSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="SquadNydusKnockbackTargetSearch"/>
+        <EffectArray value="SquadNydusKnockbackTargetSearchAlly"/>
+        <TargetLocationType value="UnitOrPoint"/>
+    </CEffectSet>
+    <CEffectCreateUnit id="SquadNydusKnockbackMPForcePersistent">
+        <EditorCategories value="Race:Zerg"/>
+        <CreateFlags index="Birth" value="0"/>
+        <CreateFlags index="DropOff" value="0"/>
+        <CreateFlags index="PlacementIgnoreBlockers" value="1"/>
+        <CreateFlags index="Precursor" value="1"/>
+        <CreateFlags index="ProvideFood" value="0"/>
+        <CreateFlags index="TechComplete" value="0"/>
+        <CreateFlags index="UseFood" value="0"/>
+        <SpawnEffect value="SquadNydusKnockbackCreatePHSet"/>
+        <SpawnRange value="3"/>
+        <SpawnOffset value="0,1"/>
+        <TypeFallbackUnit Value="Target"/>
+    </CEffectCreateUnit>
+    <CEffectApplyBehavior id="SquadNydusKnockbackMPKnockbackAB">
+        <WhichUnit Effect="SquadNydusKnockbackMPForcePersistent"/>
+        <Behavior value="SquadNydusKnockbackMPKnockback"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="SquadNydusKnockbackMPKnockbackRB">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Effect="SquadNydusKnockbackMPForcePersistent"/>
+        <BehaviorLink value="SquadBurrowChargeMPKnockback"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="SquadNydusKnockbackStunApply">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Effect="SquadNydusKnockbackMPForcePersistent"/>
+        <Behavior value="SquadNydusKnockbackStun"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="SquadNydusKnockbackTargetDamage">
+        <ValidatorArray value="TargetIsEnemy"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Amount value="5"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Stasis,Dead,Hidden,Invulnerable"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="SquadNydusKnockbackTargetSearch">
+        <ValidatorArray value="CasterNotDead"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <SearchFilters value="Ground,Visible;Self,Player,Ally,Neutral,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="3" Effect="SquadNydusKnockbackTargetSet"/>
+        <SearchFlags index="SameCliff" value="1"/>
+    </CEffectEnumArea>
+    <CEffectEnumArea id="SquadNydusKnockbackTargetSearchAlly">
+        <ValidatorArray value="CasterNotDead"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <SearchFilters value="Ground,Visible;Self,Enemy,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="0.25" Effect="SquadNydusKnockbackTargetSet"/>
+        <SearchFlags index="SameCliff" value="1"/>
+    </CEffectEnumArea>
+    <CEffectSet id="SquadNydusKnockbackTargetSet">
+        <ValidatorArray value="CasterIsNotHidden"/>
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="SquadNydusKnockbackMPForcePersistent"/>
+        <EffectArray value="SquadNydusKnockbackTargetDamage"/>
+    </CEffectSet>
+    <CEffectRedirectMissile id="SquadVikingAAMissileRedirect">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectRedirectMissile>
     <CEffectApplyBehavior id="SquadVoidStasisAB">
         <ValidatorArray index="0" value="NotStasis"/>
         <EditorCategories value="Race:Protoss"/>
@@ -1252,7 +1352,7 @@
         <Cost Abil="SquadInfantry,Ammo10" ChargeCountUse="-1"/>
     </CEffectModifyUnit>
     <CEffectSet id="AddMuleliskChain">
-        <ValidatorArray value="IsMagazineFull"/>
+        <ValidatorArray value="MagazineNotFullSwitch"/>
         <ValidatorArray value="TargetNotSelf"/>
         <ValidatorArray value="HaveSquadInfantryMagazine"/>
         <EditorCategories value="Race:Terran"/>
@@ -2620,7 +2720,7 @@
         <Cost Abil="SquadInfantry,Ammo8" ChargeCountUse="-1"/>
     </CEffectModifyUnit>
     <CEffectSet id="AddFirebatChain">
-        <ValidatorArray value="IsMagazineFull"/>
+        <ValidatorArray value="MagazineNotFullSwitch"/>
         <ValidatorArray value="TargetNotSelf"/>
         <ValidatorArray value="HaveSquadInfantryMagazine"/>
         <EditorCategories value="Race:Terran"/>
@@ -3307,7 +3407,7 @@
         <Cost Abil="SquadInfantry,Ammo9" ChargeCountUse="-1"/>
     </CEffectModifyUnit>
     <CEffectSet id="AddPredatorChain">
-        <ValidatorArray value="IsMagazineFull"/>
+        <ValidatorArray value="MagazineNotFullSwitch"/>
         <ValidatorArray value="TargetNotSelf"/>
         <ValidatorArray value="HaveSquadInfantryMagazine"/>
         <EditorCategories value="Race:Terran"/>
@@ -3495,7 +3595,7 @@
         <EffectArray value="SquadBurrowChargeImpactAB"/>
         <EffectArray value="SquadBurrowChargeMPKnockbackAB"/>
         <EffectArray value="SquadBurrowChargeCreatePHLM"/>
-        <EffectArray value="SquadUltraliskApplyBurrowChargeStun"/>
+        <EffectArray value="SquadBurrowChargeStunApply"/>
     </CEffectSet>
     <CEffectApplyBehavior id="SquadBurrowChargeImpactAB">
         <Behavior value="SquadPrecursorBurrowChargeImpact"/>
@@ -3508,7 +3608,6 @@
         <EditorCategories value="Race:Zerg"/>
         <EffectArray value="SquadBurrowChargeTargetSearch"/>
         <EffectArray value="SquadBurrowChargeTargetSearchAlly"/>
-        <EffectArray value="SquadBurrowChargeRemoveCasterBehavior"/>
         <TargetLocationType value="Point"/>
     </CEffectSet>
     <CEffectIssueOrder id="SquadBurrowChargeIssueOrder">
@@ -3562,11 +3661,6 @@
         <EffectArray value="SquadBurrowChargePoint"/>
         <TargetLocationType value="Point"/>
     </CEffectSet>
-    <CEffectRemoveBehavior id="SquadBurrowChargeRemoveCasterBehavior">
-        <EditorCategories value="Race:Zerg"/>
-        <WhichUnit Value="Caster"/>
-        <BehaviorLink value="SquadBurrowCharging"/>
-    </CEffectRemoveBehavior>
     <CEffectCreatePersistent id="SquadBurrowChargeStructure">
         <EditorCategories value="Race:Zerg"/>
         <WhichLocation Value="CasterUnit"/>
@@ -3583,7 +3677,7 @@
         <EditorCategories value="Race:Zerg"/>
         <EffectArray value="SquadBurrowChargeStructureTargetSearch"/>
         <EffectArray value="SquadBurrowChargeStructureTargetSearchAlly"/>
-        <EffectArray value="SquadBurrowChargeRemoveCasterBehavior"/>
+        <EffectArray value="SquadNydusKnockbackRemoveCasterBehavior"/>
         <TargetLocationType value="Point"/>
     </CEffectSet>
     <CEffectIssueOrder id="SquadBurrowChargeStructureIssueOrder">
@@ -3709,7 +3803,7 @@
         <Behavior value="SpriteLinkTracker"/>
     </CEffectApplyBehavior>
     <CEffectSet id="AddSpectreChain">
-        <ValidatorArray value="IsMagazineFull"/>
+        <ValidatorArray value="MagazineNotFullSwitch"/>
         <ValidatorArray value="TargetNotSelf"/>
         <ValidatorArray value="HaveSquadInfantryMagazine"/>
         <EditorCategories value="Race:Terran"/>
@@ -3734,7 +3828,7 @@
         <Cost Abil="SquadInfantry,Ammo7" ChargeCountUse="-1"/>
     </CEffectModifyUnit>
     <CEffectSet id="AddGhostChain">
-        <ValidatorArray value="IsMagazineFull"/>
+        <ValidatorArray value="MagazineNotFullSwitch"/>
         <ValidatorArray value="TargetNotSelf"/>
         <ValidatorArray value="HaveSquadInfantryMagazine"/>
         <EditorCategories value="Race:Terran"/>
@@ -3746,7 +3840,7 @@
         <EffectArray value="GhostBuffRedirectPack"/>
     </CEffectSet>
     <CEffectSet id="AddReaperChain">
-        <ValidatorArray value="IsMagazineFull"/>
+        <ValidatorArray value="MagazineNotFullSwitch"/>
         <ValidatorArray value="TargetNotSelf"/>
         <ValidatorArray value="HaveSquadInfantryMagazine"/>
         <EditorCategories value="Race:Terran"/>
@@ -3762,7 +3856,7 @@
         <Cost Abil="SquadInfantry,Ammo6" ChargeCountUse="-1"/>
     </CEffectModifyUnit>
     <CEffectSet id="AddMedicChain">
-        <ValidatorArray value="IsMagazineFull"/>
+        <ValidatorArray value="MagazineNotFullSwitch"/>
         <ValidatorArray value="TargetNotSelf"/>
         <ValidatorArray value="HaveSquadInfantryMagazine"/>
         <EditorCategories value="Race:Terran"/>
@@ -3778,7 +3872,7 @@
         <Cost Abil="SquadInfantry,Ammo3" ChargeCountUse="-1"/>
     </CEffectModifyUnit>
     <CEffectSet id="AddMarauderChain">
-        <ValidatorArray value="IsMagazineFull"/>
+        <ValidatorArray value="MagazineNotFullSwitch"/>
         <ValidatorArray value="TargetNotSelf"/>
         <ValidatorArray value="HaveSquadInfantryMagazine"/>
         <EditorCategories value="Race:Terran"/>
@@ -4530,12 +4624,12 @@
         <SearchFilters value="Ground;Self,Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
         <SearchFlags index="OffsetByUnitRadius" value="0"/>
     </CEffectDamage>
-    <CEffectApplyBehavior id="SquadUltraliskApplyBurrowChargeStun">
+    <CEffectApplyBehavior id="SquadBurrowChargeStunApply">
         <!--        
 <ValidatorArray value="BurrowChargeEnemyTarget"/>
 -->
         <EditorCategories value="Race:Zerg"/>
-        <WhichUnit Effect="BurrowChargeMPForcePersistent"/>
+        <WhichUnit Effect="SquadBurrowChargeMPForcePersistent"/>
         <Behavior value="SquadBurrowChargeStun"/>
     </CEffectApplyBehavior>
     <CEffectApplyBehavior id="SquadUltraliskOutOfCombat2AB">
@@ -4754,7 +4848,7 @@
         <Death value="Remove"/>
     </CEffectDamage>
     <CEffectSet id="AddSCVChain">
-        <ValidatorArray value="IsMagazineFull"/>
+        <ValidatorArray value="MagazineNotFullSwitch"/>
         <ValidatorArray value="TargetNotSelf"/>
         <ValidatorArray value="HaveSquadInfantryMagazine"/>
         <EditorCategories value="Race:Terran"/>
@@ -4805,7 +4899,7 @@
         <EditorCategories value="Race:Terran"/>
     </CEffectApplyBehavior>
     <CEffectSet id="AddMarineChain">
-        <ValidatorArray value="IsMagazineFull"/>
+        <ValidatorArray value="MagazineNotFullSwitch"/>
         <ValidatorArray value="TargetNotSelf"/>
         <ValidatorArray value="HaveSquadInfantryMagazine"/>
         <EditorCategories value="Race:Terran"/>

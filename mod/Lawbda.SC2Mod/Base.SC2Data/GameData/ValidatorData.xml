@@ -1,10 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CValidatorPlayerRequirement id="HaveExtendMagazineUpgrade">
+        <Find value="1"/>
+        <Value value="HaveExtendableInfantryMagazine"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="IsMagazineNotFull8">
+        <ResultFailed value="NotEnoughRoomToLoadUnit"/>
+        <ResultNoUnit value="NotEnoughRoomToLoadUnit"/>
+        <Compare value="LE"/>
+        <Value value="7"/>
+        <Behavior value="SquadAlphaUnitTracker"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="IsMagazineNotFullUpdate">
+        <Type value="And"/>
+        <CombineArray value="HaveExtendMagazineUpgrade"/>
+        <CombineArray value="IsMagazineNotFull8"/>
+    </CValidatorCombine>
     <CValidatorUnitCompareVital id="LifeBelow75Percent">
         <Compare value="LE"/>
         <Type value="Fraction"/>
         <Value value="0.75"/>
     </CValidatorUnitCompareVital>
+    <CValidatorCombine id="MagazineNotFullSwitch">
+        <ResultFailed value="NotEnoughRoomToLoadUnit"/>
+        <CombineArray value="IsMagazineNotFull4"/>
+        <CombineArray value="IsMagazineNotFullUpdate"/>
+    </CValidatorCombine>
     <CValidatorCombine id="MedicHealGunTargetSearch">
         <Type value="And"/>
         <CombineArray value="IsNotEnemy"/>
@@ -346,13 +367,13 @@
         <WhichUnit Value="Caster"/>
         <Compare value="GT"/>
     </CValidatorUnitCompareResourceContents>
-    <CValidatorUnitCompareCargo id="IsMagazineNotFull">
+    <CValidatorUnitCompareBehaviorCount id="IsMagazineNotFull4">
         <ResultFailed value="NotEnoughRoomToLoadUnit"/>
         <ResultNoUnit value="NotEnoughRoomToLoadUnit"/>
         <Compare value="LE"/>
-        <Type value="Load"/>
         <Value value="3"/>
-    </CValidatorUnitCompareCargo>
+        <Behavior value="SquadAlphaUnitTracker"/>
+    </CValidatorUnitCompareBehaviorCount>
     <CValidatorUnitState id="IsMagazineUnit">
         <Enabled value="1"/>
         <State value="Magazine"/>
