@@ -81,6 +81,132 @@
         <HeightOffset value="1.500000"/>
         <Text value="Button/Tooltip/##id##"/>
     </CActorText>
+    <CActorModel id="SquadVoidStasisImpact" parent="ModelAddition">
+        <Macros value="GlobalLoopMacro"/>
+        <On Terms="Behavior.SquadVoidStasis.On" Send="Create"/>
+        <On Terms="Behavior.SquadVoidStasis.Off" Send="AnimBracketStop BSD"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="VoidStatsis"/>
+        <AutoScaleFactor value="1.000000"/>
+    </CActorModel>
+    <CActorSound id="SquadVoidStasisImpactSound" parent="SoundOneShot">
+        <On Terms="Effect.SquadVoidStasisSet.Start; At Target" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <Sound value="VoidStasis_Impact"/>
+    </CActorSound>
+    <CActorSound id="SquadVoidStasisLaunchSound" parent="SoundOneShot">
+        <On Terms="Effect.SquadVoidStasisSet.Start; At Caster" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <Sound value="VoidStasis_Launch"/>
+    </CActorSound>
+    <CActorSimple id="SquadVoidStasisModelMaterialController">
+        <On Terms="Behavior.SquadVoidStasis.On" Send="Create"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.600000 DelayCreation"/>
+        <On Terms="TimerExpired; TimerName DelayCreation" Target="::Main" Send="ModelMaterialApply GlazeVoidStasis"/>
+        <On Terms="Behavior.SquadVoidStasis.Off" Target="GlazeVoidStasis" Send="AnimBracketStop BSD"/>
+        <On Terms="Behavior.SquadVoidStasis.Off" Send="Destroy"/>
+        <On Terms="ActorCreation" Target="_Selectable" Send="AnimSetPausedAll"/>
+        <On Terms="Behavior.SquadVoidStasis.Off" Target="_Selectable" Send="AnimSetPausedAll 0"/>
+    </CActorSimple>
+    <CActorRange id="SquadVoidStasisRange" parent="RangeAbil" abil="SquadVoidStasis">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorAction id="SquadHellionTarBombRocketAttack" parent="GenericAttack" effectImpact="SquadHellionTarBombImpactSet" effectLaunch="SquadHellionTarBombLM">
+        <LaunchSiteOps Ops="SOpAttachHardPoint"/>
+        <LaunchAssets Sound="HH_Hellion_TarBomb_AttackLaunch"/>
+        <ImpactMap index="None" Model="" Sound="HH_Hellion_TarBomb_ImpactExplosion"/>
+        <ImpactMap index="Shield" Sound="HHHellionRocketAttackImpactShield"/>
+        <DamageMap index="None" Sound="HHHellionRocketAttackDamage"/>
+        <DamageMap index="Shield" Sound="HHHellionRocketAttackDamageShield"/>
+    </CActorAction>
+    <CActorModel id="SquadHellionTarBombRocketAttackImpact" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.SquadHellionTarBombABSearch.Start; At Target" Send="Create"/>
+        <HostSiteOps Ops="SOpForwardLaunchGuide SOpShadowSyncGround"/>
+    </CActorModel>
+    <CActorMissile id="SquadHellionTarBombRocketAttackMissile" parent="GenericAttackMissileWithDeathAnim" unitName="SquadHellionTarBombRocket">
+        <DeathArray index="Normal" SoundLink="HHHellionRocketDeath" VoiceLink="HHHellionRocketDeathVoice"/>
+    </CActorMissile>
+    <CActorModel id="SquadHellionTarBombSlow">
+        <Inherits index="CloakEffect" value="1"/>
+        <On Terms="Behavior.SquadHellionTarBomb.On" Send="Create"/>
+        <On Terms="ActorCreation; ScopeContains _UnitLarge" Send="Destroy"/>
+        <On Terms="ActorCreation; ScopeContains _UnitHuge" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="$Birth"/>
+        <On Terms="ActorCreation" Send="TimerSet 1.000000 Rebirth"/>
+        <On Terms="TimerExpired; TimerName Rebirth" Send="$Birth"/>
+        <On Terms="TimerExpired; TimerName Rebirth" Send="TimerSet 1.000000 Rebirth"/>
+        <On Terms="Behavior.SquadHellionTarBomb.Off" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpTargetPoint SOpShadow SOpHeightLaunch"/>
+    </CActorModel>
+    <CActorModel id="SquadHellionTarBombSlowHuge">
+        <Inherits index="CloakEffect" value="1"/>
+        <On Terms="Behavior.SquadHellionTarBomb.On" Send="Create"/>
+        <On Terms="ActorCreation; ScopeContains _UnitSmall" Send="Destroy"/>
+        <On Terms="ActorCreation; ScopeContains _UnitMedium" Send="Destroy"/>
+        <On Terms="ActorCreation; ScopeContains _UnitLarge" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="$Birth"/>
+        <On Terms="ActorCreation" Send="TimerSet 1.000000 Rebirth"/>
+        <On Terms="TimerExpired; TimerName Rebirth" Send="$Birth"/>
+        <On Terms="TimerExpired; TimerName Rebirth" Send="TimerSet 1.000000 Rebirth"/>
+        <On Terms="Behavior.SquadHellionTarBomb.Off" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpTargetPoint SOpShadow SOpHeightLaunch"/>
+    </CActorModel>
+    <CActorModel id="SquadHellionTarBombSlowImpact" parent="ModelAnimationStyleOneShot">
+        <Inherits index="CloakEffect" value="1"/>
+        <On Terms="Effect.SquadHellionTarBombImpactSet.Start; At Target" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpTargetPoint SOpShadow SOpHeightLaunch"/>
+        <AutoScaleFactor value="1.000000"/>
+    </CActorModel>
+    <CActorModel id="SquadHellionTarBombSlowLarge">
+        <Inherits index="CloakEffect" value="1"/>
+        <On Terms="Behavior.SquadHellionTarBomb.On" Send="Create"/>
+        <On Terms="ActorCreation; ScopeContains _UnitSmall" Send="Destroy"/>
+        <On Terms="ActorCreation; ScopeContains _UnitMedium" Send="Destroy"/>
+        <On Terms="ActorCreation; ScopeContains _UnitHuge" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="$Birth"/>
+        <On Terms="ActorCreation" Send="TimerSet 1.000000 Rebirth"/>
+        <On Terms="TimerExpired; TimerName Rebirth" Send="$Birth"/>
+        <On Terms="TimerExpired; TimerName Rebirth" Send="TimerSet 1.000000 Rebirth"/>
+        <On Terms="Behavior.SquadHellionTarBomb.Off" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpTargetPoint SOpShadow SOpHeightLaunch"/>
+    </CActorModel>
+    <CActorAction id="SquadMagrailMunition" parent="GenericAttack" effectImpact="SquadMagrailMunitionsDamage" effectLaunch="SquadMagrailMunitionsLaunchMissile">
+        <LaunchAttachQuery Methods="SetC 0"/>
+        <LaunchAssets Model="MagrailMunition_Launch" Sound="RailGun_Launch"/>
+        <BeamScope value="Caster"/>
+        <ImpactMap index="None" Model="MagrailMunition_Impact" Sound="RailGun_Impact"/>
+    </CActorAction>
+    <CActorBeamSimple id="SquadMagrailMunitionBeam" parent="GenericAttackBeam">
+        <Model value="MagrailMunition_Missile"/>
+    </CActorBeamSimple>
+    <CActorMissile id="SquadMagrailMunitionInvisibleMissile" parent="GenericAttackMissile" unitName="MagrailMunitionMissile">
+        <Model value="Invisible"/>
+    </CActorMissile>
+    <CActorSimple id="SquadMagrailMunitionsAttackAnim">
+        <On Terms="Effect.SquadMagrailMunitionsSet.Start; At Caster" Send="Create"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimPlay SpellAttack Spell,D"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimClear AttackLeft"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimClear AttackRight"/>
+        <On Terms="ActorCreation" Send="Destroy"/>
+    </CActorSimple>
+    <CActorModel id="SquadHellbatChargeStun" parent="ModelAnimationStyleContinuous">
+        <On Terms="Behavior.SquadHellbatLeapStun.On" Send="Create"/>
+        <On Terms="Behavior.SquadHellbatLeapStun.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Model value="ArtanisAreaStunModel"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorSound id="SquadHellbatJumpJetLaunchSoundActor" parent="SoundOneShot">
+        <On Terms="Effect.SquadHellbatLeapLM.Start" Send="Create"/>
+        <Sound value="Hellbat_JumpJet_Launch"/>
+    </CActorSound>
     <CActorAction id="SquadHellionAttack" parent="GenericAttackBase">
         <On Terms="Effect.SquadHellionInfernalFlameThrowerDamage.Start; At Caster; FromEffectTreeDescendant" Send="ActionDamage"/>
         <On Terms="Effect.SquadHellionInfernalFlameThrowerPersistent.Start; At Caster; !ValidatePlayer HasHellionInfernalPreIgniter" Send="Create"/>
@@ -259,7 +385,7 @@
     </CActorMissile>
     <CActorMissile id="SquadMdeicHealGunMissile" parent="GenericAttackMissile" unitName="SquadMdeicHealGunWeapon">
         <On Terms="ActorCreation" Send="SetTintColor {0,255,0 5.000000}"/>
-        <Model value="NovaPlasmaBlastWeapon"/>
+        <Model value="MagrailMunition_Missile"/>
     </CActorMissile>
     <CActorModel id="SquadNeuralParasiteModel" parent="ModelAddition">
         <On Terms="Behavior.SquadNeuralParasite.On" Send="Create"/>
@@ -357,6 +483,12 @@
         <On Terms="Effect.SquadHolyLightTargetSwitch.Start; At Target" Send="Create"/>
         <On Terms="ActorCreation" Send="SetCastShadows"/>
     </CActorModel>
+    <CActorSplat id="SquadHellionTarBombCursorSplat" parent="CursorSplat" abil="SquadHellionTarBomb">
+        <On Terms="Abil.SquadHellionTarBomb.Cursor" Send="Create"/>
+        <On Terms="ActorCreation" Send="Create CursorRegion"/>
+        <On Terms="ActorDestruction" Target="CursorRegion" Send="Destroy"/>
+        <Model value="TerranAOECursorSplat"/>
+    </CActorSplat>
     <CActorSimple id="SquadStormBoltCasterAnim" parent="SquadSimpleCastAnim" anim="Spell,Throw">
         <On index="0" Terms="Abil.SquadStormBolt.SourcePrepStart" Target="_Selectable" Send="AnimPlay spell Spell,Throw NonLooping -1.000000 -1.000000 1.000000 AsTimeScaleAbsolute"/>
         <On index="1" Terms="Abil.SquadStormBolt.SourcePrepStart" Send="Create SoundOneShot"/>
@@ -5506,7 +5638,17 @@
         <HostSiteOps Ops="SOpAttachRandomDamage"/>
         <Model value="ImpactModelFlames"/>
     </CActorModel>
-    <CActorSplat id="SquadScannerSweepCursorSplat" parent="CursorSplat" abil="RedScannerSweep">
+    <CActorSplat id="SquadScannerSweepCursorSplat">
+        <Aliases value="_Scalable"/>
+        <FogVisibility value="Visible"/>
+        <HoldTime value="-1.000000"/>
+        <FadeOut value="0.000000"/>
+        <Layer value="AOELayer"/>
+        <HostSiteOps Ops="SOpBasicScopeFollow"/>
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <On Terms="Abil.RedScannerSweep.Cursor" Send="Create"/>
+        <On Terms="ActorCreation" Send="Create CursorRegion"/>
+        <On Terms="ActorDestruction" Target="CursorRegion" Send="Destroy"/>
         <On Terms="Abil.GreenScannerSweep.Cursor" Send="Create"/>
         <On Terms="ActorCreation" Send="Create CursorRegion"/>
         <On Terms="ActorDestruction" Target="CursorRegion" Send="Destroy"/>

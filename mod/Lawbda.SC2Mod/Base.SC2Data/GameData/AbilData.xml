@@ -43,6 +43,59 @@
         </CmdButtonArray>
         <CmdButtonArray index="Cancel" DefaultButtonFace="CmdCancel"/>
     </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadVoidStasis">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Effect index="0" value="SquadVoidStasisSet"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="25"/>
+        </Cost>
+        <TargetFilters value="Ground;Player,Ally,Heroic,Missile,Stasis,UnderConstruction,Hidden,Invulnerable"/>
+        <Range value="6"/>
+        <AutoCastRange value="6"/>
+        <AutoCastValidatorArray value="DarkTemplarVoidStasis"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadVoidStasis"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadMedicFlashGrenades">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="MedicFlashBangGrenadeSearch"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="25"/>
+            <Cooldown TimeUse="20"/>
+        </Cost>
+        <Range value="10"/>
+        <PrepTime value="0.01"/>
+        <FinishTime value="0.0625"/>
+        <UninterruptibleArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <CursorEffect value="MedicFlashBangGrenadeSearch"/>
+        <AINotifyEffect value="MedicFlashBangGrenadeLaunchMissile"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadMedicFlashbangGrenades">
+            <Flags index="ShowInGlossary" value="0"/>
+        </CmdButtonArray>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadHellionTarBomb">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadHellionTarBombLMSearch"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="TransientPreferred" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="20"/>
+        </Cost>
+        <TargetFilters value="-;-"/>
+        <Range value="6"/>
+        <AutoCastFilters value="Ground,Visible;Self,Player,Ally,Neutral,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AutoCastRange value="6"/>
+        <AutoCastValidatorArray value="RangeCheckLE6"/>
+        <CastIntroTime value="0.75"/>
+        <CursorEffect value="SquadHellionTarBombLMSearch"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadHellionTarBomb"/>
+    </CAbilEffectTarget>
     <CAbilEffectTarget id="SquadNeuralParasite">
         <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
         <Effect index="0" value="SquadNeuralParasiteLaunchMissile"/>
@@ -192,32 +245,38 @@
         <Range value="10.9375"/>
         <CastOutroTime value="1.07"/>
     </CAbilEffectTarget>
-    <CAbilEffectTarget id="SquadFrostNova" parent="SquadHeroEffectTarget">
+    <CAbilAugment id="SquadJumpJetAssault">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadJumpJetAssault"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <AbilCmd value="attack,Execute"/>
+        <TargetType value="UnitOrPoint"/>
+        <Cost>
+            <Cooldown Link="SquadJumpJetAssault" Location="Unit" TimeUse="5"/>
+        </Cost>
+        <Effect value="SquadHellbatLeap"/>
+        <AutoCastValidatorArray value="CasterNotHoldingPosition"/>
+    </CAbilAugment>
+    <CAbilEffectTarget id="SquadFrostNova">
         <Alignment value="Negative"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Hero"/>
         <AbilityCategories index="CanBeDisabled" value="1"/>
         <AbilityCategories index="CanBeSilenced" value="1"/>
         <AbilityCategories index="CanBeIllusionDisabled" value="1"/>
-        <Levels value="3"/>
+        <Levels value="1"/>
         <Effect index="0" value="SquadFrostNovaFrostNova"/>
-        <Cost index="0">
-            <Vital index="Energy" value="125"/>
-            <Cooldown Location="Unit" TimeUse="8"/>
-        </Cost>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
         <Cost>
-            <Vital index="Energy" value="125"/>
-            <Cooldown Location="Unit" TimeUse="8"/>
+            <Cooldown Location="Unit" TimeUse="30"/>
         </Cost>
-        <Cost>
-            <Vital index="Energy" value="125"/>
-            <Cooldown Location="Unit" TimeUse="8"/>
-        </Cost>
-        <Range value="12.5"/>
-        <Range value="12.5"/>
-        <Range value="12.5"/>
+        <Range value="9"/>
         <PrepTime value="0.4"/>
-        <CastOutroTime value="1.1"/>
-        <AINotifyEffect value="SquadFrostNovaFrostNova"/>
+        <CursorEffect value="SquadFrostNovaSearch"/>
+        <AINotifyEffect value="MarauderSlowAOE"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadFrostNova"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
     </CAbilEffectTarget>
     <CAbilEffectTarget id="SquadBreathofFire" parent="SquadHeroEffectTarget">
         <TechAliasArray value="_ABILITY_BreathOfFire"/>
@@ -2011,16 +2070,16 @@
         </InfoArray>
         <Alert value="TrainWorkerComplete"/>
     </CAbilTrain>
-    <CAbilAugment id="SquadMarauderRailgun">
+    <CAbilAugment id="SquadMagrailMunitions">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="MagrailMunitions" Requirements="MagrailMunitionsMarauder"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadMagrailMunitions"/>
         <Flags index="AutoCast" value="1"/>
         <Flags index="AutoCastOn" value="1"/>
         <AbilCmd value="attack,Execute"/>
         <Cost>
-            <Cooldown TimeUse="30"/>
+            <Cooldown TimeUse="15"/>
         </Cost>
-        <Effect value="MagrailMunitionsSet"/>
+        <Effect value="SquadMagrailMunitionsSet"/>
     </CAbilAugment>
     <CAbilMorph id="SquadOrbitalLiftOff" parent="TerranBuildingLiftOff" unit="SquadOrbitalCommandFlying">
         <Name value="Abil/Name/SquadOrbitalLiftOff"/>
