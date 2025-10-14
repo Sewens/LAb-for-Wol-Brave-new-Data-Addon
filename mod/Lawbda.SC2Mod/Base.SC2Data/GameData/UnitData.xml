@@ -1359,7 +1359,7 @@
         <AbilArray Link="QueueMagazine"/>
         <AbilArray Link="SquadInfantry"/>
         <AbilArray Link="DisbandSquad"/>
-        <WeaponArray Link="SquadHellionHellfireFlamethrower" Turret="SquadHellion"/>
+        <WeaponArray Link="SquadHellionInfernalFlamethrower" Turret="SquadHellion"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
@@ -3538,8 +3538,8 @@
         <Collide index="Small" value="1"/>
         <Attributes index="Armored" value="1"/>
         <Attributes index="Biological" value="1"/>
-        <LifeStart value="100"/>
-        <LifeMax value="100"/>
+        <LifeStart value="125"/>
+        <LifeMax value="125"/>
         <LifeArmor value="1"/>
         <LifeArmorName value="Unit/LifeArmorName/TerranInfantryArmor"/>
         <Speed value="2.25"/>
@@ -3550,8 +3550,8 @@
         <Sight value="10"/>
         <Food value="-2"/>
         <CostCategory value="Army"/>
-        <CostResource index="Minerals" value="100"/>
-        <CostResource index="Vespene" value="25"/>
+        <CostResource index="Minerals" value="125"/>
+        <CostResource index="Vespene" value="50"/>
         <RepairTime value="25"/>
         <AttackTargetPriority value="20"/>
         <DamageDealtXP value="1"/>
@@ -3728,8 +3728,8 @@
         <Sight value="12"/>
         <Food value="-1"/>
         <CostCategory value="Army"/>
-        <CostResource index="Minerals" value="75"/>
-        <CostResource index="Vespene" value="25"/>
+        <CostResource index="Minerals" value="125"/>
+        <CostResource index="Vespene" value="15"/>
         <RepairTime value="33.3332"/>
         <AttackTargetPriority value="20"/>
         <DamageDealtXP value="1"/>
@@ -3994,8 +3994,8 @@
         <Collide index="Small" value="1"/>
         <Attributes index="Biological" value="1"/>
         <Attributes index="Psionic" value="1"/>
-        <LifeStart value="80"/>
-        <LifeMax value="80"/>
+        <LifeStart value="125"/>
+        <LifeMax value="125"/>
         <LifeArmorName value="Unit/LifeArmorName/TerranInfantryArmor"/>
         <EnergyStart value="50"/>
         <EnergyMax value="200"/>
@@ -4092,8 +4092,8 @@
         <Collide index="Small" value="1"/>
         <Attributes index="Biological" value="1"/>
         <Attributes index="Psionic" value="1"/>
-        <LifeStart value="100"/>
-        <LifeMax value="100"/>
+        <LifeStart value="135"/>
+        <LifeMax value="135"/>
         <LifeArmorName value="Unit/LifeArmorName/TerranInfantryArmor"/>
         <EnergyStart value="50"/>
         <EnergyMax value="200"/>
@@ -4134,8 +4134,6 @@
             <LayoutButtons Face="SquadGhostSniperRound" Type="AbilCmd" AbilCmd="SquadGhostSnipe,Execute" Row="2" Column="0"/>
             <LayoutButtons Face="SquadNukeCallDown" Type="AbilCmd" AbilCmd="GreenNuclearStrike,255" Row="2" Column="3"/>
             <LayoutButtons Face="SquadGhostEMPRound" Type="AbilCmd" AbilCmd="SquadGhostEMP,Execute" Row="2" Column="1"/>
-            <LayoutButtons Face="SquadGhostOcularImplants" Type="Passive" AbilCmd="255,255" Row="1" Column="0"/>
-            <LayoutButtons Face="SquadGhostCriusSuit" Type="Passive" AbilCmd="255,255" Row="1" Column="1"/>
             <LayoutButtons Face="Enband" Type="AbilCmd" AbilCmd="AddGhostToSquad,Execute" Row="1" Column="4"/>
             <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="3"/>
             <LayoutButtons Face="SquadGiftTooltips" Type="Submenu" SubmenuCardId="Gift" Row="1" Column="2"/>
@@ -4195,7 +4193,14 @@
                 <Row value="1"/>
                 <Column value="3"/>
             </LayoutButtons>
-            <LayoutButtons Face="SquadGiftTooltips" Type="Submenu" SubmenuCardId="Gift" Row="1" Column="2"/>
+            <LayoutButtons index="9">
+                <Face value="SquadGiftTooltips"/>
+                <Type value="Submenu"/>
+                <AbilCmd value=""/>
+                <SubmenuCardId value="Gift"/>
+                <Row value="1"/>
+                <Column value="2"/>
+            </LayoutButtons>
         </CardLayouts>
         <CardLayouts CardId="Gift">
             <LayoutButtons Face="SmallLifeandRegen" Type="Passive" Row="0" Column="0"/>
@@ -4218,6 +4223,10 @@
         <WeaponArray index="0" Link="SquadReaperP45GaussPistol" Turret="SquadReaperTurret"/>
         <WeaponArray index="1" Link="SquadReaperD8Charge" Turret="SquadReaperTurret"/>
         <TurretArray value="SquadReaperTurret"/>
+        <LifeStart value="80"/>
+        <LifeMax value="80"/>
+        <LifeRegenDelay value="5"/>
+        <CostResource index="Minerals" value="75"/>
     </CUnit>
     <CUnit id="SquadFirebat">
         <DeathRevealRadius value="3"/>
@@ -4258,29 +4267,13 @@
         <AbilArray Link="DisbandSquad"/>
         <AbilArray Link="AddFirebatToSquad"/>
         <AbilArray Link="SquadStimpack"/>
-        <WeaponArray Link="SquadFirebatPerditionFlamethrower"/>
+        <WeaponArray Link="SquadHellbatNapalmSpray"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
             <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
-            <LayoutButtons>
-                <Face value="JuggernautPlating"/>
-                <Type value="Passive"/>
-                <AbilCmd value="255,255"/>
-                <Requirements value="UseJuggernautPlatingFirebat"/>
-                <Row value="2"/>
-                <Column value="2"/>
-            </LayoutButtons>
-            <LayoutButtons>
-                <Face value="IncineratorNozzles"/>
-                <Type value="Passive"/>
-                <AbilCmd value="255,255"/>
-                <Requirements value="UseIncineratorNozzles"/>
-                <Row value="2"/>
-                <Column value="1"/>
-            </LayoutButtons>
             <LayoutButtons Face="Enband" Type="AbilCmd" AbilCmd="AddFirebatToSquad,Execute" Row="1" Column="4"/>
             <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="3"/>
             <LayoutButtons Face="SquadStimpack" Type="AbilCmd" AbilCmd="SquadStimpack,Execute" Row="2" Column="0"/>
@@ -4335,9 +4328,9 @@
         <Collide index="Small" value="1"/>
         <Attributes index="Light" value="1"/>
         <Attributes index="Biological" value="1"/>
-        <LifeStart value="60"/>
-        <LifeMax value="60"/>
-        <LifeArmor value="1"/>
+        <LifeStart value="80"/>
+        <LifeMax value="80"/>
+        <LifeArmor value="2"/>
         <LifeArmorName value="Unit/LifeArmorName/TerranInfantryArmor"/>
         <EnergyStart value="50"/>
         <EnergyMax value="200"/>
@@ -4348,8 +4341,8 @@
         <Sight value="10"/>
         <Food value="-2"/>
         <CostCategory value="Army"/>
-        <CostResource index="Minerals" value="75"/>
-        <CostResource index="Vespene" value="50"/>
+        <CostResource index="Minerals" value="100"/>
+        <CostResource index="Vespene" value="25"/>
         <RepairTime value="25"/>
         <AttackTargetPriority value="20"/>
         <DamageDealtXP value="1"/>
@@ -4486,8 +4479,8 @@
         <Collide index="Small" value="1"/>
         <Attributes index="Light" value="1"/>
         <Attributes index="Biological" value="1"/>
-        <LifeStart value="45"/>
-        <LifeMax value="45"/>
+        <LifeStart value="65"/>
+        <LifeMax value="65"/>
         <LifeArmorName value="Unit/LifeArmorName/TerranInfantryArmor"/>
         <Speed value="2.25"/>
         <Acceleration value="1000"/>
@@ -4497,7 +4490,7 @@
         <Sight value="9"/>
         <Food value="-1"/>
         <CostCategory value="Army"/>
-        <CostResource index="Minerals" value="50"/>
+        <CostResource index="Minerals" value="75"/>
         <RepairTime value="20"/>
         <AttackTargetPriority value="20"/>
         <DamageDealtXP value="1"/>

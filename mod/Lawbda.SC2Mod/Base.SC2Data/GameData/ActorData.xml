@@ -81,6 +81,126 @@
         <HeightOffset value="1.500000"/>
         <Text value="Button/Tooltip/##id##"/>
     </CActorText>
+    <CActorAction id="SquadHellionAttack" parent="GenericAttackBase">
+        <On Terms="Effect.SquadHellionInfernalFlameThrowerDamage.Start; At Caster; FromEffectTreeDescendant" Send="ActionDamage"/>
+        <On Terms="Effect.SquadHellionInfernalFlameThrowerPersistent.Start; At Caster; !ValidatePlayer HasHellionInfernalPreIgniter" Send="Create"/>
+        <LaunchAssets Model="" Sound="Hellion_AttackLaunch"/>
+        <BeamScope value="Caster"/>
+        <Missile value="HellionAttackBaseMissile"/>
+        <ImpactAttachQuery Methods="AMFilterTargetVolumes AMPreferGround AMArcTestWeapon AMVolumesWeightedPick"/>
+        <ImpactMap index="None" Model="HellionAttackDamageReaction" Sound="Hellion_AttackImpact" ModelReaction="HellionAttackBaseImpactReaction"/>
+        <ImpactMap index="Flesh" Model="IGNORE" ModelReaction="IGNORE"/>
+        <ImpactMap index="Metal" Model="IGNORE" ModelReaction="IGNORE"/>
+        <ImpactMap index="Shield" Model="IGNORE" Sound="HellionAttackBaseImpactShield" ModelReaction="IGNORE"/>
+        <DamageSite value="SquadHellionAttackDamageSite"/>
+        <DamageMap index="None" Model="HellionAttackBaseDamage" Sound="HellionAttackBaseDamage" ModelReaction="HellionAttackBaseDamageReaction"/>
+        <DamageMap index="Flesh" Model="IGNORE" ModelReaction="IGNORE"/>
+        <DamageMap index="Metal" Model="IGNORE" ModelReaction="IGNORE"/>
+        <DamageMap index="Shield" Model="IGNORE" Sound="HellionAttackBaseDamageShield" ModelReaction="IGNORE"/>
+        <ShieldFlashType value="Header"/>
+    </CActorAction>
+    <CActorBeamSimple id="SquadHellionAttackBeam" parent="GenericAttackBeam">
+        <On Terms="ActorCreation; ValidateUnit HasHighCapacityBarrels" Send="ModelSwap HellionUpgradeAttackBeam"/>
+        <On Terms="Effect.SquadHellionInfernalFlameThrowerSearch.Start; EffectExecuteIndex 24" Send="RefSet ::HostImpact HellionAttackBeamImpactSite"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit HasHellionInfernalPreIgniter" Send="ModelSwap HellionUpgradeAttackBeam"/>
+        <On Terms="ActorCreation; ValidateUnit HasTwinLinkedFlameThrowers" Send="SetScale 1.800000,1.000000,1.000000"/>
+        <On Terms="ActorCreation; ValidateUnit HasHellionInfernalPreIgniter" Send="ModelSwap HellionUpgradeAttackBeam"/>
+        <On Terms="ActorCreation; ValidateUnit HasTwinLinkedFlameThrowers" Send="SetScale 1.800000,1.000000,1.000000"/>
+        <Model value="HellionAttackBeam"/>
+    </CActorBeamSimple>
+    <CActorSite id="SquadHellionAttackBeamImpactSite">
+        <On Terms="Effect.SquadHellionInfernalFlameThrowerSearch.Start; EffectExecuteIndex 24; At Caster" Send="Create"/>
+        <HostSiteOps Ops="SOpTargetPoint SOpShadow SOpHeightLaunch"/>
+    </CActorSite>
+    <CActorModel id="SquadHellionAttackDamageReaction" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.SquadHellionInfernalFlameThrowerDamage.Start; At Target; !ValidateEffect HasHighCapacityBarrels; ValidateUnitType NotStructureTarget" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachHead SOpForwardCasterCenter"/>
+        <Model value="HellionAttackDamageReaction"/>
+    </CActorModel>
+    <CActorModel id="SquadHellionAttackDamageReactionStructure" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.SquadHellionInfernalFlameThrowerDamage.Start; At Target; !ValidateEffect HasHighCapacityBarrels; ValidateUnitType IsStructureTarget" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachRandomDamage"/>
+        <Model value="SiegeTankSiegedAttackDamage"/>
+    </CActorModel>
+    <CActorRegionCircle id="SquadHellionTreeKiller">
+        <On Terms="Effect.SquadHellionInfernalFlameThrowerSearch.Start; At Effect" Send="Create"/>
+        <On Terms="ActorCreation" Send="QueryRegion ::Self TreeBurnQuery AgainstCenter"/>
+        <On Terms="Effect.SquadHellionInfernalFlameThrowerSearch.Start; At Effect" Send="Destroy"/>
+        <Radius value="0.500000"/>
+    </CActorRegionCircle>
+    <CActorAction id="SquadHellionUpgradedAttack" parent="GenericAttackBase">
+        <On Terms="Effect.SquadHellionInfernalFlameThrowerDamage.Start; At Caster; FromEffectTreeDescendant" Send="ActionDamage"/>
+        <On Terms="Effect.SquadHellionInfernalFlameThrowerPersistent.Start; At Caster; ValidatePlayer HasHellionInfernalPreIgniter" Send="Create"/>
+        <LaunchAssets Model="" Sound="Hellion_AttackLaunch"/>
+        <Beam value="SquadHellionAttackBeam"/>
+        <BeamScope value="Caster"/>
+        <Missile value="HellionAttackBaseMissile"/>
+        <ImpactAttachQuery Methods="AMFilterTargetVolumes AMPreferGround AMArcTestWeapon AMVolumesWeightedPick"/>
+        <ImpactMap index="None" Model="HellionUpgradedAttackDamageReaction" Sound="Hellion_AttackImpact" ModelReaction="HellionAttackBaseImpactReaction"/>
+        <ImpactMap index="Flesh" Model="IGNORE" ModelReaction="IGNORE"/>
+        <ImpactMap index="Metal" Model="IGNORE" ModelReaction="IGNORE"/>
+        <ImpactMap index="Shield" Model="IGNORE" Sound="HellionAttackBaseImpactShield" ModelReaction="IGNORE"/>
+        <DamageSite value="SquadHellionAttackDamageSite"/>
+        <DamageMap index="None" Model="HellionAttackBaseDamage" Sound="HellionAttackBaseDamage" ModelReaction="HellionAttackBaseDamageReaction"/>
+        <DamageMap index="Flesh" Model="IGNORE" ModelReaction="IGNORE"/>
+        <DamageMap index="Metal" Model="IGNORE" ModelReaction="IGNORE"/>
+        <DamageMap index="Shield" Model="IGNORE" Sound="HellionAttackBaseDamageShield" ModelReaction="IGNORE"/>
+        <ShieldFlashType value="Header"/>
+    </CActorAction>
+    <CActorModel id="SquadHellionUpgradedAttackDamageReaction" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.SquadHellionInfernalFlameThrowerDamage.Start; At Target; ValidateEffect HasHighCapacityBarrels; ValidateUnitType NotStructureTarget" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachHead SOpForwardCasterCenter"/>
+        <Model value="HellionUpgradedAttackDamageReaction"/>
+    </CActorModel>
+    <CActorModel id="SquadHellionUpgradedAttackDamageReactionStructure" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.SquadHellionInfernalFlameThrowerDamage.Start; At Target; ValidateEffect HasHighCapacityBarrels; ValidateUnitType IsStructureTarget" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachRandomDamage"/>
+        <Model value="HellionUpgradedAttackDamageReactionStructure"/>
+    </CActorModel>
+    <CActorAction id="SquadHellbatTankAttack" parent="GenericAttackBase" effectAttack="SquadHellionTank">
+        <On Terms="Effect.SquadHellbatTank.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.SquadHellbatTankDamage.Start; At Caster; FromEffectTreeDescendant" Send="ActionDamage"/>
+        <LaunchAssets Model="HellionTankAttackLaunch" Sound="HellionTank_AttackLaunch"/>
+        <LaunchModel value="SquadHellionTankAttackLaunch"/>
+        <ImpactMap index="None" Sound="Hellion_AttackImpact"/>
+    </CActorAction>
+    <CActorModel id="SquadHellionTankAttackFireAddition" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.SquadHellbatTankDamage.Start; At Target; !ValidateEffect HasHighCapacityBarrels; ValidateUnitType NotStructureTarget" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachHead"/>
+        <Model value="HellionTankAttackFireAddition"/>
+    </CActorModel>
+    <CActorModel id="SquadHellionTankAttackFireAdditionStructure" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.SquadHellbatTankDamage.Start; At Target; !ValidateEffect HasHighCapacityBarrels; ValidateUnitType IsStructureTarget" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachRandomDamage"/>
+        <Model value="HellionTankAttackFireAddition"/>
+    </CActorModel>
+    <CActorModel id="SquadHellionTankAttackLaunch" parent="ModelAnimationStyleOneShot">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart GL_BSD GLbirth GLstand GLdeath"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.750000 Kill"/>
+        <On Terms="TimerExpired; TimerName Kill" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation; ValidateUnit HasHighCapacityBarrels" Send="ModelSwap HellionTankAttackLaunchUpgraded"/>
+        <Model value="HellionTankAttackLaunch"/>
+    </CActorModel>
+    <CActorModel id="SquadHellionTankAttackUpgradedFireAddition" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.SquadHellbatTankDamage.Start; At Target; ValidateEffect HasHighCapacityBarrels; ValidateUnitType NotStructureTarget" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachHead"/>
+        <Model value="HellionTankAttackUpgradedFireAddition"/>
+    </CActorModel>
+    <CActorModel id="SquadHellionTankAttackUpgradedFireAdditionStructure" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.SquadHellbatTankDamage.Start; At Target; ValidateEffect HasHighCapacityBarrels; ValidateUnitType IsStructureTarget" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachRandomDamage"/>
+        <Model value="HellionTankAttackUpgradedFireAddition"/>
+    </CActorModel>
     <CActorModel id="SquadHealAttackDummyCursorModel" parent="TerranCursorModel" abil="SquadHealAttack">
         <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death"/>
         <On Terms="ActorCreation; ValidatePlayer PlayerIsZerg" Send="ModelSwap AttackDummyCursorModelZerg"/>
@@ -2859,40 +2979,9 @@
     <CActorModel id="SquadHellionDropModel" parent="MercDropModelBase">
         <On Terms="ActorCreation" Send="SetScale"/>
     </CActorModel>
-    <CActorSiteOpForward id="SquadHellionAttackDamageSiteOpForward">
-        <HostForward Subject="SquadHellionAttackBeam" Actor="Find"/>
-        <Invert value="1"/>
-    </CActorSiteOpForward>
-    <CActorSite id="SquadHellionAttackDamageSite" parent="SiteUNIT">
-        <HostSiteOps Ops="SquadHellionAttackDamageSiteOpForward" HoldRotation="1"/>
-    </CActorSite>
     <CActorTurret id="SquadHellionTurret">
         <On Terms="TurretEnable.SquadHellion" Send="Create"/>
     </CActorTurret>
-    <CActorModel id="SquadHellionAttackDamageReaction" parent="ModelAnimationStyleOneShot">
-        <On Terms="Effect.SquadHellionInfernalFlameThrower.Start; At Target; !ValidateEffect HasHighCapacityBarrels; ValidateUnitType NotStructureTarget" Send="Create"/>
-        <Host Subject="_Unit"/>
-        <HostSiteOps Ops="SOpAttachHead SOpForwardCasterCenter"/>
-        <Model value="HellionAttackDamageReaction"/>
-    </CActorModel>
-    <CActorModel id="SquadHellionAttackDamageReactionStructure" parent="ModelAnimationStyleOneShot">
-        <On Terms="Effect.SquadHellionInfernalFlameThrower.Start; At Target; !ValidateEffect HasHighCapacityBarrels; ValidateUnitType IsStructureTarget" Send="Create"/>
-        <Host Subject="_Unit"/>
-        <HostSiteOps Ops="SOpAttachRandomDamage"/>
-        <Model value="SiegeTankSiegedAttackDamage"/>
-    </CActorModel>
-    <CActorModel id="SquadHellionUpgradedAttackDamageReaction" parent="ModelAnimationStyleOneShot">
-        <On Terms="Effect.SquadHellionInfernalFlameThrower.Start; At Target; ValidateEffect HasHighCapacityBarrels; ValidateUnitType NotStructureTarget" Send="Create"/>
-        <Host Subject="_Unit"/>
-        <HostSiteOps Ops="SOpAttachHead SOpForwardCasterCenter"/>
-        <Model value="HellionUpgradedAttackDamageReaction"/>
-    </CActorModel>
-    <CActorModel id="SquadHellionUpgradedAttackDamageReactionStructure" parent="ModelAnimationStyleOneShot">
-        <On Terms="Effect.SquadHellionInfernalFlameThrower.Start; At Target; ValidateEffect HasHighCapacityBarrels; ValidateUnitType IsStructureTarget" Send="Create"/>
-        <Host Subject="_Unit"/>
-        <HostSiteOps Ops="SOpAttachRandomDamage"/>
-        <Model value="HellionUpgradedAttackDamageReactionStructure"/>
-    </CActorModel>
     <CActorUnit id="SquadHellion" parent="GenericUnitBase" unitName="SquadHellion">
         <Aliases value="_UnitMedium"/>
         <Macros value="UnloadDropAnim"/>
@@ -2927,35 +3016,6 @@
             <Image value="Assets\Textures\Wireframe-Terran-Hellion-Mercenary.dds"/>
         </Wireframe>
     </CActorUnit>
-    <CActorAction id="SquadHellionAttack" parent="GenericAttackBase">
-        <On Terms="Effect.SquadHellionInfernalFlameThrower.Start; At Caster; FromEffectTreeDescendant" Send="ActionDamage"/>
-        <On Terms="Effect.SquadHellionInfernalFlameThrowerCP.Start; At Caster" Send="Create"/>
-        <LaunchAttachQuery Methods="AMFilterWeapon"/>
-        <LaunchAssets Model="" Sound="Hellion_AttackLaunch"/>
-        <BeamScope value="Caster"/>
-        <Missile value="MengskHellionAttackBaseMissile"/>
-        <ImpactAttachQuery Methods="AMFilterTargetVolumes AMPreferGround AMArcTestWeapon AMVolumesWeightedPick"/>
-        <ImpactMap index="None" Model="" Sound="Hellion_AttackImpact" ModelReaction="MengskHellionAttackBaseImpactReaction"/>
-        <ImpactMap index="Flesh" Model="IGNORE" ModelReaction="IGNORE"/>
-        <ImpactMap index="Metal" Model="IGNORE" ModelReaction="IGNORE"/>
-        <ImpactMap index="Shield" Model="IGNORE" Sound="MengskHellionAttackBaseImpactShield" ModelReaction="IGNORE"/>
-        <DamageSite value="MengskHellionAttackDamageSite"/>
-        <DamageMap index="None" Model="MengskHellionAttackBaseDamage" Sound="MengskHellionAttackBaseDamage" ModelReaction="MengskHellionAttackBaseDamageReaction"/>
-        <DamageMap index="Flesh" Model="IGNORE" ModelReaction="IGNORE"/>
-        <DamageMap index="Metal" Model="IGNORE" ModelReaction="IGNORE"/>
-        <DamageMap index="Shield" Model="IGNORE" Sound="MengskHellionAttackBaseDamageShield" ModelReaction="IGNORE"/>
-        <ShieldFlashType value="Header"/>
-    </CActorAction>
-    <CActorBeamSimple id="SquadHellionAttackBeam" parent="GenericAttackBeam">
-        <On Terms="ActorCreation; ValidateUnit HasHighCapacityBarrels" Send="ModelSwap HellionUpgradeAttackBeam"/>
-        <On Terms="Effect.SquadHellionInfernalFlameThrowerE.Start; EffectExecuteIndex 24" Send="RefSet ::HostImpact SquadHellionAttackBeamImpactSite"/>
-        <On Terms="ActorOrphan" Send="Destroy"/>
-        <Model value="MengskHellionAttackBeam"/>
-    </CActorBeamSimple>
-    <CActorSite id="SquadHellionAttackBeamImpactSite">
-        <On Terms="Effect.SquadHellionInfernalFlameThrowerE.Start; EffectExecuteIndex 24; At Caster" Send="Create"/>
-        <HostSiteOps Ops="SOpTargetPoint SOpShadow SOpHeightLaunch"/>
-    </CActorSite>
     <CActorModel id="SquadJumpLandDownModel" parent="ModelAnimationStyleOneShot">
         <Inherits index="CloakEffect" value="1"/>
         <On Terms="Behavior.SquadJump.LandDown" Send="Create"/>
