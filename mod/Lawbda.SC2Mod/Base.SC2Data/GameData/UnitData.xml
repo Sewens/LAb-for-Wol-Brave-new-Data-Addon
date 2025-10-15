@@ -427,6 +427,7 @@
         <AbilArray Link="attack"/>
         <AbilArray Link="move"/>
         <AbilArray Link="SquadVikingAMode"/>
+        <AbilArray Link="SquadVikingAssaultModeSwitch"/>
         <WeaponArray Link="SquadVikingGGatlingCannon"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -434,9 +435,11 @@
             <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
-            <LayoutButtons Face="SquadVikingAMode" Type="AbilCmd" AbilCmd="SquadVikingAMode,Execute" Row="2" Column="0"/>
-            <LayoutButtons Face="SquadVikingPhobosClassWeaponsSystem" Type="Passive" Row="2" Column="3"/>
-            <LayoutButtons Face="SquadVikingRipwaveMissiles" Type="Passive" Row="2" Column="2"/>
+            <LayoutButtons Face="SquadVikingAMode" Type="AbilCmd" AbilCmd="SquadVikingAssaultModeSwitch,Off" Row="2" Column="0"/>
+            <LayoutButtons Face="SquadVikingAMode" Type="Passive" Row="2" Column="0"/>
+            <LayoutButtons Face="SquadVikingGMode" Type="AbilCmd" AbilCmd="SquadVikingAssaultModeSwitch,Off" Row="2" Column="1"/>
+            <LayoutButtons Face="SquadVikingGMode" Type="Passive" Row="2" Column="1"/>
+            <LayoutButtons Face="SquadVikingAssaultModeAttackSpeeder" Type="Passive" Row="1" Column="0"/>
         </CardLayouts>
         <Radius value="0.75"/>
         <SeparationRadius value="0.75"/>
@@ -504,6 +507,7 @@
         <AbilArray Link="move"/>
         <AbilArray Link="SquadVikingGMode"/>
         <AbilArray Link="SquadVikingFighterOvercharge"/>
+        <AbilArray Link="SquadVikingAssaultModeSwitch"/>
         <WeaponArray Link="SquadVikingALanzerTorpedoes"/>
         <WeaponArray Link="SquadVikingAAntiLightArmorMissile"/>
         <CardLayouts>
@@ -512,8 +516,11 @@
             <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
-            <LayoutButtons Face="SquadVikingGMode" Type="AbilCmd" AbilCmd="SquadVikingGMode,Execute" Row="2" Column="1"/>
+            <LayoutButtons Face="SquadVikingGMode" Type="AbilCmd" AbilCmd="SquadVikingAssaultModeSwitch,On" Row="2" Column="1"/>
+            <LayoutButtons Face="SquadVikingGMode" Type="Passive" Row="2" Column="1"/>
             <LayoutButtons Face="SquadVikingFighterOvercharge" Type="AbilCmd" AbilCmd="SquadVikingFighterOvercharge,Execute" Row="1" Column="0"/>
+            <LayoutButtons Face="SquadVikingAMode" Type="AbilCmd" AbilCmd="SquadVikingAssaultModeSwitch,Off" Row="2" Column="0"/>
+            <LayoutButtons Face="SquadVikingAMode" Type="Passive" Row="2" Column="0"/>
         </CardLayouts>
         <Radius value="0.75"/>
         <SeparationRadius value="0.75"/>
@@ -980,22 +987,17 @@
         <AbilArray Link="SquadMedivacTransport"/>
         <AbilArray Link="SquadAfterburnersBoost"/>
         <AbilArray Link="SquadMedivacDoubleBeamHeal"/>
-        <AbilArray Link="SquadMedivacDoubleBeamHeal"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
             <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
-            <LayoutButtons Face="SquadHellionLoad" Type="AbilCmd" AbilCmd="SquadMedivacTransport,255" Row="2" Column="2"/>
+            <LayoutButtons Face="SquadHellionLoad" Type="AbilCmd" AbilCmd="SquadMedivacTransport,Load" Row="2" Column="2"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="AcquireMove" Type="AbilCmd" AbilCmd="move,AcquireMove" Row="0" Column="4"/>
             <LayoutButtons Face="Heal" Type="AbilCmd" AbilCmd="SquadMedivacHeal,Execute" Row="2" Column="0"/>
-            <LayoutButtons Face="Heal" Type="AbilCmd" AbilCmd="SquadMedivacDoubleBeamHeal,Execute" Row="2" Column="0"/>
-            <LayoutButtons Face="Heal" Type="AbilCmd" AbilCmd="SquadMedivacDoubleBeamHeal,Execute" Row="2" Column="0"/>
-            <LayoutButtons Face="SquadMedivacUnloadAll" Type="AbilCmd" AbilCmd="SquadMedivacTransport,255" Row="2" Column="3"/>
-            <LayoutButtons Face="SquadAfterburner" Type="AbilCmd" AbilCmd="SquadAfterburnersBoost,255" Row="2" Column="1"/>
-            <LayoutButtons Face="AdvancedHealingAI" Type="Passive" Requirements="AdvancedHealingAIPurchased" Row="1" Column="1"/>
-            <LayoutButtons Face="SquadMedivacRapidDeployment2" Type="Passive" Requirements="RapidDeploymentResearched" Row="1" Column="0"/>
+            <LayoutButtons Face="SquadMedivacUnloadAll" Type="AbilCmd" AbilCmd="SquadMedivacTransport,UnloadAt" Row="2" Column="3"/>
+            <LayoutButtons Face="SquadAfterburner" Type="AbilCmd" AbilCmd="SquadAfterburnersBoost,Execute" Row="2" Column="1"/>
         </CardLayouts>
         <Radius value="0.75"/>
         <SeparationRadius value="0.75"/>

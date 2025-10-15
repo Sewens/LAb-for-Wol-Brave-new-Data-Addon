@@ -86,6 +86,12 @@
         <ImpactPointSiteOps Ops="SOpTargetPointStationary SOpShadow BattlecruiserHurricaneSiteOpOffset"/>
         <ImpactMap index="None" Model="BattlecruiserHurricaneAttackImpact" Sound="Battlecruiser_MissilePodsImpact"/>
     </CActorAction>
+    <CActorModel id="SquadVikingLandImpact" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.SquadVikingGroundModeLandSet.Start; At Caster" Send="Create"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="UltraliskBurrowChargeImpact"/>
+        <Scale value="0.750000"/>
+    </CActorModel>
     <CActorAction id="SquadVikingAntiLightArmorAttack" parent="GenericAttack" effectImpact="SquadVikingAntiLightArmorMissileDamage" effectLaunch="SquadVikingAntiLightArmorMissileLM">
         <LaunchAttachQuery Methods="AMFilterBattlecruiserHurricaneLeft AMRandomUniform"/>
         <ImpactPointSiteOps Ops="SOpTargetPointStationary SOpShadow BattlecruiserHurricaneSiteOpOffset"/>

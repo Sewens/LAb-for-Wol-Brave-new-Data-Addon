@@ -43,6 +43,27 @@
         <PeriodicOffsetArray value="0.8,-0.8,0"/>
         <PeriodicPeriodArray value="0.1"/>
     </CEffectCreatePersistent>
+    <CEffectDamage id="SquadVikingGroundModeLandDamage">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <AttributeBonus index="Light" value="10"/>
+        <AttributeBonus index="Summoned" value="20"/>
+        <AreaArray Radius="1.5" Fraction="1"/>
+        <Amount value="10"/>
+        <Death value="Impact"/>
+        <ImpactUnitValidator value="TargetisEnemy"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Neutral,Air,Missile,Dead,Invulnerable"/>
+    </CEffectDamage>
+    <CEffectSet id="SquadVikingGroundModeLandSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadVikingGroundModeLandDamage"/>
+        <EffectArray value="SquadVikingGroundModeLandAKSearch"/>
+    </CEffectSet>
+    <CEffectIssueOrder id="SquadVikingGroundModeOrder">
+        <EditorCategories value="Race:Terran"/>
+        <Abil value="SquadVikingGMode"/>
+    </CEffectIssueOrder>
     <CEffectCreatePersistent id="SquadVikingAntiLightArmorMissilePersistent">
         <EditorCategories value="Race:Terran"/>
         <PeriodCount value="20"/>
@@ -319,6 +340,10 @@
     <CEffectRedirectMissile id="SquadVikingAAMissileRedirect">
         <EditorCategories value="Race:Terran"/>
     </CEffectRedirectMissile>
+    <CEffectIssueOrder id="SquadVikingAirModeOrder">
+        <EditorCategories value="Race:Terran"/>
+        <Abil value="SquadVikingAMode"/>
+    </CEffectIssueOrder>
     <CEffectApplyBehavior id="SquadVoidStasisAB">
         <ValidatorArray index="0" value="NotStasis"/>
         <EditorCategories value="Race:Protoss"/>
