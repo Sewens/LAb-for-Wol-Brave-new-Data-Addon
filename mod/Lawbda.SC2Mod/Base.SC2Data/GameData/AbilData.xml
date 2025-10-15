@@ -43,6 +43,148 @@
         </CmdButtonArray>
         <CmdButtonArray index="Cancel" DefaultButtonFace="CmdCancel"/>
     </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadHurricaneMissilePods">
+        <Alignment value="Negative"/>
+        <AbilSetId value="missilepods"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadHurricaneMissile"/>
+        <Cost>
+            <Vital index="Energy" value="125"/>
+            <Cooldown TimeUse="0.8332"/>
+        </Cost>
+        <Range value="7"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <CursorEffect value="SquadHurricaneMissileDamage"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadMissilePods" State="Restricted" Requirements="UseHurricaneMissiles">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectTarget>
+    <CAbilArmMagazine id="SquadStarshipMagazine">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <SharedFlags index="TargetSnapToUnitRadius" value="1"/>
+        <Flags index="IgnoreUnitCost" value="1"/>
+        <Flags index="Retarget" value="1"/>
+        <Flags index="ShowStatus" value="0"/>
+        <Flags index="Transient" value="1"/>
+        <Flags index="WaitForFood" value="0"/>
+        <Leash value="1"/>
+        <InfoArray index="Ammo1" Distance="0.25" Manage="Recall" Unit="SquadWraith">
+            <Charge>
+                <CountMax value="1"/>
+                <CountUse value="1"/>
+                <Link value="Abil/##id##"/>
+                <Location value="Unit"/>
+            </Charge>
+            <Cooldown Link="Abil/##id##"/>
+            <Button DefaultButtonFace="BuildSquadWraith"/>
+            <Flags index="AutoBuild" value="1"/>
+            <Flags index="AutoBuildOn" value="1"/>
+            <Flags index="LeashRetarget" value="1"/>
+        </InfoArray>
+        <InfoArray index="Ammo2" Distance="0.25" Manage="Recall" Unit="SquadVikingA">
+            <Charge>
+                <CountMax value="1"/>
+                <CountUse value="1"/>
+                <Link value="Abil/##id##"/>
+                <Location value="Unit"/>
+            </Charge>
+            <Cooldown Link="Abil/##id##"/>
+            <Button DefaultButtonFace="BuildSquadViking"/>
+            <Flags index="AutoBuild" value="1"/>
+            <Flags index="AutoBuildOn" value="1"/>
+            <Flags index="External" value="1"/>
+            <Flags index="LeashRetarget" value="1"/>
+        </InfoArray>
+        <InfoArray index="Ammo3" Distance="0.25" Manage="Recall" Unit="SquadBanshee">
+            <Charge>
+                <CountMax value="1"/>
+                <CountUse value="1"/>
+                <Link value="Abil/AddMedicToSquad"/>
+                <Location value="Unit"/>
+            </Charge>
+            <Cooldown Link="Abil/##id##"/>
+            <Button DefaultButtonFace="BuildSquadBanshee"/>
+            <Flags index="AutoBuild" value="1"/>
+            <Flags index="AutoBuildOn" value="1"/>
+            <Flags index="External" value="1"/>
+            <Flags index="LeashRetarget" value="1"/>
+        </InfoArray>
+        <InfoArray index="Ammo4" Distance="0.25" Manage="Recall" Unit="SquadRaven">
+            <Charge>
+                <CountMax value="1"/>
+                <CountUse value="1"/>
+                <Link value="Abil/AddFirebatToSquad"/>
+                <Location value="Unit"/>
+            </Charge>
+            <Cooldown Link="Abil/##id##"/>
+            <Button DefaultButtonFace="BuildSquadRaven"/>
+            <Flags index="AutoBuild" value="1"/>
+            <Flags index="AutoBuildOn" value="1"/>
+            <Flags index="External" value="1"/>
+            <Flags index="LeashRetarget" value="1"/>
+        </InfoArray>
+        <InfoArray index="Ammo5" Distance="0.25" Manage="Recall" Unit="SquadScienceVessel">
+            <Charge>
+                <CountMax value="1"/>
+                <CountUse value="1"/>
+                <Link value="Abil/##id##"/>
+                <Location value="Unit"/>
+            </Charge>
+            <Cooldown Link="Abil/##id##"/>
+            <Button DefaultButtonFace="BuildSquadScienceVessel"/>
+            <Flags index="AutoBuild" value="1"/>
+            <Flags index="AutoBuildOn" value="1"/>
+            <Flags index="External" value="1"/>
+            <Flags index="LeashRetarget" value="1"/>
+        </InfoArray>
+        <InfoArray index="Ammo6" Distance="0.25" Manage="Recall" Unit="SquadBattlecruiser">
+            <Charge>
+                <CountMax value="1"/>
+                <CountUse value="1"/>
+                <Link value="Abil/##id##"/>
+                <Location value="Unit"/>
+            </Charge>
+            <Cooldown Link="Abil/##id##"/>
+            <Button DefaultButtonFace="BuildSquadBattlecruiser"/>
+            <Flags index="AutoBuild" value="1"/>
+            <Flags index="AutoBuildOn" value="1"/>
+            <Flags index="External" value="1"/>
+            <Flags index="LeashRetarget" value="1"/>
+        </InfoArray>
+        <InfoArray index="Ammo7" Manage="Recall" Unit="SquadMedivac">
+            <Charge CountMax="1" CountUse="1" Link="Abil/##id##"/>
+            <Cooldown Link="Abil/##id##"/>
+            <Button DefaultButtonFace="BuildSquadMedivac"/>
+            <Flags index="AutoBuild" value="1"/>
+            <Flags index="AutoBuildOn" value="1"/>
+            <Flags index="External" value="1"/>
+            <Flags index="LeashRetarget" value="1"/>
+        </InfoArray>
+        <ExternalAngle value="225"/>
+        <ExternalAngle value="45"/>
+        <ExternalAngle value="315"/>
+        <ExternalAngle value="135"/>
+        <MaxCount value="4"/>
+    </CAbilArmMagazine>
+    <CAbilEffectInstant id="SquadVikingFighterOvercharge">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Effect index="0" value="SquadVikingFighterOverchargeApply"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="15"/>
+        </Cost>
+        <Arc value="360"/>
+        <AutoCastFilters value="Visible;Neutral,Enemy,Missile,Stasis,Dead,Invulnerable"/>
+        <AutoCastRange value="6"/>
+        <DefaultError value="MustTargetMechanicalUnits"/>
+        <AbilSetId value="VikingOverCharge"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadVikingFighterOvercharge">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
     <CAbilResearch id="SquadAdvanceEngineBayResearch">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <InfoArray index="Research1" Upgrade="SquadExtendableInfantrySquad">
@@ -62,6 +204,10 @@
         <AutoCastRange value="6"/>
         <AutoCastValidatorArray value="DarkTemplarVoidStasis"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadVoidStasis"/>
+        <TargetSorts>
+            <SortArray value="SquadTSAirPriority"/>
+            <SortArray value="TSLife"/>
+        </TargetSorts>
     </CAbilEffectTarget>
     <CAbilEffectTarget id="SquadMedicFlashGrenades">
         <Alignment value="Negative"/>

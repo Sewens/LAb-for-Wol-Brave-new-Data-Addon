@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CUnit id="SquadHurricaneMissileLeft" parent="MISSILE_INVULNERABLE">
+        <Race value="Terr"/>
+        <LifeStart value="5"/>
+        <LifeMax value="5"/>
+        <Mover value="HurricaneMissile"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
+    <CUnit id="SquadVikingAntiLightArmorMissile" parent="MISSILE_INVULNERABLE">
+        <Race value="Terr"/>
+        <LifeStart value="5"/>
+        <LifeMax value="5"/>
+        <Mover value="HurricaneMissile"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
+    <CUnit id="SquadHurricaneMissileRight" parent="MISSILE_INVULNERABLE">
+        <Race value="Terr"/>
+        <LifeStart value="5"/>
+        <LifeMax value="5"/>
+        <Mover value="HurricaneMissile"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+        <LeaderAlias value="HurricaneMissileLeft"/>
+        <SelectAlias value="HurricaneMissileLeft"/>
+    </CUnit>
     <CUnit id="SquadNeuralParasiteWeapon" parent="MISSILE_INVULNERABLE">
         <Race value="Zerg"/>
         <Mover value="InfestorNeuralParasite"/>
@@ -480,7 +503,9 @@
         <AbilArray Link="attack"/>
         <AbilArray Link="move"/>
         <AbilArray Link="SquadVikingGMode"/>
+        <AbilArray Link="SquadVikingFighterOvercharge"/>
         <WeaponArray Link="SquadVikingALanzerTorpedoes"/>
+        <WeaponArray Link="SquadVikingAAntiLightArmorMissile"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
@@ -488,8 +513,7 @@
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="SquadVikingGMode" Type="AbilCmd" AbilCmd="SquadVikingGMode,Execute" Row="2" Column="1"/>
-            <LayoutButtons Face="SquadVikingPhobosClassWeaponsSystem" Type="Passive" Requirements="PhobusClassWeaponSystemsResearched" Row="2" Column="3"/>
-            <LayoutButtons Face="SquadVikingRipwaveMissiles" Type="Passive" Requirements="HALORocketsResearched" Row="2" Column="2"/>
+            <LayoutButtons Face="SquadVikingFighterOvercharge" Type="AbilCmd" AbilCmd="SquadVikingFighterOvercharge,Execute" Row="1" Column="0"/>
         </CardLayouts>
         <Radius value="0.75"/>
         <SeparationRadius value="0.75"/>
@@ -3961,10 +3985,10 @@
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
             <LayoutButtons Face="SquadMuleliskGather" Type="AbilCmd" AbilCmd="SquadMuleliskGather,Gather" Row="1" Column="0"/>
             <LayoutButtons Face="SquadReturnCargo" Type="AbilCmd" AbilCmd="SquadMuleliskGather,Return" Row="1" Column="0"/>
-            <LayoutButtons Face="Repair" Type="AbilCmd" AbilCmd="SquadMuleliskRepair,Execute" Row="2" Column="2"/>
             <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="3"/>
             <LayoutButtons Face="Enband" Type="AbilCmd" AbilCmd="AddMuleliskToSquad,Execute" Row="1" Column="4"/>
             <LayoutButtons Face="SquadGiftTooltips" Type="Submenu" SubmenuCardId="Gift" Row="1" Column="2"/>
+            <LayoutButtons Face="Repair" Type="AbilCmd" AbilCmd="SquadMuleliskRepair,Execute" Row="1" Column="1"/>
         </CardLayouts>
         <CardLayouts CardId="Gift">
             <LayoutButtons Face="HugeLifeandRegen" Type="Passive" Row="0" Column="0"/>

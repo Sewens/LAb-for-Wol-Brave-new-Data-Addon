@@ -30,6 +30,157 @@
     <CEffectEnumArea default="1" id="SquadAbilSearchRadiusExt" parent="SquadAbilSearch">
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
+    <CEffectCreatePersistent id="SquadHurricaneMissile">
+        <EditorCategories value="Race:Terran"/>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="Channeled" value="1"/>
+        <InitialEffect value="SquadHurricaneMissileDamageDelayPersistent"/>
+        <PeriodCount value="10"/>
+        <PeriodicEffectArray value="SquadHurricaneMissileBurstPersistent"/>
+        <PeriodicOffsetArray value="-0.8,-0.8,0"/>
+        <PeriodicOffsetArray value="-0.8,0.8,0"/>
+        <PeriodicOffsetArray value="0.8,0.8,0"/>
+        <PeriodicOffsetArray value="0.8,-0.8,0"/>
+        <PeriodicPeriodArray value="0.1"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="SquadVikingAntiLightArmorMissilePersistent">
+        <EditorCategories value="Race:Terran"/>
+        <PeriodCount value="20"/>
+        <PeriodicEffectArray value="SquadVikingAntiLightArmorMissileLM"/>
+        <PeriodicPeriodArray value="0.05"/>
+        <PeriodicOffsetArray value="0.45,0,0"/>
+        <PeriodicOffsetArray value="-0.45,0,0"/>
+        <PeriodicOffsetArray value="0,0.45,0"/>
+        <PeriodicOffsetArray value="0,-0.45,0"/>
+        <PeriodicOffsetArray value="0.45,0.45,0"/>
+        <PeriodicOffsetArray value="0.45,-0.45,0"/>
+        <PeriodicOffsetArray value="-0.45,0.45,0"/>
+        <PeriodicOffsetArray value="-0.45,-0.45,0"/>
+        <PeriodicOffsetArray value="0.9,0,0"/>
+        <PeriodicOffsetArray value="-0.9,0,0"/>
+        <PeriodicOffsetArray value="0,0.9,0"/>
+        <PeriodicOffsetArray value="0,-0.9,0"/>
+        <PeriodicOffsetArray value="0.9,0.9,0"/>
+        <PeriodicOffsetArray value="0.9,-0.9,0"/>
+        <PeriodicOffsetArray value="-0.9,0.9,0"/>
+        <PeriodicOffsetArray value="-0.9,-0.9,0"/>
+        <Flags index="Channeled" value="1"/>
+        <Flags index="RandomOffset" value="1"/>
+        <EffectRandMode value="RandomNoRepeat"/>
+        <OffsetRandMode value="RandomNoRepeat"/>
+        <PeriodRandMode value="RandomNoRepeat"/>
+    </CEffectCreatePersistent>
+    <CEffectRandomPointInCircle id="SquadVikingAntiLightArmorMissilePickRandomPoint">
+        <EditorCategories value="Race:Terran"/>
+        <Marker Link="Effect/SquadVikingAntiLightArmorMissilePersistent">
+            <MatchFlags index="CasterUnit" value="1"/>
+        </Marker>
+        <Effect value="SquadVikingAntiLightArmorMissileLM"/>
+        <Radius value="3"/>
+    </CEffectRandomPointInCircle>
+    <CEffectCreatePersistent id="SquadHurricaneMissileBurstPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <Flags index="RandomOffset" value="1"/>
+        <PeriodCount value="2"/>
+        <PeriodicEffectArray value="SquadHurricaneMissileLeftLM"/>
+        <PeriodicEffectArray value="SquadHurricaneMissileRightLM"/>
+        <PeriodicOffsetArray value="0,0,0"/>
+        <PeriodicOffsetArray value="0.5,0,0"/>
+        <PeriodicOffsetArray value="-0.5,0,0"/>
+        <PeriodicOffsetArray value="0,0.5,0"/>
+        <PeriodicOffsetArray value="0,-0.5,0"/>
+        <PeriodicOffsetArray value="0.5,0.5,0"/>
+        <PeriodicOffsetArray value="0.5,-0.5,0"/>
+        <PeriodicOffsetArray value="-0.5,0.5,0"/>
+        <PeriodicOffsetArray value="-0.5,-0.5,0"/>
+        <PeriodicOffsetArray value="1,0,0"/>
+        <PeriodicOffsetArray value="-1,0,0"/>
+        <PeriodicOffsetArray value="0,1,0"/>
+        <PeriodicOffsetArray value="0,-1,0"/>
+        <PeriodicOffsetArray value="1,1,0"/>
+        <PeriodicOffsetArray value="1,-1,0"/>
+        <PeriodicOffsetArray value="-1,1,0"/>
+        <PeriodicOffsetArray value="-1,-1,0"/>
+        <PeriodicPeriodArray value="0.05"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="SquadHurricaneMissileDamage">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <LaunchLocation Value="SourceUnitOrPoint"/>
+        <AttributeBonus index="Light" value="5"/>
+        <Visibility value="Visible"/>
+        <Flags index="Notification" value="1"/>
+        <Amount value="4"/>
+        <Death value="Fire"/>
+        <AreaArray Radius="1.6" Fraction="1"/>
+        <SearchFilters value="Air;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="ExtendByUnitRadius" value="1"/>
+        <SearchFlags index="SameCliff" value="0"/>
+    </CEffectDamage>
+    <CEffectDamage id="SquadVikingAntiLightArmorMissileDamage">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <LaunchLocation Value="SourceUnitOrPoint"/>
+        <AttributeBonus index="Light" value="5"/>
+        <Visibility value="Visible"/>
+        <Flags index="Notification" value="1"/>
+        <Amount value="5"/>
+        <Death value="Fire"/>
+        <AreaArray Radius="0.5" Fraction="1"/>
+        <SearchFilters value="Air;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="ExtendByUnitRadius" value="1"/>
+        <SearchFlags index="SameCliff" value="0"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="SquadHurricaneMissileDamageDelayPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <Flags index="Channeled" value="1"/>
+        <ExpireDelay value="1.5"/>
+        <FinalEffect value="SquadHurricaneMissileDamagePersistent"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="SquadHurricaneMissileDamagePersistent">
+        <EditorCategories value="Race:Terran"/>
+        <Flags index="Channeled" value="1"/>
+        <PeriodCount value="10"/>
+        <PeriodicEffectArray value="SquadHurricaneMissileDamage"/>
+        <PeriodicPeriodArray value="0.1"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="SquadHurricaneMissileLeftDummy">
+        <EditorCategories value="Race:Terran"/>
+        <AreaArray/>
+    </CEffectEnumArea>
+    <CEffectLaunchMissile id="SquadHurricaneMissileLeftLM">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <ImpactEffect value="SquadHurricaneMissileLeftDummy"/>
+        <AmmoUnit value="SquadHurricaneMissileLeft"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="SquadVikingAntiLightArmorMissileLM">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <ImpactEffect value="SquadVikingAntiLightArmorMissileDamage"/>
+        <AmmoUnit value="SquadVikingAntiLightArmorMissile"/>
+    </CEffectLaunchMissile>
+    <CEffectEnumArea id="SquadHurricaneMissileRightDummy">
+        <EditorCategories value="Race:Terran"/>
+        <AreaArray/>
+    </CEffectEnumArea>
+    <CEffectLaunchMissile id="SquadHurricaneMissileRightLM">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <ImpactEffect value="SquadHurricaneMissileRightDummy"/>
+        <AmmoUnit value="SquadHurricaneMissileRight"/>
+    </CEffectLaunchMissile>
+    <CEffectApplyBehavior id="SquadVikingFighterOverchargeApply">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadVikingFighterOvercharge"/>
+    </CEffectApplyBehavior>
     <CEffectSet id="CaptainPredatorKaiserBlades">
         <EditorCategories value="Race:Terran"/>
         <EffectArray value="CaptainPredatorKaiserBladesSearch"/>
