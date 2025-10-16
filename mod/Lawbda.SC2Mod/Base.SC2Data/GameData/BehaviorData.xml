@@ -1,5 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorBuff id="SoulOrb">
+        <InfoIcon value="Assets\Textures\btn-soul-orb.dds"/>
+        <BehaviorCategories index="User9" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <BuffFlags index="RefreshStack" value="1"/>
+        <MaxStackCount value="8"/>
+        <MaxStackCountPerCaster value="1"/>
+        <DamageResponse>
+            <Handled value="SquadHallucinationTargetPersistent"/>
+            <Location value="Attacker"/>
+            <ModifyFraction value="0.99"/>
+            <DamageValue value="Original"/>
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadHallucation">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Modification LifeArmorMultiplier="0" ShieldArmorMultiplier="0" SubgroupPriority="-100">
+            <ModifyFlags index="DisableAbils" value="1"/>
+            <ModifyFlags index="EnableAttack" value="1"/>
+            <ModifyFlags index="EnableMove" value="1"/>
+            <ModifyFlags index="HideChangeUI" value="1"/>
+            <StateFlags index="Hallucination" value="1"/>
+            <StateFlags index="SuppressCombat" value="1"/>
+            <StateFlags index="SuppressDetection" value="1"/>
+            <StateFlags index="SuppressRadar" value="1"/>
+            <DamageDealtMaximum index="Spell" value="0"/>
+            <DamageDealtMaximum index="Melee" value="0"/>
+            <DamageDealtMaximum index="Ranged" value="0"/>
+            <DamageDealtMaximum index="Splash" value="0"/>
+            <AbilClassEnableArray index="CAbilMorph" value="1"/>
+            <AbilClassEnableArray index="CAbilMorphPlacement" value="1"/>
+            <AbilClassEnableArray index="CAbilStop" value="1"/>
+            <AbilLinkDisableArray value="MorphZerglingToBaneling"/>
+            <AbilLinkDisableArray value="DevourerAspect"/>
+            <AbilLinkDisableArray value="MorphToBroodLord"/>
+            <AbilLinkDisableArray value="LurkerAspect"/>
+            <AbilLinkDisableArray value="MorphToOverseer"/>
+            <AbilLinkDisableArray value="MorphQueen2"/>
+            <AbilLinkDisableArray value="MorphQueen3"/>
+            <AbilLinkDisableArray value="ThorCrippled"/>
+            <AbilLinkDisableArray value="ThorUncrippled"/>
+            <AbilLinkDisableArray value="PhasingMode"/>
+        </Modification>
+        <DamageResponse ModifyFraction="2">
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadHallucinationTimedLife">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <Duration value="60"/>
+        <ExpireEffect value="SquadSquadHallucinationTargetKill"/>
+        <Modification>
+            <StateFlags index="SuppressPassenger" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
     <CBehaviorBuff id="SquadVikingAssaultMode">
         <InfoIcon value="Assets\Textures\btn-unit-terran-mecha-vikingassault.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -1092,7 +1152,7 @@
     </CBehaviorBuff>
     <!--Regen life and sheild based on damage taken, by ratio 5%.-->
     <!--Additional damage dealt based on target life %5.-->
-    <CBehaviorBuff id="SoulOrb">
+    <CBehaviorBuff id="SoulOrbAdditionalDamage">
         <InfoIcon value="Assets\Textures\btn-soul-orb.dds"/>
         <BehaviorCategories index="User9" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>

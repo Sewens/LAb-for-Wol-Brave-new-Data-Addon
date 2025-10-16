@@ -70,6 +70,51 @@
         <HostSiteOps Ops="SOpAttachHead"/>
         <Model value="Invisible"/>
     </CActorModel>
+    <CActorModel default="1" id="SquadUnitDeathModel">
+        <Aliases value="_Main"/>
+        <Aliases value="_Unit"/>
+        <Aliases value="_DeathModel"/>
+        <Macros value="DeadAnimationMacro"/>
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="CastShadows" value="1"/>
+        <Inherits index="CreepEngulfment" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="TeamColor" value="1"/>
+        <Inherits index="TintColor" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <AcceptedHostedPropTransfers index="TimeScale" value="0"/>
+        <!-- Means we get props and bearings once, and then stop. -->
+        <On Terms="ActorCreation" Send="RefClear ::Host"/>
+        <On Terms="ActorCreation" Send="SetTintColor 255,255,255 0.600000"/>
+        <On Terms="ActorCreation" Target="ModelPretargetGround" Send="Destroy"/>
+        <On Terms="ActorCreation" Target="GroundPreSelection" Send="Destroy"/>
+        <On Terms="ActorCreation; ScopeContains _RedTintDeath" Send="SetTintColor 255,0,0"/>
+        <On Terms="ActorCreation; ScopeContains _GreenTintDeath" Send="SetTintColor 0,255,0"/>
+        <On Terms="ActorCreation; ScopeContains _BlueTintDeath" Send="SetTintColor 0,0,255"/>
+        <On Terms="ActorCreation; ScopeContains _YellowTintDeath" Send="SetTintColor 255,255,0"/>
+        <On Terms="ActorCreation; ScopeContains _CyanTintDeath" Send="SetTintColor 0,255,255"/>
+        <On Terms="ActorCreation; ScopeContains _PurpleTintDeath" Send="SetTintColor 255,0,255"/>
+        <On Terms="Signal.*.ClearDeathModel" Send="Destroy"/>
+        <Host Subject="::Creator"/>
+        <ModelFlags index="SuppressMissingAttachErrors" value="1"/>
+        <ModelFlags index="UpdateVisibility" value="0"/>
+        <ModelFlags index="UseSyncSeed" value="1"/>
+        <EventDataSound Name="NydusCanalThud" Actor="UnitSound" Sound="NydusWorm_DeathThud"/>
+        <EventDataSound Name="ZergExplosionSlime" Actor="UnitSound" Sound="Zerg_ExplosionSlime"/>
+        <EventDataSound Name="ZergPreExplosionSmall" Actor="UnitSound" Sound="Zerg_PreExplosionSmall"/>
+        <EventDataSound Name="ZergExplosionTiny" Actor="UnitSound" Sound="Zerg_ExplosionTiny"/>
+        <EventDataSound Name="ZergExplosionSmall" Actor="UnitSound" Sound="Zerg_ExplosionSmall"/>
+        <EventDataSound Name="ZergExplosionMedium" Actor="UnitSound" Sound="Zerg_ExplosionMedium"/>
+        <EventDataSound Name="ZergExplosionLarge" Actor="UnitSound" Sound="Zerg_ExplosionLarge"/>
+        <EventDataSound Name="ProtossPreExplosionSmall" Actor="UnitSound" Sound="Protoss_PreExplosionSmall"/>
+        <EventDataSound Name="ProtossExplosionSmall" Actor="UnitSound" Sound="Protoss_ExplosionSmall"/>
+        <EventDataSound Name="ProtossExplosionMedium" Actor="UnitSound" Sound="Protoss_ExplosionMedium"/>
+        <EventDataSound Name="ProtossExplosionLarge" Actor="UnitSound" Sound="Protoss_ExplosionLarge"/>
+        <EventDataSound Name="TerranPreExplosionSmall" Actor="UnitSound" Sound="Terran_PreExplosionSmall"/>
+        <EventDataSound Name="TerranExplosionSmall" Actor="UnitSound" Sound="Terran_ExplosionSmall"/>
+        <EventDataSound Name="TerranExplosionMedium" Actor="UnitSound" Sound="Terran_ExplosionMedium"/>
+        <EventDataSound Name="TerranExplosionLarge" Actor="UnitSound" Sound="Terran_ExplosionLarge"/>
+    </CActorModel>
     <CActorText default="1" id="SquadFloatingTextDefault">
         <Host Subject="_Unit"/>
         <On Terms="ActorCreation" Send="TimerSet 0.010000 StartMover"/>
@@ -81,6 +126,48 @@
         <HeightOffset value="1.500000"/>
         <Text value="Button/Tooltip/##id##"/>
     </CActorText>
+    <CActorModel id="SquadHallucinationTargetBirth" parent="ModelAnimationStyleOneShot">
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Behavior.SquadHallucation.On; !ValidateUnit CasterIsColossus" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="HallucinationBirth"/>
+        <AutoScaleFactor value="1.000000"/>
+    </CActorModel>
+    <CActorModel id="SquadHallucinationTargetColossusBirth" parent="ModelAnimationStyleOneShot">
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Behavior.SquadHallucation.On; ValidateUnit CasterIsColossus" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="HallucinationColossusBirth"/>
+        <AutoScaleFactor value="1.000000"/>
+    </CActorModel>
+    <CActorSound id="SquadMeatCargo" parent="SoundOneShot">
+        <On Terms="AbilTransport.SquadMeatCargo.TransportLoad" Send="Create"/>
+        <On Terms="AbilTransport.SquadMeatCargo.TransportUnload" Send="Create"/>
+        <On Terms="ActorCreation" Target="_Selectable" Send="Create"/>
+        <On Terms="ActorCreation" Send="Destroy"/>
+    </CActorSound>
+    <CActorSimple id="SquadHallucinationTargetHighTemplar">
+        <Aliases value="_HallucinationTinter"/>
+        <On Terms="Behavior.SquadHallucation.On" Send="Create"/>
+        <On Terms="Behavior.SquadHallucation.On; ViewerTreatsUnitAs Detected" Send="Signal HallucinationTintOn"/>
+        <On Terms="Signal.*.HallucinationTintOn" Target="_Unit" Send="SetTintColor 108,108,255 1.000000 OneShot Hallucination"/>
+        <On Terms="Signal.*.HallucinationTintOn; !Option Shader Low" Target="_Unit" Send="SetOpacity 0.700000 1.000000 Hallucination"/>
+        <On Terms="Signal.*.HallucinationTintOff" Target="_Unit" Send="ClearTintColor 1.000000 Hallucination"/>
+        <On Terms="Signal.*.HallucinationTintOff; !Option Shader Low" Target="_Unit" Send="ClearOpacity 1.000000 Hallucination"/>
+        <On Terms="Behavior.SquadHallucation.Off" Send="Destroy"/>
+        <On Terms="Behavior.ArtanisHallucination.On" Send="Create"/>
+        <On Terms="Behavior.ArtanisHallucination.On; ViewerTreatsUnitAs Detected" Send="Signal HallucinationTintOn"/>
+        <On Terms="Behavior.ArtanisHallucination.Off" Send="Destroy"/>
+        <On Terms="Behavior.VoidStalkerBlinkHallucination.On" Send="Create"/>
+        <On Terms="Behavior.VoidStalkerBlinkHallucination.On; ViewerTreatsUnitAs Detected" Send="Signal HallucinationTintOn"/>
+        <On Terms="Behavior.VoidStalkerBlinkHallucination.Off" Send="Destroy"/>
+    </CActorSimple>
     <CActorModel id="SquadWarHoundAstralWindCastModel" parent="ModelAnimationStyleOneShot">
         <Inherits index="CloakEffect" value="1"/>
         <Inherits index="Visibility" value="1"/>
@@ -539,7 +626,7 @@
     </CActorMissile>
     <CActorMissile id="SquadMdeicHealGunMissile" parent="GenericAttackMissile" unitName="SquadMdeicHealGunWeapon">
         <On Terms="ActorCreation" Send="SetTintColor {0,255,0 5.000000}"/>
-        <Model value="MagrailMunition_Missile"/>
+        <Model value="WarHoundBeam"/>
     </CActorMissile>
     <CActorModel id="SquadNeuralParasiteModel" parent="ModelAddition">
         <On Terms="Behavior.SquadNeuralParasite.On" Send="Create"/>

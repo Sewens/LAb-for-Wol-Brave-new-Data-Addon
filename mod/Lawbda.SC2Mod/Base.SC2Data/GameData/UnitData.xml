@@ -3982,6 +3982,8 @@
         <AbilArray Link="SquadInfantry"/>
         <AbilArray Link="DisbandSquad"/>
         <AbilArray Link="AddMuleliskToSquad"/>
+        <AbilArray Link="SquadMeatCargo"/>
+        <AbilArray Link="SquadMeatCargoLoadCorpse"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
@@ -3994,6 +3996,8 @@
             <LayoutButtons Face="Enband" Type="AbilCmd" AbilCmd="AddMuleliskToSquad,Execute" Row="1" Column="4"/>
             <LayoutButtons Face="SquadGiftTooltips" Type="Submenu" SubmenuCardId="Gift" Row="1" Column="2"/>
             <LayoutButtons Face="Repair" Type="AbilCmd" AbilCmd="SquadMuleliskRepair,Execute" Row="1" Column="1"/>
+            <LayoutButtons Face="SquadLoadBody" Type="AbilCmd" AbilCmd="SquadMeatCargoLoadCorpse,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="SquadUnloadBodyAll" Type="AbilCmd" AbilCmd="SquadMeatCargo,UnloadAll" Row="2" Column="1"/>
         </CardLayouts>
         <CardLayouts CardId="Gift">
             <LayoutButtons Face="HugeLifeandRegen" Type="Passive" Row="0" Column="0"/>
@@ -4237,7 +4241,7 @@
         <CardLayouts CardId="Gift">
             <LayoutButtons Face="SmallLifeandRegen" Type="Passive" Row="0" Column="0"/>
             <LayoutButtons Face="ResourceHarvestBonusBasicMultiple" Type="Passive" Row="0" Column="1"/>
-            <LayoutButtons Face="SquadSoulOrb" Type="Passive" Row="0" Column="2"/>
+            <LayoutButtons Face="SquadSoulOrbHallucinationBuff" Type="Passive" Row="0" Column="2"/>
             <LayoutButtons Face="SpeedTier32" Row="1" Column="0"/>
         </CardLayouts>
         <CargoSize value="1"/>
@@ -4589,6 +4593,7 @@
         <TauntDuration index="Dance" value="5"/>
         <SelectAlias value="Marine"/>
         <SubgroupAlias value="Marine"/>
+        <DeathTime value="90"/>
     </CUnit>
     <CUnit id="SquadSCV">
         <DeathRevealRadius value="3"/>

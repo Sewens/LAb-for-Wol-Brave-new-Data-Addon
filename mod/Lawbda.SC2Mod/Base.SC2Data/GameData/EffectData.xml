@@ -30,6 +30,43 @@
     <CEffectEnumArea default="1" id="SquadAbilSearchRadiusExt" parent="SquadAbilSearch">
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
+    <CEffectCreateUnit id="SquadHallucinationTargetCreateUnit">
+        <EditorCategories value="Race:Terran"/>
+        <CreateFlags index="ProvideFood" value="0"/>
+        <CreateFlags index="TechComplete" value="0"/>
+        <CreateFlags index="UseFood" value="0"/>
+        <SpawnEffect value="SquadHallucinationTargetApplyBehavior"/>
+        <TypeFallbackUnit Effect="SquadHallucinationTargetPersistent" Value="Target"/>
+        <Chance value="0.5"/>
+    </CEffectCreateUnit>
+    <CEffectSet id="SquadHallucinationTargetApplyBehavior">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="SquadHallucinationTargetCreateUnitBHal"/>
+        <EffectArray value="SquadHallucinationTargetCreateUnitBTimer"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="SquadHallucinationTargetCreateUnitBHal">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="SquadHallucation"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadHallucinationTargetCreateUnitBTimer">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="SquadHallucinationTimedLife"/>
+    </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="SquadHallucinationTargetPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffectArray value="SquadHallucinationTargetCreateUnit"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="SquadSquadHallucinationTargetKill">
+        <ValidatorArray value="KillHallucinationTargetFilters"/>
+        <EditorCategories value="Race:Protoss"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Flags index="Kill" value="1"/>
+        <Flags index="Notification" value="1"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectDamage>
     <CEffectSet id="SquadWarHoundAstralWindSet">
         <EditorCategories value="Race:Terran"/>
         <EffectArray value="SquadWarHoundAstralWindSearch"/>
@@ -65,6 +102,34 @@
         <PeriodicOffsetArray value="0.8,-0.8,0"/>
         <PeriodicPeriodArray value="0.1"/>
     </CEffectCreatePersistent>
+    <CEffectModifyUnit id="SquadPauseDecay">
+        <EditorCategories value="Race:Terran"/>
+        <ModifyFlags index="PauseDeathTime" value="1"/>
+    </CEffectModifyUnit>
+    <CEffectModifyUnit id="SquadUnpauseDecay">
+        <EditorCategories value="Race:Terran"/>
+        <ModifyFlags index="UnpauseDeathTime" value="1"/>
+    </CEffectModifyUnit>
+    <CEffectIssueOrder id="SquadMeatCargoUnloadDisableAutoLoad">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <CmdFlags index="SetAutoCast" value="1"/>
+        <Player Value="Caster"/>
+    </CEffectIssueOrder>
+    <CEffectSet id="SquadMeatCargoGetCorpse">
+        <ValidatorArray value="IsCasterTransportNotFull"/>
+        <!--ValidatorArray value="Amel@CanLoadTarget"/-->
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadMeatCargoGetCorpseIssueOrder"/>
+    </CEffectSet>
+    <CEffectIssueOrder id="SquadMeatCargoGetCorpseIssueOrder">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Abil value="SquadMeatCargo"/>
+        <CmdFlags index="Preempt" value="1"/>
+        <Player Value="Caster"/>
+        <Target Value="TargetUnit"/>
+    </CEffectIssueOrder>
     <CEffectDamage id="SquadSiegeTankJumpJetPlaceholderRemove">
         <EditorCategories value="Race:Terran"/>
         <ImpactLocation Value="TargetUnit"/>
