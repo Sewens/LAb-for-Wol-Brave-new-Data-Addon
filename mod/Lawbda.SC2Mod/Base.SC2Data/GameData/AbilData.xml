@@ -59,6 +59,22 @@
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadSiegeTankJumpJetRedeploy">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Effect index="0" value="SquadSiegeTankJumpJetPlaceholderCreate"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Cost>
+            <Cooldown Location="Unit" TimeUse="8"/>
+        </Cost>
+        <Range value="8"/>
+        <PrepTime value="0.125"/>
+        <UninterruptibleArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadSiegeTankJumpJet" Requirements="HaveHoverSiegeTank"/>
+        <PlaceUnit value="SiegeTankJumpJetPlaceholder"/>
+    </CAbilEffectTarget>
     <CAbilArmMagazine id="SquadStarshipMagazine">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <SharedFlags index="TargetSnapToUnitRadius" value="1"/>
@@ -2301,10 +2317,6 @@
         <InfoArray index="Train5" Time="42">
             <Button DefaultButtonFace="BuildSquadViking"/>
             <Unit value="SquadVikingA"/>
-        </InfoArray>
-        <InfoArray index="Train6">
-            <Charge Link="Abil/##id##"/>
-            <Cooldown Link="Abil/##id##"/>
         </InfoArray>
         <InfoArray index="Train7" Time="60">
             <Button DefaultButtonFace="BuildSquadScienceVessel" Requirements="PoweredByTechlab"/>

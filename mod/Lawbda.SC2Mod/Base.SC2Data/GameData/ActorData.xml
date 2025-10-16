@@ -81,6 +81,30 @@
         <HeightOffset value="1.500000"/>
         <Text value="Button/Tooltip/##id##"/>
     </CActorText>
+    <CActorModel id="SquadSeigeTankJumpJetLandingModel">
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="ActorCreation" Send="$Stand,00"/>
+        <On Terms="AnimDone; AnimName Stand" Send="Destroy"/>
+        <On Terms="Effect.SquadSiegeTankJumpJetPlaceholderRemoveSet.Start; At Caster" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter SOpShadow"/>
+        <Model value="SquadUnloadFX"/>
+        <AutoScaleFactor value="1.000000"/>
+    </CActorModel>
+    <CActorModel id="SquadSeigeTankJumpJetLaunchModel" parent="ModelAnimationStyleContinuous">
+        <On Terms="Effect.SquadSiegeTankJumpJetCreateCP.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.SquadSiegeTankJumpJetCreateCP.Stop" Send="Destroy"/>
+        <Model value="SquadSiegeTankJumpJetLaunchModel"/>
+    </CActorModel>
+    <CActorRange id="SquadSeigeTankJumpJetRange" parent="RangeAbil" abil="SquadSiegeTankJumpJetRedeploy"/>
+    <CActorSound id="SquadSeigeTankJumpJetLaunchActorSound" parent="SoundOneShot">
+        <On Terms="Effect.SquadSiegeTankJumpJetCreateCP.Start; At Caster" Send="Create"/>
+        <Sound value="SiegeTank_JumpJet_Launch"/>
+    </CActorSound>
     <CActorAction id="SquadHurricaneLeftAttack" parent="GenericAttack" effectImpact="SquadHurricaneMissileLeftDummy" effectLaunch="SquadHurricaneMissileLeftLM">
         <LaunchAttachQuery Methods="AMFilterBattlecruiserHurricaneLeft AMRandomUniform"/>
         <ImpactPointSiteOps Ops="SOpTargetPointStationary SOpShadow BattlecruiserHurricaneSiteOpOffset"/>

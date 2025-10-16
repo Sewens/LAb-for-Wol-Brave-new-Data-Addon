@@ -43,6 +43,53 @@
         <PeriodicOffsetArray value="0.8,-0.8,0"/>
         <PeriodicPeriodArray value="0.1"/>
     </CEffectCreatePersistent>
+    <CEffectDamage id="SquadSiegeTankJumpJetPlaceholderRemove">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <Visibility value="Hidden"/>
+        <Flags index="Kill" value="1"/>
+        <Flags index="NoKillCredit" value="1"/>
+        <Death value="Remove"/>
+    </CEffectDamage>
+    <CEffectSet id="SquadSiegeTankJumpJetPlaceholderRemoveSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadSiegeTankJumpJetPlaceholderRemove"/>
+    </CEffectSet>
+    <CEffectCreatePersistent id="SquadSiegeTankJumpJetCreateCP">
+        <EditorCategories value="Race:Terran"/>
+        <Flags index="Channeled" value="1"/>
+        <InitialEffect value="SquadSiegeTankJumpJetCreateTimeOutAB"/>
+        <PeriodCount value="1"/>
+        <PeriodicValidator value="NotDead"/>
+        <PeriodicEffectArray value="SquadSiegeTankJumpJetLM"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectCreateUnit id="SquadSiegeTankJumpJetPlaceholderCreate">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetPoint"/>
+        <CreateFlags index="Birth" value="0"/>
+        <CreateFlags index="ProvideFood" value="0"/>
+        <CreateFlags index="SetFacing" value="1"/>
+        <CreateFlags index="UseFood" value="0"/>
+        <SpawnEffect value="SquadSiegeTankJumpJetCreateCP"/>
+        <SpawnUnit value="SiegeTankJumpJetPlaceholder"/>
+        <SpawnRange value="0"/>
+    </CEffectCreateUnit>
+    <CEffectApplyBehavior id="SquadSiegeTankJumpJetCreateTimeOutAB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Effect="SiegeTankJumpJetCreateCP" Value="TargetOuter"/>
+        <Behavior value="SquadSiegeTankJumpJetCreateTimeOut"/>
+        <Count value="5"/>
+    </CEffectApplyBehavior>
+    <CEffectLaunchMissile id="SquadSiegeTankJumpJetLM">
+        <LaunchLocation Value="CasterUnit"/>
+        <ImpactLocation Value="TargetUnitOrPoint"/>
+        <ImpactEffect value="SquadSiegeTankJumpJetPlaceholderRemoveSet"/>
+        <FinishEffect value="SquadSiegeTankJumpJetPlaceholderRemoveSet"/>
+        <Flags index="ValidateWeapon" value="0"/>
+        <Movers Link="SquadSiegeTankJumpJet"/>
+        <DeathType value="Unknown"/>
+    </CEffectLaunchMissile>
     <CEffectDamage id="SquadVikingGroundModeLandDamage">
         <EditorCategories value="Race:Terran"/>
         <ResponseFlags index="Acquire" value="1"/>
