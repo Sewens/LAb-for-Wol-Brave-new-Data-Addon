@@ -30,6 +30,28 @@
     <CEffectEnumArea default="1" id="SquadAbilSearchRadiusExt" parent="SquadAbilSearch">
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
+    <CEffectSet id="SquadWarHoundAstralWindSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadWarHoundAstralWindSearch"/>
+    </CEffectSet>
+    <CEffectModifyUnit id="SquadWarHoundAstralWindOther">
+        <EditorCategories value="Race:Terran"/>
+        <VitalArray index="Life">
+            <Change value="30"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectSet id="SquadWarHoundAstralWindOtherSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadWarHoundAstralWindOther"/>
+    </CEffectSet>
+    <CEffectEnumArea id="SquadWarHoundAstralWindSearch">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <ExcludeArray Effect="SquadWarHoundAstralWindSet" Value="Target"/>
+        <SearchFilters value="-;Enemy,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="6" Effect="SquadWarHoundAstralWindOtherSet"/>
+        <SearchFlags index="ExtendByUnitRadius" value="1"/>
+    </CEffectEnumArea>
     <CEffectCreatePersistent id="SquadHurricaneMissile">
         <EditorCategories value="Race:Terran"/>
         <TimeScaleSource Value="Caster"/>
@@ -1228,6 +1250,70 @@
         <EditorCategories value="Race:Terran"/>
         <EffectArray value="CaptainPredatorOutOfCombat2RB"/>
         <EffectArray value="CaptainPredatorOutOfCombat3RB"/>
+    </CEffectSet>
+    <CEffectDamage id="SquadWarHoundRailgunDamage">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <AttributeBonus index="Massive" value="47"/>
+        <ArmorReduction value="1"/>
+        <Kind value="Ranged"/>
+        <Amount value="23"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="SquadWarHoundRailgunLM">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="SquadWarHoundRailgunDamage"/>
+        <AmmoUnit value="SquadWarhoundMissile"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="SquadWarHoundMelee">
+        <Name value="Effect/Name/WarHound"/>
+        <EditorCategories value="Race:Terran"/>
+        <Marker Link="Effect/WarHound"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <AttributeBonus index="Massive" value="47"/>
+        <ArmorReduction value="1"/>
+        <Kind value="Melee"/>
+        <Amount value="23"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="SquadTornadoMissileCP">
+        <ValidatorArray value="TornadoMaxDistance"/>
+        <ValidatorArray value="TornadoMissileFilters"/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <PeriodCount value="3"/>
+        <PeriodicEffectArray value="SquadTornadoMissileLMSet"/>
+        <PeriodicPeriodArray value="0.125"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="SquadTornadoMissileDamage" parent="DU_WEAP">
+        <ValidatorArray value="NotHidden"/>
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Ranged"/>
+        <Amount value="10"/>
+    </CEffectDamage>
+    <CEffectDamage id="SquadTornadoMissileDamageDummy">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="SquadTornadoMissileLM">
+        <ValidatorArray value="NotHidden"/>
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="SquadTornadoMissileDamage"/>
+        <AmmoUnit value="SquadTornadoMissile"/>
+        <Movers Link="TornadoMissileWeaponClose" IfRangeLTE="6"/>
+        <Movers Link="TornadoMissileWeapon" IfRangeLTE="20"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="SquadTornadoMissileLMDummy">
+        <ValidatorArray value="IsHidden"/>
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <ImpactEffect value="SquadTornadoMissileDamageDummy"/>
+        <AmmoUnit value="SquadTornadoMissileDummy"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="SquadTornadoMissileLMSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadTornadoMissileLM"/>
+        <EffectArray value="SquadTornadoMissileLMDummy"/>
     </CEffectSet>
     <CEffectApplyBehavior id="YellowScannerChronoBeam">
         <EditorCategories value=""/>

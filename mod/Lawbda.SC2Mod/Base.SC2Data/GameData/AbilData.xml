@@ -43,6 +43,16 @@
         </CmdButtonArray>
         <CmdButtonArray index="Cancel" DefaultButtonFace="CmdCancel"/>
     </CAbilEffectTarget>
+    <CAbilEffectInstant id="SquadWarHoundAstralWind">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadWarHoundAstralWindSet"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="15"/>
+        </Cost>
+        <AINotifyEffect value="SquadWarHoundAstralWindSet"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadWarHoundAstralWind"/>
+    </CAbilEffectInstant>
     <CAbilEffectTarget id="SquadHurricaneMissilePods">
         <Alignment value="Negative"/>
         <AbilSetId value="missilepods"/>
@@ -632,6 +642,18 @@
         <Activity value="UI/Upgrading"/>
         <ValidatorArray value="HasNoCargo"/>
     </CAbilMorph>
+    <CAbilAugment id="SquadTornadoMissile">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="TornadoMissile"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <AbilCmd value="attack,Execute"/>
+        <Cost>
+            <Cooldown TimeUse="6"/>
+        </Cost>
+        <Effect value="SquadTornadoMissileCP"/>
+        <AutoCastFilters value="Ground,Mechanical,Visible;Self,Player,Ally,Neutral,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+    </CAbilAugment>
     <CAbilEffectTarget id="YellowScannerSweep">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Flags index="RequireTargetVision" value="0"/>
@@ -2085,6 +2107,10 @@
         <InfoArray index="Train6" Time="25">
             <Button DefaultButtonFace="BuildSquadVulture"/>
             <Unit value="SquadVulture"/>
+        </InfoArray>
+        <InfoArray index="Train7">
+            <Button DefaultButtonFace="SquadBuildWarHound"/>
+            <Unit value="SquadWarhound"/>
         </InfoArray>
     </CAbilTrain>
     <CAbilMorph id="SquadMorphToTechReactor">

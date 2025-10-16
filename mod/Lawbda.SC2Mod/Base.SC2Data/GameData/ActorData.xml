@@ -81,6 +81,33 @@
         <HeightOffset value="1.500000"/>
         <Text value="Button/Tooltip/##id##"/>
     </CActorText>
+    <CActorModel id="SquadWarHoundAstralWindCastModel" parent="ModelAnimationStyleOneShot">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.SquadWarHoundAstralWindSearch.Start" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOrigin" HoldRotation="1"/>
+        <Model value="ArtanisAstralWindCastModel"/>
+    </CActorModel>
+    <CActorModel id="SquadWarHoundWindImpactModel" parent="ModelAnimationStyleOneShot">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.SquadWarHoundAstralWindOther.Start; At Target" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOrigin" HoldRotation="1"/>
+        <Model value="ArtanisAstralWindImpactModel"/>
+    </CActorModel>
+    <CActorRange id="SquadWarHoundAstralWindRange">
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <On Terms="Abil.SquadWarHoundAstralWind.ButtonHoverOn" Send="Create"/>
+        <On Terms="Abil.SquadWarHoundAstralWind.ButtonHoverOff" Send="Destroy"/>
+        <Range value="6.000000"/>
+    </CActorRange>
+    <CActorSound id="SquadWarHoundAstralWindSound" parent="SoundOneShot">
+        <On Terms="Effect.SquadWarHoundAstralWindSearch.Start" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <Sound value="Artanis_AstralWind"/>
+    </CActorSound>
     <CActorModel id="SquadSeigeTankJumpJetLandingModel">
         <Flags index="SuppressSaveLoad" value="1"/>
         <Inherits index="BaseModelScale" value="1"/>
@@ -888,6 +915,149 @@
         <HostSiteOps Ops="SOpAttachOverhead" HoldRotation="1"/>
         <Model value="TissueAssimilationModel"/>
     </CActorModel>
+    <CActorUnit id="SquadWarHound" parent="GenericUnitBase" unitName="SquadWarhound">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="UnloadDropAnim"/>
+        <Macros value="PhysicsDeathsSwarmGround"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <Macros value="PhysicsDeathsVoidGround"/>
+        <On Terms="WeaponStart.WarHound.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.WarHound.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="WeaponStart.WarHound.AttackStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart AttackSuperior Attack,Superior"/>
+        <On Terms="WeaponStart.WarHound.AttackStart; WeaponTargetElevation LE -20.000000" Send="AnimBracketStart AttackInferior Attack,Inferior"/>
+        <On Terms="WeaponStop.WarHound.AttackStop" Send="AnimBracketStop AttackSuperior"/>
+        <On Terms="WeaponStop.WarHound.AttackStop" Send="AnimBracketStop AttackInferior"/>
+        <On Terms="WeaponStart.WarHoundMelee.AttackStart" Send="AnimBracketStart Attack Spell,A"/>
+        <On Terms="WeaponStop.WarHoundMelee.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="Effect.TornadoMissileCP.Start; At Caster" Send="AnimBracketStart Cover Cover,Start Cover Cover,End"/>
+        <On Terms="Effect.TornadoMissileCP.Stop; At Caster" Send="AnimBracketStop Cover"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create Warhound_Land"/>
+        <On Terms="UnitDeathCustomize; Option Model Low" Send="DeathCustomize Low"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit HaveVoidShade" Send="DeathCustomize Shadow"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
+        <Model value="WarHound"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="WarHound"/>
+        <DeathArray index="Normal" ModelLink="WarHoundDeath" SoundLink="SiegeTank_Explode"/>
+        <DeathCustoms ModelLink="WarhoundDeathRagdoll" Name="RagdollBasic">
+            <BodySquibs Name="Basic" Model="TerranSquibDeathRagdoll"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollSiegeTank" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollBaneling" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollUltraUnburrow" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms ModelLink="TerranLargeUnitDeathLow" Name="Low"/>
+        <DeathCustoms>
+            <ModelLink value="DeathVoidShadowMedium"/>
+            <SoundLink value="ShadowUnit_DeathFX"/>
+            <VoiceLink value="ShadowUnit_DeathVox"/>
+            <Name value="Shadow"/>
+        </DeathCustoms>
+        <DeathActorModel value="UnitDeathModelUnscaled"/>
+        <PlacementModel value="WarHound"/>
+        <PortraitModel value="WarhoundPortrait"/>
+        <StandAnimTurnTime value="3.33"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="2.000000"/>
+            <RangeDown value="2.000000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleWarhound"/>
+        </TerrainSquibs>
+        <WalkAnimMoveSpeed value="2.7968"/>
+        <BarOffset value="125"/>
+        <BarWidth value="90"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-terran-warhound.dds"/>
+        </GroupIcon>
+        <HighlightTooltip value="Unit/Name/SquadWarHound"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <NameOffset value="40"/>
+        <SoundArray index="Ready" value="WarHound_Ready"/>
+        <SoundArray index="What" value="WarHound_What"/>
+        <SoundArray index="Yes" value="WarHound_Yes"/>
+        <SoundArray index="Attack" value="WarHound_Attack"/>
+        <SoundArray index="Pissed" value="WarHound_Pissed"/>
+        <SoundArray index="Movement" value="WarHound_Movement"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-warhound.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-terran-warhound.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="SquadWarHoundAttack" parent="GenericAttack" effectImpact="SquadWarHoundRailgunDamage" effectLaunch="SquadWarHoundRailgunLM">
+        <LaunchAssets Sound="RailGun_Launch"/>
+        <BeamScope value="Caster"/>
+        <ImpactMap index="None" Model="WarHoundAttackImpact" Sound="RailGun_Impact"/>
+        <ImpactPhysics Name="RailgunImpact" MatchKeys="Basic" Physics="RailgunAttackDeathForce"/>
+        <ActionFlags index="LaunchForceSite" value="1"/>
+    </CActorAction>
+    <CActorMissile id="SquadWarHoundAttackMissile" parent="GenericAttackMissile" unitName="SquadWarhoundMissile">
+        <Model value="Invisible"/>
+    </CActorMissile>
+    <CActorBeamSimple id="SquadWarHoundBeam" parent="GenericAttackBeam">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.SquadWarHoundRailgunLM.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.WarHound.Start" Send="Create WarHoundImpactHoldingSite"/>
+        <On Terms="Effect.WarHound.Start" Send="RefSet ::HostImpact WarHoundImpactHoldingSite"/>
+        <Host Subject="_Selectable"/>
+        <Model value="WarHoundBeam"/>
+        <HostLaunch Subject="_Selectable" Actor="Find"/>
+        <HostLaunchSiteOps Ops="SOpAttachWeapon" HoldPosition="1" HoldRotation="1"/>
+        <HostImpact Subject="_Missile" Actor="Find"/>
+        <HostImpactSiteOps Ops="SOpAttachCenter"/>
+    </CActorBeamSimple>
+    <CActorAction id="SquadWarHoundMeleeAttack" parent="GenericAttack" effectAttack="SquadWarHoundMelee">
+        <ImpactMap index="None" Sound="WarHound_MeleeAttackLaunch"/>
+        <ImpactPhysics>
+            <Name value="AttackOverhead"/>
+            <MatchKeys value="Basic"/>
+            <AttackAnimProps value="00"/>
+            <Physics value="WarhoundMeleeAttackForceOverhead"/>
+        </ImpactPhysics>
+        <ImpactPhysics>
+            <Name value="AttackSwipe"/>
+            <MatchKeys value="Basic"/>
+            <AttackAnimProps value="01"/>
+            <Physics value="WarhoundMeleeAttackForceLateral"/>
+        </ImpactPhysics>
+        <ShieldFlashType value="Header"/>
+    </CActorAction>
+    <CActorSound id="SquadWarHoundDeath" parent="SoundOneShot">
+        <On Terms="UnitDeath.SquadWarhound; PassChance 25.000000" Send="Create"/>
+        <Sound value="WarHound_Death"/>
+    </CActorSound>
+    <CActorAction id="SquadTornadoMissileAttack" parent="GenericAttack" effectImpact="SquadTornadoMissileDamage" effectLaunch="SquadTornadoMissileLM">
+        <LaunchAttachQuery Methods="AMFilterWarHound AMPatternWarHound"/>
+        <LaunchAssets Model="TornadoMissileAttackLaunch" Sound="WarHound_Missile_Launch"/>
+        <ImpactMap index="None" Model="TornadoMissileAttackImpact" Sound="WarHound_Missile_Impact"/>
+        <ImpactPhysics Name="TornadoMissileImpact" MatchKeys="Basic" Physics="WarhoundMissileAttackForce"/>
+    </CActorAction>
+    <CActorMissile id="SquadTornadoMissileAttackMissile" parent="GenericAttackMissile" unitName="SquadTornadoMissile">
+        <Model value="TornadoMissileWeapon"/>
+    </CActorMissile>
+    <CActorAction id="SquadTornadoMissileDummyAttack" parent="GenericAttack" effectImpact="SquadTornadoMissileDamageDummy" effectLaunch="SquadTornadoMissileLMDummy">
+        <LaunchAttachQuery Methods="AMFilterWarHoundDummy AMPatternWarHoundDummy"/>
+        <LaunchAssets Model="TornadoMissileDummyAttackLaunch" Sound="WarHound_Missile_Launch"/>
+        <ImpactMap index="None" Sound="WarHound_Missile_Impact"/>
+    </CActorAction>
+    <CActorMissile id="SquadTornadoMissileDummyAttackMissile" parent="GenericAttackMissile" unitName="SquadTornadoMissileDummy">
+        <Model value="TornadoMissileDummyWeapon"/>
+    </CActorMissile>
     <CActorModel id="YellowScannerChronoBeamImpact" parent="ModelAnimationStyleContinuous">
         <On Terms="Behavior.YellowScannerChronoBeam.On" Send="Create"/>
         <On Terms="Behavior.YellowScannerChronoBeam.Off" Send="AnimBracketStop BSD"/>

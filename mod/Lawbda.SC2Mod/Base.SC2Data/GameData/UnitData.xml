@@ -1074,7 +1074,7 @@
                 <Row value="2"/>
                 <Column value="2"/>
             </LayoutButtons>
-            <LayoutButtons Face="SquadUnstableCloak" Type="Passive" Row="2" Column="0"/>
+            <LayoutButtons Face="SquadWraithHighLagCloak" Type="Passive" Row="2" Column="0"/>
         </CardLayouts>
         <Radius value="0.625"/>
         <SeparationRadius value="0.625"/>
@@ -2483,6 +2483,7 @@
             <LayoutButtons Face="BuildSquadThor" Type="AbilCmd" AbilCmd="SquadFactoryTrain,Train4" Row="0" Column="4"/>
             <LayoutButtons Face="BuildSquadDiamondback" Type="AbilCmd" AbilCmd="SquadFactoryTrain,Train3" Row="0" Column="1"/>
             <LayoutButtons Face="BuildSquadVulture" Type="AbilCmd" AbilCmd="SquadFactoryTrain,Train6" Row="1" Column="0"/>
+            <LayoutButtons Face="SquadBuildWarHound" Type="AbilCmd" AbilCmd="SquadFactoryTrain,Train7" Row="1" Column="1"/>
         </CardLayouts>
         <Radius value="1.625"/>
         <SeparationRadius value="1.625"/>
@@ -5921,6 +5922,87 @@
     <CUnit id="SquadThorAALance" parent="MISSILE">
         <Race value="Terr"/>
         <Mover value="ThorAALance"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
+    <CUnit id="SquadWarhound">
+        <DeathRevealRadius value="3"/>
+        <Race value="Terr"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TurnBeforeMove" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Locust" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <LifeStart value="220"/>
+        <LifeMax value="220"/>
+        <LifeArmor value="3"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranVehiclePlating"/>
+        <Speed value="2.8125"/>
+        <Acceleration value="1000"/>
+        <LateralAcceleration value="46.0625"/>
+        <TurningRate value="360"/>
+        <Sight value="11"/>
+        <Food value="-3"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="150"/>
+        <CostResource index="Vespene" value="50"/>
+        <RepairTime value="45"/>
+        <AttackTargetPriority value="20"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="SquadTornadoMissile"/>
+        <AbilArray Link="QueueMagazine"/>
+        <AbilArray Link="DisbandSquad"/>
+        <WeaponArray Link="SquadWarHoundMelee"/>
+        <WeaponArray Link="SquadWarHoundRailgun"/>
+        <EffectArray index="Death" value="SquadWarHoundAstralWindSet"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="SquadHaywireMissiles" Type="AbilCmd" AbilCmd="SquadTornadoMissile,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="4"/>
+            <LayoutButtons Face="SquadWarHoundAstralWind" Type="Passive" Row="2" Column="3"/>
+        </CardLayouts>
+        <Radius value="0.8125"/>
+        <SeparationRadius value="0.625"/>
+        <InnerRadius value="0.5"/>
+        <CargoSize value="4"/>
+        <ScoreMake value="225"/>
+        <ScoreKill value="225"/>
+        <SubgroupPriority value="8"/>
+        <MinimapRadius value="1"/>
+        <EditorCategories value="ObjectFamily:Campaign,ObjectType:Unit"/>
+        <HotkeyAlias value=""/>
+        <GlossaryPriority value="126"/>
+        <GlossaryStrongArray value="Stalker"/>
+        <GlossaryStrongArray value="SiegeTankSieged"/>
+        <GlossaryWeakArray value="Roach"/>
+        <GlossaryWeakArray value="Zealot"/>
+        <GlossaryWeakArray value="Marauder"/>
+        <TauntDuration index="Dance" value="5"/>
+    </CUnit>
+    <CUnit id="SquadWarhoundMissile" parent="MISSILE">
+        <Race value="Terr"/>
+        <Mover value="WarHoundWeapon"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
+    <CUnit id="SquadTornadoMissileDummy" parent="MISSILE">
+        <Race value="Terr"/>
+        <Mover value="TornadoMissileDummyWeapon"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
+    <CUnit id="SquadTornadoMissile" parent="MISSILE">
+        <Race value="Terr"/>
+        <Mover value="TornadoMissileWeapon"/>
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
     </CUnit>
 </Catalog>
