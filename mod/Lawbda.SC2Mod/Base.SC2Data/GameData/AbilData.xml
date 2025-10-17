@@ -65,33 +65,33 @@
         <AINotifyEffect value=""/>
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadHallucinationTarget"/>
     </CAbilEffectTarget>
-    <CAbilTransport id="SquadMeatCargo">
+    <CAbilTransport id="SquadMeatWagonCorpseCargo">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <CmdButtonArray index="Load" DefaultButtonFace="SquadLoadBody"/>
         <CmdButtonArray index="UnloadAll" DefaultButtonFace="SquadUnloadBodyAll"/>
         <Flags index="AllowPassengerSmartCmd" value="0"/>
         <Flags index="AllowSmartCmd" value="0"/>
         <Flags index="AllowCorpse" value="1"/>
+        <Range value="12"/>
+        <MaxUnloadRange value="4"/>
         <MaxCargoCount value="8"/>
         <MaxCargoSize value="8"/>
         <TotalCargoSpace value="8"/>
-        <TargetFilters value="Dead;Missile,Buried"/>
-        <Range value="12"/>
-        <MaxUnloadRange value="4"/>
-        <SearchRadius value="12"/>
+        <LoadCargoEffect value="SquadMeatWagonLoadPauseDecay"/>
+        <UnloadCargoEffect value="SquadMeatWagonUnloadUnpauseDecay"/>
+        <UnloadTransportEffect value="SquadMeatWagonUnloadDisableAutoLoad"/>
         <InitialLoadDelay value="0.5"/>
         <LoadPeriod value="0.5"/>
-        <LoadCargoEffect value="SquadPauseDecay"/>
-        <UnloadTransportEffect value="SquadMeatCargoUnloadDisableAutoLoad"/>
-        <UnloadCargoEffect value="SquadUnpauseDecay"/>
-        <DeathUnloadEffect value="SquadUnpauseDecay"/>
+        <TargetFilters value="Dead;Missile,Buried"/>
+        <SearchRadius value="12"/>
+        <DeathUnloadEffect value="SquadMeatWagonUnloadUnpauseDecay"/>
     </CAbilTransport>
-    <CAbilEffectInstant id="SquadMeatCargoLoadCorpse">
+    <CAbilEffectInstant id="SquadMeatWagonLoadCorpse">
         <Alignment value="Positive"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Unit"/>
         <AbilityCategories index="CanBeDisabled" value="1"/>
         <AbilityCategories index="CanBeIllusionDisabled" value="1"/>
-        <Effect index="0" value="SquadMeatCargoGetCorpse"/>
+        <Effect index="0" value="SquadMeatWagonGetCorpse"/>
         <Flags index="AllowMovement" value="1"/>
         <Flags index="AutoCast" value="1"/>
         <Flags index="AutoCastOn" value="1"/>
@@ -107,6 +107,19 @@
         </Marker>
         <DefaultError value="MustTargetUnit,Errors/Cantfindcorpse"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadLoadBody"/>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="SquadMeatWagonSalvageUnits">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadMeatWagonSalvageIterCargo"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <InterruptCost>
+            <Cooldown TimeUse="5"/>
+        </InterruptCost>
+        <AutoCastAcquireLevel value="Defensive"/>
+        <AutoCastFilters value="Visible;Self"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadMeatWagonSalvageUnits"/>
     </CAbilEffectInstant>
     <CAbilEffectInstant id="SquadWarHoundAstralWind">
         <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>

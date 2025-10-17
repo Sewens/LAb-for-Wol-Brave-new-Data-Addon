@@ -32,9 +32,10 @@
         <AbilArray Link="attack"/>
         <AbilArray Link="move"/>
         <AbilArray Link="Rally"/>
-        <AbilArray Link="SquadMeatCargo"/>
-        <AbilArray Link="SquadMeatCargoLoadCorpse"/>
+        <AbilArray Link="SquadMeatWagonCorpseCargo"/>
+        <AbilArray Link="SquadMeatWagonLoadCorpse"/>
         <AbilArray Link="SquadMeatWagonBattleModeSwitch"/>
+        <AbilArray Link="SquadMeatWagonSalvageUnits"/>
         <WeaponArray Link="SquadMeatWagonBileCannons" Turret="SquadMeatWagonTurret"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -42,11 +43,12 @@
             <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
-            <LayoutButtons Face="SquadLoadBody" Type="AbilCmd" AbilCmd="SquadMeatCargoLoadCorpse,Execute" Row="1" Column="0"/>
+            <LayoutButtons Face="SquadLoadBody" Type="AbilCmd" AbilCmd="SquadMeatWagonLoadCorpse,255" Row="1" Column="0"/>
             <LayoutButtons Face="SquadMeatWagonBattleMode" Type="AbilCmd" AbilCmd="SquadMeatWagonBattleModeSwitch,On" Row="2" Column="0"/>
-            <LayoutButtons Face="SquadMeatWagonCargoMode" Type="AbilCmd" AbilCmd="SquadMeatWagonBattleModeSwitch,Off" Row="2" Column="1"/>
             <LayoutButtons Face="SquadMeatWagonBattleMode" Type="Passive" Row="2" Column="0"/>
+            <LayoutButtons Face="SquadMeatWagonCargoMode" Type="AbilCmd" AbilCmd="SquadMeatWagonBattleModeSwitch,Off" Row="2" Column="1"/>
             <LayoutButtons Face="SquadMeatWagonCargoMode" Type="Passive" Row="2" Column="1"/>
+            <LayoutButtons Face="SquadMeatWagonSalvageUnits" Type="AbilCmd" AbilCmd="SquadMeatWagonSalvageUnits,Execute" Row="1" Column="1"/>
         </CardLayouts>
         <Radius value="1.625"/>
         <SeparationRadius value="1.1"/>
@@ -4571,6 +4573,8 @@
         <Race value="Terr"/>
         <Mob value="Multiplayer"/>
         <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="SelectableWhileDead" value="1"/>
+        <FlagArray index="TargetableWhileDead" value="1"/>
         <FlagArray index="ArmySelect" value="1"/>
         <PlaneArray index="Ground" value="1"/>
         <Collide index="Ground" value="1"/>

@@ -58,6 +58,40 @@
         <PeriodCount value="1"/>
         <PeriodicEffectArray value="SquadHallucinationTargetCreateUnit"/>
     </CEffectCreatePersistent>
+    <CEffectDamage id="SquadMeatWagonRemoveCargoUnits">
+        <EditorCategories value="Race:Terran"/>
+        <Marker>
+            <MatchFlags index="Id" value="1"/>
+        </Marker>
+        <DamageModifierSource Value="Caster"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <Flags index="Kill" value="1"/>
+        <Death value="Remove"/>
+    </CEffectDamage>
+    <CEffectModifyUnit id="SquadMeatWagonSalvageRefundUnits">
+        <EditorCategories value="Race:Terran"/>
+        <OwningPlayer Effect="SquadMeatWagonSalvageIterCargo" Value="Caster"/>
+        <ModifyFlags index="Salvage" value="1"/>
+        <SalvageFactor>
+            <Resource index="Minerals" value="-0.5"/>
+            <Resource index="Vespene" value="-0.25"/>
+        </SalvageFactor>
+        <ModifyOwnerPlayer Value="Caster"/>
+    </CEffectModifyUnit>
+    <CEffectEnumTransport id="SquadMeatWagonSalvageIterCargo">
+        <EditorCategories value="Race:Terran"/>
+        <SearchFilters value="-;Self"/>
+        <MaxCount value="1"/>
+        <Effect value="SquadMeatWagonSalvageIterSet"/>
+    </CEffectEnumTransport>
+    <CEffectSet id="SquadMeatWagonSalvageIterSet">
+        <EditorCategories value="Race:Terran"/>
+        <Marker>
+            <MatchFlags index="Id" value="1"/>
+        </Marker>
+        <EffectArray value="SquadMeatWagonSalvageRefundUnits"/>
+        <EffectArray value="SquadMeatWagonRemoveCargoUnits"/>
+    </CEffectSet>
     <CEffectDamage id="SquadSquadHallucinationTargetKill">
         <ValidatorArray value="KillHallucinationTargetFilters"/>
         <EditorCategories value="Race:Protoss"/>
@@ -102,30 +136,33 @@
         <PeriodicOffsetArray value="0.8,-0.8,0"/>
         <PeriodicPeriodArray value="0.1"/>
     </CEffectCreatePersistent>
-    <CEffectModifyUnit id="SquadPauseDecay">
+    <CEffectModifyUnit id="SquadMeatWagonLoadPauseDecay">
         <EditorCategories value="Race:Terran"/>
+        <VitalArray index="Life">
+            <Change value="-1"/>
+        </VitalArray>
         <ModifyFlags index="PauseDeathTime" value="1"/>
     </CEffectModifyUnit>
-    <CEffectModifyUnit id="SquadUnpauseDecay">
+    <CEffectModifyUnit id="SquadMeatWagonUnloadUnpauseDecay">
         <EditorCategories value="Race:Terran"/>
         <ModifyFlags index="UnpauseDeathTime" value="1"/>
     </CEffectModifyUnit>
-    <CEffectIssueOrder id="SquadMeatCargoUnloadDisableAutoLoad">
+    <CEffectIssueOrder id="SquadMeatWagonUnloadDisableAutoLoad">
         <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="Caster"/>
         <CmdFlags index="SetAutoCast" value="1"/>
         <Player Value="Caster"/>
     </CEffectIssueOrder>
-    <CEffectSet id="SquadMeatCargoGetCorpse">
+    <CEffectSet id="SquadMeatWagonGetCorpse">
         <ValidatorArray value="IsCasterTransportNotFull"/>
         <!--ValidatorArray value="Amel@CanLoadTarget"/-->
         <EditorCategories value="Race:Terran"/>
-        <EffectArray value="SquadMeatCargoGetCorpseIssueOrder"/>
+        <EffectArray value="SquadMeatWagonGetCorpseIssueOrder"/>
     </CEffectSet>
-    <CEffectIssueOrder id="SquadMeatCargoGetCorpseIssueOrder">
+    <CEffectIssueOrder id="SquadMeatWagonGetCorpseIssueOrder">
         <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="Caster"/>
-        <Abil value="SquadMeatCargo"/>
+        <Abil value="SquadMeatWagonCorpseCargo"/>
         <CmdFlags index="Preempt" value="1"/>
         <Player Value="Caster"/>
         <Target Value="TargetUnit"/>
