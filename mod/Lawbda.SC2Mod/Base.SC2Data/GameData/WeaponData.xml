@@ -14,6 +14,23 @@
         <Period value="0.86"/>
         <DamagePoint value="0.3332"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="SquadMeatWagonBileCannons">
+        <EditorCategories value="Race:Terran"/>
+        <Options index="Disabled" value="1"/>
+        <Options index="OnlyFireWhileInAttackOrder" value="0"/>
+        <Options index="OnlyFireAtAttackOrderTarget" value="0"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel0.dds"/>
+        <DisplayEffect value="SquadMeatWagonBileStreamDamage"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <MinScanRange value="8.5"/>
+        <Range value="8"/>
+        <Period value="1"/>
+        <DamagePoint value="0"/>
+        <Effect value="SquadMeatWagonBileStreamSprayInitialCP"/>
+        <AllowedMovement value="Moving"/>
+        <RandomDelayMin value="0"/>
+        <RandomDelayMax value="0"/>
+    </CWeaponLegacy>
     <CWeaponLegacy id="SquadHellionInfernalFlamethrower">
         <EditorCategories value="Race:Terran"/>
         <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel0.dds"/>
@@ -284,6 +301,7 @@
         <Period value="2"/>
         <Effect value="SquadThorPunisherCannonsDamage"/>
         <LegacyOptions index="KeepChanneling" value="1"/>
+        <MinScanRange value="10"/>
     </CWeaponLegacy>
     <CWeaponLegacy id="SquadThorJavelinMissileLaunchers">
         <EditorCategories value="Race:Terran"/>
@@ -292,11 +310,14 @@
         <DisplayAttackCount value="4"/>
         <TargetFilters value="Air,Visible;Ground,Missile,Stasis,Dead,Hidden,Invulnerable"/>
         <AcquirePrioritization value="ByAngle"/>
-        <Range value="10"/>
+        <Range value="12"/>
         <Arc value="5.625"/>
         <Period value="3"/>
         <Effect value="SquadThorJavelinMissileLaunchersPersistent"/>
         <LegacyOptions index="KeepChanneling" value="1"/>
+        <AcquireTargetSorts>
+            <SortArray value="SquadTSAirPriority"/>
+        </AcquireTargetSorts>
     </CWeaponLegacy>
     <CWeaponLegacy id="SquadBacklashRockets">
         <EditorCategories value="Race:Terran"/>

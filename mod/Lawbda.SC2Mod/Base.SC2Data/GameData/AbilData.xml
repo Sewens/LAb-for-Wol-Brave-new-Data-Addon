@@ -43,6 +43,18 @@
         </CmdButtonArray>
         <CmdButtonArray index="Cancel" DefaultButtonFace="CmdCancel"/>
     </CAbilEffectTarget>
+    <CAbilBehavior id="SquadMeatWagonBattleModeSwitch">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="On" DefaultButtonFace="SquadMeatWagonBattleMode">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="Off" DefaultButtonFace="SquadMeatWagonCargoMode">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Flags index="Toggle" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <BehaviorArray value="SquadMeatCargoBattleMode"/>
+    </CAbilBehavior>
     <CAbilEffectTarget id="SquadHallucinationTarget">
         <Alignment value="Positive"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -782,7 +794,7 @@
         <Range value="10"/>
         <SelfReviveCmd value="Revive1"/>
     </CAbilRevive>
-    <CAbilBehavior id="ExcavatorGatherMode">
+    <CAbilBehavior id="ExcavatorGatherModeSwitch">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <CmdButtonArray index="On" DefaultButtonFace="ExcavatorHarvestDropPoint">
             <Flags index="ToSelection" value="1"/>
@@ -1002,7 +1014,7 @@
         <TotalCargoSpace value="4"/>
         <TargetFilters value="Biological,Visible;Ally,Neutral,Enemy,Dead,Hidden"/>
     </CAbilTransport>
-    <CAbilBehavior id="SquadDiamondbackBlastRailgun">
+    <CAbilBehavior id="SquadDiamondbackBlastRailgunSwitch">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <CmdButtonArray index="On" DefaultButtonFace="SquadDiamondbackBlastMode">
             <Flags index="ToSelection" value="1"/>
@@ -1014,7 +1026,7 @@
         <Flags index="Transient" value="1"/>
         <BehaviorArray value="SquadDiamondbackBlastEvisceratorRailgun"/>
     </CAbilBehavior>
-    <CAbilBehavior id="SquadGoliathAirFocus">
+    <CAbilBehavior id="SquadGoliathAirFocusSwitch">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <CmdButtonArray index="On" DefaultButtonFace="SquadGoliathAirFocusMode">
             <Flags index="ToSelection" value="1"/>
@@ -1108,7 +1120,7 @@
         <Flags index="Transient" value="1"/>
         <BehaviorArray value="SquadSupplyDepotLowered"/>
     </CAbilBehavior>
-    <CAbilBehavior id="SquadYamatoShots">
+    <CAbilBehavior id="SquadYamatoShotsSwitch">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <CmdButtonArray index="On" DefaultButtonFace="SquadMiniYmatoShot">
             <Flags index="ToSelection" value="1"/>
@@ -1882,7 +1894,7 @@
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadLand"/>
         <AbilSetId value="landOn"/>
     </CAbilMorphPlacement>
-    <CAbilBehavior id="SquadBansheeBomberMode">
+    <CAbilBehavior id="SquadBansheeBomberModeSwitch">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <CmdButtonArray index="On" DefaultButtonFace="SquadBansheeBomberMode">
             <Flags index="ToSelection" value="1"/>

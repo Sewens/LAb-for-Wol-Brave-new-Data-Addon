@@ -130,6 +130,32 @@
         <Player Value="Caster"/>
         <Target Value="TargetUnit"/>
     </CEffectIssueOrder>
+    <CEffectDamage id="SquadMeatWagonBileStreamDamage">
+        <ResponseFlags index="Flee" value="1"/>
+        <AttributeBonus index="Armored" value="10"/>
+        <ArmorReduction value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Kind value="Ranged"/>
+        <Amount value="20"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="SquadMeatWagonBileStreamSprayInitialCP">
+        <ValidatorArray value="CasterIsNotHidden"/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <Flags index="Channeled" value="1"/>
+        <InitialEffect value="SquadMeatWagonBileStreamSprayLaunchMissileAReal"/>
+        <ExpireDelay value="1"/>
+    </CEffectCreatePersistent>
+    <CEffectLaunchMissile id="SquadMeatWagonBileStreamSprayLaunchMissileAReal">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactEffect value="SquadMeatWagonBileStreamDamage"/>
+        <Flags index="Channeled" value="1"/>
+        <AmmoUnit value="SquadStukovInfestedDiamondbackBileStreamSprayMissile"/>
+        <Movers Link="MissileDefault" IfRangeLTE="3"/>
+        <Movers Link="SquadStukovInfestedDiamondbackBileStreamSprayMissileClose" IfRangeLTE="5"/>
+        <Movers Link="SquadStukovInfestedDiamondbackBileStreamSprayMissile" IfRangeLTE="-1"/>
+    </CEffectLaunchMissile>
     <CEffectDamage id="SquadSiegeTankJumpJetPlaceholderRemove">
         <EditorCategories value="Race:Terran"/>
         <ImpactLocation Value="TargetUnit"/>
@@ -2308,7 +2334,7 @@
     <CEffectIssueOrder id="SquadBattlecruiserYamatoShotsUpgradeActivateIssueOrder">
         <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="Caster"/>
-        <Abil value="SquadYamatoShots"/>
+        <Abil value="SquadYamatoShotsSwitch"/>
         <CmdFlags index="Preempt" value="1"/>
     </CEffectIssueOrder>
     <CEffectApplyBehavior id="SquadBattlercruiserStunResistanceApply">
@@ -2611,7 +2637,7 @@
         <ValidatorArray index="0" value="ThorAALaunchMissileTargetFilters"/>
         <EditorCategories value="Race:Terran"/>
         <ImpactEffect value="SquadThorPunisherCannonsDamage"/>
-        <AmmoUnit value="SquadThorAALance"/>
+        <AmmoUnit value="SquadThorAALanceMissile"/>
     </CEffectLaunchMissile>
     <CEffectApplyBehavior id="SquadThorSelfRepairApplyBehavior">
         <EditorCategories value="Race:Terran"/>
@@ -2726,7 +2752,7 @@
         <ValidatorArray index="0" value="RangeCheckLE15"/>
         <EditorCategories value="Race:Terran"/>
         <ImpactEffect value="SquadThorJavelinMissileLaunchersDamage"/>
-        <AmmoUnit value="SquadThorAAWeapon"/>
+        <AmmoUnit value="SquadThorAAJavelinMissile"/>
     </CEffectLaunchMissile>
     <CEffectCreatePersistent id="SquadThorJavelinMissileLaunchersPersistent">
         <EditorCategories value="Race:Terran"/>
@@ -5435,7 +5461,7 @@
         <Flags index="Notification" value="1"/>
         <Kind value="Splash"/>
         <KindSplash value="Splash"/>
-        <Amount value="35"/>
+        <Amount value="15"/>
         <Death value="Blast"/>
         <AreaArray Radius="0.4687" Fraction="1"/>
         <AreaArray Radius="0.7812" Fraction="0.5"/>
@@ -5445,6 +5471,7 @@
         <SearchFilters value="Ground;Self,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
         <SearchFlags index="CallForHelp" value="1"/>
         <SearchFlags index="OffsetByUnitRadius" value="1"/>
+        <AttributeBonus index="Biological" value="10"/>
     </CEffectDamage>
     <CEffectSet id="SquadSpiderMinesSet">
         <EditorCategories value="Race:Terran"/>

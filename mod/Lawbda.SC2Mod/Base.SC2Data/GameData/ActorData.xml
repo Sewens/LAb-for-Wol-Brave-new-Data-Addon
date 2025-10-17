@@ -126,6 +126,57 @@
         <HeightOffset value="1.500000"/>
         <Text value="Button/Tooltip/##id##"/>
     </CActorText>
+    <CActorTurret id="SquadMeatWagonTurret">
+        <On Terms="TurretEnable.SquadMeatWagonTurret" Send="Create"/>
+    </CActorTurret>
+    <CActorAction id="SquadMeatWagonBileStreamSprayAReal" parent="GenericAttack" effectImpact="SquadMeatWagonBileStreamDamage" effectLaunch="SquadMeatWagonBileStreamSprayLaunchMissileAReal">
+        <On Terms="ActorCreation" Send="Create StukovInfestedDiamondBack_AttackReload_ActorSound"/>
+        <LaunchAttachQuery Methods=""/>
+        <LaunchAssets Sound="SquadStukovInfestedDiamondbackAttackLaunch"/>
+        <ImpactMap index="None" Model="SquadInfestedDiamondbackSlimeImpact" Sound="SquadStukovInfestedDiamondbackAttackImpact"/>
+    </CActorAction>
+    <CActorBeamSimple id="SquadMeatWagonBileStreamSprayARealBeam" parent="GenericAttackBeam">
+        <Model value="SquadInfestedDiamondbackSlime"/>
+        <ModelFlags index="AutomatedGlobalLoopsIgnoreOrphan" value="1"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorBeamSimple>
+    <CActorMissile id="SquadMeatWagonBileStreamSprayMissile" parent="GenericAttackMissile" unitName="SquadStukovInfestedDiamondbackBileStreamSprayMissile">
+        <Model value="Invisible"/>
+    </CActorMissile>
+    <CActorUnit id="SquadMeatWagon" parent="GenericUnitStandardNoAutoSoundLinks" unitName="SquadMeatWagon">
+        <Aliases value="_UnitHuge"/>
+        <On Terms="UnitDeathCustomize; AnimPlaying Work" Send="DeathCustomize Variation2"/>
+        <Model value="MilitarizedColonistTransport"/>
+        <BuildModel value="MilitarizedColonistTransport"/>
+        <DeathArray index="Normal" ModelLink="MilitarizedColonistTransportDeath" SoundLink="TransportTruck_Explode"/>
+        <DeathCustoms ModelLink="MilitarizedColonistTransportDeathWork" Name="Variation2"/>
+        <PlacementModel value="MilitarizedColonistTransport"/>
+        <PortraitModel value="TransportPilotPortrait"/>
+        <StandAnimTurnTime value="3.33"/>
+        <WalkAnimMoveSpeed value="1"/>
+        <BarOffset value="80"/>
+        <BarWidth value="100"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-MilitarizedColonistTransport.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\Wireframe-Terran-MilitarizedColonistTransport.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <NameOffset value="40"/>
+        <SoundArray index="What" value="ColonyTransport_What"/>
+        <SoundArray index="Movement" value="ColonyTransport_Movement"/>
+        <StatusBarFlags index="Cargo" value="0"/>
+        <UnitIcon value="Assets\Textures\Wireframe-Terran-MilitarizedColonistTransport.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-MilitarizedColonistTransport.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="SquadMeatWagonAttack" parent="GenericAttack" effectAttack="MilitarizedColonistTransport">
+        <LaunchAttachQuery Methods="Weapon 0" Fallback="Turret"/>
+        <LaunchAssets Model="DiamondbackCharged" Sound="SquadStukovInfestedDiamondbackAttackLaunch"/>
+        <ImpactMap index="None" Model="SquadInfestedDiamondbackSlimeImpact" Sound="SquadStukovInfestedDiamondbackAttackImpact"/>
+        <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
+        <ContainerAssets Model="" Sound=""/>
+    </CActorAction>
     <CActorModel id="SquadHallucinationTargetBirth" parent="ModelAnimationStyleOneShot">
         <Inherits index="BaseModelScale" value="1"/>
         <Inherits index="Scale" value="1"/>
@@ -2156,7 +2207,7 @@
         <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeStandard SOpForwardLaunchGuide"/>
 -->
         <ImpactMap index="None" Sound="Battlecruiser_AirAttackImpact"/>
-        <ImpactMap index="Shield" Sound="Battlecruiser_AirAttackImpact2"/>
+        <ImpactMap index="Shield" Sound="Battlecruiser_AirAttackImpact"/>
         <ImpactPhysics Name="ATAImpact" MatchKeys="BasicAir" Physics="BattlecruiserAttackAirForce"/>
         <DamageMap index="None" Sound="BattlecruiserAirAttackDamage"/>
         <DamageMap index="Shield" Sound="BattlecruiserAirAttackDamageShield"/>
@@ -6339,9 +6390,9 @@
     </CActorAction>
     <CActorAction id="SquadGhostEMPAttack" parent="GenericAttack" effectImpact="SquadEMPSearch" effectLaunch="SquadGhostEMPLaunchMissile">
         <On Terms="Effect.EMPDamage.Start; At Caster" Send="ActionDamage"/>
-        <LaunchAssets Sound="Ghost_EMPAttackLaunch2"/>
+        <LaunchAssets Sound="Ghost_EMPAttackLaunch"/>
         <ImpactPointSiteOps Ops="SOpTargetPointStationary SOpShadow GhostEMPOffset"/>
-        <ImpactMap index="None" Sound="Ghost_EMPAttackImpact2"/>
+        <ImpactMap index="None" Sound="Ghost_EMPAttackImpact"/>
     </CActorAction>
     <CActorModel id="SquadGhostEMPAttackImpactEffect" parent="ModelAnimationStyleOneShot">
         <On Terms="Effect.SquadEMPSearch.Start" Send="Create"/>
@@ -7014,7 +7065,7 @@
     </CActorModel>
     <CActorSound id="SquadPredatorRetributionFieldImpactSound" parent="SoundOneShot">
         <On Terms="Effect.SquadPredatorRetributionFieldDamage.Start" Send="Create"/>
-        <Sound value="RetributionFieldImpactSound2"/>
+        <Sound value="SquadPredatorRetributionFieldImpact"/>
     </CActorSound>
     <CActorModel id="SquadPredatorRetributionFieldLaunch" parent="ModelAnimationStyleOneShot">
         <Inherits index="BaseModelScale" value="1"/>
@@ -7096,7 +7147,7 @@
         <HeroIcon value="Assets\Textures\btn-unit-terran-scv.dds"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
         <SoundArray index="Ready" value="SCV_Ready"/>
-        <SoundArray index="Help" value="Alert_TerranEconomyUnderAttack2"/>
+        <SoundArray index="Help" value="Alert_TerranEconomyUnderAttack"/>
         <SoundArray index="What" value="SCV_What"/>
         <SoundArray index="Yes" value="SCV_Yes"/>
         <SoundArray index="Attack" value="SCV_Attack"/>
@@ -8325,7 +8376,7 @@
         <ImpactMap index="None" Model="ThorAAAttackImpact" Sound="Thor_AntiAirAttackImpact"/>
         <ImpactPhysics Name="JavelinImpact" MatchKeys="Basic" Physics="ThorAAAttackForce"/>
     </CActorAction>
-    <CActorMissile id="SquadThorAAAttackMissile" parent="GenericAttackMissile" unitName="SquadThorAAWeapon">
+    <CActorMissile id="SquadThorAAAttackMissile" parent="GenericAttackMissile" unitName="SquadThorAAJavelinMissile">
         <Model value="SquadStormBoltMissileArt"/>
     </CActorMissile>
     <CActorAction id="SquadThorAttack" parent="GenericAttack" effectAttack="SquadThorHammerDamage">
