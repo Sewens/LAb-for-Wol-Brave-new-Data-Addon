@@ -36,6 +36,7 @@
         <AbilArray Link="SquadMeatWagonLoadCorpse"/>
         <AbilArray Link="SquadMeatWagonBattleModeSwitch"/>
         <AbilArray Link="SquadMeatWagonSalvageUnits"/>
+        <AbilArray Link="SquadCorpseExplosion"/>
         <WeaponArray Link="SquadMeatWagonBileCannons" Turret="SquadMeatWagonTurret"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -43,12 +44,13 @@
             <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
-            <LayoutButtons Face="SquadLoadBody" Type="AbilCmd" AbilCmd="SquadMeatWagonLoadCorpse,255" Row="1" Column="0"/>
+            <LayoutButtons Face="SquadLoadBody" Type="AbilCmd" AbilCmd="SquadMeatWagonLoadCorpse,Execute" Row="1" Column="0"/>
             <LayoutButtons Face="SquadMeatWagonBattleMode" Type="AbilCmd" AbilCmd="SquadMeatWagonBattleModeSwitch,On" Row="2" Column="0"/>
             <LayoutButtons Face="SquadMeatWagonBattleMode" Type="Passive" Row="2" Column="0"/>
             <LayoutButtons Face="SquadMeatWagonCargoMode" Type="AbilCmd" AbilCmd="SquadMeatWagonBattleModeSwitch,Off" Row="2" Column="1"/>
             <LayoutButtons Face="SquadMeatWagonCargoMode" Type="Passive" Row="2" Column="1"/>
             <LayoutButtons Face="SquadMeatWagonSalvageUnits" Type="AbilCmd" AbilCmd="SquadMeatWagonSalvageUnits,Execute" Row="1" Column="1"/>
+            <LayoutButtons Face="SquadCorpseExplosion" Type="AbilCmd" AbilCmd="SquadCorpseExplosion,Execute" Row="1" Column="2"/>
         </CardLayouts>
         <Radius value="1.625"/>
         <SeparationRadius value="1.1"/>
@@ -4569,6 +4571,7 @@
         <TechTreeUnlockedUnitArray value=""/>
     </CUnit>
     <CUnit id="SquadMarine">
+        <DeathTime value="90"/>
         <DeathRevealRadius value="3"/>
         <Race value="Terr"/>
         <Mob value="Multiplayer"/>
@@ -4638,6 +4641,8 @@
         <MinimapRadius value="0.375"/>
         <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
         <TacticalAI value="Marine"/>
+        <SelectAlias value="Marine"/>
+        <SubgroupAlias value="Marine"/>
         <GlossaryCategory value="Unit/Category/TerranUnits"/>
         <GlossaryPriority value="21"/>
         <GlossaryStrongArray value="Marauder"/>
@@ -4654,9 +4659,6 @@
         </Fidget>
         <TauntDuration index="Cheer" value="5"/>
         <TauntDuration index="Dance" value="5"/>
-        <SelectAlias value="Marine"/>
-        <SubgroupAlias value="Marine"/>
-        <DeathTime value="90"/>
     </CUnit>
     <CUnit id="SquadSCV">
         <DeathRevealRadius value="3"/>

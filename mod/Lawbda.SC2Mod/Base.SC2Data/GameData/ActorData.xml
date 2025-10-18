@@ -1,5 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CActorUnit default="1" id="SquadWar3GenericUnit" parent="GenericUnitStandard">
+        <PlacementSound value="PlaceBuildingDefault"/>
+        <WalkAnimMoveSpeed value="0"/>
+        <On index="2" Send="AnimBaselineStart"/>
+        <!--On Terms="ActorCreation" Send="AnimGroupRemove Alternate"/-->
+        <!--On Terms="ActorCreation" Send="AnimGroupRemove Portrait"/-->
+        <On Terms="ActorCreation" Send="AnimGroupRemoveAll"/>
+        <On Terms="AbilMorph.*.Start; AbilKey Upgrade" Send="$Birth"/>
+        <On Terms="AbilMorph.*.Start; AbilKey Morph" Send="AnimPlay Morph Morph"/>
+        <On Terms="AbilMorph.*.Finish" Send="AnimClear Birth"/>
+        <On Terms="AbilMorph.*.Finish" Send="AnimClear Morph"/>
+        <On Terms="AbilMorph.*.Finish" Send="AnimBaselineStart"/>
+        <On Terms="AbilMorph.*.Pause" Send="AnimSetPausedAll"/>
+        <On Terms="AbilMorph.*.Resume" Send="AnimSetPausedAll 0"/>
+        <On Terms="AnimGroupApply" Target="::PortraitGameSelf" Send="MessageForward"/>
+        <On Terms="AnimGroupRemove" Target="::PortraitGameSelf" Send="MessageForward"/>
+        <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="AnimGroupApplyFrom ::PortraitGameUnit Instant"/>
+        <DeathArray index="Normal" AnimProps="Birth" ModelLink=""/>
+        <Macros index="0" value="SquadExtraAnimationMacro"/>
+    </CActorUnit>
+    <CActorUnit default="1" id="SquadGenericUnitBase" parent="GenericUnitStandard">
+        <Macros index="0" value="SquadExtraAnimationMacro"/>
+        <Macros value="SquadDeathAnimationMacroUnit"/>
+        <AnimBlendTime value="0.150000"/>
+        <UnitBorderSubgroupColor value="0,255,128"/>
+        <UnitBorderNormalColor value="128,128,128"/>
+        <BarOffset value="30"/>
+        <Aliases value="_ArmyUnit"/>
+        <!--DeathArray index="Normal" AnimProps="Birth" ModelLink=""/-->
+        <DeathActorModel value="SquadUnitDeathModel"/>
+        <DeathActorModelLow value="SquadUnitDeathModel"/>
+    </CActorUnit>
     <CActorModel default="1" id="SquadEffectArt" parent="ModelAnimationStyleOneShot">
         <ModelFlags index="AllowHitTest" value="0"/>
         <ModelFlags index="AutomateGlobalLoops" value="1"/>
@@ -23,6 +55,63 @@
         <AutoScaleFromSelectionFactor value="1.000000"/>
         <On Terms="AnimBracketState.*.AfterOpening; AnimName BSD; !AnimPlayable Stand" Send="AnimBracketStop BSD"/>
     </CActorModel>
+    <CActorUnit default="1" id="SquadWar3Unit" parent="SquadWar3GenericUnit">
+        <AnimBlendTime value="0.150000"/>
+        <UnitBorderSubgroupColor value="0,255,128"/>
+        <UnitBorderNormalColor value="128,128,128"/>
+        <On Terms="WeaponStart.##id##@1.AttackStart" Send="AnimBracketStart Attack Attack,One"/>
+        <On Terms="WeaponStart.##id##@2.AttackStart" Send="AnimBracketStart Attack Attack,Two"/>
+        <On Terms="Behavior.*.NegativeOn" Send="StatusIncrement DebuffIndicator"/>
+        <On Terms="Behavior.*.NegativeOff" Send="StatusDecrement DebuffIndicator"/>
+        <On Terms="StatusOn.*.DebuffIndicator" Send="SetGroupIcon 1 Assets\Textures\Renee_GroupIcon_Negtive.dds"/>
+        <On Terms="StatusOff.*.DebuffIndicator" Send="SetGroupIcon 1 Assets\Textures\Renee_GroupIconEmpty.dds"/>
+        <!--Macros value="War3_GroupIconMonitorMacro"/-->
+        <!--Macros value="War3_FactionHaloAlt"/-->
+        <Macros value="TerrainSquibAnimations"/>
+        <!--UnitFlags index="SuppressDefaultStatusBar" value="1"/-->
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="0.700000"/>
+            <RangeDown value="0.700000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleMedium"/>
+        </TerrainSquibs>
+        <EventDataFootprint Name="Bones_Gutz" Actor="War3_UnitFootprintHarness"/>
+        <GroupIcon>
+            <!--Image value="Assets\Textures\Renee_GroupIconEmpty.dds"/-->
+            <!--Index="1", Used to Show Debuff/-->
+            <Image value="Assets\Textures\Renee_GroupIconEmpty.dds"/>
+            <Image value="Assets\Textures\Renee_GroupIconEmpty.dds"/>
+        </GroupIcon>
+        <!--Image value="Assets\Textures\Renee_GroupIconEmpty.dds"/-->
+        <!--Image value="Assets\Textures\Renee_GroupIconEmpty.dds"/-->
+    </CActorUnit>
+    <CActorUnit default="1" id="SquadWar3Army" parent="SquadWar3Unit">
+        <Macros value="SquadDeathAnimationMacroUnit"/>
+        <BarOffset value="30"/>
+        <Aliases value="_ArmyUnit"/>
+        <On Terms="UnitBirth; ValidateUnit IsMechanical" Send="Create War3_BuildingFlameSmall"/>
+        <On Terms="UnitBirth; ValidateUnit IsMechanical" Send="Create War3_BuildingFlameMedium"/>
+        <On Terms="UnitBirth; ValidateUnit IsMechanical" Send="Create War3_BuildingFlameLarge"/>
+        <On Terms="UnitMovementUpdate.*.RunStart" Send="AnimGroupApply Fast"/>
+        <On Terms="UnitMovementUpdate.*.RunStop" Send="AnimGroupRemove Fast"/>
+        <DeathActorModel value="SquadUnitDeathModelGL"/>
+        <DeathActorModelLow value="SquadUnitDeathModelGL"/>
+        <StatusColors index="Energy">
+            <ColorArray index="0" value="255,59,102,182"/>
+        </StatusColors>
+        <!--VitalColors index="Energy">
+            <ColorArray value="255,73,109,189"/>
+        </VitalColors-->
+        <!--StatusBarFlags index="Shields" value="0"/>
+        <StatusBarFlags index="Life" value="0"/>
+        <StatusBarFlags index="Energy" value="0"/>
+        <StatusBarFlags index="Progress" value="0"/>
+        <StatusBarFlags index="Duration" value="0"/>
+        <StatusBarFlags index="Magazine" value="0"/-->
+        <!--CustomUnitStatusAttachment value="Ref_Center"/-->
+    </CActorUnit>
     <CActorSimple default="1" id="SquadSimpleCastAnim">
         <?token id="anim" value="Spell"?>
         <On Terms="Abil.##id##.SourcePrepStart" Target="_Selectable" Send="AnimPlay spell ##anim## NonLooping -1.000000 -1.000000 1.000000 AsTimeScaleAbsolute"/>
@@ -74,7 +163,7 @@
         <Aliases value="_Main"/>
         <Aliases value="_Unit"/>
         <Aliases value="_DeathModel"/>
-        <Macros value="DeadAnimationMacro"/>
+        <!--Macros value="SquadDeathAnimationMacroUnit"/-->
         <Inherits index="BaseModelScale" value="1"/>
         <Inherits index="CastShadows" value="1"/>
         <Inherits index="CreepEngulfment" value="1"/>
@@ -94,7 +183,8 @@
         <On Terms="ActorCreation; ScopeContains _YellowTintDeath" Send="SetTintColor 255,255,0"/>
         <On Terms="ActorCreation; ScopeContains _CyanTintDeath" Send="SetTintColor 0,255,255"/>
         <On Terms="ActorCreation; ScopeContains _PurpleTintDeath" Send="SetTintColor 255,0,255"/>
-        <On Terms="Signal.*.ClearDeathModel" Send="Destroy"/>
+        <On Terms="Signal.*.ClearDeathModel" Send="TimerSet 88.000000 RealDie"/>
+        <On Terms="TimerExpired; TimerName RealDie" Send="Destroy"/>
         <Host Subject="::Creator"/>
         <ModelFlags index="SuppressMissingAttachErrors" value="1"/>
         <ModelFlags index="UpdateVisibility" value="0"/>
@@ -126,6 +216,45 @@
         <HeightOffset value="1.500000"/>
         <Text value="Button/Tooltip/##id##"/>
     </CActorText>
+    <CActorEventMacro id="SquadExtraAnimationMacro">
+        <On Terms="UnitDeath" Send="StatusSet Dead 1"/>
+        <On Terms="UnitRevive" Send="StatusSet Dead 0"/>
+        <On Terms="AnimDone; AnimName Death" Send="AnimPlay Dead Dead PlayForever"/>
+        <!--On Terms="AnimDone.*.Missing; AnimName Death; IsStatus Dead 1" Send="Destroy"/-->
+        <On Terms="UnitRevive" Send="AnimClear Death"/>
+        <On Terms="UnitRevive" Send="AnimBracketClear Death"/>
+        <On Terms="UnitRevive" Send="AnimClear Death"/>
+        <On Terms="UnitRevive" Send="AnimClear Flesh"/>
+        <On Terms="UnitRevive" Send="AnimClear Bone"/>
+        <On Terms="UnitRevive" Send="SetOpacity 1.000000 0.000000 Dissipate"/>
+        <!--On Terms="UnitRevive" Send="AnimClearAllBut Default"/-->
+        <On Terms="UnitRevive" Send="AnimBaselineStart"/>
+        <On Terms="ActorOrphan; !AnimPlaying Death" Send="Signal CheckDecay"/>
+        <On Terms="Signal.*.CheckDecay; !AnimPlaying Decay" Send="Signal CheckFlesh"/>
+        <On Terms="Signal.*.CheckFlesh; !AnimPlaying Flesh" Send="Signal CheckBone"/>
+        <On Terms="Signal.*.CheckBone; !AnimPlaying Bone" Send="Destroy"/>
+    </CActorEventMacro>
+    <CActorEventMacro id="SquadDeathAnimationMacroUnit">
+        <!--On Terms="UnitDeath; IsStatus AnimateDead 0" Send="AnimBracketStart Death Death Decay,Flesh Decay,Bone ContentPlayOnce"/-->
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName Death; HasStatus Dead" Send="Destroy"/>
+        <On Terms="UnitDeath; !HasStatus DeathPaused" Send="$Death NonLooping"/>
+        <On Terms="AnimDone; AnimName Death; HasStatus Dead; !ValidateUnit IsDead" Send="Destroy"/>
+        <On Terms="AnimDone; AnimName Flesh; HasStatus Dead; !ValidateUnit IsDead" Send="Destroy"/>
+        <On Terms="AnimDone; AnimName Bone; HasStatus Dead" Send="Destroy"/>
+        <On Terms="AnimDone; AnimName Death; HasStatus Dead" Send="AnimPlay Flesh Decay,Death NonLooping"/>
+        <On Terms="AnimDone; AnimName Death; HasStatus Dead; IsStatus NoDecay 1" Send="Destroy"/>
+        <On Terms="AnimDone; AnimName Flesh; HasStatus Dead" Send="AnimPlay Bone Decay,Death NonLooping -1.000000 -1.000000 88.000000 AsDuration"/>
+        <On Terms="AnimPlay; AnimName Flesh; ValidateUnit IsDead" Send="AnimSetDuration Flesh 2.000000"/>
+        <On Terms="UnitDeath" Send="SetTeamColor 0,0,0 0,0,0 0.500000 OneShot Dead"/>
+        <On Terms="UnitDeath" Send="SetTintColor 160,160,160 0.500000 OneShot Dead"/>
+        <On Terms="UnitRevive" Send="ClearTintColor 0.500000 Dead"/>
+        <On Terms="UnitRevive" Send="ClearTeamColor 0.500000 Dead"/>
+    </CActorEventMacro>
+    <CActorModel id="SquadUnitDeathModelGL" parent="SquadUnitDeathModel">
+        <InheritType value="OneShot"/>
+        <On Terms="ActorCreation" Send="SetCastShadows"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
     <CActorTurret id="SquadMeatWagonTurret">
         <On Terms="TurretEnable.SquadMeatWagonTurret" Send="Create"/>
     </CActorTurret>
@@ -143,7 +272,7 @@
     <CActorMissile id="SquadMeatWagonBileStreamSprayMissile" parent="GenericAttackMissile" unitName="SquadStukovInfestedDiamondbackBileStreamSprayMissile">
         <Model value="Invisible"/>
     </CActorMissile>
-    <CActorUnit id="SquadMeatWagon" parent="GenericUnitStandardNoAutoSoundLinks" unitName="SquadMeatWagon">
+    <CActorUnit id="SquadMeatWagon" parent="GenericUnitStandard" unitName="SquadMeatWagon">
         <Aliases value="_UnitHuge"/>
         <On Terms="UnitDeathCustomize; AnimPlaying Work" Send="DeathCustomize Variation2"/>
         <Model value="MilitarizedColonistTransport"/>
@@ -164,12 +293,17 @@
         <NameOffset value="40"/>
         <SoundArray index="What" value="ColonyTransport_What"/>
         <SoundArray index="Movement" value="ColonyTransport_Movement"/>
-        <StatusBarFlags index="Cargo" value="0"/>
         <UnitIcon value="Assets\Textures\Wireframe-Terran-MilitarizedColonistTransport.dds"/>
         <Wireframe>
             <Image value="Assets\Textures\Wireframe-Terran-MilitarizedColonistTransport.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorSimple id="SquadMeatWagonLoad">
+        <On Terms="AbilTransport.SquadMeatWagonCorpseCargo.TransportLoad" Send="Create"/>
+        <On Terms="AbilTransport.SquadMeatWagonCorpseCargo.TransportUnload" Send="Create"/>
+        <On Terms="ActorCreation" Target="_Selectable" Send="Create SoundOneShot LoadUnload"/>
+        <On Terms="ActorCreation" Send="Destroy"/>
+    </CActorSimple>
     <CActorAction id="SquadMeatWagonAttack" parent="GenericAttack" effectAttack="MilitarizedColonistTransport">
         <LaunchAttachQuery Methods="Weapon 0" Fallback="Turret"/>
         <LaunchAssets Model="DiamondbackCharged" Sound="SquadStukovInfestedDiamondbackAttackLaunch"/>
@@ -203,6 +337,14 @@
         <On Terms="ActorCreation" Target="_Selectable" Send="Create"/>
         <On Terms="ActorCreation" Send="Destroy"/>
     </CActorSound>
+    <CActorAction id="SquadCorpseExplosionDamage" parent="GenericAttack" effectAttack="SquadCorpseExplosionDamage">
+        <ImpactMap index="None" Model="Confetti_Explosion_Large" Sound="VultureSpiderMineAttackImpact"/>
+        <ShieldFlashType value="Header"/>
+    </CActorAction>
+    <CActorSplat id="SquadCorpseExplosionCursorSplat" parent="ProtossCursorSplat" abil="SquadCorpseExplosion">
+        <On Terms="Abil.SquadCorpseExplosion.Cursor" Send="Create"/>
+        <Model value="PsiStormCursorSplat"/>
+    </CActorSplat>
     <CActorSimple id="SquadHallucinationTargetHighTemplar">
         <Aliases value="_HallucinationTinter"/>
         <On Terms="Behavior.SquadHallucation.On" Send="Create"/>
@@ -6552,13 +6694,14 @@
         <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
         <ImpactPhysics Name="BulletImpact" MatchKeys="Basic" Physics="MarineAttackDeathForce"/>
     </CActorAction>
-    <CActorUnit id="SquadMarine" parent="GenericUnitBase" unitName="SquadMarine">
+    <CActorUnit id="SquadMarine" parent="SquadGenericUnitBase" unitName="SquadMarine">
         <Aliases value="_UnitSmall"/>
         <Macros value="UnloadDropAnim"/>
         <Macros value="PhysicsDeathsSwarmGround"/>
         <Macros value="TerrainSquibAnimations"/>
         <Macros value="PhysicsDeathsVoidGround"/>
         <Macros value="MagazineSmallScale"/>
+        <Macros value="SquadDeathAnimationMacroUnit"/>
         <On Terms="ActorCreation; ValidatePlayer NoMarineShield" Send="AnimPlay Cover Cover PlayForever 0.000000"/>
         <On Terms="Upgrade.ShieldWall.Add" Send="AnimClear Cover"/>
         <On Terms="Upgrade.ShieldWall.Remove" Send="AnimPlay Cover Cover PlayForever 0.000000"/>
@@ -6588,6 +6731,7 @@
         <Model value="Marine_Junker_Collection"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
         <BuildModel value="Marine"/>
+        <DeathActorModel value="SquadUnitDeathModelGL"/>
         <DeathArray index="Normal" ModelLink="MarineDeath" SoundLink="Marine_DeathFXBloodSpray"/>
         <DeathArray index="Blast" ModelLink="MarineDeathBlast"/>
         <DeathArray index="Disintegrate" ModelLink="MarineDeathAcid" SoundLink="Uni_DeathFXAcid"/>
@@ -6627,7 +6771,6 @@
             <VoiceLink value="ShadowUnit_DeathVox"/>
             <Name value="Shadow"/>
         </DeathCustoms>
-        <DeathActorModel value="UnitDeathModelWithDeathMotionGround"/>
         <PlacementModel value="Marine"/>
         <PortraitModel value="MarinePortrait"/>
         <StandAnimTurnTime value="4"/>

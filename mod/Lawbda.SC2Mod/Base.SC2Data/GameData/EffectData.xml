@@ -30,6 +30,33 @@
     <CEffectEnumArea default="1" id="SquadAbilSearchRadiusExt" parent="SquadAbilSearch">
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
+    <CEffectDamage id="SquadCorpseExplosionDamage">
+        <EditorCategories value="Race:Terran"/>
+        <AttributeBonus index="Biological" value="50"/>
+        <Amount value="50"/>
+        <AreaArray Radius="1.5"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="SquadCorpseExplosionPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <PeriodCount value="10"/>
+        <PeriodicEffectArray value="SquadCorpseExplosionSearch"/>
+        <PeriodicPeriodArray value="0.5712"/>
+    </CEffectCreatePersistent>
+    <CEffectModifyUnit id="SquadCorpseExplosionRemoveCorpse">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactUnit Effect="SquadCorpseExplosionSearchSet"/>
+        <ModifyFlags index="Remove" value="1"/>
+    </CEffectModifyUnit>
+    <CEffectEnumArea id="SquadCorpseExplosionSearch">
+        <EditorCategories value="Race:Terran"/>
+        <SearchFilters value="Dead;Massive"/>
+        <AreaArray MaxCount="1" Radius="3" Effect="SquadCorpseExplosionSearchSet"/>
+    </CEffectEnumArea>
+    <CEffectSet id="SquadCorpseExplosionSearchSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadCorpseExplosionDamage"/>
+        <EffectArray value="SquadCorpseExplosionRemoveCorpse"/>
+    </CEffectSet>
     <CEffectCreateUnit id="SquadHallucinationTargetCreateUnit">
         <EditorCategories value="Race:Terran"/>
         <CreateFlags index="ProvideFood" value="0"/>
@@ -58,17 +85,13 @@
         <PeriodCount value="1"/>
         <PeriodicEffectArray value="SquadHallucinationTargetCreateUnit"/>
     </CEffectCreatePersistent>
-    <CEffectDamage id="SquadMeatWagonRemoveCargoUnits">
+    <CEffectModifyUnit id="SquadMeatWagonSalvageRemoveCargoUnits">
         <EditorCategories value="Race:Terran"/>
-        <Marker>
-            <MatchFlags index="Id" value="1"/>
-        </Marker>
         <DamageModifierSource Value="Caster"/>
-        <ImpactLocation Value="TargetUnit"/>
-        <Flags index="Kill" value="1"/>
-        <Death value="Remove"/>
-    </CEffectDamage>
-    <CEffectModifyUnit id="SquadMeatWagonSalvageRefundUnits">
+        <ModifyFlags index="DropFromContainerPassenger" value="1"/>
+        <ModifyFlags index="Remove" value="1"/>
+    </CEffectModifyUnit>
+    <CEffectModifyUnit id="SquadMeatWagonSalvageRefundCargoUnits">
         <EditorCategories value="Race:Terran"/>
         <OwningPlayer Effect="SquadMeatWagonSalvageIterCargo" Value="Caster"/>
         <ModifyFlags index="Salvage" value="1"/>
@@ -89,8 +112,8 @@
         <Marker>
             <MatchFlags index="Id" value="1"/>
         </Marker>
-        <EffectArray value="SquadMeatWagonSalvageRefundUnits"/>
-        <EffectArray value="SquadMeatWagonRemoveCargoUnits"/>
+        <EffectArray value="SquadMeatWagonSalvageRefundCargoUnits"/>
+        <EffectArray value="SquadMeatWagonSalvageRemoveCargoUnits"/>
     </CEffectSet>
     <CEffectDamage id="SquadSquadHallucinationTargetKill">
         <ValidatorArray value="KillHallucinationTargetFilters"/>
