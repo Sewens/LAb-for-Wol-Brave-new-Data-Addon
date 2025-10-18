@@ -337,10 +337,11 @@
         <On Terms="ActorCreation" Target="_Selectable" Send="Create"/>
         <On Terms="ActorCreation" Send="Destroy"/>
     </CActorSound>
-    <CActorAction id="SquadCorpseExplosionDamage" parent="GenericAttack" effectAttack="SquadCorpseExplosionDamage">
-        <ImpactMap index="None" Model="Confetti_Explosion_Large" Sound="VultureSpiderMineAttackImpact"/>
-        <ShieldFlashType value="Header"/>
-    </CActorAction>
+    <CActorSquib id="SquadCorpseExplosionDamage">
+        <On Terms="Effect.SquadCorpseExplosionDamage.Start; At Effect" Send="Create"/>
+        <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
+        <Map index="None" Model="Confetti_Explosion_Medium" Sound="Ghost_NukeExplode"/>
+    </CActorSquib>
     <CActorSplat id="SquadCorpseExplosionCursorSplat" parent="ProtossCursorSplat" abil="SquadCorpseExplosion">
         <On Terms="Abil.SquadCorpseExplosion.Cursor" Send="Create"/>
         <Model value="PsiStormCursorSplat"/>
