@@ -30,6 +30,10 @@
     <CEffectEnumArea default="1" id="SquadAbilSearchRadiusExt" parent="SquadAbilSearch">
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
+    <CEffectDamage id="SquadCorpseBirthDead">
+        <EditorCategories value="Race:Terran"/>
+        <Flags index="Kill" value="1"/>
+    </CEffectDamage>
     <CEffectCreatePersistent id="SquadCorpseExplosionPersistent">
         <EditorCategories value="Race:Terran"/>
         <PeriodCount value="10"/>
@@ -44,13 +48,18 @@
     <CEffectEnumArea id="SquadCorpseExplosionSearch">
         <EditorCategories value="Race:Terran"/>
         <SearchFilters value="Dead;Missile"/>
-        <AreaArray MaxCount="1" Radius="3" Effect="SquadCorpseExplosionSearchSet"/>
+        <AreaArray MaxCount="5" Radius="3" Effect="SquadCorpseExplosionSearchSet"/>
     </CEffectEnumArea>
     <CEffectSet id="SquadCorpseExplosionSearchSet">
         <EditorCategories value="Race:Terran"/>
         <EffectArray value="SquadCorpseExplosionDamage"/>
         <EffectArray value="SquadCorpseExplosionRemoveCorpse"/>
     </CEffectSet>
+    <CEffectCreateUnit id="SquadCreateMarineCorpse">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetPoint"/>
+        <SpawnUnit value="SquadMarineCorpseDummy"/>
+    </CEffectCreateUnit>
     <CEffectCreateUnit id="SquadHallucinationTargetCreateUnit">
         <EditorCategories value="Race:Terran"/>
         <CreateFlags index="ProvideFood" value="0"/>
@@ -108,6 +117,11 @@
         </Marker>
         <EffectArray value="SquadMeatWagonSalvageRefundCargoUnits"/>
         <EffectArray value="SquadMeatWagonSalvageRemoveCargoUnits"/>
+    </CEffectSet>
+    <CEffectSet id="SquadMeatWagonUnloadCoprseSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadMeatWagonUnloadUnpauseDecay"/>
+        <EffectArray value="SquadMeatWagonUnloadUnpauseDecay"/>
     </CEffectSet>
     <CEffectDamage id="SquadSquadHallucinationTargetKill">
         <ValidatorArray value="KillHallucinationTargetFilters"/>
@@ -186,6 +200,7 @@
         <WhichUnit Value="Caster"/>
         <CmdFlags index="SetAutoCast" value="1"/>
         <Player Value="Caster"/>
+        <Abil value="SquadMeatWagonCorpseCargo"/>
     </CEffectIssueOrder>
     <CEffectSet id="SquadMeatWagonGetCorpse">
         <ValidatorArray value="IsCasterTransportNotFull"/>

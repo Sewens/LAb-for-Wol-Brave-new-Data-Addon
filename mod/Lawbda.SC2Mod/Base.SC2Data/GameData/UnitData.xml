@@ -1,5 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CUnit id="SquadMarineCorpseDummy">
+        <DeathTime value="90"/>
+        <DeathRevealRadius value="3"/>
+        <Race value="Terr"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="SelectableWhileDead" value="1"/>
+        <FlagArray index="TargetableWhileDead" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Light" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <LifeStart value="65"/>
+        <LifeMax value="65"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranInfantryArmor"/>
+        <Speed value="2.25"/>
+        <Acceleration value="1000"/>
+        <LateralAcceleration value="46.0625"/>
+        <StationaryTurningRate value="999.8437"/>
+        <TurningRate value="999.8437"/>
+        <Sight value="9"/>
+        <Food value="-1"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="75"/>
+        <RepairTime value="20"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="10"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="SquadStimpack"/>
+        <AbilArray Link="AddMarineToSquad"/>
+        <AbilArray Link="QueueMagazine"/>
+        <AbilArray Link="SquadInfantry"/>
+        <AbilArray Link="DisbandSquad"/>
+        <AbilArray Link="SquadMagrailMunitions"/>
+        <WeaponArray Link="SquadMarineGaussRifle"/>
+        <WeaponArray/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="MothershipCoreAttack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="SquadStimpack" Type="AbilCmd" AbilCmd="SquadStimpack,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="Enband" Type="AbilCmd" AbilCmd="AddMarineToSquad,Execute" Row="1" Column="4"/>
+            <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="3"/>
+            <LayoutButtons Face="SquadGiftTooltips" Type="Submenu" SubmenuCardId="Gift" Row="1" Column="2"/>
+            <LayoutButtons Face="SquadMagrailMunitions" Type="AbilCmd" AbilCmd="SquadMagrailMunitions,Execute" Row="1" Column="0"/>
+        </CardLayouts>
+        <CardLayouts CardId="Gift">
+            <LayoutButtons Face="SmallLifeandRegen" Type="Passive" Row="0" Column="0"/>
+            <LayoutButtons Face="ResourceHarvestBonus" Type="Passive" Row="0" Column="1"/>
+            <LayoutButtons Face="SquadOrbOrb" Type="Passive" Row="0" Column="2"/>
+        </CardLayouts>
+        <Radius value="0.375"/>
+        <SeparationRadius value="0.375"/>
+        <InnerRadius value="0.375"/>
+        <CargoSize value="1"/>
+        <ScoreMake value="50"/>
+        <ScoreKill value="50"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="15"/>
+        <MinimapRadius value="0.375"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
+        <TacticalAI value="Marine"/>
+        <SelectAlias value="Marine"/>
+        <SubgroupAlias value="Marine"/>
+        <GlossaryCategory value="Unit/Category/TerranUnits"/>
+        <GlossaryPriority value="21"/>
+        <GlossaryStrongArray value="Marauder"/>
+        <GlossaryStrongArray value="Hydralisk"/>
+        <GlossaryStrongArray value="Immortal"/>
+        <GlossaryWeakArray value="SiegeTankSieged"/>
+        <GlossaryWeakArray value="Baneling"/>
+        <GlossaryWeakArray value="Colossus"/>
+        <HotkeyCategory value="Unit/Category/Lawbda"/>
+        <Fidget>
+            <ChanceArray index="Anim" value="33"/>
+            <ChanceArray index="Idle" value="33"/>
+            <ChanceArray index="Turn" value="33"/>
+        </Fidget>
+        <TauntDuration index="Cheer" value="5"/>
+        <TauntDuration index="Dance" value="5"/>
+    </CUnit>
     <CUnit id="SquadMeatWagon">
         <DeathRevealRadius value="3"/>
         <FlagArray index="UseLineOfSight" value="1"/>
@@ -37,6 +127,7 @@
         <AbilArray Link="SquadMeatWagonBattleModeSwitch"/>
         <AbilArray Link="SquadMeatWagonSalvageUnits"/>
         <AbilArray Link="SquadCorpseExplosion"/>
+        <AbilArray Link="SquadCreateMarineCorpse"/>
         <WeaponArray Link="SquadMeatWagonBileCannons" Turret="SquadMeatWagonTurret"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -51,6 +142,7 @@
             <LayoutButtons Face="SquadMeatWagonCargoMode" Type="Passive" Row="2" Column="1"/>
             <LayoutButtons Face="SquadMeatWagonSalvageUnits" Type="AbilCmd" AbilCmd="SquadMeatWagonSalvageUnits,Execute" Row="1" Column="1"/>
             <LayoutButtons Face="SquadCorpseExplosion" Type="AbilCmd" AbilCmd="SquadCorpseExplosion,Execute" Row="1" Column="2"/>
+            <LayoutButtons Face="SquadSpawnMarineCorpse" Type="AbilCmd" AbilCmd="SquadCreateMarineCorpse,Execute" Row="1" Column="4"/>
         </CardLayouts>
         <Radius value="1.625"/>
         <SeparationRadius value="1.1"/>
@@ -63,6 +155,7 @@
         <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
         <LeaderAlias value=""/>
         <HotkeyAlias value=""/>
+        <BehaviorArray Link="SquadCloakandDetectorRadar"/>
     </CUnit>
     <CUnit id="SquadStukovInfestedDiamondbackBileStreamSprayMissile" parent="MISSILE_INVULNERABLE">
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
