@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorBuff id="SquadCaptainToshDetectorRadar">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-status-radar.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Period value="0.25"/>
+        <PeriodicEffect value="SquadCaptainToshDetectorRadar"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadCaptainToshDetectorRadarDetected">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-status-radar.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="0.5"/>
+    </CBehaviorBuff>
     <CBehaviorBuff id="SoulOrb">
         <InfoIcon value="Assets\Textures\btn-soul-orb.dds"/>
         <BehaviorCategories index="User9" value="1"/>
@@ -428,6 +441,24 @@
         </PowerStageArray>
         <Requirements value="HaveAddonStructureOptimization"/>
     </CBehaviorPowerUser>
+    <CBehaviorBuff id="SquadCaptainToshPsiShield">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-defensivematrix.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="hasShields"/>
+        <Duration value="15"/>
+        <Modification>
+            <VitalMaxArray index="Shields" value="300"/>
+        </Modification>
+        <DamageResponse ModifyMinimumDamage="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadCaptainToshPsiShieldDummy">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Modification>
+            <VitalMaxArray index="Shields" value="200"/>
+        </Modification>
+    </CBehaviorBuff>
     <CBehaviorBuff id="YellowScannerChronoBeam">
         <Alignment value="Positive"/>
         <InfoIcon value="Assets\Textures\btn-ability-protoss-chronobeam.dds"/>

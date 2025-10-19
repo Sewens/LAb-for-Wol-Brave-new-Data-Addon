@@ -43,6 +43,17 @@
         </CmdButtonArray>
         <CmdButtonArray index="Cancel" DefaultButtonFace="CmdCancel"/>
     </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadCaptainToshConsumption">
+        <Alignment value="Positive"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadCaptainToshConsumptionDamage"/>
+        <Cost>
+            <Cooldown TimeUse="10"/>
+        </Cost>
+        <TargetFilters value="Biological;Self,Neutral,Enemy,Structure,Missile,Uncommandable,Stasis,Dead,Hidden,Hallucination,Invulnerable"/>
+        <Range value="4"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Consumption"/>
+    </CAbilEffectTarget>
     <CAbilEffectTarget id="SquadCaptainNovaSnipe">
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <PrepEffect value="SquadCaptainNovaCanisterRifleSnipePrep"/>
@@ -763,6 +774,18 @@
         <Arc value="360"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadSpawnMarineCorpse"/>
     </CAbilEffectTarget>
+    <CAbilEffectInstant id="SquadCaptainToshPsiShield">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadCaptainToshPsiShieldSet"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="30"/>
+            <Cooldown TimeUse="20"/>
+        </Cost>
+        <AINotifyEffect value=""/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="VoodooShield" State="Restricted"/>
+    </CAbilEffectInstant>
     <CAbilEffectTarget id="YellowScannerSweep">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Flags index="RequireTargetVision" value="0"/>

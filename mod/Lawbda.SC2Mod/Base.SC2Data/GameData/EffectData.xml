@@ -30,6 +30,21 @@
     <CEffectEnumArea default="1" id="SquadAbilSearchRadiusExt" parent="SquadAbilSearch">
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
+    <CEffectDamage id="SquadCaptainToshConsumptionDamage">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <Flags index="Live" value="1"/>
+        <VitalFractionCurrent index="Life" value="0.5"/>
+        <LeechFraction index="Energy" value="2"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="SquadCaptainToshDetectorRadar">
+        <EditorCategories value="Race:Terran"/>
+        <SearchFilters value="Visible,Detector;Player,Ally,Neutral"/>
+        <AreaArray Radius="25" Effect="SquadCaptainToshDetectorRadarDetected"/>
+    </CEffectEnumArea>
+    <CEffectApplyBehavior id="SquadCaptainToshDetectorRadarDetected">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
     <CEffectSet id="SquadCaptainNovaCanisterRifle">
         <EditorCategories value="Race:Terran"/>
         <EffectArray value="SquadCaptainNovaCanisterRifleDamage"/>
@@ -1525,6 +1540,39 @@
         <EditorCategories value="Race:Terran"/>
         <EffectArray value="SquadTornadoMissileLM"/>
         <EffectArray value="SquadTornadoMissileLMDummy"/>
+    </CEffectSet>
+    <CEffectDamage id="SquadCaptainToshZAssassinRifle" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Ranged"/>
+        <Amount value="35"/>
+    </CEffectDamage>
+    <CEffectApplyBehavior id="SquadCaptainToshPsiShieldApplyBehavior">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadCaptainToshPsiShield"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadCaptainToshPsiShieldApplyDummy">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadCaptainToshPsiShieldDummy"/>
+    </CEffectApplyBehavior>
+    <CEffectModifyUnit id="SquadCaptainToshPsiShieldModifyUnit">
+        <EditorCategories value="Race:Terran"/>
+        <VitalArray index="Shields">
+            <ChangeFraction value="1"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectRemoveBehavior id="SquadCaptainToshPsiShieldRemoveDummy">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <BehaviorLink value="VoodooShieldDummy"/>
+    </CEffectRemoveBehavior>
+    <CEffectSet id="SquadCaptainToshPsiShieldSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadCaptainToshPsiShieldApplyDummy"/>
+        <EffectArray value="SquadCaptainToshPsiShieldModifyUnit"/>
+        <EffectArray value="SquadCaptainToshPsiShieldApplyBehavior"/>
+        <EffectArray value="SquadCaptainToshPsiShieldRemoveDummy"/>
     </CEffectSet>
     <CEffectApplyBehavior id="YellowScannerChronoBeam">
         <EditorCategories value=""/>

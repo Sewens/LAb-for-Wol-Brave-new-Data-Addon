@@ -216,6 +216,126 @@
         <HeightOffset value="1.500000"/>
         <Text value="Button/Tooltip/##id##"/>
     </CActorText>
+    <CActorModel id="SquadCaptainToshConsumptionImpactModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="ActorCreation" Send="SetTintColor 255,0,0"/>
+        <On Terms="Effect.SquadCaptainToshConsumptionDamage.Start" Send="Create"/>
+        <Model value="ConsumptionImpactModel"/>
+    </CActorModel>
+    <CActorSound id="SquadCaptainToshConsumptionImpactSound" parent="SoundOneShot">
+        <On Terms="Effect.SquadCaptainToshConsumptionDamage.Start" Send="Create"/>
+        <On Terms="Effect.InfestorConsumption.Start" Send="Create"/>
+        <Sound value="Tosh_ConsumptionImpact"/>
+    </CActorSound>
+    <CActorModel id="SquadCaptainToshConsumptionLaunchModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="ActorCreation" Send="SetTintColor 255,0,150"/>
+        <On Terms="Effect.SquadCaptainToshConsumptionDamage.Start; At Caster" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+        <Model value="ConsumptionLaunchModel"/>
+    </CActorModel>
+    <CActorList id="SquadCaptainToshHeroDetectorList">
+        <On Terms="Behavior.SquadCaptainToshDetectorRadar.On" Send="Create"/>
+        <On Terms="Behavior.SquadCaptainToshDetectorRadar.Off" Send="Destroy"/>
+        <On Terms="Signal.*.AddMe" Send="RefSetFromMsg ::actor.DetectorToAdd ::Sender"/>
+        <On Terms="Signal.*.AddMe" Send="ListAdd ::actor.DetectorToAdd"/>
+        <On Terms="Signal.*.AddMe; Selected" Target="::actor.DetectorToAdd" Send="SetVisibility 1"/>
+        <On Terms="Signal.*.RemoveMe" Send="RefSetFromMsg ::actor.DetectorToRemove ::Sender"/>
+        <On Terms="Signal.*.RemoveMe" Send="ListRemove ::actor.DetectorToRemove"/>
+        <On Terms="SelectionLocalUpdate.*.Start" Target="::Contents" Send="SetVisibility 1"/>
+        <On Terms="SelectionLocalUpdate.*.Stop" Target="::Contents" Send="SetVisibility"/>
+    </CActorList>
+    <CActorModel id="HeroDetectorRadarModel_Detector102" parent="ModelAnimationStyleContinuous">
+        <Terms value="Cap 1"/>
+        <On Terms="Effect.SquadCaptainToshDetectorRadarDetected.Start; At Target; ValidateUnit HasDetector10" Send="Create"/>
+        <On Terms="Effect.SquadCaptainToshDetectorRadarDetected.Start" Send="RefSetFromRequest ::actor.TargetList HeroDetectorList Implicit Find"/>
+        <On Terms="Behavior.HeroDetectorRadarDetected.Off" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="SetVisibility"/>
+        <On Terms="Behavior.HeroDetectorRadarDetected.On" Target="::actor.TargetList" Send="Signal AddMe"/>
+        <On Terms="ActorDestruction" Target="::actor.TargetList" Send="Signal RemoveMe"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Model value="HeroDetectorRadarModel"/>
+    </CActorModel>
+    <CActorModel id="HeroDetectorRadarModel_Detector112" parent="ModelAnimationStyleContinuous">
+        <Terms value="Cap 1"/>
+        <On Terms="Effect.SquadCaptainToshDetectorRadarDetected.Start; At Target; ValidateUnit HasDetector11" Send="Create"/>
+        <On Terms="Effect.SquadCaptainToshDetectorRadarDetected.Start" Send="RefSetFromRequest ::actor.TargetList HeroDetectorList Implicit Find"/>
+        <On Terms="Behavior.HeroDetectorRadarDetected.Off" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="SetVisibility"/>
+        <On Terms="Behavior.HeroDetectorRadarDetected.On" Target="::actor.TargetList" Send="Signal AddMe"/>
+        <On Terms="ActorDestruction" Target="::actor.TargetList" Send="Signal RemoveMe"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Model value="HeroDetectorRadarModel"/>
+    </CActorModel>
+    <CActorModel id="HeroDetectorRadarModel_Detector122" parent="ModelAnimationStyleContinuous">
+        <Terms value="Cap 1"/>
+        <On Terms="Effect.SquadCaptainToshDetectorRadarDetected.Start; At Target; ValidateUnit HasDetector12" Send="Create"/>
+        <On Terms="Effect.SquadCaptainToshDetectorRadarDetected.Start" Send="RefSetFromRequest ::actor.TargetList HeroDetectorList Implicit Find"/>
+        <On Terms="Behavior.HeroDetectorRadarDetected.Off" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="SetVisibility"/>
+        <On Terms="Behavior.HeroDetectorRadarDetected.On" Target="::actor.TargetList" Send="Signal AddMe"/>
+        <On Terms="ActorDestruction" Target="::actor.TargetList" Send="Signal RemoveMe"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Model value="HeroDetectorRadarModel"/>
+    </CActorModel>
+    <CActorModel id="HeroDetectorRadarModel_Detector82" parent="ModelAnimationStyleContinuous">
+        <Terms value="Cap 1"/>
+        <On Terms="Effect.SquadCaptainToshDetectorRadarDetected.Start; At Target; ValidateUnit HasDetector8" Send="Create"/>
+        <On Terms="Effect.SquadCaptainToshDetectorRadarDetected.Start" Send="RefSetFromRequest ::actor.TargetList HeroDetectorList Implicit Find"/>
+        <On Terms="Behavior.HeroDetectorRadarDetected.Off" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="SetVisibility"/>
+        <On Terms="Behavior.HeroDetectorRadarDetected.On" Target="::actor.TargetList" Send="Signal AddMe"/>
+        <On Terms="ActorDestruction" Target="::actor.TargetList" Send="Signal RemoveMe"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Model value="HeroDetectorRadarModel"/>
+    </CActorModel>
+    <CActorRange id="HeroDetectorRadarRange_Detector102">
+        <Terms value="Cap 1"/>
+        <On Terms="Effect.SquadCaptainToshDetectorRadarDetected.Start; At Target; ValidateUnit HasDetector10" Send="Create"/>
+        <On Terms="Effect.SquadCaptainToshDetectorRadarDetected.Start" Send="RefSetFromRequest ::actor.TargetList HeroDetectorList Implicit Find"/>
+        <On Terms="Behavior.HeroDetectorRadarDetected.Off" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="SetVisibility"/>
+        <On Terms="Behavior.HeroDetectorRadarDetected.On" Target="::actor.TargetList" Send="Signal AddMe"/>
+        <On Terms="ActorDestruction" Target="::actor.TargetList" Send="Signal RemoveMe"/>
+        <Behavior value="Detector10"/>
+        <IconArcLength value="3.000000"/>
+    </CActorRange>
+    <CActorRange id="HeroDetectorRadarRange_Detector112">
+        <Terms value="Cap 1"/>
+        <On Terms="Effect.SquadCaptainToshDetectorRadarDetected.Start; At Target; ValidateUnit HasDetector11" Send="Create"/>
+        <On Terms="Effect.SquadCaptainToshDetectorRadarDetected.Start" Send="RefSetFromRequest ::actor.TargetList HeroDetectorList Implicit Find"/>
+        <On Terms="Behavior.HeroDetectorRadarDetected.Off" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="SetVisibility"/>
+        <On Terms="Behavior.HeroDetectorRadarDetected.On" Target="::actor.TargetList" Send="Signal AddMe"/>
+        <On Terms="ActorDestruction" Target="::actor.TargetList" Send="Signal RemoveMe"/>
+        <Behavior value="Detector11"/>
+        <IconArcLength value="3.000000"/>
+    </CActorRange>
+    <CActorRange id="HeroDetectorRadarRange_Detector122">
+        <Terms value="Cap 1"/>
+        <On Terms="Effect.SquadCaptainToshDetectorRadarDetected.Start; At Target; ValidateUnit HasDetector12" Send="Create"/>
+        <On Terms="Effect.SquadCaptainToshDetectorRadarDetected.Start" Send="RefSetFromRequest ::actor.TargetList HeroDetectorList Implicit Find"/>
+        <On Terms="Behavior.HeroDetectorRadarDetected.Off" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="SetVisibility"/>
+        <On Terms="Behavior.HeroDetectorRadarDetected.On" Target="::actor.TargetList" Send="Signal AddMe"/>
+        <On Terms="ActorDestruction" Target="::actor.TargetList" Send="Signal RemoveMe"/>
+        <Behavior value="Detector12"/>
+        <IconArcLength value="3.000000"/>
+    </CActorRange>
+    <CActorRange id="HeroDetectorRadarRange_Detector82">
+        <Terms value="Cap 1"/>
+        <On Terms="Effect.SquadCaptainToshDetectorRadarDetected.Start; At Target; ValidateUnit HasDetector8" Send="Create"/>
+        <On Terms="Effect.SquadCaptainToshDetectorRadarDetected.Start" Send="RefSetFromRequest ::actor.TargetList HeroDetectorList Implicit Find"/>
+        <On Terms="Behavior.HeroDetectorRadarDetected.Off" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="SetVisibility"/>
+        <On Terms="Behavior.HeroDetectorRadarDetected.On" Target="::actor.TargetList" Send="Signal AddMe"/>
+        <On Terms="ActorDestruction" Target="::actor.TargetList" Send="Signal RemoveMe"/>
+        <Behavior value="Detector8"/>
+        <IconArcLength value="3.000000"/>
+    </CActorRange>
     <CActorEventMacro id="SquadExtraAnimationMacro">
         <On Terms="UnitDeath" Send="StatusSet Dead 1"/>
         <On Terms="UnitRevive" Send="StatusSet Dead 0"/>
@@ -1620,6 +1740,76 @@
     <CActorMissile id="SquadTornadoMissileDummyAttackMissile" parent="GenericAttackMissile" unitName="SquadTornadoMissileDummy">
         <Model value="TornadoMissileDummyWeapon"/>
     </CActorMissile>
+    <CActorUnit id="SquadCaptainTosh" parent="GenericUnitBase" unitName="SquadCaptainTosh">
+        <Aliases value="_UnitSmall"/>
+        <On Terms="Abil.HeroNuclearStrike.SourceCastStart" Send="AnimBracketStart Spell Work,Start Work Work,End"/>
+        <On Terms="Abil.HeroNuclearStrike.SourceFinishStart" Send="AnimBracketStop Spell"/>
+        <On Terms="Abil.HeroNuclearStrike.SourceCancel" Send="AnimBracketStop Spell"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Work"/>
+        <On Terms="WeaponStart.*.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Work"/>
+        <On Terms="Abil.nuke.SourceCastStart" Send="AnimBracketStart Nuke Work,Start Work Work,End"/>
+        <On Terms="Abil.nuke.SourceChannelStop" Send="AnimBracketStop Nuke"/>
+        <On Terms="Abil.RogueRogueBombTosh.SourceCastStart" Send="AnimPlay SpellA Spell,A"/>
+        <On Terms="Abil.KillerPhantasmHydralisk.SourceCastStart" Send="$Spell"/>
+        <On Terms="Abil.KillerPhantasmUltralisk.SourceCastStart" Send="$Spell"/>
+        <On Terms="Abil.KillerPhantasmZergling.SourceCastStart" Send="$Spell"/>
+        <On Terms="Abil.MindBlast.SourceCastStart" Send="$Spell,B NonLooping"/>
+        <On Terms="Abil.Consumption.SourceCastStart" Send="$Spell"/>
+        <On Terms="Abil.Consumption.SourceCastStart" Send="Create ConsumptionSound"/>
+        <On Terms="Abil.ToshShadowClones.SourceCastStart" Send="$Spell"/>
+        <Model value="Tosh"/>
+        <BuildModel value="ToshTeleportIn"/>
+        <DeathArray index="Normal" ModelLink="ToshDeath" SoundLink="Tosh_Death"/>
+        <PlacementModel value="Tosh"/>
+        <PortraitModel value="ToshPortrait"/>
+        <WalkAnimMoveSpeed value="3"/>
+        <BarOffset value="40"/>
+        <BarWidth value="40"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Tosh.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\ui-heroicon-tosh.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
+        <ShieldArmorIcon value="Assets\Textures\btn-ability-terran-defensivematrix.dds"/>
+        <SoundArray index="Ready" value="Tosh_Ready"/>
+        <SoundArray index="Help" value="Tosh_Help"/>
+        <SoundArray index="What" value="Tosh_What"/>
+        <SoundArray index="Yes" value="Tosh_Yes"/>
+        <SoundArray index="Attack" value="Tosh_Attack"/>
+        <SoundArray index="Pissed" value="Tosh_Pissed"/>
+        <UnitBorderNormalColor value="150,150,150"/>
+        <UnitBorderSubgroupColor value="255,255,255"/>
+        <UnitIcon value="Assets\Textures\BTN-Unit-Terran-Tosh.dds"/>
+        <UnitKillRank Text="UnitKillRank/SquadCaptainTosh"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Tosh.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="SquadCaptainToshAttack" parent="GenericAttack" effectAttack="SquadCaptainToshZAssassinRifle">
+        <LaunchAssets Model="ToshAttackLaunch" Sound="Tosh_AttackLaunch"/>
+        <ContainerAssets Sound="Tosh_AttackLaunch"/>
+        <ImpactMap index="None" Model="ToshAttackImpact" Sound="Tosh_AttackImpact"/>
+    </CActorAction>
+    <CActorModel id="SquadCaptainToshPsiShield" parent="ModelAnimationStyleContinuous">
+        <On Terms="Behavior.SquadCaptainToshPsiShield.On" Send="Create"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart $BSD"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.500000"/>
+        <On Terms="Behavior.SquadCaptainToshPsiShield.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="VoodooShield"/>
+    </CActorModel>
+    <CActorSound id="SquadCaptainToshPsiShieldBirth" parent="SoundOneShot">
+        <On Terms="Behavior.SquadCaptainToshPsiShield.On" Send="Create"/>
+        <On Terms="Behavior.SquadCaptainToshPsiShield.Off" Send="Destroy"/>
+        <Sound value="Tosh_PsiShieldBirth"/>
+    </CActorSound>
+    <CActorSound id="SquadCaptainToshPsiShieldDeath" parent="SoundOneShot">
+        <On Terms="Behavior.SquadCaptainToshPsiShield.Off" Send="Create"/>
+        <Sound value="Tosh_PsiShieldDeath"/>
+    </CActorSound>
     <CActorModel id="YellowScannerChronoBeamImpact" parent="ModelAnimationStyleContinuous">
         <On Terms="Behavior.YellowScannerChronoBeam.On" Send="Create"/>
         <On Terms="Behavior.YellowScannerChronoBeam.Off" Send="AnimBracketStop BSD"/>
