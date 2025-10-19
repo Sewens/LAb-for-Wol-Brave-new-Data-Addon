@@ -30,6 +30,40 @@
     <CEffectEnumArea default="1" id="SquadAbilSearchRadiusExt" parent="SquadAbilSearch">
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
+    <CEffectSet id="SquadCaptainNovaCanisterRifle">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadCaptainNovaCanisterRifleDamage"/>
+        <EffectArray value="NovaVultureAnimationControllerEnableAB2"/>
+    </CEffectSet>
+    <CEffectDamage id="SquadCaptainNovaCanisterRifleDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Ranged"/>
+        <Amount value="30"/>
+    </CEffectDamage>
+    <CEffectDamage id="SquadCaptainNovaCanisterRifleSnipe" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <ArmorReduction value="0"/>
+        <Kind value="Spell"/>
+        <Amount value="125"/>
+        <Death value="Silentkill"/>
+    </CEffectDamage>
+    <CEffectSet id="SquadCaptainNovaCanisterRifleSnipePrep">
+        <EffectArray value="SquadCaptainNovaCanisterRifleSnipePrepTurretLook"/>
+        <EffectArray value="SquadCaptainNovaCanisterRifleSnipePrepTurretLookClear"/>
+    </CEffectSet>
+    <CEffectModifyUnit id="SquadCaptainNovaCanisterRifleSnipePrepTurretLook">
+        <ImpactUnit Value="Caster"/>
+        <ModifyTurret Turret="SquadCaptainNovaRotateTurret">
+            <Target Value="TargetUnit"/>
+        </ModifyTurret>
+    </CEffectModifyUnit>
+    <CEffectModifyUnit id="SquadCaptainNovaCanisterRifleSnipePrepTurretLookClear">
+        <ImpactUnit Value="Caster"/>
+        <ModifyTurret Action="ClearTarget" Turret="SquadCaptainNovaRotateTurret">
+            <Target Value="TargetUnit"/>
+        </ModifyTurret>
+    </CEffectModifyUnit>
     <CEffectDamage id="SquadCorpseBirthDead">
         <EditorCategories value="Race:Terran"/>
         <Flags index="Kill" value="1"/>

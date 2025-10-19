@@ -241,15 +241,164 @@
         <On Terms="AnimDone; AnimName Death; HasStatus Dead; !ValidateUnit IsDead" Send="Destroy"/>
         <On Terms="AnimDone; AnimName Flesh; HasStatus Dead; !ValidateUnit IsDead" Send="Destroy"/>
         <On Terms="AnimDone; AnimName Bone; HasStatus Dead" Send="Destroy"/>
-        <On Terms="AnimDone; AnimName Death; HasStatus Dead" Send="AnimPlay Flesh Decay,Death NonLooping"/>
+        <On Terms="AnimDone; AnimName Death; HasStatus Dead" Send="AnimPlay Flesh Death NonLooping"/>
         <On Terms="AnimDone; AnimName Death; HasStatus Dead; IsStatus NoDecay 1" Send="Destroy"/>
-        <On Terms="AnimDone; AnimName Flesh; HasStatus Dead" Send="AnimPlay Bone Decay,Death NonLooping -1.000000 -1.000000 88.000000 AsDuration"/>
-        <On Terms="AnimPlay; AnimName Flesh; ValidateUnit IsDead" Send="AnimSetDuration Flesh 2.000000"/>
+        <On Terms="AnimDone; AnimName Flesh; HasStatus Dead" Send="AnimPlay Bone Death NonLooping -1.000000 -1.000000 45.000000 AsDuration"/>
+        <On Terms="AnimPlay; AnimName Flesh; ValidateUnit IsDead" Send="AnimSetDuration Flesh 43.000000"/>
         <On Terms="UnitDeath" Send="SetTeamColor 0,0,0 0,0,0 0.500000 OneShot Dead"/>
         <On Terms="UnitDeath" Send="SetTintColor 160,160,160 0.500000 OneShot Dead"/>
         <On Terms="UnitRevive" Send="ClearTintColor 0.500000 Dead"/>
         <On Terms="UnitRevive" Send="ClearTeamColor 0.500000 Dead"/>
     </CActorEventMacro>
+    <CActorSound id="SquadCaptainNovaSniperRifleTailRight" parent="SoundOneShot"/>
+    <CActorSound id="SquadCaptainNovaSniperRifleTailLeft" parent="SoundOneShot"/>
+    <CActorPortrait id="SquadCaptainNovaPortrait" parent="CompositePortrait"/>
+    <CActorModel id="SquadCaptainNovaPortraitAddition" parent="CompositePortraitAddition"/>
+    <CActorModel id="SquadCaptainNovaFlameDamageSmoke" parent="TerranFlameModel">
+        <Model value="SquadCaptainNovaSmokeDamage"/>
+    </CActorModel>
+    <CActorStateMonitor id="SquadCaptainNovaFlames">
+        <On Terms="UnitCreation.CaptainNova" Send="Create"/>
+        <On Terms="StateChange; StateValid OneFlames; StateChanged Normal" Send="Create SquadCaptainNovaFlamesSetOne"/>
+        <On Terms="StateChange; StateValid TwoFlames; StateChanged Normal" Send="Create SquadCaptainNovaFlamesSetTwo"/>
+        <On Terms="StateChange; StateValid OneFlames; !StateChanged Normal" Send="Create SquadCaptainNovaFlamesSetOne"/>
+        <On Terms="StateChange; StateValid TwoFlames; !StateChanged Normal" Send="Create SquadCaptainNovaFlamesSetTwo"/>
+        <On Terms="StateChange; !StateValid OneFlames" Target="SquadCaptainNovaFlamesSetOne" Send="Destroy"/>
+        <On Terms="StateChange; !StateValid TwoFlames" Target="SquadCaptainNovaFlamesSetTwo" Send="Destroy"/>
+        <On Terms="StateChange; StateValid TwoFlames" Send="Create SquadCaptainNovaDamage_Medium_Fire_AS"/>
+        <On Terms="StateChange; !StateValid TwoFlames" Target="SquadCaptainNovaDamage_Medium_Fire_AS" Send="Destroy"/>
+        <StateArray Name="Normal" Terms="ValidateUnit LifeGEHalf"/>
+        <StateArray Name="OneFlames" Terms="ValidateUnit Life12andLife14"/>
+        <StateArray Name="TwoFlames" Terms="ValidateUnit LifeLTOneQuarter"/>
+        <StateThinkInterval value="0.5"/>
+    </CActorStateMonitor>
+    <CActorSetQueried id="SquadCaptainNovaFlamesSetTwo">
+        <Host Subject="_Selectable"/>
+        <AttachQuery Methods="AMFilterDamage AMRandomUniformAll AMSquadCaptainNovaReductionTwo"/>
+        <SpawnTarget value="SquadCaptainNovaFlameDamageSmoke"/>
+    </CActorSetQueried>
+    <CActorSound id="SquadCaptainNovaDamage_Medium_Fire_AS" parent="SoundContinuous">
+        <Host Subject="_Selectable"/>
+        <Sound value="SquadCaptainNovaDamage_Medium_Fire"/>
+    </CActorSound>
+    <CActorSetQueried id="SquadCaptainNovaFlamesSetOne">
+        <Host Subject="_Selectable"/>
+        <AttachQuery Methods="AMFilterDamage AMRandomUniformAll AMSquadCaptainNovaReductionOne"/>
+        <SpawnTarget value="SquadCaptainNovaFlameDamageSmoke"/>
+    </CActorSetQueried>
+    <CActorLookAt id="SquadCaptainNovaLookAt" parent="UnitTurret">
+        <On Terms="SupporterDestruction.*.UnitDeathModel" Send="Destroy"/>
+        <Type value="SquadCaptainNova"/>
+        <Types Id="SquadCaptainNova">
+            <Start Group="Turret_Left" Weight="1" Time="150"/>
+            <Stop Group="Turret_Left" Weight="1" Time="150"/>
+        </Types>
+    </CActorLookAt>
+    <CActorUnit id="SquadCaptainNova" parent="GenericUnitStandard" unitName="CaptainNova">
+        <Macros value="UnloadDropAnim"/>
+        <On Terms="ActorCreation" Send="Create SquadCaptainNovaLookAt"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="WeaponStart.SquadCaptainNovaCanisterRifle.AttackStart" Send="AnimPlay Attack Attack 0 -1.000000 -1.000000 1.000000 AsTimeScale"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <On Terms="WeaponStart.*.AttackStart; WeaponTargetAngle GE -45.000000" Send="StatusSet AlternateAnim 0"/>
+        <On Terms="WeaponStart.*.AttackStart; WeaponTargetAngle GE -45.000000" Send="AnimGroupRemove Alternate"/>
+        <On Terms="WeaponStart.*.AttackStart; WeaponTargetAngle LT -45.000000" Send="StatusSet AlternateAnim 1"/>
+        <On Terms="WeaponStart.*.AttackStart; WeaponTargetAngle GT -150.000000; IsStatus AlternateAnim 1" Send="AnimGroupApply Alternate"/>
+        <On Terms="WeaponStart.*.AttackStart; WeaponTargetAngle LE -150.000000; IsStatus AlternateAnim 1" Send="AnimGroupRemove Alternate"/>
+        <On Terms="WeaponStart.*.AttackStart" Target="SquadCaptainNovaLookAt" Send="LookAtEngage Continue"/>
+        <On Terms="Abil.attack.ReadyStop" Target="SquadCaptainNovaLookAt" Send="LookAtDisengage"/>
+        <On Terms="TurretTarget.SquadCaptainNovaRotateTurret" Target="SquadCaptainNovaLookAt" Send="LookAtEngage Continue"/>
+        <!--On Terms="Abil.NovaGadgetPulseGrenadesVulture.SourceCastStart" Send="$Spell 0 -1.000000 -1.000000 1.000000 AsTimeScale"/-->
+        <On Terms="Effect.SquadCaptainNovaCanisterRifleSnipePrep.Start" Send="AnimPlay Attack Attack 0 -1.000000 -1.000000 1.000000 AsTimeScale"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <DeathArray index="Normal" ModelLink="SquadCaptainNovaDeath" SoundLink="Vulture_Explosion"/>
+        <PortraitActor value="SquadCaptainNovaPortrait"/>
+        <PortraitModel value="SquadCaptainNovaPortrait"/>
+        <!--AbilSoundArray AbilCmd="VultureSpiderMines,Execute" Sound="Vulture_SpiderMinePlace"/-->
+        <BarOffset value="80"/>
+        <BarWidth value="102"/>
+        <CustomUnitStatusFrame value="HotS_UnitStatus/KerriganHeroUnitStatusFrameTemplate"/>
+        <StatusBarOn index="Custom" value="1"/>
+        <UnitFlags index="SuppressDefaultStatusBar" value="1"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Vulture.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-vulture.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <NameOffset value="40"/>
+        <SoundArray index="Movement" value="SquadCaptainNovaMoveStart"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-vulture.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Vulture.dds"/>
+        </Wireframe>
+        <Model value="SquadCaptainNova"/>
+        <BuildModel value="SquadCaptainNova"/>
+        <PlacementModel value="SquadCaptainNova"/>
+        <HighlightTooltip value="Unit/Name/SquadCaptainNova"/>
+    </CActorUnit>
+    <CActorAction id="SquadCaptainNovaAttack" parent="GenericAttack" effectAttack="SquadCaptainNovaCanisterRifleDamage">
+        <LaunchSiteOps Ops="SOpAttachHarnessStationary"/>
+        <LaunchAssets Model="" Sound="SquadCaptainNovaSniperRifleAttackLaunchBoomy"/>
+        <LaunchSound value="SquadCaptainNovaSniperRifleAttackLaunchTailSound"/>
+        <ImpactSiteOps HoldPosition="1" HoldRotation="1"/>
+        <ImpactMap index="None" Sound="SquadCaptainNovaSniperRifleAttackImpact"/>
+    </CActorAction>
+    <CActorBeamSimple id="SquadCaptainNovaAttackBeam" parent="GenericAttackBeam"/>
+    <CActorAction id="SquadCaptainNovaCanisterRifleSnipeAttack" parent="GenericAttack" effectAttack="SquadCaptainNovaCanisterRifleSnipe">
+        <LaunchSiteOps Ops="SOpAttachHarnessStationary"/>
+        <LaunchAssets Sound="SquadCaptainNovaSnipeAttackLaunch"/>
+        <LaunchSound value="SquadCaptainNovaSnipeTailExterior"/>
+        <ImpactMap index="None" Sound="SquadCaptainNovaSnipeAttackImpact"/>
+    </CActorAction>
+    <CActorBeamSimple id="SquadCaptainNovaCanisterRifleSnipeAttackBeam" parent="GenericAttackBeam"/>
+    <CActorRange id="SquadCaptainNovaCanisterRifleSnipeRange" parent="RangeAbil" abil="SquadCaptainNovaSnipe"/>
+    <CActorSound id="SquadCaptainNovaSnipeTailExterior" parent="SoundOneShot">
+        <Terms value="SoundIsFinalSound"/>
+        <Sound value="SquadCaptainNovaSniperRifleTail_Dummy"/>
+        <Layers>
+            <Sound value="Nova_Snipe_TailExterior"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Sound"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="0.000000,0.000000"/>
+        </Layers>
+    </CActorSound>
+    <CActorSound id="SquadCaptainNovaSniperRifleAttackLaunchTailSound" parent="SoundOneShot">
+        <Sound value="SquadCaptainNovaSniperRifleTail_Dummy"/>
+        <Layers>
+            <Sound value="SquadCaptainNovaAttackLaunch_MechySweetener"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Sound"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="0.000000,0.000000"/>
+        </Layers>
+        <Layers>
+            <Sound value="SquadCaptainNovaSniperRifleTailLeft"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Sound"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="0.000000,0.000000"/>
+        </Layers>
+        <Layers>
+            <Sound value="SquadCaptainNovaSniperRifleTailRight"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Sound"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="0.000000,0.000000"/>
+        </Layers>
+    </CActorSound>
     <CActorUnit id="SquadCorpseMarineDummy" parent="SquadGenericUnitBase" unitName="SquadMarineCorpseDummy">
         <Aliases value="_UnitSmall"/>
         <Macros value="UnloadDropAnim"/>
@@ -392,6 +541,9 @@
         <DeathCustoms ModelLink="MilitarizedColonistTransportDeathWork" Name="Variation2"/>
         <PlacementModel value="MilitarizedColonistTransport"/>
         <PortraitModel value="TransportPilotPortrait"/>
+        <CustomUnitStatusFrame value="HotS_UnitStatus/KerriganHeroUnitStatusFrameTemplate"/>
+        <StatusBarOn index="Custom" value="1"/>
+        <UnitFlags index="SuppressDefaultStatusBar" value="1"/>
         <StandAnimTurnTime value="3.33"/>
         <WalkAnimMoveSpeed value="1"/>
         <BarOffset value="80"/>
@@ -5057,6 +5209,9 @@
         <WalkAnimMoveSpeed value="2.25"/>
         <BarOffset value="80"/>
         <BarWidth value="102"/>
+        <CustomUnitStatusFrame value="HotS_UnitStatus/KerriganHeroUnitStatusFrameTemplate"/>
+        <StatusBarOn index="Custom" value="1"/>
+        <UnitFlags index="SuppressDefaultStatusBar" value="1"/>
         <HighlightTooltip value="Unit/Name/SquadExcavator"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
         <NameOffset value="60"/>
@@ -6796,6 +6951,9 @@
         <GroupSoundArray index="Yes" value="Raynor_Yes"/>
         <GroupSoundArray index="Attack" value="Raynor_Attack"/>
         <GroupSoundArray index="Board" value="Raynor_Ready"/>
+        <CustomUnitStatusFrame value="HotS_UnitStatus/KerriganHeroUnitStatusFrameTemplate"/>
+        <StatusBarOn index="Custom" value="1"/>
+        <UnitFlags index="SuppressDefaultStatusBar" value="1"/>
         <HeroIcon value="Assets\Textures\BTN-Unit-Terran-MarineMercenary.dds"/>
         <HighlightTooltip value="Unit/Name/WarPig"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
@@ -7153,6 +7311,9 @@
         <GroupIcon>
             <Image value="Assets\Textures\Wireframe-Terran-predator.dds"/>
         </GroupIcon>
+        <CustomUnitStatusFrame value="HotS_UnitStatus/KerriganHeroUnitStatusFrameTemplate"/>
+        <StatusBarOn index="Custom" value="1"/>
+        <UnitFlags index="SuppressDefaultStatusBar" value="1"/>
         <HeroIcon value="Assets\Textures\BTN-Unit-Terran-Predator.dds"/>
         <HighlightTooltip value="Unit/Name/Predator"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
