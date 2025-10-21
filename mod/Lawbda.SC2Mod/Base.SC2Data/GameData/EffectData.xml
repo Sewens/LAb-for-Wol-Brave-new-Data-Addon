@@ -30,6 +30,76 @@
     <CEffectEnumArea default="1" id="SquadAbilSearchRadiusExt" parent="SquadAbilSearch">
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
+    <CEffectModifyPlayer id="ScannerSweepAlphaMP">
+        <EditorCategories value="Race:Terran"/>
+        <Upgrades Upgrade="ScannerSweepAlphaUpgradeDummy" Count="1"/>
+        <Upgrades Upgrade="ScannerSweepBlackUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepBlueUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepGreenUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepRedUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepVanillaUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepYellowUpgradeDummy" Count="-1"/>
+    </CEffectModifyPlayer>
+    <CEffectModifyPlayer id="ScannerSweepBlackMP">
+        <EditorCategories value="Race:Terran"/>
+        <Upgrades Upgrade="ScannerSweepAlphaUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepBlackUpgradeDummy" Count="1"/>
+        <Upgrades Upgrade="ScannerSweepBlueUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepGreenUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepRedUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepVanillaUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepYellowUpgradeDummy" Count="-1"/>
+    </CEffectModifyPlayer>
+    <CEffectModifyPlayer id="ScannerSweepBlueMP">
+        <EditorCategories value="Race:Terran"/>
+        <Upgrades Upgrade="ScannerSweepAlphaUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepBlackUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepBlueUpgradeDummy" Count="1"/>
+        <Upgrades Upgrade="ScannerSweepGreenUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepRedUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepVanillaUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepYellowUpgradeDummy" Count="-1"/>
+    </CEffectModifyPlayer>
+    <CEffectModifyPlayer id="ScannerSweepGreenMP">
+        <EditorCategories value="Race:Terran"/>
+        <Upgrades Upgrade="ScannerSweepAlphaUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepBlackUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepBlueUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepGreenUpgradeDummy" Count="1"/>
+        <Upgrades Upgrade="ScannerSweepRedUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepVanillaUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepYellowUpgradeDummy" Count="-1"/>
+    </CEffectModifyPlayer>
+    <CEffectModifyPlayer id="ScannerSweepRedMP">
+        <EditorCategories value="Race:Terran"/>
+        <Upgrades Upgrade="ScannerSweepAlphaUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepBlackUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepBlueUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepGreenUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepRedUpgradeDummy" Count="1"/>
+        <Upgrades Upgrade="ScannerSweepVanillaUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepYellowUpgradeDummy" Count="-1"/>
+    </CEffectModifyPlayer>
+    <CEffectModifyPlayer id="ScannerSweepVanillaMP">
+        <EditorCategories value="Race:Terran"/>
+        <Upgrades Upgrade="ScannerSweepAlphaUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepBlackUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepBlueUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepGreenUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepRedUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepVanillaUpgradeDummy" Count="1"/>
+        <Upgrades Upgrade="ScannerSweepYellowUpgradeDummy" Count="-1"/>
+    </CEffectModifyPlayer>
+    <CEffectModifyPlayer id="ScannerSweepYellowMP">
+        <EditorCategories value="Race:Terran"/>
+        <Upgrades Upgrade="ScannerSweepAlphaUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepBlackUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepBlueUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepGreenUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepRedUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepVanillaUpgradeDummy" Count="-1"/>
+        <Upgrades Upgrade="ScannerSweepYellowUpgradeDummy" Count="1"/>
+    </CEffectModifyPlayer>
     <CEffectDamage id="SquadCaptainToshConsumptionDamage">
         <EditorCategories value="Race:Terran"/>
         <ImpactLocation Value="TargetUnit"/>
@@ -1576,24 +1646,31 @@
     </CEffectSet>
     <CEffectSet id="SwitchScannerAlphaDummy">
         <EditorCategories value="Race:Terran"/>
+        <EffectArray value="ScannerSweepAlphaMP"/>
     </CEffectSet>
     <CEffectSet id="SwitchScannerBlueDummy">
         <EditorCategories value="Race:Terran"/>
+        <EffectArray value="ScannerSweepBlueMP"/>
     </CEffectSet>
     <CEffectSet id="SwitchScannerYellowDummy">
         <EditorCategories value="Race:Terran"/>
+        <EffectArray value="ScannerSweepYellowMP"/>
     </CEffectSet>
     <CEffectSet id="SwitchScannerRedDummy">
         <EditorCategories value="Race:Terran"/>
+        <EffectArray value="ScannerSweepRedMP"/>
     </CEffectSet>
     <CEffectSet id="SwitchScannerGreenDummy">
         <EditorCategories value="Race:Terran"/>
+        <EffectArray value="ScannerSweepGreenMP"/>
     </CEffectSet>
     <CEffectSet id="SwitchScannerBlackDummy">
         <EditorCategories value="Race:Terran"/>
+        <EffectArray value="ScannerSweepBlackMP"/>
     </CEffectSet>
     <CEffectSet id="SwitchScannerVanillaDummy">
         <EditorCategories value="Race:Terran"/>
+        <EffectArray value="ScannerSweepVanillaMP"/>
     </CEffectSet>
     <CEffectApplyBehavior id="YellowScannerChronoBeam">
         <EditorCategories value=""/>
