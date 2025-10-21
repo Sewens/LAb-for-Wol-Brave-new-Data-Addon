@@ -553,11 +553,12 @@
         <On Terms="UnitBirth; ValidateUnit HaveDarkMarineArmor" Send="ModelSwap Shadow_MarineEX"/>
         <On Terms="UnitDeathCustomize; ValidateUnit HaveVoidShade" Send="DeathCustomize Shadow"/>
         <On Terms="UnitDeathCustomize; ValidateUnit HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
-        <Model value="MarineDeath"/>
+        <Model value="Marine_death_dance"/>
+        <ModelFlags index="UpdateVisibility" value="0"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
-        <BuildModel value="MarineDeath"/>
+        <BuildModel value="Marine_death_dance"/>
         <DeathActorModel value="SquadUnitDeathModelGL"/>
-        <DeathArray index="Normal" ModelLink="MarineDeath" SoundLink="Marine_DeathFXBloodSpray"/>
+        <DeathArray index="Normal" ModelLink="Marine_death_dance" SoundLink="Marine_DeathFXBloodSpray"/>
         <DeathArray index="Blast" ModelLink="MarineDeathBlast"/>
         <DeathArray index="Disintegrate" ModelLink="MarineDeathAcid" SoundLink="Uni_DeathFXAcid"/>
         <DeathArray index="Eat" AnimProps="Stand" ModelLink="MarineDeathEat" SoundLink="Marine_DeathFXEat"/>
@@ -596,7 +597,7 @@
             <VoiceLink value="ShadowUnit_DeathVox"/>
             <Name value="Shadow"/>
         </DeathCustoms>
-        <PlacementModel value="MarineDeath"/>
+        <PlacementModel value="Marine_death_dance"/>
         <PortraitModel value="MarinePortrait"/>
         <StandAnimTurnTime value="4"/>
         <TerrainSquibs>
@@ -1185,7 +1186,21 @@
         <ActionFlags index="VictimRevealsAttacker" value="1"/>
         <CombatRevealDurationType value="ByVictim"/>
     </CActorAction>
-    <CActorAction id="SquadMedicHealGun" parent="GenericAttack" effectImpact="SquadMedicHealGunApplyBehaviorNormal" effectLaunch="SquadMedicHealGunLaunchMissile">
+    <CActorAction id="SquadMedicHealGun" parent="GenericAttackBase">
+        <On Terms="Effect.SquadMedicHealGunLaunchMissile.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.SquadMedicHealGunApply.Start; At Caster; FromEffectTreeDescendant" Send="ActionDamage"/>
+        <On Terms="Effect.SquadMedicHealGunApply.Stop; At Caster; FromEffectTreeDescendant" Send="ActionDamagePhysics"/>
+        <LaunchAttachQuery Methods="AMFilterWeapon"/>
+        <LaunchAssets Sound="Interceptor_AttackLaunch"/>
+        <Beam value="SquadMdeicHealGunMissile"/>
+        <BeamScope value="Caster"/>
+        <ImpactMap index="None" Model="InterceptorAttackImpact" Sound="Interceptor_AttackImpact"/>
+        <ImpactModel value="DarkInterceptorTestImpact"/>
+        <DamagePhysics Name="InterceptorBeamImpact" MatchKeys="Basic" Physics="InterceptorAttackDeathForce"/>
+        <DamagePhysics Name="InterceptorBeamImpact" MatchKeys="BasicAir" Physics="InterceptorAttackAirDeathForce"/>
+        <ActionFlags index="ImpactMonitorsTeleports" value="1"/>
+    </CActorAction>
+    <!--CActorAction id="SquadMedicHealGun" parent="GenericAttack" effectImpact="SquadMedicHealGunApplyBehaviorNormal" effectLaunch="SquadMedicHealGunLaunchMissile">
         <LaunchSiteOps Ops="SOpAttachHarnessStationary"/>
         <LaunchSite value="NeuralParasiteTentacleLaunchSite"/>
         <LaunchAttachQuery Methods="Weapon 1"/>
@@ -1198,7 +1213,7 @@
         <ShieldFlashType value="None"/>
         <ActionFlags index="VictimRevealsAttacker" value="1"/>
         <CombatRevealDurationType value="ByVictim"/>
-    </CActorAction>
+    </CActorAction-->
     <CActorSound id="SquadNeuralParasiteBirthSound" parent="SoundOneShot">
         <On Terms="Behavior.SquadNeuralParasite.On" Send="Create"/>
         <On Terms="Behavior.NeuralParasiteEffect.On" Send="Create"/>
@@ -1219,10 +1234,23 @@
         <On Terms="MotionPhaseStart; MotionPhase" Target="::Supporter" Send="RefSetFromRequest ::scope.NeuralParasiteTarget _Unit Target Find"/>
         <Model value="Invisible"/>
     </CActorMissile>
-    <CActorMissile id="SquadMdeicHealGunMissile" parent="GenericAttackMissile" unitName="SquadMdeicHealGunWeapon">
-        <On Terms="ActorCreation" Send="SetTintColor {0,255,0 5.000000}"/>
-        <Model value="WarHoundBeam"/>
+    <CActorMissile id="SquadMdeicHealGunMissile" parent="GenericAttackMissile" unitName="SquadMedicHealGunMissile">
+        <Model value="Invisible"/>
     </CActorMissile>
+    <CActorBeamSimple id="SquadMedicHealGunBeam" parent="GenericAttackBeam">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="ActorCreation" Send="SetTintColor {0,255,0 5.000000}"/>
+        <On Terms="Effect.SquadMedicHealGunLaunchMissile.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.SquadMedicHealGunApply.Start" Send="Create WarHoundImpactHoldingSite"/>
+        <On Terms="Effect.SquadMedicHealGunApply.Start" Send="RefSet ::HostImpact WarHoundImpactHoldingSite"/>
+        <Host Subject="_Selectable"/>
+        <Model value="WarHoundBeam"/>
+        <HostLaunch Subject="_Selectable" Actor="Find"/>
+        <HostLaunchSiteOps Ops="SOpAttachWeapon" HoldPosition="1" HoldRotation="1"/>
+        <HostImpact Subject="_Missile" Actor="Find"/>
+        <HostImpactSiteOps Ops="SOpAttachCenter"/>
+    </CActorBeamSimple>
     <CActorModel id="SquadNeuralParasiteModel" parent="ModelAddition">
         <On Terms="Behavior.SquadNeuralParasite.On" Send="Create"/>
         <On Terms="Behavior.SquadNeuralParasite.On" Target="::Main" Send="SetSoundSuffix _NP"/>
@@ -1687,7 +1715,7 @@
         <ImpactPhysics Name="RailgunImpact" MatchKeys="Basic" Physics="RailgunAttackDeathForce"/>
         <ActionFlags index="LaunchForceSite" value="1"/>
     </CActorAction>
-    <CActorMissile id="SquadWarHoundAttackMissile" parent="GenericAttackMissile" unitName="SquadWarhoundMissile">
+    <CActorMissile id="SquadWarHoundAttackMissile" parent="GenericAttackMissile" unitName="SquadWarHoundMissile">
         <Model value="Invisible"/>
     </CActorMissile>
     <CActorBeamSimple id="SquadWarHoundBeam" parent="GenericAttackBeam">
@@ -7365,17 +7393,6 @@
             <Image value="Assets\Textures\Wireframe-Terran-medic.dds"/>
         </Wireframe>
     </CActorUnit>
-    <CActorBeamSimple id="SquadMedicHealBeam" parent="BeamSimpleAnimationStyleContinuous">
-        <Inherits index="Visibility" value="1"/>
-        <On Terms="Effect.SquadMedicHeal.TargetStart" Send="Create"/>
-        <On Terms="Effect.SquadMedicHeal.TargetStop" Send="Destroy"/>
-        <HostForProps Subject="_Unit" Scope="Caster" Actor="Find"/>
-        <Model value="MedicHealBeam"/>
-        <HostLaunch Subject="_Unit" Scope="Caster" Actor="Find"/>
-        <HostLaunchSiteOps Ops="SOpAttachWeapon"/>
-        <HostImpact Subject="_Unit" Scope="Target" Actor="Find"/>
-        <HostImpactSiteOps Ops="SOpAttachCenter"/>
-    </CActorBeamSimple>
     <CActorModel id="SquadMedicHealModel" parent="ModelAnimationStyleContinuous">
         <On Terms="ActorCreation" Send="$Birth PlayForever"/>
         <On Terms="Effect.SquadMedicHeal.TargetStart; At Target" Send="Create"/>

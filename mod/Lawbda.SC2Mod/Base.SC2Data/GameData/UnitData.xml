@@ -249,9 +249,9 @@
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
     </CUnit>
     <CUnit id="SquadChainLightningMissile"/>
-    <CUnit id="SquadMdeicHealGunWeapon" parent="MISSILE_INVULNERABLE">
+    <CUnit id="SquadMedicHealGunMissile" parent="MISSILE_INVULNERABLE">
         <Race value="Terr"/>
-        <Mover value="InfestorNeuralParasite"/>
+        <Mover value="WarHoundWeapon"/>
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
     </CUnit>
     <CUnit id="SquadStormBoltMissile">
@@ -2560,6 +2560,14 @@
         <AttackTargetPriority value="11"/>
         <AbilArray Link="SquadBuildinProgress"/>
         <AbilArray Link="SquadQueue5"/>
+        <AbilArray Link="SwitchScannerSweep"/>
+        <AbilArray Link="SwitchScannerAlpha"/>
+        <AbilArray Link="SwitchScannerBlack"/>
+        <AbilArray Link="SwitchScannerBlue"/>
+        <AbilArray Link="SwitchScannerGreen"/>
+        <AbilArray Link="SwitchScannerRed"/>
+        <AbilArray Link="SwitchScannerVanilla"/>
+        <AbilArray Link="SwitchScannerYellow"/>
         <BehaviorArray Link="SquadReactorPowerUser"/>
         <BehaviorArray Link="SquadTechlabPowerUser"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
@@ -2568,6 +2576,23 @@
             <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Cancel" Row="2" Column="4"/>
             <LayoutButtons Face="Halt" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Halt" Row="2" Column="3"/>
             <LayoutButtons Face="SelectBuilder" Type="SelectBuilder" Row="1" Column="3"/>
+            <LayoutButtons Face="SwitchScannerSweepAlpha" Type="AbilCmd" AbilCmd="SwitchScannerAlpha,Execute" Row="0" Column="1"/>
+            <LayoutButtons Face="SwitchScannerSweepAlpha" Type="Passive" Requirements="HaveScannerAlphaUpgrade" Row="0" Column="1"/>
+            <LayoutButtons Face="SwitchScannerSweepBlack" Type="Passive" Requirements="HaveScannerBlackUpgrade" Row="1" Column="4"/>
+            <LayoutButtons Face="SwitchScannerSweepBlue" Type="AbilCmd" AbilCmd="SwitchScannerBlue,Execute" Row="1" Column="2"/>
+            <LayoutButtons Face="SwitchScannerSweepBlue" Type="Passive" Requirements="HaveScannerBlueUpgrade" Row="1" Column="2"/>
+            <LayoutButtons Face="SwitchScannerSweepGreen" Type="AbilCmd" AbilCmd="SwitchScannerGreen,Execute" Row="0" Column="2"/>
+            <LayoutButtons Face="SwitchScannerSweepGreen" Type="Passive" Requirements="HaveScannerGreenUpgrade" Row="0" Column="2"/>
+            <LayoutButtons Face="SwitchScannerSweepRed" Type="AbilCmd" AbilCmd="SwitchScannerRed,Execute" Row="1" Column="1"/>
+            <LayoutButtons Face="SwitchScannerSweepRed" Type="Passive" Requirements="HaveScannerRedUpgrade" Row="1" Column="1"/>
+            <LayoutButtons Face="SwitchScannerSweepVanilla" Type="AbilCmd" AbilCmd="SwitchScannerVanilla,Execute" Row="0" Column="0"/>
+            <LayoutButtons Face="SwitchScannerSweepVanilla" Type="Passive" Requirements="HaveScannerVanillaUpgrade" Row="0" Column="0"/>
+            <LayoutButtons Face="SwitchScannerSweepYellow" Type="AbilCmd" AbilCmd="SwitchScannerYellow,Execute" Row="1" Column="0"/>
+            <LayoutButtons Face="SwitchScannerSweepYellow" Type="Passive" Requirements="HaveScannerYellowUpgrade" Row="1" Column="0"/>
+            <LayoutButtons Face="SwitchScannerSweepBlack" Type="AbilCmd" AbilCmd="SwitchScannerBlack,Execute" Row="1" Column="4"/>
+            <LayoutButtons Face="ScannerSweepGroup1Upgrade" Type="AbilCmd" AbilCmd="SwitchScannerSweep,Research1" Row="2" Column="0"/>
+            <LayoutButtons Face="ScannerSweepGroup2Upgrade" Type="AbilCmd" AbilCmd="SwitchScannerSweep,Research2" Row="2" Column="1"/>
+            <LayoutButtons Face="ScannerSweepGroup3Upgrade" Type="AbilCmd" AbilCmd="SwitchScannerSweep,Research3" Row="2" Column="2"/>
         </CardLayouts>
         <Radius value="1.5"/>
         <SeparationRadius value="1.5"/>
@@ -6213,7 +6238,7 @@
         <GlossaryWeakArray value="Marauder"/>
         <TauntDuration index="Dance" value="5"/>
     </CUnit>
-    <CUnit id="SquadWarhoundMissile" parent="MISSILE">
+    <CUnit id="SquadWarHoundMissile" parent="MISSILE">
         <Race value="Terr"/>
         <Mover value="WarHoundWeapon"/>
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>

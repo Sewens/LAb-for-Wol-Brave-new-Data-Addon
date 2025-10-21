@@ -659,30 +659,68 @@
         <PrepTime value="0.4"/>
         <CastOutroTime value="0.5"/>
     </CAbilEffectTarget>
-    <CAbilSpecialize id="AdvanceScannerSweep">
+    <CAbilEffectInstant id="SwitchScannerAlpha">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <InfoArray index="Specialize1">
-            <Button DefaultButtonFace="ScannerSweepAlpha"/>
+        <Effect index="0" value="SwitchScannerAlphaDummy"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SwitchScannerSweepAlpha" Requirements="NoScannerAlphaUpgrade"/>
+        <Cost>
+            <Cooldown Link="Abil/SwitchScanner" Location="Player" TimeUse="1"/>
+        </Cost>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="SwitchScannerBlue">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SwitchScannerBlueDummy"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SwitchScannerSweepBlue" Requirements="NoScannerBlueUpgrade"/>
+        <Cost>
+            <Cooldown Link="Abil/SwitchScanner" Location="Player" TimeUse="1"/>
+        </Cost>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="SwitchScannerYellow">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SwitchScannerYellowDummy"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SwitchScannerSweepYellow" Requirements="NoScannerYellowUpgrade"/>
+        <Cost>
+            <Cooldown Link="Abil/SwitchScanner" Location="Player" TimeUse="1"/>
+        </Cost>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="SwitchScannerRed">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SwitchScannerRedDummy"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SwitchScannerSweepRed" Requirements="NoScannerRedUpgrade"/>
+        <Cost>
+            <Cooldown Link="Abil/SwitchScanner" Location="Player" TimeUse="1"/>
+        </Cost>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="SwitchScannerGreen">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SwitchScannerGreenDummy"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SwitchScannerSweepGreen" Requirements="NoScannerGreenUpgrade"/>
+        <Cost>
+            <Cooldown Link="Abil/SwitchScanner" Location="Player" TimeUse="1"/>
+        </Cost>
+    </CAbilEffectInstant>
+    <CAbilResearch id="SwitchScannerSweep">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Activity value="UI/Specializing"/>
+        <InfoArray index="Research1" Upgrade="ScannerGroup1Upgrade">
+            <Resource index="Minerals" value="100"/>
+            <Resource index="Vespene" value="100"/>
+            <Cooldown TimeUse="45"/>
+            <Button DefaultButtonFace="ScannerSweepGroup1Upgrade" Requirements="NoScannerGroup1Upgrade"/>
         </InfoArray>
-        <InfoArray index="Specialize2">
-            <Button DefaultButtonFace="ScannerSweepBlack"/>
+        <InfoArray index="Research2" Upgrade="ScannerGroup2Upgrade">
+            <Resource index="Minerals" value="200"/>
+            <Resource index="Vespene" value="200"/>
+            <Cooldown TimeUse="60"/>
+            <Button DefaultButtonFace="ScannerSweepGroup2Upgrade" Requirements="NoScannerGroup2Upgrade"/>
         </InfoArray>
-        <InfoArray index="Specialize3">
-            <Button DefaultButtonFace="ScannerSweepBlue"/>
+        <InfoArray index="Research3" Upgrade="ScannerGroup3Upgrade">
+            <Resource index="Minerals" value="400"/>
+            <Resource index="Vespene" value="400"/>
+            <Cooldown TimeUse="75"/>
+            <Button DefaultButtonFace="ScannerSweepGroup3Upgrade" Requirements="NoScannerGroup3Upgrade"/>
         </InfoArray>
-        <InfoArray index="Specialize4">
-            <Button DefaultButtonFace="ScannerSweepGreen"/>
-        </InfoArray>
-        <InfoArray index="Specialize5">
-            <Button DefaultButtonFace="ScannerSweepRed"/>
-        </InfoArray>
-        <InfoArray index="Specialize6">
-            <Button DefaultButtonFace="ScannerSweepYellow"/>
-        </InfoArray>
-        <InfoArray index="Specialize7">
-            <Button DefaultButtonFace="ScannerSweepVanilla"/>
-        </InfoArray>
-    </CAbilSpecialize>
+    </CAbilResearch>
     <CAbilEffectInstant id="BulletTime">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Effect index="0" value="SquadBulletTime"/>
@@ -785,6 +823,22 @@
         </Cost>
         <AINotifyEffect value=""/>
         <CmdButtonArray index="Execute" DefaultButtonFace="VoodooShield" State="Restricted"/>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="SwitchScannerBlack">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SwitchScannerBlackDummy"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SwitchScannerSweepBlack" Requirements="NoScannerBlackUpgrade"/>
+        <Cost>
+            <Cooldown Link="Abil/SwitchScanner" Location="Player" TimeUse="1"/>
+        </Cost>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="SwitchScannerVanilla">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SwitchScannerVanillaDummy"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SwitchScannerSweepVanilla" Requirements="NoScannerVanillaUpgrade"/>
+        <Cost>
+            <Cooldown Link="Abil/SwitchScanner" Location="Player" TimeUse="1"/>
+        </Cost>
     </CAbilEffectInstant>
     <CAbilEffectTarget id="YellowScannerSweep">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
