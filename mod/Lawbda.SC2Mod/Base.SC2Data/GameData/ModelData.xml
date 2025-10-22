@@ -2,24 +2,105 @@
 <Catalog>
     <CModel default="1" id="SquadModelBase">
         <?token id="race" value="Neutral"?>
-        <ScaleMax value="1.562500,1.562500,1.562500"/>
-        <ScaleMin value="1.562500,1.562500,1.562500"/>
+        <EditorCategories value="Race:##race##"/>
         <Flags index="CloakedUndetectedIsHidden" value="1"/>
         <Flags index="ForcePortraitModel" value="1"/>
         <Flags index="FOW" value="0"/>
         <Flags index="IgnoreAspectRatioScale" value="1"/>
-        <EditorCategories value="Race:##race##"/>
         <Lighting value="Tyrador"/>
+        <ScaleMax value="1.562500,1.562500,1.562500"/>
+        <ScaleMin value="1.562500,1.562500,1.562500"/>
     </CModel>
     <CModel default="1" id="SquadSpell" parent="SquadModelBase">
+        <Model value="Assets\Abilities\Spells\##race##\##id##\##id##.m3"/>
         <Flags index="Wait" value="0"/>
         <Priority value="24"/>
-        <Model value="Assets\Abilities\Spells\##race##\##id##\##id##.m3"/>
     </CModel>
     <CModel default="1" id="SquadWeapon" parent="SquadModelBase">
+        <Model value="Assets\Abilities\Weapons\##id##\##id##.m3"/>
         <Flags index="Wait" value="0"/>
         <Priority value="24"/>
-        <Model value="Assets\Abilities\Weapons\##id##\##id##.m3"/>
+    </CModel>
+    <CModel id="LawbdaCorePlacement" parent="PlacementEx">
+        <Model value="Assets\COOP\Stetmann\Buildings\GARY_Stetmann_COOP_RespawnPad\GARY_Stetmann_COOP_RespawnPad_11.m3"/>
+        <ScaleMax value="0.600000,0.600000,0.600000"/>
+        <ScaleMin value="0.600000,0.600000,0.600000"/>
+    </CModel>
+    <CModel id="LawbdaCoreSplat" parent="Splat">
+        <Model value="Assets\Splats\Splat_FusionCore\Splat_FusionCore.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <ScaleMax value="0.750000,0.750000,0.750000"/>
+        <ScaleMin value="0.750000,0.750000,0.750000"/>
+    </CModel>
+    <CModel id="LawbdaCoreDeath" parent="BuildingDeathEx">
+        <Model value="Assets\COOP\Stetmann\Buildings\GARY_Stetmann_COOP_RespawnPad\GARY_Stetmann_COOP_RespawnPad_11.m3"/>
+        <Radius value="1.500000"/>
+        <SelectionLayer value="2"/>
+        <SelectionRadius value="1.750000"/>
+        <ShadowRadius value="1.750000"/>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="TerranPreExplosionSmall"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="TerranPreExplosionSmall"/>
+            <Type value="Sound"/>
+            <Time value="0.633000"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="TerranExplosionLarge"/>
+            <Type value="Sound"/>
+            <Time value="0.966000"/>
+        </Events>
+        <Events>
+            <Anim value="Death,01"/>
+            <Name value="TerranPreExplosionSmall"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+        </Events>
+        <Events>
+            <Anim value="Death,01"/>
+            <Name value="TerranExplosionLarge"/>
+            <Type value="Sound"/>
+            <Time value="0.633000"/>
+        </Events>
+        <Events>
+            <Anim value="Death,02"/>
+            <Name value="TerranPreExplosionSmall"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+        </Events>
+        <Events>
+            <Anim value="Death,02"/>
+            <Name value="TerranPreExplosionSmall"/>
+            <Type value="Sound"/>
+            <Time value="1.666000"/>
+        </Events>
+        <Events>
+            <Anim value="Death,02"/>
+            <Name value="TerranExplosionLarge"/>
+            <Type value="Sound"/>
+            <Time value="0.966000"/>
+        </Events>
+    </CModel>
+    <CModel id="LawbdaCoreBuild" parent="TerranBuildingBuild">
+        <SelectionRadius value="2.500000"/>
+        <Radius value="2.000000"/>
+        <ScaleMax value="0.750000,0.750000,0.750000"/>
+        <ScaleMin value="0.750000,0.750000,0.750000"/>
+        <ShadowRadius value="2.500000"/>
+    </CModel>
+    <CModel id="LawbdaCore">
+        <SelectionRadius value="4.500000"/>
+        <Radius value="1.500000"/>
+        <ScaleMax value="0.500000,0.500000,0.500000"/>
+        <ScaleMin value="0.500000,0.500000,0.500000"/>
+        <ShadowRadius value="4.500000"/>
+        <Model value="Assets\COOP\Stetmann\Buildings\GARY_Stetmann_COOP_RespawnPad\GARY_Stetmann_COOP_RespawnPad.m3"/>
     </CModel>
     <CModel id="Marine_death_dance" parent="Unit" Race="Terran">
         <Model value="Assets\Units\Marine_death_dance.m3"/>
@@ -211,22 +292,22 @@
         <Model value="Assets\Effects\Protoss\TempestGroundBeam\TempestGroundBeam.m3"/>
         <EditorCategories value="Race:Terran"/>
     </CModel>
-    <CModel id="AdvanceEngineBay" parent="EngineeringBayBase">
+    <CModel id="HHStarport" parent="EngineeringBayBase">
         <Model value="Assets\Buildings\Terran\Starport_HornerHan_Coop\Starport_HornerHan_Coop.m3"/>
     </CModel>
-    <CModel id="AdvanceEngineBayBuild" parent="EngineeringBayBuildBase" name="TerranBuilding_Silver_Build">
+    <CModel id="HHStarportBuild" parent="EngineeringBayBuildBase" name="TerranBuilding_Silver_Build">
         <Model value="Assets\Effects\Terran\Starport_HornerHan_Coop_Reentry\Starport_HornerHan_Coop_Reentry.m3"/>
     </CModel>
-    <CModel id="AdvanceEngineBayReentry" parent="EngineeringBayBuildBase" name="TerranBuilding_Silver_Build">
+    <CModel id="HHStarportReentry" parent="EngineeringBayBuildBase" name="TerranBuilding_Silver_Build">
         <Model value="Assets\Effects\Terran\Starport_HornerHan_Coop_Reentry\Starport_HornerHan_Coop_Reentry.m3"/>
     </CModel>
-    <CModel id="AdvanceEngineBayDeath" parent="EngineeringBayDeathBase">
+    <CModel id="HHStarportDeath" parent="EngineeringBayDeathBase">
         <Model value="Assets\Buildings\Terran\Starport_HornerHan_Coop_Death\Starport_HornerHan_Coop_Death.m3"/>
     </CModel>
-    <CModel id="AdvanceEngineBayPlacement" parent="EngineeringBayPlacementBase" low="EngineeringBay_Silver">
+    <CModel id="HHStarportPlacement" parent="EngineeringBayPlacementBase" low="EngineeringBay_Silver">
         <Model value="Assets\Buildings\Terran\Starport_Silver_Placement\Starport_Silver_Placement.m3"/>
     </CModel>
-    <CModel id="AdvanceEngineBaySplat" parent="Splat">
+    <CModel id="HHStarportSplat" parent="Splat">
         <Model value="Assets\Splats\Starport_HornerHan_Coop_Splat\Starport_HornerHan_Coop_Splat.m3"/>
         <EditorCategories value="Race:Terran"/>
         <ScaleMax value="0.750000,0.750000,0.750000"/>
@@ -328,14 +409,6 @@
             <Type value="Sound"/>
             <Payload value="StukovInfestedDiamondBack_AttackImpactSlime"/>
         </Events>
-    </CModel>
-    <CModel id="Invisible2" Race="Neutral">
-        <Model value="Assets\Units\Test\InvisibleUnit\InvisibleUnit.m3"/>
-        <EditorCategories value="Race:Neutral"/>
-        <Flags index="TeenSafe" value="1"/>
-        <Radius value="-1.000000"/>
-        <SelectionRadius value="0.000000"/>
-        <ShadowRadius value="0.000000"/>
     </CModel>
     <CModel id="SquadBomberAreaBombAttackImpact" parent="ImpactFX">
         <Model value="Assets\Effects\Terran\MiraHorner_NapalmBomb_Coop_Explosion\MiraHorner_NapalmBomb_Coop_Explosion.m3"/>
