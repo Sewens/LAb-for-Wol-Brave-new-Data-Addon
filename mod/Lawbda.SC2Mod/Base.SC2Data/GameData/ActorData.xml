@@ -204,6 +204,7 @@
         <EventDataSound Name="TerranExplosionSmall" Actor="UnitSound" Sound="Terran_ExplosionSmall"/>
         <EventDataSound Name="TerranExplosionMedium" Actor="UnitSound" Sound="Terran_ExplosionMedium"/>
         <EventDataSound Name="TerranExplosionLarge" Actor="UnitSound" Sound="Terran_ExplosionLarge"/>
+        <Sharing value="Always"/>
     </CActorModel>
     <CActorText default="1" id="SquadFloatingTextDefault">
         <Host Subject="_Unit"/>
@@ -553,12 +554,12 @@
         <On Terms="UnitBirth; ValidateUnit HaveDarkMarineArmor" Send="ModelSwap Shadow_MarineEX"/>
         <On Terms="UnitDeathCustomize; ValidateUnit HaveVoidShade" Send="DeathCustomize Shadow"/>
         <On Terms="UnitDeathCustomize; ValidateUnit HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
-        <Model value="Marine_death_dance"/>
+        <Model value="Marine"/>
         <ModelFlags index="UpdateVisibility" value="0"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
         <BuildModel value="Marine_death_dance"/>
         <DeathActorModel value="SquadUnitDeathModelGL"/>
-        <DeathArray index="Normal" ModelLink="Marine_death_dance" SoundLink="Marine_DeathFXBloodSpray"/>
+        <DeathArray index="Normal" ModelLink="MarineDeath" SoundLink="Marine_DeathFXBloodSpray"/>
         <DeathArray index="Blast" ModelLink="MarineDeathBlast"/>
         <DeathArray index="Disintegrate" ModelLink="MarineDeathAcid" SoundLink="Uni_DeathFXAcid"/>
         <DeathArray index="Eat" AnimProps="Stand" ModelLink="MarineDeathEat" SoundLink="Marine_DeathFXEat"/>
@@ -630,6 +631,7 @@
         <Wireframe>
             <Image value="Assets\Textures\Wireframe-Terran-Marine.dds"/>
         </Wireframe>
+        <Sharing value="Always"/>
     </CActorUnit>
     <CActorModel id="SquadUnitDeathModelGL" parent="SquadUnitDeathModel">
         <InheritType value="OneShot"/>
@@ -5004,33 +5006,14 @@
         <Color value="128,255,251,176"/>
         <Model value="PowerVisualFast"/>
     </CActorSplat>
-    <CActorModel id="SquadBunkerShrikeTurret">
-        <Aliases value="_Snapshot"/>
-        <Inherits index="CloakEffect" value="1"/>
-        <Inherits index="LocalTintColor" value="1"/>
-        <Inherits index="Opacity" value="1"/>
-        <Inherits index="TeamColor" value="1"/>
-        <Inherits index="TintColor" value="1"/>
-        <Inherits index="Visibility" value="1"/>
-        <Inherits index="WarpGroup" value="1"/>
-        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death"/>
-        <On Terms="Signal.*.TurretDeath" Send="ModelSwap ShrikeTurretDeath"/>
-        <On Terms="Signal.*.TurretDeath" Send="$Death"/>
-        <On Terms="Signal.*.TurretHide" Send="SetVisibility"/>
-        <On Terms="Signal.*.TurretShow" Send="SetVisibility 1"/>
-        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
-        <Host Subject="::Main"/>
-        <HostSiteOps Ops="SOpAttachTurret"/>
-        <Model value="ShrikeTurret"/>
-    </CActorModel>
-    <CActorModel id="SquadBunkerShrikeTurretPlacement">
+    <!--CActorModel id="SquadBunkerShrikeTurretPlacement">
         <Flags index="SuppressSaveLoad" value="1"/>
         <On Terms="ActorCreation" Send="SetOpacity 0.300000"/>
         <On Terms="ActorOrphan" Send="Destroy"/>
         <Host Subject="::Main"/>
         <HostSiteOps Ops="SOpAttachTurret"/>
         <Model value="ShrikeTurret"/>
-    </CActorModel>
+    </CActorModel-->
     <CActorModel id="SquadMissileTurretBuild" parent="TerranBuildingBuildSmall">
         <Model value="MissileTurret_CovertOps_Build"/>
     </CActorModel>
@@ -5187,10 +5170,7 @@
     <CActorSplat id="SquadArmorySplat" parent="GenericUnitSplat" unitName="SquadArmory">
         <Model value="ArmorySplat"/>
     </CActorSplat>
-    <CActorSiteOpRotationExplicit id="SquadBunkerShrikeTurretPlaceholderFacing">
-        <Forward value="1.000000,1.000000,0.000000"/>
-    </CActorSiteOpRotationExplicit>
-    <CActorModel id="SquadBunkerShrikeTurretPlaceholder">
+    <CActorModel id="SquadShrikeTurret">
         <Aliases value="_Snapshot"/>
         <Inherits index="CloakEffect" value="1"/>
         <Inherits index="LocalTintColor" value="1"/>
@@ -5204,20 +5184,12 @@
         <On Terms="Signal.*.TurretDeath" Send="$Death"/>
         <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
         <Host Subject="::Main"/>
-        <HostSiteOps Ops="SOpAttachTurret ShrikeTurretPlaceholderFacing"/>
-        <Model value="ShrikeTurret"/>
-    </CActorModel>
-    <CActorModel id="SquadBunkerShrikePlacement">
-        <Flags index="SuppressSaveLoad" value="1"/>
-        <On Terms="ActorCreation" Send="SetOpacity 0.300000"/>
-        <On Terms="ActorOrphan" Send="Destroy"/>
-        <Host Subject="::Main"/>
         <HostSiteOps Ops="SOpAttachTurret"/>
         <Model value="ShrikeTurret"/>
     </CActorModel>
-    <CActorModel id="SquadBunkerShrikeTurretAttackLaunch" parent="ModelAnimationStyleOneShot">
+    <CActorModel id="SquadShrikeTurretAttackLaunch" parent="ModelAnimationStyleOneShot">
         <Flags index="SuppressCreationErrors" value="1"/>
-        <Host Subject="SquadBunkerShrikeTurret" ReachAcrossEffectTrees="1"/>
+        <Host Subject="SquadShrikeTurret" ReachAcrossEffectTrees="1"/>
         <HostSiteOps Ops="SOpAttachRollingWeaponStripe"/>
         <Model value="ShrikeTurretAttackLaunch"/>
     </CActorModel>
@@ -5238,8 +5210,8 @@
     <CActorSplat id="SquadTechReactorSplat" parent="GenericUnitSplat" unitName="SquadTechReactor">
         <Model value="ReactorSplat"/>
     </CActorSplat>
-    <CActorTurret id="SquadBunkerShrikeTurretTurret">
-        <On Terms="TurretEnable.SquadBunkerShrikeTurret" Send="Create"/>
+    <CActorTurret id="SquadBunkerShrikeTurret">
+        <On Terms="TurretEnable.SquadShrikeTurret" Send="Create"/>
     </CActorTurret>
     <CActorTurret id="SquadDiamondbackTurret">
         <On Terms="TurretEnable.SquadDiamondback" Send="Create"/>
@@ -5905,25 +5877,17 @@
         <Model value="Bunker_Silver"/>
         <CreepHeightClass value="Small"/>
         <BuildModel value="Bunker_Silver_Build"/>
-        <!--
-        <Remove Terms="Upgrade.NeoSteelFrame.Add; ValidateUnit NotDeadOrConstruction" Send="ModelSwap Bunker_Silver_Upgrade"/>
-        <On Terms="Upgrade.TerranBuildingArmor.Add; ValidateUnit HasCargo" Send="AnimGroupApply Stand,Work Stand,Work,Start Stand,Work,End"/>
-        <On Terms="Upgrade.TerranBuildingArmor.Add; ValidateUnit NotDeadOrConstruction" Send="ModelSwap Bunker_Silver_Upgrade"/>
-        <On Terms="UnitBirth.SquadBunker; ValidateUnit NeosteelFramePurchased" Send="ModelSwap Bunker_Silver_Upgrade"/>
-        <On Terms="Upgrade.NeosteelFrame.Add; ValidateUnit NotDeadOrConstruction" Send="ModelSwap Bunker_Silver_Upgrade"/>
--->
         <On Terms="UnitDeathCustomize; ValidateUnit BunkerIsEmpty" Send="DeathCustomize Empty"/>
-        <On Terms="UnitDeathCustomize; ValidateUnit NeosteelFramePurchasedNoConstruction" Send="DeathCustomize Upgrade"/>
-        <On Terms="Upgrade.NeosteelFrame.Add; ValidateUnit HasCargo" Send="AnimGroupApply Stand,Work Stand,Work,Start Stand,Work,End"/>
         <On Terms="UnitBirth.SquadBunker" Send="StatusSet SquadBunkerBuilt 1"/>
-        <On Terms="Behavior.SuqadBunkerShrikeTurret.On" Send="StatusSet SuqadBunkerShrikeTurret 1"/>
-        <On Terms="Behavior.SuqadBunkerShrikeTurret.On" Send="Create SquadBunkerShrikeTurret"/>
-        <On Terms="Behavior.SuqadBunkerShrikeTurret.On; IsStatus SquadBunkerBuilt 0" Send="Create SquadBunkerShrikeTurretPlaceholder"/>
-        <On Terms="Behavior.SuqadBunkerShrikeTurret.On; IsStatus SquadBunkerBuilt 0" Target="SuqadBunkerShrikeTurret" Send="Signal TurretHide"/>
-        <On Terms="UnitDeathCustomize; IsStatus SuqadBunkerShrikeTurret 1" Target="SuqadBunkerShrikeTurret" Send="Signal TurretDeath"/>
-        <On Terms="UnitDeathCustomize; IsStatus SuqadBunkerShrikeTurret 1" Target="SquadBunkerShrikeTurretPlaceholder" Send="Signal TurretDeath"/>
-        <On Terms="UnitBirth.SquadBunker" Target="SquadBunkerShrikeTurretPlaceholder" Send="Destroy"/>
-        <On Terms="UnitBirth.SquadBunker" Target="SuqadBunkerShrikeTurret" Send="Signal TurretShow"/>
+        <!-- shrike turret-->
+        <On Terms="Behavior.SquadBunkerShrikeTurret.On" Send="StatusSet SquadShrikeTurret 1"/>
+        <On Terms="Behavior.SquadBunkerShrikeTurret.On" Send="Create SquadShrikeTurret"/>
+        <On Terms="UnitBirth.SquadBunker" Target="SquadShrikeTurret" Send="Signal TurretShow"/>
+        <On Terms="UnitDeathCustomize; IsStatus SquadShrikeTurret 1" Target="SquadShrikeTurret" Send="Signal TurretDeath"/>
+        <On Terms="UnitDeathCustomize; IsStatus SquadShrikeTurret 1" Target="SquadShrikeTurret" Send="Signal TurretDeath"/>
+        <!-- emp turret-->
+        <!-- fire turret-->
+        <!-- hive mind emulator turret-->
         <DeathArray index="Normal" ModelLink="Bunker_Silver_Death"/>
         <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="Bunker_Explode"/>
         <DeathCustoms ModelLink="Bunker_Silver_Upgrade_Death" Name="Upgrade"/>
@@ -6196,12 +6160,12 @@
     <CActorSplat id="SquadRefinerySplat" parent="GenericUnitSplat" unitName="SquadRefinery">
         <Model value="RefinerySplat"/>
     </CActorSplat>
-    <CActorAction id="SquadBunkerShrikeTurretAttack" parent="GenericAttack" effectAttack="SquadBunkerShrikeTurret">
-        <On Terms="ActorCreation" Send="Create SquadBunkerShrikeTurretAttackLaunch"/>
+    <CActorAction id="SquadShrikeTurretAttack" parent="GenericAttack" effectAttack="SquadShrikeTurret">
+        <On Terms="ActorCreation" Send="Create SquadShrikeTurretAttackLaunch"/>
         <LaunchAssets Model="" Sound="Bunker_ShrikeTurretAttackLaunch"/>
-        <ImpactMap index="None" Model="ShrikeTurretAttackImpact" Sound="Bunker_ShrikeTurretAttackImpact"/>
         <Beam value="ShrikeTurretAttackBeam"/>
         <Missile value="ShrikeTurretAttackMissile"/>
+        <ImpactMap index="None" Model="ShrikeTurretAttackImpact" Sound="Bunker_ShrikeTurretAttackImpact"/>
     </CActorAction>
     <CActorUnit id="SquadBarracks" parent="TerranBuildingFlyerEx" unitName="SquadBarracks">
         <Macros value="SnowVisualBuildingMacro"/>

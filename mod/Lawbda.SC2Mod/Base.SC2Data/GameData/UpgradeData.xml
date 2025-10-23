@@ -6,6 +6,123 @@
     <CUpgrade id="AddonStructureRelocation">
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
+    <!--Can switch turret between shrike turret, fire and emp.-->
+    <CUpgrade id="BunkerSwitchableBunkerTurret">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="21"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-neosteelframe.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="400"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadBunker"/>
+    </CUpgrade>
+    <!--Slowly add resource for resource nearby.-->
+    <CUpgrade id="CommandCenterResourceGenerateField">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadCommandCenter"/>
+        <AffectedUnitArray value="SquadOrbitalCommand"/>
+        <AffectedUnitArray value="SquadPlanetaryFortress"/>
+        <AffectedUnitArray value="SquadGalaxyFortress"/>
+    </CUpgrade>
+    <!--Building times are half while in field of command center.-->
+    <CUpgrade id="CommandCenterRapidBuildingField">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadCommandCenter"/>
+        <AffectedUnitArray value="SquadOrbitalCommand"/>
+        <AffectedUnitArray value="SquadPlanetaryFortress"/>
+        <AffectedUnitArray value="SquadGalaxyFortress"/>
+    </CUpgrade>
+    <!--Mechanic unit will be disabled 0.5s while being attack by predator.-->
+    <CUpgrade id="PredatorEnhancedElectorField">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Set" Reference="Behavior,SquadHallucation,Modification.ShieldArmorMultiplier" Value="1"/>
+        <EffectArray Operation="Set" Reference="Behavior,SquadHallucation,Modification.LifeArmorMultiplier" Value="1"/>
+        <EffectArray Operation="Set" Reference="Behavior,SquadHallucinationTimedLife,Duration" Value="45.000000"/>
+        <EffectArray Operation="Set" Reference="Behavior,SquadHallucation,DamageResponse.ModifyFraction" Value="1"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadPredator"/>
+    </CUpgrade>
+    <!--Predator can jump over cliff, enable jump ability.-->
+    <CUpgrade id="PredatorFlyingDog">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadPredator"/>
+    </CUpgrade>
+    <!--Lock 3 target in sensor tower visible range to slow their time scale to 0.5.-->
+    <CUpgrade id="SensorTowerMiniWorld">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadSensorTower"/>
+    </CUpgrade>
+    <CUpgrade id="FirebatTarBomb">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadFirebat"/>
+    </CUpgrade>
+    <CUpgrade id="GhostTripleSnip">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Race value="Terr"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadGhost"/>
+    </CUpgrade>
+    <CUpgrade id="GhostEmpLockdownEnhance">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Race value="Terr"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadGhost"/>
+    </CUpgrade>
+    <!--Switch between high damage slow longbolt missile and range hellstorm batteries.-->
+    <CUpgrade id="MissileTurretHellstormBatteries">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadMissileTurret"/>
+    </CUpgrade>
+    <CUpgrade id="MedicDualInjectors">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Alert value="ResearchComplete"/>
+        <EffectArray Operation="Set" Reference="Weapon,SquadMedicHealGunTwo,Options[Disabled]" Value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadMedic"/>
+    </CUpgrade>
+    <CUpgrade id="MedicFlashbangGrenade">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Alert value="ResearchComplete"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadMedic"/>
+    </CUpgrade>
+    <CUpgrade id="BunkerInstantJustice">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="21"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-neosteelframe.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="400"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadBunker"/>
+    </CUpgrade>
+    <CUpgrade id="MissileTurretHellstormBatteries2">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadMissileTurret"/>
+    </CUpgrade>
+    <!--Sensor tower now supply command center field in detection radius.-->
+    <CUpgrade id="SensorTowerExpandableCommandCenterField">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadSensorTower"/>
+    </CUpgrade>
+    <!--Damage response when unit attack missile tower.-->
+    <CUpgrade id="SupplyDepotActiveProtectionSystem">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadSupplyDepot"/>
+        <AffectedUnitArray value="SquadSupplyDepotLowered"/>
+    </CUpgrade>
     <CUpgrade id="ScannerGroup3Upgrade">
         <EditorCategories value="Race:Terran"/>
         <AffectedUnitArray value="SquadOrbitalCommand"/>
@@ -66,11 +183,29 @@
         <AffectedUnitArray value="SquadOrbitalCommandFlying"/>
         <AffectedUnitArray value="SquadGlobalCaster"/>
     </CUpgrade>
+    <CUpgrade id="MarineSuperStimpack" parent="Research">
+        <Flags index="TechTreeCheat" value="1"/>
+        <InfoTooltipPriority value="2"/>
+        <Icon value="Assets\Textures\btn-techupgrade-terran-combatshield-color.dds"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="200"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Operation="Set" Reference="Abil,SquadStimpack,Cost[0].Vital[Life]" Value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadMarine"/>
+        <LeaderAlias value=""/>
+    </CUpgrade>
+    <!--Enlarge voodoo orb mind control duration.-->
+    <CUpgrade id="SpectreUltimateVoodooCaster">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadSpectre"/>
+    </CUpgrade>
     <CUpgrade id="SquadExtendableInfantrySquad">
         <EffectArray Operation="Set" Reference="Abil,SquadInfantry,MaxCount" Value="8"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
-    <CUpgrade id="SquadMocularReactors">
+    <CUpgrade id="MocularReactorsShield">
         <Flags index="UpgradeCheat" value="0"/>
         <EffectArray Reference="Unit,Raven,EnergyStart" Value="100"/>
         <EffectArray Reference="Unit,Ghost,EnergyStart" Value="100"/>
@@ -111,10 +246,25 @@
         <AffectedUnitArray value="DukesRevenge"/>
         <AffectedUnitArray value="DuskWing"/>
     </CUpgrade>
-    <CUpgrade id="ClusterBomb2">
+    <CUpgrade id="ReaperVoidStasis">
         <Flags index="UpgradeCheat" value="0"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <AffectedUnitArray value="SquadReaper"/>
+    </CUpgrade>
+    <CUpgrade id="ReaperReaperofSouls">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Set" Reference="Behavior,SquadHallucation,Modification.ShieldArmorMultiplier" Value="1"/>
+        <EffectArray Operation="Set" Reference="Behavior,SquadHallucation,Modification.LifeArmorMultiplier" Value="1"/>
+        <EffectArray Operation="Set" Reference="Behavior,SquadHallucinationTimedLife,Duration" Value="45.000000"/>
+        <EffectArray Operation="Set" Reference="Behavior,SquadHallucation,DamageResponse.ModifyFraction" Value="1"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadReaper"/>
+    </CUpgrade>
+    <CUpgrade id="SupplyDepotInstantSupplyDrop">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadSupplyDepot"/>
+        <AffectedUnitArray value="SquadSupplyDepotLowered"/>
     </CUpgrade>
     <CUpgrade id="TerranStructureEmergencyProtocal">
         <EffectArray Operation="Set" Reference="Abil,SquadCommandCenterLiftOff,InfoArray[0].SectionArray[Stats].DurationArray[Delay]" Value="0.500000"/>
@@ -147,7 +297,7 @@
         <EffectArray Operation="Set" Reference="Abil,SquadFactoryLand,InfoArray[0].SectionArray[Actor].DurationArray[Duration]" Value="0.500000"/>
         <EffectArray Operation="Set" Reference="Abil,SquadStarportLand,InfoArray[0].SectionArray[Stats].DurationArray[Delay]" Value="0.500000"/>
         <EffectArray Operation="Set" Reference="Abil,SquadStarportLand,InfoArray[0].SectionArray[Actor].DurationArray[Duration]" Value="0.500000"/>
-        <EditorCategories value="Race:Terran"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
     <CUpgrade id="SquadReaperCombatDrugs">
         <Flags index="TechTreeCheat" value="1"/>
@@ -158,25 +308,6 @@
         <ScoreResult value="BuildOrder"/>
         <EditorCategories value="Race:Terran,UpgradeType:SpellResearch"/>
         <AffectedUnitArray value="SquadReaper"/>
-    </CUpgrade>
-    <CUpgrade id="CombatShield2">
-        <Flags index="UpgradeCheat" value="0"/>
-        <EffectArray Reference="Unit,SquadMarine,LifeMax" Value="10"/>
-        <EffectArray Reference="Unit,SquadMarine,LifeStart" Value="10"/>
-        <EffectArray Operation="Set" Reference="Actor,Marine,GroupIcon.Image[0]" Value="Assets\Textures\wireframe-terran-marine-shield.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Marine,Wireframe.Image[0]" Value="Assets\Textures\wireframe-terran-marine-shield.dds"/>
-        <EffectArray Reference="Unit,WarPig,LifeMax" Value="10"/>
-        <EffectArray Reference="Unit,WarPig,LifeStart" Value="10"/>
-        <EffectArray Operation="Set" Reference="Actor,KelmorianMiner,GroupIcon.Image[0]" Value="Assets\Textures\wireframe-terran-marine-mercenary-shield.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,KelmorianMiner,Wireframe.Image[0]" Value="Assets\Textures\wireframe-terran-marine-mercenary-shield.dds"/>
-        <EffectArray Reference="Unit,MengskMarine,LifeMax" Value="10"/>
-        <EffectArray Reference="Unit,MengskMarine,LifeStart" Value="10"/>
-        <EffectArray Operation="Set" Reference="Actor,MengskMarine,GroupIcon.Image[0]" Value="Assets\Textures\wireframe-terran-marine-mercenary-shield.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,MengskMarine,Wireframe.Image[0]" Value="Assets\Textures\wireframe-terran-marine-mercenary-shield.dds"/>
-        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
-        <AffectedUnitArray value="SquadMarine"/>
-        <AffectedUnitArray value="WarPig"/>
-        <AffectedUnitArray value="MengskMarine"/>
     </CUpgrade>
     <CUpgrade id="MoverModify">
         <EffectArray Operation="Set" Reference="Unit,SquadMedic,Mover" Value="CliffJumper"/>
@@ -262,114 +393,20 @@
         <AffectedUnitArray value="BattlecruiserYamato"/>
         <AffectedUnitArray value="ScienceVessel"/>
     </CUpgrade>
-    <CUpgrade id="FirebatJuggernautPlating2">
+    <CUpgrade id="FirebatFireshieldPlating">
         <Flags index="UpgradeCheat" value="0"/>
         <EffectArray Reference="Unit,SquadFirebat,LifeArmor" Value="2"/>
-        <EffectArray Reference="Unit,DevilDog,LifeArmor" Value="2"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
-    <CUpgrade id="JuggernautPlating2">
+    <CUpgrade id="MarauderFrostPlating">
         <Flags index="UpgradeCheat" value="0"/>
         <EffectArray Reference="Unit,SquadMarauder,LifeArmor" Value="2.000000"/>
-        <EffectArray Reference="Unit,HammerSecurity,LifeArmor" Value="2.000000"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
-    <CUpgrade id="LaserTargetingSystemMarauder2">
+    <CUpgrade id="MarauderFrostNova">
         <Flags index="UpgradeCheat" value="0"/>
-        <InfoTooltipPriority value="2"/>
-        <Race value="Protoss"/>
-        <ScoreResult value="BuildOrder"/>
-        <EffectArray Reference="Unit,SquadMarauder,SightBonus[Dusk]" Value="2"/>
-        <EffectArray Reference="Unit,SquadMarauder,SightBonus[Dawn]" Value="2"/>
-        <EffectArray Reference="Weapon,PunisherGrenades,Range" Value="1"/>
-        <EffectArray Reference="Weapon,PunisherGrenades,MinScanRange" Value="1"/>
-        <EffectArray Reference="Unit,SquadMarauder,SubgroupPriorityDelta" Value="20"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <AffectedUnitArray value="SquadMarauder"/>
-    </CUpgrade>
-    <CUpgrade id="LaserTargetingSystemMarine2">
-        <Flags index="UpgradeCheat" value="0"/>
-        <InfoTooltipPriority value="2"/>
-        <Race value="Protoss"/>
-        <ScoreResult value="BuildOrder"/>
-        <EffectArray Reference="Unit,SquadMarine,SightBonus[Dusk]" Value="2"/>
-        <EffectArray Reference="Unit,SquadMarine,SightBonus[Dawn]" Value="2"/>
-        <EffectArray Reference="Weapon,GuassRifle,Range" Value="1"/>
-        <EffectArray Reference="Weapon,GuassRifle,MinScanRange" Value="1"/>
-        <EffectArray Reference="Unit,SquadMarine,SubgroupPriorityDelta" Value="20"/>
-        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
-        <AffectedUnitArray value="SquadMarine"/>
-    </CUpgrade>
-    <CUpgrade id="LaserTargetingSystemReaper2">
-        <Flags index="UpgradeCheat" value="0"/>
-        <InfoTooltipPriority value="2"/>
-        <Race value="Protoss"/>
-        <ScoreResult value="BuildOrder"/>
-        <EffectArray Reference="Unit,SquadReaper,SightBonus[Dusk]" Value="2"/>
-        <EffectArray Reference="Unit,SquadReaper,SightBonus[Dawn]" Value="2"/>
-        <EffectArray Reference="Weapon,P38ScytheGuassPistol,Range" Value="1"/>
-        <EffectArray Reference="Weapon,P38ScytheGuassPistol,MinScanRange" Value="1"/>
-        <EffectArray Reference="Unit,SquadReaper,SubgroupPriorityDelta" Value="20"/>
-        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
-        <AffectedUnitArray value="SquadReaper"/>
-    </CUpgrade>
-    <CUpgrade id="MarauderLifeBoost2">
-        <Flags index="UpgradeCheat" value="0"/>
-        <EffectArray Reference="Unit,SquadMarauder,LifeMax" Value="25"/>
-        <EffectArray Reference="Unit,SquadMarauder,LifeStart" Value="25"/>
-        <EffectArray Reference="Unit,HammerSecurity,LifeMax" Value="25"/>
-        <EffectArray Reference="Unit,HammerSecurity,LifeStart" Value="25"/>
-        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
-        <AffectedUnitArray value="SquadMarauder"/>
-    </CUpgrade>
-    <CUpgrade id="MarineStimpack2">
-        <Flags index="UpgradeCheat" value="0"/>
-        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
-        <AffectedUnitArray value="SquadMarine"/>
-    </CUpgrade>
-    <CUpgrade id="OcularImplants2">
-        <Flags index="UpgradeCheat" value="0"/>
-        <EffectArray Reference="Unit,Ghost2,SightBonus[Dusk]" Value="3"/>
-        <EffectArray Reference="Unit,Ghost2,SightBonus[Dawn]" Value="3"/>
-        <EffectArray Reference="Weapon,C10CanisterRifle,Range" Value="2"/>
-        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
-    </CUpgrade>
-    <CUpgrade id="PunisherGrenades2">
-        <Flags index="UpgradeCheat" value="0"/>
-        <Icon value="Assets\Textures\btn-ability-terran-punishergrenade-color.dds"/>
-        <Alert value="ResearchComplete"/>
-        <Race value="Terr"/>
-        <ScoreAmount value="100"/>
-        <ScoreResult value="BuildOrder"/>
-        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
-        <AffectedUnitArray value="SquadMarauder"/>
-    </CUpgrade>
-    <CUpgrade id="ReaperD8Charge2">
-        <Flags index="UpgradeCheat" value="0"/>
-        <EffectArray Operation="Subtract" Reference="Weapon,D8Charge,Options[Hidden]" Value="1"/>
-        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
-        <AffectedUnitArray value="SquadReaper"/>
-    </CUpgrade>
-    <CUpgrade id="ReaperJump2">
-        <Flags index="TechTreeCheat" value="1"/>
-        <Icon value="Assets\Textures\btn-ability-terran-jetpack-color.dds"/>
-        <Alert value="ResearchComplete"/>
-        <Race value="Terr"/>
-        <ScoreAmount value="200"/>
-        <ScoreResult value="BuildOrder"/>
-        <EffectArray Operation="Set" Reference="Unit,SquadReaper,Mover" Value="CliffJumper"/>
-        <EditorCategories value="Race:Terran,UpgradeType:SpellResearch"/>
-        <AffectedUnitArray value="SquadReaper"/>
-    </CUpgrade>
-    <CUpgrade id="ReaperSpeed22">
-        <Flags index="TechTreeCheat" value="1"/>
-        <Icon value="Assets\Textures\btn-upgrade-terran-reapernitropacks.dds"/>
-        <Alert value="ResearchComplete"/>
-        <Race value="Terr"/>
-        <ScoreAmount value="100"/>
-        <ScoreResult value="BuildOrder"/>
-        <EffectArray Reference="Unit,SquadReaper,Speed" Value="0.875000"/>
-        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
     <CUpgrade id="RegenerativeBioSteel2">
         <Flags index="UpgradeCheat" value="0"/>
@@ -423,7 +460,7 @@
         <EffectArray Operation="Set" Reference="Unit,Wraith,LifeRegenRate" Value="0.601500"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
-    <CUpgrade id="ShieldWall2" parent="Research">
+    <CUpgrade id="MarineCombatShield" parent="Research">
         <Flags index="TechTreeCheat" value="1"/>
         <InfoTooltipPriority value="2"/>
         <Icon value="Assets\Textures\btn-techupgrade-terran-combatshield-color.dds"/>
@@ -431,9 +468,10 @@
         <ScoreAmount value="200"/>
         <ScoreResult value="BuildOrder"/>
         <EffectArray Reference="Unit,SquadMarine,LifeMax" Value="10"/>
-        <EffectArray Reference="Unit,SquadMarine,LifeStart" Value="10"/>
-        <EffectArray Operation="Set" Reference="Actor,Marine,Wireframe.Image[0]" Value="Assets\Textures\wireframe-terran-marine-shield.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,Marine,GroupIcon.Image[0]" Value="Assets\Textures\wireframe-terran-marine-shield.dds"/>
+        <EffectArray Reference="Unit,SquadMarine,LifeArmor" Value="1"/>
+        <EffectArray Operation="Set" Reference="Actor,SquadMarine,Wireframe.Image[0]" Value="Assets\Textures\wireframe-terran-marine-shield.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,SquadMarine,GroupIcon.Image[0]" Value="Assets\Textures\wireframe-terran-marine-shield.dds"/>
+        <EffectArray Reference="Unit,SquadMarine,LifeMax" Value="10"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <AffectedUnitArray value="SquadMarine"/>
     </CUpgrade>
@@ -793,15 +831,6 @@
         <AffectedUnitArray value="MengskReaper"/>
         <AffectedUnitArray value="HERC"/>
         <LeaderLevel value="3"/>
-    </CUpgrade>
-    <CUpgrade id="Stimpack22" parent="Research">
-        <Icon value="Assets\Textures\btn-ability-terran-stimpack-color.dds"/>
-        <Race value="Terr"/>
-        <ScoreAmount value="200"/>
-        <ScoreResult value="BuildOrder"/>
-        <EditorCategories value="Race:Terran,UpgradeType:SpellResearch"/>
-        <AffectedUnitArray value="SquadMarine"/>
-        <AffectedUnitArray value="SquadMarauder"/>
     </CUpgrade>
     <CUpgrade id="SquadTerranVehicleAndShipPlatingLevel1" parent="TerranVehicleAndShipArmors">
         <Name value="Upgrade/Name/SquadTerranVehicleAndShipPlatingLevel1"/>
@@ -1536,8 +1565,10 @@
         <AffectedUnitArray value="HelsAngelFighter"/>
         <LeaderLevel value="3"/>
     </CUpgrade>
-    <CUpgrade id="UltrasonicPulseEnhanced2">
+    <!--Unit killed by psi slash will cause targeting another enemy with psi slash.-->
+    <CUpgrade id="SpectreSlashChainReaction">
         <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <AffectedUnitArray value="SquadSpectre"/>
     </CUpgrade>
 </Catalog>

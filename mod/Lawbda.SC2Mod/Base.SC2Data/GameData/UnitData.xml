@@ -2917,10 +2917,10 @@
         <AbilArray Link="SquadBunkerTransport"/>
         <AbilArray Link="SquadBunkerInstantJustice"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
-        <BehaviorArray Link="SuqadBunkerShrikeTurret"/>
+        <BehaviorArray Link="SquadBunkerShrikeTurret"/>
         <BehaviorArray Link="SquadReactorPowerUserForDefenceStructure"/>
         <BehaviorArray Link="SquadTechlabPowerUserForDefenceStructure"/>
-        <WeaponArray Link="SquadBunkerShrikeAutoGun" Turret="SquadBunkerShrikeTurret"/>
+        <WeaponArray Link="SquadBunkerShrikeAutoGun" Turret="SquadShrikeTurret"/>
         <CardLayouts>
             <LayoutButtons Face="AttackRedirect" Type="AbilCmd" AbilCmd="AttackRedirect,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="MothershipCoreAttack" Type="AbilCmd" AbilCmd="SquadBunkerAttack,Execute" Row="0" Column="4"/>
@@ -3854,7 +3854,7 @@
         <AbilArray Link="attack"/>
         <AbilArray Link="move"/>
         <AbilArray Link="SquadStimpack"/>
-        <AbilArray Link="SquadMagrailMunitions"/>
+        <AbilArray Link="SquadFrostNova"/>
         <AbilArray Link="QueueMagazine"/>
         <AbilArray Link="SquadInfantry"/>
         <AbilArray Link="DisbandSquad"/>
@@ -3866,19 +3866,11 @@
             <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
-            <LayoutButtons>
-                <Face value="SquadMarauderConcussiveShells"/>
-                <Type value="Passive"/>
-                <AbilCmd value="255,255"/>
-                <Requirements value="UseJackhammerConcussiveGrenade"/>
-                <Row value="2"/>
-                <Column value="1"/>
-            </LayoutButtons>
-            <LayoutButtons Face="MagrailMunitions" Type="AbilCmd" AbilCmd="SquadMagrailMunitions,Execute" Row="2" Column="2"/>
             <LayoutButtons Face="SquadStimpack" Type="AbilCmd" AbilCmd="SquadStimpack,Execute" Row="2" Column="0"/>
             <LayoutButtons Face="Enband" Type="AbilCmd" AbilCmd="AddMarauderToSquad,Execute" Row="1" Column="4"/>
             <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="3"/>
             <LayoutButtons Face="SquadGiftTooltips" Type="Submenu" SubmenuCardId="Gift" Row="1" Column="2"/>
+            <LayoutButtons Face="SquadFrostNova" Type="AbilCmd" AbilCmd="SquadFrostNova,Execute" Row="1" Column="0"/>
         </CardLayouts>
         <CardLayouts CardId="Gift">
             <LayoutButtons Face="MediumLifeandRegen" Type="Passive" Row="0" Column="0"/>
@@ -4692,6 +4684,7 @@
             <Cooldown Link="Medic/Revive"/>
         </ReviveInfoBase>
         <WeaponArray Link="SquadMedicHealGun"/>
+        <WeaponArray Link="SquadMedicHealGunTwo"/>
     </CUnit>
     <CUnit id="SquadMercCompound">
         <DeathRevealRadius value="3"/>
