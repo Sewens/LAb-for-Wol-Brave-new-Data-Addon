@@ -402,6 +402,7 @@
         <BehaviorArray Link="SquadTechlabPowerUser"/>
         <BehaviorArray Link="SquadTechlabPowerUserForDefenceStructure"/>
         <BehaviorArray Link="SquadMissileTurretDetector11"/>
+        <BehaviorArray Link="CCResourceMessageRegenAura"/>
         <WeaponArray Link="SquadGalaxyFortressBlizzardCannon" Turret="SquadGalaxyFortress"/>
         <CardLayouts>
             <LayoutButtons Face="PlanetaryFortressLoad" Type="AbilCmd" AbilCmd="CommandCenterTransport,LoadAll" Row="2" Column="0"/>
@@ -608,6 +609,13 @@
     <CUnit id="SquadHyperionGroundLMWeapon" parent="MISSILE">
         <Race value="Terr"/>
         <Mover value="HyperionLMWeapon"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
+    <CUnit id="SquadMissileTurretHellstormBatteriesMissile" parent="MISSILE_INVULNERABLE">
+        <Race value="Terr"/>
+        <LifeStart value="5"/>
+        <LifeMax value="5"/>
+        <Mover value="HurricaneMissile"/>
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
     </CUnit>
     <CUnit id="SquadVikingG">
@@ -1351,7 +1359,7 @@
         <AbilArray Link="SquadBansheeBomberModeSwitch"/>
         <BehaviorArray Link="SquadBansheeDistortionBlasters"/>
         <WeaponArray Link="SquadBacklashRockets"/>
-        <WeaponArray Link="SquadFireBomber"/>
+        <WeaponArray Link="SquadFireBomberStrafe"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
@@ -1469,6 +1477,7 @@
         <GlossaryWeakArray value="Mutalisk"/>
         <GlossaryWeakArray value="Immortal"/>
         <HotkeyCategory value="Unit/Category/Lawbda"/>
+        <CargoSize value="8"/>
     </CUnit>
     <CUnit id="SquadSiegeTank">
         <DeathRevealRadius value="3"/>
@@ -2366,6 +2375,7 @@
         <BehaviorArray Link="SquadTechlabPowerUser"/>
         <BehaviorArray Link="SquadReactorPowerUserForDefenceStructure"/>
         <BehaviorArray Link="SquadTechlabPowerUserForDefenceStructure"/>
+        <BehaviorArray Link="CCResourceMessageRegenAura"/>
         <WeaponArray Link="SquadPlanetaryFortressIbiksCannon" Turret="SquadPlanetaryFortress"/>
         <CardLayouts>
             <LayoutButtons Face="PlanetaryFortressLoad" Type="AbilCmd" AbilCmd="CommandCenterTransport,LoadAll" Row="2" Column="0"/>
@@ -2847,15 +2857,18 @@
         <RepairTime value="25"/>
         <AttackTargetPriority value="11"/>
         <AbilArray Link="SquadBuildinProgress"/>
+        <AbilArray Link="SensorTowerMiniWorld"/>
         <BehaviorArray Link="SquadTowerRadar"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="SquadReactorPowerUserForDefenceStructure"/>
         <BehaviorArray Link="SquadTechlabPowerUserForDefenceStructure"/>
+        <BehaviorArray Link="SquadSensorTowerCCPowerSource"/>
         <CardLayouts>
             <LayoutButtons Face="RadarField" Type="Passive" Requirements="NotUnderConstruction" Row="1" Column="0"/>
             <LayoutButtons Face="Halt" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Halt" Row="2" Column="3"/>
             <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Cancel" Row="2" Column="4"/>
             <LayoutButtons Face="SquadSelectBuilder" Type="SelectBuilder" Row="1" Column="3"/>
+            <LayoutButtons Face="SensorTowerMiniWorld" Type="AbilCmd" AbilCmd="SensorTowerMiniWorld,Execute" Row="2" Column="0"/>
         </CardLayouts>
         <Radius value="0.75"/>
         <SeparationRadius value="0.75"/>
@@ -3007,14 +3020,14 @@
         <AbilArray Link="SquadQueue5"/>
         <AbilArray Link="SquadInfantry"/>
         <AbilArray Link="DisbandSquad"/>
+        <AbilArray Link="SquadMisiileTurretHellstormMissileSwitch"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="SquadMissileTurretDetector11"/>
         <BehaviorArray Link="SquadHellstormMissiles"/>
         <BehaviorArray Link="SquadTechlabPowerUserForDefenceStructure"/>
         <BehaviorArray Link="SquadReactorPowerUserForDefenceStructure"/>
         <WeaponArray Link="SquadMissileTurretLongboltMissile" Turret="SquadMissileTurret"/>
-        <WeaponArray Link="SquadMissileTurretHellstormMissilePods" Turret="SquadMissileTurret"/>
-        <WeaponArray Link="SquadMissileTurretHellstormMissilePods" Turret="SquadMissileTurret"/>
+        <WeaponArray Link="SquadMissileTurretHellstormBatteries" Turret="SquadMissileTurret"/>
         <CardLayouts>
             <LayoutButtons Face="Halt" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Halt" Row="2" Column="3"/>
             <LayoutButtons Face="Detector" Type="Passive" Requirements="NotUnderConstruction" Row="2" Column="3"/>
@@ -3022,23 +3035,11 @@
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
             <LayoutButtons Face="AttackBuilding" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="SquadSelectBuilder" Type="SelectBuilder" Row="1" Column="3"/>
-            <LayoutButtons>
-                <Face value="ReinforcedSuperstructure"/>
-                <Type value="Passive"/>
-                <AbilCmd value="255,255"/>
-                <Requirements value="UseReinforcedSuperstructure"/>
-                <Row value="2"/>
-                <Column value="0"/>
-            </LayoutButtons>
-            <LayoutButtons>
-                <Face value="HellstormMissileBatteries"/>
-                <Type value="Passive"/>
-                <AbilCmd value="255,255"/>
-                <Requirements value="UseHailstormMissilePods"/>
-                <Row value="2"/>
-                <Column value="1"/>
-            </LayoutButtons>
             <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="4"/>
+            <LayoutButtons Face="SquadMissileTurretHellstormBateries" Type="AbilCmd" AbilCmd="SquadMisiileTurretHellstormMissileSwitch,On" Row="2" Column="0"/>
+            <LayoutButtons Face="SquadMissileTurretHellstormBateriesPassive" Type="Passive" Requirements="HaveMissileTurretHellstormBateries" Row="2" Column="0"/>
+            <LayoutButtons Face="SquadMissileTurretLongboltMissile" Type="AbilCmd" AbilCmd="SquadMisiileTurretHellstormMissileSwitch,Off" Row="2" Column="1"/>
+            <LayoutButtons Face="SquadMissileTurretLongboltMissilePassive" Type="Passive" Requirements="HaveMissileTurretHellstormBateries" Row="2" Column="1"/>
         </CardLayouts>
         <Radius value="0.75"/>
         <SeparationRadius value="0.75"/>
@@ -3266,6 +3267,7 @@
         <BehaviorArray Link="SquadCommandCenterPowerSource"/>
         <BehaviorArray Link="SquadReactorPowerUser"/>
         <BehaviorArray Link="SquadTechlabPowerUser"/>
+        <BehaviorArray Link="CCResourceMessageRegenAura"/>
         <EffectArray index="Create" value="CCCreateSet"/>
         <EffectArray index="Birth" value="CCBirthSet"/>
         <CardLayouts>
@@ -3721,6 +3723,7 @@
         <BehaviorArray Link="SquadCommandCenterPowerSource"/>
         <BehaviorArray Link="SquadReactorPowerUser"/>
         <BehaviorArray Link="SquadTechlabPowerUser"/>
+        <BehaviorArray Link="CCResourceMessageRegenAura"/>
         <CardLayouts>
             <LayoutButtons Face="SCV" Type="AbilCmd" AbilCmd="SquadCommandCenterTrain,Train1" Row="0" Column="0"/>
             <LayoutButtons Face="Lift" Type="AbilCmd" AbilCmd="SquadOrbitalLiftOff,Execute" Row="2" Column="3"/>

@@ -30,6 +30,21 @@
     <CEffectEnumArea default="1" id="SquadAbilSearchRadiusExt" parent="SquadAbilSearch">
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
+    <CEffectApplyBehavior id="CCResourceMessageApply">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="CCResourceMessage"/>
+    </CEffectApplyBehavior>
+    <CEffectModifyUnit id="CCResourceMessageMU">
+        <EditorCategories value="Race:Terran"/>
+        <Resources value="1"/>
+        <ResourcesHarvestedFraction value="1"/>
+        <ModifyOwnerPlayer Value="Unknown"/>
+    </CEffectModifyUnit>
+    <CEffectEnumArea id="CCResourceMessageSearch">
+        <SearchFilters value="Structure;Enemy,Worker"/>
+        <AreaArray MaxCount="2" Radius="9" Effect="CCResourceMessageApply"/>
+        <MaxCount value="2"/>
+    </CEffectEnumArea>
     <CEffectModifyPlayer id="ScannerSweepAlphaMP">
         <EditorCategories value="Race:Terran"/>
         <Upgrades Upgrade="ScannerSweepAlphaUpgradeDummy" Count="1"/>
@@ -100,6 +115,16 @@
         <Upgrades Upgrade="ScannerSweepVanillaUpgradeDummy" Count="-1"/>
         <Upgrades Upgrade="ScannerSweepYellowUpgradeDummy" Count="1"/>
     </CEffectModifyPlayer>
+    <CEffectApplyBehavior id="SensorTowerMiniWorldApply">
+        <ValidatorArray index="0" removed="1"/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SensorTowerMiniWorld"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumArea id="SensorTowerMiniWorldSearch">
+        <EditorCategories value="Race:Terran"/>
+        <SearchFilters value="Visible;Player,Ally,Neutral,Missile,Dead"/>
+        <AreaArray MaxCount="1" Radius="30"/>
+    </CEffectEnumArea>
     <CEffectDamage id="SquadCaptainToshConsumptionDamage">
         <EditorCategories value="Race:Terran"/>
         <ImpactLocation Value="TargetUnit"/>
@@ -269,6 +294,96 @@
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
         <SearchFlags index="SameCliff" value="0"/>
     </CEffectDamage>
+    <CEffectDamage id="SquadMissileTurretHellstormBatteriesMissileDamage">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <LaunchLocation Value="SourceUnitOrPoint"/>
+        <AttributeBonus index="Light" value="5"/>
+        <Visibility value="Visible"/>
+        <Flags index="Notification" value="1"/>
+        <Amount value="5"/>
+        <Death value="Fire"/>
+        <AreaArray Radius="0.5" Fraction="1"/>
+        <SearchFilters value="Air;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="ExtendByUnitRadius" value="1"/>
+        <SearchFlags index="SameCliff" value="0"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="SquadMissileTurretHellstormBatteriesMissileLM">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <ImpactEffect value="SquadMissileTurretHellstormBatteriesMissileDamage"/>
+        <AmmoUnit value="SquadMissileTurretHellstormBatteriesMissile"/>
+    </CEffectLaunchMissile>
+    <CEffectCreatePersistent id="SquadMissileTurretHellstormBatteriesMissilePersistent">
+        <EditorCategories value="Race:Terran"/>
+        <Flags index="Channeled" value="1"/>
+        <Flags index="RandomOffset" value="1"/>
+        <PeriodCount value="20"/>
+        <PeriodicEffectArray value="SquadMissileTurretHellstormBatteriesMissileLM"/>
+        <PeriodicOffsetArray value="0.5,0,0"/>
+        <PeriodicOffsetArray value="-0.5,0,0"/>
+        <PeriodicOffsetArray value="0,0.5,0"/>
+        <PeriodicOffsetArray value="0,-0.5,0"/>
+        <PeriodicOffsetArray value="0.5,0.5,0"/>
+        <PeriodicOffsetArray value="0.5,-0.5,0"/>
+        <PeriodicOffsetArray value="-0.5,0.5,0"/>
+        <PeriodicOffsetArray value="-0.5,-0.5,0"/>
+        <PeriodicOffsetArray value="1,0,0"/>
+        <PeriodicOffsetArray value="-1,0,0"/>
+        <PeriodicOffsetArray value="0,1,0"/>
+        <PeriodicOffsetArray value="0,-1,0"/>
+        <PeriodicOffsetArray value="1,1,0"/>
+        <PeriodicOffsetArray value="1,-1,0"/>
+        <PeriodicOffsetArray value="-1,1,0"/>
+        <PeriodicOffsetArray value="-1,-1,0"/>
+        <PeriodicOffsetArray value="1.5,0,0"/>
+        <PeriodicOffsetArray value="-1.5,0,0"/>
+        <PeriodicOffsetArray value="0,1.5,0"/>
+        <PeriodicOffsetArray value="0,-1.5,0"/>
+        <PeriodicOffsetArray value="1.5,1.5,0"/>
+        <PeriodicOffsetArray value="1.5,-1.5,0"/>
+        <PeriodicOffsetArray value="-1.5,1.5,0"/>
+        <PeriodicOffsetArray value="-1.5,-1.5,0"/>
+        <PeriodicPeriodArray value="0.125"/>
+        <EffectRandMode value="RandomNoRepeat"/>
+        <OffsetRandMode value="RandomNoRepeat"/>
+        <PeriodRandMode value="RandomNoRepeat"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="SquadVikingGTwinGatlingStrifePersistent">
+        <EditorCategories value="Race:Terran"/>
+        <Flags index="Channeled" value="1"/>
+        <Flags index="RandomOffset" value="1"/>
+        <PeriodCount value="5"/>
+        <PeriodicEffectArray value="SquadVikingGTwinGatlingCannonDamage"/>
+        <PeriodicOffsetArray value="0.5,0,0"/>
+        <PeriodicOffsetArray value="-0.5,0,0"/>
+        <PeriodicOffsetArray value="0,0.5,0"/>
+        <PeriodicOffsetArray value="0,-0.5,0"/>
+        <PeriodicOffsetArray value="0.5,0.5,0"/>
+        <PeriodicOffsetArray value="0.5,-0.5,0"/>
+        <PeriodicOffsetArray value="-0.5,0.5,0"/>
+        <PeriodicOffsetArray value="-0.5,-0.5,0"/>
+        <PeriodicOffsetArray value="1.25,0,0"/>
+        <PeriodicOffsetArray value="-1.25,0,0"/>
+        <PeriodicOffsetArray value="0,1.25,0"/>
+        <PeriodicOffsetArray value="0,-1.25,0"/>
+        <PeriodicOffsetArray value="1.25,1.25,0"/>
+        <PeriodicOffsetArray value="1.25,-1.25,0"/>
+        <PeriodicOffsetArray value="-1.25,1.25,0"/>
+        <PeriodicOffsetArray value="-1.25,-1.25,0"/>
+        <PeriodicPeriodArray value="0.05"/>
+        <EffectRandMode value="RandomNoRepeat"/>
+        <OffsetRandMode value="RandomNoRepeat"/>
+        <PeriodRandMode value="RandomNoRepeat"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="SquadVikingGTwinGatlingCannonStrifeSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadVikingGTwinGatlingStrifePersistent"/>
+        <EffectArray value="SquadVikingAttackSpeederApply"/>
+    </CEffectSet>
     <CEffectSet id="SquadWarHoundAstralWindSet">
         <EditorCategories value="Race:Terran"/>
         <EffectArray value="SquadWarHoundAstralWindSearch"/>
@@ -432,7 +547,7 @@
     </CEffectIssueOrder>
     <CEffectCreatePersistent id="SquadVikingAntiLightArmorMissilePersistent">
         <EditorCategories value="Race:Terran"/>
-        <PeriodCount value="20"/>
+        <PeriodCount value="10"/>
         <PeriodicEffectArray value="SquadVikingAntiLightArmorMissileLM"/>
         <PeriodicPeriodArray value="0.05"/>
         <PeriodicOffsetArray value="0.45,0,0"/>
@@ -514,7 +629,7 @@
         <AttributeBonus index="Light" value="5"/>
         <Visibility value="Visible"/>
         <Flags index="Notification" value="1"/>
-        <Amount value="5"/>
+        <Amount value="10"/>
         <Death value="Fire"/>
         <AreaArray Radius="0.5" Fraction="1"/>
         <SearchFilters value="Air;Missile,Stasis,Dead,Hidden,Invulnerable"/>
@@ -2234,7 +2349,7 @@
     <CEffectCreatePersistent id="SquadHyperionAirCP">
         <EditorCategories value="Race:Terran"/>
         <InitialEffect value="SquadHyperionAirLM"/>
-        <PeriodCount value="24"/>
+        <PeriodCount value="8"/>
         <PeriodicValidator value="NotDead"/>
         <PeriodicEffectArray value="SquadHyperionAirLM"/>
         <PeriodicOffsetArray value="3,0,0"/>
@@ -2258,7 +2373,7 @@
     <CEffectCreatePersistent id="SquadHyperionGroundCP">
         <EditorCategories value="Race:Terran"/>
         <InitialEffect value="SquadHyperionGroundLM"/>
-        <PeriodCount value="24"/>
+        <PeriodCount value="8"/>
         <PeriodicValidator value="NotDead"/>
         <PeriodicEffectArray value="SquadHyperionGroundLMSwitch"/>
         <PeriodicOffsetArray value="3,0,0"/>
@@ -2326,7 +2441,7 @@
         <EditorCategories value="Race:Terran"/>
         <WhichLocation Value="TargetUnit"/>
         <InitialEffect value="SquadBattlecruiserLaserBatteryLM"/>
-        <PeriodCount value="12"/>
+        <PeriodCount value="6"/>
         <PeriodicEffectArray value="SquadBattlecruiserLaserBatteryLM"/>
         <PeriodicOffsetArray value="3,0,0"/>
         <PeriodicOffsetArray value="0,3,0"/>
@@ -4597,7 +4712,9 @@
     </CEffectLaunchMissile>
     <CEffectDamage id="SquadMissileTurretLongboltMissileDamage" parent="DU_WEAP_MISSILE">
         <EditorCategories value="Race:Terran"/>
-        <Amount value="12"/>
+        <Amount value="26"/>
+        <AttributeBonus index="Armored" value="14"/>
+        <AttributeBonus index="Massive" value="14"/>
     </CEffectDamage>
     <CEffectEnumArea id="SquadMarauderSlowAOE">
         <ValidatorArray value="PunisherGrenadesResearched"/>

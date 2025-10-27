@@ -1,5 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorBuff id="CCResourceMessage">
+        <InfoIcon value="Assets\Textures\btn-ability-zerg-dehaka-healingaura.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <BuffFlags index="RefreshStack" value="1"/>
+        <MaxStackCountPerCaster value="1"/>
+        <Duration value="4"/>
+        <Period value="4"/>
+        <PeriodicEffect value="CCResourceMessageMU"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="CCResourceMessageRegenAura">
+        <InfoIcon value="Assets\Textures\btn-ability-zerg-dehaka-healingaura.dds"/>
+        <BehaviorCategories index="User9" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <MaxStackCount value="8"/>
+        <Period value="2"/>
+        <PeriodicEffect value="CCResourceMessageSearch"/>
+        <Requirements value="HaveCommandCenterResourceGenerateField"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="MedivacLoadSiegedTank">
+        <InfoIcon value="Assets\Textures\btn-ability-mengsk-siegetank-flyingtankarmament.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Modification MoveSpeedBonus="-0.5">
+            <StateFlags index="SuppressCloak" value="1"/>
+            <LifeArmorBonus value="3"/>
+            <VitalMaxFractionArray index="Life" value="120"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="MedivacLoadThor">
+        <InfoIcon value="Assets\Textures\btn-ability-mengsk-siegetank-flyingtankarmament.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Modification MoveSpeedBonus="-1">
+            <StateFlags index="SuppressCloak" value="1"/>
+            <LifeArmorBonus value="3"/>
+            <VitalMaxFractionArray index="Life" value="240"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SensorTowerMiniWorld">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-spearofadun-timestop.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="10"/>
+        <Modification TimeScale="0.5"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadBunkerHiveMindEmulatorTurret">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <Modification>
+            <WeaponEnableArray value="SquadBunkerShrikeAutoGun"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadBunkerPsiDisrupterTurret">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <Modification>
+            <WeaponEnableArray value="SquadBunkerShrikeAutoGun"/>
+        </Modification>
+    </CBehaviorBuff>
     <CBehaviorBuff id="SquadCaptainToshDetectorRadar">
         <InfoFlags index="Hidden" value="1"/>
         <InfoIcon value="Assets\Textures\btn-status-radar.dds"/>
@@ -28,6 +86,14 @@
             <Chance value="1"/>
         </DamageResponse>
     </CBehaviorBuff>
+    <CBehaviorPowerSource id="SquadSensorTowerCCPowerSource">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-building-terran-commandcenter-covertops.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Requirements value="HaveSensorTowerCCPowerSource"/>
+        <Radius value="12"/>
+        <PowerLink value="SquadCommandCenterPowerSource"/>
+    </CBehaviorPowerSource>
     <CBehaviorBuff id="SquadHallucation">
         <BehaviorFlags index="Permanent" value="1"/>
         <InfoFlags index="Hidden" value="1"/>
@@ -83,6 +149,14 @@
             <WeaponEnableArray value="SquadMeatWagonBileCannons"/>
         </Modification>
     </CBehaviorBuff>
+    <CBehaviorBuff id="SquadMissileTurretHellstormSwitch">
+        <InfoIcon value="Assets\Textures\btn-techupgrade-terran-hellstormbatteries.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Modification>
+            <WeaponEnableArray value="SquadMissileTurretHellstormBatteries"/>
+            <WeaponDisableArray value="SquadMissileTurretLongboltMissile"/>
+        </Modification>
+    </CBehaviorBuff>
     <CBehaviorBuff id="SquadVikingAssaultMode">
         <InfoIcon value="Assets\Textures\btn-unit-terran-mecha-vikingassault.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -93,7 +167,7 @@
         <Alignment value="Positive"/>
         <InfoIcon value="Assets\Textures\btn-ability-protoss-protoncharge.dds"/>
         <EditorCategories value="AbilityorEffectType:Units"/>
-        <Duration value="10"/>
+        <Duration value="8"/>
         <Modification MoveSpeedMultiplier="1.25" AttackSpeedMultiplier="1.5">
             <WeaponEnableArray value="SquadVikingAAntiLightArmorMissile"/>
             <WeaponDisableArray value="SquadVikingALanzerTorpedoes"/>
@@ -684,7 +758,7 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Modification>
             <StateFlags index="Cloak" value="1"/>
-            <WeaponEnableArray value="SquadFireBomber"/>
+            <WeaponEnableArray value="SquadFireBomberStrafe"/>
             <WeaponDisableArray value="SquadBacklashRockets"/>
         </Modification>
     </CBehaviorBuff>
@@ -1355,19 +1429,19 @@
     </CBehaviorBuff>
     <CBehaviorPowerSource id="SquadCommandCenterPowerSource">
         <InfoFlags index="Hidden" value="1"/>
-        <InfoIcon value="Assets\Textures\btn-building-terran-techlab-covertops.dds"/>
+        <InfoIcon value="Assets\Textures\btn-building-terran-commandcenter-covertops.dds"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
-        <Radius value="6.5"/>
+        <Radius value="6"/>
     </CBehaviorPowerSource>
     <CBehaviorPowerSource id="SquadFactoryPowerSource">
         <InfoFlags index="Hidden" value="1"/>
-        <InfoIcon value="Assets\Textures\btn-building-terran-techlab-covertops.dds"/>
+        <InfoIcon value="Assets\Textures\btn-building-terran-factory-silver.dds"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <Radius value="6.5"/>
     </CBehaviorPowerSource>
     <CBehaviorPowerSource id="SquadStarportPowerSource">
         <InfoFlags index="Hidden" value="1"/>
-        <InfoIcon value="Assets\Textures\btn-building-terran-techlab-covertops.dds"/>
+        <InfoIcon value="Assets\Textures\btn-building-terran-starport-silver.dds"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <Radius value="6.5"/>
     </CBehaviorPowerSource>
@@ -1428,7 +1502,7 @@
     </CBehaviorBuff>
     <CBehaviorPowerSource id="SquadBarrackPowerSource">
         <InfoFlags index="Hidden" value="1"/>
-        <InfoIcon value="Assets\Textures\btn-building-terran-techlab-covertops.dds"/>
+        <InfoIcon value="Assets\Textures\btn-building-terran-barracks-covertops.dds"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <Radius value="6.5"/>
     </CBehaviorPowerSource>

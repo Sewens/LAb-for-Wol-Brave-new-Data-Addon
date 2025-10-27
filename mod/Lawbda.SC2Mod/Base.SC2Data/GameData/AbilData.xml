@@ -43,6 +43,29 @@
         </CmdButtonArray>
         <CmdButtonArray index="Cancel" DefaultButtonFace="CmdCancel"/>
     </CAbilEffectTarget>
+    <CAbilEffectInstant id="SensorTowerMiniWorld">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SensorTowerMiniWorldSearch"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="25"/>
+        </Cost>
+        <AutoCastFilters value="Visible;Player,Ally,Neutral"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SensorTowerMiniWorld" Requirements="HaveSensorTowerMiniWorld"/>
+    </CAbilEffectInstant>
+    <CAbilBehavior id="SquadMisiileTurretHellstormMissileSwitch">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="On" DefaultButtonFace="SquadMissileTurretHellstormBateries" Requirements="HaveMissileTurretHellstormBateries">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="Off" DefaultButtonFace="SquadMissileTurretLongboltMissile" Requirements="HaveMissileTurretHellstormBateries">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Flags index="Toggle" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <BehaviorArray value="SquadMissileTurretHellstormSwitch"/>
+    </CAbilBehavior>
     <CAbilEffectTarget id="SquadCaptainToshConsumption">
         <Alignment value="Positive"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -323,13 +346,12 @@
         <Effect index="0" value="SquadVikingFighterOverchargeApply"/>
         <Flags index="AllowMovement" value="1"/>
         <Flags index="AutoCast" value="1"/>
-        <Flags index="AutoCastOn" value="1"/>
         <Flags index="NoDeceleration" value="1"/>
         <Cost>
             <Cooldown TimeUse="15"/>
         </Cost>
         <Arc value="360"/>
-        <AutoCastFilters value="Visible;Neutral,Enemy,Missile,Stasis,Dead,Invulnerable"/>
+        <AutoCastFilters value="Visible;Player,Ally,Neutral,Missile,Stasis,Dead,Invulnerable"/>
         <AutoCastRange value="6"/>
         <DefaultError value="MustTargetMechanicalUnits"/>
         <AbilSetId value="VikingOverCharge"/>

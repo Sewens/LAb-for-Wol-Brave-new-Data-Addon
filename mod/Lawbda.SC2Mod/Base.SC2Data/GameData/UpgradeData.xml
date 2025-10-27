@@ -6,6 +6,78 @@
     <CUpgrade id="AddonStructureRelocation">
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
+    <CUpgrade id="HellionDurabilityTraining">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Reference="Unit,SquadHellion,LifeArmor" Value="3"/>
+        <EffectArray Reference="Unit,SquadHellion,ReviveInfoBase.Vital[Life]" Value="50"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="HellionUpgradePlaceholder">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Alert value="ResearchComplete"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadMedic"/>
+    </CUpgrade>
+    <CUpgrade id="HellionUpgradePlaceholder2">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Alert value="ResearchComplete"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadMedic"/>
+    </CUpgrade>
+    <CUpgrade id="HellionProjectileAccelerators">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <!--Maximum life and energy + 100, life armor + 5, give ghost and spectre 10% damage for all types duration 15s, maximum 10 stack.-->
+    <CUpgrade id="ScienceVesselGhostConditioning">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadScienceVessel"/>
+    </CUpgrade>
+    <!--Muninn can revive death infantry per 50 energy, +5 sight for raven.-->
+    <CUpgrade id="RavenMuninnUpgrade">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadRaven"/>
+    </CUpgrade>
+    <CUpgrade id="MedivacArmamentStabilizers">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadMedivac"/>
+    </CUpgrade>
+    <!--Raven Now have defence drone as weapon, maximum energy +200, defence drone cost lower to 10 per missile.-->
+    <CUpgrade id="RavenHuginnUpgrade">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadRaven"/>
+    </CUpgrade>
+    <!--Create a terrazine region, unit in region will super cloak periodically and add 100 maximum energy.-->
+    <CUpgrade id="ScienceVesselProjectShadowblade">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadScienceVessel"/>
+    </CUpgrade>
+    <CUpgrade id="VikingAssaultGatlingStrife">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Set" Reference="Weapon,SquadVikingGGatlingCannon,DisplayAttackCount" Value="5"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadVikingA"/>
+    </CUpgrade>
+    <CUpgrade id="BattlecruiserSuperSmash2">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadBattlecruiser"/>
+    </CUpgrade>
+    <CUpgrade id="BansheeDirectImpactMissileSilo">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Set" Reference="Weapon,SquadBacklashRockets,Range" Value="7"/>
+        <EffectArray Operation="Set" Reference="Weapon,SquadBacklashRockets,TargetFilters" Value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <EffectArray Operation="Set" Reference="Weapon,SquadFireBomberDirect,Options[Hidden]" Value="0"/>
+        <EffectArray Operation="Set" Reference="Weapon,SquadFireBomberStrafe,Options[Hidden]" Value="1"/>
+        <EffectArray Operation="Set" Reference="Behavior,SquadBansheeBomberMode,Modification.WeaponEnableArray[0]" Value="SquadFireBomberDirect"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadBanshee"/>
+    </CUpgrade>
     <!--Can switch turret between shrike turret, fire and emp.-->
     <CUpgrade id="BunkerSwitchableBunkerTurret">
         <Flags index="UpgradeCheat" value="0"/>
@@ -35,6 +107,11 @@
         <AffectedUnitArray value="SquadOrbitalCommand"/>
         <AffectedUnitArray value="SquadPlanetaryFortress"/>
         <AffectedUnitArray value="SquadGalaxyFortress"/>
+    </CUpgrade>
+    <CUpgrade id="BattlecruiserSuperSmash">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadBattlecruiser"/>
     </CUpgrade>
     <!--Mechanic unit will be disabled 0.5s while being attack by predator.-->
     <CUpgrade id="PredatorEnhancedElectorField">
@@ -105,7 +182,8 @@
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <AffectedUnitArray value="SquadBunker"/>
     </CUpgrade>
-    <CUpgrade id="MissileTurretHellstormBatteries2">
+    <!--Damage resoponse for attackers, both for air and ground unit.-->
+    <CUpgrade id="MissileTurretReactionPlating">
         <Flags index="UpgradeCheat" value="0"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <AffectedUnitArray value="SquadMissileTurret"/>
@@ -408,7 +486,7 @@
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <AffectedUnitArray value="SquadMarauder"/>
     </CUpgrade>
-    <CUpgrade id="RegenerativeBioSteel2">
+    <CUpgrade id="SquadRegenerativeBioSteel">
         <Flags index="UpgradeCheat" value="0"/>
         <EffectArray Operation="Set" Reference="Unit,Hellion,LifeRegenDelay" Value="3.000000"/>
         <EffectArray Operation="Set" Reference="Unit,Hellion,LifeRegenRate" Value="0.601500"/>
@@ -1570,5 +1648,17 @@
         <Flags index="UpgradeCheat" value="0"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <AffectedUnitArray value="SquadSpectre"/>
+    </CUpgrade>
+    <!--Add two repair drone for medivac.-->
+    <CUpgrade id="MedivacKhalaiIngenuity">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadMedivac"/>
+    </CUpgrade>
+    <CUpgrade id="VikingFighterOverchargeEnhanced">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Set" Reference="Behavior,SquadVikingFighterOvercharge,Duration" Value="15.000000"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadVikingA"/>
     </CUpgrade>
 </Catalog>
