@@ -32,6 +32,63 @@
         <ScaleMax value="0.750000,0.750000,0.750000"/>
         <ScaleMin value="0.750000,0.750000,0.750000"/>
     </CModel>
+    <CModel id="SquadHHWidowMineAttackLaunch" parent="LaunchFX">
+        <Model value="Assets\Effects\Terran\WidowMineDustBirth\WidowMineDustBirth.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <ScaleMax value="0.750000,0.750000,0.750000"/>
+        <ScaleMin value="0.750000,0.750000,0.750000"/>
+    </CModel>
+    <CModel id="SquadHHWidowMineAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Terran\WidowMineImpact\WidowMineImpact.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Events>
+            <Anim value="Death"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="WidowMine_Death"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="HH_TornadoMissile_LaunchBlossom"/>
+            <Type value="Sound"/>
+            <Time value="0.197000"/>
+            <Payload value="HH_TornadoMissile_LaunchBlossom"/>
+        </Events>
+    </CModel>
+    <CModel id="SquadSiegeTankMortarMissile" race="Neutral">
+        <Model value="Assets\COOP\Mengsk\Effects\Battlecruiser_Mengsk_COOP_YamatoAoE\Battlecruiser_Mengsk_COOP_YamatoAoE.m3"/>
+        <EditorCategories value="Race:Neutral"/>
+        <Events Anim="Death" Type="Sound" Payload="SND_MMTI"/>
+        <Events Anim="Death,02" Type="Sound" Payload="SND_MMTI"/>
+        <Events Anim="Death,03" Type="Sound" Payload="SND_MMTI"/>
+        <Events>
+            <Anim value="Death"/>
+            <Type value="FootprintLeft"/>
+            <Time value="0.467000"/>
+            <Payload value="UBR_HCRT"/>
+        </Events>
+        <Events>
+            <Anim value="Death,02"/>
+            <Type value="FootprintLeft"/>
+            <Time value="0.367000"/>
+            <Payload value="UBR_HCRT"/>
+        </Events>
+        <Events>
+            <Anim value="Death,03"/>
+            <Type value="FootprintLeft"/>
+            <Time value="0.467000"/>
+            <Payload value="UBR_HCRT"/>
+        </Events>
+        <Flags index="CloakedUndetectedIsHidden" value="1"/>
+        <Flags index="ForcePortraitModel" value="1"/>
+        <Flags index="FOW" value="0"/>
+        <Flags index="IgnoreAspectRatioScale" value="1"/>
+        <Flags index="Wait" value="0"/>
+        <Lighting value="Tyrador"/>
+        <Priority value="24"/>
+        <ScaleMax value="1.562500,1.562500,1.562500"/>
+        <ScaleMin value="1.562500,1.562500,1.562500"/>
+    </CModel>
     <CModel id="LawbdaCoreDeath" parent="BuildingDeathEx">
         <Model value="Assets\COOP\Stetmann\Buildings\GARY_Stetmann_COOP_RespawnPad\GARY_Stetmann_COOP_RespawnPad_11.m3"/>
         <Radius value="1.500000"/>

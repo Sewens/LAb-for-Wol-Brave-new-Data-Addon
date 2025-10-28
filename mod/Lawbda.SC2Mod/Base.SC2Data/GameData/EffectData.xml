@@ -115,6 +115,58 @@
         <Upgrades Upgrade="ScannerSweepVanillaUpgradeDummy" Count="-1"/>
         <Upgrades Upgrade="ScannerSweepYellowUpgradeDummy" Count="1"/>
     </CEffectModifyPlayer>
+    <CEffectSet id="SquadSiegeTankMortarInitSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadSiegeTankMortarLaunchMissile"/>
+        <EffectArray value="SquadSiegeTankMortarPersistent"/>
+    </CEffectSet>
+    <CEffectDamage id="SquadSiegeTankSpiltShellInitialBlast" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <AttributeBonus index="Armored" value="15"/>
+        <Kind value="Ranged"/>
+        <KindSplash value="Splash"/>
+        <Amount value="35"/>
+        <Death value="Blast"/>
+        <AreaArray Radius="0.4687" Fraction="1"/>
+        <AreaArray Radius="0.7812" Fraction="0.5"/>
+        <AreaArray Radius="1.25" Fraction="0.25"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Ground;Self,Air,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <SearchFlags index="OffsetByUnitRadius" value="0"/>
+    </CEffectDamage>
+    <CEffectDamage id="SquadSiegeTankMortarDamage">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <ArmorReduction value="1"/>
+        <Visibility value="Visible"/>
+        <Flags index="Notification" value="1"/>
+        <Flags index="Impact" value="1"/>
+        <Flags index="NoZeroDamageInherit" value="1"/>
+        <Flags index="ValidateImpactDeflection" value="1"/>
+        <Kind value="Ranged"/>
+        <KindSplash value="Splash"/>
+        <Type value="Normal"/>
+        <Amount value="38"/>
+        <Random value="12"/>
+        <Death value="Blast"/>
+        <AreaArray Radius="0.25" Fraction="1"/>
+        <AreaArray Radius="1" Fraction="0.2"/>
+        <AreaArray Radius="2.5" Fraction="0.1"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="OffsetAreaByAngle" value="1"/>
+        <SearchFlags index="SameCliff" value="0"/>
+        <AttributeBonus index="Structure" value="24"/>
+        <SearchFilters value="Ground,Visible;Air,Missile,Stasis,Dead"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="SquadSiegeTankMortarLaunchMissile">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetUnitOrPoint"/>
+        <ImpactEffect value="SquadSiegeTankMortarDamage"/>
+        <Flags index="ValidateImpactDeflection" value="1"/>
+        <AmmoUnit value="SquadSiegeTankMortarMissile"/>
+        <ValidatorArray index="0" removed="1"/>
+    </CEffectLaunchMissile>
     <CEffectApplyBehavior id="SensorTowerMiniWorldApply">
         <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
@@ -266,7 +318,134 @@
     <CEffectSet id="SquadMeatWagonUnloadCoprseSet">
         <EditorCategories value="Race:Terran"/>
         <EffectArray value="SquadMeatWagonUnloadUnpauseDecay"/>
-        <EffectArray value="SquadMeatWagonUnloadUnpauseDecay"/>
+    </CEffectSet>
+    <CEffectCreatePersistent id="SquadSiegeTankMortarPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <PeriodCount value="2"/>
+        <PeriodicEffectArray value="SquadSiegeTankMortarSearch"/>
+        <PeriodicPeriodArray value="1"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="SquadSiegeTankMortarSearch">
+        <EditorCategories value="Race:Terran"/>
+        <SearchFilters value="Ground;Player,Ally,Missile,Stasis,Dead"/>
+        <AreaArray MaxCount="1" Radius="2" Effect="SquadSiegeTankMortarLaunchMissile"/>
+    </CEffectEnumArea>
+    <CEffectLaunchMissile id="SquadSiegeTankSpiltShellInitialLaunchMissile">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetUnitOrPoint"/>
+        <ImpactEffect value="SquadSiegeTankSpiltShellInitialImpactSet"/>
+        <AmmoUnit value="SquadSiegeTankSpiltShellInitialMissile"/>
+    </CEffectLaunchMissile>
+    <CEffectCreatePersistent id="SquadSiegeTankSpiltShellSecondPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Effect="SquadSiegeTankSpiltShellInitialImpactSet" History="Damage"/>
+        <Flags index="RandomOffset" value="1"/>
+        <PeriodCount value="5"/>
+        <PeriodicEffectArray value="SquadSiegeTankSpiltShellSecondLaunchMissile"/>
+        <!--
+        <PeriodicEffectArray value="SquadSiegeTankSpiltBlastShellBlossomCP1"/>
+        <PeriodicEffectArray value="SquadSiegeTankSpiltBlastShellBlossomCP2"/>
+        <PeriodicEffectArray value="SquadSiegeTankSpiltBlastShellBlossomCP3"/>
+        <PeriodicEffectArray value="SquadSiegeTankSpiltBlastShellBlossomCP4"/>
+        <PeriodicEffectArray value="SquadSiegeTankSpiltBlastShellBlossomCP5"/>
+-->
+        <PeriodicOffsetArray value="2,0,0"/>
+        <PeriodicOffsetArray value="-2,0,0"/>
+        <PeriodicOffsetArray value="0,2,0"/>
+        <PeriodicOffsetArray value="0,-2,0"/>
+        <PeriodicOffsetArray value="2,2,0"/>
+        <PeriodicOffsetArray value="2,-2,0"/>
+        <PeriodicOffsetArray value="-2,2,0"/>
+        <PeriodicOffsetArray value="-2,-2,0"/>
+        <PeriodicOffsetArray value="1,0,0"/>
+        <PeriodicOffsetArray value="-1,0,0"/>
+        <PeriodicOffsetArray value="0,1,0"/>
+        <PeriodicOffsetArray value="0,-1,0"/>
+        <PeriodicOffsetArray value="1,1,0"/>
+        <PeriodicOffsetArray value="1,-1,0"/>
+        <PeriodicOffsetArray value="-1,1,0"/>
+        <PeriodicOffsetArray value="-1,-1,0"/>
+        <PeriodicOffsetArray value="1.5,0,0"/>
+        <PeriodicOffsetArray value="-1.5,0,0"/>
+        <PeriodicOffsetArray value="0,1.5,0"/>
+        <PeriodicOffsetArray value="0,-1.5,0"/>
+        <PeriodicOffsetArray value="1.5,1.5,0"/>
+        <PeriodicOffsetArray value="1.5,-1.5,0"/>
+        <PeriodicOffsetArray value="-1.5,1.5,0"/>
+        <PeriodicOffsetArray value="-1.5,-1.5,0"/>
+        <PeriodicPeriodArray value="0.05"/>
+        <EffectRandMode value="RandomNoRepeat"/>
+        <OffsetRandMode value="RandomNoRepeat"/>
+        <PeriodRandMode value="RandomNoRepeat"/>
+    </CEffectCreatePersistent>
+    <!--    <CEffectCreatePersistent id="SquadSiegeTankSpiltBlastShellBlossomCP1">-->
+    <!--        <EditorCategories value="Race:Terran"/>-->
+    <!--        <Flags index="RandomOffset" value="1"/>-->
+    <!--        <PeriodCount value="1"/>-->
+    <!--        <PeriodicEffectArray value="SquadSiegeTankSpiltBlastShellSecondLaunchMissile"/>-->
+    <!--        <PeriodicOffsetArray value="5.5,0,0"/>-->
+    <!--        <PeriodicOffsetArray value="-5.5,0,0"/>-->
+    <!--        <PeriodicOffsetArray value="2.5,0,0"/>-->
+    <!--        <OffsetRandMode value="RandomNoRepeat"/>-->
+    <!--    </CEffectCreatePersistent>-->
+    <!--    <CEffectCreatePersistent id="SquadSiegeTankSpiltBlastShellBlossomCP2">-->
+    <!--        <EditorCategories value="Race:Terran"/>-->
+    <!--        <Flags index="RandomOffset" value="1"/>-->
+    <!--        <PeriodCount value="1"/>-->
+    <!--        <PeriodicEffectArray value="SquadSiegeTankSpiltBlastShellSecondLaunchMissile"/>-->
+    <!--        <PeriodicOffsetArray value="4.354,-3.0266,0"/>-->
+    <!--        <PeriodicOffsetArray value="1,-2.0981,0"/>-->
+    <!--        <PeriodicOffsetArray value="1.354,-5.2062,0"/>-->
+    <!--        <OffsetRandMode value="RandomNoRepeat"/>-->
+    <!--    </CEffectCreatePersistent>-->
+    <!--    <CEffectCreatePersistent id="SquadSiegeTankSpiltBlastShellBlossomCP3">-->
+    <!--        <EditorCategories value="Race:Terran"/>-->
+    <!--        <Flags index="RandomOffset" value="1"/>-->
+    <!--        <PeriodCount value="1"/>-->
+    <!--        <PeriodicEffectArray value="SquadSiegeTankSpiltBlastShellSecondLaunchMissile"/>-->
+    <!--        <PeriodicOffsetArray value="4.354,3.0266,0"/>-->
+    <!--        <PeriodicOffsetArray value="1,2.0981,0"/>-->
+    <!--        <PeriodicOffsetArray value="1.354,5.2062,0"/>-->
+    <!--        <OffsetRandMode value="RandomNoRepeat"/>-->
+    <!--    </CEffectCreatePersistent>-->
+    <!--    <CEffectCreatePersistent id="SquadSiegeTankSpiltBlastShellBlossomCP4">-->
+    <!--        <EditorCategories value="Race:Terran"/>-->
+    <!--        <Flags index="RandomOffset" value="1"/>-->
+    <!--        <PeriodCount value="1"/>-->
+    <!--        <PeriodicEffectArray value="SquadSiegeTankSpiltBlastShellSecondLaunchMissile"/>-->
+    <!--        <PeriodicOffsetArray value="-4.354,-3.0266,0"/>-->
+    <!--        <PeriodicOffsetArray value="-1.354,-5.2062,0"/>-->
+    <!--        <PeriodicOffsetArray value="-1,-2.0981,0"/>-->
+    <!--        <OffsetRandMode value="RandomNoRepeat"/>-->
+    <!--    </CEffectCreatePersistent>-->
+    <!--    <CEffectCreatePersistent id="SquadSiegeTankSpiltBlastShellBlossomCP5">-->
+    <!--        <EditorCategories value="Race:Terran"/>-->
+    <!--        <Flags index="RandomOffset" value="1"/>-->
+    <!--        <PeriodCount value="1"/>-->
+    <!--        <PeriodicEffectArray value="SquadSiegeTankSpiltBlastShellSecondLaunchMissile"/>-->
+    <!--        <PeriodicOffsetArray value="-4.354,3.0266,0"/>-->
+    <!--        <PeriodicOffsetArray value="-1.354,5.2062,0"/>-->
+    <!--        <PeriodicOffsetArray value="-1,2.0981,0"/>-->
+    <!--        <OffsetRandMode value="RandomNoRepeat"/>-->
+    <!--    </CEffectCreatePersistent>-->
+    <CEffectLaunchMissile id="SquadSiegeTankSpiltShellSecondLaunchMissile">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <ImpactEffect value="SquadSiegeTankSpiltShellSecondBlast"/>
+        <AmmoUnit value="SquadSiegeTankSpiltShellSecondMissile"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="SquadSiegeTankSpiltShellSecondBlast" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <ShieldBonus value="10"/>
+        <ArmorReduction value="0"/>
+        <Kind value="Spell"/>
+        <KindSplash value="Splash"/>
+        <Amount value="10"/>
+        <Death value="Blast"/>
+    </CEffectDamage>
+    <CEffectSet id="SquadSiegeTankSpiltShellInitialImpactSet">
+        <EffectArray value="SquadSiegeTankSpiltShellSecondPersistent"/>
+        <EffectArray value="SquadSiegeTankSpiltShellInitialBlast"/>
     </CEffectSet>
     <CEffectDamage id="SquadSquadHallucinationTargetKill">
         <ValidatorArray value="KillHallucinationTargetFilters"/>
@@ -3484,7 +3663,7 @@
         <Amount value="40"/>
         <Death value="Blast"/>
     </CEffectDamage>
-    <CEffectSet id="SquadSiegeTankSiegedVoid">
+    <CEffectSet id="SquadSiegeTankSiegedSet">
         <EffectArray value="SquadSiegeTankCrucioShockCannonDirected"/>
         <EffectArray value="SquadSiegeTankCrucioShockCannonBlast"/>
         <EffectArray value="SquadSiegeTankMaelstromRounds"/>

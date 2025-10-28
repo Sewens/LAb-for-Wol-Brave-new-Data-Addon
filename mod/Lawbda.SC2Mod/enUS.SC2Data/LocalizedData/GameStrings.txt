@@ -137,6 +137,7 @@ Abil/Name/SquadSCVRepair=Squad SCV Repair
 Abil/Name/SquadScienceVesselNanoRepair=Squad Science Vessel Nano Repair
 Abil/Name/SquadSiegeMode=Squad Siege Mode
 Abil/Name/SquadSiegeTankJumpJetRedeploy=Squad Siege Tank JumpJet Redeploy
+Abil/Name/SquadSiegeTankMortarLauncherSwitch=Squad Siege Tank Mortar Launcher Switch
 Abil/Name/SquadSiegeTankUnsiege=Squad Siege Tank Unsiege
 Abil/Name/SquadSpectreObliterate=Squad Spectre Obliterate
 Abil/Name/SquadSpectreUltrasonicPulse=Squad Spectre Ultrasonic Pulse
@@ -299,6 +300,7 @@ Behavior/Name/SquadRavenSeekerMissiletimeout=Squad Raven Seeker Missile timeout
 Behavior/Name/SquadReaperJump=Squad Reaper Jump
 Behavior/Name/SquadShooterAuraBuff=Squad Shooter Aura Buff
 Behavior/Name/SquadShortlyStun=Squad Shortly Stun
+Behavior/Name/SquadSiegeTankMortarLauncherSwitch=Squad Siege Tank Mortar Launcher Switch
 Behavior/Name/SquadSpectreGiftVoodooMindControl=Squad Spectre Gift Voodoo Mind Control
 Behavior/Name/SquadSpectreUltrasonicPulsestun=Squad Spectre Ultrasonic Pulse stun
 Behavior/Name/SquadSquadSight=Squad Squad Sight
@@ -629,9 +631,13 @@ Button/Name/SquadSetRallyPoint=Squad Set Rally Point
 Button/Name/SquadShockwave=Squad Shockwave
 Button/Name/SquadSiegeTank=Squad Siege Tank
 Button/Name/SquadSiegeTankJumpJet=Squad Siege Tank JumpJet
+Button/Name/SquadSiegeTankMortarLauncher=Squad Siege Tank Mortar Launcher
+Button/Name/SquadSiegeTankMortarLauncherPassive=Squad Siege Tank Mortar Launcher Passive
 Button/Name/SquadSiegeTankResearchSiegeTech=Squad Siege Tank Research Siege Tech
 Button/Name/SquadSiegeTankShapedBlast=Squad Siege Tank Shaped Blast
 Button/Name/SquadSiegeTankSiegeMode=Squad Siege Tank Siege Mode
+Button/Name/SquadSiegeTankSpiltShell=Squad Siege Tank Spilt Shell
+Button/Name/SquadSiegeTankSpiltShellPassive=Squad Siege Tank Spilt Shell Passive
 Button/Name/SquadSiegeTankUnsiege=Squad Siege Tank Unsiege
 Button/Name/SquadSoulOrbDamageBuff=Squad Soul Orb Damage Buff
 Button/Name/SquadSoulOrbHallucinationBuff=Squad Soul Orb Hallucination Buff
@@ -966,10 +972,14 @@ Button/Tooltip/SquadSelectBuilder=Selects the unit constructing this structure.
 Button/Tooltip/SquadSensorTower=Reveals the locations of enemy units at long range. The Sensor Tower's detection area is visible to the enemy.
 Button/Tooltip/SquadSetRallyPoint=Sends constructed units to the designated point. Workers rallied to resources will begin gathering automatically.
 Button/Tooltip/SquadSiegeTank=Heavy tank. Long-range artillery in Siege Mode.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/SquadSiegeTankMortarLauncher=Missile Pods deal <d ref="Effect,HurricaneMissileDamage,Amount * Effect,HurricaneMissileDamagePersistent,PeriodCount"/> (+<d ref="Effect,HurricaneMissileDamage,AttributeBonus[0] * Effect,HurricaneMissileDamagePersistent,PeriodCount"/> vs. light) damage to air units in target area.
+Button/Tooltip/SquadSiegeTankMortarLauncherPassive=Missile Pods deal <d ref="Effect,HurricaneMissileDamage,Amount * Effect,HurricaneMissileDamagePersistent,PeriodCount"/> (+<d ref="Effect,HurricaneMissileDamage,AttributeBonus[0] * Effect,HurricaneMissileDamagePersistent,PeriodCount"/> vs. light) damage to air units in target area.
 Button/Tooltip/SquadSiegeTankResearchSiegeTech=Enables <c val="ffff8a">Siege Tanks</c> to deploy into Siege Mode. While in Siege Mode, Siege Tanks have significantly increased range and damage, but they cannot move.
 Button/Tooltip/SquadSiegeTankShapedBlast=Shock Cannon damage to friendly units reduced by 75%.
 Button/Tooltip/SquadSiegeTankSiegeMode=Deploys into Siege Mode. In this mode Siege Tanks have very long range and inflict area damage. Siege Tanks in this mode cannot move or attack targets at close range.
 Button/Tooltip/SquadSiegeTankSieged=Heavy tank. Long-range artillery in Siege Mode.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/SquadSiegeTankSpiltShell=Missile Pods deal <d ref="Effect,HurricaneMissileDamage,Amount * Effect,HurricaneMissileDamagePersistent,PeriodCount"/> (+<d ref="Effect,HurricaneMissileDamage,AttributeBonus[0] * Effect,HurricaneMissileDamagePersistent,PeriodCount"/> vs. light) damage to air units in target area.
+Button/Tooltip/SquadSiegeTankSpiltShellPassive=Missile Pods deal <d ref="Effect,HurricaneMissileDamage,Amount * Effect,HurricaneMissileDamagePersistent,PeriodCount"/> (+<d ref="Effect,HurricaneMissileDamage,AttributeBonus[0] * Effect,HurricaneMissileDamagePersistent,PeriodCount"/> vs. light) damage to air units in target area.
 Button/Tooltip/SquadSiegeTankUnsiege=Reverts to Tank Mode. In this mode Siege Tanks can move, but they do less damage.
 Button/Tooltip/SquadSoulOrbHallucinationBuff=Attack enemy will create their hallucination on <d ref="Effect,SquadHallucinationTargetCreateUnit,Chance" precision="2"/> chance.
 Button/Tooltip/SquadSpawnMarineCorpse=Spawns four Infested Terrans. Infested Terrans last <d ref="Behavior,StukovInfestedTerranTimedLife,Duration"/> seconds.
@@ -1754,7 +1764,23 @@ Effect/Name/SquadSiegeTankJumpJetPlaceholderCreate=Squad Siege Tank JumpJet Plac
 Effect/Name/SquadSiegeTankJumpJetPlaceholderRemove=Squad Siege Tank JumpJet Placeholder Remove
 Effect/Name/SquadSiegeTankJumpJetPlaceholderRemoveSet=Squad Siege Tank JumpJet Placeholder Remove Set
 Effect/Name/SquadSiegeTankMaelstromRounds=Squad Siege Tank Maelstrom Rounds
-Effect/Name/SquadSiegeTankSiegedVoid=Squad Siege Tank Sieged Void
+Effect/Name/SquadSiegeTankMortarDamage=Squad Siege Tank Mortar Damage
+Effect/Name/SquadSiegeTankMortarInitSet=Squad Siege Tank Mortar Init Set
+Effect/Name/SquadSiegeTankMortarLaunchMissile=Squad Siege Tank Mortar Launch Missile
+Effect/Name/SquadSiegeTankMortarPersistent=Squad Siege Tank Mortar Persistent
+Effect/Name/SquadSiegeTankMortarSearch=Squad Siege Tank Mortar Search
+Effect/Name/SquadSiegeTankSiegedSet=Squad Siege Tank Sieged Set
+Effect/Name/SquadSiegeTankSpiltBlastShellBlossomCP1=Squad Siege Tank Spilt Blast Shell Blossom CP1
+Effect/Name/SquadSiegeTankSpiltBlastShellBlossomCP2=Squad Siege Tank Spilt Blast Shell Blossom CP2
+Effect/Name/SquadSiegeTankSpiltBlastShellBlossomCP3=Squad Siege Tank Spilt Blast Shell Blossom CP3
+Effect/Name/SquadSiegeTankSpiltBlastShellBlossomCP4=Squad Siege Tank Spilt Blast Shell Blossom CP4
+Effect/Name/SquadSiegeTankSpiltBlastShellBlossomCP5=Squad Siege Tank Spilt Blast Shell Blossom CP5
+Effect/Name/SquadSiegeTankSpiltShellInitialBlast=Squad Siege Tank Spilt Shell Initial Blast
+Effect/Name/SquadSiegeTankSpiltShellInitialImpactSet=Squad Siege Tank Spilt Shell Initial Impact Set
+Effect/Name/SquadSiegeTankSpiltShellInitialLaunchMissile=Squad Siege Tank Spilt Shell Initial Launch Missile
+Effect/Name/SquadSiegeTankSpiltShellSecondBlast=Squad Siege Tank Spilt Shell Second Blast
+Effect/Name/SquadSiegeTankSpiltShellSecondLaunchMissile=Squad Siege Tank Spilt Shell Second Launch Missile
+Effect/Name/SquadSiegeTankSpiltShellSecondPersistent=Squad Siege Tank Spilt Shell Second Persistent
 Effect/Name/SquadSnipeDamage=Squad Snipe Damage
 Effect/Name/SquadSpecterU=Squad Specter U
 Effect/Name/SquadSpectreDeathResponseChain=Squad Spectre Death Response Chain
@@ -2057,7 +2083,10 @@ Unit/Name/SquadSCVJumper=Squad SCV Jumper
 Unit/Name/SquadScienceVessel=Squad Science Vessel
 Unit/Name/SquadSensorTower=Squad Sensor Tower
 Unit/Name/SquadSiegeTank=Squad Siege Tank
+Unit/Name/SquadSiegeTankMortarMissile=Squad Siege Tank Mortar Missile
 Unit/Name/SquadSiegeTankSieged=Siege Breaker
+Unit/Name/SquadSiegeTankSpiltShellInitialMissile=Squad Siege Tank Spilt Shell Initial Missile
+Unit/Name/SquadSiegeTankSpiltShellSecondMissile=Squad Siege Tank Spilt Shell Second Missile
 Unit/Name/SquadSpectre=Squad Spectre
 Unit/Name/SquadSpectreUltrasonicPulseWeapon=Squad Spectre Ultrasonic Pulse Weapon
 Unit/Name/SquadSpiderMine=Squad Spider Mine
@@ -2211,6 +2240,8 @@ Weapon/Name/SquadReaperD8Charge=Squad Reaper D8 Charge
 Weapon/Name/SquadReaperP45GaussPistol=Squad Reaper P-45 Gauss Pistol
 Weapon/Name/SquadSiegeTank90mmCannons=Squad Siege Tank 90mm Cannons
 Weapon/Name/SquadSiegeTankCrucioShockCannon=Squad Siege Tank Crucio Shock Cannon
+Weapon/Name/SquadSiegeTankMortarLauncher=Squad Siege Tank Mortar Launcher
+Weapon/Name/SquadSiegeTankSpiltShell=Squad Siege Tank Spilt Shell
 Weapon/Name/SquadSpecterAGR14GaussRifle=Squad Specter AGR-14 Gauss Rifle
 Weapon/Name/SquadSpiderMinesSuicide=Squad Spider Mines Suicide
 Weapon/Name/SquadSpiderSilk=Squad Spider Silk

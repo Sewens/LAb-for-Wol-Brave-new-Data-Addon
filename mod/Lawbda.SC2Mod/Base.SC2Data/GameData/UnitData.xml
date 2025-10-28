@@ -217,6 +217,20 @@
         <HotkeyAlias value=""/>
         <BehaviorArray Link="SquadCloakandDetectorRadar"/>
     </CUnit>
+    <CUnit id="SquadSiegeTankSpiltShellSecondMissile" parent="MISSILE">
+        <Race value="Terr"/>
+        <FlagArray index="Invulnerable" value="1"/>
+        <UserFlagArray index="Projectile" value="1"/>
+        <Mover value="WidowMineWeapon"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
+    <CUnit id="SquadSiegeTankSpiltShellInitialMissile" parent="MISSILE">
+        <Race value="Terr"/>
+        <FlagArray index="Invulnerable" value="1"/>
+        <UserFlagArray index="Projectile" value="1"/>
+        <Mover value="SquadBattlecruiserMiniYamatoLM"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
     <CUnit id="SquadStukovInfestedDiamondbackBileStreamSprayMissile" parent="MISSILE_INVULNERABLE">
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
     </CUnit>
@@ -494,6 +508,14 @@
         <GlossaryStrongArray value="Ultralisk"/>
         <HotkeyCategory value="Unit/Category/TerranStory"/>
         <AIEvaluateAlias value=""/>
+    </CUnit>
+    <CUnit id="SquadSiegeTankMortarMissile" parent="MISSILE">
+        <Race value="Terr"/>
+        <Mob value="Warcraft"/>
+        <FlagArray index="Invulnerable" value="1"/>
+        <UserFlagArray index="Projectile" value="1"/>
+        <Mover value="MortarMissileLauncher"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
     </CUnit>
     <CUnit id="SquadForceField">
         <DeathRevealRadius value="0"/>
@@ -1427,31 +1449,22 @@
         <AbilArray Link="QueueMagazine"/>
         <AbilArray Link="DisbandSquad"/>
         <AbilArray Link="SquadInfantry"/>
-        <WeaponArray Link="SquadSiegeTankCrucioShockCannon" Turret="SiegeTankSieged"/>
+        <AbilArray Link="SquadSiegeTankMortarLauncherSwitch"/>
+        <WeaponArray Link="SquadSiegeTankCrucioShockCannon" Turret="SquadSiegeTankSieged"/>
+        <WeaponArray Link="SquadSiegeTankSpiltShell" Turret="SquadSiegeTankSieged"/>
+        <WeaponArray Link="SquadSiegeTankMortarLauncher" Turret="SquadSiegeTankSieged"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
             <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
             <LayoutButtons Face="AttackBuilding" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
-            <LayoutButtons>
-                <Face value="MaelstromRounds"/>
-                <Type value="Passive"/>
-                <AbilCmd value="255,255"/>
-                <Requirements value="UseMaelstromRounds"/>
-                <Row value="2"/>
-                <Column value="2"/>
-            </LayoutButtons>
-            <LayoutButtons>
-                <Face value="ShapedBlast"/>
-                <Type value="Passive"/>
-                <AbilCmd value="255,255"/>
-                <Requirements value="UseShapedBlast"/>
-                <Row value="2"/>
-                <Column value="3"/>
-            </LayoutButtons>
             <LayoutButtons Face="SquadSiegeTankUnsiege" Type="AbilCmd" AbilCmd="SquadSiegeTankUnsiege,Execute" Row="2" Column="0"/>
             <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="4"/>
+            <LayoutButtons Face="SquadSiegeTankMortarLauncher" Type="AbilCmd" AbilCmd="SquadSiegeTankMortarLauncherSwitch,On" Row="1" Column="0"/>
+            <LayoutButtons Face="SquadSiegeTankSpiltShell" Type="AbilCmd" AbilCmd="SquadSiegeTankMortarLauncherSwitch,Off" Row="1" Column="1"/>
+            <LayoutButtons Face="SquadSiegeTankMortarLauncherPassive" Type="Passive" Row="1" Column="0"/>
+            <LayoutButtons Face="SquadSiegeTankSpiltShellPassive" Type="Passive" Row="1" Column="1"/>
         </CardLayouts>
         <Radius value="0.875"/>
         <SeparationRadius value="1"/>
@@ -1529,22 +1542,6 @@
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
             <LayoutButtons Face="SquadSiegeTankSiegeMode" Type="AbilCmd" AbilCmd="SquadSiegeMode,Execute" Row="2" Column="0"/>
-            <LayoutButtons>
-                <Face value="MaelstromRounds"/>
-                <Type value="Passive"/>
-                <AbilCmd value="255,255"/>
-                <Requirements value="UseMaelstromRoundsReq"/>
-                <Row value="2"/>
-                <Column value="2"/>
-            </LayoutButtons>
-            <LayoutButtons>
-                <Face value="ShapedBlast"/>
-                <Type value="Passive"/>
-                <AbilCmd value="255,255"/>
-                <Requirements value="UseShapedBlastReq"/>
-                <Row value="2"/>
-                <Column value="3"/>
-            </LayoutButtons>
             <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="4"/>
             <LayoutButtons Face="SquadSiegeTankJumpJet" Type="AbilCmd" AbilCmd="SquadSiegeTankJumpJetRedeploy,Execute" Row="1" Column="0"/>
         </CardLayouts>
