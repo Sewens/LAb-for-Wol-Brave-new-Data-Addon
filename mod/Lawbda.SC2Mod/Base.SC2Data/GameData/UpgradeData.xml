@@ -6,27 +6,38 @@
     <CUpgrade id="AddonStructureRelocation">
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
+    <CUpgrade id="WarhoundJetpackUpgrade">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Race value="Terr"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadWarhound"/>
+    </CUpgrade>
     <CUpgrade id="HellionDurabilityTraining">
         <Flags index="UpgradeCheat" value="0"/>
         <EffectArray Reference="Unit,SquadHellion,LifeArmor" Value="3"/>
         <EffectArray Reference="Unit,SquadHellion,ReviveInfoBase.Vital[Life]" Value="50"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
-    <CUpgrade id="HellionUpgradePlaceholder">
+    <CUpgrade id="VultureBroodMotherSpider">
         <Flags index="UpgradeCheat" value="0"/>
         <Alert value="ResearchComplete"/>
+        <EffectArray Reference="Abil,SquadSpiderMineMagazine,MaxCount" Value="3"/>
+        <EffectArray Reference="Unit,SquadVulture,LifeArmor" Value="2"/>
+        <EffectArray Reference="Unit,SquadVulture,LifeMax" Value="75"/>
+        <EffectArray Reference="Unit,SquadVulture,LifeStart" Value="75"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
-        <AffectedUnitArray value="SquadMedic"/>
+        <AffectedUnitArray value="SquadVulture"/>
     </CUpgrade>
-    <CUpgrade id="HellionUpgradePlaceholder2">
+    <CUpgrade id="VultureGoodNeighborhoodForever">
         <Flags index="UpgradeCheat" value="0"/>
         <Alert value="ResearchComplete"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
-        <AffectedUnitArray value="SquadMedic"/>
+        <AffectedUnitArray value="SquadVulture"/>
     </CUpgrade>
     <CUpgrade id="HellionProjectileAccelerators">
         <Flags index="UpgradeCheat" value="0"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadHellion"/>
     </CUpgrade>
     <!--Maximum life and energy + 100, life armor + 5, give ghost and spectre 10% damage for all types duration 15s, maximum 10 stack.-->
     <CUpgrade id="ScienceVesselGhostConditioning">
@@ -108,18 +119,18 @@
         <AffectedUnitArray value="SquadPlanetaryFortress"/>
         <AffectedUnitArray value="SquadGalaxyFortress"/>
     </CUpgrade>
-    <CUpgrade id="BattlecruiserSuperSmash">
+    <CUpgrade id="BattlecruiserUltraCapacitors">
         <Flags index="UpgradeCheat" value="0"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <AffectedUnitArray value="SquadBattlecruiser"/>
+        <EffectArray Reference="Effect,SquadHyperionGroundCP,PeriodCount" Value="4"/>
+        <EffectArray Reference="Effect,SquadHyperionAirCP,PeriodCount" Value="4"/>
+        <EffectArray Operation="Set" Reference="Weapon,SquadHyperionAirLaserBattery,DisplayAttackCount" Value="12"/>
+        <EffectArray Operation="Set" Reference="Weapon,SquadHyperionGroundLaserBattery,DisplayAttackCount" Value="12"/>
     </CUpgrade>
     <!--Mechanic unit will be disabled 0.5s while being attack by predator.-->
     <CUpgrade id="PredatorEnhancedElectorField">
         <Flags index="UpgradeCheat" value="0"/>
-        <EffectArray Operation="Set" Reference="Behavior,SquadHallucation,Modification.ShieldArmorMultiplier" Value="1"/>
-        <EffectArray Operation="Set" Reference="Behavior,SquadHallucation,Modification.LifeArmorMultiplier" Value="1"/>
-        <EffectArray Operation="Set" Reference="Behavior,SquadHallucinationTimedLife,Duration" Value="45.000000"/>
-        <EffectArray Operation="Set" Reference="Behavior,SquadHallucation,DamageResponse.ModifyFraction" Value="1"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <AffectedUnitArray value="SquadPredator"/>
     </CUpgrade>
@@ -140,7 +151,7 @@
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <AffectedUnitArray value="SquadFirebat"/>
     </CUpgrade>
-    <CUpgrade id="GhostTripleSnip">
+    <CUpgrade id="GhostTripleSnipe">
         <Flags index="UpgradeCheat" value="0"/>
         <Race value="Terr"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
@@ -261,7 +272,7 @@
         <AffectedUnitArray value="SquadOrbitalCommandFlying"/>
         <AffectedUnitArray value="SquadGlobalCaster"/>
     </CUpgrade>
-    <CUpgrade id="MarineSuperStimpack" parent="Research">
+    <CUpgrade id="MarineSuperCombatPack" parent="Research">
         <Flags index="TechTreeCheat" value="1"/>
         <InfoTooltipPriority value="2"/>
         <Icon value="Assets\Textures\btn-techupgrade-terran-combatshield-color.dds"/>
@@ -1660,5 +1671,18 @@
         <EffectArray Operation="Set" Reference="Behavior,SquadVikingFighterOvercharge,Duration" Value="15.000000"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <AffectedUnitArray value="SquadVikingA"/>
+    </CUpgrade>
+    <CUpgrade id="WarhoundMomentofSilence">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Race value="Terr"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadWarhound"/>
+    </CUpgrade>
+    <CUpgrade id="SiegeTankSiegeWeaponUpgrade">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Race value="Terr"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadSiegeTank"/>
+        <AffectedUnitArray value="SquadSiegeTankSieged"/>
     </CUpgrade>
 </Catalog>

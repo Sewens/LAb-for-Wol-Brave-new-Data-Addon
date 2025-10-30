@@ -173,10 +173,10 @@
         <Inherits index="Visibility" value="1"/>
         <AcceptedHostedPropTransfers index="TimeScale" value="0"/>
         <!-- Means we get props and bearings once, and then stop. -->
-        <On Terms="ActorCreation" Send="RefClear ::Host"/>
+        <!--On Terms="ActorCreation" Send="RefClear ::Host"/-->
         <On Terms="ActorCreation" Send="SetTintColor 255,255,255 0.600000"/>
-        <On Terms="ActorCreation" Target="ModelPretargetGround" Send="Destroy"/>
-        <On Terms="ActorCreation" Target="GroundPreSelection" Send="Destroy"/>
+        <!-- On Terms="ActorCreation" Target="ModelPretargetGround" Send="Destroy"/-->
+        <!-- On Terms="ActorCreation" Target="GroundPreSelection" Send="Destroy"/-->
         <On Terms="ActorCreation; ScopeContains _RedTintDeath" Send="SetTintColor 255,0,0"/>
         <On Terms="ActorCreation; ScopeContains _GreenTintDeath" Send="SetTintColor 0,255,0"/>
         <On Terms="ActorCreation; ScopeContains _BlueTintDeath" Send="SetTintColor 0,0,255"/>
@@ -217,12 +217,53 @@
         <HeightOffset value="1.500000"/>
         <Text value="Button/Tooltip/##id##"/>
     </CActorText>
+    <!--
+    <CActorModel id="SquadGuardianShield">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death ContentPlayOnce"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
+        <On Terms="Effect.GuardianShieldPersistent.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.GuardianShieldPersistent.Stop; At Caster" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="GuardianShield"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+-->
+    <CActorRange id="SquadGhostBlackOpsSnipeRange" parent="RangeAbil" abil="Snipe"/>
+    <CActorAction id="SquadGhostBlackOpsSnipeAttack" parent="GenericAttack" effectAttack="SquadSnipeBlackOpsDamage">
+        <LaunchSiteOps Ops="SOpAttachHarnessStationary"/>
+        <LaunchAssets Sound="Ghost_SnipeLaunch"/>
+        <ImpactMap index="None" Sound="Ghost_SnipeImpact"/>
+        <ImpactPhysics Name="GhostSnipeImpact" MatchKeys="Basic" Physics="GhostSnipeAttackDeathForce"/>
+    </CActorAction>
+    <CActorBeamSimple id="SquadGhostBlackOpsSnipeAttackBeam" parent="GenericAttackBeam"/>
+    <CActorAction id="SquadGhostBlackOpsSnipeTripleTapAttack" parent="GenericAttack" effectAttack="SquadSnipeBlackOpsTripleTapDamage">
+        <LaunchSiteOps Ops="SOpAttachHarnessStationary"/>
+        <LaunchAssets Sound="Ghost_SnipeLaunch"/>
+        <ImpactMap index="None" Sound="Ghost_SnipeImpact"/>
+        <ImpactPhysics Name="GhostSnipeImpact" MatchKeys="Basic" Physics="GhostSnipeAttackDeathForce"/>
+    </CActorAction>
+    <CActorBeamSimple id="SquadGhostBlackOpsSnipeTripleTapAttackBeam" parent="GenericAttackBeam">
+        <Model value="SquadGhostBlackOpsSnipeAttackBeam"/>
+    </CActorBeamSimple>
+    <CActorUnit id="SquadSiegeTankJumpJetPlaceholder" parent="GenericUnitStandard" unitName="SiegeTankJumpJetPlaceholder">
+        <Model value="Invisible"/>
+        <StatusBarFlags index="Shields" value="0"/>
+        <StatusBarFlags index="Life" value="0"/>
+        <StatusBarFlags index="Energy" value="0"/>
+        <StatusBarFlags index="Cargo" value="0"/>
+        <StatusBarFlags index="Progress" value="0"/>
+        <StatusBarFlags index="Duration" value="0"/>
+        <StatusBarFlags index="Magazine" value="0"/>
+    </CActorUnit>
     <CActorModel id="SquadSiegeTankSpiltShellAttackLaunch" parent="ModelAnimationStyleOneShot">
         <Host Subject="_Unit"/>
         <HostSiteOps Ops="SOpAttachWeapon00"/>
     </CActorModel>
     <CActorAction id="SquadSiegeTankSpiltShellInitialAttack" parent="GenericAttack" effectImpact="SquadSiegeTankSpiltShellInitialBlast" effectLaunch="SquadSiegeTankSpiltShellInitialLaunchMissile">
-        <On Terms="Effect.SquadSiegeTankSpiltShellInitialBlast.Start; At Caster" Send="Create"/>
         <LaunchAssets Model="SiegeBreakerSiegedAttackLaunch" Sound="SiegeTank_SiegedAttackLaunch"/>
         <ImpactSiteOps Ops="SOpActionCenter SOpTargetUnitZ" HoldPosition="1"/>
         <ImpactMap index="None" Model="SiegeBreakerSiegedAttackImpact" Sound="SiegeTank_SiegedAttackImpact"/>
@@ -232,13 +273,13 @@
         <DamageModel value="SquadSiegeTankAttackDamageModel"/>
         <ShieldFlashType value="Full"/>
     </CActorAction>
-    <CActorModel id="SquadSiegeTankSpiltShellFireAddition" parent="ModelAnimationStyleOneShot">
+    <!--CActorModel id="SquadSiegeTankSpiltShellFireAddition" parent="ModelAnimationStyleOneShot">
         <On Terms="Effect.SquadSiegeTankSpiltShellInitialBlast.Start; At Target" Send="Create"/>
         <On Terms="Effect.SquadSiegeTankSpiltShellSecondBlast.Start; At Target" Send="Create"/>
         <Host Subject="_Unit"/>
         <HostSiteOps Ops="SOpAttachHead"/>
         <Model value="HellionTankAttackFireAddition"/>
-    </CActorModel>
+    </CActorModel-->
     <CActorModel id="SquadSiegeTankSpiltShellInitialImpactModel" parent="ModelAnimationStyleOneShot">
         <On Terms="Effect.SquadSiegeTankSpiltShellInitialBlast.Start" Send="Create"/>
         <Model value="SiegeBreakerSiegedAttackImpact"/>
@@ -435,7 +476,7 @@
         <Behavior value="Detector8"/>
         <IconArcLength value="3.000000"/>
     </CActorRange>
-    <CActorSplat id="SquadSensorTowerCCPowerRadius" unitName="SquadCommandCenter">
+    <CActorSplat id="SquadSensorTowerCCPowerSplat" unitName="SquadSensorTower">
         <Aliases value="_Snapshot"/>
         <Inherits index="CloakEffect" value="1"/>
         <Inherits index="Decal" value="1"/>
@@ -443,11 +484,16 @@
         <Supporter Subject="::Creator"/>
         <On Terms="SupporterDestruction" Send="Destroy"/>
         <On Terms="ActorOrphan" Send="Destroy"/>
-        <On Terms="Behavior.SquadSensorTowerCCPowerSource.Create" Send="Create"/>
-        <On Terms="Behavior.SquadSensorTowerCCPowerSource.Destroy" Send="Destroy"/>
-        <Host Subject="_Selectable"/>
-        <Color value="128,255,251,176"/>
-        <Model value="PowerVisualFast"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Stand"/>
+        <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
+        <HostSiteOps Ops="SOpShadow SOpForwardNorth"/>
+        <Color value="0,255,215,0"/>
+        <Model value="KaraxPowerVisual"/>
+        <FadeIn value="0.000000"/>
+        <FadeOut value="0.000000"/>
+        <Layer value="PowerLayer"/>
+        <HoldTime value="-1.000000"/>
+        <Scale value="2.000000"/>
     </CActorSplat>
     <CActorEventMacro id="SquadReviveAnimationMacroUnit">
         <On Terms="UnitDeath" Send="StatusSet Dead 1"/>
@@ -469,15 +515,15 @@
     </CActorEventMacro>
     <CActorEventMacro id="SquadDeathAnimationMacroUnit">
         <!--On Terms="UnitDeath; IsStatus AnimateDead 0" Send="AnimBracketStart Death Death Decay,Flesh Decay,Bone ContentPlayOnce"/-->
-        <On Terms="AnimBracketState.*.AfterClosing; AnimName Death; HasStatus Dead" Send="Destroy"/>
+        <!--On Terms="AnimBracketState.*.AfterClosing; AnimName Death; HasStatus Dead" Send="Destroy"/-->
         <On Terms="AnimPlay; AnimName Flesh; ValidateUnit IsDead" Send="AnimSetDuration Flesh 43.000000"/>
         <On Terms="AnimDone; AnimName Flesh; HasStatus Dead" Send="AnimPlay Bone Death NonLooping -1.000000 -1.000000 45.000000 AsDuration"/>
         <On Terms="AnimDone; AnimName Bone; HasStatus Dead" Send="Destroy"/>
         <On Terms="AnimDone; AnimName Death; HasStatus Dead" Send="AnimPlay Flesh Death NonLooping"/>
         <On Terms="UnitDeath; !HasStatus DeathPaused" Send="$Death NonLooping"/>
-        <On Terms="AnimDone; AnimName Death; HasStatus Dead; !ValidateUnit IsDead" Send="Destroy"/>
+        <!--On Terms="AnimDone; AnimName Death; HasStatus Dead; !ValidateUnit IsDead" Send="Destroy"/-->
         <On Terms="AnimDone; AnimName Flesh; HasStatus Dead; !ValidateUnit IsDead" Send="Destroy"/>
-        <On Terms="AnimDone; AnimName Death; HasStatus Dead; IsStatus NoDecay 1" Send="Destroy"/>
+        <!--On Terms="AnimDone; AnimName Death; HasStatus Dead; IsStatus NoDecay 1" Send="Destroy"/-->
         <On Terms="UnitDeath" Send="SetTeamColor 0,0,0 0,0,0 0.500000 OneShot Dead"/>
         <On Terms="UnitDeath" Send="SetTintColor 160,160,160 0.500000 OneShot Dead"/>
         <On Terms="UnitRevive" Send="ClearTintColor 0.500000 Dead"/>
@@ -587,7 +633,7 @@
     <CActorRange id="SquadCaptainNovaCanisterRifleSnipeRange" parent="RangeAbil" abil="SquadCaptainNovaSnipe"/>
     <CActorSound id="SquadCaptainNovaSnipeTailExterior" parent="SoundOneShot">
         <Terms value="SoundIsFinalSound"/>
-        <Sound value="SquadCaptainNovaSniperRifleTail_Dummy"/>
+        <Sound value="SquadCaptainNovaSniperRifleTailDummy"/>
         <Layers>
             <Sound value="Nova_Snipe_TailExterior"/>
             <PitchSource value="Sound"/>
@@ -600,7 +646,7 @@
         </Layers>
     </CActorSound>
     <CActorSound id="SquadCaptainNovaSniperRifleAttackLaunchTailSound" parent="SoundOneShot">
-        <Sound value="SquadCaptainNovaSniperRifleTail_Dummy"/>
+        <Sound value="SquadCaptainNovaSniperRifleTailDummy"/>
         <Layers>
             <Sound value="SquadCaptainNovaAttackLaunch_MechySweetener"/>
             <PitchSource value="Sound"/>
@@ -657,10 +703,10 @@
         <On Terms="UnitDeathCustomize; PassChance 100.000000; !ValidateUnit IsNotNeuralParasited" Send="Create Marine_Death_NP"/>
         <On Terms="UnitDeathCustomize; ValidateUnit IsCelestialBurning" Send="DeathCustomize Variation14"/>
         <On Terms="UnitDeathCustomize; ValidateUnit IsCelestialBurning" Send="DeathCustomize RagdollFire"/>
-        <Model value="Marine_death_dance"/>
+        <Model value="Marine"/>
         <ModelFlags index="UpdateVisibility" value="0"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
-        <BuildModel value="Marine_death_dance"/>
+        <BuildModel value="Marine"/>
         <DeathArray index="Normal" ModelLink="Marine_death_dance" SoundLink="Marine_DeathFXBloodSpray"/>
         <DeathArray index="Blast" ModelLink="Marine_death_dance"/>
         <DeathArray index="Disintegrate" ModelLink="Marine_death_dance" SoundLink="Uni_DeathFXAcid"/>
@@ -905,7 +951,21 @@
         <Host Subject="_Selectable"/>
         <Sound value="Artanis_AstralWind"/>
     </CActorSound>
-    <CActorModel id="SquadSeigeTankJumpJetLandingModel">
+    <!--CActorSplat id="SquadSiegeTankJumpJetCursorSplat" abil="SquadSiegeTankJumpJetRedeploy">
+        <Aliases value="_Scalable"/>
+        <FogVisibility value="Visible"/>
+        <HoldTime value="-1.000000"/>
+        <FadeOut value="0.000000"/>
+        <Layer value="AOELayer"/>
+        <On Terms="Abil.SquadSiegeTankJumpJetRedeploy.Cursor" Send="Create"/>
+        <On Terms="ActorCreation" Send="Create CursorRegion"/>
+        <On Terms="ActorDestruction" Target="CursorRegion" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <HostSiteOps Ops="SOpBasicScopeFollow"/>
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <Model value="SiegeTankPlacement"/>
+    </CActorSplat-->
+    <CActorModel id="SquadSiegeTankJumpJetLandingModel">
         <Flags index="SuppressSaveLoad" value="1"/>
         <Inherits index="BaseModelScale" value="1"/>
         <Inherits index="CloakEffect" value="1"/>
@@ -919,13 +979,23 @@
         <Model value="SquadUnloadFX"/>
         <AutoScaleFactor value="1.000000"/>
     </CActorModel>
-    <CActorModel id="SquadSeigeTankJumpJetLaunchModel" parent="ModelAnimationStyleContinuous">
+    <CActorModel id="SquadSiegeTankJumpJetLaunchModel" parent="ModelAnimationStyleContinuous">
         <On Terms="Effect.SquadSiegeTankJumpJetCreateCP.Start; At Caster" Send="Create"/>
         <On Terms="Effect.SquadSiegeTankJumpJetCreateCP.Stop" Send="Destroy"/>
-        <Model value="SquadSiegeTankJumpJetLaunchModel"/>
     </CActorModel>
-    <CActorRange id="SquadSeigeTankJumpJetRange" parent="RangeAbil" abil="SquadSiegeTankJumpJetRedeploy"/>
-    <CActorSound id="SquadSeigeTankJumpJetLaunchActorSound" parent="SoundOneShot">
+    <CActorRange id="SquadSiegeTankJumpJetRange">
+        <On Terms="Abil.SquadSiegeTankJumpJetRedeploy.TargetOn" Send="Create"/>
+        <On Terms="Abil.SquadSiegeTankJumpJetRedeploy.TargetOff" Send="Destroy"/>
+        <On Terms="Abil.SquadSiegeTankJumpJetRedeploy.ButtonHoverOn" Send="Create"/>
+        <On Terms="Abil.SquadSiegeTankJumpJetRedeploy.ButtonHoverOff" Send="Destroy"/>
+        <HostSiteOps Ops=""/>
+        <Range value="8.000000"/>
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="1.500000"/>
+        <Host Subject="_Unit"/>
+        <Abil Link="SquadSiegeTankJumpJetRedeploy"/>
+    </CActorRange>
+    <CActorSound id="SquadSiegeTankJumpJetLaunchActorSound" parent="SoundOneShot">
         <On Terms="Effect.SquadSiegeTankJumpJetCreateCP.Start; At Caster" Send="Create"/>
         <Sound value="SiegeTank_JumpJet_Launch"/>
     </CActorSound>
@@ -1059,7 +1129,7 @@
         <On Terms="ActorCreation" Target="_Selectable" Send="AnimSetPausedAll"/>
         <On Terms="Behavior.SquadVoidStasis.Off" Target="_Selectable" Send="AnimSetPausedAll 0"/>
     </CActorSimple>
-    <CActorRange id="SquadVoidStasisRange" parent="RangeAbil" abil="SquadVoidStasis">
+    <CActorRange id="SquadVoidStasisRange" parent="RangeAbil" abil="SquadReaperVoidStasis">
         <Icon value="Assets\Textures\RadarIcon2.dds"/>
         <IconArcLength value="3.250000"/>
     </CActorRange>
@@ -1563,7 +1633,6 @@
     </CActorModel>
     <CActorSimple id="SquadFrostNovaCasterAnim" parent="SquadSimpleCastAnim">
         <On index="0" Terms="Abil.SquadFrostNova.SourcePrepStart" Target="_Selectable" Send="AnimPlay spell Spell NonLooping -1.000000 -1.000000 1.000000 AsTimeScaleAbsolute"/>
-        <On index="1" Terms="Abil.SquadFrostNova.SourcePrepStart" Send="Create EffectSoundOneShot ##effectsound##"/>
         <On index="2" Terms="Abil.SquadFrostNova.SourcePrepStart" Send="Create"/>
         <On index="3" Terms="Abil.SquadFrostNova.SourcePrepStop" Send="Destroy"/>
     </CActorSimple>
@@ -1626,6 +1695,8 @@
         <Macros value="TerranPlanetaryFortressPlayerDecalMacro"/>
         <Macros value="SnowVisualBuildingMacro"/>
         <AcceptedHostedPropTransfers index="Decal" value="0"/>
+        <On Terms="SelectionLocalUpdate.SquadGalaxyFortress.Start" Send="Create SquadCommandCenterPowerSplat"/>
+        <On Terms="SelectionLocalUpdate.SquadGalaxyFortress.Stop" Target="SquadCommandCenterPowerSplat" Send="Destroy"/>
         <On Terms="ActorCreation" Send="AnimGroupApply A"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom SquadPlanetaryFortress; MorphTo SquadGalaxyFortress" Send="Create"/>
         <On Terms="Abil.*.TransportOccupy" Send="AnimPlay StandC Stand,Work,C PlayForever"/>
@@ -2508,7 +2579,7 @@
         <IconArcLength value="1.500000"/>
         <IconTint value="255,254,105,132"/>
     </CActorRange>
-    <CActorSplat id="SquadTechlabPowerRadius" unitName="SquadTechLab">
+    <CActorSplat id="SquadTechlabPowerSplat" unitName="SquadTechLab">
         <Aliases value="_Snapshot"/>
         <Inherits index="CloakEffect" value="1"/>
         <Inherits index="Decal" value="1"/>
@@ -2516,12 +2587,15 @@
         <Supporter Subject="::Creator"/>
         <On Terms="SupporterDestruction" Send="Destroy"/>
         <On Terms="ActorOrphan" Send="Destroy"/>
-        <On Terms="UnitBirth.SquadTechlab" Send="Create"/>
-        <On Terms="Behavior.SquadTechlabPowerSource.Create" Send="Create"/>
-        <On Terms="Behavior.SquadTechlabPowerSource.Destroy" Send="Destroy"/>
-        <Host Subject="_Selectable"/>
-        <Color value="128,41,250,244"/>
-        <Model value="PowerVisualFast"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Stand"/>
+        <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
+        <HostSiteOps Ops="SOpShadow SOpForwardNorth"/>
+        <Model value="KaraxPowerVisual"/>
+        <FadeIn value="0.000000"/>
+        <FadeOut value="0.000000"/>
+        <HoldTime value="-1.000000"/>
+        <Layer value="PowerLayer"/>
+        <Color value="80,255,255,255"/>
     </CActorSplat>
     <CActorModel id="SquadVikingGDeathRagdoll">
         <Aliases value="_Main"/>
@@ -4138,6 +4212,8 @@
         <Macros value="PhysicsDeathsVoidGround"/>
         <Inherits index="ModelMaterials" value="1"/>
         <AcceptedTransfers index="ModelMaterials" value="1"/>
+        <On Terms="SelectionLocalUpdate.SquadSiegeTank.Start" Target="SquadSiegeTankJumpJetRange" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.SquadSiegeTank.Stop" Target="SquadSiegeTankJumpJetRange" Send="Destroy"/>
         <On Terms="UnitHeightUpdate.*.Land" Send="Create SquadSiegeTankLand"/>
         <On Terms="UnitDeathCustomize; ValidateUnit HaveVoidShade" Send="DeathCustomize Shadow"/>
         <On Terms="UnitDeathCustomize; ValidateUnit HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
@@ -5090,7 +5166,7 @@
     <CActorSplat id="SquadForgeSplat" parent="GenericUnitSplat" unitName="SquadForge">
         <Model value="ForgeSplat"/>
     </CActorSplat>
-    <CActorSplat id="SquadCommandCenterRadius" unitName="SquadCommandCenter">
+    <CActorSplat id="SquadCommandCenterPowerSplat" unitName="SquadCommandCenter">
         <Aliases value="_Snapshot"/>
         <Inherits index="CloakEffect" value="1"/>
         <Inherits index="Decal" value="1"/>
@@ -5098,11 +5174,15 @@
         <Supporter Subject="::Creator"/>
         <On Terms="SupporterDestruction" Send="Destroy"/>
         <On Terms="ActorOrphan" Send="Destroy"/>
-        <On Terms="Behavior.SquadCommandCenterPowerSource.Create" Send="Create"/>
-        <On Terms="Behavior.SquadCommandCenterPowerSource.Destroy" Send="Destroy"/>
-        <Host Subject="_Selectable"/>
-        <Color value="128,255,251,176"/>
-        <Model value="PowerVisualFast"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Stand"/>
+        <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
+        <HostSiteOps Ops="SOpShadow SOpForwardNorth"/>
+        <Color value="80,255,215,0"/>
+        <Model value="KaraxPowerVisual"/>
+        <FadeIn value="0.000000"/>
+        <FadeOut value="0.000000"/>
+        <Layer value="PowerLayer"/>
+        <HoldTime value="-1.000000"/>
     </CActorSplat>
     <!--CActorModel id="SquadBunkerShrikeTurretPlacement">
         <Flags index="SuppressSaveLoad" value="1"/>
@@ -5189,7 +5269,7 @@
     <CActorSplat id="SquadReactorSplat" parent="GenericUnitSplat" unitName="SquadReactor">
         <Model value="ReactorSplat"/>
     </CActorSplat>
-    <CActorSplat id="SquadFactoryPowerRadius" unitName="SquadFactory">
+    <CActorSplat id="SquadFactoryPowerSplat" unitName="SquadFactory">
         <Aliases value="_Snapshot"/>
         <Inherits index="CloakEffect" value="1"/>
         <Inherits index="Decal" value="1"/>
@@ -5197,13 +5277,17 @@
         <Supporter Subject="::Creator"/>
         <On Terms="SupporterDestruction" Send="Destroy"/>
         <On Terms="ActorOrphan" Send="Destroy"/>
-        <On Terms="Behavior.SquadFactoryPowerSource.Create" Send="Create"/>
-        <On Terms="Behavior.SquadFactoryPowerSource.Destroy" Send="Destroy"/>
-        <Host Subject="_Selectable"/>
-        <Color value="128,255,176,232"/>
-        <Model value="PowerVisualFast"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Stand"/>
+        <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
+        <HostSiteOps Ops="SOpShadow SOpForwardNorth"/>
+        <Color value="80,26,255,26"/>
+        <Model value="KaraxPowerVisual"/>
+        <FadeIn value="0.000000"/>
+        <FadeOut value="0.000000"/>
+        <HoldTime value="-1.000000"/>
+        <Layer value="PowerLayer"/>
     </CActorSplat>
-    <CActorSplat id="SquadStarportPowerRadius" unitName="SquadStarport">
+    <CActorSplat id="SquadStarportPowerSplat" unitName="SquadStarport">
         <Aliases value="_Snapshot"/>
         <Inherits index="CloakEffect" value="1"/>
         <Inherits index="Decal" value="1"/>
@@ -5211,11 +5295,15 @@
         <Supporter Subject="::Creator"/>
         <On Terms="SupporterDestruction" Send="Destroy"/>
         <On Terms="ActorOrphan" Send="Destroy"/>
-        <On Terms="Behavior.SquadStarportPowerSource.Create" Send="Create"/>
-        <On Terms="Behavior.SquadStarportPowerSource.Destroy" Send="Destroy"/>
-        <Host Subject="_Selectable"/>
-        <Color value="128,255,176,232"/>
-        <Model value="PowerVisualFast"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Stand"/>
+        <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
+        <HostSiteOps Ops="SOpShadow SOpForwardNorth"/>
+        <Color value="80,251,0,6"/>
+        <Model value="KaraxPowerVisual"/>
+        <FadeIn value="0.000000"/>
+        <FadeOut value="0.000000"/>
+        <HoldTime value="-1.000000"/>
+        <Layer value="PowerLayer"/>
     </CActorSplat>
     <CActorSound id="SquadMuleliskGatherMinerals" parent="SoundContinuous">
         <On Terms="Abil.SquadMuleliskGather.Start" Send="Create"/>
@@ -5291,19 +5379,20 @@
         <HostSiteOps Ops="SOpAttachRollingWeaponStripe"/>
         <Model value="ShrikeTurretAttackLaunch"/>
     </CActorModel>
-    <CActorSplat id="SquadBarracksPowerRadius" unitName="SquadBarracks">
+    <CActorSplat id="SquadBarracksPowerSplat" parent="PowerVisual" unitName="SquadBarracks">
         <Aliases value="_Snapshot"/>
         <Inherits index="CloakEffect" value="1"/>
         <Inherits index="Decal" value="1"/>
         <Inherits index="Visibility" value="1"/>
         <Supporter Subject="::Creator"/>
+        <On Terms="ActorCreation" Target="_Selectable" Send="SetOpacity 1.000000"/>
         <On Terms="SupporterDestruction" Send="Destroy"/>
         <On Terms="ActorOrphan" Send="Destroy"/>
-        <On Terms="Behavior.SquadBarrackPowerSource.Create" Send="Create"/>
-        <On Terms="Behavior.SquadBarrackPowerSource.Destroy" Send="Destroy"/>
-        <Host Subject="_Selectable"/>
-        <Color value="128,255,251,176"/>
-        <Model value="PowerVisualFast"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Stand"/>
+        <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
+        <HostSiteOps Ops="SOpShadow SOpForwardNorth"/>
+        <Color value="255,116,50,252"/>
+        <Model value="KaraxPowerVisual"/>
     </CActorSplat>
     <CActorSplat id="SquadTechReactorSplat" parent="GenericUnitSplat" unitName="SquadTechReactor">
         <Model value="ReactorSplat"/>
@@ -5520,6 +5609,8 @@
     <CActorUnit id="SquadFactory" parent="TerranBuildingFlyerEx" unitName="SquadFactory">
         <Macros value="SnowVisualBuildingMacro"/>
         <On Terms="UnitDeathCustomize.SquadFactoryFlying" Send="DeathCustomize Flying"/>
+        <On Terms="SelectionLocalUpdate.SquadFactory.Start" Send="Create SquadFactoryPowerSplat"/>
+        <On Terms="SelectionLocalUpdate.SquadFactory.Stop" Target="SquadFactoryPowerSplat" Send="Destroy"/>
         <Model value="Factory_CovertOps"/>
         <BuildModel value="Factory_CovertOps_Build"/>
         <DeathArray index="Normal" ModelLink="Factory_CovertOps_Death" VoiceLink="Factory_Explode"/>
@@ -5719,6 +5810,8 @@
         <Macros value="TerranPlanetaryFortressPlayerDecalMacro"/>
         <Macros value="SnowVisualBuildingMacro"/>
         <AcceptedHostedPropTransfers index="Decal" value="0"/>
+        <On Terms="SelectionLocalUpdate.SquadPlanetaryFortress.Start" Send="Create SquadCommandCenterPowerSplat"/>
+        <On Terms="SelectionLocalUpdate.SquadPlanetaryFortress.Stop" Target="SquadCommandCenterPowerSplat" Send="Destroy"/>
         <!--On Terms="ActorCreation" Send="AnimGroupRemove A"/-->
         <On Terms="AbilMorph.*.Finish; MorphFrom SquadPlanetaryFortress; MorphTo SquadGalaxyFortress" Send="Destroy"/>
         <On Terms="AbilMorph.*.Start; MorphFrom SquadPlanetaryFortress; MorphTo SquadGalaxyFortress" Send="AnimGroupApply A"/>
@@ -5860,7 +5953,7 @@
         <IconArcLength value="1.500000"/>
         <IconTint value="255,0,255,255"/>
     </CActorRange>
-    <CActorSplat id="SquadReactorPowerRadius" unitName="SquadReactor">
+    <CActorSplat id="SquadReactorPowerSplat" unitName="SquadReactor">
         <Aliases value="_Snapshot"/>
         <Inherits index="CloakEffect" value="1"/>
         <Inherits index="Decal" value="1"/>
@@ -5868,16 +5961,21 @@
         <Supporter Subject="::Creator"/>
         <On Terms="SupporterDestruction" Send="Destroy"/>
         <On Terms="ActorOrphan" Send="Destroy"/>
-        <On Terms="UnitBirth.SquadReactor" Send="Create"/>
-        <On Terms="Behavior.SquadReactorPowerSource.Create" Send="Create"/>
-        <On Terms="Behavior.SquadReactorPowerSource.Destroy" Send="Destroy"/>
-        <Host Subject="_Selectable"/>
-        <Color value="128,41,250,244"/>
-        <Model value="PowerVisualFast"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Stand"/>
+        <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
+        <HostSiteOps Ops="SOpShadow SOpForwardNorth"/>
+        <Color value="80,68,255,251"/>
+        <Model value="KaraxPowerVisual"/>
+        <FadeIn value="0.000000"/>
+        <FadeOut value="0.000000"/>
+        <HoldTime value="-1.000000"/>
+        <Layer value="PowerLayer"/>
     </CActorSplat>
     <CActorUnit id="SquadReactor" parent="ReactorBase" unitName="SquadReactor">
         <Macros value="SnowVisualBuildingMacro"/>
         <Macros value="SquadTerranAttachmentAnims"/>
+        <On Terms="SelectionLocalUpdate.SquadReactor.Start" Send="Create SquadReactorPowerSplat"/>
+        <On Terms="SelectionLocalUpdate.SquadReactor.Stop" Target="SquadReactorPowerSplat" Send="Destroy"/>
         <On Terms="AbilMorph.*.Finish; MorphTo SquadTechReactor" Target="SquadReactorSplat" Send="Destroy"/>
         <On Terms="AbilMorph.*.Finish; MorphTo SquadTechReactor" Send="Destroy"/>
         <On Terms="AbilMorph.*.Finish; MorphTo SquadTechReactor" Target="SquadReactorSplat" Send="Destroy"/>
@@ -5938,6 +6036,8 @@
         <Macros value="SnowVisualBuildingMacro"/>
         <Model value="SensorTower_Silver"/>
         <BuildModel value="SensorTower_Silver_Build"/>
+        <On Terms="SelectionLocalUpdate.SquadSensorTower.Start" Send="Create SquadSensorTowerCCPowerSplat"/>
+        <On Terms="SelectionLocalUpdate.SquadSensorTower.Stop" Target="SquadSensorTowerCCPowerSplat" Send="Destroy"/>
         <DeathArray index="Normal" ModelLink="SensorTower_Silver_Death" SoundLink="SensorTower_Explode"/>
         <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="SensorTower_Explode"/>
         <PlacementModel value="SensorTower_Silver_Placement"/>
@@ -6021,6 +6121,8 @@
         <AcceptedHostedPropTransfers index="Decal" value="0"/>
         <On Terms="ActorCreation" Send="AnimGroupRemove A"/>
         <On Terms="ActorCreation" Send="AnimGroupRemove B"/>
+        <On Terms="SelectionLocalUpdate.SquadCommandCenter.Start" Send="Create SquadCommandCenterPowerSplat"/>
+        <On Terms="SelectionLocalUpdate.SquadCommandCenter.Stop" Target="SquadCommandCenterPowerSplat" Send="Destroy"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom SquadCommandCenter; MorphTo SquadOrbitalCommand" Send="Destroy"/>
         <On Terms="AbilMorph.*.Start; MorphFrom SquadCommandCenter; MorphTo SquadOrbitalCommand" Send="AnimGroupApply B"/>
         <On Terms="AbilMorph.*.Start; MorphFrom SquadCommandCenter; MorphTo SquadOrbitalCommand" Send="AnimBaselineStop"/>
@@ -6268,6 +6370,8 @@
     <CActorUnit id="SquadBarracks" parent="TerranBuildingFlyerEx" unitName="SquadBarracks">
         <Macros value="SnowVisualBuildingMacro"/>
         <On Terms="UnitDeathCustomize.BarracksFlying" Send="DeathCustomize Flying"/>
+        <On Terms="SelectionLocalUpdate.SquadBarracks.Start" Send="Create SquadBarracksPowerSplat"/>
+        <On Terms="SelectionLocalUpdate.SquadBarracks.Stop" Target="SquadBarracksPowerSplat" Send="Destroy"/>
         <Model value="Barracks_Silver"/>
         <BuildModel value="Barracks_Silver_Build"/>
         <DeathArray index="Normal" ModelLink="Barracks_Silver_Death"/>
@@ -6467,6 +6571,8 @@
         <Macros value="TerranOrbitalCommandPlayerDecalMacro"/>
         <Macros value="SnowVisualBuildingMacro"/>
         <AcceptedHostedPropTransfers index="Decal" value="0"/>
+        <On Terms="SelectionLocalUpdate.SquadOrbitalCommand.Start" Send="Create SquadCommandCenterPowerSplat"/>
+        <On Terms="SelectionLocalUpdate.SquadOrbitalCommand.Stop" Target="SquadCommandCenterPowerSplat" Send="Destroy"/>
         <On Terms="UnitBirth.SquadOrbitalCommand" Send="AnimGroupApply B {} {} Instant"/>
         <On Terms="UnitBirth.SquadOrbitalCommandFlying" Send="AnimGroupApply B {} {} Instant"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom SquadCommandCenter; MorphTo SquadOrbitalCommand" Send="Create"/>
@@ -8032,6 +8138,8 @@
     <CActorUnit id="SquadStarport" parent="TerranBuildingFlyerEx" unitName="SquadStarport">
         <Macros value="SnowVisualBuildingMacro"/>
         <On Terms="UnitDeathCustomize.SquadStarportFlying" Send="DeathCustomize Flying"/>
+        <On Terms="SelectionLocalUpdate.SquadStarport.Start" Send="Create SquadStarportPowerSplat"/>
+        <On Terms="SelectionLocalUpdate.SquadStarport.Stop" Target="SquadStarportPowerSplat" Send="Destroy"/>
         <Model value="Starport_CovertOps"/>
         <BuildModel value="Starport_CovertOps_Build"/>
         <DeathArray index="Normal" ModelLink="Starport_CovertOps_Death"/>
@@ -8260,6 +8368,8 @@
         <Macros value="SquadQueueAnim"/>
         <Macros value="SquadTerranAttachmentAnims"/>
         <Aliases value="_UnitLarge"/>
+        <On Terms="SelectionLocalUpdate.SquadTechlab.Start" Send="Create SquadTechlabPowerSplat"/>
+        <On Terms="SelectionLocalUpdate.SquadTechlab.Stop" Target="SquadTechlabPowerSplat" Send="Destroy"/>
         <DeathArray index="Normal" ModelLink="TechLab_Silver_Death" SoundLink="TechLab_Explode"/>
         <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="TechLab_Explode"/>
         <DeathCustoms ModelLink="TechLab_Silver_Detached_Death" Name="Detached"/>

@@ -60,6 +60,24 @@
         </Fidget>
         <AlliedPushPriority value="11"/>
     </CUnit>
+    <CUnit id="SiegeTankJumpJetPlaceholder" parent="PLACEHOLDER">
+        <DeathRevealRadius value="3"/>
+        <Race value="Terr"/>
+        <Collide index="Structure" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="10"/>
+        <Radius value="0.375"/>
+        <SeparationRadius value="0.375"/>
+        <MinimapRadius value="0.375"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
+        <LeaderAlias value=""/>
+        <HotkeyAlias value=""/>
+    </CUnit>
     <CUnit id="SquadMarineCorpseDummy">
         <DeathTime value="90"/>
         <DeathRevealRadius value="3"/>
@@ -409,7 +427,6 @@
         <AbilArray Link="SquadCommandCenterTrain"/>
         <AbilArray Link="SquadQueue5"/>
         <AbilArray Link="CommandCenterTransport"/>
-        <AbilArray Link="SquadCalldownDefenderCoreAnchor"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="SquadReactorPowerUserForDefenceStructure"/>
         <BehaviorArray Link="SquadReactorPowerUser"/>
@@ -427,7 +444,6 @@
             <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Cancel" Row="2" Column="4"/>
             <LayoutButtons Face="SCV" Type="AbilCmd" AbilCmd="SquadCommandCenterTrain,Train1" Row="0" Column="0"/>
             <LayoutButtons Face="Rally" Type="AbilCmd" AbilCmd="SquadCommandCenterRally,Rally1" Row="1" Column="4"/>
-            <LayoutButtons Face="SquadCalldownDefenderCoreAnchor" Type="AbilCmd" AbilCmd="SquadCalldownDefenderCoreAnchor,Execute" Row="0" Column="1"/>
         </CardLayouts>
         <Radius value="2.5"/>
         <SeparationRadius value="2.5"/>
@@ -2365,7 +2381,6 @@
         <AbilArray Link="SquadQueue5"/>
         <AbilArray Link="CommandCenterTransport"/>
         <AbilArray Link="SquadUpgradeToGalaxyFortress"/>
-        <AbilArray Link="SquadCalldownDefenderCoreAnchor"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="SquadCommandCenterPowerSource"/>
         <BehaviorArray Link="SquadReactorPowerUser"/>
@@ -2385,7 +2400,6 @@
             <LayoutButtons Face="SCV" Type="AbilCmd" AbilCmd="SquadCommandCenterTrain,Train1" Row="0" Column="0"/>
             <LayoutButtons Face="Rally" Type="AbilCmd" AbilCmd="SquadCommandCenterRally,Rally1" Row="1" Column="4"/>
             <LayoutButtons Face="UpgradetoGalaxyFortress" Type="AbilCmd" AbilCmd="SquadUpgradeToGalaxyFortress,Execute" Row="0" Column="2"/>
-            <LayoutButtons Face="SquadCalldownDefenderCoreAnchor" Type="AbilCmd" AbilCmd="SquadCalldownDefenderCoreAnchor,Execute" Row="0" Column="1"/>
         </CardLayouts>
         <Radius value="2.5"/>
         <SeparationRadius value="2.5"/>
@@ -3404,7 +3418,7 @@
         <AbilArray Link="SquadBarracksLiftOff"/>
         <AbilArray Link="SquadBuildinProgress"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
-        <BehaviorArray Link="SquadBarrackPowerSource"/>
+        <BehaviorArray Link="SquadBarracksPowerSource"/>
         <BehaviorArray Link="SquadReactorPowerUser"/>
         <BehaviorArray Link="SquadTechlabPowerUser"/>
         <CardLayouts>
@@ -3475,7 +3489,7 @@
         <AbilArray index="4" removed="1"/>
         <AbilArray index="5" removed="1"/>
         <BehaviorArray index="1" Link="SquadTechlabPowerUser"/>
-        <BehaviorArray index="3" Link="SquadBarrackPowerSource"/>
+        <BehaviorArray index="3" Link="SquadBarracksPowerSource"/>
         <CardLayouts index="0">
             <LayoutButtons index="0" Face="SquadLand" Type="AbilCmd" AbilCmd="SquadBarracksLand,Execute" Row="2" Column="3"/>
             <LayoutButtons index="1" Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
@@ -4027,7 +4041,7 @@
         <AbilArray Link="QueueMagazine"/>
         <AbilArray Link="AddPredatorToSquad"/>
         <AbilArray Link="DisbandSquad"/>
-        <AbilArray Link="SquadJumpJetAssault"/>
+        <AbilArray Link="SquadPredatorJumpJetAssault"/>
         <BehaviorArray Link="SquadJump"/>
         <WeaponArray Link="SquadPredatorTitaniumClaws"/>
         <CardLayouts>
@@ -4041,7 +4055,7 @@
             <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="3"/>
             <LayoutButtons Face="Enband" Type="AbilCmd" AbilCmd="AddPredatorToSquad,Execute" Row="1" Column="4"/>
             <LayoutButtons Face="SquadGiftTooltips" Type="Submenu" SubmenuCardId="Gift" Row="1" Column="2"/>
-            <LayoutButtons Face="SquadJumpJetAssault" Type="AbilCmd" AbilCmd="SquadJumpJetAssault,Execute" Row="1" Column="0"/>
+            <LayoutButtons Face="SquadPredatorJumpJetAssault" Type="AbilCmd" AbilCmd="SquadPredatorJumpJetAssault,255" Row="1" Column="0"/>
         </CardLayouts>
         <CardLayouts CardId="Gift">
             <LayoutButtons Face="HugeLifeandRegen" Type="Passive" Row="0" Column="0"/>
@@ -4410,6 +4424,7 @@
         <AbilArray Link="QueueMagazine"/>
         <AbilArray Link="DisbandSquad"/>
         <AbilArray Link="AddGhostToSquad"/>
+        <AbilArray Link="SquadGhostTripleSnipe"/>
         <WeaponArray Link="SquadGhostC10CanisterRifle"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -4418,7 +4433,8 @@
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
             <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="GreenNuclearStrike,255" Row="2" Column="4"/>
             <LayoutButtons Face="AttackGhost" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
-            <LayoutButtons Face="SquadGhostSniperRound" Type="AbilCmd" AbilCmd="SquadGhostSnipe,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="SquadGhostSnipe" Type="AbilCmd" AbilCmd="SquadGhostSnipe,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="SquadGhostTripleSnipe" Type="AbilCmd" AbilCmd="SquadGhostTripleSnipe,Execute" Row="2" Column="0"/>
             <LayoutButtons Face="SquadNukeCallDown" Type="AbilCmd" AbilCmd="GreenNuclearStrike,255" Row="2" Column="3"/>
             <LayoutButtons Face="SquadGhostEMPRound" Type="AbilCmd" AbilCmd="SquadGhostEMP,Execute" Row="2" Column="1"/>
             <LayoutButtons Face="Enband" Type="AbilCmd" AbilCmd="AddGhostToSquad,Execute" Row="1" Column="4"/>
@@ -4468,7 +4484,7 @@
         <AbilArray index="4" Link="QueueMagazine"/>
         <AbilArray Link="DisbandSquad"/>
         <AbilArray Link="AddReaperToSquad"/>
-        <AbilArray Link="SquadVoidStasis"/>
+        <AbilArray Link="SquadReaperVoidStasis"/>
         <CardLayouts index="0">
             <LayoutButtons index="5" Face="SquadReaperJetPack" AbilCmd="255,255" Column="0"/>
             <LayoutButtons index="6" Face="Enband" Type="AbilCmd" AbilCmd="AddReaperToSquad,Execute" Row="1" Column="4"/>
@@ -4482,7 +4498,7 @@
                 <Row value="1"/>
                 <Column value="2"/>
             </LayoutButtons>
-            <LayoutButtons index="9" Face="SquadVoidStasis" Type="AbilCmd" AbilCmd="SquadVoidStasis,Execute" Row="1" Column="0"/>
+            <LayoutButtons index="9" Face="SquadVoidStasis" Type="AbilCmd" AbilCmd="SquadReaperVoidStasis,255" Row="1" Column="0"/>
         </CardLayouts>
         <CardLayouts CardId="Gift">
             <LayoutButtons Face="SmallLifeandRegen" Type="Passive" Row="0" Column="0"/>
@@ -5883,7 +5899,7 @@
         <AbilArray Link="SquadInfantry"/>
         <AbilArray Link="SquadVultureDeploySpiderMine"/>
         <AbilArray Link="SquadVultureDisableSpiderSwitch"/>
-        <BehaviorArray Link="CaptainBuffRedirectDaemon"/>
+        <BehaviorArray Link="VultureBuffRedirectDaemon"/>
         <WeaponArray Link="SquadVultureFragmentationGrenade"/>
         <WeaponArray Link="SquadVultureFragmentationGrenade2nd"/>
         <WeaponArray Link="SquadVultureSpiderLaunch"/>
@@ -5894,15 +5910,15 @@
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
             <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="SquadSpiderMineQueue,255" Row="2" Column="4"/>
-            <LayoutButtons Face="Minecraft" Row="1" Column="3"/>
+            <LayoutButtons Face="Minecraft" Type="Passive" Requirements="HaveVultureBroodMotherSpider" Row="1" Column="3"/>
             <LayoutButtons Face="SpiderMineMagazine" Type="AbilCmd" AbilCmd="SquadSpiderMineMagazine,Ammo1" Row="1" Column="0"/>
             <LayoutButtons Face="DeploySquadSpiderMine" Type="AbilCmd" AbilCmd="SquadVultureDeploySpiderMine,Execute" Row="2" Column="0"/>
             <LayoutButtons Face="SquadSpiderMineTeleport" Type="Passive" Row="1" Column="2"/>
             <LayoutButtons Face="VanillaVultureMode" Type="AbilCmd" AbilCmd="SquadVultureDisableSpiderSwitch,On" Row="2" Column="1"/>
             <LayoutButtons Face="VanillaVultureMode" Type="Passive" Row="2" Column="1"/>
             <LayoutButtons Face="SpiderCarrierMode" Type="AbilCmd" AbilCmd="SquadVultureDisableSpiderSwitch,Off" Row="2" Column="2"/>
-            <LayoutButtons Face="NotDisbandSquad" Type="Passive" Row="1" Column="4"/>
             <LayoutButtons Face="SpiderCarrierMode" Type="Passive" Row="2" Column="2"/>
+            <LayoutButtons Face="NotDisbandSquad" Type="Passive" Row="1" Column="4"/>
         </CardLayouts>
         <Radius value="0.625"/>
         <SeparationRadius value="0.625"/>
@@ -6213,6 +6229,7 @@
         <AbilArray Link="SquadTornadoMissile"/>
         <AbilArray Link="QueueMagazine"/>
         <AbilArray Link="DisbandSquad"/>
+        <AbilArray Link="SquadWarhoundJumpJetAssault"/>
         <WeaponArray Link="SquadWarHoundMelee"/>
         <WeaponArray Link="SquadWarHoundRailgun"/>
         <EffectArray index="Death" value="SquadWarHoundAstralWindSet"/>
@@ -6225,6 +6242,7 @@
             <LayoutButtons Face="SquadHaywireMissiles" Type="AbilCmd" AbilCmd="SquadTornadoMissile,Execute" Row="2" Column="0"/>
             <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="4"/>
             <LayoutButtons Face="SquadWarHoundAstralWind" Type="Passive" Row="2" Column="3"/>
+            <LayoutButtons Face="SquadWarhoundJumpJetAssault" Type="AbilCmd" AbilCmd="SquadWarhoundJumpJetAssault,Execute" Row="1" Column="0"/>
         </CardLayouts>
         <Radius value="0.8125"/>
         <SeparationRadius value="0.625"/>

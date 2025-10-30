@@ -54,6 +54,19 @@
         <AutoCastFilters value="Visible;Player,Ally,Neutral"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="SensorTowerMiniWorld" Requirements="HaveSensorTowerMiniWorld"/>
     </CAbilEffectInstant>
+    <CAbilAugment id="SquadWarhoundJumpJetAssault">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadWarhoundJumpJetAssault" Requirements="HaveWarhoundJetpack"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <AbilCmd value="attack,Execute"/>
+        <TargetType value="UnitOrPoint"/>
+        <Cost>
+            <Cooldown Link="SquadJumpJetAssaultSquadJumpJetAssault2SquadJumpJetAssaultSquadWarhoundJumpJetAssault" Location="Unit" TimeUse="5"/>
+        </Cost>
+        <Effect value="SquadHellbatLeap"/>
+        <AutoCastValidatorArray value="CasterNotHoldingPosition"/>
+    </CAbilAugment>
     <CAbilBehavior id="SquadSiegeTankMortarLauncherSwitch">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <CmdButtonArray index="On" DefaultButtonFace="SquadSiegeTankMortarLauncher">
@@ -221,6 +234,8 @@
     <CAbilEffectTarget id="SquadSiegeTankJumpJetRedeploy">
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <Effect index="0" value="SquadSiegeTankJumpJetPlaceholderCreate"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="BestUnit" value="0"/>
         <Flags index="RequireTargetVision" value="0"/>
         <Cost>
             <Cooldown Location="Unit" TimeUse="8"/>
@@ -231,8 +246,11 @@
         <UninterruptibleArray index="Cast" value="1"/>
         <UninterruptibleArray index="Channel" value="1"/>
         <UninterruptibleArray index="Finish" value="1"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="SquadSiegeTankJumpJet" Requirements="HaveHoverSiegeTank"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadSiegeTankJumpJet">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
         <PlaceUnit value="SiegeTankJumpJetPlaceholder"/>
+        <SharedFlags index="TargetCursorVisibleInBlackMask" value="1"/>
     </CAbilEffectTarget>
     <CAbilArmMagazine id="SquadStarshipMagazine">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -377,7 +395,7 @@
             <Button DefaultButtonFace="ExtendableInfantryMagazine"/>
         </InfoArray>
     </CAbilResearch>
-    <CAbilEffectTarget id="SquadVoidStasis">
+    <CAbilEffectTarget id="SquadReaperVoidStasis">
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <Effect index="0" value="SquadVoidStasisSet"/>
         <Flags index="AutoCast" value="1"/>
@@ -386,14 +404,14 @@
             <Cooldown TimeUse="25"/>
         </Cost>
         <TargetFilters value="Ground;Player,Ally,Heroic,Missile,Stasis,UnderConstruction,Hidden,Invulnerable"/>
-        <Range value="6"/>
-        <AutoCastRange value="6"/>
-        <AutoCastValidatorArray value="DarkTemplarVoidStasis"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="SquadVoidStasis" Requirements="FireSuppressionSystemsNotResearched"/>
         <TargetSorts>
             <SortArray value="SquadTSAirPriority"/>
             <SortArray value="TSLife"/>
         </TargetSorts>
+        <Range value="6"/>
+        <AutoCastRange value="6"/>
+        <AutoCastValidatorArray value="DarkTemplarVoidStasis"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadVoidStasis" Requirements="HaveReaperVoidStasis"/>
     </CAbilEffectTarget>
     <CAbilEffectTarget id="SquadMedicFlashGrenades">
         <Alignment value="Negative"/>
@@ -412,7 +430,7 @@
         <UninterruptibleArray index="Finish" value="1"/>
         <CursorEffect value="MedicFlashBangGrenadeSearch"/>
         <AINotifyEffect value="MedicFlashBangGrenadeLaunchMissile"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="SquadMedicFlashbangGrenades">
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadMedicFlashbangGrenades" Requirements="HaveMedicFlashbangGrenade">
             <Flags index="ShowInGlossary" value="0"/>
         </CmdButtonArray>
     </CAbilEffectTarget>
@@ -583,15 +601,15 @@
         <Range value="10.9375"/>
         <CastOutroTime value="1.07"/>
     </CAbilEffectTarget>
-    <CAbilAugment id="SquadJumpJetAssault">
+    <CAbilAugment id="SquadPredatorJumpJetAssault">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="SquadJumpJetAssault"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadPredatorJumpJetAssault" Requirements="HavePredatorFlyingDog"/>
         <Flags index="AutoCast" value="1"/>
         <Flags index="AutoCastOn" value="1"/>
         <AbilCmd value="attack,Execute"/>
         <TargetType value="UnitOrPoint"/>
         <Cost>
-            <Cooldown Link="SquadJumpJetAssault" Location="Unit" TimeUse="5"/>
+            <Cooldown Link="SquadJumpJetAssaultSquadPredatorJumpJetAssault" Location="Unit" TimeUse="5"/>
         </Cost>
         <Effect value="SquadHellbatLeap"/>
         <AutoCastValidatorArray value="CasterNotHoldingPosition"/>
@@ -2495,7 +2513,7 @@
     </CAbilTrain>
     <CAbilAugment id="SquadMagrailMunitions">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="SquadMagrailMunitions"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadMagrailMunitions" Requirements="HaveMarineSuperCombatPack"/>
         <Flags index="AutoCast" value="1"/>
         <Flags index="AutoCastOn" value="1"/>
         <AbilCmd value="attack,Execute"/>
@@ -3077,7 +3095,28 @@
             <MatchFlags index="Link" value="0"/>
             <MatchFlags index="CasterUnit" value="1"/>
         </Marker>
-        <CmdButtonArray index="Execute" DefaultButtonFace="SniperBotSnipe"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadGhostSnipe" Requirements="NoGhostTripleSnipe"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadGhostTripleSnipe">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadSnipeBlackOpsSet"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Cost>
+            <Cooldown Location="Unit" TimeUse="30"/>
+        </Cost>
+        <TargetFilters value="Biological,Visible;Self,Player,Ally,Neutral,Structure,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
+        <TargetSorts RequestCount="1">
+            <SortArray value="TSLifeLargestFirst"/>
+            <SortArray value="TSDistance"/>
+        </TargetSorts>
+        <Range value="10"/>
+        <AutoCastFilters value="Biological,Visible;Self,Player,Ally,Neutral,Structure,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
+        <AutoCastRange value="10"/>
+        <CastIntroTime value="0.5"/>
+        <AINotifyEffect value="Snipe"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadGhostTripleSnipe" Requirements="HaveGhostTripleSnipe"/>
     </CAbilEffectTarget>
     <CAbilArmMagazine id="SquadInfantry">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>

@@ -184,6 +184,49 @@
         <VitalFractionCurrent index="Life" value="0.5"/>
         <LeechFraction index="Energy" value="2"/>
     </CEffectDamage>
+    <CEffectSet id="SquadSnipeBlackOpsSet">
+        <EffectArray value="SquadSnipeBlackOpsDamage"/>
+        <EffectArray value="SquadSnipeBlackOpsTripleTapDelayCP"/>
+        <!--EffectArray value="Snipe_BlackOpsTripleTapSwitch"/-->
+    </CEffectSet>
+    <CEffectDamage id="SquadSnipeBlackOpsDamage" parent="DU_WEAP">
+        <ImpactLocation Value="TargetUnit"/>
+        <ArmorReduction value="0"/>
+        <Kind value="Spell"/>
+        <Amount value="170"/>
+        <Death value="Silentkill"/>
+    </CEffectDamage>
+    <CEffectDamage id="SquadSnipeBlackOpsTripleTapDamage" parent="DU_WEAP">
+        <Marker Link="Effect/Snipe_BlackOpsDamage"/>
+        <ArmorReduction value="0"/>
+        <Kind value="Spell"/>
+        <Amount value="85"/>
+        <Death value="Silentkill"/>
+    </CEffectDamage>
+    <CEffectSwitch id="SquadSnipeBlackOpsTripleTapSwitch">
+        <ValidatorArray value="HaveGhostBlackOpsTripleTap"/>
+        <CaseArray Validator="GhostBlackOpsTripleTapEnemyCheck" Effect="SquadSnipeBlackOpsTripleTapSearchNoPrimary"/>
+        <CaseDefault value="SquadSnipeBlackOpsTripleTapSearch"/>
+    </CEffectSwitch>
+    <CEffectCreatePersistent id="SquadSnipeBlackOpsTripleTapDelayCP">
+        <EditorCategories value="Race:Terran"/>
+        <PeriodCount value="2"/>
+        <PeriodicEffectArray value="SquadSnipeBlackOpsTripleTapSwitch"/>
+        <PeriodicPeriodArray value="0.125"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="SquadSnipeBlackOpsTripleTapSearch">
+        <EditorCategories value="Race:Terran"/>
+        <SearchFilters value="-;Self,Player,Ally,Neutral,Structure,Missile,Stasis,Dead,Invulnerable"/>
+        <AreaArray MaxCount="1" Radius="3" Effect="SquadSnipeBlackOpsTripleTapDamage"/>
+        <MaxCount value="1"/>
+    </CEffectEnumArea>
+    <CEffectEnumArea id="SquadSnipeBlackOpsTripleTapSearchNoPrimary">
+        <EditorCategories value="Race:Terran"/>
+        <ExcludeArray Effect="SquadSnipeBlackOpsSet" Value="Target"/>
+        <SearchFilters value="-;Self,Player,Ally,Neutral,Structure,Missile,Stasis,Dead,Invulnerable"/>
+        <AreaArray MaxCount="1" Radius="3" Effect="SquadSnipeBlackOpsTripleTapDamage"/>
+        <MaxCount value="1"/>
+    </CEffectEnumArea>
     <CEffectEnumArea id="SquadCaptainToshDetectorRadar">
         <EditorCategories value="Race:Terran"/>
         <SearchFilters value="Visible,Detector;Player,Ally,Neutral"/>
@@ -1168,7 +1211,7 @@
         <EditorCategories value="Race:Terran"/>
         <CreateFlags index="UseFood" value="0"/>
         <SpawnEffect value="SquadHellbatLeapSet"/>
-        <SpawnUnit value="Hellbat"/>
+        <SpawnUnit value="HellionTank"/>
         <SpawnRange value="1"/>
         <SpawnOffset value="0,-1"/>
     </CEffectCreateUnit>
