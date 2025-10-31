@@ -133,9 +133,7 @@
         <Death value="Blast"/>
     </CEffectDamage>
     <CEffectApplyBehavior id="SquadSiegeTankChargingCannonsStackApply">
-        <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
-        <OwningPlayer Value="Caster"/>
         <WhichUnit Value="Caster"/>
         <Behavior value="SquadSiegeTankChargingCannonsStack"/>
     </CEffectApplyBehavior>
@@ -146,6 +144,7 @@
         <ValidatorArray index="0" value="SiegeTankChargingCannonsFullStack"/>
         <EditorCategories value="Race:Terran"/>
         <BehaviorLink value="SquadSiegeTankChargingCannonsStack"/>
+        <WhichUnit Value="Caster"/>
     </CEffectRemoveBehavior>
     <CEffectDamage id="SquadSiegeTankChargingCannonsStackMissileDamage">
         <EditorCategories value="Race:Terran"/>
@@ -445,6 +444,7 @@
         <ImpactLocation Value="TargetUnitOrPoint"/>
         <ImpactEffect value="SquadSiegeTankSpiltShellInitialImpactSet"/>
         <AmmoUnit value="SquadSiegeTankSpiltShellInitialMissile"/>
+        <Movers Link="HotSHunterMissile"/>
     </CEffectLaunchMissile>
     <CEffectCreatePersistent id="SquadSiegeTankSpiltShellSecondPersistent">
         <EditorCategories value="Race:Terran"/>
@@ -543,6 +543,7 @@
         <ImpactLocation Value="TargetPoint"/>
         <ImpactEffect value="SquadSiegeTankSpiltShellSecondBlast"/>
         <AmmoUnit value="SquadSiegeTankSpiltShellSecondMissile"/>
+        <Movers Link="WidowMineWeapon"/>
     </CEffectLaunchMissile>
     <CEffectDamage id="SquadSiegeTankSpiltShellSecondBlast" parent="DU_WEAP">
         <EditorCategories value="Race:Terran"/>

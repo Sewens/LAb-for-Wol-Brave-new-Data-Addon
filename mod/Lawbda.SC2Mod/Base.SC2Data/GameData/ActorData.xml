@@ -263,6 +263,7 @@
         <LaunchAssets Model="SiegeTankAttackLaunch" Sound="SiegeTank_AttackLaunch"/>
         <ImpactMap index="None" Model="SiegeTankAttackImpact" Sound="SiegeTank_AttackImpact"/>
         <ImpactPhysics Name="90mmCannonImpact" MatchKeys="Basic" Physics="SiegeTankAttackForce"/>
+        <LaunchSiteOps Ops="SOpAttachWeapon00"/>
     </CActorAction>
     <CActorUnit id="SquadSiegeTankJumpJetPlaceholder" parent="GenericUnitStandard" unitName="SiegeTankJumpJetPlaceholder">
         <Model value="Invisible"/>
@@ -320,9 +321,26 @@
     </CActorModel>
     <CActorMissile id="SquadSiegeTankSpiltShellInitialMissile" parent="GenericAttackMissile" unitName="SquadSiegeTankSpiltShellInitialMissile">
         <On Terms="ActorCreation" Send="SetCastShadows"/>
-        <Model value="TornadoMissileWeapon"/>
+        <!--On Terms="UnitBirth.StukovInfestedSiegeTankWeapon" Send="Create"/-->
+        <On Terms="UnitBirth" Send="AnimBracketStart Lifetime Jump,Start Jump"/>
+        <!--On Terms="UnitDeath" Send="Destroy"/-->
+        <On Terms="ActorCreation" Send="SetScale 0.500000"/>
+        <On Terms="ActorCreation" Send="SetScale 1.000000 1.000000"/>
+        <Model value="WidowMine"/>
+        <!--On Terms="ActorCreation" Send="Create SiegeTankSiegedTargetImpactFire"/-->
+        <HostSiteOps Ops="SOpBasicScopeFollow StukovInfestedSiegeTankExploderUpOffset StukovInfestedSiegeTankExploderRotator StukovInfestedSiegeTankExploderDownOffset"/>
         <ModelFlags index="AutomateGlobalLoops" value="1"/>
     </CActorMissile>
+    <CActorSiteOpRotator id="StukovInfestedSiegeTankExploderRotator">
+        <Rate value="-720.000000"/>
+        <LocalAxis value="1.000000,0.000000,0.000000"/>
+    </CActorSiteOpRotator>
+    <CActorSiteOpLocalOffset id="StukovInfestedSiegeTankExploderUpOffset">
+        <LocalOffset value="0.000000,0.000000,0.750000"/>
+    </CActorSiteOpLocalOffset>
+    <CActorSiteOpLocalOffset id="StukovInfestedSiegeTankExploderDownOffset">
+        <LocalOffset value="0.000000,0.000000,-0.750000"/>
+    </CActorSiteOpLocalOffset>
     <CActorModel id="SquadWar3GenericAttackImpactModel">
         <Flags index="SuppressCreationErrors" value="1"/>
         <Flags index="SuppressSaveLoad" value="1"/>
