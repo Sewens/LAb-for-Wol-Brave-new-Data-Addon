@@ -889,6 +889,23 @@
             <Cooldown Link="Abil/SwitchScanner" Location="Player" TimeUse="1"/>
         </Cost>
     </CAbilEffectInstant>
+    <CAbilEffectTarget id="SquadBansheeConsumeDisableStructure">
+        <Alignment value="Positive"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadBansheeConsumeStructureLaunchMissile"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="DeferCooldown" value="1"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="5"/>
+        </Cost>
+        <TargetFilters value="Structure;Missile,Stasis,UnderConstruction,Dead,Hidden"/>
+        <Range value="9"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadBansheeConsume" Requirements="HaveBansheeGreedyConsumption"/>
+        <AutoCastRange value="10"/>
+        <CancelableArray index="Channel" value="1"/>
+    </CAbilEffectTarget>
     <CAbilEffectTarget id="YellowScannerSweep">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Flags index="RequireTargetVision" value="0"/>

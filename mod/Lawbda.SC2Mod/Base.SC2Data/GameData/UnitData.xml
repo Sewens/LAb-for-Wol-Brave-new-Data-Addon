@@ -235,6 +235,14 @@
         <HotkeyAlias value=""/>
         <BehaviorArray Link="SquadCloakandDetectorRadar"/>
     </CUnit>
+    <CUnit id="SquadSiegeTankChargingCannonsMissile" parent="MISSILE">
+        <Race value="Terr"/>
+        <Mob value="Warcraft"/>
+        <FlagArray index="Invulnerable" value="1"/>
+        <UserFlagArray index="Projectile" value="1"/>
+        <Mover value="PunisherGrenadesWeapon"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
     <CUnit id="SquadSiegeTankSpiltShellSecondMissile" parent="MISSILE">
         <Race value="Terr"/>
         <FlagArray index="Invulnerable" value="1"/>
@@ -1316,6 +1324,8 @@
         <AbilArray Link="move"/>
         <BehaviorArray Link="SquadWraithDisplacementField"/>
         <BehaviorArray Link="SquadWraithPeriodCloak"/>
+        <BehaviorArray Link="SquadWraithAttackFrontburnerAttacking"/>
+        <BehaviorArray Link="SquadWraithHiveMindNetwork"/>
         <WeaponArray Link="MengskWraithA"/>
         <WeaponArray Link="MengskWraithG"/>
         <CardLayouts>
@@ -1324,23 +1334,9 @@
             <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
-            <LayoutButtons>
-                <Face value="DisplacementField"/>
-                <Type value="Passive"/>
-                <AbilCmd value="255,255"/>
-                <Requirements value="CloakDistortionFieldResearched"/>
-                <Row value="2"/>
-                <Column value="3"/>
-            </LayoutButtons>
-            <LayoutButtons>
-                <Face value="SingularityAnchor"/>
-                <Type value="Passive"/>
-                <AbilCmd value="255,255"/>
-                <Requirements value="DynamicPowerRoutingResearched"/>
-                <Row value="2"/>
-                <Column value="2"/>
-            </LayoutButtons>
             <LayoutButtons Face="SquadWraithHighLagCloak" Type="Passive" Row="2" Column="0"/>
+            <LayoutButtons Face="SquadWraithAttackFrontburner" Type="Passive" Requirements="HaveWraithAttackFrontburner" Row="1" Column="0"/>
+            <LayoutButtons Face="SquadDisplacementField" Type="Passive" Row="2" Column="1"/>
         </CardLayouts>
         <Radius value="0.625"/>
         <SeparationRadius value="0.625"/>
@@ -1395,6 +1391,7 @@
         <AbilArray Link="attack"/>
         <AbilArray Link="move"/>
         <AbilArray Link="SquadBansheeBomberModeSwitch"/>
+        <AbilArray Link="SquadBansheeConsumeDisableStructure"/>
         <BehaviorArray Link="SquadBansheeDistortionBlasters"/>
         <WeaponArray Link="SquadBacklashRockets"/>
         <WeaponArray Link="SquadFireBomberStrafe"/>
@@ -1404,10 +1401,11 @@
             <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
-            <LayoutButtons Face="SquadBansheeRocketMode" Type="AbilCmd" AbilCmd="SquadBansheeBomberModeSwitch,255" Row="2" Column="2"/>
-            <LayoutButtons Face="SquadBansheeBomberMode" Type="AbilCmd" AbilCmd="SquadBansheeBomberModeSwitch,255" Row="2" Column="1"/>
-            <LayoutButtons Face="SquadBansheeBomberMode" Type="Passive" Row="2" Column="1"/>
-            <LayoutButtons Face="SquadBansheeRocketMode" Type="Passive" Row="2" Column="2"/>
+            <LayoutButtons Face="SquadBansheeRocketMode" Type="AbilCmd" AbilCmd="SquadBansheeBomberModeSwitch,255" Row="1" Column="1"/>
+            <LayoutButtons Face="SquadBansheeRocketMode" Type="Passive" Row="1" Column="1"/>
+            <LayoutButtons Face="SquadBansheeBomberMode" Type="Passive" Row="1" Column="0"/>
+            <LayoutButtons Face="SquadBansheeBomberMode" Type="AbilCmd" AbilCmd="SquadBansheeBomberModeSwitch,255" Row="1" Column="0"/>
+            <LayoutButtons Face="SquadBansheeConsume" Type="AbilCmd" AbilCmd="SquadBansheeConsumeDisableStructure,Execute" Row="2" Column="0"/>
         </CardLayouts>
         <Radius value="0.75"/>
         <SeparationRadius value="0.75"/>
@@ -6343,5 +6341,10 @@
             <ChanceArray index="Idle" value="33"/>
             <ChanceArray index="Turn" value="33"/>
         </Fidget>
+    </CUnit>
+    <CUnit id="SquadBansheeConsumeStructure" parent="MISSILE_INVULNERABLE">
+        <Race value="Terr"/>
+        <Mover value="ViperConsumeStructureWeapon"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
     </CUnit>
 </Catalog>

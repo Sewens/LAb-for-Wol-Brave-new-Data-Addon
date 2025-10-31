@@ -19,6 +19,25 @@
         <PeriodicEffect value="CCResourceMessageSearch"/>
         <Requirements value="HaveCommandCenterResourceGenerateField"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="SquadSiegeTankChargingCannonsStack">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-ability-mengsk-medivac-igniteafterburners.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <MaxStackCount value="5"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadWraithAttackFrontburnerAttacking">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-ability-hornerhan-wraith-attackspeed.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <DamageResponse>
+            <Handled value="SquadWraithAttackFrontburnerApply"/>
+            <Location value="Attacker"/>
+            <ModifyFraction value="0.99"/>
+            <DamageValue value="Original"/>
+            <Chance value="1"/>
+        </DamageResponse>
+        <Requirements value="HaveWraithAttackFrontburner"/>
+    </CBehaviorBuff>
     <CBehaviorBuff id="MedivacLoadSiegedTank">
         <InfoIcon value="Assets\Textures\btn-ability-mengsk-siegetank-flyingtankarmament.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -171,10 +190,21 @@
         <InitialEffect value="SquadVikingGroundModeOrder"/>
         <FinalEffect value="SquadVikingAirModeOrder"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="SquadWraithAttackFrontburner">
+        <InfoIcon value="Assets\Textures\btn-ability-hornerhan-wraith-attackspeed.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <BuffFlags index="RefreshStack" value="1"/>
+        <MaxStackCount value="5"/>
+        <MaxStackCountPerCaster value="5"/>
+        <Duration value="10"/>
+        <Modification>
+            <AdditiveMoveSpeedFactor value="0.2"/>
+        </Modification>
+    </CBehaviorBuff>
     <CBehaviorBuff id="SquadVikingFighterOvercharge">
         <Alignment value="Positive"/>
         <InfoIcon value="Assets\Textures\btn-ability-protoss-protoncharge.dds"/>
-        <EditorCategories value="AbilityorEffectType:Units"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <Duration value="8"/>
         <Modification MoveSpeedMultiplier="1.25" AttackSpeedMultiplier="1.5">
             <WeaponEnableArray value="SquadVikingAAntiLightArmorMissile"/>
@@ -326,6 +356,49 @@
         <InitialEffect value="SquadForceStopChannelOrder"/>
         <Modification>
             <StateFlags index="Stun" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadBansheeConsume">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-zerg-corruption-color.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Modification>
+            <StateFlags index="Stun" value="1"/>
+            <AbilClassDisableArray index="CAbilAttack" value="1"/>
+            <AbilClassDisableArray index="CAbilBuild" value="1"/>
+            <AbilClassDisableArray index="CAbilMorph" value="1"/>
+            <AbilClassDisableArray index="CAbilQueue" value="1"/>
+            <AbilClassDisableArray index="CAbilResearch" value="1"/>
+            <AbilClassDisableArray index="CAbilTrain" value="1"/>
+            <AbilClassDisableArray index="CAbilWarpTrain" value="1"/>
+            <BehaviorCategoriesDisable index="Cloak" value="1"/>
+            <BehaviorCategoriesDisable index="Aura" value="1"/>
+            <BehaviorClassDisableArray index="CBehaviorBuff" value="1"/>
+            <BehaviorClassDisableArray index="CBehaviorCreepSource" value="1"/>
+            <BehaviorClassDisableArray index="CBehaviorPowerSource" value="1"/>
+            <BehaviorClassDisableArray index="CBehaviorPowerUser" value="1"/>
+        </Modification>
+        <MaxStackCount value="100"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadWraithHiveMindNetwork">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-ability-zerg-overlord-oversight.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Requirements value="HaveWraithHiveMindNetwork"/>
+        <Period value="5"/>
+        <PeriodicEffect value="SquadWraithHiveMindBuffSearch"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadWraithHiveMindBuff">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-ability-zerg-overlord-oversight.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <MaxStackCountPerCaster value="1"/>
+        <Duration value="10"/>
+        <DisplayDuration index="Self" value="1"/>
+        <BuffFlags index="RefreshStack" value="1"/>
+        <MaxStackCount value="25"/>
+        <Modification AttackSpeedMultiplier="1.04">
+            <DamageDealtScaled index="Ranged" value="2"/>
         </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="VultureBuffRedirectDaemon">
@@ -1243,7 +1316,7 @@
         <Alignment value="Negative"/>
         <InfoIcon value="Assets\Textures\btn-ability-zerg-neuralparasite.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Duration value="0.5"/>
+        <Duration value="1.5"/>
         <InitialEffect value="SquadSpectreGiftVoodooMindControlKillCargo"/>
         <Player Value="Caster"/>
         <Modification>

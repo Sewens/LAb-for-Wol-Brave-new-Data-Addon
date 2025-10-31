@@ -217,6 +217,15 @@
         <HeightOffset value="1.500000"/>
         <Text value="Button/Tooltip/##id##"/>
     </CActorText>
+    <CActorSound id="SquadBasheeConsumeLoop" parent="SoundContinuous">
+        <On Terms="Behavior.SquadBansheeConsume.On" Send="Create"/>
+        <On Terms="Behavior.SquadBansheeConsume.Off" Send="Destroy"/>
+        <Sound value="LairViper_Consume_LP"/>
+    </CActorSound>
+    <CActorSound id="SquadBansheeConsumeStartSound" parent="SoundOneShot">
+        <On Terms="Behavior.SquadBansheeConsume.On" Send="Create"/>
+        <Sound value="LairViper_Consume_Start"/>
+    </CActorSound>
     <!--
     <CActorModel id="SquadGuardianShield">
         <Inherits index="CloakEffect" value="1"/>
@@ -249,6 +258,12 @@
     <CActorBeamSimple id="SquadGhostBlackOpsSnipeTripleTapAttackBeam" parent="GenericAttackBeam">
         <Model value="SquadGhostBlackOpsSnipeAttackBeam"/>
     </CActorBeamSimple>
+    <CActorAction id="SquadSiegeTankChargingCannonsAttack" parent="GenericAttack" effectAttack="SquadSiegeTankChargingCannonsDirectDamage">
+        <LaunchAttachQuery Methods="AMPatternRollingStripe"/>
+        <LaunchAssets Model="SiegeTankAttackLaunch" Sound="SiegeTank_AttackLaunch"/>
+        <ImpactMap index="None" Model="SiegeTankAttackImpact" Sound="SiegeTank_AttackImpact"/>
+        <ImpactPhysics Name="90mmCannonImpact" MatchKeys="Basic" Physics="SiegeTankAttackForce"/>
+    </CActorAction>
     <CActorUnit id="SquadSiegeTankJumpJetPlaceholder" parent="GenericUnitStandard" unitName="SiegeTankJumpJetPlaceholder">
         <Model value="Invisible"/>
         <StatusBarFlags index="Shields" value="0"/>
@@ -259,6 +274,20 @@
         <StatusBarFlags index="Duration" value="0"/>
         <StatusBarFlags index="Magazine" value="0"/>
     </CActorUnit>
+    <CActorAction id="SquadSiegeTankChargingCannonsLaunchMissile" parent="GenericAttack" effectImpact="SquadSiegeTankChargingCannonsStackMissileDamage" effectLaunch="SquadSiegeTankChargingCannonsStackLaunchMissile">
+        <LaunchAssets Sound="Battlecruiser_GroundAttackLaunch"/>
+        <Missile value="SquadSiegeTankChargingCannonsMissile"/>
+        <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeStandard SOpForwardLaunchGuide"/>
+        <ImpactMap index="None" Model="SquadBattlecruiserMiniYamatoImpact" Sound="Battlecruiser_YamatoAttackImpact" ModelReaction="CapitalShipWeaponAttackImpactReaction"/>
+        <ImpactMap index="Shield" Sound="CapitalShipWeaponAttackImpactShield" ModelReaction="CapitalShipWeaponAttackImpactReactionShield"/>
+        <DamageMap index="None" Sound="BattlecruiserAttackDamage"/>
+        <DamageMap index="Shield" Sound="BattlecruiserAttackDamageShield"/>
+    </CActorAction>
+    <CActorMissile id="SquadSiegeTankChargingCannonsMissile" parent="GenericAttackMissile" unitName="SquadSiegeTankChargingCannonsMissile">
+        <On Terms="ActorCreation" Send="SetCastShadows"/>
+        <Model value="SquadBattlecruiserMiniYamatoLMWeapon"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorMissile>
     <CActorModel id="SquadSiegeTankSpiltShellAttackLaunch" parent="ModelAnimationStyleOneShot">
         <Host Subject="_Unit"/>
         <HostSiteOps Ops="SOpAttachWeapon00"/>
@@ -2009,6 +2038,66 @@
         <On Terms="Behavior.SquadCaptainToshPsiShield.Off" Send="Create"/>
         <Sound value="Tosh_PsiShieldDeath"/>
     </CActorSound>
+    <CActorSound id="SquadBansheeConsumeCastSound" parent="SoundOneShot">
+        <On Terms="Abil.SquadBansheeConsumeDisableStructure.SourceCastStart" Send="Create"/>
+        <Sound value="Spell_Consume_Launch"/>
+    </CActorSound>
+    <CActorAction id="SquadBansheeConsumeStructure" parent="GenericAttack" effectImpact="ViperConsumeStructurePersistent" effectLaunch="SquadBansheeConsumeStructureLaunchMissile">
+        <LaunchSiteOps Ops="SOpAttachWeapon"/>
+        <LaunchSite value="ViperConsumeStructureTentacleLaunchSite"/>
+        <LaunchAttachQuery Methods="Weapon"/>
+        <LaunchAssets Sound="Infestor_NeuralParasiteAttackLaunch"/>
+        <ImpactMap index="None" Sound="Infestor_NeuralParasiteAttackImpact"/>
+        <ShieldFlashType value="None"/>
+        <ActionFlags index="IgnoresShields" value="1"/>
+        <ActionFlags index="VictimRevealsAttacker" value="1"/>
+        <CombatRevealDurationType value="ByVictim"/>
+    </CActorAction>
+    <CActorModel id="SquadBansheeConsumeStructureHealImpactModel" parent="ModelAnimationStyleContinuous">
+        <On Terms="Effect.SquadBansheeConsumeStructureCreatePersistent.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.SquadBansheeConsumeStructureCreatePersistent.Stop; At Caster" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="ConsumptionImpact"/>
+    </CActorModel>
+    <CActorMissile id="SquadBansheeConsumeStructureMissile" parent="GenericAttackMissile" unitName="SquadBansheeConsumeStructure">
+        <Supporter>
+            <Subject value="ViperConsumeStructureTentacle"/>
+            <Scope value="Caster"/>
+            <Actor value="Find"/>
+            <Effect value="ViperConsumeStructureLaunchMissile"/>
+        </Supporter>
+        <On Terms="MotionPhaseStart; MotionPhase" Target="::Supporter" Send="RefSet TentacleAttack ::Self"/>
+        <On Terms="MotionPhaseStart; MotionPhase" Target="::Supporter" Send="RefSetFromRequest ::scope.ViperConsumeStructureTarget _Unit Target Find"/>
+        <Model value="Invisible"/>
+    </CActorMissile>
+    <CActorRange id="SquadBansheeConsumeStructureRange" parent="RangeAbil" abil="SquadBansheeConsumeDisableStructure">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorModel id="SquadBansheeConsumeStructureTentacle">
+        <Macros value="GlobalLoopMacro"/>
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.SquadBansheeConsumeStructureLaunchMissile.Start; At Caster" Send="Create"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death"/>
+        <On Terms="ActorCreation" Send="RefSet ::scope.Tentacle ::Self"/>
+        <On Terms="ActorCreation" Send="SetOpacity"/>
+        <On Terms="TimerExpired; TimerName OpacityTimer" Send="SetOpacity 1.000000 0.500000"/>
+        <On Terms="Effect.ViperConsumeStructureCreatePersistent.Start" Send="Create ViperConsumeStructureTentacleImpactHoldingSite"/>
+        <On Terms="Effect.ViperConsumeStructureCreatePersistent.Start" Send="Create ViperConsumeStructureDamageImpactModel"/>
+        <On Terms="Effect.ViperConsumeStructureCreatePersistent.Start" Send="RefSetFromRequest TentacleAttack ViperConsumeStructureTentacleImpactHoldingSite"/>
+        <On Terms="Abil.ViperConsumeStructure.SourceChannelStop" Send="AnimBracketStop BSD"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Target="_Selectable" Send="CombatRevealComplete ViperConsumeStructure"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.125000 OpacityTimer"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachWeapon01Soft"/>
+        <Model value="ViperConsumeStructureTentacle"/>
+        <HostedAttaches Name="TentacleAttack">
+            <AttachQuery Methods="Hardpoint"/>
+        </HostedAttaches>
+    </CActorModel>
     <CActorModel id="YellowScannerChronoBeamImpact" parent="ModelAnimationStyleContinuous">
         <On Terms="Behavior.YellowScannerChronoBeam.On" Send="Create"/>
         <On Terms="Behavior.YellowScannerChronoBeam.Off" Send="AnimBracketStop BSD"/>

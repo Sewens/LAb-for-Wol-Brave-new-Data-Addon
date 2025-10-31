@@ -112,6 +112,15 @@
         <Period value="10"/>
         <Effect value="SquadGalaxyFortressBlizzardCannonPersistent"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="SquadSiegeTankChargingCannons">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-ability-mengsk-medivac-igniteafterburners.dds"/>
+        <DisplayEffect value="SquadSiegeTankChargingCannonsDirectDamage"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="7"/>
+        <Period value="1.04"/>
+        <Effect value="SquadSiegeTankChargingCannonsAttackSet"/>
+    </CWeaponLegacy>
     <CWeaponLegacy id="SquadSiegeTankSpiltShell">
         <EditorCategories value="Race:Terran"/>
         <Options index="LinkedCooldown" value="0"/>
@@ -125,8 +134,14 @@
     </CWeaponLegacy>
     <CWeaponLegacy id="SquadSiegeTankMortarLauncher">
         <EditorCategories value="Race:Terran"/>
+        <Options index="Disabled" value="1"/>
+        <Options index="LinkedCooldown" value="0"/>
+        <Options index="DisplayCooldown" value="1"/>
+        <Options index="NeverMiss" value="0"/>
         <Icon value="Assets\Textures\btn-ability-mengsk-ghostacademy-armsilowithtacticalmissile.dds"/>
         <DisplayEffect value="SquadSiegeTankMortarDamage"/>
+        <DisplayAttackCount value="3"/>
+        <TargetFilters value="Visible;Dead"/>
         <MinScanRange value="15"/>
         <Range value="15"/>
         <RangeSlop value="3.9062"/>
@@ -134,12 +149,6 @@
         <Period value="7.5"/>
         <Effect value="SquadSiegeTankMortarInitSet"/>
         <LegacyOptions index="LockTurretWhileFiring" value="1"/>
-        <Options index="Disabled" value="1"/>
-        <Options index="LinkedCooldown" value="0"/>
-        <Options index="DisplayCooldown" value="1"/>
-        <Options index="NeverMiss" value="0"/>
-        <DisplayAttackCount value="3"/>
-        <TargetFilters value="Visible;Dead"/>
     </CWeaponLegacy>
     <CWeaponLegacy id="SquadMedicHealGun">
         <EditorCategories value="Race:Terran"/>
