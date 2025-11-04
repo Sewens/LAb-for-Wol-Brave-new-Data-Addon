@@ -43,6 +43,24 @@
         </CmdButtonArray>
         <CmdButtonArray index="Cancel" DefaultButtonFace="CmdCancel"/>
     </CAbilEffectTarget>
+    <CAbilEffectTarget id="BlueNuclearStrike">
+        <TechPlayer value="Owner"/>
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="BlueNuclear"/>
+        <Range value="500"/>
+        <FinishTime value="2.5"/>
+        <CancelableArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <ValidatedArray index="Channel" value="0"/>
+        <AlertArray index="Cast" value="CalldownLaunch"/>
+        <CursorEffect value="BlueNuclearDamage"/>
+        <CalldownEffect value="BlueNuclear"/>
+        <AINotifyEffect value="RedNuclear"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="BlueNukeEMP" Requirements="HaveNuke"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <Arc value="360"/>
+    </CAbilEffectTarget>
     <CAbilEffectInstant id="SensorTowerMiniWorld">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Effect index="0" value="SensorTowerMiniWorldSearch"/>
@@ -2958,7 +2976,7 @@
             <Flags index="AutoBuild" value="1"/>
             <Flags index="AutoBuildOn" value="1"/>
         </InfoArray>
-        <CalldownEffect value="Nuke"/>
+        <CalldownEffect value="BlueNuclear"/>
     </CAbilArmMagazine>
     <CAbilEffectTarget id="RedScannerSweep">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -3438,6 +3456,7 @@
         <AINotifyEffect value="RedNuclear"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="NucolorFireFlame" Requirements="HaveNuke"/>
         <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <Arc value="360"/>
     </CAbilEffectTarget>
     <CAbilBuild id="SquadTerranBuild">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>

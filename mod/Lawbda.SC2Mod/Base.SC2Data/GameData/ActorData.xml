@@ -217,6 +217,261 @@
         <HeightOffset value="1.500000"/>
         <Text value="Button/Tooltip/##id##"/>
     </CActorText>
+    <CActorSplat id="SquadArtilleryMengskSplat" parent="GenericUnitSplat" unitName="SquadArtilleryMengsk"/>
+    <CActorUnit id="SquadArtilleryMengsk" parent="TerranBuildingEx" unitName="SquadArtilleryMengsk">
+        <Aliases value="_UnitHuge"/>
+        <On Terms="WeaponStart.*.AttackStart" Send="AnimBracketClear SpecialAttack Instant"/>
+        <On Terms="WeaponStart.*.AttackStart" Send="AnimBracketStart Attack Attack {} {} FullMatch"/>
+        <On Terms="Abil.BlueNuclearStrike.SourceCastStart" Send="AnimBracketStart SpecialAttack Attack,01 {} {} ContentPlayOnce"/>
+        <On Terms="Abil.BlueNuclearStrike.SourcePrepStart" Send="AnimBracketStart Cover Cover {} {} OpeningPlayForever"/>
+        <On Terms="Abil.BlueNuclearStrike.SourceFinishStop" Send="AnimBracketStop Cover"/>
+        <On Terms="Abil.BlueNuclearStrike.SourceCancel" Send="AnimBracketStop Cover"/>
+        <Remove Terms="WeaponStart.*.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <CreepHeightClass value="Small"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="MissileTurret_Explode"/>
+        <PlacementSound value="Terran_BuildingPlacementSmall"/>
+        <PlacementActorModel value="SquadArtilleryMengskPlacement"/>
+        <BarOffset value="90"/>
+        <BarWidth value="120"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\wireframe-terran-artillerymengsk.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-terran-artillerymengsk.dds"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-terran-artillerymengsk.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-terran-artillerymengsk.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorModel id="SquadArtilleryMengskBuild" parent="TerranBuildingBuildSmall" unitName="SquadArtilleryMengsk"/>
+    <CActorSound id="SquadArtilleryMengskExpStrikeDropAS" parent="SoundOneShot">
+        <On Terms="Effect.ArtilleryMengskExperimentalStrikeCloudCP.Start; At Effect" Send="Create"/>
+        <On Terms="Effect.ArtilleryMengskBombardmentDropDelayCP.Initial; At Effect" Send="Create"/>
+        <Sound value="ArtilleryMengsk_ExpStrike_Drop"/>
+    </CActorSound>
+    <CActorSquib id="SquadArtilleryMengskBombardmentExplode">
+        <On Terms="Effect.ArtilleryMengskBombardmentDamageSearch.Start; At Effect" Send="Create"/>
+        <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
+        <Map index="None" Sound="ArtilleryMengsk_ExpStrike_Explode"/>
+    </CActorSquib>
+    <CActorTurret id="SquadArtilleryMengskTurret">
+        <On Terms="TurretEnable.SquadArtilleryMengsk" Send="Create"/>
+    </CActorTurret>
+    <CActorSound id="SquadArtilleryMengskTurretAS" parent="SoundOneShot">
+        <On Terms="TurretEnable.SquadArtilleryMengsk" Send="Create"/>
+        <Sound value="AtrilleryMengsk_Turret_Servo"/>
+    </CActorSound>
+    <CActorAction id="ArtilleryMengskBombardmentAttack" parent="GenericAttack" effectImpact="ArtilleryMengskBombardmentDamageSearch" effectLaunch="ArtilleryMengskBombardmentLM">
+        <LaunchAttachQuery Methods="Weapon"/>
+        <ImpactMap index="None" Model="ArtilleryMengskMissileImpact" Sound="KorhalSporeCannon_AttackImpact"/>
+    </CActorAction>
+    <CActorSquib id="ArtilleryMengskBombardmentExplode">
+        <On Terms="Effect.ArtilleryMengskBombardmentDamageSearch.Start; At Effect" Send="Create"/>
+        <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
+        <Map index="None" Sound="ArtilleryMengsk_ExpStrike_Explode"/>
+    </CActorSquib>
+    <CActorRange id="ArtilleryMengskBombardmentRange" parent="RangeAbil">
+        <On index="1" Terms="Abil.TargetOn" Send="Create"/>
+        <On index="2" Terms="Abil.TargetOff" Send="Destroy"/>
+        <On index="3" Terms="Abil.ButtonHoverOn" Send="Create"/>
+        <On index="4" Terms="Abil.ButtonHoverOff" Send="Destroy"/>
+        <Range value="30.000000"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorSplat id="ArtilleryMengskBombardmentSplat" parent="TerranCursorSplat" abil="ArtilleryMengskAttack">
+        <Model value="ArtilleryMengskBombardmentSplat"/>
+        <Scale value="15.000000"/>
+    </CActorSplat>
+    <CActorModel id="ArtilleryMengskBombardmentTargetingSplat">
+        <On Terms="Effect.ArtilleryMengskBombardmentDropDelayCP.Start; At Effect" Send="Create"/>
+        <On Terms="Effect.ArtilleryMengskBombardmentDropDelayCP.Initial" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand"/>
+        <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
+    </CActorModel>
+    <CActorRange id="ArtilleryMengskBombardmentWeaponRange" parent="RangeWeapon" weapon="ArtilleryMengskBombardment">
+        <On Terms="SelectionLocalUpdate.ArtilleryMengsk.Start" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.ArtilleryMengsk.StartEditorGround" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.ArtilleryMengsk.StartEditorFlyer" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.ArtilleryMengsk.Stop" Send="Destroy"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorSound id="ArtilleryMengsk_ExpStrike_Click" parent="SoundOneShot">
+        <EditorCategories value=""/>
+        <Host Subject="ArtilleryMengsk_ExpStrike_Macro" Actor="Find"/>
+    </CActorSound>
+    <CActorSound id="ArtilleryMengsk_ExpStrike_GasRelease" parent="SoundOneShot">
+        <EditorCategories value=""/>
+        <Host Subject="ArtilleryMengsk_ExpStrike_Macro" Actor="Find"/>
+        <Layers Sound="ArtilleryMengsk_ExpStrike_GasCloud"/>
+        <Layers Sound="ArtilleryMengsk_ExpStrike_GasCloudLyr"/>
+    </CActorSound>
+    <CActorSound id="ArtilleryMengsk_ExpStrike_Impact" parent="SoundOneShot">
+        <EditorCategories value=""/>
+        <On Terms="Effect.ArtilleryMengskBombardmentDamageSearch.Start; At Effect" Send="Create"/>
+        <Host Subject="ArtilleryMengsk_ExpStrike_Macro" Actor="Find"/>
+    </CActorSound>
+    <CActorSound id="ArtilleryMengsk_ExpStrike_Klaxon" parent="SoundOneShot">
+        <EditorCategories value=""/>
+        <On Terms="Abil.ArtilleryMengskExperimentalStrike.SourcePrepStart" Send="Create"/>
+        <!--Layers Sound="ArtilleryMengsk_ExpStrike_AirRaid_Siren"/>-->
+    </CActorSound>
+    <CActorModel id="ArtilleryMengsk_ExpStrike_Macro">
+        <EditorCategories value=""/>
+        <On Terms="ActorCreation" Send="TimerSet 0.900000 Impact"/>
+        <On Terms="ActorCreation" Send="TimerSet 1.090000 Click"/>
+        <On Terms="ActorCreation" Send="TimerSet 1.100000 GasRelease"/>
+        <On Terms="TimerExpired; TimerName Impact" Send="Create ArtilleryMengsk_ExpStrike_Impact"/>
+        <On Terms="TimerExpired; TimerName Click" Send="Create ArtilleryMengsk_ExpStrike_Click"/>
+        <On Terms="TimerExpired; TimerName GasRelease" Send="Create ArtilleryMengsk_ExpStrike_GasRelease"/>
+        <On Terms="TimerExpired; TimerName GasRelease" Send="Destroy"/>
+        <On Terms="Effect.ArtilleryMengskExperimentalStrikeCloudCP.Start; At Effect" Send="Create"/>
+        <Model value="Invisible"/>
+    </CActorModel>
+    <CActorSound id="AtrilleryMengsk_Turret_Servo" parent="SoundOneShot">
+        <EditorCategories value=""/>
+        <On Terms="Abil.ArtilleryMengskExperimentalStrike.SourcePrepStart" Send="Create"/>
+    </CActorSound>
+    <CActorModel id="SquadArtilleryMengskPlacement">
+        <Aliases value="_Main"/>
+        <Aliases value="_Unit"/>
+        <Aliases value="_Selectable"/>
+        <Filter index="Neutral" value="1"/>
+        <Filter index="Enemy" value="1"/>
+        <FogVisibility value="Visible"/>
+        <On Terms="ActorCreation; ModelIsLowQuality" Send="SetOpacity 0.300000"/>
+        <On Terms="ActorCreation" Send="AnimGroupApply Placement"/>
+        <On Terms="ActorCreation" Send="$Stand PlayForever"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="Signal.*.HidePlacement" Send="SetVisibility"/>
+        <On Terms="Signal.*.ShowPlacement" Send="SetVisibility 1"/>
+        <HostSiteOps Ops="SOpTipabilityFloorScope"/>
+    </CActorModel>
+    <CActorSplat id="ArtilleryMengskGlobalExperimentalStrikeSplat" parent="TerranCursorSplat" abil="ArtilleryMengskGlobalExperimentalStrike">
+        <Model value="ArtilleryMengskGlobalExperimentalStrikeSplat"/>
+        <Scale value="15.000000"/>
+    </CActorSplat>
+    <CActorModel id="ArtilleryMengskExperimentalStrikeTargetingSplat">
+        <On Terms="Effect.ArtilleryMengskExperimentalStrikeDropDeplayCP.Start; At Effect" Send="Create"/>
+        <On Terms="Effect.ArtilleryMengskExperimentalStrikeDropDeplayCP.Stop; FromEffectTreeDescendant" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand"/>
+        <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
+    </CActorModel>
+    <CActorModel id="ArtilleryMengskFear" parent="ModelAnimationStyleContinuous">
+        <On Terms="Behavior.ArtilleryMengskFear.On" Send="Create"/>
+        <On Terms="Behavior.ArtilleryMengskFear.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation" Send="SetTintColor 37,220,100 0.000000 OneShot GasTint"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+    </CActorModel>
+    <CActorSound id="ArtilleryMengskFearHit" parent="SoundOneShot">
+        <On Terms="Behavior.ArtilleryMengskFear.On" Send="Create"/>
+    </CActorSound>
+    <CActorModel id="ArtilleryMengskCloudSickness">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Behavior.ArtilleryMengskCloudSickness.On" Send="Create"/>
+        <On Terms="Behavior.ArtilleryMengskCloudSickness.Off" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="$Stand PlayForever"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.750000"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+    </CActorModel>
+    <CActorModel id="ArtilleryMengskExperimentalStrikeCloud" parent="ModelAnimationStyleContinuous">
+        <On Terms="Effect.ArtilleryMengskExperimentalStrikeCloudCP.Start; At Effect" Send="Create"/>
+        <On Terms="Effect.ArtilleryMengskExperimentalStrikeCloudCP.Stop" Send="Destroy"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorModel id="ArtilleryMengskExperimentalStrikeImpact" parent="ModelAnimationStyleContinuous">
+        <On Terms="Effect.ArtilleryMengskExperimentalStrikeCloudCP.Start; At Effect" Send="Create"/>
+        <On Terms="Effect.ArtilleryMengskExperimentalStrikeCloudCP.Stop" Send="AnimBracketStop BSD"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorMissile id="ArtilleryMengskExperimentalStrikeMissile" parent="GenericAttackMissile" unitName="ArtilleryMengskExperimentalStrikeMissile">
+        <Model value="Invisible"/>
+    </CActorMissile>
+    <CActorModel id="BlueNuclearCollateralFire">
+        <On Terms="Effect.BlueNuclearDamage.Start; At Target" Send="Create"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Model value="BlueNukeCollateralFire"/>
+    </CActorModel>
+    <CActorModel id="BlueNuclearDrop">
+        <On Terms="Effect.BlueNuclearDetonate.Start" Send="Create"/>
+        <On Terms="Effect.BlueNuclearDetonate.Start" Send="$Birth"/>
+        <On Terms="Effect.RedNuclearDamage" Send="Destroy"/>
+        <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
+        <Model value="BlueNukeDrop"/>
+    </CActorModel>
+    <CActorSound id="BlueNuclearDropSound" parent="SoundContinuous">
+        <On Terms="Effect.BlueNuclearDetonate.Start" Send="Create"/>
+        <On Terms="Effect.RedNuclearDamage.Start" Send="Destroy"/>
+        <Sound value="Ghost_NukeDrop"/>
+    </CActorSound>
+    <CActorSquib id="BlueNuclearExplode">
+        <On Terms="Effect.BlueNuclearDamage.Start; At Effect" Send="Create"/>
+        <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
+        <Map index="None" Model="BlueNukeExplode" Sound="Ghost_NukeExplode"/>
+    </CActorSquib>
+    <CActorFoliageFXSpawner id="BlueNuclearGhostNukeFoliageFXSpawner" parent="FoliageFXSpawnerFire">
+        <On Terms="Effect.BlueNuclearDamage.Start" Send="Create"/>
+        <Radius value="5.000000"/>
+    </CActorFoliageFXSpawner>
+    <CActorModel id="BlueNuclearIndicator" parent="ModelAnimationStyleOneShot">
+        <Flags index="SuppressSaveLoad" value="0"/>
+        <FogVisibility value="Visible"/>
+        <On Terms="Effect.BlueNuclearPersistent.Start" Send="Create"/>
+        <On Terms="Effect.BlueNuclearPersistent.Stop" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidatePlayer HaveUnfriendlyNukeIndicator" Send="SetFilter Enemy"/>
+        <On Terms="ActorCreation" Send="SetTintColor 31,6,255"/>
+        <HostSiteOps Ops="SOpShadow"/>
+    </CActorModel>
+    <!--CActorSquib id="BlueNuclearLaunch">
+        <On Terms="Effect.BlueNuclearPersistent" Send="Create"/>
+        <HostSiteOps Ops="SOpSourcePointSationary"/>
+        <Map index="None" Model="BlueNukeLaunch" Sound="Ghost_NukeLaunch"/>
+    </CActorSquib-->
+    <CActorAction id="BlueNuclearShieldHitter" parent="AoESplashShieldHitter" effectHit="BlueNuclearDamage">
+        <DamageModel value="Genericattackmodel"/>
+    </CActorAction>
+    <CActorModel id="BlueNuclearTarget" parent="ModelAnimationStyleOneShot">
+        <Flags index="SuppressSaveLoad" value="0"/>
+        <Filter index="Self" value="1"/>
+        <Filter index="Ally" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <FogVisibility value="Visible"/>
+        <On Terms="Effect.BlueNuclearPersistent.Start" Send="Create"/>
+        <On Terms="Effect.BlueNuclearPersistent.Stop" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation; !ValidatePlayer HaveUnfriendlyNukeIndicator" Send="SetFilter Enemy"/>
+        <Host Subject="GhostNukeTargetBillboard" Actor="Create"/>
+    </CActorModel>
+    <CActorForceCylinder id="BlueNuclearShockwave">
+        <On Terms="ActorCreation" Send="TimerSet 0.200000 PhasePause"/>
+        <On Terms="TimerExpired; TimerName PhasePause" Send="ForceSetRadius 1.500000"/>
+        <On Terms="TimerExpired; TimerName PhasePause" Send="ForceSetRadius 8.000000 2.100000"/>
+        <On Terms="TimerExpired; TimerName PhasePause" Send="ForceSetMagnitude 65.000000 1.150000"/>
+        <On Terms="TimerExpired; TimerName PhasePause" Send="TimerSet 2.100000 PhaseGrow"/>
+        <On Terms="TimerExpired; TimerName PhaseGrow" Send="ForceSetMagnitude 0.000000 1.700000"/>
+        <On Terms="Effect.BlueNuclearDamage.Start" Send="Create"/>
+        <On Terms="ActorCreation" Send="Create NukeShockwave00"/>
+        <On Terms="ActorCreation" Send="Create NukeShockwave01"/>
+        <On Terms="ActorCreation" Send="Create NukeShockwave02"/>
+        <On Terms="ActorCreation" Send="Create NukeShockwave03"/>
+        <HostSiteOps Ops="SOpTargetPoint SOpShadow SOpMoveUpBy6"/>
+        <Model value="SquadActorForceField"/>
+        <Field value="Radial"/>
+        <Duration value="4.000000"/>
+        <Magnitude value="35.000000,10.000000"/>
+        <HostEndSiteOps Ops="SOpMoveUpBy2"/>
+    </CActorForceCylinder>
+    <CActorRegionCircle id="BlueNuclearTreeKiller">
+        <On Terms="Effect.BlueNuclearDamage.Start; At Effect" Send="Create"/>
+        <On Terms="Effect.HeroNukeDamage.Start; At Effect" Send="Create"/>
+        <On Terms="ActorCreation" Send="QueryRegion ::Self TreeBurnQuery AgainstCenter"/>
+        <On Terms="ActorCreation" Send="QueryRegion ::Self NukedQuery AgainstCenter"/>
+        <On Terms="Effect.BlueNuclearDamage.Start; At Effect" Send="Destroy"/>
+        <On Terms="Effect.HeroNukeDamage.Start; At Effect" Send="Destroy"/>
+        <Radius value="8.000000"/>
+    </CActorRegionCircle>
     <CActorSound id="SquadBasheeConsumeLoop" parent="SoundContinuous">
         <On Terms="Behavior.SquadBansheeConsume.On" Send="Create"/>
         <On Terms="Behavior.SquadBansheeConsume.Off" Send="Destroy"/>
@@ -4319,8 +4574,6 @@
         <Macros value="PhysicsDeathsVoidGround"/>
         <Inherits index="ModelMaterials" value="1"/>
         <AcceptedTransfers index="ModelMaterials" value="1"/>
-        <On Terms="SelectionLocalUpdate.SquadSiegeTank.Start" Target="SquadSiegeTankJumpJetRange" Send="Create"/>
-        <On Terms="SelectionLocalUpdate.SquadSiegeTank.Stop" Target="SquadSiegeTankJumpJetRange" Send="Destroy"/>
         <On Terms="UnitHeightUpdate.*.Land" Send="Create SquadSiegeTankLand"/>
         <On Terms="UnitDeathCustomize; ValidateUnit HaveVoidShade" Send="DeathCustomize Shadow"/>
         <On Terms="UnitDeathCustomize; ValidateUnit HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
@@ -9654,4 +9907,8 @@
         <Abil Link="SquadSpiderMineUnburrowRangeDummy"/>
     </CActorRange>
     <CActorRange id="SquadVultureDeploySpiderMineRange" parent="RangeAbil" abil="SquadVultureDeploySpiderMine"/>
+    <CActorSplat id="BlueNuclearCursorSplat" parent="TerranCursorSplat" abil="BlueNuclearStrike">
+        <Model value="BlueNukeCursorSplat"/>
+        <Color value="255,36,80,255"/>
+    </CActorSplat>
 </Catalog>

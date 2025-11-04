@@ -32,6 +32,170 @@
         <ScaleMax value="0.750000,0.750000,0.750000"/>
         <ScaleMin value="0.750000,0.750000,0.750000"/>
     </CModel>
+    <CModel id="SquadArtilleryMengsk" parent="BuildingEx" Race="Terran">
+        <Model value="Assets\COOP\Mengsk\Buildings\Artillery_Mengsk_COOP\Artillery_Mengsk_COOP.m3"/>
+        <AttachProps Id="Ref_Weapon 01">
+            <Keys index="SetA" value="0"/>
+        </AttachProps>
+        <Events>
+            <Anim value="Attack,00"/>
+            <Name value="ArtilleryMengskBombardment_Launch_AS"/>
+            <Type value="Actor"/>
+            <Time value="0.007000"/>
+            <Payload value="ArtilleryMengskBombardment_Launch_AS"/>
+        </Events>
+        <Events>
+            <Anim value="Attack,01"/>
+            <Name value="ArtilleryMengskBombardment_Launch_AS"/>
+            <Type value="Actor"/>
+            <Time value="0.007000"/>
+            <Payload value="ArtilleryMengskBombardment_Launch_AS"/>
+        </Events>
+        <PlanetPanelCamera value="Star2CameraHigh05"/>
+        <Radius value="0.750000"/>
+        <ScaleMax value="1.750000,1.750000,1.750000"/>
+        <ScaleMin value="1.750000,1.750000,1.750000"/>
+        <SelectionRadius value="1.000000"/>
+        <ShadowRadius value="1.000000"/>
+        <SquibTypeDefault value="Metal"/>
+        <TechPurchaseCamera value="TechPurchaseMissileTurret"/>
+        <UnitGlossaryCamera value="Star2CameraHigh05"/>
+    </CModel>
+    <CModel id="SquadArtilleryMengskDeath" parent="MissileTurretDeathBase">
+        <Model value="Assets\COOP\Mengsk\Buildings\Artillery_Mengsk_COOP_Death\Artillery_Mengsk_COOP_Death.m3"/>
+        <ScaleMax value="1.750000,1.750000,1.750000"/>
+        <ScaleMin value="1.750000,1.750000,1.750000"/>
+    </CModel>
+    <CModel id="SquadArtilleryMengskPlacement" parent="Placement" Race="Terran">
+        <Model value="Assets\COOP\Mengsk\Buildings\Artillery_Mengsk_COOP_Placement\Artillery_Mengsk_COOP_Placement.m3"/>
+        <ScaleMax value="1.750000,1.750000,1.750000"/>
+        <ScaleMin value="1.750000,1.750000,1.750000"/>
+        <SelectionRadius value="0.000000"/>
+        <ShadowRadius value="0.000000"/>
+    </CModel>
+    <CModel id="SquadArtilleryMengskPortrait" parent="AdjutantPortrait"/>
+    <CModel id="SquadArtilleryMengskBuild" parent="MissileTurretBuildBase">
+        <Model value="Assets\Buildings\Terran\TerranBuild\TerranBuild.m3"/>
+        <ScaleMax value="0.930000,0.930000,0.930000"/>
+        <ScaleMin value="0.930000,0.930000,0.930000"/>
+    </CModel>
+    <CModel id="ArtilleryMengskGlobalExperimentalStrikeSplat" parent="UI">
+        <Model value="Assets\UI\Cursors\TerranAOECursor\TerranAOECursor.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="ArtilleryMengskExperimentalStrikeImpact" parent="OneShotSpellFX">
+        <Model value="Assets\COOP\Mengsk\Effects\Artillery_Mengsk_COOP_DirtyBomb_Land\Artillery_Mengsk_COOP_DirtyBomb_Land.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <RadiusLoose value="1.000000"/>
+        <!--Events>
+            <Anim value="Birth,00"/>
+            <Name value="ArtilleryMengsk_ExpStrike_Impact"/>
+            <Type value="Sound"/>
+            <Time value="0.900000"/>
+            <Payload value="ArtilleryMengsk_ExpStrike_Impact"/>
+        </Events>
+        <Events>
+            <Anim value="Birth,00"/>
+            <Name value="ArtilleryMengsk_ExpStrike_Click"/>
+            <Type value="Sound"/>
+            <Time value="1.090000"/>
+            <Payload value="ArtilleryMengsk_ExpStrike_Click"/>
+        </Events>
+        <Events>
+            <Anim value="Birth,00"/>
+            <Name value="ArtilleryMengsk_ExpStrike_GasRelease"/>
+            <Type value="Sound"/>
+            <Time value="1.100000"/>
+            <Payload value="ArtilleryMengsk_ExpStrike_GasRelease"/>
+        </Events-->
+    </CModel>
+    <CModel id="ArtilleryMengskExperimentalStrikeTargetingSplat" parent="UI">
+        <Model value="Assets\COOP\Mengsk\Splats\DirtyBomb_Mengsk_COOP_Splat\DirtyBomb_Mengsk_COOP_Splat.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <SelectionRadius value="2.500000"/>
+        <ShadowRadius value="2.500000"/>
+        <ScaleMax value="0.750000,0.750000,0.750000"/>
+        <ScaleMin value="0.750000,0.750000,0.750000"/>
+    </CModel>
+    <CModel id="ArtilleryMengskFear" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Neutral\Fear_Coop\Fear_Coop.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="ArtilleryMengskExperimentalStrikeCloud" parent="PersistentSpellFX">
+        <Model value="Assets\COOP\Mengsk\Effects\Artillery_Mengsk_COOP_DirtyBomb_Impact\Artillery_Mengsk_COOP_DirtyBomb_Impact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <ScaleMax value="0.700000,0.700000,0.700000"/>
+        <ScaleMin value="0.700000,0.700000,0.700000"/>
+    </CModel>
+    <CModel id="ArtilleryMengskCloudSickness" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Zerg\DiseaseCloud\DiseaseCloud.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CModel>
+    <CModel id="SquadArtilleryMengskSplat" parent="Splat">
+        <Model value="Assets\Splats\Splat_Bunker\Splat_Bunker.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <ScaleMax value="1.050000,1.050000,1.050000"/>
+        <ScaleMin value="1.050000,1.050000,1.050000"/>
+    </CModel>
+    <CModel id="SquadArtilleryMengskBombardmentDrop" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Terran\NukeFalling\NukeFalling.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <RadiusLoose value="1.000000"/>
+    </CModel>
+    <CModel id="SquadArtilleryMengskBombardmentExplode" parent="OneShotSpellFX">
+        <Model value="Assets\COOP\Mengsk\Effects\Artillery_Mengsk_COOP_Impact\Artillery_Mengsk_COOP_Impact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <RadiusLoose value="1.000000"/>
+        <ScaleMax value="1.600000,1.600000,1.600000"/>
+        <ScaleMin value="1.600000,1.600000,1.600000"/>
+    </CModel>
+    <CModel id="SquadArtilleryMengskBombardmentLaunch" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Terran\NukeRising\NukeRising.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <RadiusLoose value="1.000000"/>
+        <!--Events>
+            <Anim value="Birth,00"/>
+            <Name value="ArtilleryMengsk_ExpStrike_Launch"/>
+            <Type value="Sound"/>
+            <Time value="1.393000"/>
+            <Attachment value="Ref_Head"/>
+            <Payload value="ArtilleryMengsk_ExpStrike_Launch"/>
+        </Events>
+        <Events>
+            <Anim value="Birth,00"/>
+            <Name value="ArtilleryMengsk_ExpStrike_LoadBirth"/>
+            <Type value="Sound"/>
+            <Time value="0.950000"/>
+            <Payload value="ArtilleryMengsk_ExpStrike_LoadBirth"/>
+        </Events>-->
+    </CModel>
+    <CModel id="BlueNuclearIndicator" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Terran\GhostLaseTargetTactical\GhostLaseTargetTactical.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="BlueNuclearTarget" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Terran\GhostLaseTarget\GhostLaseTarget.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="BlueNukeCollateralFire" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Terran\FireImpact\FireImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="BlueNukeDrop" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Terran\NukeFalling\NukeFalling.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <RadiusLoose value="1.000000"/>
+    </CModel>
+    <CModel id="BlueNukeExplode" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Terran\HyperionEMP\HyperionEMP.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <RadiusLoose value="1.000000"/>
+    </CModel>
+    <CModel id="BlueNukeLaunch" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Terran\NukeRising\NukeRising.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <RadiusLoose value="1.000000"/>
+    </CModel>
     <CModel id="SiegeTankPlacement" parent="SiegeTankBase">
         <Model value="Assets\Effects\Terran\SiegeTank_BlackOps_Tank_Placement\SiegeTank_BlackOps_Tank_Placement.m3"/>
     </CModel>
@@ -656,5 +820,13 @@
     <CModel id="SquadSpectreUltrasonicPulseWeapon" parent="MissileFX">
         <Model value="Assets\Effects\Terran\UltraSonicMissile\UltraSonicMissile.m3"/>
         <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="BlueNukeCursorSplat" parent="UI">
+        <Model value="Assets\UI\Cursors\NukeCursor1\NukeCursor1.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <ScaleMax value="0.200000,0.200000,0.200000"/>
+        <ScaleMin value="0.200000,0.200000,0.200000"/>
+        <SelectionRadius value="2.500000"/>
+        <ShadowRadius value="2.500000"/>
     </CModel>
 </Catalog>
