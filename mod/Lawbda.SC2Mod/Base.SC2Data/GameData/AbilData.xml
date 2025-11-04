@@ -43,6 +43,141 @@
         </CmdButtonArray>
         <CmdButtonArray index="Cancel" DefaultButtonFace="CmdCancel"/>
     </CAbilEffectTarget>
+    <CAbilEffectInstant id="SquadSuperGaryEnergyPower">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadSuperGaryCP"/>
+        <Cost>
+            <Charge Link="Abil/PowerFieldSuperGaryStetmann" Location="Unit"/>
+            <Cooldown Link="Abil/PowerFieldSuperGaryStetmann" Location="Unit" TimeUse="120"/>
+        </Cost>
+        <AINotifyEffect value="PowerFieldSuperGaryStetmann"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadSuperGaryEnergyPower" Requirements="HavePowerFieldEnergyRegenerationUpgrade"/>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="SquadSuperGaryHealthPower">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadSuperGaryCP"/>
+        <Cost>
+            <Charge Link="Abil/PowerFieldSuperGaryStetmann" Location="Unit"/>
+            <Cooldown Link="Abil/PowerFieldSuperGaryStetmann" Location="Unit" TimeUse="120"/>
+        </Cost>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadSuperGaryHealthPower" Requirements="HavePowerFieldHPRegenerationUpgrade"/>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="SquadSuperGarySpeedPower">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadSuperGaryCP"/>
+        <Cost>
+            <Charge Link="Abil/PowerFieldSuperGaryStetmann" Location="Unit"/>
+            <Cooldown Link="Abil/PowerFieldSuperGaryStetmann" Location="Unit" TimeUse="120"/>
+        </Cost>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadSuperGarySpeedPower" Requirements="HavePowerFieldMovementSpeedUpgrade"/>
+    </CAbilEffectInstant>
+    <CAbilEffectTarget id="SquadLurkerChannelingSpines">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadLurkerChannelingSpinesCP"/>
+        <TargetFilters value="Ground,Visible;Self,Player,Ally,Neutral,Missile,Dead,Hidden,Invulnerable"/>
+        <Range value="0.5"/>
+        <Arc value="360"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="LurkerStetmannChannelingSpines"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadSuperGaryOrb">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Protoss"/>
+        <Effect index="0" value="SquadGaryOrbInitialSwitch"/>
+        <Cost>
+            <Charge>
+                <CountMax value="2"/>
+                <CountStart value="2"/>
+                <CountUse value="1"/>
+                <Link value="Abil/GaryOrb"/>
+                <TimeUse value="30"/>
+            </Charge>
+            <Cooldown Link="Abil/GaryOrb"/>
+        </Cost>
+        <Range value="13"/>
+        <Arc value="360"/>
+        <UninterruptibleArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="GaryStetmannOrb"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadSuperGaryOverchargeEnergy">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadSuperGaryOverchargeFindTarget"/>
+        <Cost>
+            <Charge>
+                <CountMax value="2"/>
+                <CountStart value="2"/>
+                <CountUse value="1"/>
+                <Link value="Abil/PowerTowerOverchargeStetmann"/>
+                <Location value="Unit"/>
+                <TimeUse value="45"/>
+            </Charge>
+            <Cooldown Link="Abil/PowerTowerOverchargeStetmann" Location="Unit"/>
+        </Cost>
+        <Range value="8"/>
+        <Arc value="360"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadSuperGaryOverchargeEnergy" Requirements="HavePowerFieldEnergyRegenerationUpgrade"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadSuperGaryOverchargeHealth">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadSuperGaryOverchargeFindTarget"/>
+        <Cost>
+            <Charge>
+                <CountMax value="2"/>
+                <CountStart value="2"/>
+                <CountUse value="1"/>
+                <Link value="Abil/PowerTowerOverchargeStetmann"/>
+                <Location value="Unit"/>
+                <TimeUse value="45"/>
+            </Charge>
+            <Cooldown Link="Abil/PowerTowerOverchargeStetmann" Location="Unit"/>
+        </Cost>
+        <InterruptCost>
+            <Charge Link="Abil/SuperGaryStetmannPowerTowerOvercharge"/>
+            <Cooldown Link="Abil/SuperGaryStetmannPowerTowerOvercharge"/>
+        </InterruptCost>
+        <Range value="8"/>
+        <Arc value="360"/>
+        <Marker Link="Abil/SuperGaryStetmannPowerTowerOvercharge"/>
+        <AINotifyEffect value="SuperGaryStetmannPowerTowerOvercharge"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadSuperGaryOverchargeHealth" Requirements="HavePowerFieldHPRegenerationUpgrade"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadSuperGaryOverchargeSpeed">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadSuperGaryOverchargeFindTarget"/>
+        <Cost>
+            <Charge>
+                <CountMax value="2"/>
+                <CountStart value="2"/>
+                <CountUse value="1"/>
+                <Link value="Abil/PowerTowerOverchargeStetmann"/>
+                <Location value="Unit"/>
+                <TimeUse value="45"/>
+            </Charge>
+            <Cooldown Link="Abil/PowerTowerOverchargeStetmann" Location="Unit"/>
+        </Cost>
+        <Range value="8"/>
+        <Arc value="360"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadSuperGaryOverchargeSpeed" Requirements="HavePowerFieldMovementSpeedUpgrade"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadSuperGaryRecall">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadGaryRecallFindTarget"/>
+        <Cost>
+            <Charge>
+                <CountMax value="2"/>
+                <CountStart value="2"/>
+                <CountUse value="1"/>
+                <Link value="Abil/GaryStetmannRecall"/>
+                <TimeUse value="180"/>
+            </Charge>
+            <Cooldown Link="Abil/GaryStetmannRecall"/>
+        </Cost>
+        <TargetFilters value="-;Neutral,Enemy,Missile,Item,Dead,Hidden"/>
+        <Range value="500"/>
+        <Arc value="360"/>
+        <CursorEffect value="GaryStetmannRecallFindTarget"/>
+        <AINotifyEffect value="MassRecall"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="GaryStetmannRecall"/>
+    </CAbilEffectTarget>
     <CAbilEffectTarget id="BlueNuclearStrike">
         <TechPlayer value="Owner"/>
         <Alignment value="Negative"/>
@@ -959,14 +1094,6 @@
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadHavocForceField"/>
         <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
         <PlaceUnit value="SquadForceField"/>
-    </CAbilEffectTarget>
-    <CAbilEffectTarget id="SquadLurkerChannelingSpines">
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Effect index="0" value="SquadLurkerChannelingSpinesCP"/>
-        <TargetFilters value="Ground,Visible;Self,Player,Ally,Neutral,Missile,Dead,Hidden,Invulnerable"/>
-        <Range value="0.5"/>
-        <Arc value="360"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="LurkerStetmannChannelingSpines"/>
     </CAbilEffectTarget>
     <CAbilEffectTarget id="AddMuleliskToSquad">
         <Alignment value="Positive"/>

@@ -1,5 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorBuff id="SquadGaryOrb">
+        <Alignment value="Negative"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <TimeScaleSource Value="Global"/>
+        <Duration value="0.51"/>
+        <Period value="0.5"/>
+        <InitialEffect value="SquadGaryOrbDamageInitial"/>
+        <PeriodicEffect value="SquadGaryOrbDamage"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadGaryOrbDamage">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Period value="0.25"/>
+        <PeriodicEffect value="SquadGaryOrbDamageSearch"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadGaryPowerCountdown">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <Duration value="30"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadGaryRecallInvulnerability">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="2"/>
+        <Modification>
+            <StateFlags index="Invulnerable" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadGaryRecalled">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="1"/>
+        <Modification>
+            <ModifyFlags index="DisableAbils" value="1"/>
+            <StateFlags index="SuppressAttack" value="1"/>
+            <StateFlags index="SuppressPassenger" value="1"/>
+            <StateFlags index="Uncommandable" value="1"/>
+            <AbilClassDisableArray index="CAbilAttack" value="1"/>
+            <AbilClassDisableArray index="CAbilMove" value="1"/>
+            <AbilLinkEnableArray value="VolatileBurstBuilding"/>
+            <AbilLinkEnableArray value="GhostCloak"/>
+            <AbilLinkEnableArray value="BansheeCloak"/>
+            <AbilLinkEnableArray value="LiberatorMorphtoAG"/>
+            <AbilLinkEnableArray value="LiberatorMorphtoAA"/>
+            <AbilLinkEnableArray value="LiberatorAATarget"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadGaryRecalling">
+        <InfoFlags index="Hidden" value="1"/>
+        <BehaviorCategories index="User7" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="CasterNotDead"/>
+        <Duration value="2"/>
+        <ExpireEffect value="SquadGaryRecallSet"/>
+        <Modification>
+            <ModifyFlags index="DisableAbils" value="1"/>
+            <StateFlags index="SuppressAttack" value="1"/>
+            <StateFlags index="SuppressPassenger" value="1"/>
+            <StateFlags index="Uncommandable" value="1"/>
+            <AbilClassDisableArray index="CAbilAttack" value="1"/>
+            <AbilClassDisableArray index="CAbilMove" value="1"/>
+            <AbilLinkEnableArray value="VolatileBurstBuilding"/>
+            <AbilLinkEnableArray value="GhostCloak"/>
+            <AbilLinkEnableArray value="BansheeCloak"/>
+            <AbilLinkEnableArray value="LiberatorMorphtoAG"/>
+            <AbilLinkEnableArray value="LiberatorMorphtoAA"/>
+            <AbilLinkEnableArray value="LiberatorAATarget"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorPowerUser id="SquadGaryBuffAlly">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <PowerLink value="PowerSourceStetmann"/>
+        <Flags index="HideUnpoweredText" value="1"/>
+        <PowerStageArray/>
+        <PowerStageArray MinPowerLevel="1">
+            <Modification>
+                <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Energy" value="0"/>
+            </Modification>
+        </PowerStageArray>
+    </CBehaviorPowerUser>
+    <CBehaviorPowerUser id="SquadBuffSelf">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <PowerLink value="PowerSourceStetmann"/>
+        <Flags index="HideUnpoweredText" value="1"/>
+        <PowerStageArray/>
+        <PowerStageArray MinPowerLevel="1">
+            <Modification>
+                <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Energy" value="0"/>
+            </Modification>
+        </PowerStageArray>
+    </CBehaviorPowerUser>
+    <CBehaviorPowerSource id="SquadGaryPower">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-ability-stetmann-stetzonegenerator-speed.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Structures"/>
+        <Requirements value="HavePowerFieldSuperGaryStetmann"/>
+        <Radius value="11"/>
+        <PowerLink value="PowerSourceStetmann"/>
+    </CBehaviorPowerSource>
+    <CBehaviorBuff id="SquadSuperGaryOvercharge">
+        <InfoIcon value="Assets\Textures\btn-ability-stetmann-garystetelliteovercharge-speed.dds"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Duration value="30"/>
+        <Period value="1"/>
+        <InitialEffect value="SquadSuperGaryOverchargeInitial"/>
+        <PeriodicEffect value="SquadSuperGary0verrchargePeriodic"/>
+        <FinalEffect value="SquadSuperGaryOverchargeFinal"/>
+        <Modification>
+            <StateFlags index="Invulnerable" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorAttribute id="SquadSuperGaryTheBestOilAttribute">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Zerg"/>
+        <MaxPoints value="20"/>
+        <Modification>
+            <AdditiveAttackSpeedFactor value="0.1"/>
+            <VitalRegenArray index="Life" value="1"/>
+        </Modification>
+    </CBehaviorAttribute>
     <CBehaviorBuff id="CCResourceMessage">
         <InfoIcon value="Assets\Textures\btn-ability-zerg-dehaka-healingaura.dds"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>

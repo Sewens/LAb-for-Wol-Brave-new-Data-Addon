@@ -1,5 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CUnit id="SquadGaryOrbMissileEmpowered" parent="MISSILE_INVULNERABLE">
+        <Race value="Terr"/>
+        <Sight value="5"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
+    <CUnit id="SquadGaryOrbMissileUnempowered" parent="MISSILE_INVULNERABLE">
+        <Race value="Zerg"/>
+        <Mover value="SquadGaryOrbMissile"/>
+        <Sight value="5"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
+    <CUnit id="SquadSuperGary">
+        <DeathTime value="-1"/>
+        <DeathRevealRadius value="3"/>
+        <Facing value="45"/>
+        <Race value="Terr"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Air" value="1"/>
+        <PushPriority value="11"/>
+        <Collide index="Flying" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Heroic" value="1"/>
+        <LifeStart value="1000"/>
+        <LifeMax value="1000"/>
+        <LifeArmor value="3"/>
+        <LifeRegenRate value="6"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranVehiclePlating"/>
+        <Mover value="Fly"/>
+        <Speed value="2.9492"/>
+        <Acceleration value="1000"/>
+        <LateralAcceleration value="10"/>
+        <Sight value="11"/>
+        <Height value="2.75"/>
+        <VisionHeight value="4"/>
+        <RepairTime value="180"/>
+        <AttackTargetPriority value="20"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="SquadSuperGaryOrb"/>
+        <AbilArray Link="SquadSuperGaryRecall"/>
+        <AbilArray Link="SquadSuperGaryOverchargeSpeed"/>
+        <AbilArray Link="SquadSuperGaryOverchargeHealth"/>
+        <AbilArray Link="SquadSuperGaryOverchargeEnergy"/>
+        <AbilArray Link="SquadSuperGarySpeedPower"/>
+        <AbilArray Link="SquadSuperGaryHealthPower"/>
+        <AbilArray Link="SquadSuperGaryEnergyPower"/>
+        <BehaviorArray Link="AllUnitBehaviorController"/>
+        <BehaviorArray Link="SquadGaryPower"/>
+        <BehaviorArray Link="Detector11"/>
+        <BehaviorArray Link="SquadSuperGaryTheBestOilAttribute"/>
+        <WeaponArray Link="SquadSuperGaryStetmannGun" Turret="SquadGaryRotate"/>
+        <EffectArray index="Create" value="CommanderPrestigeStetmannGaryPowerUser"/>
+        <EffectArray index="Revive" value="GaryReviveSet"/>
+        <CardLayouts>
+            <LayoutButtons Face="MoveChampions" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="AttackChampions" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="SquadSuperGaryOrb" Type="AbilCmd" AbilCmd="SquadSuperGaryOrb,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="SquadSuperGaryRecall" Type="AbilCmd" AbilCmd="SquadSuperGaryRecall,Execute" Row="2" Column="2"/>
+            <LayoutButtons Face="SquadSuperGaryOverchargeSpeed" Type="AbilCmd" AbilCmd="SquadSuperGaryOverchargeSpeed,Execute" Row="2" Column="1"/>
+            <LayoutButtons Face="SquadSuperGaryOverchargeHealth" Type="AbilCmd" AbilCmd="SquadSuperGaryOverchargeHealth,Execute" Row="2" Column="1"/>
+            <LayoutButtons Face="SquadSuperGaryOverchargeEnergy" Type="AbilCmd" AbilCmd="SquadSuperGaryOverchargeEnergy,Execute" Row="2" Column="1"/>
+            <LayoutButtons Face="Detector" Type="Passive" Row="1" Column="4"/>
+            <LayoutButtons Face="SquadSuperGarySpeedPower" Type="AbilCmd" AbilCmd="SquadSuperGarySpeedPower,Execute" Row="2" Column="3"/>
+            <LayoutButtons Face="SquadSuperGaryHealthPower" Type="AbilCmd" AbilCmd="SquadSuperGaryHealthPower,Execute" Row="2" Column="3"/>
+            <LayoutButtons Face="SquadSuperGaryEnergyPower" Type="AbilCmd" AbilCmd="SquadSuperGaryEnergyPower,Execute" Row="2" Column="3"/>
+            <LayoutButtons Face="SquadSuperGaryTheBestOil" Type="Passive" Row="1" Column="0"/>
+        </CardLayouts>
+        <Radius value="1.5"/>
+        <InnerRadius value="1"/>
+        <SubgroupPriority value="199"/>
+        <MinimapRadius value="1"/>
+        <EditorCategories value="ObjectFamily:Campaign,ObjectType:Unit"/>
+        <HotkeyAlias value="GaryStetmann"/>
+        <TechAliasArray value="Alias_Gary"/>
+        <HotkeyCategory value="Unit/Category/ZergMecha"/>
+    </CUnit>
+    <CUnit id="SquadSuperGaryStetmannMissile" parent="MISSILE">
+        <Race value="Terr"/>
+        <Mover value="LiberatorAGMissile"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
     <CUnit id="CaptainNova">
         <DeathRevealRadius value="3"/>
         <Race value="Terr"/>
@@ -359,7 +447,9 @@
         <Mover value="InfestorNeuralParasite"/>
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
     </CUnit>
-    <CUnit id="SquadChainLightningMissile"/>
+    <CUnit id="SquadChainLightningMissile">
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
+    </CUnit>
     <CUnit id="SquadMedicHealGunMissile" parent="MISSILE_INVULNERABLE">
         <Race value="Terr"/>
         <Mover value="WarHoundWeapon"/>

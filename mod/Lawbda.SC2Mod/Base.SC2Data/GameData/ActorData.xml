@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
     <CActorUnit default="1" id="SquadWar3GenericUnit" parent="GenericUnitStandard">
-        <PlacementSound value="PlaceBuildingDefault"/>
-        <WalkAnimMoveSpeed value="0"/>
+        <Macros index="0" value="SquadReviveAnimationMacroUnit"/>
         <On index="2" Send="AnimBaselineStart"/>
         <!--On Terms="ActorCreation" Send="AnimGroupRemove Alternate"/-->
         <!--On Terms="ActorCreation" Send="AnimGroupRemove Portrait"/-->
@@ -18,7 +17,8 @@
         <On Terms="AnimGroupRemove" Target="::PortraitGameSelf" Send="MessageForward"/>
         <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="AnimGroupApplyFrom ::PortraitGameUnit Instant"/>
         <DeathArray index="Normal" AnimProps="Birth" ModelLink=""/>
-        <Macros index="0" value="SquadReviveAnimationMacroUnit"/>
+        <PlacementSound value="PlaceBuildingDefault"/>
+        <WalkAnimMoveSpeed value="0"/>
     </CActorUnit>
     <CActorUnit default="1" id="SquadGenericUnitBase" parent="GenericUnitStandard">
         <Macros index="0" value="SquadReviveAnimationMacroUnit"/>
@@ -33,41 +33,40 @@
         <DeathActorModelLow value="SquadUnitDeathModel"/>
     </CActorUnit>
     <CActorModel default="1" id="SquadEffectArt" parent="ModelAnimationStyleOneShot">
-        <ModelFlags index="AllowHitTest" value="0"/>
-        <ModelFlags index="AutomateGlobalLoops" value="1"/>
         <FogVisibility value="Hidden"/>
         <On Terms="ActorCreation" Send="SetCastShadows"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
     </CActorModel>
     <CActorModel default="1" id="SquadSpecialArt" parent="ModelAnimationStyleOneShot">
-        <ModelFlags index="AllowHitTest" value="0"/>
-        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+        <Inherits index="Scale" value="1"/>
         <FogVisibility value="Hidden"/>
         <On Terms="ActorCreation" Send="SetCastShadows"/>
-        <Inherits index="Scale" value="1"/>
-    </CActorModel>
-    <CActorModel default="1" id="SquadTargetArtX" parent="ModelAnimationStyleContinuous">
         <ModelFlags index="AllowHitTest" value="0"/>
         <ModelFlags index="AutomateGlobalLoops" value="1"/>
-        <Host Subject="_Selectable"/>
+    </CActorModel>
+    <CActorModel default="1" id="SquadTargetArtX" parent="ModelAnimationStyleContinuous">
         <Inherits index="CloakEffect" value="1"/>
         <Inherits index="Scale" value="1"/>
         <Inherits index="Visibility" value="1"/>
-        <AutoScaleFromSelectionFactor value="1.000000"/>
         <On Terms="AnimBracketState.*.AfterOpening; AnimName BSD; !AnimPlayable Stand" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <AutoScaleFromSelectionFactor value="1.000000"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
     </CActorModel>
     <CActorUnit default="1" id="SquadWar3Unit" parent="SquadWar3GenericUnit">
-        <AnimBlendTime value="0.150000"/>
-        <UnitBorderSubgroupColor value="0,255,128"/>
-        <UnitBorderNormalColor value="128,128,128"/>
+        <!--Macros value="War3_GroupIconMonitorMacro"/-->
+        <!--Macros value="War3_FactionHaloAlt"/-->
+        <Macros value="TerrainSquibAnimations"/>
         <On Terms="WeaponStart.##id##@1.AttackStart" Send="AnimBracketStart Attack Attack,One"/>
         <On Terms="WeaponStart.##id##@2.AttackStart" Send="AnimBracketStart Attack Attack,Two"/>
         <On Terms="Behavior.*.NegativeOn" Send="StatusIncrement DebuffIndicator"/>
         <On Terms="Behavior.*.NegativeOff" Send="StatusDecrement DebuffIndicator"/>
         <On Terms="StatusOn.*.DebuffIndicator" Send="SetGroupIcon 1 Assets\Textures\Renee_GroupIcon_Negtive.dds"/>
         <On Terms="StatusOff.*.DebuffIndicator" Send="SetGroupIcon 1 Assets\Textures\Renee_GroupIconEmpty.dds"/>
-        <!--Macros value="War3_GroupIconMonitorMacro"/-->
-        <!--Macros value="War3_FactionHaloAlt"/-->
-        <Macros value="TerrainSquibAnimations"/>
+        <AnimBlendTime value="0.150000"/>
+        <EventDataFootprint Name="Bones_Gutz" Actor="War3_UnitFootprintHarness"/>
         <!--UnitFlags index="SuppressDefaultStatusBar" value="1"/-->
         <TerrainSquibs>
             <MovementDistance value="0.150000,0.150000"/>
@@ -77,20 +76,20 @@
             <AttachQuery Methods="AMFilterCenter"/>
             <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleMedium"/>
         </TerrainSquibs>
-        <EventDataFootprint Name="Bones_Gutz" Actor="War3_UnitFootprintHarness"/>
         <GroupIcon>
             <!--Image value="Assets\Textures\Renee_GroupIconEmpty.dds"/-->
             <!--Index="1", Used to Show Debuff/-->
             <Image value="Assets\Textures\Renee_GroupIconEmpty.dds"/>
             <Image value="Assets\Textures\Renee_GroupIconEmpty.dds"/>
         </GroupIcon>
+        <UnitBorderNormalColor value="128,128,128"/>
+        <UnitBorderSubgroupColor value="0,255,128"/>
         <!--Image value="Assets\Textures\Renee_GroupIconEmpty.dds"/-->
         <!--Image value="Assets\Textures\Renee_GroupIconEmpty.dds"/-->
     </CActorUnit>
     <CActorUnit default="1" id="SquadWar3Army" parent="SquadWar3Unit">
-        <Macros value="SquadDeathAnimationMacroUnit"/>
-        <BarOffset value="30"/>
         <Aliases value="_ArmyUnit"/>
+        <Macros value="SquadDeathAnimationMacroUnit"/>
         <On Terms="UnitBirth; ValidateUnit IsMechanical" Send="Create War3_BuildingFlameSmall"/>
         <On Terms="UnitBirth; ValidateUnit IsMechanical" Send="Create War3_BuildingFlameMedium"/>
         <On Terms="UnitBirth; ValidateUnit IsMechanical" Send="Create War3_BuildingFlameLarge"/>
@@ -98,6 +97,7 @@
         <On Terms="UnitMovementUpdate.*.RunStop" Send="AnimGroupRemove Fast"/>
         <DeathActorModel value="SquadUnitDeathModelGL"/>
         <DeathActorModelLow value="SquadUnitDeathModelGL"/>
+        <BarOffset value="30"/>
         <StatusColors index="Energy">
             <ColorArray index="0" value="255,59,102,182"/>
         </StatusColors>
@@ -127,7 +127,7 @@
         <!--On Terms="Abil.##id##.SourcePrepStart" Send="Create EffectSoundLooped ##effectsoundlooped##"/-->
     </CActorSimple>
     <CActorAction default="1" id="SquadInstantBeamAction" parent="GenericAttack">
-        <?token id="beam" type="CActorLink" value="Bogus"?>
+        <?token id="beam" value="Bogus"?>
         <Beam value="##beam##"/>
         <BeamScope value="Caster"/>
         <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeNoVizEnhance SOpForwardLaunchGuide"/>
@@ -138,14 +138,14 @@
         <On Terms="SupporterDestruction" Send="AnimBracketStop BSD"/>
     </CActorBeamSimple>
     <CActorAction default="1" id="SquadGenericMissileAttack" parent="GenericAttack">
-        <?token id="missile" type="CActorLink"?>
+        <?token id="missile"?>
         <Missile value="##missile##"/>
         <ImpactMap index="None" Model="##missile##"/>
         <ImpactModel value="SquadGenericAttackImpactModel"/>
     </CActorAction>
     <CActorMissile default="1" id="SquadMissile" parent="GenericAttackMissile">
-        <ModelFlags index="AutomateGlobalLoops" value="1"/>
         <On Terms="ActorCreation" Send="SetCastShadows"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
     </CActorMissile>
     <CActorAction default="1" id="SquadMarauderAttackBase" parent="MarauderAttackBase"/>
     <CActorModel default="1" id="SquadFloatingTextActorDefault">
@@ -217,6 +217,319 @@
         <HeightOffset value="1.500000"/>
         <Text value="Button/Tooltip/##id##"/>
     </CActorText>
+    <CActorMissile id="SquadGaryCannonMissileUpgraded" parent="GenericAttackMissile" unitName="SquadSuperGaryStetmannMissile">
+        <Model value="SquadGaryCannonMissileUpgraded"/>
+    </CActorMissile>
+    <CActorModel id="SquadGaryTeleportIn" parent="ModelAnimationStyleOneShot">
+        <InheritType value="OneShot"/>
+        <On Terms="Effect.SquadGaryRecallPrepare.Start" Send="Create"/>
+        <On Terms="ActorCreation" Send="TimerSet 2.000000 Die"/>
+        <On Terms="TimerExpired; TimerName Die" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable" Scope="Target"/>
+        <HostSiteOps Ops="SOpAttachCenterStationary"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+        <ModelFlags index="UpdateVisibility" value="0"/>
+    </CActorModel>
+    <CActorAction id="SquadGaryOrbEmpoweredAttack" parent="GenericAttack" effectImpact="SquadGaryOrbEmpoweredImpactDummy" effectLaunch="SquadGaryOrbEmpoweredLaunchMissile">
+        <LaunchAttachQuery Methods="AMFilterWeaponLeft"/>
+        <LaunchAssets Sound="SquadGaryPsionicOrbLaunch"/>
+        <Missile value="SquadGaryOrbMissileEmpowered"/>
+        <ImpactPointSiteOps Ops="SOpTargetPointStationary SOpShadow SOpHeightLaunch"/>
+        <ImpactMap index="None" Model="SquadGaryOrbFinalImpactModel" Sound="SquadGaryPsionicOrbImpact"/>
+        <ImpactModel value="SquadGaryOrbEmpoweredAttackImpactModel"/>
+    </CActorAction>
+    <CActorModel id="SquadGaryOrbEmpoweredAttackImpactModel">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD {} {} Death ContentPlayOnce 0.200000 AsTimeScale"/>
+        <On Terms="ActorCreation" Send="Create Gary_OrbEmpowered_Impact_AS"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorMissile id="SquadGaryOrbMissileEmpowered" parent="GenericAttackMissile" unitName="SquadGaryOrbMissileEmpowered">
+        <Macros value="GlobalLoopMacro"/>
+        <On Terms="ActorCreation" Send="Create PsionicOrbLoop_Emp_AS"/>
+        <On Terms="ActorDestruction" Target="PsionicOrbLoop_Emp_AS" Send="Destroy"/>
+        <Model value="SquadGaryTechnoOrbSmall"/>
+    </CActorMissile>
+    <CActorMissile id="SquadGaryOrbMissileUnempowered" parent="GenericAttackMissile" unitName="SquadGaryOrbMissileUnempowered">
+        <Macros value="GlobalLoopMacro"/>
+        <On Terms="ActorCreation" Send="Create PsionicOrbLoop_Emp_AS"/>
+        <On Terms="ActorDestruction" Target="PsionicOrbLoop_Emp_AS" Send="Destroy"/>
+        <Model value="SquadGaryTechnoOrbMissile"/>
+    </CActorMissile>
+    <CActorAction id="SquadGaryOrbUnempoweredAttack" parent="GenericAttack" effectImpact="SquadGaryOrbImpactDummy" effectLaunch="SquadGaryOrbUnempoweredLaunchMissile">
+        <EditorCategories value=""/>
+        <LaunchAttachQuery Methods="AMFilterWeaponLeft"/>
+        <LaunchAssets Sound="SquadGaryPsionicOrbLaunch"/>
+        <Missile value="SquadGaryOrbMissileUnempowered"/>
+        <ImpactPointSiteOps Ops="SOpTargetPointStationary SOpShadow SOpHeightLaunch"/>
+        <ImpactMap index="None" Model="SquadGaryOrbFinalImpactModel" Sound="SquadGaryPsionicOrbImpact"/>
+        <ImpactModel value="SquadGaryOrbUnempoweredAttackImpactModel"/>
+    </CActorAction>
+    <CActorModel id="SquadGaryOrbUnempoweredAttackImpactModel">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD {} {} Death ContentPlayOnce 0.200000 AsTimeScale"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="Create Gary_OrbEmpowered_Impact_AS"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorModel id="SquadGaryRecalledImpact" parent="ModelAddition">
+        <Terms value="Cap 1"/>
+        <Aliases index="0" removed="1"/>
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <Inherits index="BaseModelScale" value="0"/>
+        <Inherits index="CastShadows" value="0"/>
+        <Inherits index="CloakEffect" value="0"/>
+        <Inherits index="CreepEngulfment" value="0"/>
+        <Inherits index="Decal" value="0"/>
+        <Inherits index="ModelMaterials" value="0"/>
+        <Inherits index="Opacity" value="0"/>
+        <Inherits index="Scale" value="0"/>
+        <Inherits index="TeamColor" value="0"/>
+        <Inherits index="TimeScale" value="0"/>
+        <Inherits index="TintColor" value="0"/>
+        <Inherits index="Visibility" value="0"/>
+        <Inherits index="WarpGroup" value="0"/>
+        <On index="0" Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death ContentPlayOnce"/>
+        <On index="1" Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+        <On index="2" Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
+        <On Terms="Behavior.Recalled.On" Send="Create"/>
+        <On Terms="Behavior.SingleRecalled.On" Send="Create"/>
+        <On Terms="Behavior.MothershipCoreRecalled.On" Send="Create"/>
+        <On Terms="Behavior.SquadGaryRecalled.On" Send="Create"/>
+        <On Terms="Behavior.HybridUrunRecalled.On" Send="Create"/>
+        <On Terms="AssetPreInit; ValidatePlayer NoDarkProtoss" Send="ModelLinkCustomize SOAMothershipBlinkStrikeIn"/>
+        <On Terms="ActorCreation; ValidatePlayer NoDarkProtoss" Send="HostSiteOpsSet ::Host"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <AutoScaleFactor value="0.450000"/>
+        <ModelFlags index="UseSyncSeed" value="0"/>
+    </CActorModel>
+    <CActorSound id="SquadGaryRecalledImpactSound" parent="SoundOneShot">
+        <Terms value="Cap 1"/>
+        <On Terms="Behavior.Recalled.On" Send="Create"/>
+        <On Terms="Behavior.SingleRecalled.On" Send="Create"/>
+        <On Terms="Behavior.MothershipCoreRecalled.On" Send="Create"/>
+        <On Terms="Behavior.SquadGaryRecalled.On" Send="Create"/>
+        <On Terms="Behavior.HybridUrunRecalled.On" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <Sound value="SquadGaryRecalledImpact"/>
+    </CActorSound>
+    <CActorModel id="SquadGaryRecallingImpact" parent="ModelAddition">
+        <Terms value="Cap 1"/>
+        <Aliases index="0" removed="1"/>
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <Inherits index="BaseModelScale" value="0"/>
+        <Inherits index="CastShadows" value="0"/>
+        <Inherits index="CloakEffect" value="0"/>
+        <Inherits index="CreepEngulfment" value="0"/>
+        <Inherits index="Decal" value="0"/>
+        <Inherits index="ModelMaterials" value="0"/>
+        <Inherits index="Opacity" value="0"/>
+        <Inherits index="Scale" value="0"/>
+        <Inherits index="TeamColor" value="0"/>
+        <Inherits index="TimeScale" value="0"/>
+        <Inherits index="TintColor" value="0"/>
+        <Inherits index="Visibility" value="0"/>
+        <Inherits index="WarpGroup" value="0"/>
+        <On index="0" Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death ContentPlayOnce"/>
+        <On index="1" Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+        <On index="2" Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
+        <On Terms="Behavior.Recalling.On" Send="Create"/>
+        <On Terms="Behavior.SingleRecalling.On" Send="Create"/>
+        <On Terms="Behavior.MothershipCoreRecalling.On" Send="Create"/>
+        <On Terms="Behavior.SquadGaryRecalling.On" Send="Create"/>
+        <On Terms="Behavior.HybridUrunRecalling.On" Send="Create"/>
+        <On Terms="AssetPreInit; ValidatePlayer NoDarkProtoss" Send="ModelLinkCustomize SOAMothershipBlinkStrikeOut"/>
+        <On Terms="ActorCreation; ValidatePlayer NoDarkProtoss" Send="HostSiteOpsSet ::Host"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <AutoScaleFactor value="0.450000"/>
+        <ModelFlags index="UseSyncSeed" value="0"/>
+    </CActorModel>
+    <CActorSound id="SquadGaryRecallingImpactSound" parent="SoundOneShot">
+        <Terms value="Cap 1"/>
+        <On Terms="Behavior.Recalling.On" Send="Create"/>
+        <On Terms="Behavior.SingleRecalling.On" Send="Create"/>
+        <On Terms="Behavior.MothershipCoreRecalling.On" Send="Create"/>
+        <On Terms="Behavior.SquadGaryRecalling.On" Send="Create"/>
+        <On Terms="Behavior.HybridUrunRecalling.On" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <Sound value="SquadGaryRecallingImpact"/>
+    </CActorSound>
+    <CActorSite id="SquadGaryTurretLookAtTarget">
+        <On Terms="Effect.SquadGaryOrbUnempoweredLaunchMissile.Start" Send="Create"/>
+        <On Terms="Effect.SquadGaryOrbEmpoweredLaunchMissile.Start" Send="Create"/>
+        <On Terms="ActorCreation" Send="RefSetFromRequest ::actor.LookAt _GaryStetmannTurret Caster"/>
+        <On Terms="ActorCreation" Target="::actor.LookAt" Send="RefSet ::HostTarget ::Self"/>
+        <On Terms="ActorCreation" Target="::actor.LookAt" Send="LookAtStart Continue"/>
+        <On Terms="ActorCreation" Send="TimerSet 1.000000 Die"/>
+        <On Terms="TimerExpired; TimerName Die" Target="::actor.LookAt" Send="LookAtStop"/>
+        <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
+        <HostSiteOps Ops="SOpTargetPoint"/>
+    </CActorSite>
+    <CActorModelMaterial id="SquadGaryOverchargeShieldGlaze" parent="GlazeParent">
+        <On Terms="ActorCreation" Send="ModelMaterialApplyTo ::Main"/>
+        <On Terms="Behavior.SquadSuperGaryOvercharge.Off" Send="Destroy"/>
+        <On Terms="Behavior.SquadSuperGaryOvercharge.On" Send="Create"/>
+        <Model value="GlazeSuperShield"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModelMaterial>
+    <CActorModel id="SquadGaryOvercharge" parent="ModelAnimationStyleContinuous">
+        <Inherits index="CloakEffect" value="1"/>
+        <On Terms="Behavior.SquadSuperGaryOvercharge.Create" Send="Create"/>
+        <On Terms="Behavior.SquadSuperGaryOvercharge.Destroy" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart Work Stand,Work,Start Stand,Work Stand,Work,End"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.500000"/>
+        <On Terms="ActorCreation; ValidateUnit HasPowerFieldHPRegenerationBuff" Send="SetTintColor 128,215,64 0.000000 OneShot OverchargeTint"/>
+        <On Terms="ActorCreation; ValidateUnit HasPowerFieldEnergyRegenerationBuff" Send="SetTintColor 255,25,80 0.000000 OneShot OverchargeTint"/>
+        <Host Subject="_Unit" Actor="Find"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="SquadSuperGaryOvercharge"/>
+    </CActorModel>
+    <CActorSound id="SquadGaryOverchargeLoopAS" parent="SoundContinuous">
+        <On Terms="Behavior.SquadSuperGaryOvercharge.Create" Send="Create"/>
+        <On Terms="Behavior.SquadSuperGaryOvercharge.Destroy" Send="Destroy"/>
+        <Sound value="SquadGaryOverchargeLoop"/>
+        <Layers Sound="PowerTowerStetmannOvercharge_Start"/>
+    </CActorSound>
+    <CActorSound id="SquadGaryOverchargeStopAS" parent="SoundOneShot">
+        <On Terms="Behavior.SquadSuperGaryOvercharge.Destroy" Send="Create"/>
+        <Sound value="SquadGaryOverchargeStop"/>
+    </CActorSound>
+    <CActorSimple id="SquadGaryRecallOpacity">
+        <On Terms="Behavior.Recalling.On" Send="Create"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="SetOpacity 0.800000 0.250000 MassRecallOpacity"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="SetTintColor 100,100,255 0.250000 OneShot MassRecallTint"/>
+        <On Terms="Behavior.NeuralParasite.On" Target="_Unit" Send="ClearOpacity 0.250000 MassRecallOpacity"/>
+        <On Terms="Behavior.NeuralParasite.On" Target="_Unit" Send="ClearTintColor 0.250000 MassRecallTint"/>
+        <On Terms="Behavior.NeuralParasite.On" Send="Destroy"/>
+        <On Terms="Behavior.Recalled.Off" Target="_Unit" Send="ClearOpacity 0.250000 MassRecallOpacity"/>
+        <On Terms="Behavior.Recalled.Off" Target="_Unit" Send="ClearTintColor 0.250000 MassRecallTint"/>
+        <On Terms="Behavior.Recalled.Off" Send="Destroy"/>
+        <On Terms="Behavior.Yoink.On" Target="_Unit" Send="ClearOpacity 0.250000 MassRecallOpacity"/>
+        <On Terms="Behavior.Yoink.On" Target="_Unit" Send="ClearTintColor 0.250000 MassRecallTint"/>
+        <On Terms="Behavior.Yoink.On" Send="Destroy"/>
+        <On Terms="Behavior.MothershipCoreRecalling.On" Send="Create"/>
+        <On Terms="Behavior.MothershipCoreRecalling.Off" Send="TimerSet 0.150000 ClearRecallOpacity"/>
+        <On Terms="Behavior.MothershipCoreRecalled.Off" Target="_Unit" Send="ClearOpacity 0.250000 MassRecallOpacity"/>
+        <On Terms="Behavior.MothershipCoreRecalled.Off" Target="_Unit" Send="ClearTintColor 0.250000 MassRecallTint"/>
+        <On Terms="Behavior.MothershipCoreRecalled.Off" Send="Destroy"/>
+        <On Terms="Behavior.MothershipRecalling.On" Send="Create"/>
+        <On Terms="Behavior.MothershipRecalling.Off" Send="TimerSet 0.150000 ClearRecallOpacity"/>
+        <On Terms="Behavior.MothershipRecalled.Off" Target="_Unit" Send="ClearOpacity 0.250000 MassRecallOpacity"/>
+        <On Terms="Behavior.MothershipRecalled.Off" Target="_Unit" Send="ClearTintColor 0.250000 MassRecallTint"/>
+        <On Terms="Behavior.MothershipRecalled.Off" Send="Destroy"/>
+        <On Terms="TimerExpired; TimerName ClearRecallOpacity; ValidateUnit NoRecallingBehaviors" Target="_Unit" Send="ClearOpacity 0.250000 MassRecallOpacity"/>
+        <On Terms="TimerExpired; TimerName ClearRecallOpacity; ValidateUnit NoRecallingBehaviors" Target="_Unit" Send="ClearTintColor 0.250000 MassRecallTint"/>
+        <On Terms="TimerExpired; TimerName ClearRecallOpacity; ValidateUnit NoRecallingBehaviors" Send="Destroy"/>
+        <On Terms="Behavior.HybridUrunRecalling.On" Send="Create"/>
+        <On Terms="Behavior.HybridUrunRecalled.Off" Target="_Unit" Send="ClearOpacity 0.250000 MassRecallOpacity"/>
+        <On Terms="Behavior.HybridUrunRecalled.Off" Target="_Unit" Send="ClearTintColor 0.250000 MassRecallTint"/>
+        <On Terms="Behavior.HybridUrunRecalling.Off" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidatePlayer NoDarkProtoss" Target="_Unit" Send="SetTintColor 145,0,0 0.250000 OneShot MassRecallTint"/>
+        <On Terms="Behavior.SquadGaryRecalling.On" Send="Create"/>
+        <On Terms="Behavior.SquadGaryRecalling.Off" Send="TimerSet 0.150000 ClearRecallOpacity"/>
+        <On Terms="Behavior.GaryStetmannRecalled.Off" Send="ClearOpacity 0.250000 MassRecallOpacity"/>
+        <On Terms="Behavior.GaryStetmannRecalled.Off" Send="ClearTintColor 0.250000 MassRecallTint"/>
+        <On Terms="Behavior.GaryStetmannRecalled.Off" Send="Destroy"/>
+    </CActorSimple>
+    <CActorModel id="SquadLurkerChannelingSpinesImpact" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.SquadLurkerChannelingSpinesSearch2.Start" Send="Create"/>
+        <On Terms="ActorCreation" Send="AnimPlay Attack Attack"/>
+        <On Terms="ActorCreation" Send="Create LurkerStetmannChanneling_SpikeImpact_AS"/>
+        <On Terms="ActorCreation" Send="TimerSet 1.500000 DelayDestroy"/>
+        <On Terms="TimerExpired; TimerName DelayDestroy" Send="Destroy"/>
+        <Model value="Lurker_Stetmann_COOP_SuperSpikeImproved"/>
+    </CActorModel>
+    <CActorUnit id="SquadSuperGary" parent="GenericUnitBase" unitName="SquadSuperGary">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="PowerFieldStetmannMacro"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="WeaponStart.*.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStart.*.AttackStart; AnimPlaying Birth" Send="AnimClear Birth"/>
+        <On Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo SuperGaryStetmann" Send="Create"/>
+        <On Terms="ActorCreation" Send="AnimBracketClear BSD"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death"/>
+        <On Terms="ActorCreation" Send="Create GaryStetmannLookAt"/>
+        <On Terms="WeaponStart.SuperGaryStetmannGun.AttackStart" Target="_GaryStetmannTurret" Send="LookAtEngage Continue"/>
+        <On Terms="WeaponStop.SuperGaryStetmannGun.AttackStop" Target="_GaryStetmannTurret" Send="LookAtDisengage"/>
+        <On Terms="Abil.attack.ReadyStart" Target="_GaryStetmannTurret" Send="LookAtEngage"/>
+        <On Terms="Behavior.GaryReviveIntro.Off" Send="AnimBracketClear GL_BSD"/>
+        <On Terms="Behavior.GaryReviveIntro.Off" Send="AnimBracketStart GL_BSD {} GLstand GLdeath"/>
+        <On Terms="Behavior.GaryReviveIntro.Off" Send="AnimBracketClear BSD"/>
+        <On Terms="Behavior.GaryReviveIntro.Off" Send="AnimBracketStart BSD {} Stand Death"/>
+        <On Terms="AnimBracketState.*.AfterOpening; AnimName GL_BSD" Send="AnimBlendTimeApply 0.000000"/>
+        <On Terms="Abil.SuperGaryStetmannPowerTowerOverchargeSpeed.TargetOn" Target="::external.StetmannGaryPowerTargetingHelperList" Send="Signal TargetOn"/>
+        <On Terms="Abil.SuperGaryStetmannPowerTowerOverchargeSpeed.TargetOff" Target="::external.StetmannGaryPowerTargetingHelperList" Send="Signal TargetOff"/>
+        <On Terms="Abil.SuperGaryStetmannPowerTowerOverchargeHealth.TargetOn" Target="::external.StetmannGaryPowerTargetingHelperList" Send="Signal TargetOn"/>
+        <On Terms="Abil.SuperGaryStetmannPowerTowerOverchargeHealth.TargetOff" Target="::external.StetmannGaryPowerTargetingHelperList" Send="Signal TargetOff"/>
+        <On Terms="Abil.SuperGaryStetmannPowerTowerOverchargeEnergy.TargetOn" Target="::external.StetmannGaryPowerTargetingHelperList" Send="Signal TargetOn"/>
+        <On Terms="Abil.SuperGaryStetmannPowerTowerOverchargeEnergy.TargetOff" Target="::external.StetmannGaryPowerTargetingHelperList" Send="Signal TargetOff"/>
+        <On Terms="Abil.SuperGaryStetmannRecall.TargetOn" Target="::external.StetmannGaryPowerTargetingHelperList" Send="Signal TargetOn"/>
+        <On Terms="Abil.SuperGaryStetmannRecall.TargetOff" Target="::external.StetmannGaryPowerTargetingHelperList" Send="Signal TargetOff"/>
+        <On Terms="Upgrade.PowerFieldSuperGaryStetmann.Add" Send="Create GaryBlob"/>
+        <On Terms="Upgrade.PowerFieldSuperGaryStetmann.Remove" Target="GaryBlob" Send="Destroy"/>
+        <On Terms="UnitDeath" Target="GaryBlob" Send="Destroy"/>
+        <Model value="SquadGaryUpgrade"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="SquadGaryUpgrade"/>
+        <DeathArray index="Normal" ModelLink="SquadGaryUpgradeDeath" SoundLink="" VoiceLink=""/>
+        <PlacementModel value="SquadGaryUpgrade"/>
+        <PortraitModel value="SquadGaryPortraitUpgrade"/>
+        <BarWidth value="100"/>
+        <CustomUnitStatusFrame value="Coop_UnitStatus/GaryStetmannStatusFrameTemplate"/>
+        <CustomUnitStatusOffset value="0,-50"/>
+        <CustomUnitStatusAttachment value="Ref_Origin"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\wireframe-stetmann-supergary.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-stetmann-supergary.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
+        <MinimapIcon value="Assets\Textures\ui_minimap_icon_gary.dds"/>
+        <MinimapIconScale value="0.850000"/>
+        <MinimapRenderPriority value="Hero"/>
+        <MinimapTooltip value="Unit/Name/SquadSuperGary"/>
+        <MinimapUseSelfColor value="0"/>
+        <MinimapUseSelectionColor value="0"/>
+        <SoundArray index="Birth" value=""/>
+        <SoundArray index="Ready" value="SquadGaryReady"/>
+        <SoundArray index="Help" value="SquadGaryHelp"/>
+        <SoundArray index="What" value="SquadGaryWhat"/>
+        <SoundArray index="Yes" value="SquadGaryYes"/>
+        <SoundArray index="Attack" value="SquadGaryAttack"/>
+        <SoundArray index="Pissed" value="SquadGaryPissed"/>
+        <SoundArray index="Movement" value="SquadGaryMoveStart"/>
+        <SoundArray index="Turning" value=""/>
+        <SoundArray index="Board" value=""/>
+        <SoundArray index="Click" value=""/>
+        <SoundArray index="ClickError" value=""/>
+        <SoundArray index="Highlight" value=""/>
+        <StatusBarOn index="Shields" value="1"/>
+        <StatusBarOn index="Life" value="1"/>
+        <StatusBarOn index="Energy" value="1"/>
+        <StatusBarOn index="Progress" value="1"/>
+        <StatusBarOn index="Duration" value="1"/>
+        <StatusBarOn index="Custom" value="1"/>
+        <UnitFlags index="SuppressDefaultStatusBar" value="1"/>
+        <UnitIcon value="Assets\Textures\btn-unit-stetmann-supergary.dds"/>
+        <UnitKillRank Text="Rank/SquadSuperGary"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-stetmann-supergary.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="SquadSuperGaryAttack" parent="GenericAttack" effectImpact="SquadGaryDamage" effectLaunch="SquadGaryMissileLM">
+        <LaunchAssets Model="SquadGaryCannonLaunchUpgraded"/>
+        <Missile value="SquadGaryCannonMissileUpgraded"/>
+        <ImpactMap index="None" Model="SquadGaryCannonImpactUpgraded"/>
+        <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
+        <AcquisitionPitchHalfArc value="5.000000"/>
+        <AccuracyHalfArc value="1.000000"/>
+    </CActorAction>
     <CActorSplat id="SquadArtilleryMengskSplat" parent="GenericUnitSplat" unitName="SquadArtilleryMengsk"/>
     <CActorUnit id="SquadArtilleryMengsk" parent="TerranBuildingEx" unitName="SquadArtilleryMengsk">
         <Aliases value="_UnitHuge"/>
@@ -247,12 +560,12 @@
     <CActorSound id="SquadArtilleryMengskExpStrikeDropAS" parent="SoundOneShot">
         <On Terms="Effect.ArtilleryMengskExperimentalStrikeCloudCP.Start; At Effect" Send="Create"/>
         <On Terms="Effect.ArtilleryMengskBombardmentDropDelayCP.Initial; At Effect" Send="Create"/>
-        <Sound value="ArtilleryMengsk_ExpStrike_Drop"/>
+        <Sound value="SquadArtilleryMengskExpStrikeDrop"/>
     </CActorSound>
     <CActorSquib id="SquadArtilleryMengskBombardmentExplode">
         <On Terms="Effect.ArtilleryMengskBombardmentDamageSearch.Start; At Effect" Send="Create"/>
         <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
-        <Map index="None" Sound="ArtilleryMengsk_ExpStrike_Explode"/>
+        <Map index="None" Sound="SquadArtilleryMengskExpStrikeExplode"/>
     </CActorSquib>
     <CActorTurret id="SquadArtilleryMengskTurret">
         <On Terms="TurretEnable.SquadArtilleryMengsk" Send="Create"/>
@@ -261,16 +574,11 @@
         <On Terms="TurretEnable.SquadArtilleryMengsk" Send="Create"/>
         <Sound value="AtrilleryMengsk_Turret_Servo"/>
     </CActorSound>
-    <CActorAction id="ArtilleryMengskBombardmentAttack" parent="GenericAttack" effectImpact="ArtilleryMengskBombardmentDamageSearch" effectLaunch="ArtilleryMengskBombardmentLM">
+    <CActorAction id="SquadArtilleryMengskBombardmentAttack" parent="GenericAttack" effectImpact="ArtilleryMengskBombardmentDamageSearch" effectLaunch="ArtilleryMengskBombardmentLM">
         <LaunchAttachQuery Methods="Weapon"/>
         <ImpactMap index="None" Model="ArtilleryMengskMissileImpact" Sound="KorhalSporeCannon_AttackImpact"/>
     </CActorAction>
-    <CActorSquib id="ArtilleryMengskBombardmentExplode">
-        <On Terms="Effect.ArtilleryMengskBombardmentDamageSearch.Start; At Effect" Send="Create"/>
-        <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
-        <Map index="None" Sound="ArtilleryMengsk_ExpStrike_Explode"/>
-    </CActorSquib>
-    <CActorRange id="ArtilleryMengskBombardmentRange" parent="RangeAbil">
+    <CActorRange id="SquadArtilleryMengskBombardmentRange" parent="RangeAbil">
         <On index="1" Terms="Abil.TargetOn" Send="Create"/>
         <On index="2" Terms="Abil.TargetOff" Send="Destroy"/>
         <On index="3" Terms="Abil.ButtonHoverOn" Send="Create"/>
@@ -278,44 +586,44 @@
         <Range value="30.000000"/>
         <IconArcLength value="3.250000"/>
     </CActorRange>
-    <CActorSplat id="ArtilleryMengskBombardmentSplat" parent="TerranCursorSplat" abil="ArtilleryMengskAttack">
+    <CActorSplat id="SquadArtilleryMengskBombardmentSplat" parent="TerranCursorSplat" abil="ArtilleryMengskAttack">
         <Model value="ArtilleryMengskBombardmentSplat"/>
         <Scale value="15.000000"/>
     </CActorSplat>
-    <CActorModel id="ArtilleryMengskBombardmentTargetingSplat">
+    <CActorModel id="SquadArtilleryMengskBombardmentTargetingSplat">
         <On Terms="Effect.ArtilleryMengskBombardmentDropDelayCP.Start; At Effect" Send="Create"/>
         <On Terms="Effect.ArtilleryMengskBombardmentDropDelayCP.Initial" Send="Destroy"/>
         <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand"/>
         <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
     </CActorModel>
-    <CActorRange id="ArtilleryMengskBombardmentWeaponRange" parent="RangeWeapon" weapon="ArtilleryMengskBombardment">
+    <CActorRange id="SquadArtilleryMengskBombardmentWeaponRange" parent="RangeWeapon" weapon="ArtilleryMengskBombardment">
         <On Terms="SelectionLocalUpdate.ArtilleryMengsk.Start" Send="Create"/>
         <On Terms="SelectionLocalUpdate.ArtilleryMengsk.StartEditorGround" Send="Create"/>
         <On Terms="SelectionLocalUpdate.ArtilleryMengsk.StartEditorFlyer" Send="Create"/>
         <On Terms="SelectionLocalUpdate.ArtilleryMengsk.Stop" Send="Destroy"/>
         <IconArcLength value="3.250000"/>
     </CActorRange>
-    <CActorSound id="ArtilleryMengsk_ExpStrike_Click" parent="SoundOneShot">
+    <CActorSound id="SquadArtilleryMengskExpStrikeClick" parent="SoundOneShot">
         <EditorCategories value=""/>
-        <Host Subject="ArtilleryMengsk_ExpStrike_Macro" Actor="Find"/>
+        <Host Subject="SquadArtilleryMengskExpStrikeMacro" Actor="Find"/>
     </CActorSound>
-    <CActorSound id="ArtilleryMengsk_ExpStrike_GasRelease" parent="SoundOneShot">
+    <CActorSound id="SquadArtilleryMengskExpStrikeGasRelease" parent="SoundOneShot">
         <EditorCategories value=""/>
-        <Host Subject="ArtilleryMengsk_ExpStrike_Macro" Actor="Find"/>
-        <Layers Sound="ArtilleryMengsk_ExpStrike_GasCloud"/>
-        <Layers Sound="ArtilleryMengsk_ExpStrike_GasCloudLyr"/>
+        <Host Subject="SquadArtilleryMengskExpStrikeMacro" Actor="Find"/>
+        <Layers Sound="SquadArtilleryMengskExpStrikeGasCloud"/>
+        <Layers Sound="SquadArtilleryMengskExpStrikeGasCloudLyr"/>
     </CActorSound>
-    <CActorSound id="ArtilleryMengsk_ExpStrike_Impact" parent="SoundOneShot">
+    <CActorSound id="SquadArtilleryMengskExpStrikeImpact" parent="SoundOneShot">
         <EditorCategories value=""/>
         <On Terms="Effect.ArtilleryMengskBombardmentDamageSearch.Start; At Effect" Send="Create"/>
-        <Host Subject="ArtilleryMengsk_ExpStrike_Macro" Actor="Find"/>
+        <Host Subject="SquadArtilleryMengskExpStrikeMacro" Actor="Find"/>
     </CActorSound>
-    <CActorSound id="ArtilleryMengsk_ExpStrike_Klaxon" parent="SoundOneShot">
+    <CActorSound id="SquadArtilleryMengskExpStrikeKlaxon" parent="SoundOneShot">
         <EditorCategories value=""/>
         <On Terms="Abil.ArtilleryMengskExperimentalStrike.SourcePrepStart" Send="Create"/>
         <!--Layers Sound="ArtilleryMengsk_ExpStrike_AirRaid_Siren"/>-->
     </CActorSound>
-    <CActorModel id="ArtilleryMengsk_ExpStrike_Macro">
+    <CActorModel id="SquadArtilleryMengskExpStrikeMacro">
         <EditorCategories value=""/>
         <On Terms="ActorCreation" Send="TimerSet 0.900000 Impact"/>
         <On Terms="ActorCreation" Send="TimerSet 1.090000 Click"/>
@@ -327,9 +635,9 @@
         <On Terms="Effect.ArtilleryMengskExperimentalStrikeCloudCP.Start; At Effect" Send="Create"/>
         <Model value="Invisible"/>
     </CActorModel>
-    <CActorSound id="AtrilleryMengsk_Turret_Servo" parent="SoundOneShot">
+    <CActorSound id="SquadAtrilleryMengskTurretServo" parent="SoundOneShot">
         <EditorCategories value=""/>
-        <On Terms="Abil.ArtilleryMengskExperimentalStrike.SourcePrepStart" Send="Create"/>
+        <On Terms="Abil.BlueNuclearStrike.SourcePrepStart" Send="Create"/>
     </CActorSound>
     <CActorModel id="SquadArtilleryMengskPlacement">
         <Aliases value="_Main"/>
@@ -346,27 +654,27 @@
         <On Terms="Signal.*.ShowPlacement" Send="SetVisibility 1"/>
         <HostSiteOps Ops="SOpTipabilityFloorScope"/>
     </CActorModel>
-    <CActorSplat id="ArtilleryMengskGlobalExperimentalStrikeSplat" parent="TerranCursorSplat" abil="ArtilleryMengskGlobalExperimentalStrike">
-        <Model value="ArtilleryMengskGlobalExperimentalStrikeSplat"/>
+    <CActorSplat id="SquadArtilleryMengskGlobalExperimentalStrikeSplat" parent="TerranCursorSplat" abil="ArtilleryMengskGlobalExperimentalStrike">
+        <Model value="SquadArtilleryMengskGlobalExperimentalStrikeSplat"/>
         <Scale value="15.000000"/>
     </CActorSplat>
-    <CActorModel id="ArtilleryMengskExperimentalStrikeTargetingSplat">
+    <CActorModel id="SquadArtilleryMengskExperimentalStrikeTargetingSplat">
         <On Terms="Effect.ArtilleryMengskExperimentalStrikeDropDeplayCP.Start; At Effect" Send="Create"/>
         <On Terms="Effect.ArtilleryMengskExperimentalStrikeDropDeplayCP.Stop; FromEffectTreeDescendant" Send="Destroy"/>
         <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand"/>
         <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
     </CActorModel>
-    <CActorModel id="ArtilleryMengskFear" parent="ModelAnimationStyleContinuous">
+    <CActorModel id="SquadArtilleryMengskFear" parent="ModelAnimationStyleContinuous">
         <On Terms="Behavior.ArtilleryMengskFear.On" Send="Create"/>
         <On Terms="Behavior.ArtilleryMengskFear.Off" Send="AnimBracketStop BSD"/>
         <On Terms="ActorCreation" Send="SetTintColor 37,220,100 0.000000 OneShot GasTint"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachOverhead"/>
     </CActorModel>
-    <CActorSound id="ArtilleryMengskFearHit" parent="SoundOneShot">
+    <CActorSound id="SquadArtilleryMengskFearHit" parent="SoundOneShot">
         <On Terms="Behavior.ArtilleryMengskFear.On" Send="Create"/>
     </CActorSound>
-    <CActorModel id="ArtilleryMengskCloudSickness">
+    <CActorModel id="SquadArtilleryMengskCloudSickness">
         <Inherits index="CloakEffect" value="1"/>
         <Inherits index="Visibility" value="1"/>
         <On Terms="Behavior.ArtilleryMengskCloudSickness.On" Send="Create"/>
@@ -377,17 +685,17 @@
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachCenter"/>
     </CActorModel>
-    <CActorModel id="ArtilleryMengskExperimentalStrikeCloud" parent="ModelAnimationStyleContinuous">
+    <CActorModel id="SquadArtilleryMengskExperimentalStrikeCloud" parent="ModelAnimationStyleContinuous">
         <On Terms="Effect.ArtilleryMengskExperimentalStrikeCloudCP.Start; At Effect" Send="Create"/>
         <On Terms="Effect.ArtilleryMengskExperimentalStrikeCloudCP.Stop" Send="Destroy"/>
         <ModelFlags index="AutomateGlobalLoops" value="1"/>
     </CActorModel>
-    <CActorModel id="ArtilleryMengskExperimentalStrikeImpact" parent="ModelAnimationStyleContinuous">
+    <CActorModel id="SquadArtilleryMengskExperimentalStrikeImpact" parent="ModelAnimationStyleContinuous">
         <On Terms="Effect.ArtilleryMengskExperimentalStrikeCloudCP.Start; At Effect" Send="Create"/>
         <On Terms="Effect.ArtilleryMengskExperimentalStrikeCloudCP.Stop" Send="AnimBracketStop BSD"/>
         <ModelFlags index="AutomateGlobalLoops" value="1"/>
     </CActorModel>
-    <CActorMissile id="ArtilleryMengskExperimentalStrikeMissile" parent="GenericAttackMissile" unitName="ArtilleryMengskExperimentalStrikeMissile">
+    <CActorMissile id="SquadArtilleryMengskExperimentalStrikeMissile" parent="GenericAttackMissile" unitName="ArtilleryMengskExperimentalStrikeMissile">
         <Model value="Invisible"/>
     </CActorMissile>
     <CActorModel id="BlueNuclearCollateralFire">
@@ -481,21 +789,19 @@
         <On Terms="Behavior.SquadBansheeConsume.On" Send="Create"/>
         <Sound value="LairViper_Consume_Start"/>
     </CActorSound>
-    <!--
-    <CActorModel id="SquadGuardianShield">
-        <Inherits index="CloakEffect" value="1"/>
-        <Inherits index="Visibility" value="1"/>
-        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death ContentPlayOnce"/>
-        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
-        <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
-        <On Terms="Effect.GuardianShieldPersistent.Start; At Caster" Send="Create"/>
-        <On Terms="Effect.GuardianShieldPersistent.Stop; At Caster" Send="AnimBracketStop BSD"/>
-        <Host Subject="_Unit"/>
-        <HostSiteOps Ops="SOpAttachCenter"/>
-        <Model value="GuardianShield"/>
-        <ModelFlags index="AllowHitTest" value="0"/>
-    </CActorModel>
--->
+    <!--    <CActorModel id="SquadGuardianShield">-->
+    <!--        <Inherits index="CloakEffect" value="1"/>-->
+    <!--        <Inherits index="Visibility" value="1"/>-->
+    <!--        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death ContentPlayOnce"/>-->
+    <!--        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>-->
+    <!--        <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>-->
+    <!--        <On Terms="Effect.GuardianShieldPersistent.Start; At Caster" Send="Create"/>-->
+    <!--        <On Terms="Effect.GuardianShieldPersistent.Stop; At Caster" Send="AnimBracketStop BSD"/>-->
+    <!--        <Host Subject="_Unit"/>-->
+    <!--        <HostSiteOps Ops="SOpAttachCenter"/>-->
+    <!--        <Model value="GuardianShield"/>-->
+    <!--        <ModelFlags index="AllowHitTest" value="0"/>-->
+    <!--    </CActorModel>-->
     <CActorRange id="SquadGhostBlackOpsSnipeRange" parent="RangeAbil" abil="Snipe"/>
     <CActorAction id="SquadGhostBlackOpsSnipeAttack" parent="GenericAttack" effectAttack="SquadSnipeBlackOpsDamage">
         <LaunchSiteOps Ops="SOpAttachHarnessStationary"/>
@@ -586,14 +892,14 @@
         <HostSiteOps Ops="SOpBasicScopeFollow StukovInfestedSiegeTankExploderUpOffset StukovInfestedSiegeTankExploderRotator StukovInfestedSiegeTankExploderDownOffset"/>
         <ModelFlags index="AutomateGlobalLoops" value="1"/>
     </CActorMissile>
-    <CActorSiteOpRotator id="StukovInfestedSiegeTankExploderRotator">
-        <Rate value="-720.000000"/>
+    <CActorSiteOpRotator id="SquadInfestedSiegeTankExploderRotator">
         <LocalAxis value="1.000000,0.000000,0.000000"/>
+        <Rate value="-720.000000"/>
     </CActorSiteOpRotator>
-    <CActorSiteOpLocalOffset id="StukovInfestedSiegeTankExploderUpOffset">
+    <CActorSiteOpLocalOffset id="SquadInfestedSiegeTankExploderUpOffset">
         <LocalOffset value="0.000000,0.000000,0.750000"/>
     </CActorSiteOpLocalOffset>
-    <CActorSiteOpLocalOffset id="StukovInfestedSiegeTankExploderDownOffset">
+    <CActorSiteOpLocalOffset id="SquadInfestedSiegeTankExploderDownOffset">
         <LocalOffset value="0.000000,0.000000,-0.750000"/>
     </CActorSiteOpLocalOffset>
     <CActorModel id="SquadWar3GenericAttackImpactModel">
@@ -860,7 +1166,7 @@
     </CActorSetQueried>
     <CActorSound id="SquadCaptainNovaDamageMediumFireAS" parent="SoundContinuous">
         <Host Subject="_Selectable"/>
-        <Sound value="SquadCaptainNovaDamage_Medium_Fire"/>
+        <Sound value="SquadCaptainNovaDamageMediumFire"/>
     </CActorSound>
     <CActorSetQueried id="SquadCaptainNovaFlamesSetOne">
         <Host Subject="_Selectable"/>
@@ -950,7 +1256,7 @@
     <CActorSound id="SquadCaptainNovaSniperRifleAttackLaunchTailSound" parent="SoundOneShot">
         <Sound value="SquadCaptainNovaSniperRifleTailDummy"/>
         <Layers>
-            <Sound value="SquadCaptainNovaAttackLaunch_MechySweetener"/>
+            <Sound value="SquadCaptainNovaAttackLaunchMechySweetener"/>
             <PitchSource value="Sound"/>
             <PlayDelaySource value="Sound"/>
             <VolumeSource value="Sound"/>

@@ -7,9 +7,9 @@
         <PeriodicPeriod value="1"/>
     </CEffectCreateHealer>
     <CEffectModifyUnit default="1" id="SquadHeal">
+        <ValidatorArray value="NoTargetExcludeBuffAny"/>
         <AINotifyFlags index="HelpFriend" value="1"/>
         <ModifyFlags index="IsHeal" value="1"/>
-        <ValidatorArray value="NoTargetExcludeBuffAny"/>
     </CEffectModifyUnit>
     <CEffectLaunchMissile default="1" id="SquadLaunchMissile">
         <?token id="weaponid" value="##id##"?>
@@ -22,9 +22,9 @@
         <Flags index="ValidateImpactDeflection" value="0"/>
     </CEffectLaunchMissile>
     <CEffectApplyBehavior default="1" id="SquadApplyBuff">
+        <ValidatorArray index="0" removed="1"/>
         <ResponseFlags index="Acquire" value="1"/>
         <ResponseFlags index="Flee" value="1"/>
-        <ValidatorArray index="0" removed="1"/>
     </CEffectApplyBehavior>
     <CEffectEnumArea default="1" id="SquadAbilSearch"/>
     <CEffectEnumArea default="1" id="SquadAbilSearchRadiusExt" parent="SquadAbilSearch">
@@ -157,6 +157,261 @@
         <Upgrades Upgrade="ScannerSweepVanillaUpgradeDummy" Count="-1"/>
         <Upgrades Upgrade="ScannerSweepYellowUpgradeDummy" Count="1"/>
     </CEffectModifyPlayer>
+    <CEffectDamage id="SquadGaryOrbDamageInitial">
+        <ValidatorArray value="GaryStetmannOrbTargetFilters"/>
+        <EditorCategories value="Race:Protoss"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Amount value="25"/>
+    </CEffectDamage>
+    <CEffectModifyUnit id="SquadGaryOrbEmpoweredImpactDummy">
+        <EditorCategories value=""/>
+        <Marker Link="Effect/GaryOrbImpactDummy"/>
+        <ImpactUnit Value="Source"/>
+    </CEffectModifyUnit>
+    <CEffectModifyUnit id="SquadGaryOrbImpactDummy">
+        <EditorCategories value=""/>
+        <ImpactUnit Value="Source"/>
+    </CEffectModifyUnit>
+    <CEffectApplyBehavior id="SquadGaryOrbApplyBehavior">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="SquadGaryOrb"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="SquadGaryOrbDamage">
+        <ValidatorArray value="GaryStetmannOrbTargetFilters"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Visibility value="Hidden"/>
+        <Amount value="25"/>
+    </CEffectDamage>
+    <CEffectApplyBehavior id="SquadGaryOrbDamageAB">
+        <WhichUnit Value="Source"/>
+        <Behavior value="SquadGaryOrbDamage"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumArea id="SquadGaryOrbDamageSearch">
+        <EditorCategories value=""/>
+        <SearchFilters value="-;Self,Player,Ally,Missile,Item,Stasis,Dead,Hidden,Invulnerable"/>
+        <TargetSorts>
+            <SortArray value="TSRandom"/>
+        </TargetSorts>
+        <AreaArray Radius="2.5" Effect="SquadGaryOrbApplyBehavior"/>
+    </CEffectEnumArea>
+    <CEffectCreatePersistent id="SquadGaryOrbEmpoweredInitialPersistent">
+        <EditorCategories value=""/>
+        <WhichLocation Value="SourcePoint"/>
+        <PeriodCount value="3"/>
+        <PeriodicEffectArray value="SquadGaryOrbEmpoweredLaunchMissile"/>
+        <PeriodicOffsetArray value="0,-13,0"/>
+        <PeriodicOffsetArray value="3.3645,-12.557,0"/>
+        <PeriodicOffsetArray value="-3.3645,-12.557,0"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectLaunchMissile id="SquadGaryOrbEmpoweredLaunchMissile">
+        <EditorCategories value=""/>
+        <ImpactLocation Value="TargetPoint"/>
+        <LaunchEffect value="SquadGaryOrbDamageAB"/>
+        <ImpactEffect value="SquadGaryOrbEmpoweredImpactDummy"/>
+        <AmmoUnit value="SquadGaryOrbMissileEmpowered"/>
+    </CEffectLaunchMissile>
+    <CEffectSwitch id="SquadGaryOrbInitialSwitch">
+        <EditorCategories value="Race:Zerg"/>
+        <CaseArray Validator="CasterIsPoweredByPowerSourceStetmann" Effect="SquadGaryOrbEmpoweredInitialPersistent"/>
+        <CaseDefault value="SquadGaryOrbUnempoweredInitialPersistent"/>
+        <TargetLocationType value="Point"/>
+    </CEffectSwitch>
+    <CEffectCreatePersistent id="SquadGaryOrbUnempoweredInitialPersistent">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="SourcePoint"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffectArray value="SquadGaryOrbUnempoweredLaunchMissile"/>
+        <PeriodicOffsetArray value="0,-13,0"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectLaunchMissile id="SquadGaryOrbUnempoweredLaunchMissile">
+        <EditorCategories value=""/>
+        <ImpactLocation Value="TargetPoint"/>
+        <LaunchEffect value="SquadGaryOrbDamageAB"/>
+        <ImpactEffect value="SquadGaryOrbImpactDummy"/>
+        <AmmoUnit value="SquadGaryOrbMissileUnempowered"/>
+    </CEffectLaunchMissile>
+    <CEffectApplyBehavior id="SquadGaryPowerCountdown">
+        <EditorCategories value=""/>
+        <WhichUnit Value="Caster"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadGaryRecallApplyBehavior">
+        <ValidatorArray index="0" value="NotLarvaEgg"/>
+        <ValidatorArray value="NotLarva"/>
+        <ValidatorArray value="NotLarvaStetmann"/>
+        <ValidatorArray value="NotAbducted"/>
+        <ValidatorArray value="NotReleasedInterceptor"/>
+        <ValidatorArray value="TargetIsNotNonCommanderAlly"/>
+        <ValidatorArray value="NotLarvaStetmann"/>
+        <ValidatorArray value="NotLarvaEggStetmann"/>
+        <ValidatorArray value="TargetNotUndergoingMassTransport"/>
+        <Behavior value="SquadGaryRecalling"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumArea id="SquadGaryRecallFindTarget">
+        <EditorCategories value="Race:Zerg"/>
+        <AreaArray Radius="4" Effect="SquadGaryRecallPrepare"/>
+        <MinCount value="1"/>
+        <MaxCount value="1"/>
+    </CEffectEnumArea>
+    <CEffectApplyBehavior id="SquadGaryRecallInvulnerabilityAB">
+        <EditorCategories value=""/>
+        <Behavior value="SquadGaryRecallInvulnerability"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadGaryRecallPostBehavior">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="SquadGaryRecalled"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="SquadGaryRecallPrepare">
+        <ValidatorArray value="IsPowerTower"/>
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="SquadGaryRecallInvulnerabilityAB"/>
+        <EffectArray value="SquadGaryRecallSearch"/>
+    </CEffectSet>
+    <CEffectEnumArea id="SquadGaryRecallSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactLocation Value="CasterPoint"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="-;Ally,Neutral,Enemy,Structure,User1,Worker,Missile,Item,Uncommandable,Dead,Hidden"/>
+        <AreaArray Radius="12" Effect="SquadGaryRecallApplyBehavior"/>
+        <MinCount value="1"/>
+        <SearchFlags index="ExtendByUnitRadius" value="1"/>
+    </CEffectEnumArea>
+    <CEffectSet id="SquadGaryRecallSet">
+        <ValidatorArray value="NotLarvaEgg"/>
+        <ValidatorArray value="NotLarva"/>
+        <ValidatorArray value="NotLarvaStetmann"/>
+        <ValidatorArray value="NotLarvaEggStetmann"/>
+        <EffectArray value="SquadGaryRecallTeleport"/>
+        <EffectArray value="SquadGaryRecallPostBehavior"/>
+    </CEffectSet>
+    <CEffectTeleport id="SquadGaryRecallTeleport">
+        <EditorCategories value="Race:Protoss"/>
+        <PlacementArc value="360"/>
+        <PlacementAround Effect="GaryStetmannRecallSearch"/>
+        <PlacementRange value="15"/>
+        <SourceLocation Effect="GaryStetmannRecallSearch" Value="CasterPoint"/>
+        <TargetLocation Effect="GaryStetmannRecallSearch" Value="TargetPoint"/>
+        <TeleportFlags index="TestCliff" value="1"/>
+        <TeleportFlags index="TestFog" value="0"/>
+    </CEffectTeleport>
+    <CEffectApplyBehavior id="SquadGaryEnergyRegenerationAB">
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="PowerFieldEnergyRegenerationStetmann"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadGaryEnergyRegenerationAllyAB">
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="PowerFieldEnergyRegenerationAllyStetmann"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadGaryHPRegenerationAB">
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="PowerFieldHPRegenerationStetmann"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadGaryHPRegenerationAllyAB">
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="PowerFieldHPRegenerationAllyStetmann"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadGaryMovementSpeedAB">
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="SquadBuffSelf"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadGaryMovementSpeedAllyAB">
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="SquadGaryBuffAlly"/>
+    </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="SquadSuperGaryCP">
+        <EditorCategories value="Race:Zerg"/>
+        <InitialEffect value="SquadGaryPowerCountdown"/>
+        <PeriodCount value="2"/>
+        <PeriodicEffectArray value="SquadSuperGaryUpgrade"/>
+        <PeriodicEffectArray value="SquadSuperGaryStetmannDowngrade"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="30"/>
+    </CEffectCreatePersistent>
+    <CEffectModifyPlayer id="SquadSuperGaryStetmannDowngrade">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichPlayer Value="Caster"/>
+        <Upgrades Upgrade="PowerFieldSuperGaryStetmann" Count="-1"/>
+    </CEffectModifyPlayer>
+    <CEffectModifyPlayer id="SquadSuperGaryUpgrade">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichPlayer Value="Caster"/>
+        <Upgrades Upgrade="PowerFieldSuperGaryStetmann" Count="1"/>
+    </CEffectModifyPlayer>
+    <CEffectEnumArea id="SquadSuperGaryOverchargeFindTarget">
+        <EditorCategories value="Race:Zerg"/>
+        <AreaArray Radius="4" Effect="SquadSuperGaryOverchargeStetmannAB"/>
+        <MinCount value="1"/>
+        <MaxCount value="1"/>
+    </CEffectEnumArea>
+    <CEffectApplyBehavior id="SquadSuperGaryOverchargeStetmannAB">
+        <ValidatorArray index="0" value="IsPowerTower"/>
+        <ValidatorArray value="TargetNotHavePowerTowerOvercharge"/>
+        <EditorCategories value=""/>
+        <Behavior value="SquadSuperGaryOvercharge"/>
+    </CEffectApplyBehavior>
+    <CEffectModifyUnit id="SquadSuperGaryOverchargeFinal">
+        <EditorCategories value="Race:Zerg"/>
+        <Cost Abil="FASTOverloadStetmann,Execute">
+            <Fraction Charge="10"/>
+        </Cost>
+    </CEffectModifyUnit>
+    <CEffectModifyUnit id="SquadSuperGaryOverchargeInitial">
+        <EditorCategories value="Race:Zerg"/>
+        <Cost Abil="FASTOverloadStetmann,Execute">
+            <Fraction Charge="-10"/>
+        </Cost>
+    </CEffectModifyUnit>
+    <CEffectModifyUnit id="SquadSuperGary0verrchargePeriodic">
+        <EditorCategories value="Race:Zerg"/>
+        <Cost Abil="FASTOverloadStetmann,Execute">
+            <Fraction Charge="-1"/>
+        </Cost>
+    </CEffectModifyUnit>
+    <CEffectCreatePersistent id="SquadLurkerChannelingSpinesCP">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichLocation Value="TargetUnit"/>
+        <PeriodCount value="10"/>
+        <PeriodicValidator value="CasterIsLurkerStetmannBurrowedandCasterandTargetNotDead"/>
+        <PeriodicEffectArray value="SquadLurkerChannelingSpinesSearch2"/>
+        <PeriodicPeriodArray value="1"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="SquadLurkerChannelingSpinesDamage">
+        <EditorCategories value="Race:Terran"/>
+        <Amount value="50"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="SquadLurkerChannelingSpinesSearch2">
+        <EditorCategories value="Race:Zerg"/>
+        <SearchFilters value="Ground,Visible;Player,Ally,Neutral,Missile,Hidden,Invulnerable"/>
+        <AreaArray Radius="2" Effect="SquadLurkerChannelingSpinesDamage"/>
+    </CEffectEnumArea>
+    <CEffectSet id="SquadGaryPowerFieldAllyABSet">
+        <ValidatorArray value="IsAllyOfStetmann"/>
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="SquadGaryEnergyRegenerationAllyAB"/>
+        <EffectArray value="SquadGaryHPRegenerationAllyAB"/>
+        <EffectArray value="SquadGaryMovementSpeedAllyAB"/>
+    </CEffectSet>
+    <CEffectSet id="SquadGaryPowerFieldSelfABSet">
+        <ValidatorArray value="IsStetmann"/>
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="SquadGaryEnergyRegenerationAB"/>
+        <EffectArray value="SquadGaryHPRegenerationAB"/>
+        <EffectArray value="SquadGaryMovementSpeedAB"/>
+    </CEffectSet>
+    <CEffectDamage id="SquadGaryDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Ranged"/>
+        <Amount value="45"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="SquadGaryMissileLM">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="SquadGaryDamage"/>
+        <AmmoUnit value="SquadSuperGaryStetmannMissile"/>
+    </CEffectLaunchMissile>
     <CEffectSet id="SquadSiegeTankChargingCannonsAttackSet">
         <EditorCategories value="Race:Terran"/>
         <EffectArray value="SquadSiegeTankChargingCannonsAttackSwitch"/>
@@ -2283,18 +2538,6 @@
         <SearchFilters value="-;Air,Ground,Structure,Missile,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
         <AreaArray Radius="1.7"/>
     </CEffectEnumArea>
-    <CEffectCreatePersistent id="SquadLurkerChannelingSpinesCP">
-        <EditorCategories value="Race:Terran"/>
-        <WhichLocation Value="TargetUnit"/>
-        <PeriodCount value="1"/>
-        <PeriodicValidator value="CasterIsLurkerStetmannBurrowedandCasterandTargetNotDead"/>
-        <PeriodicEffectArray value="SquadLurkerChannelingSpinesSearch"/>
-        <PeriodicPeriodArray value="1"/>
-    </CEffectCreatePersistent>
-    <CEffectDamage id="SquadLurkerChannelingSpinesDamage">
-        <EditorCategories value="Race:Terran"/>
-        <Amount value="12"/>
-    </CEffectDamage>
     <CEffectEnumArea id="SquadLurkerChannelingSpinesSearch">
         <EditorCategories value="Race:Terran"/>
         <SearchFilters value="Ground,Visible;Player,Ally,Neutral,Air,Missile,Hidden,Invulnerable,AirUnit"/>
