@@ -1,5 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorBuff id="FirebatImmolationArmor">
+        <InfoIcon value="Assets\Textures\war3_btn\renee_war3_btnimmolationon.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DamageResponse Handled="FirebatImmolationArmorPersistent" ModifyFraction="0.99" TargetFilters="Visible;Missile,Dead,Invulnerable">
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="MissileTowerSpikeArmor">
+        <InfoIcon value="Assets\Textures\btn-upgrade-zerg-organiccarapace.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DamageResponse Handled="SquadMissileTurretSpikeArmorCreatePersistent" ModifyFraction="0.99" TargetFilters="Visible;Missile,Dead,Invulnerable">
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="MarauderFrostArmor">
+        <InfoIcon value="Assets\Textures\war3_btn\renee_war3_btnfrostarmoron.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DamageResponse Handled="SquadMarauderFrostArmorSet" ModifyFraction="0.99" TargetFilters="Visible;Missile,Dead,Invulnerable">
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
     <CBehaviorBuff id="SquadGaryOrb">
         <Alignment value="Negative"/>
         <InfoFlags index="Hidden" value="1"/>
@@ -109,6 +130,17 @@
         <Radius value="11"/>
         <PowerLink value="PowerSourceStetmann"/>
     </CBehaviorPowerSource>
+    <CBehaviorBuff id="MarauderFrostArmorSlow">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-slow.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="HasPsiStrike"/>
+        <RemoveValidatorArray value="NoPurificationNova"/>
+        <RemoveValidatorArray value="HasNovaPsiStrikeWalkSpeed"/>
+        <MaxStackCount value="8"/>
+        <Duration value="5"/>
+        <Modification MoveSpeedMultiplier="0.9"/>
+    </CBehaviorBuff>
     <CBehaviorBuff id="SquadSuperGaryOvercharge">
         <InfoIcon value="Assets\Textures\btn-ability-stetmann-garystetelliteovercharge-speed.dds"/>
         <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
@@ -1946,15 +1978,6 @@
         <CarryResourceBehavior value="SquadCarryHarvestableVespeneGeyserGas"/>
         <IdealHarvesterCount value="3"/>
     </CBehaviorResource>
-    <CBehaviorBuff id="SquadHellstormMissiles">
-        <InfoFlags index="Hidden" value="1"/>
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Requirements value="HellstormMissilesResearched"/>
-        <Modification>
-            <WeaponEnableArray value="MissileTurret"/>
-            <WeaponEnableArray value="HailstormMissilePods"/>
-        </Modification>
-    </CBehaviorBuff>
     <CBehaviorVeterancy id="InfantryLevelUpto10">
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <VeterancyLevelArray MinVeterancyXP="200"/>
@@ -2057,7 +2080,7 @@
         <MaxStackCountPerCaster value="1"/>
         <InfoIcon value="Assets\Textures\btn-upgrade-stetmann-infestorbonusravager.dds"/>
     </CBehaviorBuff>
-    <CBehaviorBuff id="MagazineDeathResponse">
+    <CBehaviorBuff id="MagazineDeathResponseController">
         <BehaviorFlags index="Permanent" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <Modification>

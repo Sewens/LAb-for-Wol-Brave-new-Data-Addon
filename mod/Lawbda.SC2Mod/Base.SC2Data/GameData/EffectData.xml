@@ -157,6 +157,12 @@
         <Upgrades Upgrade="ScannerSweepVanillaUpgradeDummy" Count="-1"/>
         <Upgrades Upgrade="ScannerSweepYellowUpgradeDummy" Count="1"/>
     </CEffectModifyPlayer>
+    <CEffectDamage id="FirebatImmolationArmorDamage" parent="DU_WEAP_SPLASH">
+        <ValidatorArray value="noMarkers"/>
+        <EditorCategories value="Race:Terran"/>
+        <Amount value="2"/>
+        <Death value="Fire"/>
+    </CEffectDamage>
     <CEffectDamage id="SquadGaryOrbDamageInitial">
         <ValidatorArray value="GaryStetmannOrbTargetFilters"/>
         <EditorCategories value="Race:Protoss"/>
@@ -322,6 +328,27 @@
         <EditorCategories value="Race:Zerg"/>
         <Behavior value="SquadGaryBuffAlly"/>
     </CEffectApplyBehavior>
+    <CEffectDamage id="MarauderFrostArmorDamage">
+        <EditorCategories value=""/>
+        <Amount value="5"/>
+    </CEffectDamage>
+    <CEffectSet id="SquadMarauderFrostArmorSet">
+        <EditorCategories value=""/>
+        <EffectArray value="MarauderFrostArmorDamage"/>
+        <EffectArray value="MarauderFrostAromrSlowApply"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="MarauderFrostAromrSlowApply">
+        <ValidatorArray index="0" value="PunisherGrenadesSlowTargetFilters"/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="MarauderFrostArmorSlow"/>
+    </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="FirebatImmolationArmorPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <PeriodCount value="5"/>
+        <PeriodicEffectArray value="FirebatImmolationArmorDamage"/>
+        <PeriodicPeriodArray value="0.25"/>
+    </CEffectCreatePersistent>
     <CEffectCreatePersistent id="SquadSuperGaryCP">
         <EditorCategories value="Race:Zerg"/>
         <InitialEffect value="SquadGaryPowerCountdown"/>
@@ -5302,33 +5329,33 @@
     </CEffectSet>
     <CEffectApplyBehavior id="AddDeathResponseSquad">
         <EditorCategories value="Race:Terran"/>
-        <Behavior value="MagazineDeathResponse"/>
+        <Behavior value="MagazineDeathResponseController"/>
     </CEffectApplyBehavior>
     <CEffectRemoveBehavior id="DeathResponseRemoveSquad">
         <EditorCategories value=""/>
-        <BehaviorLink value="MagazineDeathResponse"/>
+        <BehaviorLink value="MagazineDeathResponseController"/>
     </CEffectRemoveBehavior>
-    <CEffectCreatePersistent id="SquadMissileTurretHellstormMissilePodsCreatePersistent">
+    <CEffectCreatePersistent id="SquadMissileTurretSpikeArmorCreatePersistent">
         <EditorCategories value="Race:Terran"/>
         <WhichLocation Value="TargetUnit"/>
-        <PeriodCount value="8"/>
-        <PeriodicEffectArray value="SquadMissileTurretHellstormMissilePodsLaunchMissile"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffectArray value="SquadMissileTurretSpikeArmorLaunchMissile"/>
         <PeriodicPeriodArray value="0.0625"/>
     </CEffectCreatePersistent>
-    <CEffectDamage id="SquadMissileTurretHellstormMissilePodsDamage">
+    <CEffectDamage id="SquadMissileTurretSpikeArmorDamage">
         <EditorCategories value="Race:Terran"/>
         <ResponseFlags index="Acquire" value="1"/>
         <ResponseFlags index="Flee" value="1"/>
         <Flags index="Notification" value="1"/>
         <Kind value="Ranged"/>
-        <Amount value="1"/>
-        <AreaArray Radius="1.5" Fraction="1"/>
+        <Amount value="5"/>
+        <AreaArray Radius="1" Fraction="1"/>
         <SearchFilters value="Air,Visible;Player,Ally,Neutral,Missile,Stasis,Dead,Invulnerable,Benign,Passive"/>
     </CEffectDamage>
-    <CEffectLaunchMissile id="SquadMissileTurretHellstormMissilePodsLaunchMissile">
+    <CEffectLaunchMissile id="SquadMissileTurretSpikeArmorLaunchMissile">
         <EditorCategories value="Race:Terran"/>
-        <ImpactEffect value="SquadMissileTurretHellstormMissilePodsDamage"/>
-        <AmmoUnit value="SquadMissileTurretHellstormMissiles"/>
+        <ImpactEffect value="SquadMissileTurretSpikeArmorDamage"/>
+        <AmmoUnit value="SquadMissileTurretSpikeArmorMissiles"/>
     </CEffectLaunchMissile>
     <CEffectCreatePersistent id="SquadMissileTurretLongboltMissileCreatePersistent">
         <EditorCategories value="Race:Terran"/>

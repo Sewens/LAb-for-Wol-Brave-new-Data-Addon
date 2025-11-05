@@ -217,6 +217,15 @@
         <HeightOffset value="1.500000"/>
         <Text value="Button/Tooltip/##id##"/>
     </CActorText>
+    <CActorModel id="FirebatImmolationArmorFlameImpact" parent="ModelAnimationStyleOneShot">
+        <Terms value="Cap 1"/>
+        <On Terms="Effect.FirebatImmolationArmorDamage.Start; At Target" Send="Create"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="SetTintColor 255,21,28"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachRandomDamage"/>
+        <Model value="ImpactModelFlames"/>
+    </CActorModel>
     <CActorMissile id="SquadGaryCannonMissileUpgraded" parent="GenericAttackMissile" unitName="SquadSuperGaryStetmannMissile">
         <Model value="SquadGaryCannonMissileUpgraded"/>
     </CActorMissile>
@@ -443,6 +452,19 @@
         <On Terms="ActorCreation" Send="TimerSet 1.500000 DelayDestroy"/>
         <On Terms="TimerExpired; TimerName DelayDestroy" Send="Destroy"/>
         <Model value="Lurker_Stetmann_COOP_SuperSpikeImproved"/>
+    </CActorModel>
+    <CActorModel id="MarauderFrostArmorFrozen" parent="ModelAddition">
+        <Inherits index="TimeScale" value="0"/>
+        <Inherits index="TintColor" value="0"/>
+        <Remove Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="Behavior.MarauderFrostArmorSlow.On" Send="Create"/>
+        <On Terms="Behavior.MarauderFrostArmorSlow.On" Send="HostSiteOpsSet ::Host SOpAttachOrigin"/>
+        <On Terms="Behavior.MarauderFrostArmorSlow.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="Behavior.MarauderFrostArmorSlow.Off" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="SetTintColor 20,125,254"/>
+        <Model value="FrozenSolid"/>
+        <AutoScaleFactor value="1.000000"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
     </CActorModel>
     <CActorUnit id="SquadSuperGary" parent="GenericUnitBase" unitName="SquadSuperGary">
         <Aliases value="_UnitHuge"/>
@@ -6923,12 +6945,12 @@
     <CActorSplat id="SquadEngineeringBaySplat" parent="GenericUnitSplat" unitName="SquadEngineeringBay">
         <Model value="EngineeringBaySplat"/>
     </CActorSplat>
-    <CActorAction id="SquadMissileTurretHailstormMissileVolley" parent="GenericAttack" effectImpact="SquadMissileTurretHellstormMissilePodsDamage" effectLaunch="SquadMissileTurretHellstormMissilePodsLaunchMissile">
+    <CActorAction id="SquadMissileTurretSpikeArmor" parent="GenericAttack" effectImpact="SquadMissileTurretSpikeArmorDamage" effectLaunch="SquadMissileTurretSpikeArmorLaunchMissile">
         <LaunchAttachQuery Methods="AMPatternDrunkenMissileVolley"/>
         <LaunchAssets Sound="MissileTurret_HellstormAttackLaunch"/>
         <ImpactMap index="None" Sound="MissileTurret_HellstormAttackImpact"/>
     </CActorAction>
-    <CActorMissile id="SquadMissileTurretHailstormMissileVolleyMissile" parent="GenericAttackMissile" unitName="SquadMissileTurretHellstormMissiles">
+    <CActorMissile id="SquadMissileTurretSpikeArmorMissile" parent="GenericAttackMissile" unitName="SquadMissileTurretSpikeArmorMissiles">
         <On Terms="ActorDestruction" Send="Create HailstormMissileVolleyDeath"/>
         <Model value="HailstormMissilesWeapon"/>
     </CActorMissile>
