@@ -43,6 +43,42 @@
         </CmdButtonArray>
         <CmdButtonArray index="Cancel" DefaultButtonFace="CmdCancel"/>
     </CAbilEffectTarget>
+    <CAbilEffectTarget id="NuclearStrikeGreen">
+        <TechPlayer value="Owner"/>
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="GreenNuclear"/>
+        <Range value="500"/>
+        <Arc value="360"/>
+        <FinishTime value="2.5"/>
+        <CancelableArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <ValidatedArray index="Channel" value="0"/>
+        <AlertArray index="Cast" value="CalldownLaunch"/>
+        <CursorEffect value="GreenNuclearDamage"/>
+        <CalldownEffect value="GreenNuclear"/>
+        <AINotifyEffect value="GreenNuclear"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="GreenNukeGeneticMutator" Requirements="HaveNuke"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="NuclearStrikeWhite">
+        <TechPlayer value="Owner"/>
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="WhiteNuclear"/>
+        <Range value="500"/>
+        <Arc value="360"/>
+        <FinishTime value="2.5"/>
+        <CancelableArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <ValidatedArray index="Channel" value="0"/>
+        <AlertArray index="Cast" value="CalldownLaunch"/>
+        <CursorEffect value="WhiteNuclearDamage"/>
+        <CalldownEffect value="WhiteNuclear"/>
+        <AINotifyEffect value="GreenNuclear"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="WhiteNuke" Requirements="HaveNuke"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+    </CAbilEffectTarget>
     <CAbilEffectInstant id="SquadSuperGaryEnergyPower">
         <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
         <Effect index="0" value="SquadSuperGaryCP"/>
@@ -178,12 +214,13 @@
         <AINotifyEffect value="MassRecall"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="GaryStetmannRecall"/>
     </CAbilEffectTarget>
-    <CAbilEffectTarget id="BlueNuclearStrike">
+    <CAbilEffectTarget id="NuclearStrikeBlue">
         <TechPlayer value="Owner"/>
         <Alignment value="Negative"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Effect index="0" value="BlueNuclear"/>
         <Range value="500"/>
+        <Arc value="360"/>
         <FinishTime value="2.5"/>
         <CancelableArray index="Channel" value="1"/>
         <UninterruptibleArray index="Channel" value="1"/>
@@ -194,7 +231,6 @@
         <AINotifyEffect value="RedNuclear"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="BlueNukeEMP" Requirements="HaveNuke"/>
         <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
-        <Arc value="360"/>
     </CAbilEffectTarget>
     <CAbilEffectInstant id="SensorTowerMiniWorld">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -3022,7 +3058,7 @@
         <InfoArray index="Ammo2" Count="5" Unit="Nuke">
             <Charge Link="Abil/##id##"/>
             <Cooldown Link="Abil/##id##"/>
-            <Button DefaultButtonFace="NucolorFrozen"/>
+            <Button DefaultButtonFace="WhiteNuke"/>
             <Flags index="AutoBuild" value="1"/>
             <Flags index="AutoBuildOn" value="1"/>
         </InfoArray>
@@ -3089,7 +3125,7 @@
             <Flags index="AutoBuild" value="1"/>
             <Flags index="AutoBuildOn" value="1"/>
         </InfoArray>
-        <CalldownEffect value="Nuke"/>
+        <CalldownEffect value="GreenNuclear"/>
     </CAbilArmMagazine>
     <CAbilArmMagazine id="NuclearWarheadBlue">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
@@ -3550,29 +3586,13 @@
             </SectionArray>
         </InfoArray>
     </CAbilMorph>
-    <CAbilEffectTarget id="GreenNuclearStrike">
+    <CAbilEffectTarget id="NuclearStrikeRed">
         <TechPlayer value="Owner"/>
         <Alignment value="Negative"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Effect index="0" value="RedNuclear"/>
         <Range value="12"/>
-        <FinishTime value="2.5"/>
-        <CancelableArray index="Channel" value="1"/>
-        <UninterruptibleArray index="Channel" value="1"/>
-        <ValidatedArray index="Channel" value="0"/>
-        <AlertArray index="Cast" value="CalldownLaunch"/>
-        <CursorEffect value="NukeDamage"/>
-        <CalldownEffect value="Nuke"/>
-        <AINotifyEffect value="Nuke"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="NukeCalldown" Requirements="HaveNuke"/>
-        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
-    </CAbilEffectTarget>
-    <CAbilEffectTarget id="RedNuclearStrike">
-        <TechPlayer value="Owner"/>
-        <Alignment value="Negative"/>
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Effect index="0" value="RedNuclear"/>
-        <Range value="12"/>
+        <Arc value="360"/>
         <FinishTime value="2.5"/>
         <CancelableArray index="Channel" value="1"/>
         <UninterruptibleArray index="Channel" value="1"/>
@@ -3583,7 +3603,6 @@
         <AINotifyEffect value="RedNuclear"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="NucolorFireFlame" Requirements="HaveNuke"/>
         <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
-        <Arc value="360"/>
     </CAbilEffectTarget>
     <CAbilBuild id="SquadTerranBuild">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>

@@ -30,6 +30,79 @@
     <CEffectEnumArea default="1" id="SquadAbilSearchRadiusExt" parent="SquadAbilSearch">
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
+    <CEffectUseCalldown id="GreenNuclear">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetPoint"/>
+        <CalldownCount value="1"/>
+        <CalldownEffect value="GreenNuclearPersistent"/>
+    </CEffectUseCalldown>
+    <CEffectUseCalldown id="WhiteNuclear">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetPoint"/>
+        <CalldownCount value="1"/>
+        <CalldownEffect value="WhiteNuclearPersistent"/>
+    </CEffectUseCalldown>
+    <CEffectDamage id="GreenNuclearDamage">
+        <EditorCategories value="Race:Terran"/>
+        <AINotifyFlags index="HurtFriend" value="1"/>
+        <AINotifyFlags index="HurtEnemy" value="1"/>
+        <AINotifyFlags index="MajorDanger" value="1"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <AttributeBonus index="Structure" value="200"/>
+        <Amount value="1"/>
+        <Death value="Fire"/>
+        <AreaArray Radius="4" Fraction="1"/>
+        <AreaArray Radius="6" Fraction="0.5"/>
+        <AreaArray Radius="8" Fraction="0.25"/>
+        <SearchFilters value="-;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="SameCliff" value="0"/>
+    </CEffectDamage>
+    <CEffectDamage id="WhiteNuclearDamage">
+        <EditorCategories value="Race:Terran"/>
+        <AINotifyFlags index="HurtFriend" value="1"/>
+        <AINotifyFlags index="HurtEnemy" value="1"/>
+        <AINotifyFlags index="MajorDanger" value="1"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <AttributeBonus index="Structure" value="200"/>
+        <Amount value="1"/>
+        <Death value="Fire"/>
+        <AreaArray Radius="4" Fraction="1"/>
+        <AreaArray Radius="6" Fraction="0.5"/>
+        <AreaArray Radius="8" Fraction="0.25"/>
+        <SearchFilters value="-;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="SameCliff" value="0"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="GreenNuclearDetonate">
+        <EditorCategories value="Race:Terran"/>
+        <InitialDelay value="1.25"/>
+        <InitialEffect value="GreenNuclearDamage"/>
+        <ExpireDelay value="8.25"/>
+        <RevealRadius value="8"/>
+        <RevealFlags index="Unfog" value="1"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="WhiteNuclearDetonate">
+        <EditorCategories value="Race:Terran"/>
+        <InitialDelay value="1.25"/>
+        <InitialEffect value="WhiteNuclearDamage"/>
+        <ExpireDelay value="8.25"/>
+        <RevealRadius value="8"/>
+        <RevealFlags index="Unfog" value="1"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="GreenNuclearPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <Alert value="CalldownLaunchObserver"/>
+        <Flags index="Channeled" value="1"/>
+        <InitialDelay value="2.75"/>
+        <ExpireEffect value="GreenNuclearDetonate"/>
+        <FinalEffect value="SquadNukeSuicide"/>
+        <PeriodCount value="5"/>
+        <PeriodicPeriodArray value="0.2"/>
+        <AINotifyEffect value="BlueNuclearDamage"/>
+    </CEffectCreatePersistent>
     <CEffectApplyBehavior id="CCResourceMessageApply">
         <EditorCategories value="Race:Terran"/>
         <Behavior value="CCResourceMessage"/>
@@ -82,6 +155,17 @@
         <Flags index="Channeled" value="1"/>
         <InitialDelay value="2.75"/>
         <ExpireEffect value="BlueNuclearDetonate"/>
+        <FinalEffect value="SquadNukeSuicide"/>
+        <PeriodCount value="5"/>
+        <PeriodicPeriodArray value="0.2"/>
+        <AINotifyEffect value="BlueNuclearDamage"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="WhiteNuclearPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <Alert value="CalldownLaunchObserver"/>
+        <Flags index="Channeled" value="1"/>
+        <InitialDelay value="2.75"/>
+        <ExpireEffect value="WhiteNuclearDetonate"/>
         <FinalEffect value="SquadNukeSuicide"/>
         <PeriodCount value="5"/>
         <PeriodicPeriodArray value="0.2"/>
