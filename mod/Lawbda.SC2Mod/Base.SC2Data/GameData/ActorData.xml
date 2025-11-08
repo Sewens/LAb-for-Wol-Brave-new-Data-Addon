@@ -217,6 +217,24 @@
         <HeightOffset value="1.500000"/>
         <Text value="Button/Tooltip/##id##"/>
     </CActorText>
+    <CActorAction id="SquadVoidRayAttack" parent="GenericAttackBase">
+        <On Terms="Effect.PaladenFrostBeamChargePersistent.Start" Send="Create"/>
+        <On Terms="Effect.PaladenFrostBeamDamage.Start; At Effect; FromEffectTreeDescendant" Send="ActionDamage"/>
+        <On Terms="Effect.PaladenFrostBeamChargePersistent.Stop" Send="Destroy"/>
+        <LaunchAttachQuery Methods="Weapon 1"/>
+        <BeamScope value="Caster"/>
+        <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeNoVizEnhance VoidRaySOpForwardLaunch"/>
+        <ActionFlags index="AlignedImpactsAndDamages" value="1"/>
+        <ActionFlags index="LaunchForceSite" value="1"/>
+        <Lifetime value="-1.000000"/>
+    </CActorAction>
+    <CActorBeamSimple id="SquadVoidRayAttackBeam">
+        <On Terms="ActorCreation" Send="AnimPlay Attack Attack,02 PlayForever"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="Effect.PaladenFrostBeamChargePersistent.Start; FromEffectTreeDescendant" Send="AnimPlay Attack Attack,02 PlayForever"/>
+        <On Terms="Effect.PaladenFrostBeamChargePersistent.Stop; FromEffectTreeDescendant" Send="Destroy"/>
+        <Model value="VoidRayAttackBeam"/>
+    </CActorBeamSimple>
     <CActorModel id="GreenNuclearCollateralFire">
         <On Terms="Effect.GreenNuclearDamage.Start; At Target" Send="Create"/>
         <HostSiteOps Ops="SOpShadow"/>
@@ -231,6 +249,15 @@
         <Model value="GreenNukeCursorSplat"/>
         <On Terms="ActorCreation" Send="SetTintColor 49,239,44"/>
     </CActorSplat>
+    <CActorSplat id="VanillaNuclearCursorSplat" parent="TerranCursorSplat" abil="NuclearStrikeVanilla">
+        <On Terms="ActorCreation" Send="SetTintColor 255,255,255"/>
+        <Model value="VanillaNukeCursorSplat"/>
+    </CActorSplat>
+    <CActorModel id="YellowNuclearCollateralFire">
+        <On Terms="Effect.YellowNuclearDamage.Start; At Target" Send="Create"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Model value="YellowNukeCollateralFire"/>
+    </CActorModel>
     <CActorSplat id="WhiteNuclearCursorSplat" parent="TerranCursorSplat" abil="NuclearStrikeWhite">
         <On Terms="ActorCreation" Send="SetTintColor 255,255,255"/>
         <Model value="WhiteNukeCursorSplat"/>
@@ -242,6 +269,15 @@
         <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
         <Model value="GreenNukeDrop"/>
     </CActorModel>
+    <CActorModel id="BlackNuclearCollateralFire">
+        <On Terms="Effect.BlackNuclearDamage.Start; At Target" Send="Create"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Model value="BlackNukeCollateralFire"/>
+    </CActorModel>
+    <CActorSplat id="YellowNuclearCursorSplat" parent="TerranCursorSplat" abil="NuclearStrikeYelllow">
+        <On Terms="ActorCreation" Send="SetTintColor 255,255,255"/>
+        <Model value="YelllowNukeCursorSplat"/>
+    </CActorSplat>
     <CActorModel id="WhiteNuclearDrop">
         <On Terms="Effect.WhiteNuclearDetonate.Start" Send="Create"/>
         <On Terms="Effect.WhiteNuclearDetonate.Start" Send="$Birth"/>
@@ -254,6 +290,22 @@
         <On Terms="Effect.RedNuclearDamage.Start" Send="Destroy"/>
         <Sound value="Ghost_NukeDrop"/>
     </CActorSound>
+    <CActorSplat id="BlackNuclearCursorSplat" parent="TerranCursorSplat" abil="NuclearStrikeBlack">
+        <On Terms="ActorCreation" Send="SetTintColor 0,0,0"/>
+        <Model value="BlackNukeCursorSplat"/>
+    </CActorSplat>
+    <CActorModel id="VanillaNuclearCollateralFire">
+        <On Terms="Effect.VanillaNuclearDamage.Start; At Target" Send="Create"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Model value="VanillaNukeCollateralFire"/>
+    </CActorModel>
+    <CActorModel id="YellowNuclearDrop">
+        <On Terms="Effect.YellowNuclearDetonate.Start" Send="Create"/>
+        <On Terms="Effect.YellowNuclearDetonate.Start" Send="$Birth"/>
+        <On Terms="Effect.RedNuclearDamage" Send="Destroy"/>
+        <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
+        <Model value="YellowNukeDrop"/>
+    </CActorModel>
     <CActorSound id="WhiteNuclearDropSound" parent="SoundContinuous">
         <On Terms="Effect.WhiteNuclearDetonate.Start" Send="Create"/>
         <On Terms="Effect.RedNuclearDamage.Start" Send="Destroy"/>
@@ -266,6 +318,25 @@
         <Map index="None" Model="GreenNukeExplode" Sound="Ghost_NukeExplode"/>
         <Inherits index="TintColor" value="1"/>
     </CActorSquib>
+    <CActorModel id="BlackNuclearDrop">
+        <On Terms="Effect.BlackNuclearDetonate.Start" Send="Create"/>
+        <On Terms="Effect.BlackNuclearDetonate.Start" Send="$Birth"/>
+        <On Terms="Effect.RedNuclearDamage" Send="Destroy"/>
+        <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
+        <Model value="BlackNukeDrop"/>
+    </CActorModel>
+    <CActorModel id="VanillaNuclearDrop">
+        <On Terms="Effect.VanillaNuclearDetonate.Start" Send="Create"/>
+        <On Terms="Effect.VanillaNuclearDetonate.Start" Send="$Birth"/>
+        <On Terms="Effect.RedNuclearDamage" Send="Destroy"/>
+        <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
+        <Model value="VanillaNukeDrop"/>
+    </CActorModel>
+    <CActorSound id="YellowNuclearDropSound" parent="SoundContinuous">
+        <On Terms="Effect.YellowNuclearDetonate.Start" Send="Create"/>
+        <On Terms="Effect.RedNuclearDamage.Start" Send="Destroy"/>
+        <Sound value="Ghost_NukeDrop"/>
+    </CActorSound>
     <CActorSquib id="WhiteNuclearExplode">
         <Inherits index="TintColor" value="1"/>
         <On Terms="Effect.WhiteNuclearDamage.Start; At Effect" Send="Create"/>
@@ -277,6 +348,23 @@
         <On Terms="Effect.GreenNuclearDamage.Start" Send="Create"/>
         <Radius value="5.000000"/>
     </CActorFoliageFXSpawner>
+    <CActorSound id="BlackNuclearDropSound" parent="SoundContinuous">
+        <On Terms="Effect.BlackNuclearDetonate.Start" Send="Create"/>
+        <On Terms="Effect.RedNuclearDamage.Start" Send="Destroy"/>
+        <Sound value="Ghost_NukeDrop"/>
+    </CActorSound>
+    <CActorSound id="VanillaNuclearDropSound" parent="SoundContinuous">
+        <On Terms="Effect.VanillaNuclearDetonate.Start" Send="Create"/>
+        <On Terms="Effect.RedNuclearDamage.Start" Send="Destroy"/>
+        <Sound value="Ghost_NukeDrop"/>
+    </CActorSound>
+    <CActorSquib id="YellowNuclearExplode">
+        <Inherits index="TintColor" value="1"/>
+        <On Terms="Effect.YellowNuclearDamage.Start; At Effect" Send="Create"/>
+        <On Terms="ActorCreation" Send="SetTintColor 49,239,44"/>
+        <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
+        <Map index="None" Model="YellowNukeExplode" Sound="Ghost_NukeExplode"/>
+    </CActorSquib>
     <CActorFoliageFXSpawner id="WhiteNuclearGhostNukeFoliageFXSpawner" parent="FoliageFXSpawnerFire">
         <On Terms="Effect.WhiteNuclearDamage.Start" Send="Create"/>
         <Radius value="5.000000"/>
@@ -290,6 +378,24 @@
         <On Terms="ActorCreation" Send="SetTintColor 49,239,44"/>
         <HostSiteOps Ops="SOpShadow"/>
     </CActorModel>
+    <CActorSquib id="BlackNuclearExplode">
+        <Inherits index="TintColor" value="1"/>
+        <On Terms="Effect.BlackNuclearDamage.Start; At Effect" Send="Create"/>
+        <On Terms="ActorCreation" Send="SetTintColor 49,239,44"/>
+        <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
+        <Map index="None" Model="BlackNukeExplode" Sound="Ghost_NukeExplode"/>
+    </CActorSquib>
+    <CActorSquib id="VanillaNuclearExplode">
+        <Inherits index="TintColor" value="1"/>
+        <On Terms="Effect.VanillaNuclearDamage.Start; At Effect" Send="Create"/>
+        <On Terms="ActorCreation" Send="SetTintColor 49,239,44"/>
+        <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
+        <Map index="None" Model="VanillaNukeExplode" Sound="Ghost_NukeExplode"/>
+    </CActorSquib>
+    <CActorFoliageFXSpawner id="YellowNuclearGhostNukeFoliageFXSpawner" parent="FoliageFXSpawnerFire">
+        <On Terms="Effect.YellowNuclearDamage.Start" Send="Create"/>
+        <Radius value="5.000000"/>
+    </CActorFoliageFXSpawner>
     <CActorModel id="WhiteNuclearIndicator" parent="ModelAnimationStyleOneShot">
         <Flags index="SuppressSaveLoad" value="0"/>
         <FogVisibility value="Visible"/>
@@ -302,6 +408,23 @@
     <CActorAction id="GreenNuclearShieldHitter" parent="AoESplashShieldHitter" effectHit="GreenNuclearDamage">
         <DamageModel value="Genericattackmodel"/>
     </CActorAction>
+    <CActorFoliageFXSpawner id="BlackNuclearGhostNukeFoliageFXSpawner" parent="FoliageFXSpawnerFire">
+        <On Terms="Effect.BlackNuclearDamage.Start" Send="Create"/>
+        <Radius value="5.000000"/>
+    </CActorFoliageFXSpawner>
+    <CActorFoliageFXSpawner id="VanillaNuclearGhostNukeFoliageFXSpawner" parent="FoliageFXSpawnerFire">
+        <On Terms="Effect.VanillaNuclearDamage.Start" Send="Create"/>
+        <Radius value="5.000000"/>
+    </CActorFoliageFXSpawner>
+    <CActorModel id="YellowNuclearIndicator" parent="ModelAnimationStyleOneShot">
+        <Flags index="SuppressSaveLoad" value="0"/>
+        <FogVisibility value="Visible"/>
+        <On Terms="Effect.YellowNuclearPersistent.Start" Send="Create"/>
+        <On Terms="Effect.YellowNuclearPersistent.Stop" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidatePlayer HaveUnfriendlyNukeIndicator" Send="SetFilter Enemy"/>
+        <On Terms="ActorCreation" Send="SetTintColor 255,255,255"/>
+        <HostSiteOps Ops="SOpShadow"/>
+    </CActorModel>
     <CActorAction id="WhiteNuclearShieldHitter" parent="AoESplashShieldHitter" effectHit="WhiteNuclearDamage">
         <DamageModel value="Genericattackmodel"/>
     </CActorAction>
@@ -313,6 +436,27 @@
         <On Terms="ActorCreation" Send="Create NukeShockwave03"/>
         <HostSiteOps Ops="SOpTargetPoint SOpShadow SOpMoveUpBy6"/>
     </CActorForceCylinder>
+    <CActorModel id="BlackNuclearIndicator" parent="ModelAnimationStyleOneShot">
+        <Flags index="SuppressSaveLoad" value="0"/>
+        <FogVisibility value="Visible"/>
+        <On Terms="Effect.BlackNuclearPersistent.Start" Send="Create"/>
+        <On Terms="Effect.BlackNuclearPersistent.Stop" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidatePlayer HaveUnfriendlyNukeIndicator" Send="SetFilter Enemy"/>
+        <On Terms="ActorCreation" Send="SetTintColor 0,0,0"/>
+        <HostSiteOps Ops="SOpShadow"/>
+    </CActorModel>
+    <CActorModel id="VanillaNuclearIndicator" parent="ModelAnimationStyleOneShot">
+        <Flags index="SuppressSaveLoad" value="0"/>
+        <FogVisibility value="Visible"/>
+        <On Terms="Effect.VanillaNuclearPersistent.Start" Send="Create"/>
+        <On Terms="Effect.VanillaNuclearPersistent.Stop" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidatePlayer HaveUnfriendlyNukeIndicator" Send="SetFilter Enemy"/>
+        <On Terms="ActorCreation" Send="SetTintColor 255,255,255"/>
+        <HostSiteOps Ops="SOpShadow"/>
+    </CActorModel>
+    <CActorAction id="YellowNuclearShieldHitter" parent="AoESplashShieldHitter" effectHit="YellowNuclearDamage">
+        <DamageModel value="Genericattackmodel"/>
+    </CActorAction>
     <CActorForceCylinder id="WhiteNuclearShockwave">
         <On Terms="ActorCreation" Send="TimerSet 0.200000 PhasePause"/>
         <On Terms="TimerExpired; TimerName PhasePause" Send="ForceSetRadius 1.500000"/>
@@ -342,6 +486,30 @@
         <On Terms="ActorCreation; !ValidatePlayer HaveUnfriendlyNukeIndicator" Send="SetFilter Enemy"/>
         <Host Subject="GhostNukeTargetBillboard" Actor="Create"/>
     </CActorModel>
+    <CActorAction id="BlackNuclearShieldHitter" parent="AoESplashShieldHitter" effectHit="BlackNuclearDamage">
+        <DamageModel value="Genericattackmodel"/>
+    </CActorAction>
+    <CActorAction id="VanillaNuclearShieldHitter" parent="AoESplashShieldHitter" effectHit="VanillaNuclearDamage">
+        <DamageModel value="Genericattackmodel"/>
+    </CActorAction>
+    <CActorForceCylinder id="YellowNuclearShockwave">
+        <On Terms="ActorCreation" Send="TimerSet 0.200000 PhasePause"/>
+        <On Terms="TimerExpired; TimerName PhasePause" Send="ForceSetRadius 1.500000"/>
+        <On Terms="TimerExpired; TimerName PhasePause" Send="ForceSetRadius 8.000000 2.100000"/>
+        <On Terms="TimerExpired; TimerName PhasePause" Send="ForceSetMagnitude 65.000000 1.150000"/>
+        <On Terms="TimerExpired; TimerName PhasePause" Send="TimerSet 2.100000 PhaseGrow"/>
+        <On Terms="TimerExpired; TimerName PhaseGrow" Send="ForceSetMagnitude 0.000000 1.700000"/>
+        <On Terms="Effect.YellowNuclearDamage.Start" Send="Create"/>
+        <On Terms="ActorCreation" Send="Create NukeShockwave00"/>
+        <On Terms="ActorCreation" Send="Create NukeShockwave01"/>
+        <On Terms="ActorCreation" Send="Create NukeShockwave02"/>
+        <On Terms="ActorCreation" Send="Create NukeShockwave03"/>
+        <HostSiteOps Ops="SOpTargetPoint SOpShadow SOpMoveUpBy6"/>
+        <Field value="Radial"/>
+        <Duration value="4.000000"/>
+        <Magnitude value="35.000000,10.000000"/>
+        <HostEndSiteOps Ops="SOpMoveUpBy2"/>
+    </CActorForceCylinder>
     <CActorModel id="WhiteNuclearTarget" parent="ModelAnimationStyleOneShot">
         <Flags index="SuppressSaveLoad" value="0"/>
         <Filter index="Self" value="1"/>
@@ -431,6 +599,53 @@
         <Sound value="StormCloudGlazeFrozen_Ice"/>
         <Layers Sound="StormCloudGlazeFrozen_Thaw"/>
     </CActorSound>
+    <CActorForceCylinder id="BlackNuclearShockwave">
+        <On Terms="ActorCreation" Send="TimerSet 0.200000 PhasePause"/>
+        <On Terms="TimerExpired; TimerName PhasePause" Send="ForceSetRadius 1.500000"/>
+        <On Terms="TimerExpired; TimerName PhasePause" Send="ForceSetRadius 8.000000 2.100000"/>
+        <On Terms="TimerExpired; TimerName PhasePause" Send="ForceSetMagnitude 65.000000 1.150000"/>
+        <On Terms="TimerExpired; TimerName PhasePause" Send="TimerSet 2.100000 PhaseGrow"/>
+        <On Terms="TimerExpired; TimerName PhaseGrow" Send="ForceSetMagnitude 0.000000 1.700000"/>
+        <On Terms="Effect.BlackNuclearDamage.Start" Send="Create"/>
+        <On Terms="ActorCreation" Send="Create NukeShockwave00"/>
+        <On Terms="ActorCreation" Send="Create NukeShockwave01"/>
+        <On Terms="ActorCreation" Send="Create NukeShockwave02"/>
+        <On Terms="ActorCreation" Send="Create NukeShockwave03"/>
+        <HostSiteOps Ops="SOpTargetPoint SOpShadow SOpMoveUpBy6"/>
+        <Field value="Radial"/>
+        <Duration value="4.000000"/>
+        <Magnitude value="35.000000,10.000000"/>
+        <HostEndSiteOps Ops="SOpMoveUpBy2"/>
+    </CActorForceCylinder>
+    <CActorForceCylinder id="VanillaNuclearShockwave">
+        <On Terms="ActorCreation" Send="TimerSet 0.200000 PhasePause"/>
+        <On Terms="TimerExpired; TimerName PhasePause" Send="ForceSetRadius 1.500000"/>
+        <On Terms="TimerExpired; TimerName PhasePause" Send="ForceSetRadius 8.000000 2.100000"/>
+        <On Terms="TimerExpired; TimerName PhasePause" Send="ForceSetMagnitude 65.000000 1.150000"/>
+        <On Terms="TimerExpired; TimerName PhasePause" Send="TimerSet 2.100000 PhaseGrow"/>
+        <On Terms="TimerExpired; TimerName PhaseGrow" Send="ForceSetMagnitude 0.000000 1.700000"/>
+        <On Terms="Effect.VanillaNuclearDamage.Start" Send="Create"/>
+        <On Terms="ActorCreation" Send="Create NukeShockwave00"/>
+        <On Terms="ActorCreation" Send="Create NukeShockwave01"/>
+        <On Terms="ActorCreation" Send="Create NukeShockwave02"/>
+        <On Terms="ActorCreation" Send="Create NukeShockwave03"/>
+        <HostSiteOps Ops="SOpTargetPoint SOpShadow SOpMoveUpBy6"/>
+        <Field value="Radial"/>
+        <Duration value="4.000000"/>
+        <Magnitude value="35.000000,10.000000"/>
+        <HostEndSiteOps Ops="SOpMoveUpBy2"/>
+    </CActorForceCylinder>
+    <CActorModel id="YellowNuclearTarget" parent="ModelAnimationStyleOneShot">
+        <Flags index="SuppressSaveLoad" value="0"/>
+        <Filter index="Self" value="1"/>
+        <Filter index="Ally" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <FogVisibility value="Visible"/>
+        <On Terms="Effect.YellowNuclearPersistent.Start" Send="Create"/>
+        <On Terms="Effect.YellowNuclearPersistent.Stop" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation; !ValidatePlayer HaveUnfriendlyNukeIndicator" Send="SetFilter Enemy"/>
+        <Host Subject="GhostNukeTargetBillboard" Actor="Create"/>
+    </CActorModel>
     <CActorRegionCircle id="WhiteNuclearTreeKiller">
         <On Terms="Effect.WhiteNuclearDamage.Start; At Effect" Send="Create"/>
         <On Terms="Effect.HeroNukeDamage.Start; At Effect" Send="Create"/>
@@ -2902,6 +3117,55 @@
             <AttachQuery Methods="Hardpoint"/>
         </HostedAttaches>
     </CActorModel>
+    <CActorModel id="BlackNuclearTarget" parent="ModelAnimationStyleOneShot">
+        <Flags index="SuppressSaveLoad" value="0"/>
+        <Filter index="Self" value="1"/>
+        <Filter index="Ally" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <FogVisibility value="Visible"/>
+        <On Terms="Effect.BlackNuclearPersistent.Start" Send="Create"/>
+        <On Terms="Effect.BlackNuclearPersistent.Stop" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation; !ValidatePlayer HaveUnfriendlyNukeIndicator" Send="SetFilter Enemy"/>
+        <Host Subject="GhostNukeTargetBillboard" Actor="Create"/>
+    </CActorModel>
+    <CActorModel id="VanillaNuclearTarget" parent="ModelAnimationStyleOneShot">
+        <Flags index="SuppressSaveLoad" value="0"/>
+        <Filter index="Self" value="1"/>
+        <Filter index="Ally" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <FogVisibility value="Visible"/>
+        <On Terms="Effect.VanillaNuclearPersistent.Start" Send="Create"/>
+        <On Terms="Effect.VanillaNuclearPersistent.Stop" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation; !ValidatePlayer HaveUnfriendlyNukeIndicator" Send="SetFilter Enemy"/>
+        <Host Subject="GhostNukeTargetBillboard" Actor="Create"/>
+    </CActorModel>
+    <CActorRegionCircle id="YellowNuclearTreeKiller">
+        <On Terms="Effect.YellowNuclearDamage.Start; At Effect" Send="Create"/>
+        <On Terms="Effect.HeroNukeDamage.Start; At Effect" Send="Create"/>
+        <On Terms="ActorCreation" Send="QueryRegion ::Self TreeBurnQuery AgainstCenter"/>
+        <On Terms="ActorCreation" Send="QueryRegion ::Self NukedQuery AgainstCenter"/>
+        <On Terms="Effect.YellowNuclearDamage.Start; At Effect" Send="Destroy"/>
+        <On Terms="Effect.HeroNukeDamage.Start; At Effect" Send="Destroy"/>
+        <Radius value="8.000000"/>
+    </CActorRegionCircle>
+    <CActorRegionCircle id="BlackNuclearTreeKiller">
+        <On Terms="Effect.BlackNuclearDamage.Start; At Effect" Send="Create"/>
+        <On Terms="Effect.HeroNukeDamage.Start; At Effect" Send="Create"/>
+        <On Terms="ActorCreation" Send="QueryRegion ::Self TreeBurnQuery AgainstCenter"/>
+        <On Terms="ActorCreation" Send="QueryRegion ::Self NukedQuery AgainstCenter"/>
+        <On Terms="Effect.BlackNuclearDamage.Start; At Effect" Send="Destroy"/>
+        <On Terms="Effect.HeroNukeDamage.Start; At Effect" Send="Destroy"/>
+        <Radius value="8.000000"/>
+    </CActorRegionCircle>
+    <CActorRegionCircle id="VanillaNuclearTreeKiller">
+        <On Terms="Effect.VanillaNuclearDamage.Start; At Effect" Send="Create"/>
+        <On Terms="Effect.HeroNukeDamage.Start; At Effect" Send="Create"/>
+        <On Terms="ActorCreation" Send="QueryRegion ::Self TreeBurnQuery AgainstCenter"/>
+        <On Terms="ActorCreation" Send="QueryRegion ::Self NukedQuery AgainstCenter"/>
+        <On Terms="Effect.VanillaNuclearDamage.Start; At Effect" Send="Destroy"/>
+        <On Terms="Effect.HeroNukeDamage.Start; At Effect" Send="Destroy"/>
+        <Radius value="8.000000"/>
+    </CActorRegionCircle>
     <CActorModel id="YellowScannerChronoBeamImpact" parent="ModelAnimationStyleContinuous">
         <On Terms="Behavior.YellowScannerChronoBeam.On" Send="Create"/>
         <On Terms="Behavior.YellowScannerChronoBeam.Off" Send="AnimBracketStop BSD"/>
@@ -8360,7 +8624,8 @@
         </Wireframe>
     </CActorUnit>
     <CActorAction id="SquadMarineAttack" parent="GenericAttack" effectAttack="SquadGuassRifleDamage">
-        <LaunchAssets Model="MarineAttackLaunch" Sound="Marine_AttackLaunch"/>
+        <LaunchAssets Model="" Sound="Marine_AttackLaunch"/>
+        <LaunchAttachQuery Methods="AMFilterWeapon02"/>
         <ContainerAssets Model="MarineBunkerAttackLaunch" Sound="Marine_BunkerAttackLaunch"/>
         <ImpactMap index="None" Model="MarineAttackImpact" Sound="Marine_AttackImpact"/>
         <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
@@ -8370,6 +8635,17 @@
         <AcquisitionPitchHalfArc value="15.000000"/>
         <AccuracyHalfArc value="5.000000"/>
     </CActorAction>
+    <!--
+    <CActorAction id="SquadMarineAttack" parent="GenericAttack" effectAttack="SquadGuassRifleDamage">
+        <LaunchAssets Model="" Sound="Marine_AttackLaunch"/>
+        <ImpactMap index="None" Model="MarineAttackImpact" Sound="Marine_AttackImpact"/>
+        <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
+    </CActorAction>
+-->
+    <CActorBeamSimple id="SquadMarineAttackBeam" parent="GenericAttackBeam">
+        <Model value="InterceptorAttackBeam"/>
+        <Scale value="0.750000"/>
+    </CActorBeamSimple>
     <CActorSound id="SquadMarineDeath" parent="SoundOneShot">
         <Remove Terms="UnitDeath.Marine; PassChance 100.000000" Send="Create"/>
         <On Terms="UnitDeath.SquadMarine; PassChance 100.000000" Send="Create"/>
