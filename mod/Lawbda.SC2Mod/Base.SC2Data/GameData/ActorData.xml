@@ -217,6 +217,192 @@
         <HeightOffset value="1.500000"/>
         <Text value="Button/Tooltip/##id##"/>
     </CActorText>
+    <CActorUnit id="SquadBunkerPsiDisrupter" parent="TerranBuildingEx" unitName="SquadBunkerPsiDisrupter">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="BunkerTransportAnim"/>
+        <Macros value="SnowVisualBuildingMacro"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit BunkerIsEmpty" Send="DeathCustomize Empty"/>
+        <On Terms="UnitBirth.SquadBunkerPsiDisrupter" Send="StatusSet SquadBunkerBuilt 1"/>
+        <On Terms="Behavior.SquadBunkerPsiDisrupter.On" Send="StatusSet SquadPsiDisrupterAttachment 1"/>
+        <On Terms="Behavior.SquadBunkerPsiDisrupter.On" Send="Create SquadPsiDisrupterAttachment"/>
+        <On Terms="UnitBirth.SquadBunkerPsiDisrupter" Target="SquadBunkerPsiDisrupterAttachment" Send="Signal TurretShow"/>
+        <On Terms="UnitDeathCustomize; IsStatus SquadPsiDisrupterAttachment 1" Target="SquadBunkerPsiDisrupterAttachment" Send="Signal TurretDeath"/>
+        <Model value="Bunker_Silver"/>
+        <CreepHeightClass value="Small"/>
+        <BuildModel value="Bunker_Silver_Build"/>
+        <DeathArray index="Normal" ModelLink="Bunker_Silver_Death"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="Bunker_Explode"/>
+        <DeathCustoms ModelLink="Bunker_Silver_Upgrade_Death" Name="Upgrade"/>
+        <DeathCustoms ModelLink="Bunker_Silver_Upgrade_Empty_Death" Name="Empty"/>
+        <PlacementModel value="Bunker_Silver_Placement"/>
+        <PlacementActorModel value="BunkerPlacementModelCampaign"/>
+        <PlaceholderActorModel value="BunkerPlaceholderModelCampaign"/>
+        <PortraitModel value="Bunker_Silver_Portrait"/>
+        <BarOffset value="80"/>
+        <BarWidth value="85"/>
+        <GlossaryAnim value="Stand,Work"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Bunker.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-terran-Bunker.dds"/>
+        <NameOffset value="70"/>
+        <SoundArray index="Ready" value="Bunker_Ready"/>
+        <SoundArray index="What" value="Bunker_What"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-terran-Bunker.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Bunker.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorUnit id="SquadBunkerHiveMindEmulator" parent="TerranBuildingEx" unitName="SquadBunkerHiveMindEmulator">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="BunkerTransportAnim"/>
+        <Macros value="SnowVisualBuildingMacro"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit BunkerIsEmpty" Send="DeathCustomize Empty"/>
+        <On Terms="UnitBirth.SquadBunkerHiveMindEmulator" Send="StatusSet SquadBunkerBuilt 1"/>
+        <On Terms="Behavior.SquadBunkerHiveMindEmulator.On" Send="StatusSet SquadBunkerHiveMindEmulatorAttachment 1"/>
+        <On Terms="Behavior.SquadBunkerHiveMindEmulator.On" Send="Create SquadBunkerHiveMindEmulatorAttachment"/>
+        <On Terms="UnitBirth.SquadBunkerHiveMindEmulator" Target="SquadBunkerHiveMindEmulatorAttachment" Send="Signal TurretShow"/>
+        <On Terms="UnitDeathCustomize; IsStatus SquadBunkerHiveMindEmulatorAttachment 1" Target="SquadBunkerHiveMindEmulatorAttachment" Send="Signal TurretDeath"/>
+        <Model value="Bunker_Silver"/>
+        <CreepHeightClass value="Small"/>
+        <BuildModel value="Bunker_Silver_Build"/>
+        <DeathArray index="Normal" ModelLink="Bunker_Silver_Death"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="Bunker_Explode"/>
+        <DeathCustoms ModelLink="Bunker_Silver_Upgrade_Death" Name="Upgrade"/>
+        <DeathCustoms ModelLink="Bunker_Silver_Upgrade_Empty_Death" Name="Empty"/>
+        <PlacementModel value="Bunker_Silver_Placement"/>
+        <PlacementActorModel value="BunkerPlacementModelCampaign"/>
+        <PlaceholderActorModel value="BunkerPlaceholderModelCampaign"/>
+        <PortraitModel value="Bunker_Silver_Portrait"/>
+        <BarOffset value="80"/>
+        <BarWidth value="85"/>
+        <GlossaryAnim value="Stand,Work"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Bunker.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-terran-Bunker.dds"/>
+        <NameOffset value="70"/>
+        <SoundArray index="Ready" value="Bunker_Ready"/>
+        <SoundArray index="What" value="Bunker_What"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-terran-Bunker.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Bunker.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorSplat id="SquadBunkerPsiDisrupterSplat" parent="GenericUnitSplat" unitName="SquadBunkerPsiDisrupter">
+        <Model value="BunkerSplat"/>
+    </CActorSplat>
+    <CActorModel id="SquadBunkerPsiDisrupterBuild" parent="TerranBuildingBuild" unitName="SquadBunkerPsiDisrupter">
+        <Model value="Bunker_Silver_Build"/>
+    </CActorModel>
+    <CActorSplat id="SquadBunkerHiveMindEmulatorSplat" parent="GenericUnitSplat" unitName="SquadBunkerHiveMindEmulator">
+        <Model value="BunkerSplat"/>
+    </CActorSplat>
+    <CActorModel id="SquadBunkerHiveMindEmulatorBuild" parent="TerranBuildingBuild" unitName="SquadBunkerHiveMindEmulator">
+        <Model value="Bunker_Silver_Build"/>
+    </CActorModel>
+    <CActorModel id="SquadBunkerPsiDisrupterAttachment">
+        <Aliases value="_Snapshot"/>
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="LocalTintColor" value="1"/>
+        <Inherits index="Opacity" value="1"/>
+        <Inherits index="TeamColor" value="1"/>
+        <Inherits index="TintColor" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <Inherits index="WarpGroup" value="1"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death"/>
+        <On Terms="Signal.*.TurretDeath" Send="ModelSwap EyeserPsiDisruptorDeath"/>
+        <On Terms="Signal.*.TurretDeath" Send="$Death"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <Host Subject="::Main"/>
+        <HostSiteOps Ops="SOpAttachTurret"/>
+        <Model value="EyeserPsiDisruptor"/>
+        <Scale value="0.750000"/>
+    </CActorModel>
+    <CActorModel id="SquadBunkerHiveMindEmulatorAttachment">
+        <Aliases value="_Snapshot"/>
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="LocalTintColor" value="1"/>
+        <Inherits index="Opacity" value="1"/>
+        <Inherits index="TeamColor" value="1"/>
+        <Inherits index="TintColor" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <Inherits index="WarpGroup" value="1"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death"/>
+        <On Terms="Signal.*.TurretDeath" Send="ModelSwap HiveMindEmulatorDeath"/>
+        <On Terms="Signal.*.TurretDeath" Send="$Death"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <Host Subject="::Main"/>
+        <HostSiteOps Ops="SOpAttachTurret"/>
+        <Model value="EyeserHiveEmulator"/>
+        <Scale value="0.500000"/>
+    </CActorModel>
+    <CActorUnit id="SquadBunkerPerdition" parent="TerranBuildingEx" unitName="SquadBunkerPerdition">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="BunkerTransportAnim"/>
+        <Macros value="SnowVisualBuildingMacro"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit BunkerIsEmpty" Send="DeathCustomize Empty"/>
+        <On Terms="UnitBirth.SquadBunkerPerdition" Send="StatusSet SquadBunkerBuilt 1"/>
+        <On Terms="Behavior.SquadBunkerPerditionTurret.On" Send="StatusSet SquadBunkerPerditionTurretAttachment 1"/>
+        <On Terms="Behavior.SquadBunkerPerditionTurret.On" Send="Create SquadBunkerPerditionTurretAttachment"/>
+        <On Terms="UnitBirth.SquadBunkerPerdition" Target="SquadBunkerPerditionTurretAttachment" Send="Signal TurretShow"/>
+        <On Terms="UnitDeathCustomize; IsStatus SquadBunkerPerditionTurretAttachment 1" Target="SquadBunkerPerditionTurretAttachment" Send="Signal TurretDeath"/>
+        <Model value="Bunker_Silver"/>
+        <CreepHeightClass value="Small"/>
+        <BuildModel value="Bunker_Silver_Build"/>
+        <DeathArray index="Normal" ModelLink="Bunker_Silver_Death"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="Bunker_Explode"/>
+        <DeathCustoms ModelLink="Bunker_Silver_Upgrade_Death" Name="Upgrade"/>
+        <DeathCustoms ModelLink="Bunker_Silver_Upgrade_Empty_Death" Name="Empty"/>
+        <PlacementModel value="Bunker_Silver_Placement"/>
+        <PlacementActorModel value="BunkerPlacementModelCampaign"/>
+        <PlaceholderActorModel value="BunkerPlaceholderModelCampaign"/>
+        <PortraitModel value="Bunker_Silver_Portrait"/>
+        <BarOffset value="80"/>
+        <BarWidth value="85"/>
+        <GlossaryAnim value="Stand,Work"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Bunker.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-terran-Bunker.dds"/>
+        <NameOffset value="70"/>
+        <SoundArray index="Ready" value="Bunker_Ready"/>
+        <SoundArray index="What" value="Bunker_What"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-terran-Bunker.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Bunker.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorTurret id="SquadBunkerPerditionTurretAttachmentEnable">
+        <On Terms="TurretEnable.SquadPerditionTurret" Send="Create"/>
+    </CActorTurret>
+    <CActorModel id="SquadBunkerPerditionBuild" parent="TerranBuildingBuild" unitName="SquadBunkerPerdition">
+        <Model value="Bunker_Silver_Build"/>
+    </CActorModel>
+    <CActorSplat id="SquadBunkerPerditionSplat" parent="GenericUnitSplat" unitName="SquadBunkerPerdition">
+        <Model value="BunkerSplat"/>
+    </CActorSplat>
+    <CActorModel id="SquadBunkerPerditionTurretAttachment">
+        <Aliases value="_Snapshot"/>
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="LocalTintColor" value="1"/>
+        <Inherits index="Opacity" value="1"/>
+        <Inherits index="TeamColor" value="1"/>
+        <Inherits index="TintColor" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <Inherits index="WarpGroup" value="1"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death"/>
+        <On Terms="Signal.*.TurretDeath" Send="ModelSwap PerditionTurretDeath"/>
+        <On Terms="Signal.*.TurretDeath" Send="$Death"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <Host Subject="::Main"/>
+        <HostSiteOps Ops="SOpAttachTurret"/>
+        <Model value="PerditionTurret"/>
+        <Scale value="0.500000"/>
+    </CActorModel>
     <CActorAction id="SquadVoidRayAttack" parent="GenericAttackBase">
         <On Terms="Effect.PaladenFrostBeamChargePersistent.Start" Send="Create"/>
         <On Terms="Effect.PaladenFrostBeamDamage.Start; At Effect; FromEffectTreeDescendant" Send="ActionDamage"/>
@@ -1329,7 +1515,7 @@
         <On Terms="ActorCreation" Send="SetScale 1.000000 1.000000"/>
         <Model value="WidowMine"/>
         <!--On Terms="ActorCreation" Send="Create SiegeTankSiegedTargetImpactFire"/-->
-        <HostSiteOps Ops="SOpBasicScopeFollow StukovInfestedSiegeTankExploderUpOffset StukovInfestedSiegeTankExploderRotator StukovInfestedSiegeTankExploderDownOffset"/>
+        <HostSiteOps Ops="SOpBasicScopeFollow SquadInfestedSiegeTankExploderUpOffset SquadInfestedSiegeTankExploderRotator SquadInfestedSiegeTankExploderDownOffset"/>
         <ModelFlags index="AutomateGlobalLoops" value="1"/>
     </CActorMissile>
     <CActorSiteOpRotator id="SquadInfestedSiegeTankExploderRotator">
@@ -6360,7 +6546,7 @@
     <CActorModel id="SquadFusionCoreBuild" parent="TerranBuildingBuild" unitName="SquadFusionCore">
         <Model value="FusionCore_CovertOps_Build"/>
     </CActorModel>
-    <CActorModel id="SquadBunkerBuild" parent="TerranBuildingBuild" unitName="SquadBunker">
+    <CActorModel id="SquadBunkerShrikeBuild" parent="TerranBuildingBuild" unitName="SquadBunker">
         <Model value="Bunker_Silver_Build"/>
     </CActorModel>
     <CActorModel id="SquadArmoryBuild" parent="TerranBuildingBuild" unitName="SquadArmory">
@@ -6511,7 +6697,7 @@
     <CActorSplat id="SquadArmorySplat" parent="GenericUnitSplat" unitName="SquadArmory">
         <Model value="ArmorySplat"/>
     </CActorSplat>
-    <CActorModel id="SquadShrikeTurret">
+    <CActorModel id="SquadShrikeTurretAttachment">
         <Aliases value="_Snapshot"/>
         <Inherits index="CloakEffect" value="1"/>
         <Inherits index="LocalTintColor" value="1"/>
@@ -6528,9 +6714,9 @@
         <HostSiteOps Ops="SOpAttachTurret"/>
         <Model value="ShrikeTurret"/>
     </CActorModel>
-    <CActorModel id="SquadShrikeTurretAttackLaunch" parent="ModelAnimationStyleOneShot">
+    <CActorModel id="SquadShrikeTurretAttachmentAttackLaunch" parent="ModelAnimationStyleOneShot">
         <Flags index="SuppressCreationErrors" value="1"/>
-        <Host Subject="SquadShrikeTurret" ReachAcrossEffectTrees="1"/>
+        <Host Subject="SquadShrikeTurretAttachment" ReachAcrossEffectTrees="1"/>
         <HostSiteOps Ops="SOpAttachRollingWeaponStripe"/>
         <Model value="ShrikeTurretAttackLaunch"/>
     </CActorModel>
@@ -6552,7 +6738,7 @@
     <CActorSplat id="SquadTechReactorSplat" parent="GenericUnitSplat" unitName="SquadTechReactor">
         <Model value="ReactorSplat"/>
     </CActorSplat>
-    <CActorTurret id="SquadBunkerShrikeTurret">
+    <CActorTurret id="SquadShrikeTurretAttachmentEnable">
         <On Terms="TurretEnable.SquadShrikeTurret" Send="Create"/>
     </CActorTurret>
     <CActorTurret id="SquadDiamondbackTurret">
@@ -7223,21 +7409,20 @@
         <IconArcLength value="3.250000"/>
         <RangeFlags index="Minimap" value="1"/>
     </CActorRange>
-    <CActorUnit id="SquadBunker" parent="TerranBuildingEx" unitName="SquadBunker">
+    <CActorUnit id="SquadBunkerShrike" parent="TerranBuildingEx" unitName="SquadBunkerShrike">
         <Aliases value="_UnitHuge"/>
         <Macros value="BunkerTransportAnim"/>
         <Macros value="SnowVisualBuildingMacro"/>
-        <Model value="Bunker_Silver"/>
-        <CreepHeightClass value="Small"/>
-        <BuildModel value="Bunker_Silver_Build"/>
         <On Terms="UnitDeathCustomize; ValidateUnit BunkerIsEmpty" Send="DeathCustomize Empty"/>
-        <On Terms="UnitBirth.SquadBunker" Send="StatusSet SquadBunkerBuilt 1"/>
+        <On Terms="UnitBirth.SquadBunkerShrike" Send="StatusSet SquadBunkerBuilt 1"/>
         <!-- shrike turret-->
         <On Terms="Behavior.SquadBunkerShrikeTurret.On" Send="StatusSet SquadShrikeTurret 1"/>
         <On Terms="Behavior.SquadBunkerShrikeTurret.On" Send="Create SquadShrikeTurret"/>
-        <On Terms="UnitBirth.SquadBunker" Target="SquadShrikeTurret" Send="Signal TurretShow"/>
-        <On Terms="UnitDeathCustomize; IsStatus SquadShrikeTurret 1" Target="SquadShrikeTurret" Send="Signal TurretDeath"/>
-        <On Terms="UnitDeathCustomize; IsStatus SquadShrikeTurret 1" Target="SquadShrikeTurret" Send="Signal TurretDeath"/>
+        <On Terms="UnitBirth.SquadBunkerShrike" Target="SquadShrikeTurretAttachment" Send="Signal TurretShow"/>
+        <On Terms="UnitDeathCustomize; IsStatus SquadShrikeTurret 1" Target="SquadShrikeTurretAttachment" Send="Signal TurretDeath"/>
+        <Model value="Bunker_Silver"/>
+        <CreepHeightClass value="Small"/>
+        <BuildModel value="Bunker_Silver_Build"/>
         <!-- emp turret-->
         <!-- fire turret-->
         <!-- hive mind emulator turret-->
@@ -7265,7 +7450,7 @@
             <Image value="Assets\Textures\Wireframe-Terran-Bunker.dds"/>
         </Wireframe>
     </CActorUnit>
-    <CActorSplat id="SquadBunkerSplat" parent="GenericUnitSplat" unitName="SquadBunker">
+    <CActorSplat id="SquadBunkerShrikeSplat" parent="GenericUnitSplat" unitName="SquadBunkerShrike">
         <Model value="BunkerSplat"/>
     </CActorSplat>
     <CActorUnit id="SquadCommandCenter" parent="TerranBuildingFlyerEx" unitName="SquadCommandCenter">
@@ -7515,7 +7700,7 @@
     <CActorSplat id="SquadRefinerySplat" parent="GenericUnitSplat" unitName="SquadRefinery">
         <Model value="RefinerySplat"/>
     </CActorSplat>
-    <CActorAction id="SquadShrikeTurretAttack" parent="GenericAttack" effectAttack="SquadShrikeTurret">
+    <CActorAction id="SquadShrikeTurretAttachmentAttack" parent="GenericAttack" effectAttack="SquadShrikeTurretDamage">
         <On Terms="ActorCreation" Send="Create SquadShrikeTurretAttackLaunch"/>
         <LaunchAssets Model="" Sound="Bunker_ShrikeTurretAttackLaunch"/>
         <Beam value="ShrikeTurretAttackBeam"/>
