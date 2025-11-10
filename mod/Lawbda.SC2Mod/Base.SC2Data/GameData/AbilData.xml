@@ -43,6 +43,27 @@
         </CmdButtonArray>
         <CmdButtonArray index="Cancel" DefaultButtonFace="CmdCancel"/>
     </CAbilEffectTarget>
+    <CAbilSpecialize id="BunkerMorphSwitch">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoArray index="Specialize1">
+            <Resource index="Minerals" value="50"/>
+            <Button DefaultButtonFace="BuildSquadBunkerShrike"/>
+        </InfoArray>
+        <InfoArray index="Specialize2">
+            <Resource index="Minerals" value="75"/>
+            <Button DefaultButtonFace="BuildSquadBunkerPerdiction"/>
+        </InfoArray>
+        <InfoArray index="Specialize3">
+            <Resource index="Minerals" value="100"/>
+            <Resource index="Vespene" value="125"/>
+            <Button DefaultButtonFace="BuildSquadBunkerHiveMindEmulator"/>
+        </InfoArray>
+        <InfoArray index="Specialize4">
+            <Resource index="Minerals" value="125"/>
+            <Resource index="Vespene" value="75"/>
+            <Button DefaultButtonFace="BuildSquadBunkerPsiDisrupter"/>
+        </InfoArray>
+    </CAbilSpecialize>
     <CAbilEffectTarget id="NuclearStrikeGreen">
         <TechPlayer value="Owner"/>
         <Alignment value="Negative"/>
@@ -133,6 +154,66 @@
         <CmdButtonArray index="Execute" DefaultButtonFace="WhiteNuke" Requirements="HaveNuke"/>
         <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
     </CAbilEffectTarget>
+    <CAbilMorph id="MorphBunkerShrike">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="TrooperMengskSpecializeAA">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <Flags index="WaitUntilStopped" value="0"/>
+        <InfoArray Unit="TrooperMengskAA">
+            <SectionArray index="Abils">
+                <EffectArray index="Finish" value="TrooperMengskWeaponEquipSet"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilMorph id="MorphBunkerHiveMindEmulator">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="TrooperMengskSpecializeImproved">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <Flags index="WaitUntilStopped" value="0"/>
+        <InfoArray Unit="TrooperMengskImproved">
+            <SectionArray index="Abils">
+                <EffectArray index="Finish" value="TrooperMengskWeaponEquipSet"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilMorph id="MorphBunkerPsiDisrupter">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="TrooperMengskSpecializeFlamethrower">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <Flags index="WaitUntilStopped" value="0"/>
+        <InfoArray Unit="TrooperMengskFlamethrower">
+            <SectionArray index="Abils">
+                <EffectArray index="Finish" value="TrooperMengskWeaponEquipSet"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilMorph id="MorphBunkerPerdiction">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="TrooperMengskSpecializeFlamethrower">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <Flags index="WaitUntilStopped" value="0"/>
+        <InfoArray Unit="TrooperMengskFlamethrower">
+            <SectionArray index="Abils">
+                <EffectArray index="Finish" value="TrooperMengskWeaponEquipSet"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
     <CAbilEffectInstant id="SquadSuperGaryEnergyPower">
         <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
         <Effect index="0" value="SquadSuperGaryCP"/>
@@ -1678,7 +1759,7 @@
         <AINotifyEffect value="HunterSeekerMissile"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadRavenSeekerMissile"/>
     </CAbilEffectTarget>
-    <CAbilEffectTarget id="SquadBunkerInstantJustice">
+    <CAbilEffectTarget id="SquadBunkerInstantInjustice">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <SharedFlags index="TargetCursorVisibleInBlackMask" value="1"/>
         <Effect index="0" value="SquadBunkerCalldownCreatePersistent"/>
@@ -1689,7 +1770,7 @@
         <AutoCastFilters value="-;-"/>
         <CalldownEffect value="SquadBunkerCalldownTransport"/>
         <AINotifyEffect value="Nuke"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="SquadCalldownMulelisk"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadBunkerInstantInjustis"/>
     </CAbilEffectTarget>
     <CAbilEffectInstant id="SquadThorEmergencyRepair">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -3676,20 +3757,20 @@
             <Button DefaultButtonFace="BuildSquadBarracks" Requirements="HaveSquadSupplyDepotCombine"/>
         </InfoArray>
         <InfoArray index="Build5" Unit="SquadEngineeringBay" Time="35">
-            <Button DefaultButtonFace="BuildSquadEngineeringBay" Requirements="HaveCommandCenter"/>
+            <Button DefaultButtonFace="BuildSquadEngineeringBay" Requirements="HaveSquadCommandCenterCombine"/>
         </InfoArray>
         <InfoArray index="Build6" Unit="SquadMissileTurret" Time="25">
-            <Button DefaultButtonFace="BuildSquadMissileTurret" Requirements="HaveSquadEngineeringBay2"/>
+            <Button DefaultButtonFace="BuildSquadMissileTurret" Requirements="HaveSquadEngineeringBay"/>
         </InfoArray>
         <InfoArray index="Build7" Unit="SquadBunkerShrike" Time="25">
-            <Button DefaultButtonFace="BuildSquadBunker" Requirements="HaveSquadBarracks"/>
+            <Button DefaultButtonFace="BuildSquadBunkerShrike" Requirements="HaveSquadBarracks"/>
         </InfoArray>
         <InfoArray index="Build8" Unit="SquadAutomatedRefinery" Time="30">
             <Button DefaultButtonFace="BuildSquadAutomatedRefinery"/>
             <ValidatorArray value="HasVespene"/>
         </InfoArray>
         <InfoArray index="Build9" Unit="SquadSensorTower" Time="25">
-            <Button DefaultButtonFace="BuildSquadSensorTower" Requirements="HaveSquadEngineeringBay2"/>
+            <Button DefaultButtonFace="BuildSquadSensorTower" Requirements="HaveSquadEngineeringBay"/>
         </InfoArray>
         <InfoArray index="Build10" Unit="SquadGhostAcademy" Time="40">
             <Button DefaultButtonFace="BuildSquadGhostAcademy" Requirements="HaveSquadBarracks"/>
@@ -3713,15 +3794,15 @@
             <Button DefaultButtonFace="BuildSquadFusionCore" Requirements="HaveSquadStarport"/>
         </InfoArray>
         <InfoArray index="Build17" Unit="SquadBunkerPsiDisrupter" Time="45">
-            <Button DefaultButtonFace="BuildSquadPsiDisrupter"/>
+            <Button DefaultButtonFace="BuildSquadBunkerPsiDisrupter"/>
         </InfoArray>
         <InfoArray index="Build18" Unit="SquadBunkerHiveMindEmulator" Time="60">
-            <Button DefaultButtonFace="BuildSquadHiveMindEmulator"/>
+            <Button DefaultButtonFace="BuildSquadBunkerHiveMindEmulator"/>
         </InfoArray>
         <InfoArray index="Build19" Unit="SquadBunkerPerdition">
             <Resource index="Minerals" value="100"/>
             <Cooldown TimeUse="15"/>
-            <Button DefaultButtonFace="PerditionTurret"/>
+            <Button DefaultButtonFace="BuildSquadBunkerPerdiction"/>
         </InfoArray>
         <InfoArray index="Build28" Unit="SquadTechlab" Time="25">
             <Button DefaultButtonFace="BuildSquadTechLab" Requirements="HaveSquadBarracks"/>

@@ -403,6 +403,44 @@
         <Model value="PerditionTurret"/>
         <Scale value="0.500000"/>
     </CActorModel>
+    <CActorUnit id="SquadBunkerVanilla" parent="TerranBuildingEx" unitName="SquadBunkerVanilla">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="BunkerTransportAnim"/>
+        <Macros value="SnowVisualBuildingMacro"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit BunkerIsEmpty" Send="DeathCustomize Empty"/>
+        <Model value="Bunker_Silver"/>
+        <CreepHeightClass value="Small"/>
+        <BuildModel value="Bunker_Silver_Build"/>
+        <DeathArray index="Normal" ModelLink="Bunker_Silver_Death"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="Bunker_Explode"/>
+        <DeathCustoms ModelLink="Bunker_Silver_Upgrade_Death" Name="Upgrade"/>
+        <DeathCustoms ModelLink="Bunker_Silver_Upgrade_Empty_Death" Name="Empty"/>
+        <PlacementModel value="Bunker_Silver_Placement"/>
+        <PlacementActorModel value="BunkerPlacementModelCampaign"/>
+        <PlaceholderActorModel value="BunkerPlaceholderModelCampaign"/>
+        <PortraitModel value="Bunker_Silver_Portrait"/>
+        <BarOffset value="80"/>
+        <BarWidth value="85"/>
+        <GlossaryAnim value="Stand,Work"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Bunker.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-terran-Bunker.dds"/>
+        <NameOffset value="70"/>
+        <SoundArray index="Ready" value="Bunker_Ready"/>
+        <SoundArray index="What" value="Bunker_What"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-terran-Bunker.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Bunker.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorSplat id="SquadBunkerVanillaSplat" parent="GenericUnitSplat" unitName="SquadBunkerVanilla">
+        <Model value="BunkerSplat"/>
+    </CActorSplat>
+    <CActorModel id="SquadBunkerVanillaBuild" parent="TerranBuildingBuild" unitName="SquadBunkerVanilla">
+        <Model value="Bunker_Silver_Build"/>
+    </CActorModel>
     <CActorAction id="SquadVoidRayAttack" parent="GenericAttackBase">
         <On Terms="Effect.PaladenFrostBeamChargePersistent.Start" Send="Create"/>
         <On Terms="Effect.PaladenFrostBeamDamage.Start; At Effect; FromEffectTreeDescendant" Send="ActionDamage"/>
@@ -5036,7 +5074,7 @@
         <Sound value="330mmBarrageCannonsMorph"/>
     </CActorSound>
     <CActorSplat id="SquadThor330mmBarrageCannonsCursorSplat" parent="TerranCursorSplat" abil="SquadThor330mmBarrageCannons"/>
-    <CActorSplat id="SquadBunkerCalldownCursorSplat" parent="TerranCursorSplat" abil="SquadBunkerInstantJustice"/>
+    <CActorSplat id="SquadBunkerCalldownCursorSplat" parent="TerranCursorSplat" abil="SquadBunkerInstantInjustice"/>
     <CActorSound id="SquadThor250mmStrikeCannonsUnMorph" parent="SoundOneShot">
         <On Terms="Abil.SquadThor250mmStrikeCannons.SourceFinishStart" Send="Create"/>
         <On Terms="Abil.ExplosiveMissiles.SourceCastStart" Send="Create"/>
