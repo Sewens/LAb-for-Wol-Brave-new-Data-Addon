@@ -38,31 +38,78 @@
     </CEffectUseCalldown>
     <CEffectMorph id="MorphBunkerHiveMindEmulator">
         <EditorCategories value=""/>
+        <ActorKey value="SquadBunkerHiveMindEmulator"/>
         <MorphFlags index="IgnoreFacing" value="1"/>
         <MorphFlags index="IgnorePlacement" value="1"/>
-        <MorphUnit value="TrooperMengsk"/>
+        <MorphUnit value="SquadBunkerHiveMindEmulator"/>
+        <AbilKeyFallback value="MorphBunkerHiveMindEmulator"/>
     </CEffectMorph>
+    <CEffectIssueOrder id="MorphBunkerHiveMindEmulatorOrder">
+        <EditorCategories value=""/>
+        <WhichUnit Value="Caster"/>
+        <Abil value="MorphBunkerHiveMindEmulator"/>
+    </CEffectIssueOrder>
+    <CEffectIssueOrder id="MorphBunkerPerditionOrder">
+        <EditorCategories value=""/>
+        <WhichUnit Value="Caster"/>
+        <Abil value="MorphBunkerPerdiction"/>
+    </CEffectIssueOrder>
     <CEffectMorph id="MorphBunkerPsiDisrupter">
         <EditorCategories value=""/>
+        <ActorKey value="SquadBunkerPsiDisrupter"/>
         <MorphFlags index="IgnoreFacing" value="1"/>
         <MorphFlags index="IgnorePlacement" value="1"/>
-        <MorphUnit value="TrooperMengskAA"/>
-        <AbilKeyFallback value="TrooperMengskSpecializeAA"/>
+        <MorphUnit value="SquadBunkerPsiDisrupter"/>
+        <AbilKeyFallback value="MorphBunkerPsiDisrupter"/>
     </CEffectMorph>
-    <CEffectMorph id="MorphBunkerPerdiction">
+    <CEffectMorph id="MorphBunkerPerdition">
         <EditorCategories value=""/>
+        <ActorKey value="SquadBunkerPerdition"/>
         <MorphFlags index="IgnoreFacing" value="1"/>
         <MorphFlags index="IgnorePlacement" value="1"/>
-        <MorphUnit value="TrooperMengskFlamethrower"/>
-        <AbilKeyFallback value="TrooperMengskSpecializeFlamethrower"/>
+        <MorphUnit value="SquadBunkerPerdition"/>
+        <AbilKeyFallback value="MorphBunkerPerdiction"/>
     </CEffectMorph>
+    <CEffectIssueOrder id="MorphBunkerPsiDisrupterOrder">
+        <EditorCategories value=""/>
+        <WhichUnit Value="Caster"/>
+        <Abil value="MorphBunkerPsiDisrupter"/>
+    </CEffectIssueOrder>
     <CEffectMorph id="MorphBunkerShrike">
         <EditorCategories value=""/>
         <MorphFlags index="IgnoreFacing" value="1"/>
         <MorphFlags index="IgnorePlacement" value="1"/>
-        <MorphUnit value="TrooperMengskImproved"/>
-        <AbilKeyFallback value="TrooperMengskSpecializeImproved"/>
+        <MorphUnit value="SquadBunkerShrike"/>
+        <AbilKeyFallback value="MorphBunkerShrike"/>
+        <ActorKey value="SquadBunkerShrike"/>
     </CEffectMorph>
+    <CEffectIssueOrder id="MorphBunkerShrikeOrder">
+        <EditorCategories value=""/>
+        <WhichUnit Value="Caster"/>
+        <Abil value="MorphBunkerShrike"/>
+    </CEffectIssueOrder>
+    <CEffectSet id="SquadSiegeTankChargingCannonsDirectFinalAttackSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadSiegeTankChargingCannonsAttackSwitch"/>
+        <EffectArray value="SquadSiegeTankChargingCannonsFullyChargeApply"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="SquadSiegeTankChargingCannonsFullyChargeApply">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="SquadSiegeTankChargingCannonsFullyCharge"/>
+        <ValidatorArray index="0" value="SiegeTankChargingCannonsn_1Stack"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="SquadSiegeTankChargingCannonsFullyChargeRemove">
+        <ValidatorArray index="0" value="SiegeTankChargingCannonsFullStack"/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="SquadSiegeTankChargingCannonsFullyCharge"/>
+    </CEffectRemoveBehavior>
+    <CEffectSet id="SquadSiegeTankChargingCannonsLMFinishSet">
+        <EditorCategories value=""/>
+        <EffectArray value="SquadSiegeTankChargingCannonsFullyChargeRemove"/>
+        <EffectArray value="SquadSiegeTankChargingCannonsStackRemove"/>
+    </CEffectSet>
     <CEffectUseCalldown id="WhiteNuclear">
         <EditorCategories value="Race:Terran"/>
         <WhichLocation Value="TargetPoint"/>
@@ -638,10 +685,11 @@
         <ImpactEffect value="SquadGaryDamage"/>
         <AmmoUnit value="SquadSuperGaryStetmannMissile"/>
     </CEffectLaunchMissile>
-    <CEffectSet id="SquadSiegeTankChargingCannonsAttackSet">
+    <CEffectSet id="SquadSiegeTankChargingCannonsDirectAttackSet">
         <EditorCategories value="Race:Terran"/>
         <EffectArray value="SquadSiegeTankChargingCannonsAttackSwitch"/>
         <EffectArray value="SquadSiegeTankChargingCannonsStackApply"/>
+        <EffectArray value="SquadSiegeTankChargingCannonsFullyChargeApply"/>
     </CEffectSet>
     <CEffectSwitch id="SquadSiegeTankChargingCannonsAttackSwitch">
         <EditorCategories value="Race:Terran"/>
@@ -705,7 +753,7 @@
         <EditorCategories value="Race:Terran"/>
         <ImpactLocation Value="TargetUnitOrPoint"/>
         <ImpactEffect value="SquadSiegeTankChargingCannonsStackMissileDamage"/>
-        <FinishEffect value="SquadSiegeTankChargingCannonsStackRemove"/>
+        <FinishEffect value="SquadSiegeTankChargingCannonsLMFinishSet"/>
         <Flags index="ValidateImpactDeflection" value="1"/>
         <AmmoUnit value="SquadSiegeTankChargingCannonsMissile"/>
     </CEffectLaunchMissile>

@@ -408,6 +408,34 @@
         <Macros value="BunkerTransportAnim"/>
         <Macros value="SnowVisualBuildingMacro"/>
         <On Terms="UnitDeathCustomize; ValidateUnit BunkerIsEmpty" Send="DeathCustomize Empty"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerShrike" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerShrike" Send="AnimGroupApply B"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerShrike" Send="AnimBaselineStop"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerShrike" Target="SquadBunkerShrike" Send="Create"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerShrike" Send="AnimClear Morph"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerShrike" Send="AnimGroupRemove B"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerShrike" Send="AnimBaselineStart"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom SquadBunkerVanilla; MorphTo SquadPlanetaryFortress" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom SquadBunkerVanilla; MorphTo SquadPlanetaryFortress" Send="AnimGroupApply A"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom SquadBunkerVanilla; MorphTo SquadPlanetaryFortress" Send="AnimBaselineStop"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom SquadBunkerVanilla; MorphTo SquadPlanetaryFortress" Send="AnimPlay Morph Morph 0 1.500000"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom SquadBunkerVanilla; MorphTo SquadPlanetaryFortress" Send="AnimClear Morph"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom SquadBunkerVanilla; MorphTo SquadPlanetaryFortress" Send="AnimGroupRemove A"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom SquadBunkerVanilla; MorphTo SquadPlanetaryFortress" Send="AnimBaselineStart"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom SquadBunkerVanilla; MorphTo SquadOrbitalCommand" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom SquadBunkerVanilla; MorphTo SquadOrbitalCommand" Send="AnimGroupApply B"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom SquadBunkerVanilla; MorphTo SquadOrbitalCommand" Send="AnimBaselineStop"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom SquadBunkerVanilla; MorphTo SquadOrbitalCommand" Send="AnimPlay Morph Morph 0 0.000000"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom SquadBunkerVanilla; MorphTo SquadOrbitalCommand" Send="AnimClear Morph"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom SquadBunkerVanilla; MorphTo SquadOrbitalCommand" Send="AnimGroupRemove B"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom SquadBunkerVanilla; MorphTo SquadOrbitalCommand" Send="AnimBaselineStart"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom SquadBunkerVanilla; MorphTo SquadOrbitalCommand" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom SquadBunkerVanilla; MorphTo SquadOrbitalCommand" Send="AnimGroupApply B"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom SquadBunkerVanilla; MorphTo SquadOrbitalCommand" Send="AnimBaselineStop"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom SquadBunkerVanilla; MorphTo SquadOrbitalCommand" Send="AnimPlay Morph Morph 0 0.000000"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom SquadBunkerVanilla; MorphTo SquadOrbitalCommand" Send="AnimClear Morph"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom SquadBunkerVanilla; MorphTo SquadOrbitalCommand" Send="AnimGroupRemove B"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom SquadBunkerVanilla; MorphTo SquadOrbitalCommand" Send="AnimBaselineStart"/>
         <Model value="Bunker_Silver"/>
         <CreepHeightClass value="Small"/>
         <BuildModel value="Bunker_Silver_Build"/>
@@ -1679,6 +1707,15 @@
         <Model value="SquadBattlecruiserYamatoCharge"/>
         <Scale value="0.650000"/>
         <ModelFlags index="UseSyncSeed" value="1"/>
+    </CActorModel>
+    <CActorModel id="SquadSiegeTankChargingCannonsChargingUp" parent="ModelAddition">
+        <AutoScaleFactor value="0.500000"/>
+        <Inherits index="TintColor" value="0"/>
+        <On Terms="Behavior.SquadSiegeTankChargingCannonsFullyCharge.On" Send="Create"/>
+        <On Terms="Behavior.SquadSiegeTankChargingCannonsFullyCharge.Off" Send="AnimBracketStop BSD"/>
+        <HostSiteOps Ops="SOpAttachWeapon"/>
+        <Model value="FrenzyModel"/>
+        <Scale value="2.000000"/>
     </CActorModel>
     <CActorModel id="HeroDetectorRadarModel_Detector122" parent="ModelAnimationStyleContinuous">
         <Terms value="Cap 1"/>

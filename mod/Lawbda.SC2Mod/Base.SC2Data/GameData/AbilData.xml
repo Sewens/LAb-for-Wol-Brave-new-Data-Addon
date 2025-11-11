@@ -45,22 +45,30 @@
     </CAbilEffectTarget>
     <CAbilSpecialize id="BunkerMorphSwitch">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <InfoArray index="Specialize1">
+        <InfoArray index="Specialize1" Effect="MorphBunkerShrikeOrder">
             <Resource index="Minerals" value="50"/>
+            <Display index="Minerals" value="1"/>
+            <Display index="Vespene" value="1"/>
             <Button DefaultButtonFace="BuildSquadBunkerShrike"/>
         </InfoArray>
-        <InfoArray index="Specialize2">
+        <InfoArray index="Specialize2" Effect="MorphBunkerPerditionOrder">
             <Resource index="Minerals" value="75"/>
+            <Display index="Minerals" value="1"/>
+            <Display index="Vespene" value="1"/>
             <Button DefaultButtonFace="BuildSquadBunkerPerdiction"/>
         </InfoArray>
-        <InfoArray index="Specialize3">
+        <InfoArray index="Specialize3" Effect="MorphBunkerHiveMindEmulatorOrder">
             <Resource index="Minerals" value="100"/>
             <Resource index="Vespene" value="125"/>
+            <Display index="Minerals" value="1"/>
+            <Display index="Vespene" value="1"/>
             <Button DefaultButtonFace="BuildSquadBunkerHiveMindEmulator"/>
         </InfoArray>
-        <InfoArray index="Specialize4">
+        <InfoArray index="Specialize4" Effect="MorphBunkerPsiDisrupterOrder">
             <Resource index="Minerals" value="125"/>
             <Resource index="Vespene" value="75"/>
+            <Display index="Minerals" value="1"/>
+            <Display index="Vespene" value="1"/>
             <Button DefaultButtonFace="BuildSquadBunkerPsiDisrupter"/>
         </InfoArray>
     </CAbilSpecialize>
@@ -156,63 +164,49 @@
     </CAbilEffectTarget>
     <CAbilMorph id="MorphBunkerShrike">
         <EditorCategories value="AbilityorEffectType:Units"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="TrooperMengskSpecializeAA">
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadBunkerShrikeTurret">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
         <Flags index="BestUnit" value="1"/>
         <Flags index="IgnoreFacing" value="1"/>
         <Flags index="Transient" value="1"/>
         <Flags index="WaitUntilStopped" value="0"/>
-        <InfoArray Unit="TrooperMengskAA">
-            <SectionArray index="Abils">
-                <EffectArray index="Finish" value="TrooperMengskWeaponEquipSet"/>
-            </SectionArray>
-        </InfoArray>
+        <InfoArray Unit="SquadBunkerShrike"/>
     </CAbilMorph>
     <CAbilMorph id="MorphBunkerHiveMindEmulator">
         <EditorCategories value="AbilityorEffectType:Units"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="TrooperMengskSpecializeImproved">
+        <CmdButtonArray index="Execute" DefaultButtonFace="BuildSquadBunkerHiveMindEmulator">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
         <Flags index="BestUnit" value="1"/>
+        <Flags index="Birth" value="1"/>
         <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="IgnoreUnitCost" value="1"/>
         <Flags index="Transient" value="1"/>
         <Flags index="WaitUntilStopped" value="0"/>
-        <InfoArray Unit="TrooperMengskImproved">
-            <SectionArray index="Abils">
-                <EffectArray index="Finish" value="TrooperMengskWeaponEquipSet"/>
-            </SectionArray>
-        </InfoArray>
+        <InfoArray Unit="SquadBunkerHiveMindEmulator"/>
     </CAbilMorph>
     <CAbilMorph id="MorphBunkerPsiDisrupter">
         <EditorCategories value="AbilityorEffectType:Units"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="TrooperMengskSpecializeFlamethrower">
+        <CmdButtonArray index="Execute" DefaultButtonFace="BuildSquadBunkerPsiDisrupter">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
         <Flags index="BestUnit" value="1"/>
         <Flags index="IgnoreFacing" value="1"/>
         <Flags index="Transient" value="1"/>
         <Flags index="WaitUntilStopped" value="0"/>
-        <InfoArray Unit="TrooperMengskFlamethrower">
-            <SectionArray index="Abils">
-                <EffectArray index="Finish" value="TrooperMengskWeaponEquipSet"/>
-            </SectionArray>
-        </InfoArray>
+        <InfoArray Unit="SquadBunkerPsiDisrupter"/>
     </CAbilMorph>
     <CAbilMorph id="MorphBunkerPerdiction">
         <EditorCategories value="AbilityorEffectType:Units"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="TrooperMengskSpecializeFlamethrower">
+        <CmdButtonArray index="Execute" DefaultButtonFace="BuildSquadBunkerPerdiction">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
         <Flags index="BestUnit" value="1"/>
         <Flags index="IgnoreFacing" value="1"/>
         <Flags index="Transient" value="1"/>
         <Flags index="WaitUntilStopped" value="0"/>
-        <InfoArray Unit="TrooperMengskFlamethrower">
-            <SectionArray index="Abils">
-                <EffectArray index="Finish" value="TrooperMengskWeaponEquipSet"/>
-            </SectionArray>
-        </InfoArray>
+        <InfoArray Unit="SquadBunkerPerdition"/>
     </CAbilMorph>
     <CAbilEffectInstant id="SquadSuperGaryEnergyPower">
         <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
