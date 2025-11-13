@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorBuff id="SquadMedivacRepairDroneRecall">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Period value="0.25"/>
+        <PeriodicEffect value="SquadMedivacRepairDroneRecallTeleport"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadMedivacRepairDroneHealController">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <BuffFlags index="Channeled" value="1"/>
+        <FinalEffect value="SquadMedivacRepairDroneHealTargetRB"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadMedivacRepairDroneHealTarget">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="NotFullLife"/>
+        <RemoveValidatorArray value="NotHidden"/>
+        <RemoveValidatorArray value="IsMechanical"/>
+        <Period value="0.0625"/>
+        <InitialEffect value="SquadMedivacRepairDroneHealControllerAB"/>
+        <PeriodicEffect value="SquadMedivacRepairDroneHealTarget"/>
+        <FinalEffect value="SquadMedivacRepairDroneHealControllerRB"/>
+    </CBehaviorBuff>
     <CBehaviorBuff id="FirebatImmolationArmor">
         <InfoIcon value="Assets\Textures\war3_btn\renee_war3_btnimmolationon.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -22,21 +45,18 @@
         </DamageResponse>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadBunkerPsiDisrupter">
-        <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <Modification>
             <WeaponEnableArray value="SquadBunkerShrikeAutoGun"/>
         </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadBunkerHiveMindEmulator">
-        <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <Modification>
             <WeaponEnableArray value="SquadBunkerShrikeAutoGun"/>
         </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadBunkerPerditionTurret">
-        <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <Modification>
             <WeaponEnableArray value="SquadBunkerShrikeAutoGun"/>
@@ -2197,7 +2217,6 @@
         <ExpireEffect value="SquadRefineryMorph"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadBunkerShrikeTurret">
-        <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <Modification>
             <WeaponEnableArray value="SquadBunkerShrikeAutoGun"/>

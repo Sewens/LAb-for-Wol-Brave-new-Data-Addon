@@ -72,6 +72,55 @@
             <Button DefaultButtonFace="BuildSquadBunkerPsiDisrupter"/>
         </InfoArray>
     </CAbilSpecialize>
+    <CAbilArmMagazine id="SquadMedivacRepairDroneHanger">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Launch value="ReleaseAtSource"/>
+        <Flags index="AutoCreate" value="1"/>
+        <Flags index="Retarget" value="1"/>
+        <Flags index="ShowStatus" value="0"/>
+        <Leash value="3"/>
+        <InfoArray index="Ammo1" CountStart="2" Manage="Recall" Unit="SquadMedivacRepairDrone">
+            <Charge HideCount="1" Link="CarrierRepairDrone" Location="Unit"/>
+            <Cooldown Link="Abil/##id##"/>
+            <Button DefaultButtonFace="SquadMedivacRepairDroneHanger">
+                <Flags index="IgnoreUser" value="1"/>
+                <Flags index="ToSelection" value="1"/>
+            </Button>
+            <Flags index="AutoBuild" value="1"/>
+            <Flags index="AutoBuildOn" value="1"/>
+            <Flags index="External" value="1"/>
+        </InfoArray>
+        <EffectArray index="Create" value="SquadMedivacRepairDroneRecall"/>
+        <ExternalAngle value="-135"/>
+        <ExternalAngle value="135"/>
+        <MaxCount value="2"/>
+    </CAbilArmMagazine>
+    <CAbilEffectTarget id="SquadMedivacRepairDroneHeal">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadMedivacRepairDroneHealSet"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <TargetFilters value="Mechanical,Visible;Self,Neutral,Enemy,Missile,Uncommandable,UnderConstruction,Dead,Hidden,Invulnerable"/>
+        <TargetSorts RequestCount="1">
+            <SortArray value="TSAlliancePassive"/>
+            <SortArray value="TSLifeFraction"/>
+            <SortArray value="TSDistance"/>
+        </TargetSorts>
+        <Range value="4"/>
+        <RangeSlop value="2"/>
+        <AutoCastAcquireLevel value="Defensive"/>
+        <AutoCastFilters value="Mechanical,Visible;Self,Neutral,Enemy,Missile,Dead,Hidden,Invulnerable"/>
+        <AutoCastRange value="8"/>
+        <AutoCastValidatorArray value="NotWarpingIn"/>
+        <AutoCastValidatorArray value="CarrierRepairDroneHealNotCasting"/>
+        <AutoCastValidatorArray value="CarrierRepairDroneHealTargetNotBeingHealed"/>
+        <AutoCastValidatorArray value="CasterIsNotMovingOrStopped"/>
+        <DefaultError value="RequiresHealTarget"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadMedivacRepairDrone"/>
+        <AcquireAttackers value="1"/>
+    </CAbilEffectTarget>
     <CAbilEffectTarget id="NuclearStrikeGreen">
         <TechPlayer value="Owner"/>
         <Alignment value="Negative"/>

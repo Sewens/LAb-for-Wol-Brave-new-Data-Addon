@@ -30,6 +30,49 @@
     <CEffectEnumArea default="1" id="SquadAbilSearchRadiusExt" parent="SquadAbilSearch">
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
+    <CEffectApplyBehavior id="SquadMedivacRepairDroneRecall">
+        <EditorCategories value=""/>
+    </CEffectApplyBehavior>
+    <CEffectTeleport id="SquadMedivacRepairDroneRecallTeleport">
+        <ValidatorArray value="CasterisGreaterThan5"/>
+        <EditorCategories value=""/>
+        <PlacementAround Value="CasterUnit"/>
+        <SourceLocation Value="TargetUnit"/>
+    </CEffectTeleport>
+    <CEffectApplyBehavior id="SquadMedivacRepairDroneHealControllerAB">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="SquadMedivacRepairDroneHealController"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="SquadMedivacRepairDroneHealControllerRB">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="CarrierRepairDroneHealController"/>
+    </CEffectRemoveBehavior>
+    <CEffectSet id="SquadMedivacRepairDroneHealSet">
+        <ValidatorArray value="CarrierRepairDroneHealTargetNotBeingHealed"/>
+        <ValidatorArray value="NotFullLife"/>
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="SquadMedivacRepairDroneHealControllerRB"/>
+        <EffectArray value="SquadMedivacRepairDroneHealTargetAB"/>
+    </CEffectSet>
+    <CEffectModifyUnit id="SquadMedivacRepairDroneHealTarget">
+        <EditorCategories value="Race:Protoss"/>
+        <LaunchUnit Value="Caster"/>
+        <ImpactUnit Value="Source"/>
+        <VitalArray index="Life">
+            <Change value="0.5"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectApplyBehavior id="SquadMedivacRepairDroneHealTargetAB">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="SquadMedivacRepairDroneHealTarget"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="SquadMedivacRepairDroneHealTargetRB">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Effect="CarrierRepairDroneHealTargetAB"/>
+        <BehaviorLink value="CarrierRepairDroneHealTarget"/>
+    </CEffectRemoveBehavior>
     <CEffectUseCalldown id="GreenNuclear">
         <EditorCategories value="Race:Terran"/>
         <WhichLocation Value="TargetPoint"/>

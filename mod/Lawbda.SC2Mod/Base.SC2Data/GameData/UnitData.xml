@@ -1,5 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CUnit id="SquadMedivacRepairDrone">
+        <Race value="Prot"/>
+        <Mob value="Campaign"/>
+        <FlagArray index="Unselectable" value="1"/>
+        <FlagArray index="Untargetable" value="1"/>
+        <FlagArray index="Invulnerable" value="1"/>
+        <FlagArray index="AISupport" value="1"/>
+        <PlaneArray index="Air" value="1"/>
+        <Collide index="Flying" value="1"/>
+        <Attributes index="Light" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/ProtossPlating"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/ProtossPlasmaShields"/>
+        <Mover value="Fly"/>
+        <Speed value="2.5"/>
+        <Acceleration value="2.125"/>
+        <Height value="3.75"/>
+        <CostCategory value="Army"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="Warpable"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="SquadMedivacRepairDroneHeal"/>
+        <BehaviorArray Link="AbilityTargetExclusionBehavior"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="AcquireMove" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="AcquireMove" Type="AbilCmd" AbilCmd="move,AcquireMove" Row="0" Column="4"/>
+            <LayoutButtons Face="CarrierRepairDroneHeal" Type="AbilCmd" AbilCmd="SquadMedivacRepairDroneHeal,Execute" Row="2" Column="0"/>
+        </CardLayouts>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="4"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
+    </CUnit>
     <CUnit id="SquadBunkerPsiDisrupter">
         <DeathRevealRadius value="3"/>
         <Facing value="315"/>
@@ -1772,6 +1809,7 @@
         <AbilArray Link="SquadMedivacTransport"/>
         <AbilArray Link="SquadAfterburnersBoost"/>
         <AbilArray Link="SquadMedivacDoubleBeamHeal"/>
+        <AbilArray Link="SquadMedivacRepairDroneHanger"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
@@ -1783,6 +1821,7 @@
             <LayoutButtons Face="Heal" Type="AbilCmd" AbilCmd="SquadMedivacHeal,Execute" Row="2" Column="0"/>
             <LayoutButtons Face="SquadMedivacUnloadAll" Type="AbilCmd" AbilCmd="SquadMedivacTransport,UnloadAt" Row="2" Column="3"/>
             <LayoutButtons Face="SquadAfterburner" Type="AbilCmd" AbilCmd="SquadAfterburnersBoost,Execute" Row="2" Column="1"/>
+            <LayoutButtons Face="SquadMedivacRepairDroneHanger" Type="Passive" AbilCmd="SquadMedivacRepairDroneHanger,Ammo1" Row="1" Column="0"/>
         </CardLayouts>
         <Radius value="0.75"/>
         <SeparationRadius value="0.75"/>
@@ -4769,6 +4808,7 @@
             <LayoutButtons Face="Enband" Type="AbilCmd" AbilCmd="AddMuleliskToSquad,Execute" Row="1" Column="4"/>
             <LayoutButtons Face="SquadGiftTooltips" Type="Submenu" SubmenuCardId="Gift" Row="1" Column="2"/>
             <LayoutButtons Face="Repair" Type="AbilCmd" AbilCmd="SquadMuleliskRepair,Execute" Row="1" Column="1"/>
+            <LayoutButtons Face="ArtanisTestButton" Type="Passive" Row="2" Column="0"/>
         </CardLayouts>
         <CardLayouts CardId="Gift">
             <LayoutButtons Face="HugeLifeandRegen" Type="Passive" Row="0" Column="0"/>
