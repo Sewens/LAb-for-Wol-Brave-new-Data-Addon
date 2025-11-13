@@ -2431,6 +2431,29 @@
         <On Terms="Behavior.SquadVikingFighterOvercharge.On" Send="Create"/>
         <Sound value="HiveMindEmulator_MindControlLaunch"/>
     </CActorSound>
+    <CActorModel id="SquadVikingFighterFuryChargingModel" parent="ModelAddition">
+        <Macros value="GlobalLoopMacro"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.500000"/>
+        <On Terms="Behavior.SquadVikingAttackSpeeder.On" Send="Create"/>
+        <On Terms="BehaviorLevel.SquadVikingAttackSpeeder; Level 1" Send="AnimGroupApply B"/>
+        <On Terms="BehaviorLevel.SquadVikingAttackSpeeder; Level 2" Send="AnimGroupRemove B"/>
+        <On Terms="BehaviorLevel.SquadVikingAttackSpeeder; Level 2" Send="AnimGroupApply C"/>
+        <On Terms="BehaviorLevel.SquadVikingAttackSpeeder; Level 3" Send="AnimGroupRemove C"/>
+        <On Terms="BehaviorLevel.SquadVikingAttackSpeeder; Level 3" Send="AnimGroupApply D"/>
+        <On Terms="BehaviorLevel.SquadVikingAttackSpeeder; Level 4" Send="AnimGroupRemove D"/>
+        <On Terms="BehaviorLevel.SquadVikingAttackSpeeder; Level 4" Send="AnimGroupApply E"/>
+        <On Terms="Behavior.SquadVikingAttackSpeeder.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="UnitDeath" Send="Destroy"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+        <Model value="KerriganFuryAbilitiesLightning"/>
+    </CActorModel>
+    <CActorModel id="SquadVikingFighterFuryFullyChargeModel" parent="ModelAddition">
+        <Inherits index="TintColor" value="0"/>
+        <On Terms="BehaviorLevel.SquadVikingAttackSpeeder; Level 5" Send="Create"/>
+        <On Terms="Behavior.SquadVikingAttackSpeeder.Off" Send="Destroy"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+        <Model value="KerriganFuryFullyCharge"/>
+    </CActorModel>
     <CActorSimple id="SquadNydusKnockbackImpactAnim">
         <On Terms="Behavior.SquadNydusKnockbackMPKnockback.On" Send="Create"/>
         <On Terms="ActorCreation" Target="_Unit" Send="AnimClear Attack"/>
