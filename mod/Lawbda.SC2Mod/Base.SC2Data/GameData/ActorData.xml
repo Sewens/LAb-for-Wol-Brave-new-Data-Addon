@@ -2454,6 +2454,29 @@
         <HostSiteOps Ops="SOpAttachOrigin"/>
         <Model value="KerriganFuryFullyCharge"/>
     </CActorModel>
+    <CActorModel id="TestFuryChargingModel" parent="ModelAddition">
+        <Macros value="GlobalLoopMacro"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.500000"/>
+        <On Terms="Behavior.TestAttributeStack.On" Send="Create"/>
+        <On Terms="BehaviorLevel.TestAttributeStack; Level 1" Send="AnimGroupApply B"/>
+        <On Terms="BehaviorLevel.TestAttributeStack; Level 2" Send="AnimGroupRemove B"/>
+        <On Terms="BehaviorLevel.TestAttributeStack; Level 2" Send="AnimGroupApply C"/>
+        <On Terms="BehaviorLevel.TestAttributeStack; Level 3" Send="AnimGroupRemove C"/>
+        <On Terms="BehaviorLevel.TestAttributeStack; Level 3" Send="AnimGroupApply D"/>
+        <On Terms="BehaviorLevel.TestAttributeStack; Level 4" Send="AnimGroupRemove D"/>
+        <On Terms="BehaviorLevel.TestAttributeStack; Level 4" Send="AnimGroupApply E"/>
+        <On Terms="Behavior.TestAttributeStack.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="UnitDeath" Send="Destroy"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+        <Model value="KerriganFuryAbilitiesLightning"/>
+    </CActorModel>
+    <CActorModel id="TestFuryFullyChargeModel" parent="ModelAddition">
+        <Inherits index="TintColor" value="0"/>
+        <On Terms="BehaviorLevel.TestAttributeStack; Level 5" Send="Create"/>
+        <On Terms="Behavior.TestAttributeStack.Off" Send="Destroy"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+        <Model value="KerriganFuryFullyCharge"/>
+    </CActorModel>
     <CActorSimple id="SquadNydusKnockbackImpactAnim">
         <On Terms="Behavior.SquadNydusKnockbackMPKnockback.On" Send="Create"/>
         <On Terms="ActorCreation" Target="_Unit" Send="AnimClear Attack"/>
