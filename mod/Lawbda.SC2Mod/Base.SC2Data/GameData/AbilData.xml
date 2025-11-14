@@ -211,17 +211,6 @@
         <CmdButtonArray index="Execute" DefaultButtonFace="WhiteNuke" Requirements="HaveNuke"/>
         <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
     </CAbilEffectTarget>
-    <CAbilMorph id="MorphBunkerShrike">
-        <EditorCategories value="AbilityorEffectType:Units"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="SquadBunkerShrikeTurret">
-            <Flags index="ToSelection" value="1"/>
-        </CmdButtonArray>
-        <Flags index="BestUnit" value="1"/>
-        <Flags index="IgnoreFacing" value="1"/>
-        <Flags index="Transient" value="1"/>
-        <Flags index="WaitUntilStopped" value="0"/>
-        <InfoArray Unit="SquadBunkerShrike"/>
-    </CAbilMorph>
     <CAbilMorph id="MorphBunkerHiveMindEmulator">
         <EditorCategories value="AbilityorEffectType:Units"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="BuildSquadBunkerHiveMindEmulator">
@@ -233,18 +222,26 @@
         <Flags index="IgnoreUnitCost" value="1"/>
         <Flags index="Transient" value="1"/>
         <Flags index="WaitUntilStopped" value="0"/>
-        <InfoArray Unit="SquadBunkerHiveMindEmulator"/>
+        <InfoArray Score="1" Unit="SquadBunkerHiveMindEmulator">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="5"/>
+            </SectionArray>
+        </InfoArray>
     </CAbilMorph>
     <CAbilMorph id="MorphBunkerPsiDisrupter">
         <EditorCategories value="AbilityorEffectType:Units"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="BuildSquadBunkerPsiDisrupter">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
+        <InfoArray Score="1" Unit="SquadBunkerPsiDisrupter">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="5"/>
+            </SectionArray>
+        </InfoArray>
         <Flags index="BestUnit" value="1"/>
         <Flags index="IgnoreFacing" value="1"/>
         <Flags index="Transient" value="1"/>
         <Flags index="WaitUntilStopped" value="0"/>
-        <InfoArray Unit="SquadBunkerPsiDisrupter"/>
     </CAbilMorph>
     <CAbilMorph id="MorphBunkerPerdiction">
         <EditorCategories value="AbilityorEffectType:Units"/>
@@ -255,7 +252,11 @@
         <Flags index="IgnoreFacing" value="1"/>
         <Flags index="Transient" value="1"/>
         <Flags index="WaitUntilStopped" value="0"/>
-        <InfoArray Unit="SquadBunkerPerdition"/>
+        <InfoArray Score="1" Unit="SquadBunkerPerdition">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="5"/>
+            </SectionArray>
+        </InfoArray>
     </CAbilMorph>
     <CAbilEffectInstant id="AddTestAttribute">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -429,6 +430,25 @@
         <AutoCastFilters value="Visible;Player,Ally,Neutral"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="SensorTowerMiniWorld" Requirements="HaveSensorTowerMiniWorld"/>
     </CAbilEffectInstant>
+    <CAbilMorph id="MorphBunkerShrike">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadBunkerShrikeTurret">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="CancelUpgradeMorph"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="Birth" value="1"/>
+        <Flags index="DisableAbils" value="1"/>
+        <Flags index="FastBuild" value="1"/>
+        <Flags index="Interruptible" value="1"/>
+        <Flags index="Produce" value="1"/>
+        <Flags index="ShowProgress" value="1"/>
+        <InfoArray Score="1" Unit="SquadBunkerShrike">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="5"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
     <CAbilAugment id="SquadWarhoundJumpJetAssault">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadWarhoundJumpJetAssault" Requirements="HaveWarhoundJetpack"/>
@@ -1706,7 +1726,7 @@
         <UninterruptibleArray index="Finish" value="1"/>
         <AINotifyEffect value="SquadYamatoCannonMissile"/>
         <ProgressButtonArray index="Prep" value="YamatoGun"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="YamatoGun" Requirements="UseBattlecruiserSpecializations"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadYamatoCannon"/>
     </CAbilEffectTarget>
     <!--Outer import end-->
     <!--Outer import end-->

@@ -281,12 +281,15 @@
         <Aliases value="_UnitHuge"/>
         <Macros value="BunkerTransportAnim"/>
         <Macros value="SnowVisualBuildingMacro"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerPsiDisrupter" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerPsiDisrupter" Send="AnimGroupApply Stand Work End"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerPsiDisrupter" Send="Create SquadBunkerPsiDisrupterAttachment"/>
         <On Terms="UnitDeathCustomize; ValidateUnit BunkerIsEmpty" Send="DeathCustomize Empty"/>
         <On Terms="UnitBirth.SquadBunkerPsiDisrupter" Send="StatusSet SquadBunkerBuilt 1"/>
-        <On Terms="Behavior.SquadBunkerPsiDisrupter.On" Send="StatusSet SquadPsiDisrupterAttachment 1"/>
-        <On Terms="Behavior.SquadBunkerPsiDisrupter.On" Send="Create SquadPsiDisrupterAttachment"/>
+        <On Terms="Behavior.SquadBunkerPsiDisrupter.On" Send="StatusSet SquadBunkerPsiDisrupterAttachment 1"/>
+        <On Terms="Behavior.SquadBunkerPsiDisrupter.On" Send="Create SquadBunkerPsiDisrupterAttachment"/>
         <On Terms="UnitBirth.SquadBunkerPsiDisrupter" Target="SquadBunkerPsiDisrupterAttachment" Send="Signal TurretShow"/>
-        <On Terms="UnitDeathCustomize; IsStatus SquadPsiDisrupterAttachment 1" Target="SquadBunkerPsiDisrupterAttachment" Send="Signal TurretDeath"/>
+        <On Terms="UnitDeathCustomize; IsStatus SquadBunkerPsiDisrupterAttachment 1" Target="SquadBunkerPsiDisrupterAttachment" Send="Signal TurretDeath"/>
         <Model value="Bunker_Silver"/>
         <CreepHeightClass value="Small"/>
         <BuildModel value="Bunker_Silver_Build"/>
@@ -318,6 +321,9 @@
         <Aliases value="_UnitHuge"/>
         <Macros value="BunkerTransportAnim"/>
         <Macros value="SnowVisualBuildingMacro"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerHiveMindEmulator" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerHiveMindEmulator" Send="AnimGroupApply Stand Work End"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerHiveMindEmulator" Send="Create SquadBunkerHiveMindEmulatorAttachment"/>
         <On Terms="UnitDeathCustomize; ValidateUnit BunkerIsEmpty" Send="DeathCustomize Empty"/>
         <On Terms="UnitBirth.SquadBunkerHiveMindEmulator" Send="StatusSet SquadBunkerBuilt 1"/>
         <On Terms="Behavior.SquadBunkerHiveMindEmulator.On" Send="StatusSet SquadBunkerHiveMindEmulatorAttachment 1"/>
@@ -403,6 +409,9 @@
         <Aliases value="_UnitHuge"/>
         <Macros value="BunkerTransportAnim"/>
         <Macros value="SnowVisualBuildingMacro"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerPerdition" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerPerdition" Send="AnimGroupApply Stand Work End"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerPerdition" Send="Create SquadBunkerPerditionTurretAttachment"/>
         <On Terms="UnitDeathCustomize; ValidateUnit BunkerIsEmpty" Send="DeathCustomize Empty"/>
         <On Terms="UnitBirth.SquadBunkerPerdition" Send="StatusSet SquadBunkerBuilt 1"/>
         <On Terms="Behavior.SquadBunkerPerditionTurret.On" Send="StatusSet SquadBunkerPerditionTurretAttachment 1"/>
@@ -469,33 +478,17 @@
         <Macros value="SnowVisualBuildingMacro"/>
         <On Terms="UnitDeathCustomize; ValidateUnit BunkerIsEmpty" Send="DeathCustomize Empty"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerShrike" Send="Destroy"/>
-        <On Terms="AbilMorph.*.Start; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerShrike" Send="AnimGroupApply B"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerShrike" Send="AnimGroupApply Stand Work Start"/>
         <On Terms="AbilMorph.*.Start; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerShrike" Send="AnimBaselineStop"/>
-        <On Terms="AbilMorph.*.Start; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerShrike" Target="SquadBunkerShrike" Send="Create"/>
-        <On Terms="AbilMorph.*.Cancel; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerShrike" Send="AnimClear Morph"/>
-        <On Terms="AbilMorph.*.Cancel; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerShrike" Send="AnimGroupRemove B"/>
-        <On Terms="AbilMorph.*.Cancel; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerShrike" Send="AnimBaselineStart"/>
-        <On Terms="AbilMorph.*.Finish; MorphFrom SquadBunkerVanilla; MorphTo SquadPlanetaryFortress" Send="Destroy"/>
-        <On Terms="AbilMorph.*.Start; MorphFrom SquadBunkerVanilla; MorphTo SquadPlanetaryFortress" Send="AnimGroupApply A"/>
-        <On Terms="AbilMorph.*.Start; MorphFrom SquadBunkerVanilla; MorphTo SquadPlanetaryFortress" Send="AnimBaselineStop"/>
-        <On Terms="AbilMorph.*.Start; MorphFrom SquadBunkerVanilla; MorphTo SquadPlanetaryFortress" Send="AnimPlay Morph Morph 0 1.500000"/>
-        <On Terms="AbilMorph.*.Cancel; MorphFrom SquadBunkerVanilla; MorphTo SquadPlanetaryFortress" Send="AnimClear Morph"/>
-        <On Terms="AbilMorph.*.Cancel; MorphFrom SquadBunkerVanilla; MorphTo SquadPlanetaryFortress" Send="AnimGroupRemove A"/>
-        <On Terms="AbilMorph.*.Cancel; MorphFrom SquadBunkerVanilla; MorphTo SquadPlanetaryFortress" Send="AnimBaselineStart"/>
-        <On Terms="AbilMorph.*.Finish; MorphFrom SquadBunkerVanilla; MorphTo SquadOrbitalCommand" Send="Destroy"/>
-        <On Terms="AbilMorph.*.Start; MorphFrom SquadBunkerVanilla; MorphTo SquadOrbitalCommand" Send="AnimGroupApply B"/>
-        <On Terms="AbilMorph.*.Start; MorphFrom SquadBunkerVanilla; MorphTo SquadOrbitalCommand" Send="AnimBaselineStop"/>
-        <On Terms="AbilMorph.*.Start; MorphFrom SquadBunkerVanilla; MorphTo SquadOrbitalCommand" Send="AnimPlay Morph Morph 0 0.000000"/>
-        <On Terms="AbilMorph.*.Cancel; MorphFrom SquadBunkerVanilla; MorphTo SquadOrbitalCommand" Send="AnimClear Morph"/>
-        <On Terms="AbilMorph.*.Cancel; MorphFrom SquadBunkerVanilla; MorphTo SquadOrbitalCommand" Send="AnimGroupRemove B"/>
-        <On Terms="AbilMorph.*.Cancel; MorphFrom SquadBunkerVanilla; MorphTo SquadOrbitalCommand" Send="AnimBaselineStart"/>
-        <On Terms="AbilMorph.*.Finish; MorphFrom SquadBunkerVanilla; MorphTo SquadOrbitalCommand" Send="Destroy"/>
-        <On Terms="AbilMorph.*.Start; MorphFrom SquadBunkerVanilla; MorphTo SquadOrbitalCommand" Send="AnimGroupApply B"/>
-        <On Terms="AbilMorph.*.Start; MorphFrom SquadBunkerVanilla; MorphTo SquadOrbitalCommand" Send="AnimBaselineStop"/>
-        <On Terms="AbilMorph.*.Start; MorphFrom SquadBunkerVanilla; MorphTo SquadOrbitalCommand" Send="AnimPlay Morph Morph 0 0.000000"/>
-        <On Terms="AbilMorph.*.Cancel; MorphFrom SquadBunkerVanilla; MorphTo SquadOrbitalCommand" Send="AnimClear Morph"/>
-        <On Terms="AbilMorph.*.Cancel; MorphFrom SquadBunkerVanilla; MorphTo SquadOrbitalCommand" Send="AnimGroupRemove B"/>
-        <On Terms="AbilMorph.*.Cancel; MorphFrom SquadBunkerVanilla; MorphTo SquadOrbitalCommand" Send="AnimBaselineStart"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerPsiDisrupter" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerPsiDisrupter" Send="AnimGroupApply Stand Work Start"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerPsiDisrupter" Send="AnimBaselineStop"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerPerdition" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerPerdition" Send="AnimGroupApply Stand Work Start"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerPerdition" Send="AnimBaselineStop"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerHiveMindEmulator" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerHiveMindEmulator" Send="AnimGroupApply Stand Work Start"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerHiveMindEmulator" Send="AnimBaselineStop"/>
         <Model value="Bunker_Silver"/>
         <CreepHeightClass value="Small"/>
         <BuildModel value="Bunker_Silver_Build"/>
@@ -4104,22 +4097,19 @@
         <IconTint value="255,254,105,132"/>
     </CActorRange>
     <CActorSplat id="SquadTechlabPowerSplat" unitName="SquadTechLab">
-        <Aliases value="_Snapshot"/>
-        <Inherits index="CloakEffect" value="1"/>
-        <Inherits index="Decal" value="1"/>
-        <Inherits index="Visibility" value="1"/>
-        <Supporter Subject="::Creator"/>
-        <On Terms="SupporterDestruction" Send="Destroy"/>
-        <On Terms="ActorOrphan" Send="Destroy"/>
-        <On Terms="ActorCreation" Send="AnimBracketStart BSD Stand"/>
-        <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
-        <HostSiteOps Ops="SOpShadow SOpForwardNorth"/>
-        <Model value="KaraxPowerVisual"/>
         <FadeIn value="0.000000"/>
         <FadeOut value="0.000000"/>
         <HoldTime value="-1.000000"/>
         <Layer value="PowerLayer"/>
-        <Color value="80,255,255,255"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <On Terms="SupporterDestruction" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Stand"/>
+        <On Terms="ActorCreation" Send="SetTintColor 255,255,255"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.750000"/>
+        <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
+        <Model value="KaraxPowerVisual"/>
     </CActorSplat>
     <CActorModel id="SquadVikingGDeathRagdoll">
         <Aliases value="_Main"/>
@@ -7594,13 +7584,16 @@
         <Aliases value="_UnitHuge"/>
         <Macros value="BunkerTransportAnim"/>
         <Macros value="SnowVisualBuildingMacro"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerShrike" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerShrike" Send="AnimGroupApply Stand Work End"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom SquadBunkerVanilla; MorphTo SquadBunkerShrike" Send="Create SquadShrikeTurretAttachment"/>
         <On Terms="UnitDeathCustomize; ValidateUnit BunkerIsEmpty" Send="DeathCustomize Empty"/>
-        <On Terms="UnitBirth.SquadBunkerShrike" Send="StatusSet SquadBunkerBuilt 1"/>
+        <!--On Terms="UnitBirth.SquadBunkerShrike" Send="StatusSet SquadBunkerBuilt 1"/-->
         <!-- shrike turret-->
-        <On Terms="Behavior.SquadBunkerShrikeTurret.On" Send="StatusSet SquadShrikeTurret 1"/>
-        <On Terms="Behavior.SquadBunkerShrikeTurret.On" Send="Create SquadShrikeTurret"/>
+        <On Terms="Behavior.SquadBunkerShrikeTurret.On" Send="StatusSet SquadShrikeTurretAttachment 1"/>
+        <On Terms="Behavior.SquadBunkerShrikeTurret.On" Send="Create SquadShrikeTurretAttachment"/>
         <On Terms="UnitBirth.SquadBunkerShrike" Target="SquadShrikeTurretAttachment" Send="Signal TurretShow"/>
-        <On Terms="UnitDeathCustomize; IsStatus SquadShrikeTurret 1" Target="SquadShrikeTurretAttachment" Send="Signal TurretDeath"/>
+        <On Terms="UnitDeathCustomize; IsStatus SquadShrikeTurretAttachment 1" Target="SquadShrikeTurretAttachment" Send="Signal TurretDeath"/>
         <Model value="Bunker_Silver"/>
         <CreepHeightClass value="Small"/>
         <BuildModel value="Bunker_Silver_Build"/>
@@ -7882,8 +7875,8 @@
         <Model value="RefinerySplat"/>
     </CActorSplat>
     <CActorAction id="SquadShrikeTurretAttachmentAttack" parent="GenericAttack" effectAttack="SquadShrikeTurretDamage">
-        <On Terms="ActorCreation" Send="Create SquadShrikeTurretAttackLaunch"/>
         <LaunchAssets Model="" Sound="Bunker_ShrikeTurretAttackLaunch"/>
+        <On Terms="ActorCreation" Send="Create SquadShrikeTurretAttachmentAttackLaunch"/>
         <Beam value="ShrikeTurretAttackBeam"/>
         <Missile value="ShrikeTurretAttackMissile"/>
         <ImpactMap index="None" Model="ShrikeTurretAttackImpact" Sound="Bunker_ShrikeTurretAttackImpact"/>
