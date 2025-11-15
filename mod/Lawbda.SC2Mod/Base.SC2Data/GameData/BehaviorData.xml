@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorBuff id="SquadBattlecruiserSuperSmash">
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-deadlycharge.dds"/>
+        <BehaviorCategories index="Permanent" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="ExcavatorSpeedAbove7"/>
+        <Period value="0.125"/>
+        <PeriodicEffect value="SquadBattlecruiserSuperSmashSearch"/>
+        <PeriodicDisplayEffect value="SquadBattlecruiserSuperSmashDamage"/>
+    </CBehaviorBuff>
     <CBehaviorBuff id="SquadMedivacRepairDroneRecall">
         <BehaviorFlags index="Permanent" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units"/>
@@ -181,6 +190,24 @@
         <MaxStackCount value="8"/>
         <Duration value="5"/>
         <Modification MoveSpeedMultiplier="0.9"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadBunkerPsiDisruption">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-psidisruption.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="HasPsiStrike"/>
+        <Duration value="0.1875"/>
+        <Modification MoveSpeedMultiplier="0.5" AttackSpeedMultiplier="0.5">
+            <RateMultiplierArray index="Queueable" value="0.5"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadBunkerPsiDisruptionSearch">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-research-zerg-psidisruptor.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <DisableValidatorArray value="NotDeadOrConstruction"/>
+        <Period value="0.125"/>
+        <PeriodicEffect value="SquadBunkerPsiDisruptionSearch"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadSiegeTankChargingCannonsFullyCharge">
         <BehaviorFlags index="Permanent" value="1"/>
@@ -686,7 +713,7 @@
         <InfoIcon value="Assets\Textures\btn-upgrade-terran-magfieldaccelerator.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Modification WeaponRange="2">
-            <AdditiveAttackSpeedFactor value="0.25"/>
+            <AdditiveAttackSpeedFactor value="0.15"/>
         </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadAddonTacticalJumpTeleport">
@@ -775,13 +802,15 @@
         <PowerLink value="SquadReactorPowerSource"/>
         <PowerStageArray/>
         <PowerStageArray MinPowerLevel="1" LevelGainEffect="ElectricFieldAcceleratorApply" LevelLossEffect="ElectricFieldAcceleratorRemove">
-            <Modification>
+            <Modification TimeScale="1.25">
                 <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
                 <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
                 <VitalMaxIncreaseAffectsCurrentArray index="Energy" value="0"/>
             </Modification>
         </PowerStageArray>
         <Requirements value="HaveAddonStructureOptimization"/>
+        <InfoIcon value="Assets\Textures\btn-building-terran-reactor-silver.dds"/>
+        <Flags index="HideUnpoweredText" value="1"/>
     </CBehaviorPowerUser>
     <!--Add defence strcutre defence tech.-->
     <CBehaviorPowerUser id="SquadTechlabPowerUserForDefenceStructure">
@@ -795,9 +824,25 @@
                 <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
                 <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
                 <VitalMaxIncreaseAffectsCurrentArray index="Energy" value="0"/>
+                <VitalDamageGainArray index="Life">
+                    <KindArray index="Spell" value="0.15"/>
+                    <KindArray index="Melee" value="0.15"/>
+                    <KindArray index="Ranged" value="0.15"/>
+                    <KindArray index="Splash" value="0.15"/>
+                    <KindArray index="NoProc" value="0.15"/>
+                </VitalDamageGainArray>
+                <VitalDamageGainArray index="Energy">
+                    <KindArray index="Spell" value="0.25"/>
+                    <KindArray index="Melee" value="0.25"/>
+                    <KindArray index="Ranged" value="0.25"/>
+                    <KindArray index="Splash" value="0.25"/>
+                    <KindArray index="NoProc" value="0.25"/>
+                </VitalDamageGainArray>
             </Modification>
         </PowerStageArray>
         <Requirements value="HaveAddonStructureOptimization"/>
+        <InfoIcon value="Assets\Textures\btn-building-terran-techlab-silver.dds"/>
+        <Flags index="HideUnpoweredText" value="1"/>
     </CBehaviorPowerUser>
     <CBehaviorBuff id="SquadCaptainToshPsiShield">
         <Alignment value="Positive"/>
@@ -1070,8 +1115,8 @@
     <CBehaviorBuff id="SquadBattlecruiserFleetwideJumpTeleportIn">
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
-        <Duration value="0.6"/>
-        <Modification>
+        <Duration value="1.5"/>
+        <Modification MoveSpeedBonus="2">
             <StateFlags index="Invulnerable" value="1"/>
             <StateFlags index="SuppressCloak" value="1"/>
             <StateFlags index="Untargetable" value="1"/>
@@ -1450,9 +1495,10 @@
         <MaxStackCount value="20"/>
         <MaxStackCountPerCaster value="20"/>
         <Duration value="15"/>
-        <Modification MoveSpeedMultiplier="1.075" AccelerationBonus="50" DecelerationBonus="-25">
+        <Modification MoveSpeedMultiplier="1.075" AccelerationBonus="5" DecelerationBonus="-2.5">
             <StateFlags index="SuppressCollision" value="1"/>
         </Modification>
+        <Requirements value="HaveBattlecruiserSuperSmash"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadFirebatGiftFireOrbBurningGround">
         <Alignment value="Negative"/>

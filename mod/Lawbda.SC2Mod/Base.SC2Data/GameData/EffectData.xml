@@ -30,6 +30,73 @@
     <CEffectEnumArea default="1" id="SquadAbilSearchRadiusExt" parent="SquadAbilSearch">
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
+    <CEffectDamage id="SquadBattlecruiserSuperSmashDamage">
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Melee"/>
+        <Amount value="50"/>
+        <Death value="Impact"/>
+        <SearchFilters value="AirUnit;Self,Player,Ally,Neutral,Missile,Stasis,Dead"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="SquadBattlecruiserSuperSmashSearch">
+        <EditorCategories value=""/>
+        <SearchFilters value="-;Self,Player,Ally,Neutral,Ground,Missile,Stasis,Dead"/>
+        <AreaArray Radius="3.5" Effect="SquadBattlecruiserSuperSmashDamage"/>
+        <SearchFlags index="ExtendByUnitRadius" value="1"/>
+    </CEffectEnumArea>
+    <CEffectCreatePersistent id="SquadPerditionTurretFlamethrowerCreatePersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="SourcePoint"/>
+        <OffsetVectorStartLocation Value="SourcePoint"/>
+        <Flags index="Channeled" value="1"/>
+        <ExpireEffect value="RenewBurrowTimer2"/>
+        <PeriodCount value="14"/>
+        <PeriodicEffectArray value="SquadPerditionTurretFlamethrowerSearchArea"/>
+        <PeriodicOffsetArray value="0.5,-0.5,0"/>
+        <PeriodicOffsetArray value="-0.5,-0.5,0"/>
+        <PeriodicOffsetArray value="0.5,-1,0"/>
+        <PeriodicOffsetArray value="-0.5,-1,0"/>
+        <PeriodicOffsetArray value="0.5,-1.5,0"/>
+        <PeriodicOffsetArray value="-0.5,-1.5,0"/>
+        <PeriodicOffsetArray value="0.5,-2,0"/>
+        <PeriodicOffsetArray value="-0.5,-2,0"/>
+        <PeriodicOffsetArray value="0.5,-2.5,0"/>
+        <PeriodicOffsetArray value="-0.5,-2.5,0"/>
+        <PeriodicOffsetArray value="0.5,-3,0"/>
+        <PeriodicOffsetArray value="-0.5,-3,0"/>
+        <PeriodicOffsetArray value="0.5,-3.5,0"/>
+        <PeriodicOffsetArray value="-0.5,-3.5,0"/>
+        <PeriodicPeriodArray value="0.022"/>
+        <PeriodicPeriodArray value="0.022"/>
+        <PeriodicPeriodArray value="0.022"/>
+        <PeriodicPeriodArray value="0.022"/>
+        <PeriodicPeriodArray value="0.022"/>
+        <PeriodicPeriodArray value="0.022"/>
+        <PeriodicPeriodArray value="0.022"/>
+        <PeriodicPeriodArray value="0.022"/>
+        <PeriodicPeriodArray value="0.022"/>
+        <PeriodicPeriodArray value="0.022"/>
+        <PeriodicPeriodArray value="0.022"/>
+        <PeriodicPeriodArray value="0.022"/>
+        <PeriodicPeriodArray value="0.022"/>
+        <PeriodicPeriodArray value="0.022"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="SquadPerditionTurretFlamethrowerDamage" parent="DU_WEAP_SPLASH">
+        <ValidatorArray value="noMarkers"/>
+        <EditorCategories value="Race:Terran"/>
+        <AttributeBonus index="Light" value="4"/>
+        <Amount value="16"/>
+        <Death value="Fire"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="SquadPerditionTurretFlamethrowerSearchArea" parent="EA_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <SearchFilters value="Ground;Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="0.6" Effect="SquadPerditionTurretFlamethrowerDamage"/>
+    </CEffectEnumArea>
+    <CEffectSet id="SquadPerditionTurretFlamethrowerSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadPerditionTurretFlamethrowerCreatePersistent"/>
+        <EffectArray value="SquadPerditionTurretFlamethrowerDamage"/>
+    </CEffectSet>
     <CEffectApplyBehavior id="SquadMedivacRepairDroneRecall">
         <EditorCategories value=""/>
     </CEffectApplyBehavior>
@@ -131,6 +198,16 @@
         <WhichUnit Value="Caster"/>
         <Abil value="MorphBunkerShrike"/>
     </CEffectIssueOrder>
+    <CEffectApplyBehavior id="SquadBunkerPsiDisruptionApply">
+        <ValidatorArray index="0" value="IsZerg"/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadBunkerPsiDisruption"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumArea id="SquadBunkerPsiDisruptionSearch">
+        <EditorCategories value="Race:Terran"/>
+        <SearchFilters value="Visible;Self,Player,Ally,Neutral,Structure,Heroic,Missile,Stasis,Dead,Hidden,Invulnerable,Benign"/>
+        <AreaArray Radius="8" Effect="SquadBunkerPsiDisruptionApply"/>
+    </CEffectEnumArea>
     <CEffectSet id="SquadSiegeTankChargingCannonsDirectFinalAttackSet">
         <EditorCategories value="Race:Terran"/>
         <EffectArray value="SquadSiegeTankChargingCannonsAttackSwitch"/>
@@ -2937,7 +3014,7 @@
     <CEffectSet id="SquadChronoBeamSet">
         <EffectArray value="SquadChronoBeam2"/>
     </CEffectSet>
-    <CEffectApplyBehavior id="squadPsiDisruptionApply">
+    <CEffectApplyBehavior id="SquadPsiDisruptionApply">
         <ValidatorArray index="0" value="IsZerg"/>
         <EditorCategories value="Race:Terran"/>
         <Behavior value="SquadPsiDisruption"/>
@@ -2945,7 +3022,7 @@
     <CEffectEnumArea id="SquadPsiDisruptionSearch">
         <EditorCategories value="Race:Terran"/>
         <SearchFilters value="Visible;Self,Player,Ally,Neutral,Structure,Heroic,Missile,Stasis,Dead,Hidden,Invulnerable,Benign"/>
-        <AreaArray Radius="8" Effect="squadPsiDisruptionApply"/>
+        <AreaArray Radius="8" Effect="SquadPsiDisruptionApply"/>
     </CEffectEnumArea>
     <CEffectEnumArea id="VanillaScannerSearhVictim">
         <EditorCategories value="Race:Terran"/>
@@ -3145,9 +3222,9 @@
     <CEffectCreatePersistent id="BehemothAfterburnerPersistent">
         <EditorCategories value="Race:Terran"/>
         <WhichLocation Value="CasterUnit"/>
-        <PeriodCount value="10"/>
+        <PeriodCount value="20"/>
         <PeriodicEffectArray value="BehemothAfterburnerApply"/>
-        <PeriodicPeriodArray value="0.5"/>
+        <PeriodicPeriodArray value="0.25"/>
     </CEffectCreatePersistent>
     <CEffectSet id="ReaperBuffRedirectPack">
         <EditorCategories value="Race:Terran"/>

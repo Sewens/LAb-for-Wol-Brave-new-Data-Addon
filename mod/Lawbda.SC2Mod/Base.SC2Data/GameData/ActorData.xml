@@ -217,6 +217,34 @@
         <HeightOffset value="1.500000"/>
         <Text value="Button/Tooltip/##id##"/>
     </CActorText>
+    <CActorAction id="SquadBunkerPerditionTurretFlamethrowerAttack" parent="GenericAttack" effectAttack="SquadPerditionTurretFlamethrowerSet">
+        <On Terms="ActorCreation" Send="Create SquadBunkerPerditionTurretFlamethrowerAttackLaunch"/>
+        <On Terms="Effect.SquadPerditionTurretFlamethrowerSet.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.PerditionTurretFlameThrowerDamage.Start; At Target" Send="ActionImpact"/>
+        <On Terms="Effect.PerditionTurretFlameThrowerDamage.Start; At Caster; FromEffectTreeDescendant" Send="ActionDamage"/>
+        <LaunchAssets Model="" Sound="PerditionTurretAttackLaunch"/>
+        <!--
+
+        -->
+        <ImpactMap index="None" Sound="PerditionTurret_AttackImpact"/>
+    </CActorAction>
+    <CActorModel id="SquadBunkerPerditionTurretFlamethrowerAttackLaunch" parent="ModelAnimationStyleOneShot">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <Host Subject="SquadBunkerPerditionTurretAttachment" ReachAcrossEffectTrees="1"/>
+        <HostSiteOps Ops="SOpAttachRollingWeaponStripe"/>
+        <Model value="PerditionTurretAttackLaunch"/>
+    </CActorModel>
+    <CActorModel id="SquadBunkerPerditionTurretFlamethrowerImpactModelFlames" parent="ModelAnimationStyleOneShot">
+        <Terms value="Cap 1"/>
+        <On Terms="Effect.SquadPerditionTurretFlamethrowerDamage.Start; At Target" Send="Create"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachRandomDamage"/>
+        <Model value="ImpactModelFlames"/>
+    </CActorModel>
+    <CActorTurret id="SquadBunkerHiveMindEmulatorRotateTurret">
+        <On Terms="TurretEnable.SquadBunkerHiveMindEmulatorTurret" Send="Create"/>
+    </CActorTurret>
     <CActorBeamSimple id="SquadMedivacRepairDroneHealBeam" parent="BeamSimpleAnimationStyleContinuous">
         <On Terms="Effect.SquadMedivacRepairDroneHealTargetAB.Start; At Target" Send="Create"/>
         <On Terms="Behavior.SquadMedivacRepairDroneHealTarget.Off" Send="AnimBracketStop BSD"/>
@@ -360,6 +388,13 @@
     <CActorSplat id="SquadBunkerPsiDisrupterSplat" parent="GenericUnitSplat" unitName="SquadBunkerPsiDisrupter">
         <Model value="BunkerSplat"/>
     </CActorSplat>
+    <CActorRange id="SquadBunkerPsiDisrupterRange">
+        <On Terms="SelectionLocalUpdate.SquadBunkerPsiDisrupter.Start" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.SquadBunkerPsiDisrupter.StartEditorGround" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.SquadBunkerPsiDisrupter.StartEditorFlyer" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.SquadBunkerPsiDisrupter.Stop" Send="Destroy"/>
+        <Range value="8.000000"/>
+    </CActorRange>
     <CActorModel id="SquadBunkerPsiDisrupterBuild" parent="TerranBuildingBuild" unitName="SquadBunkerPsiDisrupter">
         <Model value="Bunker_Silver_Build"/>
     </CActorModel>
@@ -378,7 +413,7 @@
         <Inherits index="TintColor" value="1"/>
         <Inherits index="Visibility" value="1"/>
         <Inherits index="WarpGroup" value="1"/>
-        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Attack Death"/>
         <On Terms="Signal.*.TurretDeath" Send="ModelSwap EyeserPsiDisruptorDeath"/>
         <On Terms="Signal.*.TurretDeath" Send="$Death"/>
         <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
@@ -470,7 +505,7 @@
         <Host Subject="::Main"/>
         <HostSiteOps Ops="SOpAttachTurret"/>
         <Model value="PerditionTurret"/>
-        <Scale value="0.500000"/>
+        <Scale value="0.750000"/>
     </CActorModel>
     <CActorUnit id="SquadBunkerVanilla" parent="TerranBuildingEx" unitName="SquadBunkerVanilla">
         <Aliases value="_UnitHuge"/>
@@ -521,6 +556,14 @@
     </CActorSplat>
     <CActorModel id="SquadBunkerVanillaBuild" parent="TerranBuildingBuild" unitName="SquadBunkerVanilla">
         <Model value="Bunker_Silver_Build"/>
+    </CActorModel>
+    <CActorModel id="SquadBattlecruiserSuperSmashVisual" parent="ModelAnimationStyleContinuous">
+        <On Terms="Behavior.SquadVikingFighterOvercharge.On" Send="Create"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.500000"/>
+        <On Terms="Behavior.SquadVikingFighterOvercharge.Off" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Model value="ArtanisOverchargeModel"/>
     </CActorModel>
     <CActorAction id="SquadVoidRayAttack" parent="GenericAttackBase">
         <On Terms="Effect.PaladenFrostBeamChargePersistent.Start" Send="Create"/>
@@ -3735,7 +3778,8 @@
     </CActorUnit>
     <CActorModel id="SquadPsiDisruptorDebuff" parent="ModelAnimationStyleOneShot">
         <Terms value="Cap 1"/>
-        <On Terms="Effect.squadPsiDisruptionApply.Start; At Target" Send="Create"/>
+        <On Terms="Effect.SquadBunkerPsiDisruptionApply.Start; At Target" Send="Create"/>
+        <On Terms="Effect.SquadPsiDisruptionApply.Start; At Target" Send="Create"/>
         <On Terms="ActorCreation; ValidateUnit IsUltralisk" Send="SetScale 0.400000"/>
         <On Terms="ActorCreation; ValidateUnit IsUltraliskBurrowed" Send="SetScale 0.300000"/>
         <On Terms="ActorCreation; ValidateUnit IsQueen" Send="SetScale 0.500000"/>

@@ -82,14 +82,11 @@
         <AbilArray Link="SquadBunkerStop"/>
         <AbilArray Link="SquadBunkerTransport"/>
         <AbilArray Link="SquadBunkerInstantInjustice"/>
-        <AbilArray Link="MorphBunkerPerdiction"/>
-        <AbilArray Link="MorphBunkerPsiDisrupter"/>
-        <AbilArray Link="MorphBunkerHiveMindEmulator"/>
-        <AbilArray Link="MorphBunkerShrike"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="SquadBunkerPsiDisrupter"/>
         <BehaviorArray Link="SquadReactorPowerUserForDefenceStructure"/>
         <BehaviorArray Link="SquadTechlabPowerUserForDefenceStructure"/>
+        <BehaviorArray Link="SquadBunkerPsiDisruptionSearch"/>
         <CardLayouts>
             <LayoutButtons Face="AttackRedirect" Type="AbilCmd" AbilCmd="AttackRedirect,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="MothershipCoreAttack" Type="AbilCmd" AbilCmd="SquadBunkerAttack,Execute" Row="0" Column="4"/>
@@ -172,10 +169,7 @@
         <AbilArray Link="SquadBunkerStop"/>
         <AbilArray Link="SquadBunkerTransport"/>
         <AbilArray Link="SquadBunkerInstantInjustice"/>
-        <AbilArray Link="MorphBunkerPerdiction"/>
-        <AbilArray Link="MorphBunkerPsiDisrupter"/>
-        <AbilArray Link="MorphBunkerHiveMindEmulator"/>
-        <AbilArray Link="MorphBunkerShrike"/>
+        <AbilArray Link="SquadHiveMindEmulatorMindControl"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="SquadBunkerHiveMindEmulator"/>
         <BehaviorArray Link="SquadReactorPowerUserForDefenceStructure"/>
@@ -193,6 +187,7 @@
             <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Cancel" Row="2" Column="4"/>
             <LayoutButtons Face="SquadSelectBuilder" Type="SelectBuilder" Row="1" Column="3"/>
             <LayoutButtons Face="SquadBunkerInstantInjustis" Type="AbilCmd" AbilCmd="SquadBunkerInstantInjustice,255" Row="0" Column="0"/>
+            <LayoutButtons Face="SquadMindControl" Type="AbilCmd" AbilCmd="SquadHiveMindEmulatorMindControl,Execute" Row="1" Column="0"/>
         </CardLayouts>
         <Radius value="1.25"/>
         <SeparationRadius value="1.25"/>
@@ -216,6 +211,7 @@
         <GlossaryWeakArray value="Colossus"/>
         <GlossaryWeakArray value="SiegeTank"/>
         <HotkeyCategory value="Unit/Category/Lawbda"/>
+        <TurretArray value="SquadBunkerHiveMindEmulatorTurret"/>
     </CUnit>
     <CUnit id="SquadBunkerPerdition">
         <DeathRevealRadius value="3"/>
@@ -262,15 +258,11 @@
         <AbilArray Link="SquadBunkerStop"/>
         <AbilArray Link="SquadBunkerTransport"/>
         <AbilArray Link="SquadBunkerInstantInjustice"/>
-        <AbilArray Link="MorphBunkerPerdiction"/>
-        <AbilArray Link="MorphBunkerPsiDisrupter"/>
-        <AbilArray Link="MorphBunkerHiveMindEmulator"/>
-        <AbilArray Link="MorphBunkerShrike"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="SquadBunkerPerditionTurret"/>
         <BehaviorArray Link="SquadReactorPowerUserForDefenceStructure"/>
         <BehaviorArray Link="SquadTechlabPowerUserForDefenceStructure"/>
-        <WeaponArray Link="PerditionTurretFlamethrower" Turret="SquadPerditionTurret"/>
+        <WeaponArray Link="SquadPerditionTurretFlamethrower" Turret="SquadPerditionTurret"/>
         <CardLayouts>
             <LayoutButtons Face="AttackRedirect" Type="AbilCmd" AbilCmd="AttackRedirect,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="MothershipCoreAttack" Type="AbilCmd" AbilCmd="SquadBunkerAttack,Execute" Row="0" Column="4"/>
@@ -376,8 +368,8 @@
             <LayoutButtons Face="BuildSquadBunkerHiveMindEmulator" Type="AbilCmd" AbilCmd="MorphBunkerHiveMindEmulator,Execute" Row="1" Column="3"/>
             <LayoutButtons Face="SquadBunkerInstantInjustis" Type="AbilCmd" AbilCmd="SquadBunkerInstantInjustice,255" Row="0" Column="0"/>
             <LayoutButtons Face="BuildSquadBunkerShrike" Type="AbilCmd" AbilCmd="MorphBunkerShrike,Execute" Row="1" Column="0"/>
-            <LayoutButtons Face="BuildSquadBunkerPsiDisrupter" Type="AbilCmd" AbilCmd="MorphBunkerPsiDisrupter,Execute" Row="1" Column="1"/>
-            <LayoutButtons Face="BuildSquadBunkerPerdiction" Type="AbilCmd" AbilCmd="MorphBunkerPerdiction,Execute" Row="1" Column="2"/>
+            <LayoutButtons Face="BuildSquadBunkerPsiDisrupter" Type="AbilCmd" AbilCmd="MorphBunkerPsiDisrupter,Execute" Row="1" Column="2"/>
+            <LayoutButtons Face="BuildSquadBunkerPerdiction" Type="AbilCmd" AbilCmd="MorphBunkerPerdiction,Execute" Row="1" Column="1"/>
         </CardLayouts>
         <Radius value="1.25"/>
         <SeparationRadius value="1.25"/>
@@ -1440,8 +1432,8 @@
         <AbilArray Link="SquadBattlecruiserTacticalJump"/>
         <AbilArray Link="SquadYamatoShotsSwitch"/>
         <AbilArray Link="BehemothAfterburner"/>
-        <BehaviorArray Link="SquadBattlecruiserYamatoShotsActivate"/>
         <BehaviorArray Link="SquadBattlecruiserRegenSpeed"/>
+        <BehaviorArray Link="SquadBattlecruiserSuperSmash"/>
         <WeaponArray Link="SquadHyperionGroundLaserBattery" Turret="SquadBattlecruiser"/>
         <WeaponArray Link="SquadHyperionAirLaserBattery" Turret="SquadBattlecruiser"/>
         <WeaponArray Link="SquadBattlecruiserMiniYamatoGun" Turret="SquadBattlecruiser"/>
@@ -1452,9 +1444,9 @@
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="SquadBattlecruiserTacticalJump" Type="AbilCmd" AbilCmd="SquadBattlecruiserTacticalJump,Execute" Row="2" Column="0"/>
-            <LayoutButtons Face="SquadATXLaserBattery" Type="AbilCmd" AbilCmd="SquadYamatoShotsSwitch,255" Row="2" Column="3"/>
+            <LayoutButtons Face="SquadATXLaserBattery" Type="AbilCmd" AbilCmd="SquadYamatoShotsSwitch,Off" Row="2" Column="3"/>
             <LayoutButtons Face="SquadATXLaserBattery" Type="Passive" Row="2" Column="3"/>
-            <LayoutButtons Face="SquadMiniYmatoShot" Type="AbilCmd" AbilCmd="SquadYamatoShotsSwitch,255" Row="2" Column="2"/>
+            <LayoutButtons Face="SquadMiniYmatoShot" Type="AbilCmd" AbilCmd="SquadYamatoShotsSwitch,On" Row="2" Column="2"/>
             <LayoutButtons Face="SquadMiniYmatoShot" Type="Passive" Row="2" Column="2"/>
             <LayoutButtons Face="BehemothIgniteAfterburners" Type="AbilCmd" AbilCmd="BehemothAfterburner,Execute" Row="2" Column="1"/>
         </CardLayouts>
@@ -3498,10 +3490,6 @@
         <AbilArray Link="SquadBunkerStop"/>
         <AbilArray Link="SquadBunkerTransport"/>
         <AbilArray Link="SquadBunkerInstantInjustice"/>
-        <AbilArray Link="MorphBunkerPerdiction"/>
-        <AbilArray Link="MorphBunkerPsiDisrupter"/>
-        <AbilArray Link="MorphBunkerHiveMindEmulator"/>
-        <AbilArray Link="MorphBunkerShrike"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="SquadBunkerShrikeTurret"/>
         <BehaviorArray Link="SquadReactorPowerUserForDefenceStructure"/>
