@@ -217,6 +217,34 @@
         <HeightOffset value="1.500000"/>
         <Text value="Button/Tooltip/##id##"/>
     </CActorText>
+    <CActorModel id="SquadGhostEMPLockdownModel" parent="ModelAnimationStyleContinuous">
+        <On Terms="Behavior.SquadGhostEMPDecloak.On; At Caster; ValidatePlayer HaveGhostEmpLockdownEnhance" Send="Create"/>
+        <On Terms="Behavior.SquadGhostEMPDecloak.Off" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="LockdownModel"/>
+    </CActorModel>
+    <CActorSplat id="SquadGhostEMPCursorSplat" parent="TerranCursorSplat" abil="SquadGhostEMP"/>
+    <CActorRange id="SquadGhostEMPRange" parent="RangeAbil" abil="SquadGhostEMP">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorAction id="SquadGhostEMPAttack2" parent="GenericAttack" effectImpact="SquadGhostEMPSearch" effectLaunch="SquadGhostEMPLaunchMissile2">
+        <On Terms="Effect.EMPDamage.Start; At Caster" Send="ActionDamage"/>
+        <LaunchAssets Sound="Ghost_EMPAttackLaunch"/>
+        <Missile value="SquadGhostEMPAttackMissile"/>
+        <ImpactPointSiteOps Ops="SOpTargetPointStationary SOpShadow GhostEMPOffset"/>
+        <ImpactMap index="None" Sound="Ghost_EMPAttackImpact"/>
+    </CActorAction>
+    <CActorModel id="SquadGhostEMPAttackImpactEffect2" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.SquadGhostEMPSearch.Start" Send="Create"/>
+        <On Terms="Effect.SquadGhostEMPSearch.Stop" Send="AnimBracketStop BSD"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Model value="GhostEMPAttackImpactEffect"/>
+    </CActorModel>
+    <CActorMissile id="SquadGhostEMPAttackMissile" parent="GenericAttackMissile" unitName="SquadGhostEMPMissile">
+        <Model value="EMP2Weapon"/>
+    </CActorMissile>
     <CActorAction id="SquadBunkerPerditionTurretFlamethrowerAttack" parent="GenericAttack" effectAttack="SquadPerditionTurretFlamethrowerSet">
         <On Terms="ActorCreation" Send="Create SquadBunkerPerditionTurretFlamethrowerAttackLaunch"/>
         <On Terms="Effect.SquadPerditionTurretFlamethrowerSet.Start; At Caster" Send="Create"/>
@@ -8748,21 +8776,6 @@
         <AcquisitionPitchHalfArc value="15.000000"/>
         <AccuracyHalfArc value="5.000000"/>
     </CActorAction>
-    <CActorAction id="SquadGhostEMPAttack" parent="GenericAttack" effectImpact="SquadEMPSearch" effectLaunch="SquadGhostEMPLaunchMissile">
-        <On Terms="Effect.EMPDamage.Start; At Caster" Send="ActionDamage"/>
-        <LaunchAssets Sound="Ghost_EMPAttackLaunch"/>
-        <ImpactPointSiteOps Ops="SOpTargetPointStationary SOpShadow GhostEMPOffset"/>
-        <ImpactMap index="None" Sound="Ghost_EMPAttackImpact"/>
-    </CActorAction>
-    <CActorModel id="SquadGhostEMPAttackImpactEffect" parent="ModelAnimationStyleOneShot">
-        <On Terms="Effect.SquadEMPSearch.Start" Send="Create"/>
-        <On Terms="Effect.SquadEMPSearch.Stop" Send="AnimBracketStop BSD"/>
-        <HostSiteOps Ops="SOpShadow"/>
-        <Model value="GhostEMPAttackImpactEffect"/>
-    </CActorModel>
-    <CActorMissile id="SquadGhostEMPAttackMissile" parent="GenericAttackMissile" unitName="SquadGhostEMPWeapon">
-        <Model value="SquadGhostEMP2Weapon"/>
-    </CActorMissile>
     <CActorModel id="RedNuclearCollateralFire">
         <On Terms="Effect.RedNuclearDamage.Start; At Target" Send="Create"/>
         <HostSiteOps Ops="SOpShadow"/>

@@ -72,6 +72,24 @@
             <Button DefaultButtonFace="BuildSquadBunkerPsiDisrupter"/>
         </InfoArray>
     </CAbilSpecialize>
+    <CAbilEffectTarget id="SquadGhostEMP">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadGhostEMPLaunchMissile2"/>
+        <Cost>
+            <Vital index="Energy" value="75"/>
+        </Cost>
+        <Range value="10"/>
+        <PrepTime value="0.01"/>
+        <FinishTime value="0.0625"/>
+        <UninterruptibleArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <CursorEffect value="SquadGhostEMPSearch"/>
+        <AINotifyEffect value="EMPLaunchMissile"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadGhostEMPRound" State="Restricted">
+            <Flags index="ShowInGlossary" value="0"/>
+        </CmdButtonArray>
+    </CAbilEffectTarget>
     <CAbilArmMagazine id="SquadMedivacRepairDroneHanger">
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
         <Launch value="ReleaseAtSource"/>
@@ -213,7 +231,7 @@
     </CAbilEffectTarget>
     <CAbilMorph id="MorphBunkerHiveMindEmulator">
         <EditorCategories value="AbilityorEffectType:Units"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="BuildSquadBunkerHiveMindEmulator">
+        <CmdButtonArray index="Execute" DefaultButtonFace="BuildSquadBunkerHiveMindEmulator" Requirements="HaveBunkerSwitchableBunkerTurret">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
         <Flags index="BestUnit" value="1"/>
@@ -230,7 +248,7 @@
     </CAbilMorph>
     <CAbilMorph id="MorphBunkerPsiDisrupter">
         <EditorCategories value="AbilityorEffectType:Units"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="BuildSquadBunkerPsiDisrupter">
+        <CmdButtonArray index="Execute" DefaultButtonFace="BuildSquadBunkerPsiDisrupter" Requirements="HaveBunkerSwitchableBunkerTurret">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
         <InfoArray Score="1" Unit="SquadBunkerPsiDisrupter">
@@ -1841,7 +1859,7 @@
         <AutoCastFilters value="-;-"/>
         <CalldownEffect value="SquadBunkerCalldownTransport"/>
         <AINotifyEffect value="Nuke"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="SquadBunkerInstantInjustis"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadBunkerInstantInjustis" Requirements="HaveBunkerInstantInjustice"/>
     </CAbilEffectTarget>
     <CAbilEffectInstant id="SquadThorEmergencyRepair">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -3425,24 +3443,6 @@
         <UseMarkerArray index="Channel" value="0"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="Disband"/>
     </CAbilEffectInstant>
-    <CAbilEffectTarget id="SquadGhostEMP">
-        <Alignment value="Negative"/>
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Effect index="0" value="EMPLaunchMissile"/>
-        <Cost>
-            <Vital index="Energy" value="75"/>
-        </Cost>
-        <Range value="10"/>
-        <PrepTime value="0.01"/>
-        <FinishTime value="0.0625"/>
-        <UninterruptibleArray index="Prep" value="1"/>
-        <UninterruptibleArray index="Finish" value="1"/>
-        <CursorEffect value="EMPSearch"/>
-        <AINotifyEffect value="EMPLaunchMissile"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="EMP">
-            <Flags index="ShowInGlossary" value="0"/>
-        </CmdButtonArray>
-    </CAbilEffectTarget>
     <CAbilEffectTarget id="MedicFlashBangGrenade">
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <Effect index="0" value="MedicFlashBangGrenadeLaunchMissile"/>

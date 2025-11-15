@@ -30,6 +30,45 @@
     <CEffectEnumArea default="1" id="SquadAbilSearchRadiusExt" parent="SquadAbilSearch">
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
+    <CEffectApplyBehavior id="SquadGhostEMPDecloakApply">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadGhostEMPDecloak"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="SquadGhostEMPDamage2">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <ShieldBonus value="100"/>
+        <Flags index="Notification" value="1"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="SquadGhostEMPLaunchMissile2">
+        <ValidatorArray index="0" value="EMP2TargetFilters"/>
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <ImpactEffect value="SquadGhostEMPSearch"/>
+        <AmmoUnit value="SquadGhostEMPMissile"/>
+    </CEffectLaunchMissile>
+    <CEffectModifyUnit id="SquadGhostEMPModifyUnit2">
+        <ValidatorArray value="empUTargetFilters"/>
+        <EditorCategories value="Race:Terran"/>
+        <VitalArray index="Energy">
+            <Change value="-100"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectEnumArea id="SquadGhostEMPSearch">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchLocation Value="TargetPoint"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <SearchFilters value="-;Hidden,Invulnerable"/>
+        <AreaArray Radius="1.5" Effect="SquadGhostEMPSet2"/>
+    </CEffectEnumArea>
+    <CEffectSet id="SquadGhostEMPSet2">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadGhostEMPDamage2"/>
+        <EffectArray value="SquadGhostEMPModifyUnit2"/>
+        <EffectArray value="SquadGhostEMPDecloakApply"/>
+    </CEffectSet>
     <CEffectDamage id="SquadBattlecruiserSuperSmashDamage">
         <EditorCategories value="Race:Terran"/>
         <Kind value="Melee"/>
@@ -6219,45 +6258,6 @@
         <EditorCategories value="Race:Terran"/>
         <Cost Abil="SquadInfantry,Ammo1" ChargeCountUse="-1"/>
     </CEffectModifyUnit>
-    <CEffectApplyBehavior id="SquadGhostEMPApplyDecloakBehavior">
-        <EditorCategories value="Race:Terran"/>
-        <Behavior value="SquadGhostEMPDecloak"/>
-    </CEffectApplyBehavior>
-    <CEffectDamage id="SquadGhostEMPDamage">
-        <EditorCategories value="Race:Terran"/>
-        <ResponseFlags index="Acquire" value="1"/>
-        <ResponseFlags index="Flee" value="1"/>
-        <ShieldBonus value="100"/>
-        <Flags index="Notification" value="1"/>
-        <SearchFlags index="CallForHelp" value="1"/>
-    </CEffectDamage>
-    <CEffectLaunchMissile id="SquadGhostEMPLaunchMissile">
-        <ValidatorArray index="0" value="EMP2TargetFilters"/>
-        <EditorCategories value="Race:Terran"/>
-        <ImpactLocation Value="TargetPoint"/>
-        <ImpactEffect value="SquadEMPSearch"/>
-        <AmmoUnit value="SquadGhostEMPWeapon"/>
-    </CEffectLaunchMissile>
-    <CEffectModifyUnit id="SquadGhostEMPModifyUnit">
-        <ValidatorArray value="empUTargetFilters"/>
-        <EditorCategories value="Race:Terran"/>
-        <VitalArray index="Energy">
-            <Change value="-100"/>
-        </VitalArray>
-    </CEffectModifyUnit>
-    <CEffectEnumArea id="SquadEMPSearch">
-        <EditorCategories value="Race:Terran"/>
-        <LaunchLocation Value="TargetPoint"/>
-        <ImpactLocation Value="TargetPoint"/>
-        <SearchFilters value="-;Hidden,Invulnerable"/>
-        <AreaArray Radius="1.5" Effect="SquadGhostEMPSet"/>
-    </CEffectEnumArea>
-    <CEffectSet id="SquadGhostEMPSet">
-        <EditorCategories value="Race:Terran"/>
-        <EffectArray value="SquadGhostEMPDamage"/>
-        <EffectArray value="SquadGhostEMPModifyUnit"/>
-        <EffectArray value="SquadGhostEMPApplyDecloakBehavior"/>
-    </CEffectSet>
     <CEffectRemoveBehavior id="EnableMagazine">
         <EditorCategories value="Race:Terran"/>
         <BehaviorLink value="DisableMagazineAbilities"/>

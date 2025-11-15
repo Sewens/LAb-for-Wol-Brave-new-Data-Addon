@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorBuff id="SquadGhostEMPDecloak">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-emp.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="IsNotBuried"/>
+        <Duration value="10"/>
+        <Modification>
+            <StateFlags index="SuppressCloak" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
     <CBehaviorBuff id="SquadBattlecruiserSuperSmash">
         <InfoIcon value="Assets\Textures\btn-ability-protoss-deadlycharge.dds"/>
         <BehaviorCategories index="Permanent" value="1"/>
@@ -38,6 +48,7 @@
         <DamageResponse Handled="FirebatImmolationArmorPersistent" ModifyFraction="0.99" TargetFilters="Visible;Missile,Dead,Invulnerable">
             <Chance value="1"/>
         </DamageResponse>
+        <Requirements value="HaveFirebatFireshieldPlating"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="MissileTowerSpikeArmor">
         <InfoIcon value="Assets\Textures\btn-upgrade-zerg-organiccarapace.dds"/>
@@ -45,6 +56,7 @@
         <DamageResponse Handled="SquadMissileTurretSpikeArmorCreatePersistent" ModifyFraction="0.99" TargetFilters="Visible;Missile,Dead,Invulnerable">
             <Chance value="1"/>
         </DamageResponse>
+        <Requirements value="HaveMissileTurretReactionPlating"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="MarauderFrostArmor">
         <InfoIcon value="Assets\Textures\war3_btn\renee_war3_btnfrostarmoron.dds"/>
@@ -52,6 +64,7 @@
         <DamageResponse Handled="SquadMarauderFrostArmorSet" ModifyFraction="0.99" TargetFilters="Visible;Missile,Dead,Invulnerable">
             <Chance value="1"/>
         </DamageResponse>
+        <Requirements value="HaveMarauderFrostPlating"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadBunkerPsiDisrupter">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
@@ -263,6 +276,10 @@
         <MaxStackCount value="5"/>
         <BuffFlags index="RefreshStack" value="1"/>
         <InfoFlags index="Hidden" value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadWarhoundDeathHeal">
+        <InfoIcon value="Assets\Textures\btn-upgrade-tychus-tankhealth.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadWraithAttackFrontburnerAttacking">
         <InfoFlags index="Hidden" value="1"/>
@@ -635,7 +652,7 @@
         <InfoFlags index="Hidden" value="1"/>
         <InfoIcon value="Assets\Textures\btn-unit-protoss-blizzcon17-probe.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Requirements value="HaveVultureBroodMotherSpider"/>
+        <Requirements value="HaveVultureGoodNeighborhoodForever"/>
         <Period value="2"/>
         <PeriodicEffect value="SquadInnermagazineIterator"/>
     </CBehaviorBuff>
@@ -2470,16 +2487,6 @@
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <Modification>
             <AbilLinkDisableArray value="SquadInfantry"/>
-        </Modification>
-    </CBehaviorBuff>
-    <CBehaviorBuff id="SquadGhostEMPDecloak">
-        <Alignment value="Negative"/>
-        <InfoIcon value="Assets\Textures\btn-ability-terran-emp.dds"/>
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <RemoveValidatorArray value="IsNotBuried"/>
-        <Duration value="10"/>
-        <Modification>
-            <StateFlags index="SuppressCloak" value="1"/>
         </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadFireSuppressionSystem">
