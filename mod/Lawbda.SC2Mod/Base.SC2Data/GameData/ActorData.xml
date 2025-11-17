@@ -8901,8 +8901,12 @@
         <Macros value="MagazineSmallScale"/>
         <Macros value="SquadDeathAnimationMacroUnit"/>
         <On Terms="ActorCreation; ValidatePlayer NoMarineShield" Send="AnimPlay Cover Cover PlayForever 0.000000"/>
-        <On Terms="Upgrade.ShieldWall.Add" Send="AnimClear Cover"/>
-        <On Terms="Upgrade.ShieldWall.Remove" Send="AnimPlay Cover Cover PlayForever 0.000000"/>
+        <!--
+        <On Terms="Upgrade.MarineCombatShield.Add" Send="AnimClear Cover"/>
+        <On Terms="Upgrade.MarineCombatShield.Remove" Send="AnimPlay Cover Cover PlayForever 0.000000"/>
+        -->
+        <On Terms="Upgrade.MarineCombatShield.Add" Send="AnimClear Cover"/>
+        <On Terms="Upgrade.MarineCombatShield.Remove" Send="AnimPlay Cover Cover PlayForever"/>
         <On Terms="UnitDeath.SquadMarine; AnimPlaying Cover" Target="_DeathModel" Send="AnimPlay Cover Cover PlayForever 0.000000"/>
         <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
         <On Terms="WeaponStart.*.AttackStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart Attack Attack,Superior"/>
@@ -8916,8 +8920,6 @@
         <On Terms="AnimDone; AnimName Cheer" Target="MarineCheerSquib" Send="Destroy"/>
         <On Terms="AnimDone; AnimName Cheer" Target="MarineCheerSquibSound" Send="Destroy"/>
         <On Terms="UnitHeightUpdate.*.Land" Send="Create Marine_Land"/>
-        <On Terms="Upgrade.CombatShield.Add" Send="AnimClear Cover"/>
-        <On Terms="Upgrade.CombatShield.Remove" Send="AnimPlay Cover Cover PlayForever"/>
         <On Terms="UnitDeathCustomize; PassChance 100.000000; ValidateUnit IsNotNeuralParasited" Send="Create Marine_Death"/>
         <On Terms="UnitDeathCustomize; PassChance 100.000000; !ValidateUnit IsNotNeuralParasited" Send="Create Marine_Death_NP"/>
         <On Terms="UnitDeathCustomize; ValidateUnit IsCelestialBurning" Send="DeathCustomize Variation14"/>
@@ -9191,12 +9193,14 @@
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachCenter"/>
         <AutoScaleFactor value="0.250000"/>
+        <Model value="ObliterateExplosion"/>
     </CActorModel>
     <CActorModel id="SquadSpectreObliterateSecondExplosion" parent="ModelAnimationStyleOneShotNoOrphan">
         <On Terms="Effect.SquadSpectreObliterateSecondDamage.Start; At Target" Send="Create"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachCenter"/>
         <AutoScaleFactor value="0.500000"/>
+        <Model value="ObliterateExplosion"/>
     </CActorModel>
     <CActorSound id="SquadSpectreObliterateImpact" parent="SoundOneShot">
         <On Terms="Effect.SquadSpectreObliterateInitDamage.Start" Send="Create"/>

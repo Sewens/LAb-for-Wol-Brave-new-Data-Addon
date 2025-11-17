@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorBuff id="ScienceVesselGhostConditioning">
+        <InfoIcon value="Assets\Textures\btn-upgrade-nova-equipment-ui-ghostvisor.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <!--Requirements value="HaveScienceVesselGhostConditioning"/-->
+        <DamageResponse Handled="ScienceVesselGhostConditioningBuffApply" ModifyFraction="0.99" TargetFilters="Visible;Enemy,Missile,Dead,Invulnerable">
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="ScienceVesselGhostConditioningBuff">
+        <InfoIcon value="Assets\Textures\btn-upgrade-nova-equipment-ghostvisor.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <BuffFlags index="RefreshStack" value="1"/>
+        <MaxStackCount value="10"/>
+        <Duration value="15"/>
+        <RemoveValidatorArray value="IsGhostorSpectre"/>
+        <Modification>
+            <DamageDealtFraction index="Spell" value="0.1"/>
+            <DamageDealtFraction index="Melee" value="0.1"/>
+            <DamageDealtFraction index="Ranged" value="0.1"/>
+            <DamageDealtFraction index="Splash" value="0.1"/>
+            <DamageDealtFraction index="NoProc" value="0.1"/>
+        </Modification>
+    </CBehaviorBuff>
     <CBehaviorBuff id="SuqadSpectreChainPsiSlash">
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <Modification>
@@ -7,6 +30,7 @@
         </Modification>
         <InfoIcon value="Assets\Textures\btn-ability-protoss-mindblast.dds"/>
         <Duration value="0.5"/>
+        <Requirements value="HaveSpectreSlashChainReaction"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadGhostEMPDecloak">
         <Alignment value="Negative"/>
