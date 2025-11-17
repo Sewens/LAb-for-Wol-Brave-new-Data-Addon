@@ -269,6 +269,31 @@
         <EffectArray value="SquadSiegeTankChargingCannonsFullyChargeRemove"/>
         <EffectArray value="SquadSiegeTankChargingCannonsStackRemove"/>
     </CEffectSet>
+    <CEffectApplyBehavior id="SquadSpectreObliterateInitApplyDeathResponse">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SuqadSpectreChainPsiSlash"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="SquadSpectreObliterateInitSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadSpectreObliterateInitApplyDeathResponse"/>
+        <EffectArray value="SquadSpectreObliterateInitDamage"/>
+    </CEffectSet>
+    <CEffectDamage id="SquadSpectreObliterateSecondDamage">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <Flags index="Notification" value="1"/>
+        <Amount value="50"/>
+        <Death value="Blast"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="SquadSpectreObliterateSecondSearchArea">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <SearchFilters value="-;Player,Ally,Neutral,Structure,Heroic,RawResource,HarvestableResource,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray MaxCount="3" Radius="3" Effect="SquadSpectreObliterateSecondDamage"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectEnumArea>
     <CEffectApplyBehavior id="TestAttributeStack">
         <ValidatorArray index="0" value=""/>
         <EditorCategories value=""/>
@@ -1436,7 +1461,7 @@
         <ImpactLocation Value="TargetUnit"/>
         <ExcludeArray Effect="SquadWarHoundAstralWindSet" Value="Target"/>
         <SearchFilters value="-;Enemy,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
-        <AreaArray Radius="6" Effect="SquadWarHoundAstralWindOtherSet"/>
+        <AreaArray Radius="3" Effect="SquadWarHoundAstralWindOtherSet"/>
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
     <CEffectCreatePersistent id="SquadHurricaneMissile">
@@ -2411,7 +2436,7 @@
         <ExpireEffect value="SquadShockwaveMissile"/>
         <ExpireOffset value="0,-12.5,0"/>
     </CEffectCreatePersistent>
-    <CEffectApplyBehavior id="SquadWarStompBuffPause" parent="SquadApplyBuff">
+    <CEffectApplyBehavior id="SquadWarStomBuffPause" parent="SquadApplyBuff">
         <EditorCategories value="Race:Terran"/>
         <Behavior value="SquadWarStompStunned"/>
     </CEffectApplyBehavior>
@@ -2424,7 +2449,7 @@
     </CEffectDamage>
     <CEffectSet id="SquadWarStompImpactSet">
         <EditorCategories value="Race:Terran"/>
-        <EffectArray value="SquadWarStompBuffPause"/>
+        <EffectArray value="SquadWarStomBuffPause"/>
         <EffectArray value="SquadWarStompDamage"/>
     </CEffectSet>
     <CEffectEnumArea id="SquadWarStompSearch">
@@ -6610,7 +6635,7 @@
         <ImpactLocation Value="SourceUnit"/>
         <Flags index="Kill" value="1"/>
     </CEffectDamage>
-    <CEffectDamage id="SquadSpectreObliterate">
+    <CEffectDamage id="SquadSpectreObliterateInitDamage">
         <EditorCategories value="Race:Terran"/>
         <ResponseFlags index="Acquire" value="1"/>
         <ResponseFlags index="Flee" value="1"/>
