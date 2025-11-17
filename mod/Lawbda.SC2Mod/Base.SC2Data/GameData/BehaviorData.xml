@@ -1,5 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorBuff id="SquadViperAbductInstantMorph">
+        <InfoFlags index="Hidden" value="1"/>
+        <TimeScaleSource Value="Global"/>
+        <Duration value="0.2"/>
+        <Modification>
+            <StateFlags index="SuppressCloak" value="1"/>
+            <StateFlags index="TransientMorph" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadViperAbductYoink">
+        <InfoFlags index="Hidden" value="1"/>
+        <Duration value="2.5"/>
+        <FinalEffect value="SquadViperAbductSuicideRemove"/>
+        <Modification>
+            <ModifyFlags index="DisableAbils" value="1"/>
+            <ModifyFlags index="SuppressMoving" value="1"/>
+            <ModifyFlags index="SuppressTurning" value="1"/>
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="SuppressCollision" value="1"/>
+            <StateFlags index="NoDraw" value="1"/>
+            <StateFlags index="Uncommandable" value="1"/>
+            <StateFlags index="Unselectable" value="1"/>
+            <StateFlags index="Untargetable" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
     <CBehaviorBuff id="ScienceVesselGhostConditioning">
         <InfoIcon value="Assets\Textures\btn-upgrade-nova-equipment-ui-ghostvisor.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -2860,5 +2885,42 @@
         <Modification HealDealtAdditiveMultiplier="1.1" HealTakenAdditiveMultiplier="1.1">
             <DamageDealtFraction index="Melee" value="1.25"/>
         </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadViperAbductTentacleMonster">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Duration value="2"/>
+        <Modification>
+            <StateFlags index="Stun" value="1"/>
+            <StateFlags index="SuppressCloak" value="1"/>
+            <StateFlags index="SuppressCollision" value="1"/>
+            <StateFlags index="SuppressPassenger" value="1"/>
+            <AbilLinkDisableArray value="WidowMineAttack"/>
+            <AbilLinkDisableArray value="TacNukeStrike"/>
+            <AbilLinkDisableArray value="SwarmHostDeepBurrow"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadViperAbductEnemyStun">
+        <Alignment value="Negative"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-ultrasonicpulse.dds"/>
+        <BehaviorCategories index="Stun" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Duration value="1"/>
+        <Modification>
+            <ModifyFlags index="SuppressMoving" value="1"/>
+            <StateFlags index="Stun" value="1"/>
+            <AbilLinkDisableArray value="TacNukeStrike"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadViperAbductMarker">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Duration value="2"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadViperAbductTentacle">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Duration value="2"/>
     </CBehaviorBuff>
 </Catalog>

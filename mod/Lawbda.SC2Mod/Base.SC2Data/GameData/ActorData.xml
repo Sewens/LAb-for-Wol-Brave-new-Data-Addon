@@ -217,6 +217,10 @@
         <HeightOffset value="1.500000"/>
         <Text value="Button/Tooltip/##id##"/>
     </CActorText>
+    <CActorSound id="SquadViperAbductImpact" parent="SoundOneShot">
+        <On Terms="Behavior.SquadViperAbductTentacle.On" Send="Create"/>
+        <Sound value="Spell_Yoink_Impact"/>
+    </CActorSound>
     <CActorModel id="SquadGhostEMPLockdownModel" parent="ModelAnimationStyleContinuous">
         <On Terms="Behavior.SquadGhostEMPDecloak.On; At Caster; ValidatePlayer HaveGhostEmpLockdownEnhance" Send="Create"/>
         <On Terms="Behavior.SquadGhostEMPDecloak.Off" Send="Destroy"/>
@@ -11097,4 +11101,260 @@
         <Model value="BlueNukeCursorSplat"/>
         <Color value="255,36,80,255"/>
     </CActorSplat>
+    <CActorAction id="SquadViperAbduct" parent="GenericAttack" effectImpact="SquadViperAbductSet" effectLaunch="SquadViperAbductLaunchMissile">
+        <LaunchSiteOps Ops="SOpAttachWeapon"/>
+        <LaunchSite value="YoinkTentacleLaunchSite"/>
+        <LaunchAttachQuery Methods="Weapon"/>
+        <LaunchAssets Sound="Spell_Yoink_Launch"/>
+        <ImpactSiteOps Ops="SOpAttachCenter SOpForwardLaunchGuide"/>
+        <ImpactSiteOpsReaction Ops="SOp2DRotation SOp180" HoldPosition="1" HoldRotation="1"/>
+        <ImpactAttachQuery Methods="AMFilterCenter"/>
+        <ImpactMap index="None" Sound=""/>
+        <ShieldFlashType value="None"/>
+        <ActionFlags index="VictimRevealsAttacker" value="1"/>
+    </CActorAction>
+    <CActorModel id="SquadViperAbductEnemyStunModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="ActorCreation" Send="AnimBracketStart GL_BSD GLbirth GLstand GLdeath"/>
+        <On Terms="Behavior.SquadViperAbductEnemyStun.On" Send="Create"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart $BSD"/>
+        <On Terms="Behavior.SquadViperAbductEnemyStun.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Model value="MindBlastStun"/>
+    </CActorModel>
+    <CActorSimple id="SquadViperAbductImpactAnim">
+        <On Terms="Behavior.SquadViperAbductTentacleMonster.On; ValidateUnit IsNotConstructing" Send="Create"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="Signal YoinkStart"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimClear Attack"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimClear AttackReady"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimClear AttackLeft"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimClear AttackRight"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimPlay AbductFlail Flail PlayForever,RandomStartOffset 0.100000 0.100000"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="HostSiteOpsAdd ::Host SOpTilterYoink"/>
+        <On Terms="ActorCreation" Send="TimerSet 3.500000 KnockbackDelay"/>
+        <On Terms="TimerExpired; TimerName KnockbackDelay" Target="_Unit" Send="AnimClear AbductFlail"/>
+        <On Terms="TimerExpired; TimerName KnockbackDelay" Send="Destroy"/>
+        <On Terms="Behavior.SquadViperAbductTentacleMonster.Off" Target="_Unit" Send="AnimClear AbductFlail"/>
+        <On Terms="Behavior.SquadViperAbductTentacleMonster.Off" Target="_Unit" Send="Signal YoinkStop"/>
+        <On Terms="Behavior.SquadViperAbductTentacleMonster.Off" Target="_Unit" Send="HostSiteOpsRemove ::Host SOpTilterYoink"/>
+        <On Terms="Behavior.SquadViperAbductTentacleMonster.Off" Send="Destroy"/>
+    </CActorSimple>
+    <CActorModel id="SquadViperAbductImpactModel" parent="ModelAddition">
+        <On Terms="Behavior.SquadViperAbductTentacle.On" Send="Create"/>
+        <On Terms="Behavior.SquadViperAbductTentacle.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachHead"/>
+        <Model value="YoinkImpactModel"/>
+    </CActorModel>
+    <CActorMissile id="SquadViperAbductMissile" parent="GenericAttackMissile" unitName="SquadViperAbductMissile">
+        <Supporter>
+            <Subject value="YoinkTentacle"/>
+            <Scope value="Caster"/>
+            <Actor value="Find"/>
+            <Effect value="SquadViperAbductLaunchMissile"/>
+        </Supporter>
+        <On Terms="MotionPhaseStart; MotionPhase" Target="::Supporter" Send="RefSet TentacleAttack ::Self"/>
+        <Model value="Invisible"/>
+    </CActorMissile>
+    <CActorRange id="SquadViperAbductRange" parent="RangeAbil" abil="SquadViperAbduct">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorModel id="SquadViperAbductTentacle">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.SquadViperAbductLaunchMissile.Start; At Caster" Send="Create"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth GLstand Death"/>
+        <On Terms="ActorCreation" Send="AnimPlay Attack Attack"/>
+        <On Terms="ActorCreation" Send="RefSet ::scope.YoinkTentacle ::Self"/>
+        <On Terms="ActorCreation" Send="TimerSet 1.500000 DelayDestroy"/>
+        <On Terms="ActorCreation" Send="StatusSet Yoinking 0"/>
+        <On Terms="ActorCreation" Send="SetOpacity"/>
+        <On Terms="ActorCreation" Send="SetOpacity 1.000000 0.500000"/>
+        <On Terms="Effect.SquadViperAbductYoinkFinishDummy.Start; IsStatus Yoinking 0" Send="AnimBracketStop BSD"/>
+        <On Terms="Effect.SquadViperAbductApplyTentacleBehavior.Start" Send="StatusSet Yoinking 1"/>
+        <On Terms="Effect.SquadViperAbductApplyTentacleBehavior.Start" Send="AnimClear Attack"/>
+        <On Terms="Effect.SquadViperAbductApplyTentacleBehavior.Start" Send="Create SquadViperAbductYoinkImpactHoldingSite"/>
+        <On Terms="Effect.SquadViperAbductApplyTentacleBehavior.Start" Send="RefSetFromRequest TentacleAttack SquadViperAbductYoinkImpactHoldingSite"/>
+        <On Terms="Effect.SquadViperAbductApplyTentacleBehavior.Start" Send="TimerSet 1.250000 DelayDestroy"/>
+        <On Terms="TimerExpired; TimerName DelayDestroy" Send="AnimBracketStop BSD"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachWeapon01Soft"/>
+        <Model value="YoinkTentacle"/>
+        <HostedAttaches Name="TentacleAttack">
+            <AttachQuery Methods="Hardpoint"/>
+        </HostedAttaches>
+    </CActorModel>
+    <CActorSite id="SquadViperAbductYoinkImpactHoldingSite">
+        <Host Subject="_ImpactGuide" Scope="Target" Effect="SquadViperAbductYoinkStartCreatePlaceholder"/>
+        <HostSiteOps Ops="SOp180"/>
+    </CActorSite>
+    <CActorModel id="SquadViperAbductTentacleVikingAir">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.SquadViperAbductYoinkLaunchMissileVikingAir.Start; At Caster" Send="Create"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth GLstand Death"/>
+        <On Terms="ActorCreation" Send="AnimPlay Attack Attack"/>
+        <On Terms="ActorCreation" Send="RefSet ::scope.SquadViperAbductYoinkTentacleVikingAir ::Self"/>
+        <On Terms="ActorCreation" Send="TimerSet 1.500000 DelayDestroy"/>
+        <On Terms="ActorCreation" Send="StatusSet Yoinking 0"/>
+        <On Terms="ActorCreation" Send="SetOpacity"/>
+        <On Terms="ActorCreation" Send="SetOpacity 1.000000 0.500000"/>
+        <On Terms="Effect.SquadViperAbductYoinkFinishDummy.Start; IsStatus Yoinking 0" Send="AnimBracketStop BSD"/>
+        <On Terms="Effect.SquadViperAbductYoinkApplyTentacleBehaviorVikingAir.Start" Send="StatusSet Yoinking 1"/>
+        <On Terms="Effect.SquadViperAbductYoinkApplyTentacleBehaviorVikingAir.Start" Send="AnimClear Attack"/>
+        <On Terms="Effect.SquadViperAbductYoinkApplyTentacleBehaviorVikingAir.Start" Send="Create SquadViperAbductYoinkVikingAirImpactHoldingSite"/>
+        <On Terms="Effect.SquadViperAbductYoinkApplyTentacleBehaviorVikingAir.Start" Send="RefSetFromRequest TentacleVikingAirAttack SquadViperAbductYoinkVikingAirImpactHoldingSite"/>
+        <On Terms="Effect.SquadViperAbductYoinkApplyTentacleBehaviorVikingAir.Start" Send="TimerSet 1.250000 DelayDestroy"/>
+        <On Terms="TimerExpired; TimerName DelayDestroy" Send="AnimBracketStop BSD"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachWeapon01Soft"/>
+        <Model value="YoinkTentacle"/>
+        <HostedAttaches Name="TentacleVikingAirAttack">
+            <AttachQuery Methods="Hardpoint"/>
+        </HostedAttaches>
+    </CActorModel>
+    <CActorSite id="SquadViperAbductYoinkVikingAirImpactHoldingSite">
+        <Host Subject="_ImpactGuide" Scope="Target" Effect="SquadViperAbductYoinkStartCreatePlaceholderVikingAir"/>
+        <HostSiteOps Ops="SOp180"/>
+    </CActorSite>
+    <CActorModel id="SquadViperAbductTentacleVikingGround">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.SquadViperAbductYoinkLaunchMissileVikingGround.Start; At Caster" Send="Create"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth GLstand Death"/>
+        <On Terms="ActorCreation" Send="AnimPlay Attack Attack"/>
+        <On Terms="ActorCreation" Send="RefSet ::scope.YoinkTentacleVikingGround ::Self"/>
+        <On Terms="ActorCreation" Send="TimerSet 1.500000 DelayDestroy"/>
+        <On Terms="ActorCreation" Send="StatusSet Yoinking 0"/>
+        <On Terms="ActorCreation" Send="SetOpacity"/>
+        <On Terms="ActorCreation" Send="SetOpacity 1.000000 0.500000"/>
+        <On Terms="Effect.SquadViperAbductYoinkFinishDummy.Start; IsStatus Yoinking 0" Send="AnimBracketStop BSD"/>
+        <On Terms="Effect.SquadViperAbductYoinkApplyTentacleBehaviorVikingGround.Start" Send="StatusSet Yoinking 1"/>
+        <On Terms="Effect.SquadViperAbductYoinkApplyTentacleBehaviorVikingGround.Start" Send="AnimClear Attack"/>
+        <On Terms="Effect.SquadViperAbductYoinkApplyTentacleBehaviorVikingGround.Start" Send="Create SquadViperAbductYoinkVikingGroundImpactHoldingSite"/>
+        <On Terms="Effect.SquadViperAbductYoinkApplyTentacleBehaviorVikingGround.Start" Send="RefSetFromRequest TentacleVikingGroundAttack SquadViperAbductYoinkVikingGroundImpactHoldingSite"/>
+        <On Terms="Effect.SquadViperAbductYoinkApplyTentacleBehaviorVikingGround.Start" Send="TimerSet 1.250000 DelayDestroy"/>
+        <On Terms="TimerExpired; TimerName DelayDestroy" Send="AnimBracketStop BSD"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachWeapon01Soft"/>
+        <Model value="YoinkTentacle"/>
+        <HostedAttaches Name="TentacleVikingGroundAttack">
+            <AttachQuery Methods="Hardpoint"/>
+        </HostedAttaches>
+    </CActorModel>
+    <CActorSite id="SquadViperAbductYoinkVikingGroundImpactHoldingSite">
+        <Host Subject="_ImpactGuide" Scope="Target" Effect="SquadViperAbductYoinkStartCreatePlaceholderVikingGround"/>
+        <HostSiteOps Ops="SOp180"/>
+    </CActorSite>
+    <CActorAction id="SquadViperAbductVikingAir" parent="GenericAttack" effectImpact="SquadViperAbductYoinkSetVikingAir" effectLaunch="SquadViperAbductYoinkLaunchMissileVikingAir">
+        <LaunchSiteOps Ops="SOpAttachWeapon"/>
+        <LaunchSite value="SquadViperAbductYoinkVikingAirTentacleLaunchSite"/>
+        <LaunchAttachQuery Methods="Weapon"/>
+        <LaunchAssets Sound="Spell_Yoink_Launch"/>
+        <ImpactSiteOps Ops="SOpAttachHead SOpForwardLaunchGuide"/>
+        <ImpactSiteOpsReaction Ops="SOp2DRotation SOp180" HoldPosition="1" HoldRotation="1"/>
+        <ImpactAttachQuery Methods="AMFilterHead"/>
+        <ImpactMap index="None" Sound=""/>
+        <ShieldFlashType value="None"/>
+        <ActionFlags index="VictimRevealsAttacker" value="1"/>
+    </CActorAction>
+    <CActorSite id="SquadViperAbductYoinkVikingAirTentacleLaunchSite">
+        <Host Subject="::scope.SquadViperAbductYoinkTentacleVikingAir"/>
+    </CActorSite>
+    <CActorMissile id="SquadViperAbductVikingAirMissile" parent="GenericAttackMissile" unitName="SquadViperAbductVikingAirMissile">
+        <Supporter>
+            <Subject value="SquadViperAbductYoinkTentacleVikingAir"/>
+            <Scope value="Caster"/>
+            <Actor value="Find"/>
+            <Effect value="SquadViperAbductYoinkLaunchMissileVikingAir"/>
+        </Supporter>
+        <On Terms="MotionPhaseStart; MotionPhase" Target="::Supporter" Send="RefSet TentacleVikingAirAttack ::Self"/>
+        <Model value="Invisible"/>
+    </CActorMissile>
+    <CActorModel id="SquadViperAbductYoinkTentacleVikingAir">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.SquadViperAbductYoinkLaunchMissileVikingAir.Start; At Caster" Send="Create"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth GLstand Death"/>
+        <On Terms="ActorCreation" Send="AnimPlay Attack Attack"/>
+        <On Terms="ActorCreation" Send="RefSet ::scope.SquadViperAbductYoinkTentacleVikingAir ::Self"/>
+        <On Terms="ActorCreation" Send="TimerSet 1.500000 DelayDestroy"/>
+        <On Terms="ActorCreation" Send="StatusSet Yoinking 0"/>
+        <On Terms="ActorCreation" Send="SetOpacity"/>
+        <On Terms="ActorCreation" Send="SetOpacity 1.000000 0.500000"/>
+        <On Terms="Effect.SquadViperAbductYoinkFinishDummy.Start; IsStatus Yoinking 0" Send="AnimBracketStop BSD"/>
+        <On Terms="Effect.SquadViperAbductYoinkApplyTentacleBehaviorVikingAir.Start" Send="StatusSet Yoinking 1"/>
+        <On Terms="Effect.SquadViperAbductYoinkApplyTentacleBehaviorVikingAir.Start" Send="AnimClear Attack"/>
+        <On Terms="Effect.SquadViperAbductYoinkApplyTentacleBehaviorVikingAir.Start" Send="Create SquadViperAbductYoinkVikingAirImpactHoldingSite"/>
+        <On Terms="Effect.SquadViperAbductYoinkApplyTentacleBehaviorVikingAir.Start" Send="RefSetFromRequest TentacleVikingAirAttack SquadViperAbductYoinkVikingAirImpactHoldingSite"/>
+        <On Terms="Effect.SquadViperAbductYoinkApplyTentacleBehaviorVikingAir.Start" Send="TimerSet 1.250000 DelayDestroy"/>
+        <On Terms="TimerExpired; TimerName DelayDestroy" Send="AnimBracketStop BSD"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachWeapon01Soft"/>
+        <Model value="YoinkTentacle"/>
+        <HostedAttaches Name="TentacleVikingAirAttack">
+            <AttachQuery Methods="Hardpoint"/>
+        </HostedAttaches>
+    </CActorModel>
+    <CActorAction id="SquadViperAbductVikingGround" parent="GenericAttack" effectImpact="SquadViperAbductYoinkSetVikingGround" effectLaunch="SquadViperAbductYoinkLaunchMissileVikingGround">
+        <LaunchSiteOps Ops="SOpAttachWeapon"/>
+        <LaunchSite value="SquadViperAbductYoinkVikingGroundTentacleLaunchSite"/>
+        <LaunchAttachQuery Methods="Weapon"/>
+        <LaunchAssets Sound="Spell_Yoink_Launch"/>
+        <ImpactSiteOps Ops="SOpAttachHead SOpForwardLaunchGuide"/>
+        <ImpactSiteOpsReaction Ops="SOp2DRotation SOp180" HoldPosition="1" HoldRotation="1"/>
+        <ImpactAttachQuery Methods="AMFilterHead"/>
+        <ImpactMap index="None" Sound=""/>
+        <ShieldFlashType value="None"/>
+        <ActionFlags index="VictimRevealsAttacker" value="1"/>
+    </CActorAction>
+    <CActorModel id="SquadViperAbductYoinkTentacleVikingGround">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.SquadViperAbductYoinkLaunchMissileVikingGround.Start; At Caster" Send="Create"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth GLstand Death"/>
+        <On Terms="ActorCreation" Send="AnimPlay Attack Attack"/>
+        <On Terms="ActorCreation" Send="RefSet ::scope.YoinkTentacleVikingGround ::Self"/>
+        <On Terms="ActorCreation" Send="TimerSet 1.500000 DelayDestroy"/>
+        <On Terms="ActorCreation" Send="StatusSet Yoinking 0"/>
+        <On Terms="ActorCreation" Send="SetOpacity"/>
+        <On Terms="ActorCreation" Send="SetOpacity 1.000000 0.500000"/>
+        <On Terms="Effect.SquadViperAbductYoinkFinishDummy.Start; IsStatus Yoinking 0" Send="AnimBracketStop BSD"/>
+        <On Terms="Effect.SquadViperAbductYoinkApplyTentacleBehaviorVikingGround.Start" Send="StatusSet Yoinking 1"/>
+        <On Terms="Effect.SquadViperAbductYoinkApplyTentacleBehaviorVikingGround.Start" Send="AnimClear Attack"/>
+        <On Terms="Effect.SquadViperAbductYoinkApplyTentacleBehaviorVikingGround.Start" Send="Create SquadViperAbductYoinkVikingGroundImpactHoldingSite"/>
+        <On Terms="Effect.SquadViperAbductYoinkApplyTentacleBehaviorVikingGround.Start" Send="RefSetFromRequest TentacleVikingGroundAttack SquadViperAbductYoinkVikingGroundImpactHoldingSite"/>
+        <On Terms="Effect.SquadViperAbductYoinkApplyTentacleBehaviorVikingGround.Start" Send="TimerSet 1.250000 DelayDestroy"/>
+        <On Terms="TimerExpired; TimerName DelayDestroy" Send="AnimBracketStop BSD"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachWeapon01Soft"/>
+        <Model value="YoinkTentacle"/>
+        <HostedAttaches Name="TentacleVikingGroundAttack">
+            <AttachQuery Methods="Hardpoint"/>
+        </HostedAttaches>
+    </CActorModel>
+    <CActorSite id="SquadViperAbductYoinkVikingGroundTentacleLaunchSite">
+        <Host Subject="::scope.SquadViperAbductYoinkTentacleVikingGround"/>
+    </CActorSite>
+    <CActorMissile id="SquadViperAbductVikingGroundMissile" parent="GenericAttackMissile" unitName="SquadViperAbductVikingGroundMissile">
+        <Supporter>
+            <Subject value="SquadViperAbductYoinkTentacleVikingGround"/>
+            <Scope value="Caster"/>
+            <Actor value="Find"/>
+            <Effect value="SquadViperAbductYoinkLaunchMissileVikingGround"/>
+        </Supporter>
+        <On Terms="MotionPhaseStart; MotionPhase" Target="::Supporter" Send="RefSet TentacleVikingGroundAttack ::Self"/>
+        <Model value="Invisible"/>
+    </CActorMissile>
 </Catalog>
