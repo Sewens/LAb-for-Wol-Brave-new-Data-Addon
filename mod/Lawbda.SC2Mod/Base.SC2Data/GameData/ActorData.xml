@@ -218,7 +218,7 @@
         <Text value="Button/Tooltip/##id##"/>
     </CActorText>
     <CActorSound id="SquadViperAbductImpact" parent="SoundOneShot">
-        <On Terms="Behavior.SquadViperAbductTentacle.On" Send="Create"/>
+        <On Terms="Behavior.SquadViperAbductYoinkTentacle.On" Send="Create"/>
         <Sound value="Spell_Yoink_Impact"/>
     </CActorSound>
     <CActorModel id="SquadGhostEMPLockdownModel" parent="ModelAnimationStyleContinuous">
@@ -233,7 +233,7 @@
         <Icon value="Assets\Textures\RadarIcon2.dds"/>
         <IconArcLength value="3.250000"/>
     </CActorRange>
-    <CActorAction id="SquadGhostEMPAttack2" parent="GenericAttack" effectImpact="SquadGhostEMPSearch" effectLaunch="SquadGhostEMPLaunchMissile2">
+    <CActorAction id="SquadGhostEMPAttack2" parent="GenericAttack" effectImpact="SquadGhostEMPSearch" effectLaunch="SquadGhostEMPLaunchMissile">
         <On Terms="Effect.EMPDamage.Start; At Caster" Send="ActionDamage"/>
         <LaunchAssets Sound="Ghost_EMPAttackLaunch"/>
         <Missile value="SquadGhostEMPAttackMissile"/>
@@ -2390,6 +2390,12 @@
         <Host Subject="_Unit"/>
         <Abil Link="SquadSiegeTankJumpJetRedeploy"/>
     </CActorRange>
+    <CActorSplat id="SquadSiegeTankJumpJetCursorSplat" parent="TerranCursorSplat" abil="SquadSiegeTankJumpJetRedeploy"/>
+    <CActorModel id="SquadSiegeTankJumpJetCursorModel" parent="CursorModel" abil="SquadSiegeTankJumpJetRedeploy">
+        <On Terms="ActorCreation" Send="SetFacing 135.000000"/>
+        <HostSiteOps Ops="SOpBasicScopeFollow SOpMoveUpBy2"/>
+        <Model value="SiegeTank_Silver"/>
+    </CActorModel>
     <CActorSound id="SquadSiegeTankJumpJetLaunchActorSound" parent="SoundOneShot">
         <On Terms="Effect.SquadSiegeTankJumpJetCreateCP.Start; At Caster" Send="Create"/>
         <Sound value="SiegeTank_JumpJet_Launch"/>
@@ -11140,8 +11146,8 @@
         <On Terms="Behavior.SquadViperAbductTentacleMonster.Off" Send="Destroy"/>
     </CActorSimple>
     <CActorModel id="SquadViperAbductImpactModel" parent="ModelAddition">
-        <On Terms="Behavior.SquadViperAbductTentacle.On" Send="Create"/>
-        <On Terms="Behavior.SquadViperAbductTentacle.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="Behavior.SquadViperAbductYoinkTentacle.On" Send="Create"/>
+        <On Terms="Behavior.SquadViperAbductYoinkTentacle.Off" Send="AnimBracketStop BSD"/>
         <Host Subject="_Unit"/>
         <HostSiteOps Ops="SOpAttachHead"/>
         <Model value="YoinkImpactModel"/>

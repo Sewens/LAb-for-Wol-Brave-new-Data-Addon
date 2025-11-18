@@ -1,5 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CValidatorUnitCompareBehaviorCount id="SquadCantYoinkYet">
+        <ResultFailed value="CantTargetThatUnit"/>
+        <Behavior value="SquadViperAbductYoinkWait"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitFilters id="SquadNotHiddenYoinkVikingAir">
+        <WhichUnit Effect="SquadViperAbductYoinkLaunchMissileVikingAir"/>
+        <Filters value="-;Hidden"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitFilters id="SquadNotHiddenYoinkVikingGround">
+        <WhichUnit Effect="SquadViperAbductYoinkLaunchMissileVikingGround"/>
+        <Filters value="-;Hidden"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitFilters id="SquadNotHiddenYoink">
+        <WhichUnit Effect="SquadViperAbductLaunchMissile"/>
+        <Filters value="-;Hidden"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitCompareBehaviorCount id="SquadNoYoink">
+        <ResultFailed value="Error,Error/CantTargetMultipleAbduct"/>
+        <Behavior value="SquadViperAbductYoinkMarker"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitFilters id="SquadEnemyTargetYoink">
+        <WhichUnit Effect="SquadViperAbductLaunchMissile"/>
+        <Filters value="-;Self,Player,Ally"/>
+    </CValidatorUnitFilters>
     <CValidatorPlayerRequirement id="HaveGhostEmpLockdownEnhance">
         <Find value="1"/>
         <Value value="HaveGhostEmpLockdownEnhance"/>
