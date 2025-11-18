@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CUnit id="SquadDragMissile" parent="MISSILE_INVULNERABLE">
+        <Race value="Zerg"/>
+        <Mover value="DragMissile"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
+    </CUnit>
     <CUnit id="SquadGhostEMPMissile" parent="MISSILE_INVULNERABLE">
         <Race value="Terr"/>
         <Mover value="EMP2Weapon"/>
@@ -1881,7 +1886,7 @@
         <AbilArray Link="stop"/>
         <AbilArray Link="attack"/>
         <AbilArray Link="move"/>
-        <AbilArray Link="SquadViperAbduct"/>
+        <AbilArray Link="SquadWraithDrag"/>
         <BehaviorArray Link="SquadWraithDisplacementField"/>
         <BehaviorArray Link="SquadWraithPeriodCloak"/>
         <BehaviorArray Link="SquadWraithAttackFrontburnerAttacking"/>
@@ -1897,7 +1902,7 @@
             <LayoutButtons Face="SquadWraithHighLagCloak" Type="Passive" Row="2" Column="0"/>
             <LayoutButtons Face="SquadWraithAttackFrontburner" Type="Passive" Requirements="HaveWraithAttackFrontburner" Row="1" Column="0"/>
             <LayoutButtons Face="SquadDisplacementField" Type="Passive" Row="2" Column="1"/>
-            <LayoutButtons Face="SquadViperAbduct" Type="AbilCmd" AbilCmd="SquadViperAbduct,Execute" Row="2" Column="2"/>
+            <LayoutButtons Face="SquadDrag" Type="AbilCmd" AbilCmd="SquadWraithDrag,Execute" Row="2" Column="2"/>
         </CardLayouts>
         <Radius value="0.625"/>
         <SeparationRadius value="0.625"/>

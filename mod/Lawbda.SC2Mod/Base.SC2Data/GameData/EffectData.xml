@@ -30,6 +30,83 @@
     <CEffectEnumArea default="1" id="SquadAbilSearchRadiusExt" parent="SquadAbilSearch">
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
+    <CEffectApplyBehavior id="SquadDragApplyBehavior">
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="SquadDrag"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadDragApplyStunBehavior">
+        <ValidatorArray value="TargetIsEnemyOrNeutral"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="SquadDragStunned"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadDragApplyTentacleBehavior">
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="SquadDragTentacle"/>
+    </CEffectApplyBehavior>
+    <CEffectCreateUnit id="SquadDragCreatePlaceholder">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichLocation Value="CasterPoint"/>
+        <CreateFlags index="Birth" value="0"/>
+        <CreateFlags index="DropOff" value="0"/>
+        <CreateFlags index="ProvideFood" value="0"/>
+        <CreateFlags index="TechComplete" value="0"/>
+        <CreateFlags index="UseFood" value="0"/>
+        <SpawnEffect value="SquadDragCreationSet"/>
+        <SpawnRange value="4"/>
+        <TypeFallbackUnit Value="Target"/>
+    </CEffectCreateUnit>
+    <CEffectSet id="SquadDragCreationSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="SquadDragDelayPersistent"/>
+        <EffectArray value="SquadDragMakePrecursor"/>
+    </CEffectSet>
+    <CEffectCreatePersistent id="SquadDragDelayPersistent">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="EffectSuccess" value="1"/>
+        <PeriodCount value="50"/>
+        <PeriodicEffectArray value="SquadDragLaunchTarget"/>
+        <PeriodicPeriodArray value="0.1"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="SquadDragImpactDummy">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Effect="SquadDragLaunchMissile" Value="TargetUnit"/>
+        <Flags index="NoDamageTimerReset" value="1"/>
+    </CEffectDamage>
+    <CEffectSet id="SquadDragImpactSet">
+        <EditorCategories value="Race:Zerg"/>
+    </CEffectSet>
+    <CEffectLaunchMissile id="SquadDragLaunchMissile">
+        <ValidatorArray index="0" value="IsNotEggUnit"/>
+        <ValidatorArray value="NotWarpingIn"/>
+        <ValidatorArray value="IsNotLarva"/>
+        <EditorCategories value="Race:Zerg"/>
+        <FinishEffect value="SquadDragSet"/>
+        <AmmoUnit value="SquadDragMissile"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="SquadDragLaunchTarget">
+        <ValidatorArray value="NotHiddenDrag"/>
+        <EditorCategories value="Race:Zerg"/>
+        <LaunchLocation Effect="SquadDragLaunchMissile" Value="TargetUnit"/>
+        <ImpactLocation Effect="SquadDragDelayPersistent"/>
+        <ImpactEffect value="SquadDragImpactDummy"/>
+        <FinishEffect value="SquadDragImpactSet"/>
+        <Flags index="2D" value="1"/>
+        <Movers Link="DragMover"/>
+        <DeathType value="Unknown"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="SquadDragSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="SquadDragApplyTentacleBehavior"/>
+        <EffectArray value="SquadDragApplyBehavior"/>
+        <EffectArray value="SquadDragCreatePlaceholder"/>
+        <EffectArray value="SquadDragApplyStunBehavior"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="SquadDragMakePrecursor">
+        <Behavior value="SquadDragPrecursor"/>
+    </CEffectApplyBehavior>
+    <!--
     <CEffectIssueOrder id="SquadViperAbductAntiGravityPhoenix2">
         <EditorCategories value="Race:Protoss"/>
         <Abil value="BurrowZerglingUp"/>
@@ -40,6 +117,7 @@
         <Abil value="BurrowZerglingDown"/>
         <AbilCmdIndex value="1"/>
     </CEffectIssueOrder>
+
     <CEffectCreatePersistent id="SquadViperAbductGravitonBeamUnburrowTake">
         <WhichLocation Value="TargetUnit"/>
         <ExpireDelay value="0.0625"/>
@@ -76,6 +154,12 @@
         <EffectArray value="SquadViperAbductSwarmHostUproot"/>
         <EffectArray value="SquadViperAbductLurkerMPUnburrow"/>
     </CEffectSet>
+
+    <CEffectIssueOrder id="SquadViperAbductLurkerMPUnburrow">
+        <EditorCategories value="Race:Protoss"/>
+        <Abil value="BurrowLurkerMPUp"/>
+    </CEffectIssueOrder>
+-->
     <CEffectDamage id="SquadViperAbductKillRemove">
         <ImpactLocation Value="TargetUnit"/>
         <Visibility value="Hidden"/>
@@ -83,13 +167,10 @@
         <Flags index="NoKillCredit" value="1"/>
         <Death value="Remove"/>
     </CEffectDamage>
-    <CEffectIssueOrder id="SquadViperAbductLurkerMPUnburrow">
-        <EditorCategories value="Race:Protoss"/>
-        <Abil value="BurrowLurkerMPUp"/>
-    </CEffectIssueOrder>
     <CEffectApplyBehavior id="SquadViperAbductMakePrecursorYoink">
         <Behavior value="SquadViperAbductPrecursorYoink"/>
     </CEffectApplyBehavior>
+    <!--
     <CEffectRemoveBehavior id="SquadViperAbductRemoveCoreRecallingBehaviorVikingAir">
         <EditorCategories value="Race:Protoss"/>
         <WhichUnit Effect="SquadViperAbductYoinkStartCreatePlaceholderVikingAir"/>
@@ -110,6 +191,7 @@
         <WhichUnit Effect="SquadViperAbductYoinkStartCreatePlaceholderVikingGround"/>
         <BehaviorLink value="Recalling"/>
     </CEffectRemoveBehavior>
+-->
     <CEffectApplyBehavior id="ScienceVesselGhostConditioningBuffApply">
         <EditorCategories value="Race:Terran"/>
         <Behavior value="ScienceVesselGhostConditioningBuff"/>
@@ -383,6 +465,12 @@
         <Flags index="Kill" value="1"/>
         <Death value="Remove"/>
     </CEffectDamage>
+    <CEffectDamage id="SquadDragSuicideRemove">
+        <ImpactLocation Value="SourceUnit"/>
+        <Flags index="Kill" value="1"/>
+        <Death value="Remove"/>
+    </CEffectDamage>
+    <!--
     <CEffectIssueOrder id="SquadViperAbductSwarmHostMPUnburrow">
         <Abil value="MorphToSwarmHostMP"/>
     </CEffectIssueOrder>
@@ -392,6 +480,7 @@
     <CEffectIssueOrder id="SquadViperAbductSwarmHostUproot">
         <Abil value="MorphToSwarmHostUprooted"/>
     </CEffectIssueOrder>
+-->
     <CEffectApplyBehavior id="TestAttributeStack">
         <ValidatorArray index="0" value=""/>
         <EditorCategories value=""/>
@@ -7154,27 +7243,30 @@
     <CEffectApplyBehavior id="SquadViperAbductApplyBehavior">
         <ValidatorArray value="NotViking"/>
         <EditorCategories value="Race:Zerg"/>
-        <Marker Link="SquadViperAbductYoinkMarker"/>
+        <Marker Link="Abil/SquadViperAbduct"/>
         <WhichUnit Effect="SquadViperAbductYoinkStartCreatePlaceholder"/>
         <Behavior value="SquadViperAbductYoink"/>
     </CEffectApplyBehavior>
+    <!--
     <CEffectApplyBehavior id="SquadViperAbductYoinkApplyBehaviorVikingAir">
         <EditorCategories value="Race:Zerg"/>
-        <Marker Link="SquadViperAbductYoinkMarker"/>
+        <Marker Link="Abil/SquadViperAbduct"/>
         <WhichUnit Effect="SquadViperAbductYoinkStartCreatePlaceholderVikingAir"/>
         <Behavior value="SquadViperAbductTentacleMonster"/>
     </CEffectApplyBehavior>
     <CEffectApplyBehavior id="SquadViperAbductYoinkApplyBehaviorVikingGround">
         <EditorCategories value="Race:Zerg"/>
-        <Marker Link="SquadViperAbductYoinkMarker"/>
+        <Marker Link="Abil/SquadViperAbduct"/>
         <WhichUnit Effect="SquadViperAbductYoinkStartCreatePlaceholderVikingGround"/>
         <Behavior value="SquadViperAbductTentacleMonster"/>
     </CEffectApplyBehavior>
+-->
     <CEffectApplyBehavior id="SquadViperAbductApplyTentacleBehavior">
         <EditorCategories value="Race:Zerg"/>
         <WhichUnit Effect="SquadViperAbductYoinkStartCreatePlaceholder"/>
         <Behavior value="SquadViperAbductYoinkTentacle"/>
     </CEffectApplyBehavior>
+    <!--
     <CEffectApplyBehavior id="SquadViperAbductYoinkApplyTentacleBehaviorVikingAir">
         <EditorCategories value="Race:Zerg"/>
         <WhichUnit Effect="SquadViperAbductYoinkStartCreatePlaceholderVikingAir"/>
@@ -7185,6 +7277,7 @@
         <WhichUnit Effect="SquadViperAbductYoinkStartCreatePlaceholderVikingGround"/>
         <Behavior value="SquadViperAbductYoinkTentacle"/>
     </CEffectApplyBehavior>
+-->
     <CEffectCancelOrder id="SquadViperAbductYoinkCancelOrders">
         <ValidatorArray value="YoinkCancelOrder"/>
         <EditorCategories value="Race:Zerg"/>
@@ -7192,6 +7285,7 @@
         <Count value="32"/>
         <Flags index="Uninterruptible" value="1"/>
     </CEffectCancelOrder>
+    <!--
     <CEffectCancelOrder id="SquadViperAbductYoinkCancelOrdersVikingAir">
         <EditorCategories value="Race:Zerg"/>
         <WhichUnit Effect="SquadViperAbductYoinkStartCreatePlaceholderVikingAir"/>
@@ -7204,6 +7298,7 @@
         <Count value="32"/>
         <Flags index="Uninterruptible" value="1"/>
     </CEffectCancelOrder>
+-->
     <CEffectCreatePersistent id="SquadViperAbductDelayPersistent">
         <EditorCategories value="Race:Zerg"/>
         <WhichLocation Value="TargetUnit"/>
@@ -7213,6 +7308,7 @@
         <PeriodicEffectArray value="SquadViperAbductYoinkLaunchTargetMoverSwitch"/>
         <PeriodicPeriodArray value="0.1"/>
     </CEffectCreatePersistent>
+    <!--
     <CEffectCreatePersistent id="SquadViperAbductYoinkDelayPersistentVikingAir">
         <EditorCategories value="Race:Zerg"/>
         <WhichLocation Value="TargetUnit"/>
@@ -7231,12 +7327,14 @@
         <PeriodicEffectArray value="SquadViperAbductYoinkLaunchTargetVikingGround"/>
         <PeriodicPeriodArray value="0.1"/>
     </CEffectCreatePersistent>
+-->
     <CEffectApplyBehavior id="SquadViperAbductYoinkEnemyStun">
         <ValidatorArray value="SquadEnemyTargetYoink"/>
         <EditorCategories value="Race:Zerg"/>
         <WhichUnit Effect="SquadViperAbductLaunchMissile"/>
         <Behavior value="SquadViperAbductEnemyStun"/>
     </CEffectApplyBehavior>
+    <!--
     <CEffectApplyBehavior id="SquadViperAbductYoinkEnemyStunVikingAir">
         <ValidatorArray value="SquadEnemyTargetYoink"/>
         <EditorCategories value="Race:Zerg"/>
@@ -7249,6 +7347,7 @@
         <WhichUnit Effect="SquadViperAbductYoinkLaunchMissileVikingGround"/>
         <Behavior value="SquadViperAbductEnemyStun"/>
     </CEffectApplyBehavior>
+-->
     <CEffectDamage id="SquadViperAbductYoinkFinishDummy">
         <Flags index="NoDamageTimerReset" value="1"/>
     </CEffectDamage>
@@ -7257,6 +7356,7 @@
         <ImpactLocation Effect="SquadViperAbductLaunchMissile" Value="TargetUnit"/>
         <Flags index="NoDamageTimerReset" value="1"/>
     </CEffectDamage>
+    <!--
     <CEffectDamage id="SquadViperAbductYoinkImpactDummyVikingAir">
         <EditorCategories value="Race:Zerg"/>
         <ImpactLocation Effect="SquadViperAbductYoinkLaunchMissileVikingAir" Value="TargetUnit"/>
@@ -7267,6 +7367,7 @@
         <ImpactLocation Effect="SquadViperAbductYoinkLaunchMissileVikingGround" Value="TargetUnit"/>
         <Flags index="NoDamageTimerReset" value="1"/>
     </CEffectDamage>
+-->
     <CEffectSet id="SquadViperAbductImpactSet">
         <ValidatorArray value="IsNotMothershipCorePurifyNexus"/>
         <EditorCategories value="Race:Zerg"/>
@@ -7275,6 +7376,7 @@
         <EffectArray value="SquadViperAbductRemoveTentacleBehavior"/>
         <EffectArray value="SquadViperAbductYoinkEnemyStun"/>
     </CEffectSet>
+    <!--
     <CEffectSet id="SquadViperAbductYoinkImpactSetVikingAir">
         <ValidatorArray value="IsNotPhaseShielded"/>
         <EditorCategories value="Race:Zerg"/>
@@ -7291,6 +7393,7 @@
         <EffectArray value="SquadViperAbductYoinkRemoveTentacleBehaviorVikingGround"/>
         <EffectArray value="SquadViperAbductYoinkEnemyStunVikingGround"/>
     </CEffectSet>
+
     <CEffectIssueOrder id="SquadViperAbductYoinkIssueAssaultModeOrder">
         <EditorCategories value="Race:Zerg"/>
         <Abil value="AssaultMode"/>
@@ -7301,9 +7404,10 @@
         <Abil value="FighterMode"/>
         <Target Effect="SquadViperAbductYoinkStartSwitch" Value="TargetUnit"/>
     </CEffectIssueOrder>
+-->
     <CEffectLaunchMissile id="SquadViperAbductLaunchMissile">
         <EditorCategories value="Race:Zerg"/>
-        <Marker Link="SquadViperAbductYoinkMarker"/>
+        <Marker Link="Abil/SquadViperAbduct"/>
         <LaunchLocation Effect="SquadViperAbductYoinkStartCreatePlaceholder"/>
         <ImpactLocation Effect="SquadViperAbductYoinkStartCreatePlaceholder"/>
         <ImpactEffect value="SquadViperAbductSet"/>
@@ -7311,38 +7415,41 @@
         <AmmoUnit value="SquadViperAbductMissile"/>
         <ValidatorArray index="0" removed="1"/>
     </CEffectLaunchMissile>
-    <CEffectLaunchMissile id="SquadViperAbductYoinkLaunchMissileVikingAir">
-        <EditorCategories value="Race:Zerg"/>
-        <Marker Link="SquadViperAbductYoinkMarker"/>
-        <LaunchLocation Effect="YoinkStartCreatePlaceholderVikingAir"/>
-        <ImpactLocation Effect="YoinkStartCreatePlaceholderVikingAir"/>
-        <ImpactEffect value="SquadViperAbductYoinkSetVikingAir"/>
-        <FinishEffect value="SquadViperAbductYoinkFinishDummy"/>
-        <AmmoUnit value="SquadViperAbductVikingAirMissile"/>
-    </CEffectLaunchMissile>
-    <CEffectLaunchMissile id="SquadViperAbductYoinkLaunchMissileVikingGround">
-        <EditorCategories value="Race:Zerg"/>
-        <Marker Link="SquadViperAbductYoinkMarker"/>
-        <LaunchLocation Effect="YoinkStartCreatePlaceholderVikingGround"/>
-        <ImpactLocation Effect="YoinkStartCreatePlaceholderVikingGround"/>
-        <ImpactEffect value="SquadViperAbductYoinkSetVikingGround"/>
-        <FinishEffect value="SquadViperAbductYoinkFinishDummy"/>
-        <AmmoUnit value="SquadViperAbductVikingGroundMissile"/>
-    </CEffectLaunchMissile>
-    <CEffectLaunchMissile id="SquadViperAbductLaunchTarget">
+    <!--    <CEffectLaunchMissile id="SquadViperAbductYoinkLaunchMissileVikingAir">-->
+    <!--        <EditorCategories value="Race:Zerg"/>-->
+    <!--        <Marker Link="Abil/SquadViperAbduct"/>-->
+    <!--        <LaunchLocation Effect="YoinkStartCreatePlaceholderVikingAir"/>-->
+    <!--        <ImpactLocation Effect="YoinkStartCreatePlaceholderVikingAir"/>-->
+    <!--        <ImpactEffect value="SquadViperAbductYoinkSetVikingAir"/>-->
+    <!--        <FinishEffect value="SquadViperAbductYoinkFinishDummy"/>-->
+    <!--        <AmmoUnit value="SquadViperAbductVikingAirMissile"/>-->
+    <!--    </CEffectLaunchMissile>-->
+    <!--    <CEffectLaunchMissile id="SquadViperAbductYoinkLaunchMissileVikingGround">-->
+    <!--        <EditorCategories value="Race:Zerg"/>-->
+    <!--        <Marker Link="Abil/SquadViperAbduct"/>-->
+    <!--        <LaunchLocation Effect="YoinkStartCreatePlaceholderVikingGround"/>-->
+    <!--        <ImpactLocation Effect="YoinkStartCreatePlaceholderVikingGround"/>-->
+    <!--        <ImpactEffect value="SquadViperAbductYoinkSetVikingGround"/>-->
+    <!--        <FinishEffect value="SquadViperAbductYoinkFinishDummy"/>-->
+    <!--        <AmmoUnit value="SquadViperAbductVikingGroundMissile"/>-->
+    <!--    </CEffectLaunchMissile>-->
+    <CEffectLaunchMissile id="SquadViperAbductYoinkLaunchTarget">
+        <!--
         <ValidatorArray index="0" value="SquadNotHiddenYoink"/>
         <ValidatorArray value="SquadCantYoinkYet"/>
+-->
         <EditorCategories value="Race:Zerg"/>
         <LaunchLocation Effect="SquadViperAbductYoinkStartCreatePlaceholder" Value="TargetUnit"/>
         <ImpactLocation Effect="SquadViperAbductYoinkStartSet"/>
         <ImpactEffect value="SquadViperAbductYoinkImpactDummy"/>
         <FinishEffect value="SquadViperAbductImpactSet"/>
         <Flags index="2D" value="1"/>
+        <AmmoUnit value=""/>
         <Movers Link="YoinkMover"/>
         <DeathType value="Unknown"/>
     </CEffectLaunchMissile>
     <CEffectLaunchMissile id="SquadViperAbductYoinkLaunchTargetAir">
-        <ValidatorArray value="SquadNotHiddenYoink"/>
+        <ValidatorArray index="0" value="SquadNotHiddenYoink"/>
         <ValidatorArray value="SquadCantYoinkYet"/>
         <EditorCategories value="Race:Zerg"/>
         <LaunchLocation Effect="SquadViperAbductYoinkStartCreatePlaceholder" Value="TargetUnit"/>
@@ -7352,9 +7459,10 @@
         <Flags index="2D" value="1"/>
         <Movers Link="YoinkMoverAir"/>
         <DeathType value="Unknown"/>
+        <AmmoUnit value=""/>
     </CEffectLaunchMissile>
     <CEffectLaunchMissile id="SquadViperAbductYoinkLaunchTargetGlide">
-        <ValidatorArray value="SquadNotHiddenYoink"/>
+        <ValidatorArray index="0" value="SquadNotHiddenYoink"/>
         <ValidatorArray value="SquadCantYoinkYet"/>
         <EditorCategories value="Race:Zerg"/>
         <LaunchLocation Effect="SquadViperAbductYoinkStartCreatePlaceholder" Value="TargetUnit"/>
@@ -7364,13 +7472,15 @@
         <Flags index="2D" value="1"/>
         <Movers Link="YoinkMoverGlide"/>
         <DeathType value="Unknown"/>
+        <AmmoUnit value=""/>
     </CEffectLaunchMissile>
     <CEffectSwitch id="SquadViperAbductYoinkLaunchTargetMoverSwitch">
         <EditorCategories value="Race:Zerg"/>
         <CaseArray Validator="TargetIsAir" Effect="SquadViperAbductYoinkLaunchTargetAir"/>
         <CaseArray Validator="IsColossus" Effect="SquadViperAbductYoinkLaunchTargetGlide"/>
-        <CaseDefault value="SquadViperAbductLaunchTarget"/>
+        <CaseDefault value="SquadViperAbductYoinkLaunchTarget"/>
     </CEffectSwitch>
+    <!--
     <CEffectLaunchMissile id="SquadViperAbductYoinkLaunchTargetVikingAir">
         <ValidatorArray value="SquadNotHiddenYoinkVikingAir"/>
         <ValidatorArray value="SquadCantYoinkYet"/>
@@ -7395,10 +7505,12 @@
         <Movers Link="YoinkMover"/>
         <DeathType value="Unknown"/>
     </CEffectLaunchMissile>
+-->
     <CEffectApplyBehavior id="SquadViperAbductYoinkMarkerBehavior">
         <WhichUnit Effect="SquadViperAbductYoinkStartCreatePlaceholder"/>
         <Behavior value="SquadViperAbductYoinkMarker"/>
     </CEffectApplyBehavior>
+    <!--
     <CEffectApplyBehavior id="SquadViperAbductYoinkMarkerBehaviorVikingAir">
         <WhichUnit Effect="SquadViperAbductYoinkStartCreatePlaceholderVikingAir"/>
         <Behavior value="SquadViperAbductYoinkMarker"/>
@@ -7407,26 +7519,28 @@
         <WhichUnit Effect="SquadViperAbductYoinkStartCreatePlaceholderVikingGround"/>
         <Behavior value="SquadViperAbductYoinkMarker"/>
     </CEffectApplyBehavior>
+-->
     <CEffectRemoveBehavior id="SquadViperAbductYoinkRemoveBehavior">
         <EditorCategories value="Race:Zerg"/>
         <WhichUnit Effect="SquadViperAbductYoinkStartCreatePlaceholder"/>
         <BehaviorLink value="SquadViperAbductYoink"/>
     </CEffectRemoveBehavior>
-    <CEffectRemoveBehavior id="SquadViperAbductYoinkRemoveBehaviorVikingAir">
-        <EditorCategories value="Race:Zerg"/>
-        <WhichUnit Effect="YoinkStartCreatePlaceholderVikingAir"/>
-        <BehaviorLink value="SquadViperAbductYoink"/>
-    </CEffectRemoveBehavior>
-    <CEffectRemoveBehavior id="SquadViperAbductYoinkRemoveBehaviorVikingGround">
-        <EditorCategories value="Race:Zerg"/>
-        <WhichUnit Effect="YoinkStartCreatePlaceholderVikingGround"/>
-        <BehaviorLink value="SquadViperAbductYoink"/>
-    </CEffectRemoveBehavior>
+    <!--    <CEffectRemoveBehavior id="SquadViperAbductYoinkRemoveBehaviorVikingAir">-->
+    <!--        <EditorCategories value="Race:Zerg"/>-->
+    <!--        <WhichUnit Effect="YoinkStartCreatePlaceholderVikingAir"/>-->
+    <!--        <BehaviorLink value="SquadViperAbductYoink"/>-->
+    <!--    </CEffectRemoveBehavior>-->
+    <!--    <CEffectRemoveBehavior id="SquadViperAbductYoinkRemoveBehaviorVikingGround">-->
+    <!--        <EditorCategories value="Race:Zerg"/>-->
+    <!--        <WhichUnit Effect="YoinkStartCreatePlaceholderVikingGround"/>-->
+    <!--        <BehaviorLink value="SquadViperAbductYoink"/>-->
+    <!--    </CEffectRemoveBehavior>-->
     <CEffectRemoveBehavior id="SquadViperAbductRemoveTentacleBehavior">
         <EditorCategories value="Race:Zerg"/>
         <WhichUnit Effect="SquadViperAbductYoinkStartCreatePlaceholder"/>
-        <BehaviorLink value="YoinkTentacle"/>
+        <BehaviorLink value="SquadViperAbductYoinkTentacle"/>
     </CEffectRemoveBehavior>
+    <!--
     <CEffectRemoveBehavior id="SquadViperAbductYoinkRemoveTentacleBehaviorVikingAir">
         <EditorCategories value="Race:Zerg"/>
         <WhichUnit Effect="SquadViperAbductYoinkStartCreatePlaceholderVikingAir"/>
@@ -7437,22 +7551,24 @@
         <WhichUnit Effect="SquadViperAbductYoinkStartCreatePlaceholderVikingGround"/>
         <BehaviorLink value="SquadViperAbductYoinkTentacle"/>
     </CEffectRemoveBehavior>
+-->
     <CEffectSet id="SquadViperAbductSet">
         <ValidatorArray value="NoBurrowChargingRevD"/>
         <ValidatorArray value="IsNotMothershipCorePurifyNexus"/>
         <ValidatorArray value="IsNotRecallingCombine"/>
         <EditorCategories value="Race:Zerg"/>
-        <Marker Link="SquadViperAbductYoinkMarker"/>
+        <Marker Link="Abil/SquadViperAbduct"/>
         <EffectArray value="SquadViperAbductApplyTentacleBehavior"/>
         <EffectArray value="SquadViperAbductYoinkCancelOrders"/>
-        <EffectArray value="SquadViperAbductInstantUnburrow"/>
+        <!--EffectArray value="SquadViperAbductInstantUnburrow"/-->
         <EffectArray value="SquadViperAbductApplyBehavior"/>
         <EffectArray value="SquadViperAbductDelayPersistent"/>
     </CEffectSet>
+    <!--
     <CEffectSet id="SquadViperAbductYoinkSetVikingAir">
         <ValidatorArray value="IsNotPhaseShielded"/>
         <EditorCategories value="Race:Zerg"/>
-        <Marker Link="SquadViperAbductYoinkMarker"/>
+        <Marker Link="Abil/SquadViperAbduct"/>
         <EffectArray value="SquadViperAbductRemoveRecallingBehaviorVikingAir"/>
         <EffectArray value="SquadViperAbductRemoveCoreRecallingBehaviorVikingAir"/>
         <EffectArray value="SquadViperAbductYoinkApplyTentacleBehaviorVikingAir"/>
@@ -7465,7 +7581,7 @@
     <CEffectSet id="SquadViperAbductYoinkSetVikingGround">
         <ValidatorArray value="IsNotPhaseShielded"/>
         <EditorCategories value="Race:Zerg"/>
-        <Marker Link="SquadViperAbductYoinkMarker"/>
+        <Marker Link="Abil/SquadViperAbduct"/>
         <EffectArray value="SquadViperAbductRemoveRecallingBehaviorVikingGround"/>
         <EffectArray value="SquadViperAbductRemoveCoreRecallingBehaviorVikingGround"/>
         <EffectArray value="SquadViperAbductYoinkApplyTentacleBehaviorVikingGround"/>
@@ -7475,7 +7591,9 @@
         <EffectArray value="SquadViperAbductYoinkApplyBehaviorVikingGround"/>
         <EffectArray value="SquadViperAbductYoinkDelayPersistentVikingGround"/>
     </CEffectSet>
+-->
     <CEffectCreateUnit id="SquadViperAbductYoinkStartCreatePlaceholder">
+        <!--
         <ValidatorArray value="NotWarpingIn"/>
         <ValidatorArray value="IsNotEggUnit"/>
         <ValidatorArray value="IsNotLarva"/>
@@ -7484,6 +7602,7 @@
         <ValidatorArray value="NoBurrowChargingRevD"/>
         <ValidatorArray value="IsNotMothershipCorePurifyNexus"/>
         <ValidatorArray value="IsNotRecallingCombine"/>
+-->
         <EditorCategories value="Race:Zerg"/>
         <WhichLocation Value="CasterUnitOrPoint"/>
         <CreateFlags index="Birth" value="0"/>
@@ -7500,6 +7619,7 @@
         <SpawnOffset value="0,0.1"/>
         <TypeFallbackUnit Value="Target"/>
     </CEffectCreateUnit>
+    <!--
     <CEffectCreateUnit id="SquadViperAbductYoinkStartCreatePlaceholderVikingAir">
         <ValidatorArray value="NotWarpingIn"/>
         <ValidatorArray value="SquadNoYoink"/>
@@ -7540,34 +7660,40 @@
         <SpawnRange value="2"/>
         <SpawnOffset value="0,0.1"/>
     </CEffectCreateUnit>
+-->
     <CEffectSet id="SquadViperAbductYoinkStartSet">
         <ValidatorArray value="IsNotMothershipCorePurifyNexus"/>
         <EditorCategories value="Race:Zerg"/>
-        <Marker Link="SquadViperAbductYoinkMarker"/>
+        <Marker Link="Abil/SquadViperAbduct"/>
         <EffectArray value="SquadViperAbductYoinkMarkerBehavior"/>
         <EffectArray value="SquadViperAbductLaunchMissile"/>
         <EffectArray value="SquadViperAbductMakePrecursorYoink"/>
     </CEffectSet>
+    <!--
     <CEffectSet id="SquadViperAbductYoinkStartSetVikingAir">
         <ValidatorArray value="IsNotPhaseShielded"/>
         <EditorCategories value="Race:Zerg"/>
-        <Marker Link="SquadViperAbductYoinkMarker"/>
+        <Marker Link="Abil/SquadViperAbduct"/>
         <EffectArray value="SquadViperAbductYoinkMarkerBehaviorVikingAir"/>
         <EffectArray value="SquadViperAbductYoinkLaunchMissileVikingAir"/>
         <EffectArray value="SquadViperAbductMakePrecursorYoink"/>
     </CEffectSet>
+
     <CEffectSet id="SquadViperAbductYoinkStartSetVikingGround">
         <ValidatorArray value="IsNotPhaseShielded"/>
         <EditorCategories value="Race:Zerg"/>
-        <Marker Link="SquadViperAbductYoinkMarker"/>
+        <Marker Link="Abil/SquadViperAbduct"/>
         <EffectArray value="SquadViperAbductYoinkMarkerBehaviorVikingGround"/>
         <EffectArray value="SquadViperAbductYoinkLaunchMissileVikingGround"/>
         <EffectArray value="SquadViperAbductMakePrecursorYoink"/>
     </CEffectSet>
+-->
     <CEffectSwitch id="SquadViperAbductYoinkStartSwitch">
         <EditorCategories value="Race:Zerg"/>
+        <!--
         <CaseArray Validator="IsVikingAir" Effect="SquadViperAbductYoinkStartCreatePlaceholderVikingAir"/>
         <CaseArray Validator="IsVikingGround" Effect="SquadViperAbductYoinkStartCreatePlaceholderVikingGround"/>
+-->
         <CaseDefault value="SquadViperAbductYoinkStartCreatePlaceholder"/>
     </CEffectSwitch>
     <CEffectApplyBehavior id="SquadViperAbductYoinkWaitAB">

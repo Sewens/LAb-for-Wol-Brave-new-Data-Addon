@@ -72,6 +72,30 @@
             <Button DefaultButtonFace="BuildSquadBunkerPsiDisrupter"/>
         </InfoArray>
     </CAbilSpecialize>
+    <CAbilEffectTarget id="SquadWraithDrag">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadDragLaunchMissile"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="30"/>
+        </Cost>
+        <TargetFilters value="Visible;Self,Neutral,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="9"/>
+        <PrepTime value="0"/>
+        <FinishTime value="1"/>
+        <CancelableArray index="Prep" value="1"/>
+        <CancelableArray index="Cast" value="1"/>
+        <CancelableArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <AINotifyEffect value="FaceEmbrace"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadDrag"/>
+        <AutoCastRange value="10"/>
+    </CAbilEffectTarget>
     <CAbilEffectTarget id="SquadGhostEMP">
         <Alignment value="Negative"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -4182,7 +4206,7 @@
     </CAbilAttack>
     <CAbilEffectTarget id="SquadViperAbduct">
         <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
-        <Effect index="0" value="SquadViperAbductYoinkStartSwitch"/>
+        <Effect index="0" value="SquadViperAbductYoinkStartCreatePlaceholder"/>
         <Flags index="AllowMovement" value="1"/>
         <Flags index="NoDeceleration" value="1"/>
         <Cost>
