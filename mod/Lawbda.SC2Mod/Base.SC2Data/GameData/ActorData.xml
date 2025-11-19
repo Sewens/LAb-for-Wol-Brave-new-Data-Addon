@@ -217,6 +217,45 @@
         <HeightOffset value="1.500000"/>
         <Text value="Button/Tooltip/##id##"/>
     </CActorText>
+    <CActorModel id="SquadTerrazineCloudModelAttachment" parent="ModelAddition">
+        <Inherits index="BaseModelScale" value="0"/>
+        <Inherits index="Scale" value="0"/>
+        <Inherits index="TintColor" value="0"/>
+        <On Terms="Behavior.SquadTerrazineCloud.On" Send="Create"/>
+        <On Terms="Behavior.SquadTerrazineCloud.Off" Send="AnimBracketStop BSD"/>
+        <HostSiteOps Ops="SOpAttachHead"/>
+        <Model value="BloodRingTerrazineBuffImpact"/>
+        <AutoScaleFactor value="1.000000"/>
+        <Scale value="0.500000"/>
+    </CActorModel>
+    <CActorSound id="SquadTerrazineCloudBurrowProtectorSound">
+        <On Terms="Effect.SquadTerrazineCloudPersistent.Start" Send="Create"/>
+        <On Terms="Effect.SquadTerrazineCloudPersistent.Stop" Send="Destroy"/>
+    </CActorSound>
+    <CActorModel id="SquadTerrazineCloud" parent="ModelAnimationStyleContinuous">
+        <On Terms="ActorCreation" Send="AnimBracketStart GL_BSD GLbirth GLstand GLdeath"/>
+        <On Terms="ActorCreation" Send="SetTintColor 240,109,243"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.250000"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="Effect.SquadTerrazineCloudPersistent.Start" Send="Create"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart $BSD"/>
+        <On Terms="Effect.SquadTerrazineCloudPersistent.Stop" Send="Destroy"/>
+        <Model value="KarassPsiStormModel"/>
+        <Scale value="1.250000"/>
+    </CActorModel>
+    <CActorSplat id="SquadTerrazineCloudCursorSplat" parent="ZergCursorSplat" abil="SquadTerrazineCloud">
+        <Model value="TerranAOECursorSplat"/>
+    </CActorSplat>
+    <CActorRange id="SquadTerrazineCloudRange" parent="RangeAbil" abil="SquadTerrazineCloud"/>
+    <CActorSound id="SquadTerrazineCloudSpellImpact" parent="SoundContinuous">
+        <On Terms="Effect.BlindingCloudCP.Start" Send="Create"/>
+        <On Terms="Effect.BlindingCloudCP.Stop" Send="Destroy"/>
+        <On Terms="Effect.SquadTerrazineCloudPersistent.Start" Send="Create"/>
+        <On Terms="Effect.DisruptionCloudCP.Start" Send="Create"/>
+        <On Terms="Effect.DisruptionCloudCP.Stop" Send="Destroy"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Sound value="Spell_DisablingCloud_Impact"/>
+    </CActorSound>
     <CActorModel id="SquadDragStunModel" parent="ModelAnimationStyleContinuous">
         <On Terms="ActorCreation" Send="AnimBracketStart GL_BSD GLbirth GLstand GLdeath"/>
         <On Terms="ActorCreation" Send="SetTintColor 255,0,0"/>

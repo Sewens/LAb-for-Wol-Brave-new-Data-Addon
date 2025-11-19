@@ -30,6 +30,33 @@
     <CEffectEnumArea default="1" id="SquadAbilSearchRadiusExt" parent="SquadAbilSearch">
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
+    <CEffectCreatePersistent id="SquadTerrazineCloudPersistent">
+        <EditorCategories value="Race:Zerg"/>
+        <InitialEffect value="SquadTerrazineCloudSearch"/>
+        <PeriodCount value="19"/>
+        <PeriodicEffectArray value="SquadTerrazineCloudSearch"/>
+        <PeriodicPeriodArray value="0.5"/>
+    </CEffectCreatePersistent>
+    <CEffectApplyBehavior id="SquadTerrazineCloudApplyBehavior">
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="SquadTerrazineCloud"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumTransport id="SquadTerrazineCloudIterateTransport">
+        <ValidatorArray value="IsBunker"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Effect value="SquadTerrazineCloudApplyBehavior"/>
+    </CEffectEnumTransport>
+    <CEffectEnumArea id="SquadTerrazineCloudSearch">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <SearchFilters value="Ground;Self,Enemy,Missile,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="3" Effect="SquadTerrazineCloudSet"/>
+    </CEffectEnumArea>
+    <CEffectSet id="SquadTerrazineCloudSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="SquadTerrazineCloudApplyBehavior"/>
+        <EffectArray value="SquadTerrazineCloudIterateTransport"/>
+    </CEffectSet>
     <CEffectApplyBehavior id="SquadDragApplyBehavior">
         <EditorCategories value="Race:Zerg"/>
         <Behavior value="SquadDrag"/>
@@ -2693,6 +2720,7 @@
         <EditorCategories value="Race:Terran"/>
         <AreaArray Radius="3.125" Effect="SquadFrostNovaSearchImpact"/>
         <RevealerParams DetectFilters="Visible;Player,Ally,Neutral,Missile,Stasis,Dead"/>
+        <SearchFilters value="-;Player,Ally,Neutral"/>
     </CEffectEnumArea>
     <CEffectSet id="SquadFrostNovaSearchImpact">
         <EditorCategories value="Race:Terran"/>
