@@ -4802,13 +4802,13 @@
         <On Terms="Behavior.SquadIrradiated.On" Send="Create"/>
         <On Terms="Behavior.SquadIrradiated.Off" Send="Destroy"/>
         <On Terms="ActorCreation" Send="$Stand PlayForever"/>
-        <On Terms="ActorCreation" Send="SetTintColor 0,255,0"/>
+        <On Terms="ActorCreation" Send="SetTintColor 255,255,128"/>
         <On Terms="ActorCreation" Send="SetOpacity 0.750000"/>
         <On Terms="ActorOrphan" Send="Destroy"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachCenter"/>
         <Model value="IrradiateEffect"/>
-        <Scale value="0.500000"/>
+        <Scale value="0.750000"/>
     </CActorModel>
     <CActorBeamSimple id="SquadNanoRepairBeamRev1" parent="BeamSimpleAnimationStyleContinuous">
         <Inherits index="Visibility" value="1"/>
@@ -11065,11 +11065,13 @@
         <Host Subject="_Selectable"/>
         <Sound value="Medivac_HealLoop"/>
     </CActorSound>
+    <!--
     <CActorModel id="SquadIrradiateShield" parent="ModelAnimationStyleContinuous">
-        <On Terms="UnitBirth.DefensiveMatrixGrid" Send="Create"/>
-        <On Terms="UnitDeath" Send="Destroy"/>
+        <On Terms="Behavior.SquadIrradiateSheild.On" Send="Create"/>
+        <On Terms="Behavior.SquadIrradiateSheild.Off" Send="Destroy"/>
         <Scale value="0.600000"/>
     </CActorModel>
+-->
     <CActorSound id="SquadIrradiateShieldBirth">
         <On Terms="Behavior.SquadIrradiateSheild.On" Send="Create"/>
         <On Terms="Behavior.SquadIrradiateSheild.Off" Send="Destroy"/>
@@ -11077,18 +11079,33 @@
     <CActorSound id="SquadIrradiateShieldDeath">
         <On Terms="Behavior.SquadIrradiateSheild.Off" Send="Create"/>
     </CActorSound>
-    <CActorSound id="SquadIrradiateSheildImpact" parent="SoundOneShot">
+    <CActorSound id="SquadIrradiateShieldImpact" parent="SoundOneShot">
         <On Terms="Effect.SquadIrradiateSheildSet.Start" Send="Create"/>
         <Sound value="Raven_DefensiveMatrixDeath"/>
     </CActorSound>
-    <CActorSound id="SquadIrradiateSheildLaunch" parent="SoundOneShot">
+    <CActorSound id="SquadIrradiateShieldLaunch" parent="SoundOneShot">
         <On Terms="Effect.SquadIrradiateSheildSet.Start" Send="Create"/>
         <Sound value="Raven_DefensiveMatrixBirth"/>
     </CActorSound>
     <CActorModel id="SquadIrradiateShieldModel">
-        <On Terms="ActorCreation; ValidateUnit IsHyperionVoidCoop" Send="SetScale 0.600000,0.750000,0.500000"/>
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <AutoScaleFactor value="1.500000"/>
         <On Terms="Behavior.SquadIrradiateSheild.On" Send="Create"/>
         <On Terms="Behavior.SquadIrradiateSheild.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation" Send="$Stand PlayForever"/>
+        <On Terms="ActorCreation" Send="SetTintColor 255,255,128"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.750000"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit IsColossus" Send="SetScale 1.000000,1.000000,3.000000"/>
+        <On Terms="ActorCreation; ValidateUnit IsVoidRay" Send="SetScale 1.200000,1.600000,1.200000"/>
+        <On Terms="ActorCreation; ValidateUnit IsBattlecruiser" Send="SetScale 1.200000,1.500000,1.000000"/>
+        <On Terms="ActorCreation; ValidateUnit IsThor" Send="SetScale 1.400000,1.200000,1.200000"/>
+        <On Terms="ActorCreation; ValidateUnit IsHerculesCombine" Send="SetScale 1.100000,1.700000,1.100000"/>
+        <On Terms="ActorCreation; ValidateUnit IsGoliath" Send="SetScale 1.300000"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="DefensiveMatrixModel"/>
     </CActorModel>
     <CActorModel id="SquadJumpShieldModel" parent="ModelAnimationStyleContinuous">
         <Inherits index="Visibility" value="1"/>
