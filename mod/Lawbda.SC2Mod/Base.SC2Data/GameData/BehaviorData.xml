@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorBuff id="SquadIrradiateSheildDummy">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Modification>
+            <VitalMaxArray index="Shields" value="200"/>
+        </Modification>
+    </CBehaviorBuff>
     <CBehaviorBuff id="SquadTerrazineCloud">
         <Alignment value="Positive"/>
         <InfoIcon value="Assets\Textures\btn-ability-zerg-blindingcloud.dds"/>
@@ -2908,6 +2915,17 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Period value="0.0625"/>
         <PeriodicEffect value="SquadVoidNanoRepairHealTarget"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadIrradiateSheild">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-defensivematrix.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <Duration value="20"/>
+        <DamageResponse ModifyFraction="0" ModifyLimit="200" ModifyMinimumDamage="1">
+            <Chance value="1"/>
+        </DamageResponse>
     </CBehaviorBuff>
     <CBehaviorBuff id="VoodooOrb">
         <InfoIcon value="Assets\Textures\btn-voodoo-orb.dds"/>

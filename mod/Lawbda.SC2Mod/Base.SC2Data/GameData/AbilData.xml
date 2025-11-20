@@ -4101,14 +4101,14 @@
         <AutoCastRange value="2"/>
         <AutoCastCountMin value="1"/>
     </CAbilMorph>
-    <CAbilEffectTarget id="SquadScienceVesselNanoRepair">
+    <CAbilEffectTarget id="SquadScienceVesselNanoCharge">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Effect index="0" value="SquadVoidNanoRepairCP"/>
         <Flags index="AllowMovement" value="1"/>
         <Flags index="AutoCast" value="1"/>
         <Flags index="AutoCastOn" value="1"/>
         <Flags index="NoDeceleration" value="1"/>
-        <TargetFilters value="Mechanical,Visible;Self,Neutral,Enemy,Missile,Dead,Hidden,Invulnerable"/>
+        <TargetFilters value="Visible,HasEnergy;Self,Enemy,Missile,Dead,Hidden,Invulnerable"/>
         <TargetSorts RequestCount="1">
             <SortArray value="TSAlliancePassive"/>
             <SortArray value="TSLifeFraction"/>
@@ -4122,8 +4122,23 @@
         <AutoCastValidatorArray value="NotWarpingIn"/>
         <AutoCastValidatorArray value="VoidScienceVesselNanoRepairNotCasting"/>
         <DefaultError value="RequiresHealTarget"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="Heal" Requirements="VoidScienceVesselNanoRepairEnabled"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadNanoEnergyCharge" Requirements="VoidScienceVesselNanoRepairEnabled"/>
         <AcquireAttackers value="1"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadScienceVesselIrradiateShield">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadIrradiateSheildSet"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+            <Cooldown TimeUse="20"/>
+        </Cost>
+        <TargetFilters value="Visible;Enemy,Structure,Missile,Uncommandable,Dead,Hidden"/>
+        <Range value="9"/>
+        <Arc value="360"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadIrradiateSheild">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
     </CAbilEffectTarget>
     <CAbilMorph id="SquadVikingGMode">
         <AbilSetId value="AssaultMode"/>

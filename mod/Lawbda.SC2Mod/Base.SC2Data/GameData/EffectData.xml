@@ -7203,7 +7203,7 @@
     </CEffectRemoveBehavior>
     <CEffectModifyUnit id="SquadVoidNanoRepairHealTarget">
         <EditorCategories value="Race:Terran"/>
-        <VitalArray index="Life">
+        <VitalArray index="Energy">
             <Change value="0.5625"/>
         </VitalArray>
     </CEffectModifyUnit>
@@ -7223,6 +7223,32 @@
         <EditorCategories value="Race:Terran"/>
         <BehaviorLink value="VoidScienceVesselNanoRepairTarget"/>
     </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="SquadIrradiateSheildApplyBehavior">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadIrradiateSheild"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadIrradiateSheildDummyApplyBehavior">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadIrradiateSheildDummy"/>
+    </CEffectApplyBehavior>
+    <CEffectModifyUnit id="SquadIrradiateSheildModifyUnit">
+        <EditorCategories value="Race:Terran"/>
+        <VitalArray index="Shields">
+            <ChangeFraction value="1"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectRemoveBehavior id="SquadIrradiateSheildDummyRemoveBehavior">
+        <EditorCategories value="Race:Terran"/>
+        <BehaviorLink value="SquadIrradiateSheildDummy"/>
+    </CEffectRemoveBehavior>
+    <CEffectSet id="SquadIrradiateSheildSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadIrradiateSheildDummyApplyBehavior"/>
+        <EffectArray value="SquadIrradiateSheildModifyUnit"/>
+        <EffectArray value="SquadIrradiateSheildApplyBehavior"/>
+        <EffectArray value="SquadIrradiateSheildDummyRemoveBehavior"/>
+        <EffectArray value="SquadIrradiateSet"/>
+    </CEffectSet>
     <CEffectApplyBehavior id="VoodooOrbApply">
         <EditorCategories value=""/>
         <Behavior value="VoodooOrb"/>

@@ -4808,6 +4808,7 @@
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachCenter"/>
         <Model value="IrradiateEffect"/>
+        <Scale value="0.500000"/>
     </CActorModel>
     <CActorBeamSimple id="SquadNanoRepairBeamRev1" parent="BeamSimpleAnimationStyleContinuous">
         <Inherits index="Visibility" value="1"/>
@@ -11064,6 +11065,31 @@
         <Host Subject="_Selectable"/>
         <Sound value="Medivac_HealLoop"/>
     </CActorSound>
+    <CActorModel id="SquadIrradiateShield" parent="ModelAnimationStyleContinuous">
+        <On Terms="UnitBirth.DefensiveMatrixGrid" Send="Create"/>
+        <On Terms="UnitDeath" Send="Destroy"/>
+        <Scale value="0.600000"/>
+    </CActorModel>
+    <CActorSound id="SquadIrradiateShieldBirth">
+        <On Terms="Behavior.SquadIrradiateSheild.On" Send="Create"/>
+        <On Terms="Behavior.SquadIrradiateSheild.Off" Send="Destroy"/>
+    </CActorSound>
+    <CActorSound id="SquadIrradiateShieldDeath">
+        <On Terms="Behavior.SquadIrradiateSheild.Off" Send="Create"/>
+    </CActorSound>
+    <CActorSound id="SquadIrradiateSheildImpact" parent="SoundOneShot">
+        <On Terms="Effect.SquadIrradiateSheildSet.Start" Send="Create"/>
+        <Sound value="Raven_DefensiveMatrixDeath"/>
+    </CActorSound>
+    <CActorSound id="SquadIrradiateSheildLaunch" parent="SoundOneShot">
+        <On Terms="Effect.SquadIrradiateSheildSet.Start" Send="Create"/>
+        <Sound value="Raven_DefensiveMatrixBirth"/>
+    </CActorSound>
+    <CActorModel id="SquadIrradiateShieldModel">
+        <On Terms="ActorCreation; ValidateUnit IsHyperionVoidCoop" Send="SetScale 0.600000,0.750000,0.500000"/>
+        <On Terms="Behavior.SquadIrradiateSheild.On" Send="Create"/>
+        <On Terms="Behavior.SquadIrradiateSheild.Off" Send="AnimBracketStop BSD"/>
+    </CActorModel>
     <CActorModel id="SquadJumpShieldModel" parent="ModelAnimationStyleContinuous">
         <Inherits index="Visibility" value="1"/>
         <On Terms="Behavior.SquadJumpShield.On" Send="Create"/>
