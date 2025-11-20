@@ -5060,7 +5060,7 @@
         <Radius value="0.750000"/>
         <Direction value="Forward"/>
     </CActorForceSphere>
-    <CActorUnit id="SquadAutoTurret" parent="GenericUnitStandard" unitName="SquadAutoTurret">
+    <CActorUnit id="SquadAutoTurret" parent="GenericUnitStandard" unitName="SquadRavenAutoTurret">
         <Aliases value="_CreepEngulfable"/>
         <Aliases value="_UnitMedium"/>
         <Macros value="PhysicsDeathsSwarmGround"/>
@@ -5114,6 +5114,7 @@
         <Wireframe>
             <Image value="Assets\Textures\Wireframe-Terran-AutoTurret.dds"/>
         </Wireframe>
+        <HighlightTooltip value="Unit/Name/SquadAutoTurret"/>
     </CActorUnit>
     <CActorAction id="SquadAutoTurretAttack" parent="GenericAttack" effectAttack="SquadAutoTurrectTwinAutocannonsDamage">
         <LaunchAssets Model="AutoTurretAttackLaunch" Sound="Raven_AutoTurretAttackLaunch"/>
@@ -5181,7 +5182,7 @@
         <EventDataSound Name="TerranExplosionLarge" Actor="UnitSound" Sound="Terran_ExplosionLarge"/>
         <PhysicsImpactDefault ActorModel="PhysicsImpactHarness" ActorSound="PhysicsImpactSound" OccuranceThrottlingDistance="0.500000,0.500000"/>
     </CActorModel>
-    <CActorAction id="SquadRavenReleaseAutoTurret" parent="GenericAttack" effectImpact="RemovePrecursor" effectLaunch="SquadRavenAutoTurretReleaseLM">
+    <CActorAction id="SquadRavenReleaseAutoTurret" parent="GenericAttack" effectImpact="RemovePrecursor" effectLaunch="SquadRavenAutoTurretReleaseLaunchMissile">
         <LaunchAssets Sound="Raven_AutoTurretReleaseLaunch"/>
         <ImpactSiteOps Ops="SOpAttachOrigin SOpShadow"/>
         <ImpactMap index="None" Sound="Raven_AutoTurretReleaseImpact"/>
@@ -5190,7 +5191,7 @@
     <CActorMissile id="SquadRavenReleaseAutoTurretMissile" parent="GenericAttackMissile" unitName="SquadRavenAutoTurretReleaseWeapon">
         <Model value="AutoTurretReleaseWeapon"/>
     </CActorMissile>
-    <CActorAction id="SquadRavenHunterSeekerAttack" parent="GenericAttack" effectImpact="SquadRavenSeekerDamage" effectLaunch="SquadRavenSeekerLaunchMissile">
+    <CActorAction id="SquadRavenHunterSeekerAttack" parent="GenericAttack" effectImpact="SquadRavenSeekerMissileDamage" effectLaunch="SquadRavenSeekerMissileLaunchMissile">
         <ImpactSiteOps Ops="SOpTargetPoint SOp2DRotation"/>
         <ImpactAttachQuery Methods="Origin"/>
         <ImpactMap index="None" Model="Invisible" Sound="Raven_HunterSeekerAttackImpact"/>
@@ -5199,7 +5200,7 @@
         <ShieldFlashType value="Full"/>
     </CActorAction>
     <CActorModel id="SquadRavenHunterSeekerAttackImpactModel" parent="ModelAnimationStyleOneShot">
-        <On Terms="Effect.SquadRavenSeekerDamage.Start" Send="Create"/>
+        <On Terms="Effect.SquadRavenSeekerMissileDamage.Start" Send="Create"/>
         <Model value="HunterSeekerAttackImpact"/>
     </CActorModel>
     <CActorMissile id="SquadRavenHunterSeekerAttackMissile" parent="GenericAttackMissile" unitName="SquadRavenHunterSeekerWeapon">
@@ -5317,13 +5318,13 @@
     </CActorUnit>
     <CActorSimple id="SquadRavenSeekerMissileTint">
         <Aliases value="_AngryTinter"/>
-        <Remove Terms="Effect.SquadRavenSeekerLaunchMissile.Start; At Target" Send="Create"/>
+        <Remove Terms="Effect.SquadRavenSeekerMissileLaunchMissile.Start; At Target" Send="Create"/>
         <Remove Terms="ActorCreation" Send="TimerSet 0.500000 SeekerTintInitialTimer"/>
         <Remove Terms="TimerExpired; TimerName SeekerTintInitialTimer" Target="_Unit" Send="SetTintColor 255,50,50 0.500000 OneShot SeekerTarget"/>
         <Remove Terms="TimerExpired; TimerName SeekerTintInitialTimer" Send="TimerSet 2.000000 SeekerTintDuration"/>
         <Remove Terms="TimerExpired; TimerName SeekerTintDuration" Target="_Unit" Send="ClearTintColor 0.500000 SeekerTarget"/>
         <Remove Terms="TimerExpired; TimerName SeekerTintDuration" Send="Destroy"/>
-        <On Terms="Effect.SquadRavenSeekerLaunchMissile.Start; At Target" Send="Create"/>
+        <On Terms="Effect.SquadRavenSeekerMissileLaunchMissile.Start; At Target" Send="Create"/>
         <On Terms="ActorCreation" Send="TimerSet 0.500000 SeekerTintInitialTimer"/>
         <On Terms="TimerExpired; TimerName SeekerTintInitialTimer" Target="_Unit" Send="SetTintColor 255,50,50 0.500000 OneShot SeekerTarget"/>
         <On Terms="TimerExpired; TimerName SeekerTintInitialTimer" Send="TimerSet 2.000000 SeekerTintDuration"/>

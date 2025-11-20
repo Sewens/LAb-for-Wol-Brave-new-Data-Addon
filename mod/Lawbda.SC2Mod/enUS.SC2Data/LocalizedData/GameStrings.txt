@@ -908,7 +908,6 @@ Button/Tooltip/SquadAddonTacticalJump=After <d time="6"/>, warps to the target l
 Button/Tooltip/SquadAfterburner=<n/>Increases the Scout's movement speed by 100% for <d time="10"/>.
 Button/Tooltip/SquadArmory=Contains weapon and armor upgrades for Factory and Starport units.
 Button/Tooltip/SquadAttackRedirect=Targets and attacks the target unit until it is destroyed or moves out of range.
-Button/Tooltip/SquadAutoTurret=Automated defensive turret. Times out after <d ref="Behavior,AutoTurretTimedLife,Duration"/> seconds.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/SquadBanshee=Tactical-strike aircraft.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/SquadBansheeConsume=Latches onto the target structure, dealing <d ref="-1 * (Effect,ViperConsumeStructureModifyTarget,VitalArray[0].Change * Effect,ViperConsumeStructureCreatePersistent,PeriodCount)"/> damage and restoring <d ref="(Effect,ViperConsumeStructureModifyCaster,VitalArray[2].Change / Behavior,TimeScaleConversionBehavior,Duration)" precision="1"/> energy to the Viper every second.<n/><n/><c val="#ColorAttackInfo">Cannot target allied or enemy structures.</c>
 Button/Tooltip/SquadBansheeResearchCloakingField=Enables <c val="ffff8a">Banshees</c> to use the Cloak ability. Cloak renders the <c val="ffff8a">Banshee</c> invisible to enemies unless the unit is revealed by detectors or effects.
@@ -1047,6 +1046,7 @@ Button/Tooltip/SquadPsiDisruption=Slows the attack and movement speeds of all ne
 Button/Tooltip/SquadPylon=Provides supply.<n/>Supply allows you to warp in more units.<n/>Creates power for nearby structures.
 Button/Tooltip/SquadRaise=Raises the structure, preventing ground units from moving across it.
 Button/Tooltip/SquadRaven=Aerial support unit. Can use Auto-Turret, Point Defense Drone and Seeker Missile.<n/><n/><c val="FFE303">Detector</c>
+Button/Tooltip/SquadRavenAutoTurret=Automated defensive turret. Times out after <d ref="Behavior,AutoTurretTimedLife,Duration"/> seconds.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/SquadRavenBuildAutoTurret=Automated defensive turret. Times out after <d ref="Behavior,AutoTurretTimedLife,Duration"/> seconds.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/SquadRavenBuildPointDefenseDrone=Uses a laser to shoot down enemy missiles.  <n/>Cannot target special attacks. <n/>Times out after <d ref="Behavior,PointDefenseDroneTimedLife,Duration"/> seconds.<n/><n/><c val="f078ff">Each shot consumes 10 energy.</c>
 Button/Tooltip/SquadRavenDetector=This unit can detect cloaked, burrowed, and hallucinated units.
@@ -1942,18 +1942,18 @@ Effect/Name/SquadPredatorUnitTrackerRemove=Squad Predator Unit Tracker Remove
 Effect/Name/SquadProjectileAcceleratorsApply=Squad Projectile Accelerators Apply
 Effect/Name/SquadPsiDisruptionApply=Squad Psi Disruption Apply
 Effect/Name/SquadPsiDisruptionSearch=Squad Psi Disruption Search
-Effect/Name/SquadRavenAutoTurretRelease=Squad Raven Auto Turret Release
-Effect/Name/SquadRavenAutoTurretReleaseLM=Squad Raven Auto Turret Release LM
-Effect/Name/SquadRavenAutoTurretReleaseLaunch=Squad Raven Auto Turret Release Launch
+Effect/Name/SquadRavenAutoTurretReleaseCreateUnit=Squad Raven Auto Turret Release Create Unit
+Effect/Name/SquadRavenAutoTurretReleaseLaunchMissile=Squad Raven Auto Turret Release Launch Missile
+Effect/Name/SquadRavenAutoTurretReleaseSet=Squad Raven Auto Turret Release Set
 Effect/Name/SquadRavenAutoTurretSet=Squad Raven Auto Turret Set
-Effect/Name/SquadRavenAutoturretTimedLife=Squad Raven Auto turret Timed Life
+Effect/Name/SquadRavenAutoTurretTimedLife=Squad Raven Auto Turret Timed Life
 Effect/Name/SquadRavenPointDefenseDroneReleaseCreateUnit=Squad Raven Point Defense Drone Release Create Unit
 Effect/Name/SquadRavenPointDefenseDroneReleaseLaunchMissile=Squad Raven Point Defense Drone Release Launch Missile
 Effect/Name/SquadRavenPointDefenseDroneTimedLife=Squad Raven Point Defense Drone Timed Life
-Effect/Name/SquadRavenSeekerDamage=Squad Raven Seeker Damage
-Effect/Name/SquadRavenSeekerLaunchMissile=Squad Raven Seeker Launch Missile
 Effect/Name/SquadRavenSeekerMissileApplyBehavior=Squad Raven Seeker Missile Apply Behavior
+Effect/Name/SquadRavenSeekerMissileDamage=Squad Raven Seeker Missile Damage
 Effect/Name/SquadRavenSeekerMissileLaunchCP=Squad Raven Seeker Missile Launch CP
+Effect/Name/SquadRavenSeekerMissileLaunchMissile=Squad Raven Seeker Missile Launch Missile
 Effect/Name/SquadRavenSeekerMissileLaunchSet=Squad Raven Seeker Missile Launch Set
 Effect/Name/SquadRavenSeekerMissileLaunchTintCP=Squad Raven Seeker Missile Launch Tint CP
 Effect/Name/SquadRavenSeekerMissileSuicide=Squad Raven Seeker Missile Suicide
@@ -2361,7 +2361,6 @@ Unit/Name/SmallScrapSalvagex11=Small Scrap Salvagex11
 Unit/Name/SpiderMine=Squad Spider Mine Burrowed
 Unit/Name/SquadArmory=Squad Armory
 Unit/Name/SquadArtilleryMengsk=Squad Artillery Mengsk
-Unit/Name/SquadAutoTurret=Squad Auto Turret
 Unit/Name/SquadAutomatedRefinery=Automated Refinery
 Unit/Name/SquadBanshee=Squad Banshee
 Unit/Name/SquadBansheeBacklashRockets=Squad Banshee Backlash Rockets
@@ -2415,9 +2414,9 @@ Unit/Name/SquadHercules=Squad Hercules
 Unit/Name/SquadHiveMindEmulator=Squad Hive Mind Emulator
 Unit/Name/SquadHurricaneMissileLeft=Squad Hurricane Missile Left
 Unit/Name/SquadHurricaneMissileRight=Squad Hurricane Missile Right
-Unit/Name/SquadHyperionAirLMWeapon=Squad Hyperion Air LMWeapon
+Unit/Name/SquadHyperionAirLMWeapon=Squad Hyperion Air LM Weapon
 Unit/Name/SquadHyperionGroundDirectLMWeapon=Squad Hyperion Ground Direct LM Weapon
-Unit/Name/SquadHyperionGroundLMWeapon=Squad Hyperion Ground LMWeapon
+Unit/Name/SquadHyperionGroundLMWeapon=Squad Hyperion Ground LM Weapon
 Unit/Name/SquadMarauder=Squad Marauder
 Unit/Name/SquadMarauderPunisherGrenadesLMWeapon=Squad Marauder Punisher Grenades LM Weapon
 Unit/Name/SquadMarine=Squad Marine
@@ -2444,6 +2443,7 @@ Unit/Name/SquadPredator=Squad Predator
 Unit/Name/SquadPsiDisrupter=Squad Psi Disrupter
 Unit/Name/SquadPylon=Squad Pylon
 Unit/Name/SquadRaven=Squad Raven
+Unit/Name/SquadRavenAutoTurret=Squad Raven Auto Turret
 Unit/Name/SquadRavenAutoTurretReleaseWeapon=Squad Raven Auto Turret Release Weapon
 Unit/Name/SquadRavenHunterSeekerWeapon=Squad Raven Hunter Seeker Weapon
 Unit/Name/SquadReactor=Squad Reactor
