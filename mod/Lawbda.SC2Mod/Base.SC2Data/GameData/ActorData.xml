@@ -4920,7 +4920,7 @@
         <Model value="AttackDummyCursorModel"/>
     </CActorModel>
     <CActorModel id="SquadPointDefenseBeamImpact" parent="ModelAnimationStyleContinuous">
-        <On Terms="Effect.SqudPointDefenseLaserDamage.Start; At Target" Send="Create"/>
+        <On Terms="Effect.SquadPointDefenseLaserDamage.Start; At Target" Send="Create"/>
         <On Terms="ActorCreation" Send="TimerSet 0.125000 Die"/>
         <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
         <On Terms="ActorCreation" Send="$Death"/>
@@ -4955,7 +4955,7 @@
         </Wireframe>
     </CActorUnit>
     <CActorBeamSimple id="SquadPointDefenseDroneAttackBeam" parent="BeamSimpleAnimationStyleContinuous">
-        <On Terms="Effect.SqudPointDefenseLaserDamage.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.SquadPointDefenseLaserDamage.Start; At Caster" Send="Create"/>
         <On Terms="ActorCreation" Send="TimerSet 0.125000 Die"/>
         <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
         <Model value="PointDefenseDroneAttackBeam"/>
@@ -4965,12 +4965,12 @@
         <HostImpactSiteOps Ops="SOpAttachCenter"/>
     </CActorBeamSimple>
     <CActorSound id="SquadPointDefenseDroneAttackImpactSound" parent="SoundOneShot">
-        <On Terms="Effect.SqudPointDefenseLaserDamage.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.SquadPointDefenseLaserDamage.Start; At Caster" Send="Create"/>
         <Host Subject="::Creator"/>
         <Sound value="Raven_PointDefenseDroneAttackImpact"/>
     </CActorSound>
     <CActorSound id="SquadPointDefenseDroneAttackLaunchSound" parent="SoundOneShot">
-        <On Terms="Effect.SqudPointDefenseLaserDamage.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.SquadPointDefenseLaserDamage.Start; At Caster" Send="Create"/>
         <Host Subject="PointDefenseDrone"/>
         <Sound value="Raven_PointDefenseDroneAttackLaunch"/>
     </CActorSound>

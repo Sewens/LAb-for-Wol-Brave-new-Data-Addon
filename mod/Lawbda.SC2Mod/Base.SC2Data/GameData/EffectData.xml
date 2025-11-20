@@ -4178,12 +4178,12 @@
         <DrainVitalCostFactor value="0.33"/>
         <RechargeVitalRate value="9"/>
     </CEffectCreateHealer>
-    <CEffectApplyBehavior id="SquadPointDefenseLaser">
+    <CEffectApplyBehavior id="SquadPointDefenseLaserApplyBehavior">
         <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="Caster"/>
         <Behavior value="SquadPointDefenseReady"/>
     </CEffectApplyBehavior>
-    <CEffectModifyUnit id="SqudPointDefenseLaserDamage">
+    <CEffectModifyUnit id="SquadPointDefenseLaserDamage">
         <EditorCategories value="Race:Terran"/>
         <Marker Link="Weapon/PointDefenseLaser">
             <MatchFlags index="Link" value="1"/>
@@ -4191,14 +4191,14 @@
         <ModifyFlags index="Hide" value="1"/>
         <ModifyFlags index="NullifyMissile" value="1"/>
     </CEffectModifyUnit>
-    <CEffectDamage id="SquadPointDefenseLaserDummy">
+    <CEffectDamage id="SquadPointDefenseLaserVisibilityDummy">
         <EditorCategories value="Race:Terran"/>
         <ResponseFlags index="Acquire" value="1"/>
         <ResponseFlags index="Flee" value="1"/>
         <Visibility value="Visible"/>
         <Flags index="Notification" value="1"/>
     </CEffectDamage>
-    <CEffectModifyUnit id="SquadPointDefenseLaserEnergy">
+    <CEffectModifyUnit id="SquadPointDefenseLaserRemoveEnergy">
         <ValidatorArray value="PointDefenseLaserEnergyTargetFilters"/>
         <EditorCategories value="Race:Terran"/>
         <ImpactUnit Value="Caster"/>
@@ -4211,16 +4211,16 @@
         <ValidatorArray value="CasterHas10Energy"/>
         <EditorCategories value=""/>
         <EffectArray value="SquadPointDefenseLaserSearch"/>
-        <EffectArray value="SquadPointDefenseLaser"/>
+        <EffectArray value="SquadPointDefenseLaserApplyBehavior"/>
     </CEffectSet>
     <CEffectSet id="SquadPointDefenseLaserSet">
         <ValidatorArray value="PointDefenseDroneUnitFilter"/>
         <ValidatorArray value="CasterHas10Energy"/>
         <EditorCategories value="Race:Terran"/>
-        <EffectArray value="SqudPointDefenseLaserDamage"/>
-        <EffectArray value="SquadPointDefenseLaserDummy"/>
-        <EffectArray value="SquadPointDefenseLaser"/>
-        <EffectArray value="SquadPointDefenseLaserEnergy"/>
+        <EffectArray value="SquadPointDefenseLaserDamage"/>
+        <EffectArray value="SquadPointDefenseLaserVisibilityDummy"/>
+        <EffectArray value="SquadPointDefenseLaserApplyBehavior"/>
+        <EffectArray value="SquadPointDefenseLaserRemoveEnergy"/>
     </CEffectSet>
     <CEffectEnumArea id="SquadPointDefenseLaserSearch">
         <ValidatorArray value="PointDefenseSearchTargetFilters"/>
