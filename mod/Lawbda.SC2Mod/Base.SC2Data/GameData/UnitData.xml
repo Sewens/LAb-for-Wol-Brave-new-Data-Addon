@@ -2041,9 +2041,9 @@
             <LayoutButtons Face="SquadSiegeTankUnsiege" Type="AbilCmd" AbilCmd="SquadSiegeTankUnsiege,Execute" Row="2" Column="0"/>
             <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="4"/>
             <LayoutButtons Face="SquadSiegeTankMortarLauncher" Type="AbilCmd" AbilCmd="SquadSiegeTankMortarLauncherSwitch,On" Row="1" Column="0"/>
+            <LayoutButtons Face="SquadSiegeTankMortarLauncherPassive" Type="Passive" Requirements="HaveSiegeTankSiegeWeaponUpgrade" Row="1" Column="0"/>
             <LayoutButtons Face="SquadSiegeTankSpiltShell" Type="AbilCmd" AbilCmd="SquadSiegeTankMortarLauncherSwitch,Off" Row="1" Column="1"/>
-            <LayoutButtons Face="SquadSiegeTankMortarLauncherPassive" Type="Passive" Row="1" Column="0"/>
-            <LayoutButtons Face="SquadSiegeTankSpiltShellPassive" Type="Passive" Row="1" Column="1"/>
+            <LayoutButtons Face="SquadSiegeTankSpiltShellPassive" Type="Passive" Requirements="HaveSiegeTankSiegeWeaponUpgrade" Row="1" Column="1"/>
         </CardLayouts>
         <Radius value="0.875"/>
         <SeparationRadius value="1"/>
@@ -2114,6 +2114,7 @@
         <AbilArray Link="DisbandSquad"/>
         <AbilArray Link="SquadSiegeTankJumpJetRedeploy"/>
         <WeaponArray Link="SquadSiegeTankChargingCannons" Turret="SquadSiegeTankTurret"/>
+        <WeaponArray Link="SquadSiegeTank90mmCannons" Turret="SquadSiegeTankTurret"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
@@ -5607,7 +5608,7 @@
         <EditorCategories value="ObjectType:Hero,ObjectFamily:Campaign"/>
         <TacticalAI value="Marine"/>
         <LeaderAlias value="WarPig"/>
-        <HotkeyAlias value="WarPig"/>
+        <HotkeyAlias value=""/>
         <SelectAlias value="Marine"/>
         <SubgroupAlias value="WarPig"/>
         <GlossaryPriority value="31"/>
