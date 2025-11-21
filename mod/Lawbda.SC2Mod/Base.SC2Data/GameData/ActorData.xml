@@ -1035,11 +1035,11 @@
         <HostSiteOps Ops="SOpAttachRandomDamage"/>
         <Model value="ImpactModelFlames"/>
     </CActorModel>
-    <CActorUnit id="MutatorStormCloud" parent="GenericUnitStandard" unitName="MutatorStormCloud">
+    <CActorUnit id="MutatorStormCloud" parent="GenericUnitStandard" unitName="SquadMutatorStormCloud">
         <Aliases value="_NoGlaze"/>
         <FogVisibility value="Visible"/>
         <On Terms="ActorCreation" Send="Create MutatorStormCloudAddition"/>
-        <On Terms="ActorCreation" Send="Create MutatorStormCloud_ActorSoundLoop"/>
+        <On Terms="ActorCreation" Send="Create MutatorStormCloudActorSoundLoop"/>
         <Model value="Invisible"/>
         <EditorModel value="WeatherHelper"/>
         <MinimapIcon value="Assets\Textures\clouds_hurricane.dds"/>
@@ -1048,18 +1048,18 @@
         <UnitFlags index="SuppressDefaultStatusBar" value="1"/>
     </CActorUnit>
     <CActorSplat id="MutatorStormCloudBlizzardSplat">
+        <FogVisibility value="Visible"/>
         <On Terms="ActorCreation" Send="$Stand PlayForever,NonLooping"/>
         <On Terms="ActorCreation" Send="SetTintColor 255,0,0"/>
         <On Terms="ActorOrphan" Send="Destroy"/>
-        <HoldTime value="-1.000000"/>
-        <FadeOut value="0.000000"/>
         <HostSiteOps Ops="SOpShadow"/>
-        <FogVisibility value="Visible"/>
+        <FadeOut value="0.000000"/>
+        <HoldTime value="-1.000000"/>
     </CActorSplat>
     <CActorModel id="MutatorStormCloudAddition" parent="ModelAnimationStyleContinuous">
-        <ModelFlags index="OutlineOccluder" value="1"/>
         <On Terms="Behavior.MutatorStormCloudBlizzardDisable.On" Send="ModelSwap MutatorStormCloudAdditionDisabled"/>
         <On Terms="Behavior.MutatorStormCloudBlizzardDisable.Off" Send="ModelSwap MutatorStormCloudAddition"/>
+        <ModelFlags index="OutlineOccluder" value="1"/>
     </CActorModel>
     <CActorModelMaterial id="MutatorStormCloudGlazeFrozen" parent="GlazeParent">
         <On Terms="Behavior.MutatorStormCloudSlow.On" Send="Create"/>
@@ -1075,21 +1075,18 @@
         <EditorCategories value=""/>
         <LocalOffset value="1.000000,-4.000000,0.000000"/>
     </CActorSiteOpLocalOffset>
-    <CActorSound id="MutatorStormCloud_ActorSoundLoop" parent="SoundContinuous">
+    <CActorSound id="MutatorStormCloudActorSoundLoop" parent="SoundContinuous">
         <Host Subject="_Unit"/>
-        <Sound value="Mutator_StormCloud_WindGusts_Loop"/>
-        <Layers Sound="Mutator_StormCloud_WindSteady_Loop"/>
-        <Layers/>
-        <Layers/>
-        <Layers/>
+        <Sound value="MutatorStormCloudWindGustsLoop"/>
+        <Layers Sound="MutatorStormCloudWindSteadyLoop"/>
     </CActorSound>
-    <CActorSound id="MutatorStormCloudGlazeFrozen_AS" parent="SoundOneShot">
+    <CActorSound id="MutatorStormCloudGlazeFrozenAS" parent="SoundOneShot">
         <EditorCategories value=""/>
         <On Terms="Behavior.MutatorStormCloudSlow.On" Send="Create"/>
         <Sound value="StormCloudGlazeFrozen_Ice"/>
         <Layers Sound="StormCloudGlazeFrozen_WindGust"/>
     </CActorSound>
-    <CActorSound id="MutatorStormCloudGlazeFrozen_Off_AS" parent="SoundOneShot">
+    <CActorSound id="MutatorStormCloudGlazeFrozenOffAS" parent="SoundOneShot">
         <EditorCategories value=""/>
         <On Terms="Behavior.MutatorStormCloudSlow.Off" Send="Create"/>
         <Sound value="StormCloudGlazeFrozen_Ice"/>
@@ -3212,25 +3209,26 @@
         <ImpactModel value="GenericAttackImpactModel1"/>
         <ShieldFlashType value="Header"/>
     </CActorAction>
+    <!--
     <CActorSplat id="SquadAddonTacticalJumpCursorSplat" parent="TerranCursorSplat" abil="SquadAddonTacticalJump">
         <Model value="TechReactorPlacement"/>
     </CActorSplat>
-    <!--
     <CActorModel id="SquadAddonTacticalJumpCursorModel" parent="CursorModel" abil="SquadAddonTacticalJump">
         <On Terms="ActorCreation" Send="SetFacing 135.000000"/>
         <HostSiteOps Ops="SOpBasicScopeFollow SOpMoveUpBy2 TechReactorPlacement"/>
         <Model value="TechReactorPlacement"/>
     </CActorModel>
-    -->
-    <CActorSound id="SquadAddonTacticalJumpSound" parent="SoundOneShot">
-        <On Terms="Behavior.SquadAddonTacticalJumpTeleportIn.On" Send="Create"/>
-        <Sound value="Battlecruiser_HyperJumpIn"/>
-    </CActorSound>
+
     <CActorSound id="SquadAddonTacticalJumpSound2" parent="SoundOneShot">
         <On Terms="Behavior.SquadAddonTacticalJumpTeleportOut.On" Send="Create"/>
         <Host Subject="_Unit"/>
         <HostSiteOps Ops="SOpAttachOriginStationary"/>
         <Sound value="Battlecruiser_HyperJumpOut"/>
+    </CActorSound>
+    -->
+    <CActorSound id="SquadAddonTacticalJumpSound" parent="SoundOneShot">
+        <On Terms="Behavior.SquadAddonTacticalJumpTeleportIn.On" Send="Create"/>
+        <Sound value="Battlecruiser_HyperJumpIn"/>
     </CActorSound>
     <CActorSound id="SquadAddonTacticalJumpCursorSound" parent="SoundOneShot">
         <On Terms="Abil.SquadAddonTacticalJump.TargetApproachStart" Send="Create"/>
@@ -9365,7 +9363,7 @@
             <Image value="Assets\Textures\Wireframe-Terran-predator.dds"/>
         </Wireframe>
     </CActorUnit>
-    <CActorAction id="SquadPredatorAttack" parent="GenericAttack" effectAttack="SquadPredatorTitaniumClaws">
+    <CActorAction id="SquadPredatorAttack" parent="GenericAttack" effectAttack="SquadPredatorTitaniumClawsDamage">
         <LaunchAttachQuery Methods="Weapon"/>
         <LaunchAssets Sound="Predator_AttackLaunch"/>
         <LaunchSound value="GenericAttackSound"/>

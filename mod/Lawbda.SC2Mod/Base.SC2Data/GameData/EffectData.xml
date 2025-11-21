@@ -30,6 +30,45 @@
     <CEffectEnumArea default="1" id="SquadAbilSearchRadiusExt" parent="SquadAbilSearch">
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
+    <CEffectRemoveBehavior id="SquadCCAdvanceBuildRemove">
+        <ValidatorArray index="0" removed="1"/>
+        <EditorCategories value="Race:Terran"/>
+        <BehaviorLink value="SquadCCAdvanceBuild"/>
+    </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="SquadCCAdvanceBuildApply">
+        <ValidatorArray index="0" removed="1"/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadCCAdvanceBuild"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="SquadCCPowerUserApplySet">
+        <EditorCategories value=""/>
+        <EffectArray value="PoweredByCommandCenterApply"/>
+        <EffectArray value="SquadCCAdvanceBuildApply"/>
+    </CEffectSet>
+    <CEffectSet id="SquadCCPowerUserRemoveSet">
+        <EditorCategories value=""/>
+        <EffectArray value="PoweredByCommandCenterRemove"/>
+        <EffectArray value="SquadCCAdvanceBuildRemove"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="SquadBunkerEnableWeaponsApply">
+        <ValidatorArray index="0" removed="1"/>
+        <EditorCategories value=""/>
+        <Behavior value="SquadBunkerEnableWeapons"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="SquadBunkerEnableWeaponsRemove">
+        <EditorCategories value="Race:Terran"/>
+        <BehaviorLink value="SquadBunkerEnableWeapons"/>
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="SquadHellionProjectileAcceleratorsRemove">
+        <EditorCategories value=""/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="SquadHellionProjectileAccelerators"/>
+    </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="SquadHellionProjectileAcceleratorsApply">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="SquadHellionProjectileAccelerators"/>
+    </CEffectApplyBehavior>
     <CEffectCreatePersistent id="SquadTerrazineCloudPersistent">
         <EditorCategories value="Race:Zerg"/>
         <InitialEffect value="SquadTerrazineCloudSearch"/>
@@ -2758,13 +2797,13 @@
         <EditorCategories value="Race:Terran"/>
         <EffectArray value="VanillaScannerSweep"/>
     </CEffectSet>
-    <CEffectRemoveBehavior id="ElectricFieldAcceleratorRemove">
+    <CEffectRemoveBehavior id="SquadBunkerElectricFieldAcceleratorRemove">
         <EditorCategories value="Race:Terran"/>
-        <BehaviorLink value="ElectricFieldAccelerator"/>
+        <BehaviorLink value="SquadBunkerElectricFieldAccelerator"/>
     </CEffectRemoveBehavior>
-    <CEffectApplyBehavior id="ElectricFieldAcceleratorApply">
+    <CEffectApplyBehavior id="SquadBunkerElectricFieldAcceleratorApply">
         <EditorCategories value="Race:Terran"/>
-        <Behavior value="ElectricFieldAccelerator"/>
+        <Behavior value="SquadBunkerElectricFieldAccelerator"/>
     </CEffectApplyBehavior>
     <CEffectCreateUnit id="SquadAddonTacticalJumpCreatePrecursor">
         <EditorCategories value="Race:Terran"/>
@@ -4897,15 +4936,10 @@
         <EffectArray value="ExcavatorBehemothCrashSearch"/>
         <EffectArray value="ExcavatorBehemothCrashModifyMagazineIterator"/>
     </CEffectSet>
-    <CEffectRemoveBehavior id="PassengerAutoFireRemove">
+    <CEffectRemoveBehavior id="SquadHellionEnableWeaponsRemove">
         <EditorCategories value="Race:Terran"/>
-        <BehaviorLink value="PassengerAutoFire"/>
+        <BehaviorLink value="SquadHellionEnableWeapons"/>
     </CEffectRemoveBehavior>
-    <CEffectApplyBehavior id="PassengerAutoRepair">
-        <ValidatorArray index="0" removed="1"/>
-        <EditorCategories value=""/>
-        <Behavior value="PassgenerAutoRepair"/>
-    </CEffectApplyBehavior>
     <CEffectRemoveBehavior id="OrbOrbRemove">
         <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="CasterOuter"/>
@@ -5451,11 +5485,13 @@
     <CEffectApplyBehavior id="PoweredByBarrackApply">
         <EditorCategories value="Race:Terran"/>
         <Behavior value="PoweredByBarrack"/>
+        <ValidatorArray index="0" removed="1"/>
     </CEffectApplyBehavior>
     <CEffectRemoveBehavior id="PoweredByBarrackRemove">
         <EditorCategories value="Race:Terran"/>
         <BehaviorLink value="PoweredByBarrack"/>
         <Count value="1"/>
+        <ValidatorArray index="0" removed="1"/>
     </CEffectRemoveBehavior>
     <CEffectSet id="SquadFirebatDeathResponseChain">
         <EditorCategories value="Race:Terran"/>
@@ -6203,25 +6239,14 @@
         <EditorCategories value=""/>
         <EffectArray value="SCVTransformeJump"/>
     </CEffectSet>
-    <CEffectApplyBehavior id="PassengerAutoFireApply">
+    <CEffectApplyBehavior id="SquadHellionEnableWeaponsApply">
         <ValidatorArray index="0" removed="1"/>
         <EditorCategories value=""/>
-        <Behavior value="PassengerAutoFire"/>
+        <Behavior value="SquadHellionEnableWeapons"/>
     </CEffectApplyBehavior>
     <CEffectEnumMagazine id="PeriodMagazineIterate">
         <EditorCategories value="Race:Terran"/>
     </CEffectEnumMagazine>
-    <CEffectApplyBehavior id="SquadProjectileAcceleratorsApply">
-        <EditorCategories value="Race:Terran"/>
-        <WhichUnit Value="Caster"/>
-        <Behavior value="SquadBunkerProjectileAccelerators"/>
-    </CEffectApplyBehavior>
-    <CEffectRemoveBehavior id="SquadBunkerProjectileAcceleratorsRemove">
-        <EditorCategories value="Race:Terran"/>
-        <WhichUnit Value="Caster"/>
-        <BehaviorLink value="ProjectileAccelerators"/>
-        <Count value="1"/>
-    </CEffectRemoveBehavior>
     <CEffectLaunchMissile id="SquadMarauderPunisherGrenadesLaunchMissile">
         <EditorCategories value="Race:Terran"/>
         <ImpactEffect value="SquadMarauderPunisherGrenadesSet"/>
@@ -6889,7 +6914,7 @@
         <PeriodicPeriodArray value="0"/>
         <PeriodicPeriodArray value="0.122"/>
     </CEffectCreatePersistent>
-    <CEffectDamage id="SquadPredatorTitaniumClaws">
+    <CEffectDamage id="SquadPredatorTitaniumClawsDamage">
         <EditorCategories value="Race:Terran"/>
         <ArmorReduction value="1"/>
         <Flags index="Notification" value="1"/>
@@ -6959,7 +6984,7 @@
     </CEffectSet>
     <CEffectDamage id="SquadPredatorRetributionFieldDamage">
         <EditorCategories value="Race:Terran"/>
-        <Amount value="5"/>
+        <Amount value="10"/>
     </CEffectDamage>
     <CEffectEnumArea id="SquadPredatorRetributionFieldSearch">
         <EditorCategories value="Race:Terran"/>
@@ -6968,11 +6993,6 @@
         <AreaArray Radius="0.5" Effect="SquadPredatorRetributionFieldDamage"/>
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
-    <CEffectSet id="SquadPredatorRetributionFieldSet">
-        <EditorCategories value="Race:Terran"/>
-        <EffectArray value="SquadPredatorTitaniumClaws"/>
-        <EffectArray value="SquadPredatorRetributionFieldSearch"/>
-    </CEffectSet>
     <CEffectEnumArea id="ResourceMessageSearch">
         <SearchFilters value="Structure;Enemy,Worker"/>
         <AreaArray MaxCount="2" Radius="4" Effect="ResourceMessageApply"/>

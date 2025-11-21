@@ -10,6 +10,32 @@
         <Mover value="EMP2Weapon"/>
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
     </CUnit>
+    <CUnit id="SquadMutatorStormCloud">
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="Unselectable" value="1"/>
+        <FlagArray index="Untargetable" value="1"/>
+        <FlagArray index="Invulnerable" value="1"/>
+        <FogVisibility value="Visible"/>
+        <PlaneArray index="Air" value="1"/>
+        <Attributes index="MapBoss" value="1"/>
+        <Mover value="Fly"/>
+        <Speed value="0.6992"/>
+        <Acceleration value="100"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="move"/>
+        <BehaviorArray Link="Unturnable"/>
+        <!--BehaviorArray Link="MutatorStormCloudBlizzard"/-->
+        <EffectArray index="Create" value="MutatorStormCloudPersistent"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+        </CardLayouts>
+        <Radius value="0"/>
+        <SeparationRadius value="5"/>
+        <MinimapRadius value="1"/>
+    </CUnit>
     <CUnit id="SquadMedivacRepairDrone">
         <Race value="Prot"/>
         <Mob value="Campaign"/>
@@ -97,6 +123,7 @@
         <BehaviorArray Link="SquadReactorPowerUserForDefenceStructure"/>
         <BehaviorArray Link="SquadTechlabPowerUserForDefenceStructure"/>
         <BehaviorArray Link="SquadBunkerPsiDisruptionSearch"/>
+        <BehaviorArray Link="SquadCommandCenterPowerUser"/>
         <CardLayouts>
             <LayoutButtons Face="AttackRedirect" Type="AbilCmd" AbilCmd="AttackRedirect,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="MothershipCoreAttack" Type="AbilCmd" AbilCmd="SquadBunkerAttack,Execute" Row="0" Column="4"/>
@@ -184,6 +211,7 @@
         <BehaviorArray Link="SquadBunkerHiveMindEmulator"/>
         <BehaviorArray Link="SquadReactorPowerUserForDefenceStructure"/>
         <BehaviorArray Link="SquadTechlabPowerUserForDefenceStructure"/>
+        <BehaviorArray Link="SquadCommandCenterPowerUser"/>
         <CardLayouts>
             <LayoutButtons Face="AttackRedirect" Type="AbilCmd" AbilCmd="AttackRedirect,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="MothershipCoreAttack" Type="AbilCmd" AbilCmd="SquadBunkerAttack,Execute" Row="0" Column="4"/>
@@ -272,6 +300,7 @@
         <BehaviorArray Link="SquadBunkerPerditionTurret"/>
         <BehaviorArray Link="SquadReactorPowerUserForDefenceStructure"/>
         <BehaviorArray Link="SquadTechlabPowerUserForDefenceStructure"/>
+        <BehaviorArray Link="SquadCommandCenterPowerUser"/>
         <WeaponArray Link="SquadPerditionTurretFlamethrower" Turret="SquadPerditionTurret"/>
         <CardLayouts>
             <LayoutButtons Face="AttackRedirect" Type="AbilCmd" AbilCmd="AttackRedirect,Execute" Row="0" Column="4"/>
@@ -362,6 +391,7 @@
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="SquadReactorPowerUserForDefenceStructure"/>
         <BehaviorArray Link="SquadTechlabPowerUserForDefenceStructure"/>
+        <BehaviorArray Link="SquadCommandCenterPowerUser"/>
         <WeaponArray Link="SquadBunkerShrikeAutoGun" Turret="SquadShrikeTurret"/>
         <CardLayouts>
             <LayoutButtons Face="AttackRedirect" Type="AbilCmd" AbilCmd="AttackRedirect,Execute" Row="0" Column="4"/>
@@ -3024,6 +3054,7 @@
         <AbilArray Link="SquadBuildinProgress"/>
         <BehaviorArray Link="SquadHarvestableRichVespeneGeyserGas"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
+        <BehaviorArray Link="SquadCommandCenterPowerUser"/>
         <EffectArray index="Create" value="RefineryRichSearch"/>
         <CardLayouts>
             <LayoutButtons Face="Halt" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Halt" Row="2" Column="3"/>
@@ -3090,6 +3121,7 @@
         <BehaviorArray Link="SquadReactorPowerSource"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="FireSuppressionSystem"/>
+        <BehaviorArray Link="SquadCommandCenterPowerUser"/>
         <CardLayouts>
             <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Cancel" Row="2" Column="4"/>
             <LayoutButtons Face="SquadAddonTacticalJump" Type="AbilCmd" AbilCmd="SquadAddonTacticalJump,Execute" Row="2" Column="0"/>
@@ -3155,6 +3187,7 @@
         <BehaviorArray Link="SquadReactorPowerUser"/>
         <BehaviorArray Link="SquadTechlabPowerUser"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
+        <BehaviorArray Link="SquadCommandCenterPowerUser"/>
         <CardLayouts>
             <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="SquadQueue5,CancelLast" Row="2" Column="4"/>
             <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Cancel" Row="2" Column="4"/>
@@ -3234,6 +3267,7 @@
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="SquadReactorPowerUser"/>
         <BehaviorArray Link="SquadTechlabPowerUser"/>
+        <BehaviorArray Link="SquadCommandCenterPowerUser"/>
         <CardLayouts>
             <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Cancel" Row="2" Column="4"/>
             <LayoutButtons Row="0" Column="0"/>
@@ -3299,6 +3333,7 @@
         <BehaviorArray Link="SquadFactoryPowerSource"/>
         <BehaviorArray Link="SquadReactorPowerUser"/>
         <BehaviorArray Link="SquadTechlabPowerUser"/>
+        <BehaviorArray Link="SquadCommandCenterPowerUser"/>
         <CardLayouts>
             <LayoutButtons Face="Rally" Type="AbilCmd" AbilCmd="SquadStructureRally,Rally1" Row="1" Column="4"/>
             <LayoutButtons Face="SquadLiftOff" Type="AbilCmd" AbilCmd="SquadFactoryLiftOff,Execute" Row="2" Column="3"/>
@@ -3377,6 +3412,7 @@
         <BehaviorArray Link="SquadFactoryPowerSource"/>
         <BehaviorArray Link="SquadReactorPowerUser"/>
         <BehaviorArray Link="SquadTechlabPowerUser"/>
+        <BehaviorArray Link="SquadCommandCenterPowerUser"/>
         <CardLayouts>
             <LayoutButtons Face="SquadLand" Type="AbilCmd" AbilCmd="SquadFactoryLand,Execute" Row="2" Column="3"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
@@ -3437,6 +3473,7 @@
         <BehaviorArray Link="SquadReactorPowerUserForDefenceStructure"/>
         <BehaviorArray Link="SquadTechlabPowerUserForDefenceStructure"/>
         <BehaviorArray Link="SquadSensorTowerCCPowerSource"/>
+        <BehaviorArray Link="SquadCommandCenterPowerUser"/>
         <CardLayouts>
             <LayoutButtons Face="RadarField" Type="Passive" Requirements="NotUnderConstruction" Row="1" Column="0"/>
             <LayoutButtons Face="Halt" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Halt" Row="2" Column="3"/>
@@ -3506,6 +3543,7 @@
         <BehaviorArray Link="SquadBunkerShrikeTurret"/>
         <BehaviorArray Link="SquadReactorPowerUserForDefenceStructure"/>
         <BehaviorArray Link="SquadTechlabPowerUserForDefenceStructure"/>
+        <BehaviorArray Link="SquadCommandCenterPowerUser"/>
         <WeaponArray Link="SquadBunkerShrikeAutoGun" Turret="SquadShrikeTurret"/>
         <CardLayouts>
             <LayoutButtons Face="AttackRedirect" Type="AbilCmd" AbilCmd="AttackRedirect,Execute" Row="0" Column="4"/>
@@ -3599,6 +3637,7 @@
         <BehaviorArray Link="MissileTowerSpikeArmor"/>
         <BehaviorArray Link="SquadTechlabPowerUserForDefenceStructure"/>
         <BehaviorArray Link="SquadReactorPowerUserForDefenceStructure"/>
+        <BehaviorArray Link="SquadCommandCenterPowerUser"/>
         <WeaponArray Link="SquadMissileTurretLongboltMissile" Turret="SquadMissileTurret"/>
         <WeaponArray Link="SquadMissileTurretHellstormBatteries" Turret="SquadMissileTurret"/>
         <CardLayouts>
@@ -3680,6 +3719,7 @@
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="SquadTechlabPowerUser"/>
         <BehaviorArray Link="SquadReactorPowerUser"/>
+        <BehaviorArray Link="SquadCommandCenterPowerUser"/>
         <CardLayouts>
             <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="SquadQueue5,CancelLast" Row="2" Column="4"/>
             <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Halt" Row="2" Column="4"/>
@@ -3752,6 +3792,7 @@
         <BehaviorArray Link="SquadHarvestableVespeneGeyserGas"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="SquadRefineryMorph"/>
+        <BehaviorArray Link="SquadCommandCenterPowerUser"/>
         <EffectArray index="Create" value="RefineryRichSearch"/>
         <CardLayouts>
             <LayoutButtons Face="Halt" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Halt" Row="2" Column="3"/>
@@ -3984,6 +4025,7 @@
         <BehaviorArray Link="SquadBarracksPowerSource"/>
         <BehaviorArray Link="SquadReactorPowerUser"/>
         <BehaviorArray Link="SquadTechlabPowerUser"/>
+        <BehaviorArray Link="SquadCommandCenterPowerUser"/>
         <CardLayouts>
             <LayoutButtons Face="BuildSquadMarine" Type="AbilCmd" AbilCmd="SquadBarracksTrain,Train1" Row="0" Column="0"/>
             <LayoutButtons Face="BuildSquadReaper" Type="AbilCmd" AbilCmd="SquadBarracksTrain,Train2" Row="0" Column="3"/>
@@ -5686,6 +5728,7 @@
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="SquadReactorPowerUserForDefenceStructure"/>
         <BehaviorArray Link="SquadTechlabPowerUserForDefenceStructure"/>
+        <BehaviorArray Link="SquadCommandCenterPowerUser"/>
         <CardLayouts>
             <LayoutButtons Face="SquadLower" Type="AbilCmd" AbilCmd="SquadSupplyDepotLowerSwitch,On" Row="2" Column="0"/>
             <LayoutButtons Face="SquadLower" Type="Passive" Row="2" Column="0"/>
@@ -5752,6 +5795,7 @@
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="SquadReactorPowerUserForDefenceStructure"/>
         <BehaviorArray Link="SquadTechlabPowerUserForDefenceStructure"/>
+        <BehaviorArray Link="SquadCommandCenterPowerUser"/>
         <CardLayouts>
             <LayoutButtons Face="Halt" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Halt" Row="2" Column="3"/>
             <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Cancel" Row="2" Column="4"/>
@@ -5825,6 +5869,7 @@
         <BehaviorArray Link="SquadStarportPowerSource"/>
         <BehaviorArray Link="SquadReactorPowerUser"/>
         <BehaviorArray Link="SquadTechlabPowerUser"/>
+        <BehaviorArray Link="SquadCommandCenterPowerUser"/>
         <CardLayouts>
             <LayoutButtons Face="Rally" Type="AbilCmd" AbilCmd="SquadStructureRally,Rally1" Row="1" Column="4"/>
             <LayoutButtons Face="SquadLiftOff" Type="AbilCmd" AbilCmd="SquadStarportLiftOff,Execute" Row="2" Column="3"/>
@@ -5903,6 +5948,7 @@
         <BehaviorArray Link="SquadStarportPowerSource"/>
         <BehaviorArray Link="SquadReactorPowerUser"/>
         <BehaviorArray Link="SquadTechlabPowerUser"/>
+        <BehaviorArray Link="SquadCommandCenterPowerUser"/>
         <CardLayouts>
             <LayoutButtons Face="SquadLand" Type="AbilCmd" AbilCmd="SquadStarportLand,Execute" Row="2" Column="3"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
@@ -5964,10 +6010,12 @@
         <AbilArray Link="SquadAddonTacticalJump"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="FireSuppressionSystem"/>
-        <BehaviorArray Link="SquadBarrackPowerUser"/>
         <BehaviorArray Link="SquadCommandCenterPowerUser"/>
+        <!--
+        <BehaviorArray Link="SquadBarrackPowerUser"/>
         <BehaviorArray Link="SquadFactoryPowerUser"/>
         <BehaviorArray Link="SquadStarportPowerUser"/>
+-->
         <BehaviorArray Link="SquadTechlabPowerSource"/>
         <BehaviorArray Link="SquadReactorPowerSource"/>
         <CardLayouts>
@@ -6108,10 +6156,12 @@
         <AbilArray Link="SquadAddonTacticalJump"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="SquadTechlabPowerSource"/>
-        <BehaviorArray Link="SquadBarrackPowerUser"/>
         <BehaviorArray Link="SquadCommandCenterPowerUser"/>
+        <!--
+        <BehaviorArray Link="SquadBarrackPowerUser"/>
         <BehaviorArray Link="SquadFactoryPowerUser"/>
         <BehaviorArray Link="SquadStarportPowerUser"/>
+-->
         <CardLayouts>
             <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="SquadQueue5,CancelSlot" Row="2" Column="4"/>
             <LayoutButtons>
@@ -6403,6 +6453,7 @@
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="SquadReactorPowerUserForDefenceStructure"/>
         <BehaviorArray Link="SquadTechlabPowerUserForDefenceStructure"/>
+        <BehaviorArray Link="SquadCommandCenterPowerUser"/>
         <CardLayouts>
             <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Cancel" Row="2" Column="4"/>
         </CardLayouts>

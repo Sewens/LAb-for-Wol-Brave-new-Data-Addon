@@ -1,5 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorBuff id="PredatorRetributionField">
+        <InfoIcon value="Assets\Textures\btn-ability-terran-electricfield.dds"/>
+        <BehaviorCategories index="User9" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Requirements value="HavePredatorEnhancedElectorField"/>
+        <BuffFlags index="RefreshStack" value="1"/>
+        <MaxStackCount value="8"/>
+        <MaxStackCountPerCaster value="1"/>
+        <DamageResponse>
+            <Handled value="SquadPredatorRetributionFieldSearch"/>
+            <Location value="Attacker"/>
+            <ModifyFraction value="0.99"/>
+            <DamageValue value="Original"/>
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadHellionProjectileAccelerators">
+        <InfoIcon value="Assets\Textures\btn-upgrade-terran-magfieldaccelerator.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <Modification WeaponRange="2"/>
+        <Requirements value="HaveHellionProjectileAccelerators"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadCCAdvanceBuild">
+        <InfoIcon value="Assets\Textures\btn-ability-mengsk-trooper-advancedconstruction.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Modification>
+            <RateMultiplierArray index="Progress" value="1.75"/>
+        </Modification>
+    </CBehaviorBuff>
     <CBehaviorBuff id="SquadRavenTurretTimedLife" parent="TimedLife">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <DisplayDuration index="Enemy" value="1"/>
@@ -11,6 +40,19 @@
         <Modification>
             <VitalMaxArray index="Shields" value="200"/>
         </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="MutatorStormCloudBlizzardDisable">
+        <InfoFlags index="Hidden" value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="MutatorStormCloudSlow">
+        <Alignment value="Negative"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-amoncloud.dds"/>
+        <BehaviorCategories index="Slow" value="1"/>
+        <BuffFlags index="RefreshStack" value="1"/>
+        <MaxStackCount value="20"/>
+        <Duration value="2.05"/>
+        <Modification MoveSpeedMultiplier="0.9"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadTerrazineCloud">
         <Alignment value="Positive"/>
@@ -858,7 +900,7 @@
         <DeathType value="Fire"/>
         <DamageResponse TargetFilters="-;Player,Ally,Neutral"/>
     </CBehaviorBuff>
-    <CBehaviorBuff id="ElectricFieldAccelerator">
+    <CBehaviorBuff id="SquadBunkerElectricFieldAccelerator">
         <InfoIcon value="Assets\Textures\btn-upgrade-terran-magfieldaccelerator.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Modification WeaponRange="2">
@@ -950,7 +992,7 @@
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <PowerLink value="SquadReactorPowerSource"/>
         <PowerStageArray/>
-        <PowerStageArray MinPowerLevel="1" LevelGainEffect="ElectricFieldAcceleratorApply" LevelLossEffect="ElectricFieldAcceleratorRemove">
+        <PowerStageArray MinPowerLevel="1" LevelGainEffect="SquadBunkerElectricFieldAcceleratorApply" LevelLossEffect="SquadBunkerElectricFieldAcceleratorRemove">
             <Modification TimeScale="1.25">
                 <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
                 <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
@@ -960,6 +1002,7 @@
         <Requirements value="HaveAddonStructureOptimization"/>
         <InfoIcon value="Assets\Textures\btn-building-terran-reactor-silver.dds"/>
         <Flags index="HideUnpoweredText" value="1"/>
+        <PoweredWhileUnderConstruction value="1"/>
     </CBehaviorPowerUser>
     <!--Add defence strcutre defence tech.-->
     <CBehaviorPowerUser id="SquadTechlabPowerUserForDefenceStructure">
@@ -992,6 +1035,7 @@
         <Requirements value="HaveAddonStructureOptimization"/>
         <InfoIcon value="Assets\Textures\btn-building-terran-techlab-silver.dds"/>
         <Flags index="HideUnpoweredText" value="1"/>
+        <PoweredWhileUnderConstruction value="1"/>
     </CBehaviorPowerUser>
     <CBehaviorBuff id="SquadCaptainToshPsiShield">
         <Alignment value="Positive"/>
@@ -1511,13 +1555,6 @@
             <Chance value="0.75"/>
         </DamageResponse>
     </CBehaviorBuff>
-    <CBehaviorBuff id="PassgenerAutoRepair">
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Modification>
-            <AbilLinkEnableArray value="SquadSCVRepair"/>
-            <AbilLinkEnableArray value="SquadMuleliskRepair"/>
-        </Modification>
-    </CBehaviorBuff>
     <CBehaviorBuff id="ExcavatorBehemothProtocal">
         <BehaviorFlags index="Permanent" value="1"/>
         <InfoIcon value="Assets\Textures\talent-kerrigan-level13-ultraliskresearchbundle.dds"/>
@@ -2006,8 +2043,12 @@
                 <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
                 <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
                 <VitalMaxIncreaseAffectsCurrentArray index="Energy" value="0"/>
+                <RateMultiplierArray index="Progress" value="5"/>
             </Modification>
         </PowerStageArray>
+        <InfoIcon value="Assets\Textures\btn-building-terran-commandcenter-covertops.dds"/>
+        <Requirements value="HaveCommandCenterRapidBuildingField"/>
+        <PoweredWhileUnderConstruction value="1"/>
     </CBehaviorPowerUser>
     <CBehaviorPowerUser id="SquadFactoryPowerUser">
         <BehaviorFlags index="Permanent" value="1"/>
@@ -2136,10 +2177,10 @@
         <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
         <Modification Radar="30" RadarFilters="-;Neutral,RawResource,HarvestableResource,Missile,Destructible,Buried,Cloaked"/>
     </CBehaviorBuff>
-    <CBehaviorBuff id="SquadBunkerWeaponRangeBonus">
+    <CBehaviorBuff id="SquadBunkerEnableWeapons">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
-        <InitialEffect value="SquadProjectileAcceleratorsApply"/>
-        <FinalEffect value="SquadBunkerProjectileAcceleratorsRemove"/>
+        <InitialEffect value="SquadBunkerElectricFieldAcceleratorApply"/>
+        <FinalEffect value="SquadBunkerElectricFieldAcceleratorRemove"/>
         <Modification WeaponRange="1">
             <AbilLinkEnableArray value="Stimpack"/>
             <AbilLinkEnableArray value="heal"/>
@@ -2327,11 +2368,15 @@
             </DeathResponse>
         </Modification>
     </CBehaviorBuff>
-    <CBehaviorBuff id="PassengerAutoFire">
+    <CBehaviorBuff id="SquadHellionEnableWeapons">
         <BehaviorCategories index="User10" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InitialEffect value="SquadHellionProjectileAcceleratorsApply"/>
+        <FinalEffect value="SquadHellionProjectileAcceleratorsRemove"/>
         <Modification>
             <AbilClassEnableArray index="CAbilAttack" value="1"/>
+            <AbilLinkEnableArray value="SquadSCVRepair"/>
+            <AbilLinkEnableArray value="SquadMuleliskRepair"/>
         </Modification>
     </CBehaviorBuff>
     <CBehaviorPowerUser id="SquadBarrackPowerUser">
@@ -2348,10 +2393,6 @@
             </Modification>
         </PowerStageArray>
     </CBehaviorPowerUser>
-    <CBehaviorBuff id="SquadBunkerProjectileAccelerators">
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
-        <Modification WeaponRange="1"/>
-    </CBehaviorBuff>
     <CBehaviorBuff id="PoweredByReactor">
         <InfoIcon value="Assets\Textures\btn-building-terran-reactor-covertops.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
