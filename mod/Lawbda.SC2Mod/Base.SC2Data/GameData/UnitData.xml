@@ -2310,11 +2310,12 @@
             <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
-            <LayoutButtons Face="SquadGoliathMultilockMode" Type="AbilCmd" AbilCmd="SquadGoliathAirFocusSwitch,255" Row="2" Column="2"/>
-            <LayoutButtons Face="SquadGoliathAirFocusMode" Type="AbilCmd" AbilCmd="SquadGoliathAirFocusSwitch,255" Row="2" Column="1"/>
+            <LayoutButtons Face="SquadGoliathMultilockMode" Type="AbilCmd" AbilCmd="SquadGoliathAirFocusSwitch,Off" Row="2" Column="2"/>
+            <LayoutButtons Face="SquadGoliathMultilockMode" Type="Passive" Requirements="HaveGoliathDavidsDeath" Row="2" Column="2"/>
+            <LayoutButtons Face="SquadGoliathAirFocusMode" Type="AbilCmd" AbilCmd="SquadGoliathAirFocusSwitch,On" Row="2" Column="1"/>
+            <LayoutButtons Face="SquadGoliathAirFocusMode" Type="Passive" Requirements="HaveGoliathDavidsDeath" Row="2" Column="1"/>
             <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="4"/>
-            <LayoutButtons Face="SquadGoliathAirFocusMode" Type="Passive" Row="2" Column="1"/>
-            <LayoutButtons Face="SquadGoliathMultilockMode" Type="Passive" Row="2" Column="2"/>
+            <LayoutButtons Face="SquadGoliathCliffJumper" Type="Passive" Requirements="HaveGoliathExodus" Row="2" Column="0"/>
         </CardLayouts>
         <Radius value="0.6875"/>
         <SeparationRadius value="0.65"/>
@@ -2339,6 +2340,7 @@
             <ChanceArray index="Turn" value="33"/>
         </Fidget>
         <HotkeyCategory value="Unit/Category/Lawbda"/>
+        <BehaviorArray Link="SquadGoliathJump"/>
     </CUnit>
     <CUnit id="SquadGoliathAirWeapon" parent="MISSILE">
         <Race value="Campaign"/>

@@ -29,6 +29,28 @@
             <RateMultiplierArray index="Progress" value="1.75"/>
         </Modification>
     </CBehaviorBuff>
+    <CBehaviorJump id="SquadGoliathJump">
+        <InfoIcon value="Assets\Textures\btn-upgrade-terran-ui-jumpjets.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Requirements value="HaveGoliathExodus"/>
+        <TriggerHeightDeltaMin value="1.5"/>
+        <TriggerHeightDeltaMax value="4.5"/>
+        <InitiateRangeUp value="1.5"/>
+        <InitiateRangeDown value="0.5"/>
+        <JumpRangeMax value="12"/>
+        <JumpEffectUp value="SquadJumpShieldApply"/>
+        <JumpEffectDown value="SquadJumpShieldApply"/>
+        <Mover value="CliffJumper"/>
+        <MoverUp value="ReaperJumpDown"/>
+        <MoverDown value="ReaperJumpDown"/>
+        <DurationPreLaunch value="0.05"/>
+        <DurationPostLand value="0.075"/>
+        <DurationMoveOut value="0.08"/>
+        <Placeholder value="ReaperPlaceholder"/>
+        <LandAdjustmentDown value="1"/>
+        <LandArrivalRange value="0.05"/>
+        <LandCheckRadius value="5"/>
+    </CBehaviorJump>
     <CBehaviorBuff id="SquadRavenTurretTimedLife" parent="TimedLife">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <DisplayDuration index="Enemy" value="1"/>

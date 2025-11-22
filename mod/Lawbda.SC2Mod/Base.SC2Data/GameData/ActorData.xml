@@ -6070,6 +6070,9 @@
         <On Terms="Behavior.SquadJump.LandDown" Send="Create"/>
         <On Terms="Behavior.SquadJump.LandUp" Send="Create"/>
         <On Terms="Behavior.SquadJump.LandDown" Send="TimerSet 0.300000 TriggerSound"/>
+        <On Terms="Behavior.SquadGoliathJump.LandDown" Send="Create"/>
+        <On Terms="Behavior.SquadGoliathJump.LandUp" Send="Create"/>
+        <On Terms="Behavior.SquadGoliathJump.LandDown" Send="TimerSet 0.300000 TriggerSound"/>
         <On Terms="TimerExpired; TimerName TriggerSound" Send="Create ReaperJumpLandSound"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachCenter SOpShadow"/>
@@ -6077,17 +6080,20 @@
     </CActorModel>
     <CActorSound id="SquadJumpLandSound" parent="SoundOneShot">
         <On Terms="Behavior.SquadJump.LandUp" Send="Create"/>
+        <On Terms="Behavior.SquadGoliathJump.LandUp" Send="Create"/>
         <Sound value="Reaper_JumpLand"/>
     </CActorSound>
     <CActorModel id="SquadJumpLaunchModel" parent="ModelAnimationStyleOneShot">
         <Inherits index="CloakEffect" value="1"/>
         <On Terms="Behavior.SquadJump.Launch" Send="Create"/>
+        <On Terms="Behavior.SquadGoliathJump.Launch" Send="Create"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachCenter SOpShadow" HoldPosition="1" HoldRotation="1"/>
         <Model value="ReaperJumpLaunchModel"/>
     </CActorModel>
     <CActorSound id="SquadJumpLaunchSound" parent="SoundOneShot">
         <On Terms="Behavior.SquadJump.Launch" Send="Create"/>
+        <On Terms="Behavior.SquadGoliathJump.Launch" Send="Create"/>
         <Sound value="Reaper_JumpLaunch"/>
     </CActorSound>
     <CActorSound id="BehemothAfterburner" parent="SoundOneShot">

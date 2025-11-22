@@ -9,6 +9,17 @@
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <AffectedUnitArray value="SquadWraith"/>
     </CUpgrade>
+    <CUpgrade id="GoliathDavidsDeath">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadGoliath"/>
+    </CUpgrade>
+    <CUpgrade id="GoliathExodus">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Set" Reference="Unit,SquadGoliath,Mover" Value="CliffJumper"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="SquadGoliath"/>
+    </CUpgrade>
     <!--All infantry gift now can be cast to target unit in lawbda core submenu.-->
     <!--Both ally and player's unit can be targeted, including all ground, air and structure units.-->
     <!--All gift abilities share the same cooldown for 15s with equally cost as the original units's.-->
@@ -116,7 +127,6 @@
         <Flags index="UpgradeCheat" value="0"/>
         <Race value="Terr"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
-        <AffectedUnitArray value="SquadWraith"/>
     </CUpgrade>
     <!--Upgrade time reduce 25%, unlock 4 level Weapon/Armory upgrade.-->
     <CUpgrade id="HightechMilitarySupport">
@@ -170,7 +180,7 @@
     <CUpgrade id="HellionDurabilityTraining">
         <Flags index="UpgradeCheat" value="0"/>
         <EffectArray Reference="Unit,SquadHellion,LifeArmor" Value="3"/>
-        <EffectArray Reference="Unit,SquadHellion,ReviveInfoBase.Vital[Life]" Value="50"/>
+        <EffectArray Reference="Unit,SquadHellion,ReviveInfoBase.Vital[Life]" Value="100"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
     <CUpgrade id="VultureBroodMotherSpider">
@@ -469,8 +479,17 @@
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <AffectedUnitArray value="SquadReaper"/>
     </CUpgrade>
-    <CUpgrade id="SupplyDepotInstantSupplyDrop">
+    <CUpgrade id="SupplyDepotStoneBlockProtocal">
         <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Reference="Unit,SquadSupplyDepot,LifeMax" Value="200"/>
+        <EffectArray Reference="Unit,SquadSupplyDepot,LifeStart" Value="200"/>
+        <EffectArray Reference="Unit,SquadSupplyDepotDrop,LifeStart" Value="200"/>
+        <EffectArray Reference="Unit,SquadSupplyDepotDrop,LifeMax" Value="200"/>
+        <EffectArray Reference="Unit,SquadSupplyDepotLowered,LifeStart" Value="200"/>
+        <EffectArray Reference="Unit,SquadSupplyDepotLowered,LifeMax" Value="200"/>
+        <EffectArray Reference="Unit,SquadSupplyDepot,LifeArmor" Value="5"/>
+        <EffectArray Reference="Unit,SquadSupplyDepotDrop,LifeArmor" Value="5"/>
+        <EffectArray Reference="Unit,SquadSupplyDepotLowered,LifeArmor" Value="5"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <AffectedUnitArray value="SquadSupplyDepot"/>
         <AffectedUnitArray value="SquadSupplyDepotLowered"/>
