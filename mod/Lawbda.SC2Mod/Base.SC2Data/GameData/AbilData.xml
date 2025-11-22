@@ -43,6 +43,22 @@
         </CmdButtonArray>
         <CmdButtonArray index="Cancel" DefaultButtonFace="CmdCancel"/>
     </CAbilEffectTarget>
+    <CAbilEffectInstant id="ZeratulReflectionShield2">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="ZeratulReflectionShieldCP2"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="180"/>
+        </Cost>
+        <AutoCastFilters value="Visible;Neutral,Enemy"/>
+        <AutoCastValidatorArray value="VoidSentryNearbyFriendlyUnitInCombat"/>
+        <AINotifyEffect value=""/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="ZeratulReflectionShield2" Requirements="HaveZeratulArtifactTier3AndCyberCore"/>
+    </CAbilEffectInstant>
     <CAbilSpecialize id="BunkerMorphSwitch">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <InfoArray index="Specialize1" Effect="MorphBunkerShrikeOrder">

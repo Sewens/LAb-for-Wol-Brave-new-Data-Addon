@@ -217,6 +217,57 @@
         <HeightOffset value="1.500000"/>
         <Text value="Button/Tooltip/##id##"/>
     </CActorText>
+    <CActorModel id="ZeratulReflectionShield2" parent="ModelAnimationStyleContinuous">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.ZeratulReflectionShieldCP2.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.ZeratulReflectionShieldCP2.Stop; At Caster" Send="AnimBracketStop BSD"/>
+        <On Terms="ModelEvent; ModelEventName SoundStart" Send="Create GuardianShieldSoundBirth"/>
+        <On Terms="ModelEvent; ModelEventName SoundLoopStart" Send="Create GuardianShieldSoundLoop"/>
+        <On Terms="ModelEvent; ModelEventName SoundLoopEnd" Target="GuardianShieldSoundLoop" Send="Destroy"/>
+        <On Terms="ModelEvent; ModelEventName SoundLoopEnd" Send="Create GuardianShieldSoundDeath"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorModel id="ZeratulReflectionShieldImpact2" parent="ModelAnimationStyleOneShot">
+        <Terms value="Cap 1"/>
+        <Inherits index="CloakEffect" value="1"/>
+        <On Terms="Effect.ZeratulReflectionShieldMU2.Start; At Target" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachCenterSoft"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorUnit id="SquadCapitalismDome" parent="TerranBuildingEx" unitName="SquadCapitalismDome">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="QueueAnim"/>
+        <On Terms="ActorCreation" Send="Create SoundEmitter Doodad_BioDomeCommand"/>
+        <On Terms="UnitDeathCustomize.BioDomeCommandFlying" Send="DeathCustomize Flying"/>
+        <Model value="BioDomeCommand"/>
+        <BuildModel value="BioDomeCommand"/>
+        <DeathArray index="Normal" ModelLink="TerranLargeBuildingDeath" SoundLink="Terran_ExplosionLarge"/>
+        <DeathCustoms ModelLink="TerranFlyingBuildingDeath" Name="Flying"/>
+        <PlacementModel value="BioDomeCommand"/>
+        <PortraitModel value="AdjutantPortrait"/>
+        <BarOffset value="165"/>
+        <BarWidth value="200"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-BiodDomeCommand.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\BTN-Building-Terran-BioDomeCommand.dds"/>
+        <NameOffset value="170"/>
+        <SoundArray index="Ready" value="CommandCenter_What"/>
+        <UnitIcon value="Assets\Textures\BTN-Building-Terran-BioDomeCommand.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-BioDomeCommand.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorModel id="SquadCapitalismDomeBuild" parent="TerranBuildingBuild" unitName="SquadCapitalismDome">
+        <Model value="BiodomeHalfBuilt"/>
+    </CActorModel>
+    <CActorSplat id="SquadCapitalismDomeSplat" parent="GenericUnitSplat" unitName="SquadCapitalismDome">
+        <Model value="FusionCoreSplat"/>
+    </CActorSplat>
     <CActorModel id="SquadTerrazineCloudModelAttachment" parent="ModelAddition">
         <Inherits index="BaseModelScale" value="0"/>
         <Inherits index="Scale" value="0"/>
@@ -6885,6 +6936,9 @@
     <CActorModel id="SquadFusionCoreBuild" parent="TerranBuildingBuild" unitName="SquadFusionCore">
         <Model value="FusionCore_CovertOps_Build"/>
     </CActorModel>
+    <CActorSplat id="SquadFusionCoreSplat" parent="GenericUnitSplat" unitName="SquadFusionCore">
+        <Model value="FusionCoreSplat"/>
+    </CActorSplat>
     <CActorModel id="SquadBunkerShrikeBuild" parent="TerranBuildingBuild" unitName="SquadBunker">
         <Model value="Bunker_Silver_Build"/>
     </CActorModel>
@@ -7342,9 +7396,6 @@
             <Image value="Assets\Textures\Wireframe-Terran-FusionCore.dds"/>
         </Wireframe>
     </CActorUnit>
-    <CActorSplat id="SquadFusionCoreSplat" parent="GenericUnitSplat" unitName="SquadFusionCore">
-        <Model value="FusionCoreSplat"/>
-    </CActorSplat>
     <CActorUnit id="SquadGreaterNydusWorm" parent="GenericUnitMorph" unitName="SquadGreaterNydusWorm">
         <Macros value="BuildingFlattenTerrainMacro"/>
         <On Terms="Abil.GreaterNydusWormTransport.TransportUnloadStart" Send="AnimClear Birth"/>

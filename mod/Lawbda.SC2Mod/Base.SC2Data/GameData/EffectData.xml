@@ -30,6 +30,42 @@
     <CEffectEnumArea default="1" id="SquadAbilSearchRadiusExt" parent="SquadAbilSearch">
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
+    <CEffectApplyBehavior id="ZeratulReflectionShieldApplyBehavior2">
+        <ValidatorArray index="0" value="SourceNotHidden"/>
+        <ValidatorArray value="NotHaveZeratulReflectionShieldApplyBehaviorMarker"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Chance value="0.5"/>
+        <Behavior value="ZeratulReflectionShield2"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="ZeratulReflectionShieldApplyBehaviorMarker2">
+        <EditorCategories value="Race:Protoss"/>
+    </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="ZeratulReflectionShieldCP2">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="SourceUnit"/>
+        <InitialEffect value="ZeratulReflectionShieldSearch2"/>
+        <PeriodCount value="120"/>
+        <PeriodicValidator value="NotVortexd"/>
+        <PeriodicEffectArray value="ZeratulReflectionShieldSearch2"/>
+        <PeriodicPeriodArray value="0.125"/>
+    </CEffectCreatePersistent>
+    <CEffectModifyUnit id="ZeratulReflectionShieldMU2">
+        <EditorCategories value="Race:Protoss"/>
+        <ModifyFlags index="Hide" value="1"/>
+        <ModifyFlags index="NullifyMissile" value="1"/>
+    </CEffectModifyUnit>
+    <CEffectSet id="ZeratulReflectionShieldReflectSet2">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="ZeratulReflectionShieldApplyBehavior2"/>
+        <EffectArray value="ZeratulReflectionShieldApplyBehaviorMarker2"/>
+    </CEffectSet>
+    <CEffectEnumArea id="ZeratulReflectionShieldSearch2">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <SearchFilters value="Missile;Player,Ally,Neutral,MapBoss"/>
+        <AreaArray Radius="4.5" Effect="ZeratulReflectionShieldReflectSet2"/>
+        <SearchFlags index="ExtendByUnitRadius" value="1"/>
+    </CEffectEnumArea>
     <CEffectRemoveBehavior id="SquadCCAdvanceBuildRemove">
         <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
