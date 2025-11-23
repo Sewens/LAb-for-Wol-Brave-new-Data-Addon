@@ -30,40 +30,142 @@
     <CEffectEnumArea default="1" id="SquadAbilSearchRadiusExt" parent="SquadAbilSearch">
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
-    <CEffectApplyBehavior id="ZeratulReflectionShieldApplyBehavior2">
+    <CEffectRedirectMissile id="SquadRedirectPlacementLaunchTarget">
+        <ValidatorArray value="RedirectPlacementLaunchTargetTargetFilters"/>
+        <EditorCategories value=""/>
+        <WhichUnit Value="Source"/>
+        <ImpactFilters value="-;Stasis,Dead,Hidden,Invulnerable"/>
+        <Movers Link="MissileDefault"/>
+    </CEffectRedirectMissile>
+    <CEffectCreateUnit id="SquadRedirectStart">
+        <EditorCategories value=""/>
+        <Origin Value="TargetUnit"/>
+        <CreateFlags index="Birth" value="0"/>
+        <CreateFlags index="DropOff" value="0"/>
+        <CreateFlags index="OffsetByRadius" value="0"/>
+        <CreateFlags index="PlacementIgnoreBlockers" value="1"/>
+        <CreateFlags index="ProvideFood" value="0"/>
+        <CreateFlags index="TechComplete" value="0"/>
+        <CreateFlags index="UseFood" value="0"/>
+        <CreateFlags index="NormalizeSpawnOffset" value="0"/>
+        <SpawnOwner Value="Target"/>
+        <SpawnEffect value="SquadRedirectPlacementLaunchTarget"/>
+        <SpawnRange value="10"/>
+    </CEffectCreateUnit>
+    <CEffectApplyBehavior id="SquadNovaDefensiveDroneAB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="SquadNovaPointDefenseReady"/>
+    </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="SquadNovaDefensiveDroneAbsorbCP">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <Flags index="PersistUntilDestroyed" value="1"/>
+        <FinalEffect value="SquadNovaDefensiveDroneReflectDummy"/>
+        <PeriodicValidator value="CasterAndTargetNotDead"/>
+    </CEffectCreatePersistent>
+    <CEffectApplyBehavior id="SquadNovaDefensiveDroneNullified">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
+    <CEffectModifyUnit id="SquadNovaDefensiveDroneNullifyMissile">
+        <EditorCategories value="Race:Terran"/>
+        <Marker Link="Weapon/SquadPointDefenseLaser">
+            <MatchFlags index="Link" value="1"/>
+        </Marker>
+        <ModifyFlags index="NullifyMissile" value="1"/>
+    </CEffectModifyUnit>
+    <CEffectDamage id="SquadNovaDefensiveDronePlaceholderDamage">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Amount value="10"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="OffsetByUnitRadius" value="1"/>
+        <SearchFlags index="OffsetAreaByAngle" value="1"/>
+    </CEffectDamage>
+    <CEffectRedirectMissile id="SquadNovaDefensiveDroneRedirect">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactFilters value="-;-"/>
+        <Marker Link="Weapon/SquadPointDefenseLaser">
+            <MatchFlags index="Link" value="1"/>
+        </Marker>
+        <WhichUnit Effect="SquadNovaDefensiveDroneNullified"/>
+        <ImpactLocation Effect="SquadNovaDefensiveDroneReflectSearch" Value="TargetUnitOrPoint"/>
+        <OwningPlayer Effect="SquadNovaDefensiveDroneSearch"/>
+        <Movers Link="SquadBattlecruiserMiniYamatoLM" IfRangeLTE="9"/>
+    </CEffectRedirectMissile>
+    <CEffectSet id="SquadNovaDefensiveDroneReflectDummy">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadNovaDefensiveDroneReflectSearch"/>
+    </CEffectSet>
+    <CEffectEnumArea id="SquadNovaDefensiveDroneReflectSearch">
+        <EditorCategories value="Race:Terran"/>
+        <SearchFilters value="-;Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="9" Effect="SquadNovaDefensiveDroneRedirect"/>
+        <MaxCount value="1"/>
+    </CEffectEnumArea>
+    <CEffectModifyUnit id="SquadNovaDefensiveDroneRemoveEnergy">
+        <ValidatorArray value="PointDefenseLaserEnergyTargetFilters"/>
+        <EditorCategories value="Race:Terran"/>
+        <ImpactUnit Value="Caster"/>
+        <VitalArray index="Energy">
+            <Change value="-10"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectEnumArea id="SquadNovaDefensiveDroneSearch">
+        <ValidatorArray value="PointDefenseSearchTargetFilters"/>
+        <EditorCategories value=""/>
+        <ImpactLocation Value="SourceUnit"/>
+        <SearchFilters value="Missile,Visible;Self,Player,Ally,Neutral,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="8" Effect="SquadNovaDefensiveDroneSearchImpactSet"/>
+    </CEffectEnumArea>
+    <CEffectSet id="SquadNovaDefensiveDroneSearchImpactSet">
+        <ValidatorArray value="PointDefenseDroneUnitFilter"/>
+        <ValidatorArray value="CasterHas10Energy"/>
+        <EditorCategories value="Race:Terran"/>
+        <!--EffectArray value="SquadNovaDefensiveDroneRedirect"/-->
+        <EffectArray value="SquadNovaDefensiveDroneNullifyMissile"/>
+        <EffectArray value="SquadNovaDefensiveDroneAB"/>
+        <EffectArray value="SquadNovaDefensiveDroneNullified"/>
+        <EffectArray value="SquadNovaDefensiveDroneAbsorbCP"/>
+        <EffectArray value="SquadNovaDefensiveDroneRemoveEnergy"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="SquadZeratulReflectionShieldApplyBehavior">
         <ValidatorArray index="0" value="SourceNotHidden"/>
         <ValidatorArray value="NotHaveZeratulReflectionShieldApplyBehaviorMarker"/>
         <EditorCategories value="Race:Protoss"/>
         <Chance value="0.5"/>
-        <Behavior value="ZeratulReflectionShield2"/>
+        <Behavior value="SquadZeratulReflectionShield"/>
     </CEffectApplyBehavior>
-    <CEffectApplyBehavior id="ZeratulReflectionShieldApplyBehaviorMarker2">
+    <CEffectApplyBehavior id="SquadZeratulReflectionShieldMarkerApplyBehavior">
         <EditorCategories value="Race:Protoss"/>
+        <Behavior value="SquadZeratulReflectionShieldMarker"/>
     </CEffectApplyBehavior>
-    <CEffectCreatePersistent id="ZeratulReflectionShieldCP2">
+    <CEffectCreatePersistent id="SquadZeratulReflectionShieldPersistent">
         <EditorCategories value="Race:Protoss"/>
         <WhichLocation Value="SourceUnit"/>
-        <InitialEffect value="ZeratulReflectionShieldSearch2"/>
+        <InitialEffect value="SquadZeratulReflectionShieldSearch"/>
         <PeriodCount value="120"/>
         <PeriodicValidator value="NotVortexd"/>
-        <PeriodicEffectArray value="ZeratulReflectionShieldSearch2"/>
+        <PeriodicEffectArray value="SquadZeratulReflectionShieldSearch"/>
         <PeriodicPeriodArray value="0.125"/>
     </CEffectCreatePersistent>
-    <CEffectModifyUnit id="ZeratulReflectionShieldMU2">
+    <CEffectModifyUnit id="SquadZeratulReflectionShieldMU">
         <EditorCategories value="Race:Protoss"/>
         <ModifyFlags index="Hide" value="1"/>
         <ModifyFlags index="NullifyMissile" value="1"/>
     </CEffectModifyUnit>
-    <CEffectSet id="ZeratulReflectionShieldReflectSet2">
+    <CEffectSet id="SquadZeratulReflectionShieldReflectSet">
         <EditorCategories value="Race:Protoss"/>
-        <EffectArray value="ZeratulReflectionShieldApplyBehavior2"/>
-        <EffectArray value="ZeratulReflectionShieldApplyBehaviorMarker2"/>
+        <EffectArray value="SquadZeratulReflectionShieldApplyBehavior"/>
+        <EffectArray value="SquadZeratulReflectionShieldMarkerApplyBehavior"/>
     </CEffectSet>
-    <CEffectEnumArea id="ZeratulReflectionShieldSearch2">
+    <CEffectEnumArea id="SquadZeratulReflectionShieldSearch">
         <EditorCategories value="Race:Protoss"/>
         <ImpactLocation Value="TargetUnit"/>
         <SearchFilters value="Missile;Player,Ally,Neutral,MapBoss"/>
-        <AreaArray Radius="4.5" Effect="ZeratulReflectionShieldReflectSet2"/>
+        <AreaArray Radius="4.5" Effect="SquadZeratulReflectionShieldReflectSet"/>
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
     <CEffectRemoveBehavior id="SquadCCAdvanceBuildRemove">
@@ -298,9 +400,9 @@
         <EditorCategories value="Race:Terran"/>
         <Behavior value="ScienceVesselGhostConditioningBuff"/>
     </CEffectApplyBehavior>
-    <CEffectApplyBehavior id="SquadGhostEMPDecloakApply">
+    <CEffectApplyBehavior id="SquadGhostEMPLockdownApply">
         <EditorCategories value="Race:Terran"/>
-        <Behavior value="SquadGhostEMPDecloak"/>
+        <Behavior value="SquadGhostEMPLockdown"/>
     </CEffectApplyBehavior>
     <CEffectDamage id="SquadGhostEMPDamage">
         <EditorCategories value="Race:Terran"/>
@@ -335,7 +437,7 @@
         <EditorCategories value="Race:Terran"/>
         <EffectArray value="SquadGhostEMPDamage"/>
         <EffectArray value="SquadGhostEMPModifyUnit"/>
-        <EffectArray value="SquadGhostEMPDecloakApply"/>
+        <EffectArray value="SquadGhostEMPLockdownApply"/>
     </CEffectSet>
     <CEffectDamage id="SquadBattlecruiserSuperSmashDamage">
         <EditorCategories value="Race:Terran"/>
@@ -4259,9 +4361,9 @@
         <WhichUnit Value="Caster"/>
         <Behavior value="SquadPointDefenseReady"/>
     </CEffectApplyBehavior>
-    <CEffectModifyUnit id="SquadPointDefenseLaserDamage">
+    <CEffectModifyUnit id="SquadPointDefenseLaserNullifyMissile">
         <EditorCategories value="Race:Terran"/>
-        <Marker Link="Weapon/PointDefenseLaser">
+        <Marker Link="Weapon/SquadPointDefenseLaser">
             <MatchFlags index="Link" value="1"/>
         </Marker>
         <ModifyFlags index="Hide" value="1"/>
@@ -4293,7 +4395,7 @@
         <ValidatorArray value="PointDefenseDroneUnitFilter"/>
         <ValidatorArray value="CasterHas10Energy"/>
         <EditorCategories value="Race:Terran"/>
-        <EffectArray value="SquadPointDefenseLaserDamage"/>
+        <EffectArray value="SquadPointDefenseLaserNullifyMissile"/>
         <EffectArray value="SquadPointDefenseLaserVisibilityDummy"/>
         <EffectArray value="SquadPointDefenseLaserApplyBehavior"/>
         <EffectArray value="SquadPointDefenseLaserRemoveEnergy"/>

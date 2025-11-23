@@ -217,11 +217,28 @@
         <HeightOffset value="1.500000"/>
         <Text value="Button/Tooltip/##id##"/>
     </CActorText>
-    <CActorModel id="ZeratulReflectionShield2" parent="ModelAnimationStyleContinuous">
+    <CActorBeamSimple id="SquadNovaDefensiveDroneAbsorbCPBeam" parent="BeamSimpleAnimationStyleContinuous">
+        <On Terms="Effect.SquadNovaDefensiveDroneNullified.Start; At Target" Send="Create"/>
+        <On Terms="UnitDeath" Send="AnimBracketStop BSD"/>
+        <HostLaunch Subject="_Selectable" Scope="Caster"/>
+        <HostImpact Subject="::Main" Scope="Target"/>
+    </CActorBeamSimple>
+    <CActorAction id="SquadNovaDefensiveDronePlaceholderShot" parent="GenericAttack" effectAttack="SquadNovaDefensiveDronePlaceholderDamage">
+        <LaunchAssets Sound="SquadNovaPointDefenseDroneAttackLaunch"/>
+        <BeamScope value="Caster"/>
+        <ImpactMap index="None" Model="SquadNovaDefensiveDronePlaceholderShotBeamImpact" Sound="SquadNovaPointDefenseDroneAttackImpact"/>
+    </CActorAction>
+    <CActorBeamSimple id="SquadNovaDefensiveDronePlaceholderShotBeam">
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth {} Death ContentPlayOnce"/>
+        <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+    </CActorBeamSimple>
+    <CActorModel id="SquadZeratulReflectionShield" parent="ModelAnimationStyleContinuous">
         <Inherits index="CloakEffect" value="1"/>
         <Inherits index="Visibility" value="1"/>
-        <On Terms="Effect.ZeratulReflectionShieldCP2.Start; At Caster" Send="Create"/>
-        <On Terms="Effect.ZeratulReflectionShieldCP2.Stop; At Caster" Send="AnimBracketStop BSD"/>
+        <On Terms="Effect.SquadZeratulReflectionShieldPersistent.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.SquadZeratulReflectionShieldPersistent.Stop; At Caster" Send="AnimBracketStop BSD"/>
         <On Terms="ModelEvent; ModelEventName SoundStart" Send="Create GuardianShieldSoundBirth"/>
         <On Terms="ModelEvent; ModelEventName SoundLoopStart" Send="Create GuardianShieldSoundLoop"/>
         <On Terms="ModelEvent; ModelEventName SoundLoopEnd" Target="GuardianShieldSoundLoop" Send="Destroy"/>
@@ -230,10 +247,10 @@
         <HostSiteOps Ops="SOpAttachCenter"/>
         <ModelFlags index="AllowHitTest" value="0"/>
     </CActorModel>
-    <CActorModel id="ZeratulReflectionShieldImpact2" parent="ModelAnimationStyleOneShot">
+    <CActorModel id="SquadZeratulReflectionShieldImpact" parent="ModelAnimationStyleOneShot">
         <Terms value="Cap 1"/>
         <Inherits index="CloakEffect" value="1"/>
-        <On Terms="Effect.ZeratulReflectionShieldMU2.Start; At Target" Send="Create"/>
+        <On Terms="Effect.SquadZeratulReflectionShieldMU.Start; At Target" Send="Create"/>
         <Host Subject="_Unit"/>
         <HostSiteOps Ops="SOpAttachCenterSoft"/>
         <ModelFlags index="AllowHitTest" value="0"/>
@@ -389,8 +406,8 @@
         <Sound value="Spell_Yoink_Impact"/>
     </CActorSound>
     <CActorModel id="SquadGhostEMPLockdownModel" parent="ModelAnimationStyleContinuous">
-        <On Terms="Behavior.SquadGhostEMPDecloak.On; At Caster; ValidatePlayer HaveGhostEmpLockdownEnhance" Send="Create"/>
-        <On Terms="Behavior.SquadGhostEMPDecloak.Off" Send="Destroy"/>
+        <On Terms="Behavior.SquadGhostEMPLockdown.On; At Caster; ValidatePlayer HaveGhostInTheShell" Send="Create"/>
+        <On Terms="Behavior.SquadGhostEMPLockdown.Off" Send="Destroy"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachCenter"/>
         <Model value="LockdownModel"/>
@@ -4969,7 +4986,7 @@
         <Model value="AttackDummyCursorModel"/>
     </CActorModel>
     <CActorModel id="SquadPointDefenseBeamImpact" parent="ModelAnimationStyleContinuous">
-        <On Terms="Effect.SquadPointDefenseLaserDamage.Start; At Target" Send="Create"/>
+        <On Terms="Effect.SquadPointDefenseLaserNullifyMissile.Start; At Target" Send="Create"/>
         <On Terms="ActorCreation" Send="TimerSet 0.125000 Die"/>
         <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
         <On Terms="ActorCreation" Send="$Death"/>
@@ -5004,7 +5021,7 @@
         </Wireframe>
     </CActorUnit>
     <CActorBeamSimple id="SquadPointDefenseDroneAttackBeam" parent="BeamSimpleAnimationStyleContinuous">
-        <On Terms="Effect.SquadPointDefenseLaserDamage.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.SquadPointDefenseLaserNullifyMissile.Start; At Caster" Send="Create"/>
         <On Terms="ActorCreation" Send="TimerSet 0.125000 Die"/>
         <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
         <Model value="PointDefenseDroneAttackBeam"/>
@@ -5014,12 +5031,12 @@
         <HostImpactSiteOps Ops="SOpAttachCenter"/>
     </CActorBeamSimple>
     <CActorSound id="SquadPointDefenseDroneAttackImpactSound" parent="SoundOneShot">
-        <On Terms="Effect.SquadPointDefenseLaserDamage.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.SquadPointDefenseLaserNullifyMissile.Start; At Caster" Send="Create"/>
         <Host Subject="::Creator"/>
         <Sound value="Raven_PointDefenseDroneAttackImpact"/>
     </CActorSound>
     <CActorSound id="SquadPointDefenseDroneAttackLaunchSound" parent="SoundOneShot">
-        <On Terms="Effect.SquadPointDefenseLaserDamage.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.SquadPointDefenseLaserNullifyMissile.Start; At Caster" Send="Create"/>
         <Host Subject="PointDefenseDrone"/>
         <Sound value="Raven_PointDefenseDroneAttackLaunch"/>
     </CActorSound>
