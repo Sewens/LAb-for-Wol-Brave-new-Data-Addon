@@ -71,13 +71,6 @@
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <AffectedUnitArray value="SquadWraith"/>
     </CUpgrade>
-    <!--infantry magazine upgrade from 4 to 8-->
-    <CUpgrade id="ExtraSupply">
-        <Flags index="UpgradeCheat" value="0"/>
-        <Race value="Terr"/>
-        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
-        <AffectedUnitArray value="SquadWraith"/>
-    </CUpgrade>
     <!--Attack and vital basic bonus will 25% more efficient for infantry squad.-->
     <CUpgrade id="EliteSquadKillTeam">
         <Flags index="UpgradeCheat" value="0"/>
@@ -110,14 +103,14 @@
         <Flags index="UpgradeCheat" value="0"/>
         <Race value="Terr"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
-        <AffectedUnitArray value="SquadWraith"/>
+        <EffectArray Operation="Set" Reference="Behavior,SquadBulletTimeForPlayer,Modification.TimeScale" Value="0.5"/>
     </CUpgrade>
     <!--Cooldown add to 180s, player have no time scale punishment.-->
     <CUpgrade id="FastThantheLight">
         <Flags index="UpgradeCheat" value="0"/>
         <Race value="Terr"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
-        <AffectedUnitArray value="SquadWraith"/>
+        <EffectArray Operation="Set" Reference="Behavior,SquadBulletTimeForPlayer,Modification.TimeScale" Value="1"/>
     </CUpgrade>
     <!--Harvester will bonus from weapon and armory upgrades. Each level of weapon upgrade +2 harvested resource, and aromry of reduce harvest time for 0.33 seconds each.-->
     <!--Also avalible for auto harvesters.-->
@@ -150,7 +143,17 @@
         <Flags index="UpgradeCheat" value="0"/>
         <Race value="Terr"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
-        <AffectedUnitArray value="SquadWraith"/>
+        <AffectedUnitArray value="SquadBunkerVanilla"/>
+        <AffectedUnitArray value="SquadBunkerPerdition"/>
+        <AffectedUnitArray value="SquadBunkerShrike"/>
+        <AffectedUnitArray value="SquadMissileTurret"/>
+        <AffectedUnitArray value="SquadSupplyDepot"/>
+        <AffectedUnitArray value="SquadSupplyDepotLowered"/>
+        <AffectedUnitArray value="SquadBunkerPsiDisrupter"/>
+        <AffectedUnitArray value="SquadBunkerHiveMindEmulator"/>
+        <AffectedUnitArray value="SquadPlanetaryFortress"/>
+        <AffectedUnitArray value="SquadGalaxyFortress"/>
+        <AffectedUnitArray value="SquadSensorTower"/>
     </CUpgrade>
     <!--Hero attributes gain 3 times on currecnt fraction.-->
     <CUpgrade id="TheGoodtheBadandtheUgly">
@@ -163,7 +166,21 @@
         <Flags index="UpgradeCheat" value="0"/>
         <Race value="Terr"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
-        <AffectedUnitArray value="SquadWraith"/>
+        <AffectedUnitArray value="SquadGhostAcademy"/>
+        <EffectArray Operation="Subtract" Reference="Abil,NuclearWarheadVanilla,InfoArray[Ammo1].Resource[Vespene]" Value="50"/>
+        <EffectArray Operation="Subtract" Reference="Abil,NuclearWarheadVanilla,InfoArray[Ammo1].Time" Value="20.000000"/>
+        <EffectArray Operation="Subtract" Reference="Abil,NuclearWarheadBlack,InfoArray[Ammo1].Resource[Vespene]" Value="50"/>
+        <EffectArray Operation="Subtract" Reference="Abil,NuclearWarheadBlack,InfoArray[Ammo1].Time" Value="20.000000"/>
+        <EffectArray Operation="Subtract" Reference="Abil,NuclearWarheadWhite,InfoArray[Ammo1].Resource[Vespene]" Value="50"/>
+        <EffectArray Operation="Subtract" Reference="Abil,NuclearWarheadWhite,InfoArray[Ammo1].Time" Value="20.000000"/>
+        <EffectArray Operation="Subtract" Reference="Abil,NuclearWarheadBlue,InfoArray[Ammo1].Resource[Vespene]" Value="50"/>
+        <EffectArray Operation="Subtract" Reference="Abil,NuclearWarheadBlue,InfoArray[Ammo1].Time" Value="20.000000"/>
+        <EffectArray Operation="Subtract" Reference="Abil,NuclearWarheadGreen,InfoArray[Ammo1].Resource[Vespene]" Value="50"/>
+        <EffectArray Operation="Subtract" Reference="Abil,NuclearWarheadGreen,InfoArray[Ammo1].Time" Value="20.000000"/>
+        <EffectArray Operation="Subtract" Reference="Abil,NuclearWarheadRed,InfoArray[Ammo1].Resource[Vespene]" Value="50"/>
+        <EffectArray Operation="Subtract" Reference="Abil,NuclearWarheadRed,InfoArray[Ammo1].Time" Value="20.000000"/>
+        <EffectArray Operation="Subtract" Reference="Abil,NuclearWarheadYellow,InfoArray[Ammo1].Resource[Vespene]" Value="50"/>
+        <EffectArray Operation="Subtract" Reference="Abil,NuclearWarheadYellow,InfoArray[Ammo1].Time" Value="20.000000"/>
     </CUpgrade>
     <CUpgrade id="ProtossVersesZerg">
         <Flags index="UpgradeCheat" value="0"/>
@@ -199,10 +216,82 @@
     </CUpgrade>
     <!--Upgrade time reduce 25%, unlock 4 level Weapon/Armory upgrade.-->
     <CUpgrade id="HightechMilitarySupport">
-        <Flags index="UpgradeCheat" value="0"/>
-        <Race value="Terr"/>
-        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
-        <AffectedUnitArray value="SquadWraith"/>
+        <!--infantry-->
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research3].Time" Value="60.000000"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research3].Resource[Minerals]" Value="50"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research3].Resource[Vespene]" Value="50"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research4].Time" Value="75.000000"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research4].Resource[Minerals]" Value="75"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research4].Resource[Vespene]" Value="75"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research5].Time" Value="90.000000"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research5].Resource[Minerals]" Value="100"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research5].Resource[Vespene]" Value="100"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research7].Time" Value="60.000000"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research7].Resource[Minerals]" Value="50"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research7].Resource[Vespene]" Value="50"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research8].Time" Value="75.000000"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research8].Resource[Minerals]" Value="75"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research8].Resource[Vespene]" Value="75"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research9].Time" Value="90.000000"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research9].Resource[Minerals]" Value="100"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research9].Resource[Vespene]" Value="100"/>
+        <!--infantry with WW-->
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research11].Time" Value="60.000000"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research11].Resource[Minerals]" Value="50"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research11].Resource[Vespene]" Value="50"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research12].Time" Value="75.000000"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research12].Resource[Minerals]" Value="75"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research12].Resource[Vespene]" Value="75"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research13].Time" Value="90.000000"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research13].Resource[Minerals]" Value="100"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research13].Resource[Vespene]" Value="100"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research14].Time" Value="60.000000"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research14].Resource[Minerals]" Value="50"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research14].Resource[Vespene]" Value="50"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research15].Time" Value="75.000000"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research15].Resource[Minerals]" Value="75"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research15].Resource[Vespene]" Value="75"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research16].Time" Value="90.000000"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research16].Resource[Minerals]" Value="100"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SquadEngineeringBayResearch,InfoArray[Research16].Resource[Vespene]" Value="100"/>
+        <!-- vehicle and ship -->
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research1].Time" Value="60.000000"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research1].Resource[Minerals]" Value="50"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research1].Resource[Vespene]" Value="50"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research2].Time" Value="75.000000"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research2].Resource[Minerals]" Value="75"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research2].Resource[Vespene]" Value="75"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research3].Time" Value="90.000000"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research3].Resource[Minerals]" Value="100"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research3].Resource[Vespene]" Value="100"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research4].Time" Value="60.000000"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research4].Resource[Minerals]" Value="50"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research4].Resource[Vespene]" Value="50"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research5].Time" Value="75.000000"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research5].Resource[Minerals]" Value="75"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research5].Resource[Vespene]" Value="75"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research6].Time" Value="90.000000"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research6].Resource[Minerals]" Value="100"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research6].Resource[Vespene]" Value="100"/>
+        <!-- vehicle and ship  with GGG-->
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research7].Time" Value="60.000000"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research7].Resource[Minerals]" Value="50"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research7].Resource[Vespene]" Value="50"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research8].Time" Value="75.000000"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research8].Resource[Minerals]" Value="75"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research8].Resource[Vespene]" Value="75"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research9].Time" Value="90.000000"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research9].Resource[Minerals]" Value="100"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research9].Resource[Vespene]" Value="100"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research10].Time" Value="60.000000"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research10].Resource[Minerals]" Value="50"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research10].Resource[Vespene]" Value="50"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research11].Time" Value="75.000000"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research11].Resource[Minerals]" Value="75"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research11].Resource[Vespene]" Value="75"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research12].Time" Value="90.000000"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research12].Resource[Minerals]" Value="100"/>
+        <EffectArray Operation="Subtract" Reference="Abil,SuqadArmoryResearch,InfoArray[Research12].Resource[Vespene]" Value="100"/>
     </CUpgrade>
     <CUpgrade id="BansheeGreedyConsumption">
         <Flags index="UpgradeCheat" value="0"/>
@@ -240,7 +329,37 @@
         <Flags index="UpgradeCheat" value="0"/>
         <Race value="Terr"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
-        <AffectedUnitArray value="SquadWraith"/>
+        <!--hervest-->
+        <EffectArray Reference="Effect,CCResourceMessageMU,Resources" Value="1"/>
+        <EffectArray Reference="Effect,ResourceMessageMU,Resources" Value="1"/>
+        <EffectArray Reference="Effect,MultiMineralAutoHarvestSearch,AreaArray[0].MaxCount" Value="2"/>
+        <EffectArray Operation="Subtract" Reference="Behavior,ResourceFragile,Modification.ResourceHarvestTimeBonus[Minerals]" Value="0.050000"/>
+        <EffectArray Operation="Subtract" Reference="Behavior,ResourceFragile,Modification.ResourceHarvestTimeBonus[Custom]" Value="0.050000"/>
+        <EffectArray Operation="Subtract" Reference="Behavior,ResourceFragile,Modification.ResourceHarvestTimeBonus[Terrazine]" Value="0.050000"/>
+        <EffectArray Operation="Subtract" Reference="Behavior,ResourceFragile,Modification.ResourceHarvestTimeBonus[Vespene]" Value="0.050000"/>
+        <EffectArray Reference="Behavior,ResourceMineralAssassin,Modification.ResourceHarvestAmountMultiplier[Minerals]" Value="1"/>
+        <EffectArray Reference="Behavior,ResourceMineralRobbery,Modification.ResourceHarvestAmountBonus[Minerals]" Value="3"/>
+        <EffectArray Reference="Behavior,ResourceTerrazineCrazy,Modification.ResourceHarvestAmountMultiplier[Vespene]" Value="1"/>
+        <EffectArray Reference="Behavior,ResourceVespenseCrazy,Modification.ResourceHarvestAmountMultiplier[Vespene]" Value="1"/>
+        <EffectArray Operation="Subtract" Reference="Behavior,ResourceTerrazineCrazy,Modification.ResourceHarvestTimeBonus[Vespene]" Value="0.050000"/>
+        <!--scrap-->
+        <EffectArray Reference="Effect,SquadPickupScrapSmallResources,Resources[Minerals]" Value="25"/>
+        <EffectArray Reference="Effect,SquadPickupScrapSmallResources,Resources[Vespene]" Value="25"/>
+        <EffectArray Reference="Effect,SquadPickupScrapMediumResources,Resources[Minerals]" Value="50"/>
+        <EffectArray Reference="Effect,SquadPickupScrapMediumResources,Resources[Vespene]" Value="50"/>
+        <EffectArray Reference="Effect,SquadPickupScrapLargeResources,Resources[Minerals]" Value="75"/>
+        <EffectArray Reference="Effect,SquadPickupScrapLargeResources,Resources[Vespene]" Value="75"/>
+        <!--loot-->
+        <EffectArray Reference="Effect,LootonDealDamageTier1,Resources[Minerals]" Value="1"/>
+        <EffectArray Reference="Effect,LootonDealDamageTier1,Resources[Vespene]" Value="1"/>
+        <EffectArray Reference="Effect,LootonDealDamageTier2,Resources[Minerals]" Value="1"/>
+        <EffectArray Reference="Effect,LootonDealDamageTier2,Resources[Vespene]" Value="1"/>
+        <EffectArray Reference="Effect,LootonDealDamageTier3,Resources[Minerals]" Value="2"/>
+        <EffectArray Reference="Effect,LootonDealDamageTier3,Resources[Vespene]" Value="2"/>
+        <EffectArray Reference="Effect,LootonDealDamageTier4,Resources[Minerals]" Value="2"/>
+        <EffectArray Reference="Effect,LootonDealDamageTier4,Resources[Vespene]" Value="2"/>
+        <EffectArray Reference="Effect,LootonDealDamageTier5,Resources[Minerals]" Value="3"/>
+        <EffectArray Reference="Effect,LootonDealDamageTier5,Resources[Vespene]" Value="3"/>
     </CUpgrade>
     <CUpgrade id="WarhoundJetpackUpgrade">
         <Flags index="UpgradeCheat" value="0"/>
@@ -532,7 +651,7 @@
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <AffectedUnitArray value="SquadSpectre"/>
     </CUpgrade>
-    <CUpgrade id="SquadExtendableInfantrySquad">
+    <CUpgrade id="ExtraSupply">
         <EffectArray Operation="Set" Reference="Abil,SquadInfantry,MaxCount" Value="8"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>

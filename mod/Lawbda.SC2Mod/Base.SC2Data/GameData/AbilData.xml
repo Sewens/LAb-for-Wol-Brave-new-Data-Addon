@@ -43,6 +43,30 @@
         </CmdButtonArray>
         <CmdButtonArray index="Cancel" DefaultButtonFace="CmdCancel"/>
     </CAbilEffectTarget>
+    <CAbilEffectInstant id="BulletTimeTheWorld">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadBulletTime"/>
+        <InterruptCost>
+            <Cooldown TimeUse="180"/>
+        </InterruptCost>
+        <Arc value="360"/>
+        <AINotifyEffect value="SquadBulletTime"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadBulletTime" Requirements="HaveFastThantheLight"/>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AdvanceMilitarySupportAutoUpgrade">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoTooltipPriority value="1"/>
+        <Effect index="0" value="AdvanceMilitarySupportAutoUpgradeSet"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AdvanceMilitarySupportAutoUpgrade" Requirements="AdvanceMilitarySupportAutoUpgrade">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <AutoCastFilters value="-;-"/>
+        <AutoCastRange value="500"/>
+        <AINotifyEffect value="SquadLv1VehicleAndShipAutoUpgrade"/>
+    </CAbilEffectInstant>
     <CAbilEffectInstant id="SquadZeratulReflectionShield">
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
         <Effect index="0" value="SquadZeratulReflectionShieldPersistent"/>
@@ -343,7 +367,7 @@
         <Effect index="0" value="SquadSuperGaryCP"/>
         <Cost>
             <Charge Link="Abil/PowerFieldSuperGaryStetmann" Location="Unit"/>
-            <Cooldown Link="Abil/PowerFieldSuperGaryStetmann" Location="Unit" TimeUse="120"/>
+            <Cooldown Link="Abil/PowerFieldSuperGaryStetmann" Location="Unit" TimeUse="60"/>
         </Cost>
         <AINotifyEffect value="PowerFieldSuperGaryStetmann"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadSuperGaryEnergyPower" Requirements="HavePowerFieldEnergyRegenerationUpgrade"/>
@@ -353,7 +377,7 @@
         <Effect index="0" value="SquadSuperGaryCP"/>
         <Cost>
             <Charge Link="Abil/PowerFieldSuperGaryStetmann" Location="Unit"/>
-            <Cooldown Link="Abil/PowerFieldSuperGaryStetmann" Location="Unit" TimeUse="120"/>
+            <Cooldown Link="Abil/PowerFieldSuperGaryStetmann" Location="Unit" TimeUse="60"/>
         </Cost>
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadSuperGaryHealthPower" Requirements="HavePowerFieldHPRegenerationUpgrade"/>
     </CAbilEffectInstant>
@@ -362,7 +386,7 @@
         <Effect index="0" value="SquadSuperGaryCP"/>
         <Cost>
             <Charge Link="Abil/PowerFieldSuperGaryStetmann" Location="Unit"/>
-            <Cooldown Link="Abil/PowerFieldSuperGaryStetmann" Location="Unit" TimeUse="120"/>
+            <Cooldown Link="Abil/PowerFieldSuperGaryStetmann" Location="Unit" TimeUse="60"/>
         </Cost>
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadSuperGarySpeedPower" Requirements="HavePowerFieldMovementSpeedUpgrade"/>
     </CAbilEffectInstant>
@@ -857,7 +881,7 @@
     </CAbilEffectInstant>
     <CAbilResearch id="SquadAdvanceEngineBayResearch">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <InfoArray index="Research1" Upgrade="SquadExtendableInfantrySquad">
+        <InfoArray index="Research1" Upgrade="ExtraSupply">
             <Button DefaultButtonFace="ExtendableInfantryMagazine"/>
         </InfoArray>
     </CAbilResearch>
@@ -1240,7 +1264,11 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Effect index="0" value="SquadBulletTime"/>
         <AINotifyEffect value="SquadBulletTime"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="SquadBulletTime"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadBulletTime" Requirements="NoFastThantheLight"/>
+        <InterruptCost>
+            <Cooldown TimeUse="30"/>
+        </InterruptCost>
+        <Arc value="360"/>
     </CAbilEffectInstant>
     <CAbilEffectTarget id="BlackScannerSweep">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>

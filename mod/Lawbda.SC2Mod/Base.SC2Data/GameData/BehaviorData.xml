@@ -1,5 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorPowerUser id="SquadBarrackPowerUserForUnit">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <PowerLink value="SquadBarrackPowerSource"/>
+        <PowerStageArray/>
+        <PowerStageArray MinPowerLevel="1">
+            <Modification>
+                <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Energy" value="0"/>
+                <VitalRegenArray index="Life" value="5"/>
+                <VitalRegenArray index="Shields" value="5"/>
+            </Modification>
+        </PowerStageArray>
+        <Requirements value="HaveHumanAfterAll"/>
+    </CBehaviorPowerUser>
+    <CBehaviorPowerUser id="SquadFactoryPowerUserForUnit">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Requirements value="HaveHumanAfterAll"/>
+        <PowerLink value="SquadFactoryPowerSource"/>
+        <PowerStageArray/>
+        <PowerStageArray MinPowerLevel="1" LevelGainEffect="PoweredByFactoryApply" LevelLossEffect="PoweredByFactoryRemove">
+            <Modification>
+                <AdditiveMoveSpeedFactor value="0.2"/>
+                <AdditiveAttackSpeedFactor value="0.1"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Energy" value="0"/>
+            </Modification>
+        </PowerStageArray>
+    </CBehaviorPowerUser>
     <CBehaviorBuff id="SquadNovaDefensiveDroneNullified">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Modification TimeScale="0.4"/>
@@ -9,6 +43,22 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Duration value="3"/>
     </CBehaviorBuff>
+    <CBehaviorPowerUser id="SquadStarportPowerUserForUnit">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Requirements value="HaveHumanAfterAll"/>
+        <PowerLink value="SquadStarportPowerSource"/>
+        <PowerStageArray/>
+        <PowerStageArray MinPowerLevel="1" LevelGainEffect="PoweredByStarportApply" LevelLossEffect="PoweredByStarportRemove">
+            <Modification>
+                <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Energy" value="0"/>
+                <VitalRegenArray index="Energy" value="2.5"/>
+            </Modification>
+        </PowerStageArray>
+    </CBehaviorPowerUser>
     <CBehaviorBuff id="SquadZeratulReflectionShield">
         <Alignment value="Negative"/>
         <InfoIcon value="Assets\Textures\btn-ability-protoss-shieldbattery.dds"/>
@@ -474,17 +524,15 @@
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
         <BuffFlags index="RefreshStack" value="1"/>
-        <MaxStackCountPerCaster value="1"/>
-        <Duration value="4"/>
+        <MaxStackCountPerCaster value="8"/>
+        <Duration value="2"/>
         <Period value="4"/>
         <PeriodicEffect value="CCResourceMessageMU"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="CCResourceMessageRegenAura">
         <InfoIcon value="Assets\Textures\btn-ability-zerg-dehaka-healingaura.dds"/>
-        <BehaviorCategories index="User9" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <MaxStackCount value="8"/>
-        <Period value="2"/>
+        <Period value="8"/>
         <PeriodicEffect value="CCResourceMessageSearch"/>
         <Requirements value="HaveCommandCenterResourceGenerateField"/>
     </CBehaviorBuff>
@@ -1040,7 +1088,7 @@
                 <VitalMaxIncreaseAffectsCurrentArray index="Energy" value="0"/>
             </Modification>
         </PowerStageArray>
-        <Requirements value="HaveAddonStructureOptimization"/>
+        <Requirements value="HaveAddonRevolution"/>
         <InfoIcon value="Assets\Textures\btn-building-terran-reactor-silver.dds"/>
         <Flags index="HideUnpoweredText" value="1"/>
         <PoweredWhileUnderConstruction value="1"/>
@@ -1073,7 +1121,7 @@
                 </VitalDamageGainArray>
             </Modification>
         </PowerStageArray>
-        <Requirements value="HaveAddonStructureOptimization"/>
+        <Requirements value="HaveAddonRevolution"/>
         <InfoIcon value="Assets\Textures\btn-building-terran-techlab-silver.dds"/>
         <Flags index="HideUnpoweredText" value="1"/>
         <PoweredWhileUnderConstruction value="1"/>
@@ -2562,7 +2610,8 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <MaxStackCount value="8"/>
         <Modification>
-            <ResourceHarvestAmountMultiplier index="Vespene" value="4"/>
+            <ResourceHarvestAmountMultiplier index="Vespene" value="2"/>
+            <ResourceHarvestTimeBonus index="Vespene" value="-0.1"/>
         </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="ResourceVespenseCrazy">
@@ -2571,7 +2620,7 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <MaxStackCount value="8"/>
         <Modification>
-            <ResourceHarvestAmountMultiplier index="Vespene" value="2"/>
+            <ResourceHarvestAmountMultiplier index="Vespene" value="4"/>
         </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="SpriteLink">
@@ -2897,10 +2946,10 @@
         <DisableValidatorArray value=""/>
         <MaxStackCount value="8"/>
         <Modification>
-            <ResourceHarvestTimeBonus index="Minerals" value="-0.4"/>
-            <ResourceHarvestTimeBonus index="Vespene" value="-0.4"/>
-            <ResourceHarvestTimeBonus index="Terrazine" value="-0.4"/>
-            <ResourceHarvestTimeBonus index="Custom" value="-0.4"/>
+            <ResourceHarvestTimeBonus index="Minerals" value="-0.15"/>
+            <ResourceHarvestTimeBonus index="Vespene" value="-0.15"/>
+            <ResourceHarvestTimeBonus index="Terrazine" value="-0.15"/>
+            <ResourceHarvestTimeBonus index="Custom" value="-0.15"/>
         </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="UnitMediumAddMaxLife">

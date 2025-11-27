@@ -30,6 +30,41 @@
     <CEffectEnumArea default="1" id="SquadAbilSearchRadiusExt" parent="SquadAbilSearch">
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
+    <CEffectSet id="AdvanceMilitarySupportAutoUpgradeSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadLv1InfantryAutoUpgradeSwitch"/>
+        <EffectArray value="SquadLv1VehicleAndShipAutoUpgradeSwitch"/>
+    </CEffectSet>
+    <CEffectSwitch id="SquadLv1InfantryAutoUpgradeSwitch">
+        <EditorCategories value=""/>
+        <CaseArray Validator="HaveWarMinerWagon" Effect="SquadLv1InfantrywithHarvesterAutoUpgrade"/>
+        <CaseDefault value="SquadLv1InfantryAutoUpgrade"/>
+    </CEffectSwitch>
+    <CEffectSwitch id="SquadLv1VehicleAndShipAutoUpgradeSwitch">
+        <EditorCategories value=""/>
+        <CaseArray Validator="HaveGustyGardenGalaxy" Effect="SquadLv1VehicleAndShipwithDefenceStructureAutoUpgrade"/>
+        <CaseDefault value="SquadLv1VehicleAndShipAutoUpgrade"/>
+    </CEffectSwitch>
+    <CEffectModifyPlayer id="SquadLv1InfantrywithHarvesterAutoUpgrade">
+        <EditorCategories value="Race:Terran"/>
+        <Upgrades Upgrade="SquadTerranInfantryArmorHarvestBonusLevel1" Count="1"/>
+        <Upgrades Upgrade="SquadTerranInfantryWeaponsHarvestBonusLevel1" Count="1"/>
+    </CEffectModifyPlayer>
+    <CEffectModifyPlayer id="SquadLv1VehicleAndShipAutoUpgrade">
+        <EditorCategories value="Race:Terran"/>
+        <Upgrades Upgrade="SquadTerranVehicleAndShipPlatingLevel1" Count="1"/>
+        <Upgrades Upgrade="SquadTerranVehicleAndShipWeaponsLevel1" Count="1"/>
+    </CEffectModifyPlayer>
+    <CEffectModifyPlayer id="SquadLv1InfantryAutoUpgrade">
+        <EditorCategories value="Race:Terran"/>
+        <Upgrades Upgrade="SquadTerranInfantryArmorLevel1" Count="1"/>
+        <Upgrades Upgrade="SquadTerranInfantryWeaponsLevel1" Count="1"/>
+    </CEffectModifyPlayer>
+    <CEffectModifyPlayer id="SquadLv1VehicleAndShipwithDefenceStructureAutoUpgrade">
+        <EditorCategories value="Race:Terran"/>
+        <Upgrades Upgrade="SquadTerranVehicleAndShipPlatingDefenceStructureBonusLevel1" Count="1"/>
+        <Upgrades Upgrade="SquadTerranVehicleAndShipWeaponsDefenceStructureBonusLevel1" Count="1"/>
+    </CEffectModifyPlayer>
     <CEffectRedirectMissile id="SquadRedirectPlacementLaunchTarget">
         <ValidatorArray value="RedirectPlacementLaunchTargetTargetFilters"/>
         <EditorCategories value=""/>
