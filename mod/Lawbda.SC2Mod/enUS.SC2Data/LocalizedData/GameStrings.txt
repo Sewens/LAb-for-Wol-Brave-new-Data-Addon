@@ -255,8 +255,9 @@ Behavior/Name/FireOrb=Fire Orb
 Behavior/Name/FirebatImmolationArmor=Firebat Immolation Armor
 Behavior/Name/FrostOrb=Frost Orb
 Behavior/Name/GreenScannerHeal=Green Scanner Heal
+Behavior/Name/HeroLevelUpto10=Hero Level Up to10
 Behavior/Name/InfantryBasicStatesModifies=Infantry Basic States Modifies
-Behavior/Name/InfantryLevelUpto10=Infantry Level Up to10
+Behavior/Name/InfantryLevelUpto3=Infantry Level Up to3
 Behavior/Name/LightingOrb=Lighting Orb
 Behavior/Name/LootOnDealDamage=Loot On Deal Damage
 Behavior/Name/MagazineDeathResponseController=Magazine Death Response Controller
@@ -561,6 +562,7 @@ Button/Name/SquadAddonTacticalJump=Squad Addon Tactical Jump
 Button/Name/SquadAfterburner=Squad Afterburner
 Button/Name/SquadAttackRedirect=Squad Attack Redirect
 Button/Name/SquadAutoTurret=Squad Auto Turret
+Button/Name/SquadAutomatedRefineries=Squad Automated Refineries
 Button/Name/SquadBanshee=Squad Banshee
 Button/Name/SquadBansheeBomberMode=Squad Banshee Bomber Mode
 Button/Name/SquadBansheeConsume=Squad Banshee Consume
@@ -942,6 +944,9 @@ Button/Tooltip/SquadAddonTacticalJump=After <d time="6"/>, warps to the target l
 Button/Tooltip/SquadAfterburner=<n/>Increases the Scout's movement speed by 100% for <d time="10"/>.
 Button/Tooltip/SquadArmory=Contains weapon and armor upgrades for Factory and Starport units.
 Button/Tooltip/SquadAttackRedirect=Targets and attacks the target unit until it is destroyed or moves out of range.
+Button/Tooltip/SquadAutomatedMineralTextKicker4=<s val="Kicker_Minerals">+4 </s><IMG path="Assets\Textures\icon-mineral.dds" height="28" width="28"/>
+Button/Tooltip/SquadAutomatedRefineries=Refineries do not require workers
+Button/Tooltip/SquadAutomatedVespenseTextKicker4=<s val="Kicker_Refinery">+4 </s><IMG path="Assets\Textures\icon-gas-terran.dds" height="28" width="28"/>
 Button/Tooltip/SquadBanshee=Tactical-strike aircraft.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/SquadBansheeConsume=Latches onto the target structure, dealing <d ref="-1 * (Effect,ViperConsumeStructureModifyTarget,VitalArray[0].Change * Effect,ViperConsumeStructureCreatePersistent,PeriodCount)"/> damage and restoring <d ref="(Effect,ViperConsumeStructureModifyCaster,VitalArray[2].Change / Behavior,TimeScaleConversionBehavior,Duration)" precision="1"/> energy to the Viper every second.<n/><n/><c val="#ColorAttackInfo">Cannot target allied or enemy structures.</c>
 Button/Tooltip/SquadBansheeResearchCloakingField=Enables <c val="ffff8a">Banshees</c> to use the Cloak ability. Cloak renders the <c val="ffff8a">Banshee</c> invisible to enemies unless the unit is revealed by detectors or effects.
@@ -1054,6 +1059,7 @@ Button/Tooltip/SquadMedivacRepairDroneHanger=Two repair drones automatically hea
 Button/Tooltip/SquadMedivacUnloadAll=Unloads all units.
 Button/Tooltip/SquadMercCompound=Trains Mercenary units.
 Button/Tooltip/SquadMindControl=Permanently converts targeted Zerg unit to player control.<n/><n/><c val="#ColorAttackInfo">Heroic units are immune.</c>
+Button/Tooltip/SquadMineralHut=Built over a Vespene Geyser to allow harvesting of vespene gas.
 Button/Tooltip/SquadMissilePods=Missile Pods deal <d ref="Effect,HurricaneMissileDamage,Amount * Effect,HurricaneMissileDamagePersistent,PeriodCount"/> (+<d ref="Effect,HurricaneMissileDamage,AttributeBonus[0] * Effect,HurricaneMissileDamagePersistent,PeriodCount"/> vs. light) damage to air units in target area.
 Button/Tooltip/SquadMissileTurret=Primary anti-air defensive structure. <n/><n/><c val="#ColorAttackInfo">Can attack air units.</c><n/><c val="FFE303">Detector</c>
 Button/Tooltip/SquadMissileTurretHellstormBateries=Missile Pods deal <d ref="Effect,HurricaneMissileDamage,Amount * Effect,HurricaneMissileDamagePersistent,PeriodCount"/> (+<d ref="Effect,HurricaneMissileDamage,AttributeBonus[0] * Effect,HurricaneMissileDamagePersistent,PeriodCount"/> vs. light) damage to air units in target area.
@@ -1370,6 +1376,7 @@ Effect/Name/InfantryChargeBasicChain=Infantry Charge Basic Chain
 Effect/Name/InfantryEnlargeRadiusApply=Infantry Enlarge Radius Apply
 Effect/Name/InfantryEnlargeRadiusRemove=Infantry Enlarge Radius Remove
 Effect/Name/InfantryEnlargeRadiusRemoveMagazineCast=Infantry Enlarge Radius Remove Magazine Cast
+Effect/Name/InfantryLevelUpto3Apply=Infantry Level Up to3 Apply
 Effect/Name/JoinAbilityDisableRemove=Join Ability Disable Remove
 Effect/Name/JoinAbilityDisableRemoveMagazineCast=Join Ability Disable Remove Magazine Cast
 Effect/Name/LightingOrbApply=Lighting Orb Apply
@@ -1520,7 +1527,8 @@ Effect/Name/SquadAfterburnerApply=Squad Afterburner Apply
 Effect/Name/SquadAfterburnerPersistent=Squad Afterburner Persistent
 Effect/Name/SquadAlphaInfantryDeathResponseChain=Squad Alpha Infantry Death Response Chain
 Effect/Name/SquadApplyBuff=Squad Apply Buff
-Effect/Name/SquadAutoHarvestVespene=Squad Auto Harvest Vespene
+Effect/Name/SquadAutoHarvestMineral=Squad Auto Harvest Mineral
+Effect/Name/SquadAutoHarvestVespense=Squad Auto Harvest Vespense
 Effect/Name/SquadAutoTurrectTwinAutocannonsDamage=Squad Auto Turrect Twin Autocannons Damage
 Effect/Name/SquadBansheeCP=Squad Banshee CP
 Effect/Name/SquadBansheeConsumeStructureApplyBehavior=Squad Banshee Consume Structure Apply Behavior
@@ -2444,6 +2452,7 @@ Unit/Name/LawbdaCore=Lawbda Core
 Unit/Name/Medic3=Medic
 Unit/Name/MediumScrapSalvagex22=Medium Scrap Salvagex22
 Unit/Name/SiegeTank=Squad Siege Tank Sieged
+Unit/Name/SiegeTankJumpJetPlaceholder=Siege Tank Jump Jet Placeholder
 Unit/Name/SmallScrapSalvagex11=Small Scrap Salvagex11
 Unit/Name/SpiderMine=Squad Spider Mine Burrowed
 Unit/Name/SquadArmory=Squad Armory
@@ -2516,6 +2525,7 @@ Unit/Name/SquadMedicHealGunMissile=Squad Medic Heal Gun Missile
 Unit/Name/SquadMedivac=Squad Medivac
 Unit/Name/SquadMedivacRepairDrone=Repair Drone
 Unit/Name/SquadMercCompound=Squad Merc Compound
+Unit/Name/SquadMineralHut=Squad Mineral Hut
 Unit/Name/SquadMissileTurret=Squad Missile Turret
 Unit/Name/SquadMissileTurretHellstormBatteriesMissile=Squad Missile Turret Hellstorm Batteries Missile
 Unit/Name/SquadMissileTurretLongboltMissile=Squad Missile Turret Longbolt Missile

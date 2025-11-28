@@ -1,5 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorVeterancy id="InfantryLevelUpto3">
+        <InfoIcon value="Assets\Textures\btn-ability-mengsk-royalguard-mightoftheempire.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <VeterancyLevelArray MinVeterancyXP="50">
+            <Modification>
+                <AbilLinkDisableArray value="DisbandSquad"/>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="100">
+            <Modification>
+                <AdditiveMoveSpeedFactor value="0.25"/>
+                <DamageDealtFraction index="Spell" value="0.25"/>
+                <DamageDealtFraction index="Melee" value="0.25"/>
+                <DamageDealtFraction index="Ranged" value="0.25"/>
+                <DamageDealtFraction index="Splash" value="0.25"/>
+                <DamageDealtFraction index="NoProc" value="0.25"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Energy" value="0"/>
+                <VitalMaxAdditiveMultiplierArray index="Life" value="0.25"/>
+                <VitalMaxAdditiveMultiplierArray index="Energy" value="0.25"/>
+                <VitalRegenMultiplier index="Life" value="0.25"/>
+                <VitalRegenMultiplier index="Energy" value="0.25"/>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="150">
+            <Modification>
+                <AdditiveMoveSpeedFactor value="0.25"/>
+                <DamageDealtFraction index="Spell" value="0.25"/>
+                <DamageDealtFraction index="Melee" value="0.25"/>
+                <DamageDealtFraction index="Ranged" value="0.25"/>
+                <DamageDealtFraction index="Splash" value="0.25"/>
+                <DamageDealtFraction index="NoProc" value="0.25"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Energy" value="0"/>
+                <VitalMaxAdditiveMultiplierArray index="Life" value="0.25"/>
+                <VitalMaxAdditiveMultiplierArray index="Energy" value="0.25"/>
+                <VitalRegenMultiplier index="Life" value="0.25"/>
+                <VitalRegenMultiplier index="Energy" value="0.25"/>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="200">
+            <Modification>
+                <AdditiveMoveSpeedFactor value="0.25"/>
+                <DamageDealtFraction index="Spell" value="0.25"/>
+                <DamageDealtFraction index="Melee" value="0.25"/>
+                <DamageDealtFraction index="Ranged" value="0.25"/>
+                <DamageDealtFraction index="Splash" value="0.25"/>
+                <DamageDealtFraction index="NoProc" value="0.25"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Life" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Shields" value="0"/>
+                <VitalMaxIncreaseAffectsCurrentArray index="Energy" value="0"/>
+                <VitalMaxAdditiveMultiplierArray index="Life" value="0.25"/>
+                <VitalMaxAdditiveMultiplierArray index="Energy" value="0.25"/>
+                <VitalRegenMultiplier index="Life" value="0.25"/>
+                <VitalRegenMultiplier index="Energy" value="0.25"/>
+            </Modification>
+        </VeterancyLevelArray>
+        <Requirements value="HaveCaptainXelnaga"/>
+    </CBehaviorVeterancy>
+    <CBehaviorBuff id="SquadAutoHarvestMineral">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <DisableValidatorArray value="AutoHarvesterHarvest"/>
+        <RemoveValidatorArray value="AutoHarvesterFinish"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <Period value="4"/>
+        <PeriodicEffect value="SquadAutoHarvestMineral"/>
+    </CBehaviorBuff>
     <CBehaviorPowerUser id="SquadBarrackPowerUserForUnit">
         <BehaviorFlags index="Permanent" value="1"/>
         <InfoFlags index="Hidden" value="1"/>
@@ -1972,11 +2042,9 @@
     <CBehaviorBuff id="SquadAutoHarvestVespene">
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
-        <DisableValidatorArray value="AutoHarvesterHarvest"/>
-        <RemoveValidatorArray value="AutoHarvesterFinish"/>
         <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
-        <Period value="2.1"/>
-        <PeriodicEffect value="SquadAutoHarvestVespene"/>
+        <Period value="4"/>
+        <PeriodicEffect value="SquadAutoHarvestVespense"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="AutoTrackMagazine">
         <BehaviorFlags index="Permanent" value="1"/>
@@ -2346,7 +2414,8 @@
         <CarryResourceBehavior value="SquadCarryHarvestableVespeneGeyserGas"/>
         <IdealHarvesterCount value="3"/>
     </CBehaviorResource>
-    <CBehaviorVeterancy id="InfantryLevelUpto10">
+    <CBehaviorVeterancy id="HeroLevelUpto10">
+        <InfoIcon value="Assets\Textures\btn-ability-zeratul-hero-purityofwill.dds"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <VeterancyLevelArray MinVeterancyXP="200"/>
         <VeterancyLevelArray MinVeterancyXP="200">

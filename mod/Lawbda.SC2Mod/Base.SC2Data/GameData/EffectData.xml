@@ -35,6 +35,15 @@
         <EffectArray value="SquadLv1InfantryAutoUpgradeSwitch"/>
         <EffectArray value="SquadLv1VehicleAndShipAutoUpgradeSwitch"/>
     </CEffectSet>
+    <CEffectApplyBehavior id="InfantryLevelUpto3Apply">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="InfantryLevelUpto3"/>
+    </CEffectApplyBehavior>
+    <CEffectModifyUnit id="SquadAutoHarvestVespense">
+        <EditorCategories value="Race:Terran"/>
+        <Resources value="-4"/>
+        <ResourcesHarvestedFraction value="1"/>
+    </CEffectModifyUnit>
     <CEffectSwitch id="SquadLv1InfantryAutoUpgradeSwitch">
         <EditorCategories value=""/>
         <CaseArray Validator="HaveWarMinerWagon" Effect="SquadLv1InfantrywithHarvesterAutoUpgrade"/>
@@ -5589,7 +5598,7 @@
         <BehaviorLink value="ResourceVespenseCrazy"/>
         <Count value="1"/>
     </CEffectRemoveBehavior>
-    <CEffectModifyUnit id="SquadAutoHarvestVespene">
+    <CEffectModifyUnit id="SquadAutoHarvestMineral">
         <EditorCategories value="Race:Terran"/>
         <Resources value="-4"/>
         <ResourcesHarvestedFraction value="1"/>
@@ -6517,6 +6526,7 @@
         <EffectArray value="DistributeBuffTrackerApply"/>
         <EffectArray value="SpriteLinkApply"/>
         <EffectArray value="GiveKillsToCaster"/>
+        <EffectArray value="InfantryLevelUpto3Apply"/>
     </CEffectSet>
     <CEffectApplyBehavior id="LootOnDealDamage">
         <EditorCategories value="Race:Terran"/>
