@@ -217,6 +217,18 @@
         <HeightOffset value="1.500000"/>
         <Text value="Button/Tooltip/##id##"/>
     </CActorText>
+    <CActorText id="SquadAutomatedVespenseTextKicker42">
+        <On Terms="ActorCreation" Send="TimerSet 0.100000 StartMover"/>
+        <On Terms="ActorCreation" Send="TimerSet 2.000000 Die"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.000000 2.000000"/>
+        <On Terms="TimerExpired; TimerName StartMover" Send="Create AutomatedRefineryTextMover"/>
+        <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
+        <Host Subject="_Unit"/>
+        <FixedSize value="28"/>
+        <AlignV value="Bottom"/>
+        <HeightOffset value="3.500000"/>
+        <Text value="Button/Tooltip/SquadAutomatedVespenseTextKicker42"/>
+    </CActorText>
     <CActorText id="SquadMineralInvestmentLargeTextKicker40">
         <On Terms="ActorCreation" Send="TimerSet 0.100000 StartMover"/>
         <On Terms="ActorCreation" Send="TimerSet 2.000000 Die"/>
@@ -255,6 +267,9 @@
         <On Terms="Effect.SquadMineralInvestmentSmallMP8.Start" Send="Create SquadMineralInvestmentSmallTextKicker8"/>
         <On Terms="Effect.SquadMineralInvestmentMediumMP20.Start" Send="Create SquadMineralInvestmentMediumTextKicker20"/>
         <On Terms="Effect.SquadMineralInvestmentLargeMP40.Start" Send="Create SquadMineralInvestmentLargeTextKicker40"/>
+        <On Terms="Effect.SquadVespenseInvestmentSmallMP4.Start" Send="Create SquadVespenseInvestmentSmallTextKicker4"/>
+        <On Terms="Effect.SquadVespenseInvestmentMediumMP10.Start" Send="Create SquadVespenseInvestmentMediumTextKicker10"/>
+        <On Terms="Effect.SquadVespenseInvestmentLargeMP20.Start" Send="Create SquadVespenseInvestmentLargeTextKicker20"/>
         <On Terms="UnitDeathCustomize.BioDomeCommandFlying" Send="DeathCustomize Flying"/>
         <Model value="BioDomeCommand"/>
         <BuildModel value="BioDomeCommand"/>
@@ -277,7 +292,7 @@
         </Wireframe>
         <Scale value="0.600000"/>
     </CActorUnit>
-    <CActorText id="SquadAutomatedVespenseTextKicker4">
+    <CActorText id="SquadVespenseInvestmentLargeTextKicker20">
         <On Terms="ActorCreation" Send="TimerSet 0.100000 StartMover"/>
         <On Terms="ActorCreation" Send="TimerSet 2.000000 Die"/>
         <On Terms="ActorCreation" Send="SetOpacity 0.000000 2.000000"/>
@@ -287,7 +302,19 @@
         <FixedSize value="28"/>
         <AlignV value="Bottom"/>
         <HeightOffset value="3.500000"/>
-        <Text value="Button/Tooltip/SquadAutomatedVespenseTextKicker4"/>
+        <Text value="Button/Tooltip/SquadVespenseInvestmentLargeTextKicker20"/>
+    </CActorText>
+    <CActorText id="SquadVespenseInvestmentSmallTextKicker4">
+        <On Terms="ActorCreation" Send="TimerSet 0.100000 StartMover"/>
+        <On Terms="ActorCreation" Send="TimerSet 2.000000 Die"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.000000 2.000000"/>
+        <On Terms="TimerExpired; TimerName StartMover" Send="Create AutomatedRefineryTextMover"/>
+        <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
+        <Host Subject="_Unit"/>
+        <FixedSize value="28"/>
+        <AlignV value="Bottom"/>
+        <HeightOffset value="3.500000"/>
+        <Text value="Button/Tooltip/SquadVespenseInvestmentSmallTextKicker4"/>
     </CActorText>
     <CActorText id="SquadAutomatedMineralTextKicker4">
         <On Terms="ActorCreation" Send="TimerSet 0.100000 StartMover"/>
@@ -379,6 +406,18 @@
     <CActorModel id="SquadMineralHutBuild" parent="TerranBuildingBuildRefinery" unitName="SquadMineralHut">
         <Model value="SupplyDepotBuild"/>
     </CActorModel>
+    <CActorText id="SquadVespenseInvestmentMediumTextKicker10">
+        <On Terms="ActorCreation" Send="TimerSet 0.100000 StartMover"/>
+        <On Terms="ActorCreation" Send="TimerSet 2.000000 Die"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.000000 2.000000"/>
+        <On Terms="TimerExpired; TimerName StartMover" Send="Create AutomatedRefineryTextMover"/>
+        <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
+        <Host Subject="_Unit"/>
+        <FixedSize value="28"/>
+        <AlignV value="Bottom"/>
+        <HeightOffset value="3.500000"/>
+        <Text value="Button/Tooltip/SquadVespenseInvestmentMediumTextKicker10"/>
+    </CActorText>
     <CActorModel id="SquadZeratulReflectionShield" parent="ModelAnimationStyleContinuous">
         <Inherits index="CloakEffect" value="1"/>
         <Inherits index="Visibility" value="1"/>

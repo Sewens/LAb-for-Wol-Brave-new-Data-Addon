@@ -81,7 +81,7 @@
         <AutoCastFilters value="-;-"/>
         <AutoCastRange value="500"/>
         <AINotifyEffect value="PrimalHeal"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="SquadMineralInvestmentMedium"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadMineralInvestmentMedium" Requirements="HaveCapitalismRoad"/>
     </CAbilEffectInstant>
     <CAbilEffectInstant id="SquadMineralInvestmentLarge">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -97,7 +97,39 @@
         <AutoCastFilters value="-;-"/>
         <AutoCastRange value="500"/>
         <AINotifyEffect value="PrimalHeal"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="SquadMineralInvestmentLarge"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadMineralInvestmentLarge" Requirements="HaveCapitalismRoad"/>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="SquadVespenseInvestmentLarge">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadVespenseInvestmentLargeSet"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Resource index="Vespene" value="2000"/>
+            <Display index="Minerals" value="1"/>
+            <Display index="Vespene" value="1"/>
+            <Cooldown TimeUse="200"/>
+        </Cost>
+        <AutoCastFilters value="-;-"/>
+        <AutoCastRange value="500"/>
+        <AINotifyEffect value="PrimalHeal"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadVespenseInvestmentLarge" Requirements="HaveCapitalismRoad"/>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="SquadVespenseInvestmentSmall">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadVespenseInvestmentSmallSet"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Resource index="Vespene" value="500"/>
+            <Display index="Minerals" value="1"/>
+            <Display index="Vespene" value="1"/>
+            <Cooldown TimeUse="200"/>
+        </Cost>
+        <AutoCastFilters value="-;-"/>
+        <AutoCastRange value="500"/>
+        <AINotifyEffect value="PrimalHeal"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadVespenseInvestmentSmall" Requirements="HaveCapitalismRoad"/>
     </CAbilEffectInstant>
     <CAbilEffectInstant id="SquadMineralToVespense">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -114,6 +146,22 @@
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadVespenseExchange"/>
         <AutoCastFilters value="-;-"/>
         <AutoCastRange value="500"/>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="SquadVespenseInvestmentMedium">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadVespenseInvestmentMediumSet"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Resource index="Vespene" value="1000"/>
+            <Display index="Minerals" value="1"/>
+            <Display index="Vespene" value="1"/>
+            <Cooldown TimeUse="200"/>
+        </Cost>
+        <AutoCastFilters value="-;-"/>
+        <AutoCastRange value="500"/>
+        <AINotifyEffect value="PrimalHeal"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadVespenseInvestmentMedium" Requirements="HaveCapitalismRoad"/>
     </CAbilEffectInstant>
     <CAbilEffectInstant id="SquadVespenseToMineral">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -145,7 +193,7 @@
         <AutoCastFilters value="-;-"/>
         <AutoCastRange value="500"/>
         <AINotifyEffect value="PrimalHeal"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="SquadMineralInvestmentSmall"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadMineralInvestmentSmall" Requirements="HaveCapitalismRoad"/>
     </CAbilEffectInstant>
     <CAbilEffectInstant id="SquadZeratulReflectionShield">
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
@@ -4144,7 +4192,7 @@
             <Button DefaultButtonFace="BuildSquadBunkerPerdiction"/>
         </InfoArray>
         <InfoArray index="Build20" Unit="SquadMineralHut" Time="15">
-            <Button DefaultButtonFace="BuildSquadMineralHut"/>
+            <Button DefaultButtonFace="BuildSquadMineralHut" Requirements="HaveSociallismRoad"/>
             <ValidatorArray value="HasMineral"/>
         </InfoArray>
         <InfoArray index="Build21" Unit="SquadFuturesExchange" Time="60">

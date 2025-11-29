@@ -67,9 +67,57 @@
         <ValidatorArray index="0" value=""/>
         <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="Caster"/>
-        <BehaviorLink value="SquadMineralInvestmentSmallTracker"/>
+        <BehaviorLink value="SquadMineralInvestmentLargeTracker"/>
         <Count value="1"/>
     </CEffectRemoveBehavior>
+    <CEffectModifyPlayer id="SquadVespenseInvestmentLargeMP20">
+        <EditorCategories value="Race:Terran"/>
+        <WhichPlayer Value="Caster"/>
+        <Resources index="Vespene" value="4"/>
+    </CEffectModifyPlayer>
+    <CEffectCreatePersistent id="SquadVespenseInvestmentLargePersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="CasterUnit"/>
+        <PeriodCount value="200"/>
+        <PeriodicEffectArray value="SquadVespenseInvestmentLargeTrackerRemove"/>
+        <PeriodicPeriodArray value="1"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="SquadVespenseInvestmentLargeSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadVespenseInvestmentLargeTrackerApply"/>
+        <EffectArray value="SquadVespenseInvestmentLargePersistent"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="SquadVespenseInvestmentLargeTrackerApply">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="SquadVespenseInvestmentLargeTracker"/>
+        <Count value="200"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="SquadVespenseInvestmentLargeTrackerRemove">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="SquadVespenseInvestmentLargeTracker"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectModifyPlayer id="SquadVespenseInvestmentSmallMP4">
+        <EditorCategories value="Race:Terran"/>
+        <WhichPlayer Value="Caster"/>
+        <Resources index="Vespene" value="4"/>
+    </CEffectModifyPlayer>
+    <CEffectModifyPlayer id="SquadVespenseInvestmentMediumMP10">
+        <EditorCategories value="Race:Terran"/>
+        <WhichPlayer Value="Caster"/>
+        <Resources index="Vespene" value="4"/>
+    </CEffectModifyPlayer>
+    <CEffectCreatePersistent id="SquadVespenseInvestmentSmallPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="CasterUnit"/>
+        <PeriodCount value="200"/>
+        <PeriodicEffectArray value="SquadVespenseInvestmentSmallTrackerRemove"/>
+        <PeriodicPeriodArray value="1"/>
+    </CEffectCreatePersistent>
     <CEffectSet id="SquadMineralInvestmentSmallSet">
         <EditorCategories value="Race:Terran"/>
         <EffectArray value="SquadMineralInvestmentSmallTrackerApply"/>
@@ -167,6 +215,30 @@
         <Behavior value="SquadMineralInvestmentMediumTracker"/>
         <Count value="100"/>
     </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="SquadVespenseInvestmentMediumPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="CasterUnit"/>
+        <PeriodCount value="200"/>
+        <PeriodicEffectArray value="SquadVespenseInvestmentMediumTrackerRemove"/>
+        <PeriodicPeriodArray value="1"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="SquadVespenseInvestmentSmallSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadVespenseInvestmentSmallTrackerApply"/>
+        <EffectArray value="SquadVespenseInvestmentSmallPersistent"/>
+    </CEffectSet>
+    <CEffectSet id="SquadVespenseInvestmentMediumSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadVespenseInvestmentMediumTrackerApply"/>
+        <EffectArray value="SquadVespenseInvestmentMediumPersistent"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="SquadVespenseInvestmentSmallTrackerApply">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="SquadVespenseInvestmentSmallTracker"/>
+        <Count value="200"/>
+    </CEffectApplyBehavior>
     <CEffectRemoveBehavior id="SquadMineralInvestmentSmallTrackerRemove">
         <ValidatorArray index="0" value=""/>
         <EditorCategories value="Race:Terran"/>
@@ -185,7 +257,21 @@
         <ValidatorArray index="0" value=""/>
         <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="Caster"/>
-        <BehaviorLink value="SquadMineralInvestmentSmallTracker"/>
+        <BehaviorLink value="SquadMineralInvestmentMediumTracker"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="SquadVespenseInvestmentMediumTrackerApply">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="SquadVespenseInvestmentMediumTracker"/>
+        <Count value="200"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="SquadVespenseInvestmentSmallTrackerRemove">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="SquadVespenseInvestmentSmallTracker"/>
         <Count value="1"/>
     </CEffectRemoveBehavior>
     <CEffectRedirectMissile id="SquadRedirectPlacementLaunchTarget">
@@ -297,6 +383,13 @@
         <EditorCategories value="Race:Terran"/>
         <Resources index="Minerals" value="200"/>
     </CEffectModifyPlayer>
+    <CEffectRemoveBehavior id="SquadVespenseInvestmentMediumTrackerRemove">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="SquadVespenseInvestmentMediumTracker"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
     <CEffectApplyBehavior id="SquadZeratulReflectionShieldApplyBehavior">
         <ValidatorArray index="0" value="SourceNotHidden"/>
         <ValidatorArray value="NotHaveZeratulReflectionShieldApplyBehaviorMarker"/>
