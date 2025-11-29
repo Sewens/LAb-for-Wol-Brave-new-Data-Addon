@@ -259,33 +259,27 @@
         <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
     </CActorBeamSimple>
     <CActorUnit id="SquadMineralHut" parent="TerranBuildingEx" unitName="SquadMineralHut">
-        <Aliases value="_UnitHuge"/>
+        <Aliases value="_UnitSmall"/>
         <Macros value="ExtractAnim"/>
-        <Macros value="SnowVisualBuildingMacro"/>
-        <On Terms="Effect.SquadAutoHarvestVespense.Start" Send="TimerKill Stopped"/>
-        <On Terms="Effect.SquadAutoHarvestVespense.Start" Send="TimerSet 5.000000 Stopped"/>
-        <On Terms="Effect.SquadAutoHarvestVespense.Start; IsStatus Mining 0" Send="AnimPlay Work Stand,Work"/>
-        <On Terms="Effect.SquadAutoHarvestVespense.Start; IsStatus Mining 0" Send="AnimGroupRemove B"/>
-        <On Terms="Effect.SquadAutoHarvestVespense.Start; IsStatus Mining 0" Send="AnimGroupApply D"/>
-        <On Terms="Effect.SquadAutoHarvestVespense.Start; IsStatus Mining 0" Send="StatusSet Mining 1"/>
-        <On Terms="Effect.SquadAutoHarvestVespense.Start" Send="Create SquadAutomatedVespenseTextKicker4"/>
-        <On Terms="Behavior.SquadHarvestableVespeneGeyserGas.Deplete" Send="SetTintColor 255,170,170"/>
-        <On Terms="Behavior.SquadHarvestableVespeneGeyserGas.Deplete" Send="AnimGroupRemove D"/>
-        <On Terms="Behavior.SquadHarvestableVespeneGeyserGas.Deplete" Send="AnimGroupApply B"/>
-        <On Terms="Behavior.SquadHarvestableVespeneGeyserGas.Restore" Send="SetTintColor 255,255,255"/>
-        <On Terms="Behavior.SquadHarvestableVespeneGeyserGas.Restore" Send="AnimGroupRemove B"/>
-        <On Terms="Behavior.SquadHarvestableVespeneGeyserGas.Restore" Send="AnimGroupApply D"/>
-        <On Terms="Behavior.ColonyInfestation.On" Send="Create InfestationRefinery"/>
+        <On Terms="Effect.SquadAutoHarvestMineral.Start" Send="TimerKill Stopped"/>
+        <On Terms="Effect.SquadAutoHarvestMineral.Start" Send="TimerSet 5.000000 Stopped"/>
+        <On Terms="Effect.SquadAutoHarvestMineral.Start; IsStatus Mining 0" Send="AnimPlay Work Stand,Work"/>
+        <On Terms="Effect.SquadAutoHarvestMineral.Start; IsStatus Mining 0" Send="AnimGroupRemove B"/>
+        <On Terms="Effect.SquadAutoHarvestMineral.Start; IsStatus Mining 0" Send="AnimGroupApply D"/>
+        <On Terms="Effect.SquadAutoHarvestMineral.Start; IsStatus Mining 0" Send="StatusSet Mining 1"/>
+        <On Terms="Effect.SquadAutoHarvestMineral.Start" Send="Create SquadAutomatedMineralTextKicker4"/>
+        <On Terms="Behavior.SquadHarvestableMineralField.Deplete" Send="SetTintColor 255,170,170"/>
+        <On Terms="Behavior.SquadHarvestableMineralField.Deplete" Send="AnimGroupRemove D"/>
+        <On Terms="Behavior.SquadHarvestableMineralField.Deplete" Send="AnimGroupApply B"/>
+        <On Terms="Behavior.SquadHarvestableMineralField.Restore" Send="SetTintColor 255,255,255"/>
+        <On Terms="Behavior.SquadHarvestableMineralField.Restore" Send="AnimGroupRemove B"/>
+        <On Terms="Behavior.SquadHarvestableMineralField.Restore" Send="AnimGroupApply D"/>
         <On Terms="UnitDeathCustomize; ValidateUnit NoVespene" Send="DeathCustomize Empty"/>
-        <On Terms="UnitBirth.SquadMineralHut" Send="TimerSet 0.100000 HideGeyser"/>
-        <On Terms="AbilMorph.*.Finish; MorphFrom Refinery" Send="Destroy"/>
-        <On Terms="UnitBirth.RefineryPipes" Send="Create"/>
         <On Terms="UnitDeathCustomize; Option Model Low" Send="DeathCustomize Low"/>
-        <On Terms="AbilMorph.*.Finish; MorphFrom Refinery" Send="Destroy"/>
         <Model value="SquadMineralHutResourceBlocker"/>
         <CreepHeightClass value="Medium"/>
         <BuildModel value="SquadMineralHutResourceBlocker"/>
-        <DeathArray index="Normal" ModelLink="Refinery_CovertOps_Death"/>
+        <DeathArray index="Normal" ModelLink="TerranBuildingDeath"/>
         <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="Refinery_Explode"/>
         <EditorModel value="SquadMineralHutResourceBlocker"/>
         <PlacementModel value="SquadMineralHutResourceBlocker"/>
@@ -300,7 +294,7 @@
         <NameOffset value="110"/>
         <SoundArray index="Ready" value="Refinery_Ready"/>
         <SoundArray index="What" value="Refinery_What"/>
-        <StatusHarvesterData Text="UI/HarvesterCountVespene"/>
+        <StatusHarvesterData Text="UI/HarvesterCountMinerals"/>
         <UnitFlags index="ShowBlobShadow" value="0"/>
         <UnitIcon value="Assets\Textures\wireframe-general-mineralshield.dds"/>
         <Wireframe>
@@ -310,6 +304,9 @@
     <CActorSplat id="SquadMineralHutSplat" parent="GenericUnitSplat" unitName="SquadMineralHut">
         <Model value="SupplyDepotSplat"/>
     </CActorSplat>
+    <CActorModel id="SquadMineralHutBuild" parent="TerranBuildingBuildRefinery" unitName="SquadMineralHut">
+        <Model value="SupplyDepotBuild"/>
+    </CActorModel>
     <CActorModel id="SquadZeratulReflectionShield" parent="ModelAnimationStyleContinuous">
         <Inherits index="CloakEffect" value="1"/>
         <Inherits index="Visibility" value="1"/>
@@ -9955,7 +9952,7 @@
             <Image value="Assets\Textures\Wireframe-Terran-Spectre.dds"/>
         </Wireframe>
     </CActorUnit>
-    <CActorAction id="SquadSpectreUnitAttack" parent="GenericAttack" effectAttack="SquadSpecterU">
+    <CActorAction id="SquadSpectreUnitAttack" parent="GenericAttack" effectAttack="SquadSpecterAGR14GaussRifleDamage">
         <LaunchAssets Model="SpecterAttackLaunch" Sound="Spectre_AttackLaunch"/>
         <LaunchSound value="GenericAttackSound"/>
         <ContainerAssets Model="SpecterAttackLaunch" Sound="Spectre_AttackLaunch"/>

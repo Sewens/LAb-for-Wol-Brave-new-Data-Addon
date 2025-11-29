@@ -480,6 +480,7 @@ Button/Name/BuildSquadMarine=Build Squad Marine
 Button/Name/BuildSquadMedic=Build Squad Medic
 Button/Name/BuildSquadMedivac=Build Squad Medivac
 Button/Name/BuildSquadMercCompound=Build Squad Merc Compound
+Button/Name/BuildSquadMineralHut=Build Squad Mineral Hut
 Button/Name/BuildSquadMissileTurret=Build Squad Missile Turret
 Button/Name/BuildSquadPredator=Build Squad Predator
 Button/Name/BuildSquadPsiDisrupter=Build Squad Psi Disrupter
@@ -874,6 +875,7 @@ Button/Tooltip/BuildSquadMarine=General-purpose infantry.<n/><n/><c val="#ColorA
 Button/Tooltip/BuildSquadMedic=Support trooper. Heals nearby biological units.
 Button/Tooltip/BuildSquadMedivac=Air transport. Heals nearby biological units. Can use Afterburners.
 Button/Tooltip/BuildSquadMercCompound=Trains Mercenary units.
+Button/Tooltip/BuildSquadMineralHut=Prevents harvesting from this mineral field. Attack this to destroy it.
 Button/Tooltip/BuildSquadMissileTurret=Primary anti-air defensive structure. <n/><n/><c val="#ColorAttackInfo">Can attack air units.</c><n/><c val="FFE303">Detector</c>
 Button/Tooltip/BuildSquadPredator=Anti-infantry specialist that deals area damage with each attack.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/BuildSquadPsiDisrupter=Defensive structure. Slows the attack and movement speeds of all nearby Zerg units.<n/><n/><c val="#ColorAttackInfo">Heroic units are immune.</c>
@@ -1059,7 +1061,6 @@ Button/Tooltip/SquadMedivacRepairDroneHanger=Two repair drones automatically hea
 Button/Tooltip/SquadMedivacUnloadAll=Unloads all units.
 Button/Tooltip/SquadMercCompound=Trains Mercenary units.
 Button/Tooltip/SquadMindControl=Permanently converts targeted Zerg unit to player control.<n/><n/><c val="#ColorAttackInfo">Heroic units are immune.</c>
-Button/Tooltip/SquadMineralHut=Built over a Vespene Geyser to allow harvesting of vespene gas.
 Button/Tooltip/SquadMissilePods=Missile Pods deal <d ref="Effect,HurricaneMissileDamage,Amount * Effect,HurricaneMissileDamagePersistent,PeriodCount"/> (+<d ref="Effect,HurricaneMissileDamage,AttributeBonus[0] * Effect,HurricaneMissileDamagePersistent,PeriodCount"/> vs. light) damage to air units in target area.
 Button/Tooltip/SquadMissileTurret=Primary anti-air defensive structure. <n/><n/><c val="#ColorAttackInfo">Can attack air units.</c><n/><c val="FFE303">Detector</c>
 Button/Tooltip/SquadMissileTurretHellstormBateries=Missile Pods deal <d ref="Effect,HurricaneMissileDamage,Amount * Effect,HurricaneMissileDamagePersistent,PeriodCount"/> (+<d ref="Effect,HurricaneMissileDamage,AttributeBonus[0] * Effect,HurricaneMissileDamagePersistent,PeriodCount"/> vs. light) damage to air units in target area.
@@ -1669,9 +1670,11 @@ Effect/Name/SquadDamageBuffer=Squad Damage Buffer
 Effect/Name/SquadDiamondbackBlastEvisceratorApplyAttackingBehavior=Squad Diamondback Blast Eviscerator Apply Attacking Behavior
 Effect/Name/SquadDiamondbackBlastEvisceratorApplyChargeBehavior=Squad Diamondback Blast Eviscerator Apply Charge Behavior
 Effect/Name/SquadDiamondbackBlastEvisceratorApplyDamageBuff=Squad Diamondback Blast Eviscerator Apply Damage Buff
+Effect/Name/SquadDiamondbackBlastEvisceratorBeam=Squad Diamondback Blast Eviscerator Beam
 Effect/Name/SquadDiamondbackBlastEvisceratorBeamDamage=Squad Diamondback Blast Eviscerator Beam Damage
 Effect/Name/SquadDiamondbackBlastEvisceratorSet=Squad Diamondback Blast Eviscerator Set
 Effect/Name/SquadDiamondbackMultiEvisceratorApplyMultiTarget=Squad Diamondback Multi Eviscerator Apply Multi Target
+Effect/Name/SquadDiamondbackMultiEvisceratorBeam=Squad Diamondback Multi Eviscerator Beam
 Effect/Name/SquadDiamondbackMultiEvisceratorBeamDamage=Squad Diamondback Multi Eviscerator Beam Damage
 Effect/Name/SquadDiamondbackMultiEvisceratorChargingPersistent=Squad Diamondback Multi Eviscerator Charging Persistent
 Effect/Name/SquadDiamondbackMultiEvisceratorImpactSet=Squad Diamondback Multi Eviscerator Impact Set
@@ -1949,6 +1952,10 @@ Effect/Name/SquadMedivacRepairDroneHealTargetRB=Squad Medivac Repair Drone Heal 
 Effect/Name/SquadMedivacRepairDroneRecall=Squad Medivac Repair Drone Recall
 Effect/Name/SquadMedivacRepairDroneRecallTeleport=Squad Medivac Repair Drone Recall Teleport
 Effect/Name/SquadMeidcGiftPosionPeriodicDamage=Squad Meidc Gift Posion Periodic Damage
+Effect/Name/SquadMineralHutRichAB=Squad Mineral Hut Rich AB
+Effect/Name/SquadMineralHutRichRB=Squad Mineral Hut Rich RB
+Effect/Name/SquadMineralHutRichSearch=Squad Mineral Hut Rich Search
+Effect/Name/SquadMineralHutRichSet=Squad Mineral Hut Rich Set
 Effect/Name/SquadMissileTurretHellstormBatteriesMissileDamage=Squad Missile Turret Hellstorm Batteries Missile Damage
 Effect/Name/SquadMissileTurretHellstormBatteriesMissileLM=Squad Missile Turret Hellstorm Batteries Missile LM
 Effect/Name/SquadMissileTurretHellstormBatteriesMissilePersistent=Squad Missile Turret Hellstorm Batteries Missile Persistent
@@ -2125,7 +2132,7 @@ Effect/Name/SquadSnipeBlackOpsTripleTapSearch=Squad Snipe BlackOps Triple Tap Se
 Effect/Name/SquadSnipeBlackOpsTripleTapSearchNoPrimary=Squad Snipe BlackOps Triple Tap Search No Primary
 Effect/Name/SquadSnipeBlackOpsTripleTapSwitch=Squad Snipe BlackOps Triple Tap Switch
 Effect/Name/SquadSnipeDamage=Squad Snipe Damage
-Effect/Name/SquadSpecterAGR14GaussRifleDamage=Squad Specter AGR-14 Gauss Rifle Damage
+Effect/Name/SquadSpecterAGR14GaussRifleDamage=Squad Specter AGR14 Gauss Rifle Damage
 Effect/Name/SquadSpectreDeathResponseChain=Squad Spectre Death Response Chain
 Effect/Name/SquadSpectreGiftVoodooMindControl=Squad Spectre Gift Voodoo Mind Control
 Effect/Name/SquadSpectreGiftVoodooMindControlApply=Squad Spectre Gift Voodoo Mind Control Apply
@@ -2435,6 +2442,18 @@ SimpleDisplay/SquadSCVGather=<IMG path="Assets\Textures\tutorialmouserightbutton
 SimpleDisplay/SquadStructureAttack=<s val="@@@SimpleCommandRow">%hotkey</c> then</s> <IMG path="Assets\Textures\tutorialmouseleftbuttondown.dds" alignment="absolutemiddle"/> <s val="@@@SimpleCommandRow">to Attack</s>
 SpiderMagazine=
 SuqadMagazineCount=<d ref="Accumulator,CargoSizeBunker,"/>
+UI/HarvesterCountM=
+UI/HarvesterCountMI=
+UI/HarvesterCountMIn=
+UI/HarvesterCountMIne=
+UI/HarvesterCountMIner=
+UI/HarvesterCountMi=
+UI/HarvesterCountMin=
+UI/HarvesterCountMine=
+UI/HarvesterCountMiner=
+UI/HarvesterCountMinera=
+UI/HarvesterCountMineral=
+UI/HarvesterCountMinerals=<img path="@@UI/ResourceIconNoBackground0" alignment="AbsoluteMiddle" width="20" height="20"/> Workers:<c val="%colorValue%"> %current%/%ideal%</c>
 Unit/Category/Lawbda=Lawbda Mode
 Unit/Name/CaptainExcavator=Mobile Destruction Vehicle
 Unit/Name/CaptainFreeman=Captain Freeman

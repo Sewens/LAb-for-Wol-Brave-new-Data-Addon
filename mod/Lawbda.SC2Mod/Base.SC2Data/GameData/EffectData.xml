@@ -39,6 +39,27 @@
         <EditorCategories value="Race:Terran"/>
         <Behavior value="InfantryLevelUpto3"/>
     </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadMineralHutRichAB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="SquadHarvestableRichMineralField"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="SquadMineralHutRichRB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="SquadHarvestableMineralField"/>
+    </CEffectRemoveBehavior>
+    <CEffectEnumArea id="SquadMineralHutRichSearch">
+        <EditorCategories value="Race:Terran"/>
+        <SearchFilters value="RawResource;-"/>
+        <AreaArray Radius="0.5" Effect="SquadMineralHutRichSet"/>
+    </CEffectEnumArea>
+    <CEffectSet id="SquadMineralHutRichSet">
+        <ValidatorArray value="IsRichMineralField"/>
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadMineralHutRichAB"/>
+        <EffectArray value="SquadMineralHutRichRB"/>
+    </CEffectSet>
     <CEffectModifyUnit id="SquadAutoHarvestVespense">
         <EditorCategories value="Race:Terran"/>
         <Resources value="-4"/>
@@ -7194,7 +7215,7 @@
         <Amount value="25"/>
         <Death value="Silentkill"/>
     </CEffectDamage>
-    <CEffectDamage id="SquadSpecterU" parent="DU_WEAP">
+    <CEffectDamage id="SquadSpecterAGR14GaussRifleDamage" parent="DU_WEAP">
         <EditorCategories value="Race:Terran"/>
         <AttributeBonus index="Armored" value="5"/>
         <Kind value="Ranged"/>

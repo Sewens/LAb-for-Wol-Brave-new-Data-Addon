@@ -503,7 +503,7 @@
         <FlagArray index="NoPortraitTalk" value="1"/>
         <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
         <ResourceState value="Harvestable"/>
-        <ResourceType value="Vespene"/>
+        <ResourceType value="Minerals"/>
         <FogVisibility value="Snapshot"/>
         <PlaneArray index="Ground" value="1"/>
         <Collide index="Burrow" value="1"/>
@@ -528,33 +528,36 @@
         <RepairTime value="30"/>
         <AttackTargetPriority value="11"/>
         <AbilArray Link="SquadBuildinProgress"/>
-        <BehaviorArray Link="SquadHarvestableVespeneGeyserGas"/>
-        <BehaviorArray Link="TerranBuildingBurnDown"/>
+        <BehaviorArray Link="SquadHarvestableMineralField"/>
         <BehaviorArray Link="SquadCommandCenterPowerUser"/>
-        <BehaviorArray Link="SquadAutoHarvestVespene"/>
-        <EffectArray index="Create" value="SquadRefineryRichSearch"/>
+        <BehaviorArray Link="SquadAutoHarvestMineral"/>
+        <EffectArray index="Create" value="SquadMineralHutRichSearch"/>
         <CardLayouts>
             <LayoutButtons Face="Halt" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Halt" Row="2" Column="3"/>
             <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Cancel" Row="2" Column="4"/>
             <LayoutButtons Face="SquadSelectBuilder" Type="SelectBuilder" Row="1" Column="3"/>
             <LayoutButtons Face="BuildSquadAutomatedRefinery" Type="Passive" AbilCmd="255,255" Row="1" Column="0"/>
         </CardLayouts>
-        <Radius value="1.5"/>
-        <SeparationRadius value="1.5"/>
+        <Radius value="0.75"/>
+        <SeparationRadius value="0.75"/>
         <Footprint value="FootprintMineralRoundedBuilt"/>
         <PlacementFootprint value="FootprintMineralCapped"/>
-        <BuiltOn value="VespeneGeyser"/>
-        <BuiltOn value="SpacePlatformGeyser"/>
-        <BuiltOn value="RichVespeneGeyser"/>
-        <BuiltOn value="ProtossVespeneGeyser"/>
-        <BuiltOn value="PurifierVespeneGeyser"/>
-        <BuiltOn value="ShakurasVespeneGeyser"/>
-        <BuildOnAs value="RefineryRich"/>
+        <BuiltOn value="MineralField"/>
+        <BuiltOn value="MineralField450"/>
+        <BuiltOn value="MineralField750"/>
+        <BuiltOn value="MineralFieldOpaque900"/>
+        <BuiltOn value="MineralFieldOpaque"/>
+        <BuiltOn value="PurifierMineralField"/>
+        <BuiltOn value="PurifierMineralField750"/>
+        <BuiltOn value="PurifierRichMineralField"/>
+        <BuiltOn value="PurifierRichMineralField750"/>
+        <BuiltOn value="RichMineralField"/>
+        <BuiltOn value="RichMineralField750"/>
+        <BuiltOn value="UmojanLabMineralField"/>
         <ScoreMake value="75"/>
         <ScoreKill value="75"/>
         <ScoreResult value="BuildOrder"/>
         <SubgroupPriority value="1"/>
-        <MinimapRadius value="1.5"/>
         <EditorCategories value="ObjectType:Structure,ObjectFamily:Campaign"/>
         <GlossaryPriority value="244"/>
         <HotkeyCategory value="Unit/Category/Lawbda"/>
@@ -5489,8 +5492,8 @@
         </CardLayouts>
         <Radius value="1.5"/>
         <SeparationRadius value="1.5"/>
-        <Footprint value="Footprint4x4Contour2"/>
-        <PlacementFootprint value="Footprint4x42"/>
+        <Footprint value="Footprint4x4Contour"/>
+        <PlacementFootprint value="Footprint4x4"/>
         <ScoreMake value="100"/>
         <ScoreKill value="300"/>
         <ScoreResult value="BuildOrder"/>
@@ -5666,6 +5669,7 @@
             <LayoutButtons Face="BuildSquadReactor" Type="AbilCmd" AbilCmd="SquadTerranBuild,Build29" Row="2" Column="1"/>
             <LayoutButtons Face="BuildSquadTechLab" Type="AbilCmd" AbilCmd="SquadTerranBuild,Build28" Row="2" Column="0"/>
             <LayoutButtons Face="BuildSquadTechReactor" Type="AbilCmd" AbilCmd="SquadTerranBuild,Build30" Row="2" Column="2"/>
+            <LayoutButtons Face="BuildSquadMineralHut" Type="AbilCmd" AbilCmd="SquadTerranBuild,Build20" Row="0" Column="3"/>
         </CardLayouts>
         <CardLayouts CardId="TBl2">
             <LayoutButtons Face="BuildSquadGhostAcademy" Type="AbilCmd" AbilCmd="SquadTerranBuild,Build10" Row="0" Column="0"/>
@@ -5812,6 +5816,9 @@
         <Name value="Unit/Name/SquadSCVJumper"/>
         <Description value="Button/Tooltip/SquadSCVJumper"/>
         <Mover value="CliffJumper"/>
+        <CardLayouts index="1" CardId="TBl1">
+            <LayoutButtons index="9" removed="1"/>
+        </CardLayouts>
         <CardLayouts index="3" CardId="TBl3">
             <LayoutButtons index="4" removed="1"/>
             <LayoutButtons index="5" removed="1"/>
