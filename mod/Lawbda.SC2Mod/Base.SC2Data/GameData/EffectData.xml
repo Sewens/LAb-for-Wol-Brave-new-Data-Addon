@@ -39,6 +39,52 @@
         <EditorCategories value="Race:Terran"/>
         <Behavior value="InfantryLevelUpto3"/>
     </CEffectApplyBehavior>
+    <CEffectModifyPlayer id="SquadMineralInvestmentLargeMP40">
+        <EditorCategories value="Race:Terran"/>
+        <WhichPlayer Value="Caster"/>
+        <Resources index="Minerals" value="40"/>
+    </CEffectModifyPlayer>
+    <CEffectCreatePersistent id="SquadMineralInvestmentLargePersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="CasterUnit"/>
+        <PeriodCount value="100"/>
+        <PeriodicEffectArray value="SquadMineralInvestmentLargeTrackerRemove"/>
+        <PeriodicPeriodArray value="1"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="SquadMineralInvestmentLargeSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadMineralInvestmentLargeTrackerApply"/>
+        <EffectArray value="SquadMineralInvestmentLargePersistent"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="SquadMineralInvestmentLargeTrackerApply">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="SquadMineralInvestmentLargeTracker"/>
+        <Count value="100"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="SquadMineralInvestmentLargeTrackerRemove">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="SquadMineralInvestmentSmallTracker"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectSet id="SquadMineralInvestmentSmallSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadMineralInvestmentSmallTrackerApply"/>
+        <EffectArray value="SquadMineralInvestmentSmallPersistent"/>
+    </CEffectSet>
+    <CEffectSet id="SquadMineralInvestmentMediumSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadMineralInvestmentMediumTrackerApply"/>
+        <EffectArray value="SquadMineralInvestmentMediumPersistent"/>
+    </CEffectSet>
+    <CEffectModifyPlayer id="SquadMineralInvestmentSmallMP8">
+        <EditorCategories value="Race:Terran"/>
+        <Resources index="Minerals" value="8"/>
+        <WhichPlayer Value="Caster"/>
+    </CEffectModifyPlayer>
     <CEffectApplyBehavior id="SquadMineralHutRichAB">
         <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="Caster"/>
@@ -95,6 +141,53 @@
         <Upgrades Upgrade="SquadTerranVehicleAndShipPlatingDefenceStructureBonusLevel1" Count="1"/>
         <Upgrades Upgrade="SquadTerranVehicleAndShipWeaponsDefenceStructureBonusLevel1" Count="1"/>
     </CEffectModifyPlayer>
+    <CEffectModifyPlayer id="SquadMineralInvestmentMediumMP20">
+        <EditorCategories value="Race:Terran"/>
+        <WhichPlayer Value="Caster"/>
+        <Resources index="Minerals" value="20"/>
+    </CEffectModifyPlayer>
+    <CEffectCreatePersistent id="SquadMineralInvestmentSmallPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <PeriodCount value="100"/>
+        <PeriodicPeriodArray value="1"/>
+        <WhichLocation Value="CasterUnit"/>
+        <PeriodicEffectArray value="SquadMineralInvestmentSmallTrackerRemove"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="SquadMineralInvestmentMediumPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="CasterUnit"/>
+        <PeriodCount value="100"/>
+        <PeriodicEffectArray value="SquadMineralInvestmentMediumTrackerRemove"/>
+        <PeriodicPeriodArray value="1"/>
+    </CEffectCreatePersistent>
+    <CEffectApplyBehavior id="SquadMineralInvestmentMediumTrackerApply">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="SquadMineralInvestmentMediumTracker"/>
+        <Count value="100"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="SquadMineralInvestmentSmallTrackerRemove">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="SquadMineralInvestmentSmallTracker"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="SquadMineralInvestmentSmallTrackerApply">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="SquadMineralInvestmentSmallTracker"/>
+        <Count value="100"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="SquadMineralInvestmentMediumTrackerRemove">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="SquadMineralInvestmentSmallTracker"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
     <CEffectRedirectMissile id="SquadRedirectPlacementLaunchTarget">
         <ValidatorArray value="RedirectPlacementLaunchTargetTargetFilters"/>
         <EditorCategories value=""/>
@@ -196,6 +289,14 @@
         <EffectArray value="SquadNovaDefensiveDroneAbsorbCP"/>
         <EffectArray value="SquadNovaDefensiveDroneRemoveEnergy"/>
     </CEffectSet>
+    <CEffectModifyPlayer id="SquadVespenseExchange25">
+        <EditorCategories value="Race:Terran"/>
+        <Resources index="Vespene" value="25"/>
+    </CEffectModifyPlayer>
+    <CEffectModifyPlayer id="SquadMineralExchange200">
+        <EditorCategories value="Race:Terran"/>
+        <Resources index="Minerals" value="200"/>
+    </CEffectModifyPlayer>
     <CEffectApplyBehavior id="SquadZeratulReflectionShieldApplyBehavior">
         <ValidatorArray index="0" value="SourceNotHidden"/>
         <ValidatorArray value="NotHaveZeratulReflectionShieldApplyBehaviorMarker"/>

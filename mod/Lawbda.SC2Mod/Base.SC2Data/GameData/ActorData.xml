@@ -217,6 +217,66 @@
         <HeightOffset value="1.500000"/>
         <Text value="Button/Tooltip/##id##"/>
     </CActorText>
+    <CActorText id="SquadMineralInvestmentLargeTextKicker40">
+        <On Terms="ActorCreation" Send="TimerSet 0.100000 StartMover"/>
+        <On Terms="ActorCreation" Send="TimerSet 2.000000 Die"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.000000 2.000000"/>
+        <On Terms="TimerExpired; TimerName StartMover" Send="Create AutomatedRefineryTextMover"/>
+        <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
+        <Host Subject="_Unit"/>
+        <FixedSize value="28"/>
+        <AlignV value="Bottom"/>
+        <HeightOffset value="3.500000"/>
+        <Text value="Button/Tooltip/SquadMineralInvestmentLargeTextKicker40"/>
+    </CActorText>
+    <CActorText id="SquadMineralInvestmentSmallTextKicker8">
+        <On Terms="ActorCreation" Send="TimerSet 0.100000 StartMover"/>
+        <On Terms="ActorCreation" Send="TimerSet 2.000000 Die"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.000000 2.000000"/>
+        <On Terms="TimerExpired; TimerName StartMover" Send="Create AutomatedRefineryTextMover"/>
+        <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
+        <Host Subject="_Unit"/>
+        <FixedSize value="28"/>
+        <AlignV value="Bottom"/>
+        <HeightOffset value="3.500000"/>
+        <Text value="Button/Tooltip/SquadMineralInvestmentSmallTextKicker8"/>
+    </CActorText>
+    <CActorModel id="SquadFuturesExchangeBuild" parent="TerranBuildingBuild" unitName="SquadFuturesExchange">
+        <Model value="BiodomeHalfBuilt"/>
+    </CActorModel>
+    <CActorSplat id="SquadFuturesExchangeSplat" parent="GenericUnitSplat" unitName="SquadFuturesExchange">
+        <Model value="FusionCoreSplat"/>
+    </CActorSplat>
+    <CActorUnit id="SquadFuturesExchange" parent="TerranBuildingFlyer" unitName="SquadFuturesExchange">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="QueueAnim"/>
+        <On Terms="ActorCreation" Send="Create SoundEmitter Doodad_BioDomeCommand"/>
+        <!--text kicker-->
+        <On Terms="Effect.SquadMineralInvestmentSmallMP8.Start" Send="Create SquadMineralInvestmentSmallTextKicker8"/>
+        <On Terms="Effect.SquadMineralInvestmentMediumMP20.Start" Send="Create SquadMineralInvestmentMediumTextKicker20"/>
+        <On Terms="Effect.SquadMineralInvestmentLargeMP40.Start" Send="Create SquadMineralInvestmentLargeTextKicker40"/>
+        <On Terms="UnitDeathCustomize.BioDomeCommandFlying" Send="DeathCustomize Flying"/>
+        <Model value="BioDomeCommand"/>
+        <BuildModel value="BioDomeCommand"/>
+        <DeathArray index="Normal" ModelLink="TerranLargeBuildingDeath" SoundLink="Terran_ExplosionLarge"/>
+        <DeathCustoms ModelLink="TerranFlyingBuildingDeath" Name="Flying"/>
+        <PlacementModel value="BioDomeCommand"/>
+        <PortraitModel value="AdjutantPortrait"/>
+        <BarOffset value="115"/>
+        <BarWidth value="135"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-BiodDomeCommand.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\BTN-Building-Terran-BioDomeCommand.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-buildingarmor.dds"/>
+        <NameOffset value="100"/>
+        <SoundArray index="Ready" value="CommandCenter_What"/>
+        <UnitIcon value="Assets\Textures\BTN-Building-Terran-BioDomeCommand.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-BioDomeCommand.dds"/>
+        </Wireframe>
+        <Scale value="0.600000"/>
+    </CActorUnit>
     <CActorText id="SquadAutomatedVespenseTextKicker4">
         <On Terms="ActorCreation" Send="TimerSet 0.100000 StartMover"/>
         <On Terms="ActorCreation" Send="TimerSet 2.000000 Die"/>
@@ -240,6 +300,18 @@
         <AlignV value="Bottom"/>
         <HeightOffset value="3.500000"/>
         <Text value="Button/Tooltip/SquadAutomatedMineralTextKicker4"/>
+    </CActorText>
+    <CActorText id="SquadMineralInvestmentMediumTextKicker20">
+        <On Terms="ActorCreation" Send="TimerSet 0.100000 StartMover"/>
+        <On Terms="ActorCreation" Send="TimerSet 2.000000 Die"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.000000 2.000000"/>
+        <On Terms="TimerExpired; TimerName StartMover" Send="Create AutomatedRefineryTextMover"/>
+        <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
+        <Host Subject="_Unit"/>
+        <FixedSize value="28"/>
+        <AlignV value="Bottom"/>
+        <HeightOffset value="3.500000"/>
+        <Text value="Button/Tooltip/SquadMineralInvestmentMediumTextKicker20"/>
     </CActorText>
     <CActorBeamSimple id="SquadNovaDefensiveDroneAbsorbCPBeam" parent="BeamSimpleAnimationStyleContinuous">
         <On Terms="Effect.SquadNovaDefensiveDroneNullified.Start; At Target" Send="Create"/>
