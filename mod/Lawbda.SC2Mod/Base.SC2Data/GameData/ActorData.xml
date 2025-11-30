@@ -229,6 +229,12 @@
         <HeightOffset value="3.500000"/>
         <Text value="Button/Tooltip/SquadAutomatedVespenseTextKicker42"/>
     </CActorText>
+    <CActorModel id="SquadGiveExperience200" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.SquadGiveExperience200MU.Start; At Target" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="K5KerriganLevelUp"/>
+    </CActorModel>
     <CActorText id="SquadMineralInvestmentLargeTextKicker40">
         <On Terms="ActorCreation" Send="TimerSet 0.100000 StartMover"/>
         <On Terms="ActorCreation" Send="TimerSet 2.000000 Die"/>

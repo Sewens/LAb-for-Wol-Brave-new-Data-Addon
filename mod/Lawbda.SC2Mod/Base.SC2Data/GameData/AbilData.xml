@@ -43,6 +43,84 @@
         </CmdButtonArray>
         <CmdButtonArray index="Cancel" DefaultButtonFace="CmdCancel"/>
     </CAbilEffectTarget>
+    <CAbilLearn default="1" id="SquadHeroLearn">
+        <?token id="l1"?>
+        <?token id="l2"?>
+        <?token id="l3"?>
+        <?token id="l4"?>
+        <?token id="l5"?>
+        <AbilSetId value="SquadHeroLearn"/>
+        <AbilityCategories index="CanBeDisabled" value="1"/>
+        <InfoArray index="Learn1" Abil="##l1##" VeterancyLevelMin="1" VeterancyLevelSkip="2">
+            <Button DefaultButtonFace="##l1##@Research"/>
+        </InfoArray>
+        <InfoArray index="Learn2" Abil="##l2##" VeterancyLevelMin="1" VeterancyLevelSkip="2">
+            <Button DefaultButtonFace="##l2##@Research"/>
+        </InfoArray>
+        <InfoArray index="Learn3" Abil="##l3##" VeterancyLevelMin="1" VeterancyLevelSkip="2">
+            <Button DefaultButtonFace="##l3##@Research"/>
+        </InfoArray>
+        <InfoArray index="Learn4" Abil="##l4##" VeterancyLevelMin="1" VeterancyLevelSkip="2">
+            <Button DefaultButtonFace="##l4##@Research"/>
+        </InfoArray>
+        <InfoArray index="Learn5" Abil="##l5##" VeterancyLevelMin="1" VeterancyLevelSkip="2">
+            <Button DefaultButtonFace="##l5##@Research"/>
+        </InfoArray>
+        <Flags index="HideOnMaxLevel" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <PointsPerLevel value="1"/>
+    </CAbilLearn>
+    <CAbilLearn id="SquadDehakaLearn">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <InfoArray index="Learn1" Abil="DehakaGiveEssence" VeterancyLevelMin="1" VeterancyLevelSkip="2">
+            <Button DefaultButtonFace="LearnDehakaGiveEssence"/>
+        </InfoArray>
+        <InfoArray index="Learn2" Abil="DehakaLeapStomp" VeterancyLevelMin="1" VeterancyLevelSkip="2">
+            <Button DefaultButtonFace="LearnDehakaLeapStomp"/>
+        </InfoArray>
+        <InfoArray index="Learn3" Abil="DehakaConsume" VeterancyLevelMin="1" VeterancyLevelSkip="2">
+            <Button DefaultButtonFace="LearnDehakaConsume"/>
+        </InfoArray>
+        <InfoArray index="Learn4" Abil="MammothBreath" VeterancyLevelMin="6">
+            <Button DefaultButtonFace="LearnDehakaMammothBreath"/>
+        </InfoArray>
+        <InfoArray index="Learn5" Abil="DehakaMendingAura" VeterancyLevelMin="1" VeterancyLevelSkip="2">
+            <Button DefaultButtonFace="LearnDehakaMendingAura" State="Restricted"/>
+        </InfoArray>
+        <InfoArray index="Learn6" Abil="DehakaArmorUpgrade" VeterancyLevelMin="5" VeterancyLevelSkip="2">
+            <Button DefaultButtonFace="LearnDehakaArmorUpgrade" State="Restricted"/>
+        </InfoArray>
+        <InfoArray index="Learn8" Abil="DehakaIntimidatingRoar" VeterancyLevelMin="1" VeterancyLevelSkip="2">
+            <Button DefaultButtonFace="DehakaIntimidatingRoar"/>
+        </InfoArray>
+        <InfoArray index="Learn9" Abil="DehakaDetector" VeterancyLevelMin="5">
+            <Button DefaultButtonFace="LearnDehakaDetector" State="Restricted"/>
+        </InfoArray>
+        <InfoArray index="Learn11" Abil="DehakaAirAttackUpgrade" VeterancyLevelMin="10">
+            <Button DefaultButtonFace="DehakaAirAttackUpgrade" State="Restricted"/>
+        </InfoArray>
+        <Flags index="HideOnMaxLevel" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <PointsPerLevel value="1"/>
+    </CAbilLearn>
+    <CAbilEffectTarget id="SquadGiveExperience200">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadGiveExperience200MU"/>
+        <TargetFilters value="Biological,Visible;Self,Structure,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="500"/>
+        <Arc value="360"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadGhostSnipe2"/>
+    </CAbilEffectTarget>
+    <CAbilLearn id="SquadLearnHeroSimple">
+        <AbilSetId value="SquadHeroLearn"/>
+        <DefaultButtonCardId value="Lear"/>
+        <Flags index="HideOnMaxLevel" value="1"/>
+        <Flags index="ClearSubmenuOnPointsSpent" value="1"/>
+        <Flags index="HideSubmenuOnLearnedAll" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <PointsPerLevel value="1"/>
+    </CAbilLearn>
     <CAbilEffectInstant id="BulletTimeTheWorld">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Effect index="0" value="SquadBulletTime"/>
@@ -720,7 +798,7 @@
         </Cost>
         <TargetFilters value="Biological;Self,Neutral,Enemy,Structure,Missile,Uncommandable,Stasis,Dead,Hidden,Hallucination,Invulnerable"/>
         <Range value="4"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="Consumption"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadCaptainToshConsumption"/>
     </CAbilEffectTarget>
     <CAbilEffectTarget id="SquadCaptainNovaSnipe">
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
@@ -1493,7 +1571,7 @@
             <Cooldown TimeUse="20"/>
         </Cost>
         <AINotifyEffect value=""/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="VoodooShield" State="Restricted"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadCaptainToshPsiShield" State="Restricted"/>
     </CAbilEffectInstant>
     <CAbilEffectInstant id="SwitchScannerBlack">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>

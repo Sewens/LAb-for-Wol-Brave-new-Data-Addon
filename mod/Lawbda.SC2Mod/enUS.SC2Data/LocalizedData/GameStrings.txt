@@ -87,6 +87,7 @@ Abil/Name/SquadCommandCenterTrain=Squad Command Center Train
 Abil/Name/SquadCommandCenterTransport=Squad Command Center Transport
 Abil/Name/SquadCorpseExplosion=Squad Corpse Explosion
 Abil/Name/SquadCreateMarineCorpse=Squad Create Marine Corpse
+Abil/Name/SquadDehakaLearn=Squad Dehaka Learn
 Abil/Name/SquadDiamondbackBlastRailgunSwitch=Squad Diamondback Blast Railgun Switch
 Abil/Name/SquadDropToSupplyDepot=Squad Drop To Supply Depot
 Abil/Name/SquadEngineeringBayResearch=Squad Engineering Bay Research
@@ -102,6 +103,7 @@ Abil/Name/SquadGhostAcademyTransport=Squad Ghost Academy Transport
 Abil/Name/SquadGhostEMP=Squad Ghost EMP
 Abil/Name/SquadGhostSnipe=Squad Ghost Snipe
 Abil/Name/SquadGhostTripleSnipe=Squad Ghost Triple Snipe
+Abil/Name/SquadGiveExperience200=Squad Give Experience 200
 Abil/Name/SquadGoliathAirFocusSwitch=Squad Goliath Air Focus Switch
 Abil/Name/SquadHallucinationTarget=Squad Hallucination Target
 Abil/Name/SquadHavocTargetLock=Squad Havoc Target Lock
@@ -110,11 +112,13 @@ Abil/Name/SquadHealRedirect=Squad Heal Redirect
 Abil/Name/SquadHellionTarBomb=Squad Hellion Tar Bomb
 Abil/Name/SquadHellionTransport=Squad Hellion Transport
 Abil/Name/SquadHerculesTransport=Squad Hercules Transport
+Abil/Name/SquadHeroLearn=Squad Hero Learn
 Abil/Name/SquadHeroTrain=Squad Hero Train
 Abil/Name/SquadHiveMindEmulatorMindControl=Squad Hive Mind Emulator Mind Control
 Abil/Name/SquadHurricaneMissilePods=Squad Hurricane Missile Pods
 Abil/Name/SquadInfantry=Squad Infantry Magazine
 Abil/Name/SquadIrradiate=Squad Irradiate
+Abil/Name/SquadLearnHeroSimple=Squad Learn Hero Simple
 Abil/Name/SquadLurkerChannelingSpines=Squad Lurker Channeling Spines
 Abil/Name/SquadMagrailMunitions=Squad Magrail Munitions
 Abil/Name/SquadMeatWagonBattleModeSwitch=Squad Meat Wagon Battle Mode Switch
@@ -263,9 +267,9 @@ Behavior/Name/FireOrb=Fire Orb
 Behavior/Name/FirebatImmolationArmor=Firebat Immolation Armor
 Behavior/Name/FrostOrb=Frost Orb
 Behavior/Name/GreenScannerHeal=Green Scanner Heal
-Behavior/Name/HeroLevelUpto10=Hero Level Up to10
+Behavior/Name/HeroLevelUpTo10=Hero Level Up To 10
 Behavior/Name/InfantryBasicStatesModifies=Infantry Basic States Modifies
-Behavior/Name/InfantryLevelUpto3=Infantry Level Up to3
+Behavior/Name/InfantryLevelUpTo4=Infantry Level Up To 4
 Behavior/Name/LightingOrb=Lighting Orb
 Behavior/Name/LootOnDealDamage=Loot On Deal Damage
 Behavior/Name/MagazineDeathResponseController=Magazine Death Response Controller
@@ -397,6 +401,7 @@ Behavior/Name/YellowScannerChronoBeam=Yellow Scanner Chrono Beam
 Behavior/Tooltip/BehemothAfterburner=<c val="F0F50A"></c>Speed Bonus Stack: </c><d ref="$BehaviorStackCount:BehemothAfterburner$"/>
 Behavior/Tooltip/CCResourceMessage=Your resource has been messaged.
 Behavior/Tooltip/DamageBuffer=Convert imidiately damage in 10s vital reduction.
+Behavior/Tooltip/HeroLevelUpTo10=Heroes can gain experience from battle, when veterancy level up, heroes can obtain skill points for abilities level.
 Behavior/Tooltip/MagazineBaseTracker2=<c val="000000">Current Magazine unit:</c>
 Behavior/Tooltip/MagazineGhostTracker2=<c val="000000">Current Magazine unit:</c>
 Behavior/Tooltip/MagazineGhostTracker22=<c val="000000">Current Magazine unit:</c>
@@ -626,6 +631,7 @@ Button/Name/SquadGhostOcularImplants=Squad Ghost Ocular Implants
 Button/Name/SquadGhostResearchCaduceusReactor=Squad Ghost Research Caduceus Reactor
 Button/Name/SquadGhostResearchMoebiusReactor=Squad Ghost Research Moebius Reactor
 Button/Name/SquadGhostSnipe=Squad Ghost Snipe
+Button/Name/SquadGhostSnipe2=Squad Give Experience 200
 Button/Name/SquadGhostTripleSnipe=Squad Ghost Triple Snipe
 Button/Name/SquadGiftTooltips=Squad Gift Tooltips
 Button/Name/SquadGoliathAirFocusMode=Squad Goliath Air Focus Mode
@@ -839,7 +845,6 @@ Button/Name/SquadWraithHighLagCloak=Squad Wraith High Lag Cloak
 Button/Name/SquadWraithResearchWraithCloak=Squad Wraith Research Wraith Cloak
 Button/Name/SquadYamatoCannon=Squad Yamato Cannon
 Button/Name/SquadZeratulReflectionShield=Squad Zeratul Reflection Shield
-Button/Name/SqudDukesRevenge=Captain Dukes Revenge
 Button/Name/Stop=Squad Stop Redirect
 Button/Name/StructureEmergencyProtocal=Structure Emergency Protocal
 Button/Name/SwitchScannerSweepAlpha=Switch Scanner Sweep Alpha
@@ -1024,6 +1029,7 @@ Button/Tooltip/SquadGhostOcularImplants=Increases Ghost weapon range by 2. Incre
 Button/Tooltip/SquadGhostResearchCaduceusReactor=Increases the starting energy of <c val="ffff8a">Medivacs</c> by <d ref="Upgrade,MedivacCaduceusReactor,EffectArray[0].Value"/>.
 Button/Tooltip/SquadGhostResearchMoebiusReactor=Increases the starting energy of <c val="ffff8a">Ghosts</c> by <d ref="Upgrade,GhostMoebiusReactor,EffectArray[0].Value"/>.
 Button/Tooltip/SquadGhostSnipe=A careful shot, dealing <d ref="Effect,SnipeDamage,Amount"/> (<d ref="Effect,SnipeDamage,Amount + Effect,SnipeDamage,AttributeBonus[5]"/> vs. Psionic) damage. Ignores armor.<n/><n/><c val="#ColorAttackInfo">Can only target biological units.</c>
+Button/Tooltip/SquadGhostSnipe2=A careful shot, dealing <d ref="Effect,SnipeDamage,Amount"/> (<d ref="Effect,SnipeDamage,Amount + Effect,SnipeDamage,AttributeBonus[5]"/> vs. Psionic) damage. Ignores armor.<n/><n/><c val="#ColorAttackInfo">Can only target biological units.</c>
 Button/Tooltip/SquadGhostTripleSnipe=A careful shot, dealing <d ref="Effect,SnipeDamage,Amount"/> (<d ref="Effect,SnipeDamage,Amount + Effect,SnipeDamage,AttributeBonus[5]"/> vs. Psionic) damage. Ignores armor.<n/><n/><c val="#ColorAttackInfo">Can only target biological units.</c>
 Button/Tooltip/SquadGiftTooltips=The Medivac can heal two targets at once.
 Button/Tooltip/SquadGoliath=Heavy-fire support unit.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
@@ -1251,7 +1257,6 @@ Button/Tooltip/SquadWraithAttackFrontburner=Wraith starts with 100 additional en
 Button/Tooltip/SquadWraithHighLagCloak=Cloak periodically because of the high network delay.<n/>"Kale."
 Button/Tooltip/SquadWraithResearchWraithCloak=Enables Wraiths to use the Cloak ability. Cloak renders a unit invisible to enemies unless it's revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,WraithCloak,Modification.VitalRegenArray[2] + Unit,Wraith,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/SquadYamatoCannon=Blasts a target with a devastating plasma cannon, causing 300 damage.
-Button/Tooltip/SqudDukesRevenge=Request the Jackson's Revenge Battlecruiser.<n/><n/>Pirate Battlecruiser from the earliest days of the Confederacy.
 Button/Tooltip/StructureEmergencyProtocal=Reduce the terran buildings lift and land delay, double the flying speed of terran buildings.
 Button/Tooltip/SwitchScannerSweepAlpha=Reveals an area of the map, detecting cloaked and burrowed units. Lasts <d time="12"/>.
 Button/Tooltip/SwitchScannerSweepBlack=Draw power from the Void, suppress almost every positive behavior on enemy, use this ability means you are drive into the dark side of Terran.<n/>"Darksider Is."<n/>
@@ -1805,6 +1810,7 @@ Effect/Name/SquadGhostGiftLightingFeedbackReduceEnergy=Squad Ghost Gift Lighting
 Effect/Name/SquadGhostGiftLightingFeedbackSet=Squad Ghost Gift Lighting Feedback Set
 Effect/Name/SquadGhostUnitTrackerApply=Squad Ghost Unit Tracker Apply
 Effect/Name/SquadGhostUnitTrackerRemove=Squad Ghost Unit Tracker Remove
+Effect/Name/SquadGiveExperience200MU=Squad Give Experience 200 MU
 Effect/Name/SquadGoliathALM=Squad Goliath ALM
 Effect/Name/SquadGoliathHellfireMissilePackDamage=Squad Goliath Hellfire Missile Pack Damage
 Effect/Name/SquadGoliathHellfireMissilePackPersistent=Squad Goliath Hellfire Missile Pack Persistent
@@ -2535,7 +2541,6 @@ Unit/Name/LawbdaCore=Lawbda Core
 Unit/Name/Medic3=Medic
 Unit/Name/MediumScrapSalvagex22=Medium Scrap Salvagex22
 Unit/Name/SiegeTank=Squad Siege Tank Sieged
-Unit/Name/SiegeTankJumpJetPlaceholder=Siege Tank Jump Jet Placeholder
 Unit/Name/SmallScrapSalvagex11=Small Scrap Salvagex11
 Unit/Name/SpiderMine=Squad Spider Mine Burrowed
 Unit/Name/SquadArmory=Squad Armory
