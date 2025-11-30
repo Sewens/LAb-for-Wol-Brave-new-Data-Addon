@@ -4237,6 +4237,7 @@
         <WhichLocation Value="TargetUnit"/>
         <InitialEffect value="SquadBattlecruiserLaserBatteryLM"/>
         <PeriodCount value="6"/>
+        <PeriodicValidator value="NotDead"/>
         <PeriodicEffectArray value="SquadBattlecruiserLaserBatteryLM"/>
         <PeriodicOffsetArray value="3,0,0"/>
         <PeriodicOffsetArray value="0,3,0"/>
@@ -4256,7 +4257,6 @@
         <PeriodicPeriodArray value="0.0625"/>
         <PeriodicPeriodArray value="0.0825"/>
         <PeriodicPeriodArray value="0.125"/>
-        <PeriodicValidator value="NotDead"/>
     </CEffectCreatePersistent>
     <CEffectEnumArea id="SquadBattlecruiserLaserBatterySearch">
         <EditorCategories value="Race:Terran"/>
@@ -4491,10 +4491,10 @@
     </CEffectLaunchMissile>
     <CEffectDamage id="SquadBattlecruiserLaserBatteryU" parent="DU_WEAP_MISSILE">
         <EditorCategories value="Race:Terran"/>
-        <Visibility value="Visible"/>
-        <Amount value="10"/>
         <AttributeBonus index="Light" value="10"/>
         <AttributeBonus index="Biological" value="10"/>
+        <Visibility value="Visible"/>
+        <Amount value="10"/>
     </CEffectDamage>
     <CEffectLaunchMissile id="SquadBattlecruiserMiniYamatoLM">
         <EditorCategories value="Race:Terran"/>
@@ -7169,7 +7169,7 @@
     <CEffectRemoveBehavior id="SquadUltraliskOutOfCombat2RB">
         <EditorCategories value="Race:Zerg"/>
         <WhichUnit Value="Caster"/>
-        <BehaviorLink value="UltraliskOutOfCombat2"/>
+        <BehaviorLink value="SquadUltraliskOutOfCombat2"/>
     </CEffectRemoveBehavior>
     <CEffectApplyBehavior id="SquadUltraliskOutOfCombat3AB">
         <EditorCategories value="Race:Zerg"/>
@@ -7178,7 +7178,7 @@
     <CEffectRemoveBehavior id="SquadUltraliskOutOfCombat3RB">
         <EditorCategories value="Race:Zerg"/>
         <WhichUnit Value="Caster"/>
-        <BehaviorLink value="UltraliskOutOfCombat3"/>
+        <BehaviorLink value="SquadUltraliskOutOfCombat3"/>
     </CEffectRemoveBehavior>
     <CEffectSet id="SquadUltraliskOutOfCombatRBSet">
         <EditorCategories value="Race:Zerg"/>
@@ -7507,7 +7507,7 @@
         <EffectArray value="DefenderCoreExplodeDirect"/>
         <EffectArray value="DefenderCoreExplodeSplashSearch"/>
     </CEffectSet>
-    <CEffectDamage id="DefenderCoreExplodeSplash" parent="DU_WEAP">
+    <CEffectDamage id="DefenderCoreExplodeSplashDamage" parent="DU_WEAP">
         <ValidatorArray value="DontDamageOwnedWidowMines"/>
         <ValidatorArray value="DontDamageOwnedWidowMines"/>
         <EditorCategories value="Race:Terran"/>
@@ -7522,7 +7522,7 @@
         <EditorCategories value="Race:Terran"/>
         <ExcludeArray Value="Target"/>
         <SearchFilters value="-;Structure,Missile,Item,Stasis,Dead,Hidden,Invulnerable"/>
-        <AreaArray Radius="1.75" Effect="DefenderCoreExplodeSplash"/>
+        <AreaArray Radius="1.75" Effect="DefenderCoreExplodeSplashDamage"/>
     </CEffectEnumArea>
     <CEffectLaunchMissile id="DefenderCoreLM">
         <EditorCategories value="Race:Terran"/>

@@ -10706,32 +10706,6 @@
         </Wireframe>
         <WireframeShieldColor value="255,0,128,0"/>
     </CActorUnit>
-    <CActorSplat id="SquadUltraliskBurrowedSplat2" parent="BurrowedSplat" unitName="SquadUltralisk">
-        <On Terms="Effect.BurrowChargeTargetSearchRevD.Start; At Caster" Send="Create"/>
-        <On Terms="Effect.BurrowChargeTargetSearchRevD.Start; At Caster" Send="TimerSet 5.000000 DelayDestroy"/>
-        <On Terms="Effect.BurrowChargeTargetSearchRevD.Start; At Caster" Send="RefClear ::Host"/>
-        <On Terms="Abil.BurrowChargeRevD.SourceCastStart" Send="Create"/>
-        <On Terms="Abil.BurrowChargeRevD.SourceCastStart" Send="TimerSet 5.000000 DelayDestroy"/>
-        <On Terms="Abil.BurrowChargeRevD.SourceCastStart" Send="RefClear ::Host"/>
-        <On Terms="TimerExpired; TimerName DelayDestroy" Send="Destroy"/>
-        <On Terms="Abil.UltraliskBurrowCharge.SourceCastStart" Send="Create"/>
-        <On Terms="Abil.UltraliskBurrowCharge.SourceCastStart" Send="TimerSet 5.000000 DelayDestroy"/>
-        <On Terms="Abil.UltraliskBurrowCharge.SourceCastStart" Send="RefClear ::Host"/>
-        <On Terms="Abil.UltraliskBurrowChargeNoxious.SourceCastStart" Send="Create"/>
-        <On Terms="Abil.UltraliskBurrowChargeNoxious.SourceCastStart" Send="TimerSet 5.000000 DelayDestroy"/>
-        <On Terms="Abil.UltraliskBurrowChargeNoxious.SourceCastStart" Send="RefClear ::Host"/>
-        <On Terms="Effect.BurrowChargeTargetSearch.Start; At Caster" Send="Create"/>
-        <On Terms="Effect.BurrowChargeTargetSearch.Start; At Caster" Send="TimerSet 5.000000 DelayDestroy"/>
-        <On Terms="Effect.BurrowChargeTargetSearch.Start; At Caster" Send="RefClear ::Host"/>
-    </CActorSplat>
-    <CActorForceSphere id="SquadUltraliskChargeDeathForce2">
-        <On Terms="Effect.BurrowChargeImpactSet.Stop; At Caster" Send="Create"/>
-        <On Terms="Effect.BurrowChargeImpactSetRevD.Stop; At Caster" Send="Create"/>
-        <Host Subject="SOpTargetPoint SOpSplashDamagePositionVariance"/>
-        <Duration value="0.150000"/>
-        <Magnitude value="25.000000,10.000000"/>
-        <Radius value="2.500000"/>
-    </CActorForceSphere>
     <CActorModel id="SquadFirebatViralPlasmaBurnModel">
         <On Terms="Behavior.SquadFirebatViralPlasma.On" Send="Create"/>
         <On Terms="ActorCreation" Send="$Stand 0 -1.000000 -1.000000 6.000000 AsDuration"/>
@@ -11137,6 +11111,7 @@
         <On Terms="AnimDone; AnimName Birth" Send="$Stand PlayForever,NonLooping"/>
         <On Terms="UnitBirth.SquadThorWreckage.Suppressed" Send="$Stand PlayForever,NonLooping"/>
         <On Terms="AbilMorph.*.Finish; MorphTo SquadThorWreckage; PlayerHasReward ThorCE" Send="ModelSwap ThorCEWreckage"/>
+        <Model value="ThorWreckage"/>
         <Baselines index="Stand" AnimProps=""/>
         <DeathArray index="Normal" ModelLink="ThorWreckageDeath" SoundLink="Thor_Explode"/>
         <PortraitModel value="ThorPortrait"/>
@@ -11167,7 +11142,6 @@
         <Wireframe>
             <Image value="Assets\Textures\Wireframe-Terran-ThorWreckage.dds"/>
         </Wireframe>
-        <Model value="ThorWreckage"/>
     </CActorUnit>
     <CActorModel id="SquadThorSelfRepair" parent="ModelAnimationStyleContinuous">
         <On Terms="Behavior.SquadThorSelfRepair.On" Send="Create"/>
