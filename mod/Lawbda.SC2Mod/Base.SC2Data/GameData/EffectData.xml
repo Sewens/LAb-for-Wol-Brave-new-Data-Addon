@@ -70,8 +70,8 @@
     </CEffectSet>
     <CEffectRandomPointInCircle id="VanillaNuclearMissilePickRandomPoint">
         <EditorCategories value="Race:Terran"/>
-        <Marker Link="Effect/YellowNuclearDetonatePersistent"/>
-        <WhichLocation Effect="YellowNuclearDetonatePersistent" Value="TargetUnitOrPoint"/>
+        <Marker Link="Effect/VanillaNuclearDetonatePersistent"/>
+        <WhichLocation Effect="VanillaNuclearDetonatePersistent" Value="TargetUnitOrPoint"/>
         <Effect value="VanillaNuclearSmallNukeDropDelayCP"/>
         <Radius value="7"/>
     </CEffectRandomPointInCircle>
@@ -1481,8 +1481,8 @@
         <AINotifyFlags index="MajorDanger" value="1"/>
         <ResponseFlags index="Acquire" value="1"/>
         <ResponseFlags index="Flee" value="1"/>
-        <AttributeBonus index="Structure" value="200"/>
-        <Amount value="1"/>
+        <AttributeBonus index="Structure" value="50"/>
+        <Amount value="50"/>
         <Death value="Fire"/>
         <AreaArray Radius="4" Fraction="1"/>
         <AreaArray Radius="6" Fraction="0.5"/>
@@ -3924,18 +3924,16 @@
         <EditorCategories value="Race:Terran"/>
         <Alert value="CalldownLaunchObserver"/>
         <Flags index="Channeled" value="1"/>
-        <InitialDelay value="2.75"/>
+        <InitialDelay value="0.75"/>
         <ExpireEffect value="VanillaNuclearDetonatePersistent"/>
         <FinalEffect value="SquadNukeSuicide"/>
-        <PeriodCount value="5"/>
-        <PeriodicPeriodArray value="0.2"/>
-        <AINotifyEffect value="BlueNuclearDamage"/>
+        <AINotifyEffect value="VanillaNuclearDamage"/>
     </CEffectCreatePersistent>
     <CEffectDamage id="VanillaNuclearSmallNukeDamage" parent="DU_WEAP">
         <EditorCategories value="Race:Zerg"/>
         <AttributeBonus index="Structure" value="100"/>
         <Kind value="Splash"/>
-        <Amount value="150"/>
+        <Amount value="50"/>
     </CEffectDamage>
     <CEffectEnumArea id="VanillaNuclearSmallNukeDamageSearch">
         <SearchFilters value="-;Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>

@@ -599,8 +599,8 @@
         <AlertArray index="Cast" value="CalldownLaunch"/>
         <CursorEffect value="VanillaNuclearDamage"/>
         <CalldownEffect value="VanillaNuclear"/>
-        <AINotifyEffect value="GreenNuclear"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="WhiteNuke" Requirements="HaveNuke"/>
+        <AINotifyEffect value="VanillaNuclear"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="NucolorBase" Requirements="HaveNuke"/>
         <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
     </CAbilEffectTarget>
     <CAbilMorph id="MorphBunkerHiveMindEmulator">
@@ -3901,13 +3901,12 @@
         <DataCollection value="ColorfulNuclear"/>
         <Launch value="ReleaseAtSource"/>
         <Flags index="BestUnit" value="1"/>
-        <InfoArray index="Ammo1" Time="30" Count="5" Unit="Nuke">
-            <Resource index="Minerals" value="75"/>
-            <Resource index="Vespene" value="50"/>
+        <InfoArray index="Ammo2" Count="5" Unit="Nuke">
             <Charge Link="Abil/##id##"/>
             <Cooldown Link="Abil/##id##"/>
-            <Button DefaultButtonFace="NucolorBase" Requirements="TrainNuke"/>
+            <Button DefaultButtonFace="NucolorBase"/>
             <Flags index="AutoBuild" value="1"/>
+            <Flags index="AutoBuildOn" value="1"/>
         </InfoArray>
         <CalldownEffect value="VanillaNuclear"/>
     </CAbilArmMagazine>
