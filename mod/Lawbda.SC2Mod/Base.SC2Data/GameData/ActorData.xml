@@ -249,6 +249,18 @@
         <HostSiteOps Ops="SOpAttachCenter"/>
         <Model value="K5KerriganLevelUp"/>
     </CActorModel>
+    <CActorModel id="WhiteNuclearFrozen" parent="ModelAddition">
+        <Inherits index="TimeScale" value="0"/>
+        <Inherits index="TintColor" value="0"/>
+        <Remove Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="Behavior.WhiteNuclearIce.On" Send="Create"/>
+        <On Terms="Behavior.WhiteNuclearIce.On" Send="HostSiteOpsSet ::Host SOpAttachOrigin"/>
+        <On Terms="Behavior.WhiteNuclearIce.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="Behavior.WhiteNuclearIce.Off" Send="Destroy"/>
+        <Model value="FrozenSolid"/>
+        <AutoScaleFactor value="1.000000"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
     <CActorText id="SquadMineralInvestmentLargeTextKicker40">
         <On Terms="ActorCreation" Send="TimerSet 0.100000 StartMover"/>
         <On Terms="ActorCreation" Send="TimerSet 2.000000 Die"/>
@@ -1048,8 +1060,8 @@
         <Model value="YelllowNukeCursorSplat"/>
     </CActorSplat>
     <CActorModel id="WhiteNuclearDrop">
-        <On Terms="Effect.WhiteNuclearDetonate.Start" Send="Create"/>
-        <On Terms="Effect.WhiteNuclearDetonate.Start" Send="$Birth"/>
+        <On Terms="Effect.WhiteNuclearDetonatePersistent.Start" Send="Create"/>
+        <On Terms="Effect.WhiteNuclearDetonatePersistent.Start" Send="$Birth"/>
         <On Terms="Effect.RedNuclearDamage" Send="Destroy"/>
         <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
         <Model value="WhiteNukeDrop"/>
@@ -1076,7 +1088,7 @@
         <Model value="YellowNukeDrop"/>
     </CActorModel>
     <CActorSound id="WhiteNuclearDropSound" parent="SoundContinuous">
-        <On Terms="Effect.WhiteNuclearDetonate.Start" Send="Create"/>
+        <On Terms="Effect.WhiteNuclearDetonatePersistent.Start" Send="Create"/>
         <On Terms="Effect.RedNuclearDamage.Start" Send="Destroy"/>
         <Sound value="Ghost_NukeDrop"/>
     </CActorSound>
@@ -1168,8 +1180,8 @@
     <CActorModel id="WhiteNuclearIndicator" parent="ModelAnimationStyleOneShot">
         <Flags index="SuppressSaveLoad" value="0"/>
         <FogVisibility value="Visible"/>
-        <On Terms="Effect.WhiteNuclearPersistent.Start" Send="Create"/>
-        <On Terms="Effect.WhiteNuclearPersistent.Stop" Send="Destroy"/>
+        <On Terms="Effect.WhiteNuclearInitialPersistent.Start" Send="Create"/>
+        <On Terms="Effect.WhiteNuclearInitialPersistent.Stop" Send="Destroy"/>
         <On Terms="ActorCreation; ValidatePlayer HaveUnfriendlyNukeIndicator" Send="SetFilter Enemy"/>
         <On Terms="ActorCreation" Send="SetTintColor 255,255,255"/>
         <HostSiteOps Ops="SOpShadow"/>
@@ -1285,8 +1297,8 @@
         <Filter index="Ally" value="1"/>
         <Inherits index="Scale" value="1"/>
         <FogVisibility value="Visible"/>
-        <On Terms="Effect.WhiteNuclearPersistent.Start" Send="Create"/>
-        <On Terms="Effect.WhiteNuclearPersistent.Stop" Send="AnimBracketStop BSD"/>
+        <On Terms="Effect.WhiteNuclearInitialPersistent.Start" Send="Create"/>
+        <On Terms="Effect.WhiteNuclearInitialPersistent.Stop" Send="AnimBracketStop BSD"/>
         <On Terms="ActorCreation; !ValidatePlayer HaveUnfriendlyNukeIndicator" Send="SetFilter Enemy"/>
         <Host Subject="GhostNukeTargetBillboard" Actor="Create"/>
     </CActorModel>

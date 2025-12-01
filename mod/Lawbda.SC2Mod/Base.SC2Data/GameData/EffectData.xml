@@ -1025,7 +1025,7 @@
         <EditorCategories value="Race:Terran"/>
         <WhichLocation Value="TargetPoint"/>
         <CalldownCount value="1"/>
-        <CalldownEffect value="WhiteNuclearPersistent"/>
+        <CalldownEffect value="WhiteNuclearInitialPersistent"/>
     </CEffectUseCalldown>
     <CEffectDamage id="GreenNuclearDamage">
         <EditorCategories value="Race:Terran"/>
@@ -1055,6 +1055,19 @@
         <PeriodicPeriodArray value="0.2"/>
         <AINotifyEffect value="BlueNuclearDamage"/>
     </CEffectCreatePersistent>
+    <CEffectApplyBehavior id="WhiteNuclearIceApply">
+        <EditorCategories value=""/>
+        <Behavior value="WhiteNuclearIce"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumArea id="WhiteNuclearIceSearch">
+        <EditorCategories value=""/>
+        <AreaArray Radius="8" Effect="WhiteNuclearIceApply"/>
+    </CEffectEnumArea>
+    <CEffectSet id="WhiteNuclearInitialSet">
+        <EditorCategories value=""/>
+        <EffectArray value="WhiteNuclearIceSearch"/>
+        <EffectArray value="WhiteNuclearDetonatePersistent"/>
+    </CEffectSet>
     <CEffectUseCalldown id="YellowNuclear">
         <EditorCategories value="Race:Terran"/>
         <WhichLocation Value="TargetPoint"/>
@@ -1068,8 +1081,12 @@
         <AINotifyFlags index="MajorDanger" value="1"/>
         <ResponseFlags index="Acquire" value="1"/>
         <ResponseFlags index="Flee" value="1"/>
-        <AttributeBonus index="Structure" value="200"/>
-        <Amount value="1"/>
+        <AttributeBonus index="Light" value="50"/>
+        <AttributeBonus index="Biological" value="125"/>
+        <AttributeBonus index="Mechanical" value="75"/>
+        <AttributeBonus index="Structure" value="250"/>
+        <AttributeBonus index="Summoned" value="400"/>
+        <Amount value="50"/>
         <Death value="Fire"/>
         <AreaArray Radius="4" Fraction="1"/>
         <AreaArray Radius="6" Fraction="0.5"/>
@@ -1123,7 +1140,7 @@
         <SearchFlags index="CallForHelp" value="1"/>
         <SearchFlags index="SameCliff" value="0"/>
     </CEffectDamage>
-    <CEffectCreatePersistent id="WhiteNuclearDetonate">
+    <CEffectCreatePersistent id="WhiteNuclearDetonatePersistent">
         <EditorCategories value="Race:Terran"/>
         <InitialDelay value="1.25"/>
         <InitialEffect value="WhiteNuclearDamage"/>
@@ -1241,16 +1258,16 @@
         <RevealRadius value="8"/>
         <RevealFlags index="Unfog" value="1"/>
     </CEffectCreatePersistent>
-    <CEffectCreatePersistent id="WhiteNuclearPersistent">
+    <CEffectCreatePersistent id="WhiteNuclearInitialPersistent">
         <EditorCategories value="Race:Terran"/>
         <Alert value="CalldownLaunchObserver"/>
         <Flags index="Channeled" value="1"/>
         <InitialDelay value="2.75"/>
-        <ExpireEffect value="WhiteNuclearDetonate"/>
+        <ExpireEffect value="WhiteNuclearInitialSet"/>
         <FinalEffect value="SquadNukeSuicide"/>
         <PeriodCount value="5"/>
         <PeriodicPeriodArray value="0.2"/>
-        <AINotifyEffect value="BlueNuclearDamage"/>
+        <AINotifyEffect value="WhiteNuclearDamage"/>
     </CEffectCreatePersistent>
     <CEffectModifyPlayer id="ScannerSweepAlphaMP">
         <EditorCategories value="Race:Terran"/>
