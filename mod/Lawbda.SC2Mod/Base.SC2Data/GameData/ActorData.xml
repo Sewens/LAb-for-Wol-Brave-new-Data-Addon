@@ -1005,6 +1005,7 @@
     </CActorBeamSimple>
     <CActorModel id="GreenNuclearCollateralFire">
         <On Terms="Effect.GreenNuclearDamage.Start; At Target" Send="Create"/>
+        <On Terms="ActorCreation" Send="SetTintColor 0,255,64"/>
         <HostSiteOps Ops="SOpShadow"/>
         <Model value="GreenNukeCollateralFire"/>
     </CActorModel>
@@ -1790,9 +1791,9 @@
         <On Terms="TurretEnable.SquadArtilleryMengsk" Send="Create"/>
         <Sound value="AtrilleryMengsk_Turret_Servo"/>
     </CActorSound>
-    <CActorAction id="SquadArtilleryMengskBombardmentAttack" parent="GenericAttack" effectImpact="ArtilleryMengskBombardmentDamageSearch" effectLaunch="ArtilleryMengskBombardmentLM">
+    <CActorAction id="SquadArtilleryMengskBombardmentAttack" parent="GenericAttack" effectImpact="SquadArtilleryMengskBombardmentDamageSearch" effectLaunch="ArtilleryMengskBombardmentLM">
         <LaunchAttachQuery Methods="Weapon"/>
-        <ImpactMap index="None" Model="ArtilleryMengskMissileImpact" Sound="KorhalSporeCannon_AttackImpact"/>
+        <ImpactMap index="None" Model="SquadArtilleryMengskMissileImpact" Sound="KorhalSporeCannon_AttackImpact"/>
     </CActorAction>
     <CActorRange id="SquadArtilleryMengskBombardmentRange" parent="RangeAbil">
         <On index="1" Terms="Abil.TargetOn" Send="Create"/>
@@ -1802,21 +1803,21 @@
         <Range value="30.000000"/>
         <IconArcLength value="3.250000"/>
     </CActorRange>
-    <CActorSplat id="SquadArtilleryMengskBombardmentSplat" parent="TerranCursorSplat" abil="ArtilleryMengskAttack">
-        <Model value="ArtilleryMengskBombardmentSplat"/>
+    <CActorSplat id="SquadArtilleryMengskBombardmentSplat" parent="TerranCursorSplat" abil="SquadArtilleryMengskAttack">
+        <Model value="SquadArtilleryMengskSplat"/>
         <Scale value="15.000000"/>
     </CActorSplat>
     <CActorModel id="SquadArtilleryMengskBombardmentTargetingSplat">
-        <On Terms="Effect.ArtilleryMengskBombardmentDropDelayCP.Start; At Effect" Send="Create"/>
-        <On Terms="Effect.ArtilleryMengskBombardmentDropDelayCP.Initial" Send="Destroy"/>
+        <On Terms="Effect.SquadArtilleryMengskBombardmentDropDelayCP.Start; At Effect" Send="Create"/>
+        <On Terms="Effect.SquadArtilleryMengskBombardmentDropDelayCP.Initial" Send="Destroy"/>
         <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand"/>
         <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
     </CActorModel>
-    <CActorRange id="SquadArtilleryMengskBombardmentWeaponRange" parent="RangeWeapon" weapon="ArtilleryMengskBombardment">
-        <On Terms="SelectionLocalUpdate.ArtilleryMengsk.Start" Send="Create"/>
-        <On Terms="SelectionLocalUpdate.ArtilleryMengsk.StartEditorGround" Send="Create"/>
-        <On Terms="SelectionLocalUpdate.ArtilleryMengsk.StartEditorFlyer" Send="Create"/>
-        <On Terms="SelectionLocalUpdate.ArtilleryMengsk.Stop" Send="Destroy"/>
+    <CActorRange id="SquadArtilleryMengskBombardmentWeaponRange" parent="RangeWeapon" weapon="SquadArtilleryMengskBombardment">
+        <On Terms="SelectionLocalUpdate.SquadArtilleryMengsk.Start" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.SquadArtilleryMengsk.StartEditorGround" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.SquadArtilleryMengsk.StartEditorFlyer" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.SquadArtilleryMengsk.Stop" Send="Destroy"/>
         <IconArcLength value="3.250000"/>
     </CActorRange>
     <CActorSound id="SquadArtilleryMengskExpStrikeClick" parent="SoundOneShot">
@@ -1831,12 +1832,12 @@
     </CActorSound>
     <CActorSound id="SquadArtilleryMengskExpStrikeImpact" parent="SoundOneShot">
         <EditorCategories value=""/>
-        <On Terms="Effect.ArtilleryMengskBombardmentDamageSearch.Start; At Effect" Send="Create"/>
+        <On Terms="Effect.SquadArtilleryMengskBombardmentDamageSearch.Start; At Effect" Send="Create"/>
         <Host Subject="SquadArtilleryMengskExpStrikeMacro" Actor="Find"/>
     </CActorSound>
     <CActorSound id="SquadArtilleryMengskExpStrikeKlaxon" parent="SoundOneShot">
         <EditorCategories value=""/>
-        <On Terms="Abil.ArtilleryMengskExperimentalStrike.SourcePrepStart" Send="Create"/>
+        <On Terms="Abil.SquadArtilleryMengskExperimentalStrike.SourcePrepStart" Send="Create"/>
         <!--Layers Sound="ArtilleryMengsk_ExpStrike_AirRaid_Siren"/>-->
     </CActorSound>
     <CActorModel id="SquadArtilleryMengskExpStrikeMacro">
@@ -1844,9 +1845,9 @@
         <On Terms="ActorCreation" Send="TimerSet 0.900000 Impact"/>
         <On Terms="ActorCreation" Send="TimerSet 1.090000 Click"/>
         <On Terms="ActorCreation" Send="TimerSet 1.100000 GasRelease"/>
-        <On Terms="TimerExpired; TimerName Impact" Send="Create ArtilleryMengsk_ExpStrike_Impact"/>
-        <On Terms="TimerExpired; TimerName Click" Send="Create ArtilleryMengsk_ExpStrike_Click"/>
-        <On Terms="TimerExpired; TimerName GasRelease" Send="Create ArtilleryMengsk_ExpStrike_GasRelease"/>
+        <On Terms="TimerExpired; TimerName Impact" Send="Create SquadArtilleryMengskExperimentalStrikeImpact"/>
+        <On Terms="TimerExpired; TimerName Click" Send="Create SquadArtilleryMengskExpStrikeClick"/>
+        <On Terms="TimerExpired; TimerName GasRelease" Send="Create SquadArtilleryMengskExpStrikeGasRelease"/>
         <On Terms="TimerExpired; TimerName GasRelease" Send="Destroy"/>
         <On Terms="Effect.ArtilleryMengskExperimentalStrikeCloudCP.Start; At Effect" Send="Create"/>
         <Model value="Invisible"/>
@@ -1875,26 +1876,26 @@
         <Scale value="15.000000"/>
     </CActorSplat>
     <CActorModel id="SquadArtilleryMengskExperimentalStrikeTargetingSplat">
-        <On Terms="Effect.ArtilleryMengskExperimentalStrikeDropDeplayCP.Start; At Effect" Send="Create"/>
-        <On Terms="Effect.ArtilleryMengskExperimentalStrikeDropDeplayCP.Stop; FromEffectTreeDescendant" Send="Destroy"/>
+        <On Terms="Effect.SquadArtilleryMengskExperimentalStrikeDropDeplayCP.Start; At Effect" Send="Create"/>
+        <On Terms="Effect.SquadArtilleryMengskExperimentalStrikeDropDeplayCP.Stop; FromEffectTreeDescendant" Send="Destroy"/>
         <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand"/>
         <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
     </CActorModel>
     <CActorModel id="SquadArtilleryMengskFear" parent="ModelAnimationStyleContinuous">
-        <On Terms="Behavior.ArtilleryMengskFear.On" Send="Create"/>
-        <On Terms="Behavior.ArtilleryMengskFear.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="Behavior.SquadArtilleryMengskFear.On" Send="Create"/>
+        <On Terms="Behavior.SquadArtilleryMengskFear.Off" Send="AnimBracketStop BSD"/>
         <On Terms="ActorCreation" Send="SetTintColor 37,220,100 0.000000 OneShot GasTint"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachOverhead"/>
     </CActorModel>
     <CActorSound id="SquadArtilleryMengskFearHit" parent="SoundOneShot">
-        <On Terms="Behavior.ArtilleryMengskFear.On" Send="Create"/>
+        <On Terms="Behavior.SquadArtilleryMengskFear.On" Send="Create"/>
     </CActorSound>
     <CActorModel id="SquadArtilleryMengskCloudSickness">
         <Inherits index="CloakEffect" value="1"/>
         <Inherits index="Visibility" value="1"/>
-        <On Terms="Behavior.ArtilleryMengskCloudSickness.On" Send="Create"/>
-        <On Terms="Behavior.ArtilleryMengskCloudSickness.Off" Send="Destroy"/>
+        <On Terms="Behavior.SquadArtilleryMengskCloudSickness.On" Send="Create"/>
+        <On Terms="Behavior.SquadArtilleryMengskCloudSickness.Off" Send="Destroy"/>
         <On Terms="ActorCreation" Send="$Stand PlayForever"/>
         <On Terms="ActorCreation" Send="SetOpacity 0.750000"/>
         <On Terms="ActorOrphan" Send="Destroy"/>
@@ -1902,16 +1903,16 @@
         <HostSiteOps Ops="SOpAttachCenter"/>
     </CActorModel>
     <CActorModel id="SquadArtilleryMengskExperimentalStrikeCloud" parent="ModelAnimationStyleContinuous">
-        <On Terms="Effect.ArtilleryMengskExperimentalStrikeCloudCP.Start; At Effect" Send="Create"/>
-        <On Terms="Effect.ArtilleryMengskExperimentalStrikeCloudCP.Stop" Send="Destroy"/>
+        <On Terms="Effect.SquadArtilleryMengskExperimentalStrikeCloudCP.Start; At Effect" Send="Create"/>
+        <On Terms="Effect.SquadArtilleryMengskExperimentalStrikeCloudCP.Stop" Send="Destroy"/>
         <ModelFlags index="AutomateGlobalLoops" value="1"/>
     </CActorModel>
     <CActorModel id="SquadArtilleryMengskExperimentalStrikeImpact" parent="ModelAnimationStyleContinuous">
-        <On Terms="Effect.ArtilleryMengskExperimentalStrikeCloudCP.Start; At Effect" Send="Create"/>
-        <On Terms="Effect.ArtilleryMengskExperimentalStrikeCloudCP.Stop" Send="AnimBracketStop BSD"/>
+        <On Terms="Effect.SquadArtilleryMengskExperimentalStrikeCloudCP.Start; At Effect" Send="Create"/>
+        <On Terms="Effect.SquadArtilleryMengskExperimentalStrikeCloudCP.Stop" Send="AnimBracketStop BSD"/>
         <ModelFlags index="AutomateGlobalLoops" value="1"/>
     </CActorModel>
-    <CActorMissile id="SquadArtilleryMengskExperimentalStrikeMissile" parent="GenericAttackMissile" unitName="ArtilleryMengskExperimentalStrikeMissile">
+    <CActorMissile id="SquadArtilleryMengskExperimentalStrikeMissile" parent="GenericAttackMissile" unitName="SquadArtilleryMengskExperimentalStrikeMissile">
         <Model value="Invisible"/>
     </CActorMissile>
     <CActorModel id="BlueNuclearCollateralFire">

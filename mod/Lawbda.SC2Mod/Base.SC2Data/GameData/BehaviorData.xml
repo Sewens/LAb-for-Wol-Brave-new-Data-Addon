@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorBuff id="SquadArtilleryMengskCloudSickness">
+        <InfoIcon value="Assets\Textures\btn-ability-mengsk-topbar-contaminatedstrike.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <BuffFlags index="Extend" value="1"/>
+        <Duration value="5"/>
+        <Period value="1"/>
+        <PeriodicEffect value="SquadArtilleryMengskExperimentalStrikePeriodicDamage"/>
+        <Modification>
+            <StateFlags index="SuppressCloak" value="1"/>
+        </Modification>
+        <DamageResponse>
+            <ExcludeEffectArray value="SquadArtilleryMengskExperimentalStrikePeriodicDamage"/>
+        </DamageResponse>
+    </CBehaviorBuff>
     <CBehaviorVeterancy id="HeroLevelUpTo10">
         <BehaviorFlags index="Permanent" value="1"/>
         <InfoIcon value="Assets\Textures\btn-ability-zeratul-hero-purityofwill.dds"/>
@@ -400,6 +414,10 @@
             </Modification>
         </VeterancyLevelArray>
     </CBehaviorVeterancy>
+    <CBehaviorBuff id="SquadArtilleryMengskFear">
+        <InfoIcon value="Assets\Textures\mutator_fear_skull_diff.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+    </CBehaviorBuff>
     <CBehaviorBuff id="SquadAutoHarvestMineral">
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>

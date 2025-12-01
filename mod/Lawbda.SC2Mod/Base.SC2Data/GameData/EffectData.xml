@@ -30,6 +30,58 @@
     <CEffectEnumArea default="1" id="SquadAbilSearchRadiusExt" parent="SquadAbilSearch">
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
+    <CEffectCreatePersistent id="SquadArtilleryMengskExperimentalStrikeCloudCP">
+        <EditorCategories value="Race:Terran"/>
+        <InitialDelay value="1.25"/>
+        <InitialEffect value="SquadArtilleryMengskExperimentalStrikeInitialSearch"/>
+        <ExpireDelay value="3"/>
+        <PeriodCount value="5"/>
+        <PeriodicEffectArray value="SquadArtilleryMengskExperimentalStrikeCloudSearch"/>
+        <PeriodicPeriodArray value="1"/>
+        <RevealRadius value="4"/>
+        <RevealFlags index="Unfog" value="1"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="SquadArtilleryMengskExperimentalStrikeCloudSearch">
+        <EditorCategories value="Race:Zerg"/>
+        <SearchFilters value="-;Player,Ally,Neutral,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="3" Effect="SquadArtilleryMengskExperimentalStrikeCouldSicknessAB"/>
+    </CEffectEnumArea>
+    <CEffectApplyBehavior id="SquadArtilleryMengskExperimentalStrikeCouldSicknessAB">
+        <ValidatorArray index="0" value="ArtilleryMengskExperimentalStrikeFearABTargetFilters"/>
+        <EditorCategories value="Race:Terran"/>
+        <Marker Link="Effect/SquadArtilleryMengskExperimentalStrikeFearApply"/>
+        <Behavior value="SquadArtilleryMengskCloudSickness"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="SquadArtilleryMengskExperimentalStrikeInitialDamage">
+        <EditorCategories value="Race:Terran"/>
+        <Amount value="15"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="SquadArtilleryMengskExperimentalStrikeInitialSearch">
+        <ValidatorArray value="HaveMengskLevel11"/>
+        <SearchFilters value="-;Player,Ally,Neutral,Structure,Heroic,User1,Missile,Destructible,Stasis,Dead,Hidden,Invulnerable,MapBoss"/>
+        <AreaArray Radius="3" Effect="SquadArtilleryMengskExperimentalStrikeInitialSearchSet"/>
+    </CEffectEnumArea>
+    <CEffectDamage id="SquadArtilleryMengskExperimentalStrikePeriodicDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Zerg"/>
+        <Marker Link="Effect/SquadArtilleryMengskExperimentalStrikeInitialDamage"/>
+        <ResponseFlags index="Acquire" value="0"/>
+        <ResponseFlags index="Flee" value="0"/>
+        <ArmorReduction value="0"/>
+        <Kind value="Spell"/>
+        <Amount value="10"/>
+        <Death value="Disintegrate"/>
+        <SearchFlags index="CallForHelp" value="0"/>
+    </CEffectDamage>
+    <CEffectSet id="SquadArtilleryMengskExperimentalStrikeInitialSearchSet">
+        <EditorCategories value=""/>
+        <EffectArray value="SquadArtilleryMengskExperimentalStrikeInitialDamage"/>
+        <EffectArray value="SquadArtilleryMengskExperimentalStrikeFearApply"/>
+    </CEffectSet>
+    <CEffectSet id="SquadArtilleryMengskExperimentalStrikeSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadArtilleryMengskExperimentalStrikeCloudCP"/>
+        <TargetLocationType value="Point"/>
+    </CEffectSet>
     <CEffectSet id="AdvanceMilitarySupportAutoUpgradeSet">
         <EditorCategories value="Race:Terran"/>
         <EffectArray value="SquadLv1InfantryAutoUpgradeSwitch"/>
@@ -38,6 +90,10 @@
     <CEffectApplyBehavior id="InfantryLevelUpto3Apply">
         <EditorCategories value="Race:Terran"/>
         <Behavior value="InfantryLevelUpTo4"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadArtilleryMengskExperimentalStrikeFearApply">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadArtilleryMengskFear"/>
     </CEffectApplyBehavior>
     <CEffectModifyUnit id="SquadGiveExperience200MU">
         <EditorCategories value=""/>
@@ -1020,6 +1076,14 @@
         <RevealRadius value="8"/>
         <RevealFlags index="Unfog" value="1"/>
     </CEffectCreatePersistent>
+    <CEffectRandomPointInCircle id="GreenNuclearSickCloudPickRandomPoint">
+        <EditorCategories value="Race:Terran"/>
+        <Marker Link="Effect/GreenNuclearDetonate">
+            <MatchFlags index="CasterUnit" value="1"/>
+        </Marker>
+        <Effect value="SquadArtilleryMengskExperimentalStrikeSet"/>
+        <Radius value="9"/>
+    </CEffectRandomPointInCircle>
     <CEffectUseCalldown id="BlackNuclear">
         <EditorCategories value="Race:Terran"/>
         <WhichLocation Value="TargetPoint"/>
