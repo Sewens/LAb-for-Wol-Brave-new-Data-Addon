@@ -30,6 +30,114 @@
     <CEffectEnumArea default="1" id="SquadAbilSearchRadiusExt" parent="SquadAbilSearch">
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
+    <CEffectSet id="BlackNuclearBlackHolePersistentSet">
+        <EditorCategories value=""/>
+        <EffectArray value="BlackNuclearBlackHoleSearch"/>
+        <EffectArray value="BlackNuclearBlackHolePeriodicDamage"/>
+    </CEffectSet>
+    <CEffectDamage id="BlackNuclearBlackHolePeriodicDamage">
+        <EditorCategories value="Race:Terran"/>
+        <AINotifyFlags index="HurtEnemy" value="1"/>
+        <AINotifyFlags index="MajorDanger" value="1"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <AttributeBonus index="Light" value="5"/>
+        <AttributeBonus index="Biological" value="2"/>
+        <AttributeBonus index="Psionic" value="10"/>
+        <Amount value="5"/>
+        <Death value="Blast"/>
+        <AreaArray Radius="4" Fraction="1"/>
+        <AreaArray Radius="6" Fraction="0.5"/>
+        <AreaArray Radius="8" Fraction="0.25"/>
+        <SearchFilters value="-;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="SameCliff" value="0"/>
+    </CEffectDamage>
+    <CEffectSet id="BlackNuclearDetonateSet">
+        <EditorCategories value=""/>
+        <EffectArray value="BlackNuclearDamage"/>
+        <EffectArray value="SquadBlackHolePersistent"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="SquadBlackHoleAB">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="SquadBlackHole"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="BlackNuclearBlackHoleAB">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="BlackNuclearBlackHole"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyForce id="SquadBlackHoleForce">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetPoint"/>
+        <WhichUnit Effect="SquadBlackHoleImpactSet"/>
+        <Amount value="-1"/>
+    </CEffectApplyForce>
+    <CEffectApplyForce id="BlackNuclearBlackHoleForce">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetPoint"/>
+        <WhichUnit Effect="SquadBlackHoleImpactSet"/>
+        <Amount value="-1"/>
+    </CEffectApplyForce>
+    <CEffectCreatePersistent id="SquadBlackHoleForceOffset">
+        <ValidatorArray value="SquadBlackHoleForceNotInCenter"/>
+        <EditorCategories value="Race:Protoss"/>
+        <OffsetVectorStartLocation Effect="SquadBlackHoleSearch" Value="TargetPoint"/>
+        <InitialEffect value="SquadBlackHoleForce"/>
+        <InitialOffset value="0.25,0.15,0"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="BlackNuclearBlackHoleOffset">
+        <ValidatorArray value="SquadBlackHoleForceNotInCenter"/>
+        <EditorCategories value="Race:Protoss"/>
+        <OffsetVectorStartLocation Effect="SquadBlackHoleSearch" Value="TargetPoint"/>
+        <InitialEffect value="BlackNuclearBlackHoleForce"/>
+        <InitialOffset value="0.25,0.15,0"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="SquadBlackHoleImpactSet">
+        <EditorCategories value=""/>
+        <EffectArray value="SquadBlackHoleAB"/>
+        <EffectArray value="SquadBlackHoleForceOffset"/>
+        <EffectArray value="SquadBlackHoleImpactSetApplyKnockback"/>
+    </CEffectSet>
+    <CEffectSet id="BlackNuclearBlackHoleImpactSet">
+        <EditorCategories value=""/>
+        <EffectArray value="BlackNuclearBlackHoleAB"/>
+        <EffectArray value="BlackNuclearBlackHoleOffset"/>
+        <EffectArray value="BlackNuclearBlackHoleImpactSetApplyKnockback"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="SquadBlackHoleImpactSetApplyKnockback">
+        <Behavior value="SquadBlackHoleKnockback"/>
+        <Flags index="UseDuration" value="1"/>
+        <Duration value="0.125"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="BlackNuclearBlackHoleImpactSetApplyKnockback">
+        <Behavior value="BlackNuclearBlackHoleKnockback"/>
+        <Flags index="UseDuration" value="1"/>
+        <Duration value="0.125"/>
+    </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="SquadBlackHolePersistent">
+        <EditorCategories value="Race:Protoss"/>
+        <PeriodCount value="128"/>
+        <PeriodicEffectArray value="SquadBlackHoleSearch"/>
+        <PeriodicPeriodArray value="0.0625"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="BlackNuclearBlackHolePersistent">
+        <EditorCategories value="Race:Protoss"/>
+        <PeriodCount value="128"/>
+        <PeriodicEffectArray value="BlackNuclearBlackHolePersistentSet"/>
+        <PeriodicPeriodArray value="0.0625"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="SquadBlackHoleSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <LaunchLocation Value="TargetPoint"/>
+        <SearchFilters value="-;Player,Ally,Neutral,Structure,Missile,Stasis,Dead,Hidden,Invulnerable,Unstoppable"/>
+        <AreaArray Radius="4" Effect="SquadBlackHoleImpactSet"/>
+    </CEffectEnumArea>
+    <CEffectEnumArea id="BlackNuclearBlackHoleSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <LaunchLocation Value="TargetPoint"/>
+        <SearchFilters value="-;Player,Ally,Neutral,Structure,Missile,Stasis,Dead,Hidden,Invulnerable,Unstoppable"/>
+        <AreaArray Radius="8" Effect="BlackNuclearBlackHoleImpactSet"/>
+    </CEffectEnumArea>
     <CEffectApplyBehavior id="SquadBroodlingTimedLife">
         <EditorCategories value="Race:Zerg"/>
         <Behavior value="SquadBroodlingSpawnFate"/>
@@ -1044,16 +1152,16 @@
         <SearchFlags index="CallForHelp" value="1"/>
         <SearchFlags index="SameCliff" value="0"/>
     </CEffectDamage>
-    <CEffectCreatePersistent id="BlackNuclearPersistent">
+    <CEffectCreatePersistent id="BlackNuclearInitialPersistent">
         <EditorCategories value="Race:Terran"/>
         <Alert value="CalldownLaunchObserver"/>
         <Flags index="Channeled" value="1"/>
         <InitialDelay value="2.75"/>
-        <ExpireEffect value="BlackNuclearDetonate"/>
+        <ExpireEffect value="BlackNuclearDetonatePersistent"/>
         <FinalEffect value="SquadNukeSuicide"/>
         <PeriodCount value="5"/>
         <PeriodicPeriodArray value="0.2"/>
-        <AINotifyEffect value="BlueNuclearDamage"/>
+        <AINotifyEffect value="BlackNuclearDamage"/>
     </CEffectCreatePersistent>
     <CEffectApplyBehavior id="WhiteNuclearIceApply">
         <EditorCategories value=""/>
@@ -1116,7 +1224,7 @@
         <EditorCategories value="Race:Terran"/>
         <WhichLocation Value="TargetPoint"/>
         <CalldownCount value="1"/>
-        <CalldownEffect value="BlackNuclearPersistent"/>
+        <CalldownEffect value="BlackNuclearInitialPersistent"/>
     </CEffectUseCalldown>
     <CEffectUseCalldown id="VanillaNuclear">
         <EditorCategories value="Race:Terran"/>
@@ -1224,8 +1332,7 @@
         <AINotifyFlags index="MajorDanger" value="1"/>
         <ResponseFlags index="Acquire" value="1"/>
         <ResponseFlags index="Flee" value="1"/>
-        <AttributeBonus index="Structure" value="200"/>
-        <Amount value="1"/>
+        <Amount value="5"/>
         <Death value="Fire"/>
         <AreaArray Radius="4" Fraction="1"/>
         <AreaArray Radius="6" Fraction="0.5"/>
@@ -3667,10 +3774,10 @@
         <PeriodicPeriodArray value="0.2"/>
         <AINotifyEffect value="BlueNuclearDamage"/>
     </CEffectCreatePersistent>
-    <CEffectCreatePersistent id="BlackNuclearDetonate">
+    <CEffectCreatePersistent id="BlackNuclearDetonatePersistent">
         <EditorCategories value="Race:Terran"/>
         <InitialDelay value="1.25"/>
-        <InitialEffect value="BlackNuclearDamage"/>
+        <InitialEffect value="BlackNuclearDetonateSet"/>
         <ExpireDelay value="8.25"/>
         <RevealRadius value="8"/>
         <RevealFlags index="Unfog" value="1"/>

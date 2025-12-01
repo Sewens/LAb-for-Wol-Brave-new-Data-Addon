@@ -217,6 +217,235 @@
         <HeightOffset value="1.500000"/>
         <Text value="Button/Tooltip/##id##"/>
     </CActorText>
+    <CActorModel id="BlackNuclearBlackHole" parent="ModelAnimationStyleContinuous">
+        <On Terms="Effect.BlackNuclearBlackHolePersistent.Start" Send="Create"/>
+        <On Terms="Effect.BlackNuclearBlackHolePersistent.Stop" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.500000"/>
+        <On Terms="AssetPreInit; !ValidatePlayer NoDarkProtoss" Send="ModelLinkCustomize BlackHoleNoTaldarim"/>
+        <Model value="SquadBlackHole"/>
+    </CActorModel>
+    <CActorSound id="BlackNuclearBlackHoleBirthSound" parent="SoundOneShot">
+        <On Terms="Effect.BlackNuclearBlackHolePersistent.Start" Send="Create"/>
+        <Sound value="SquadBlackHoleStart"/>
+        <Layers>
+            <Sound value="BlackHole_Start2"/>
+            <PitchSource value="Actor"/>
+            <PlayDelaySource value="Actor"/>
+            <VolumeSource value="Actor"/>
+            <Chance value="100"/>
+            <Pitch value="-6.000000,-6.000000"/>
+            <PlayDelay value="25,75"/>
+            <Volume value="0.000000,0.000000"/>
+        </Layers>
+        <Layers>
+            <Sound value="BlackHole_Start3"/>
+            <PitchSource value="Actor"/>
+            <PlayDelaySource value="Actor"/>
+            <VolumeSource value="Actor"/>
+            <Chance value="100"/>
+            <Pitch value="-6.000000,-6.000000"/>
+            <PlayDelay value="75,125"/>
+            <Volume value="0.000000,0.000000"/>
+        </Layers>
+    </CActorSound>
+    <CActorSound id="BlackNuclearBlackHoleDeathSound" parent="SoundOneShot">
+        <On Terms="Effect.BlackNuclearBlackHolePersistent.Stop" Send="Create"/>
+        <On Terms="Effect.ZeratulBlackHolePersistent.Stop" Send="Create"/>
+        <Sound value="SquadBlackHoleEnd"/>
+    </CActorSound>
+    <CActorSimple id="BlackNuclearBlackHoleFlail">
+        <EditorCategories value=""/>
+        <Supporter Subject="_Selectable"/>
+        <On Terms="Behavior.BlackNuclearBlackHole.On" Send="Create"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimPlay Flail Flail PlayForever"/>
+        <On Terms="Behavior.BlackNuclearBlackHole.Off" Target="_Unit" Send="AnimClear Flail"/>
+    </CActorSimple>
+    <!--
+    <CActorSplat id="SquadBlackHoleKnockbackSplat" parent="BurrowedSplat" unitName="K5Kerrigan">
+        <Inherits index="BaseModelScale" value="0"/>
+        <Inherits index="Scale" value="0"/>
+        <On Terms="UnitDeathCustomize" Send="RefClear ::Host"/>
+        <On Terms="UnitDeathCustomize" Send="TimerSet 4.000000,2.000000 DelayDestroy"/>
+        <On Terms="Behavior.SquadBlackHoleKnockback.On" Send="Destroy"/>
+        <On Terms="Behavior.SquadBlackHoleKnockback.Off; ValidateUnit IsK5KerriganBurrowed" Send="Create"/>
+        <HostSiteOps Ops="SOpShadow" HoldPosition="1"/>
+        <Model value="SquadBlackHoleKnockbackSplat"/>
+    </CActorSplat>
+-->
+    <CActorSimple id="SquadBlackHoleKnockbackAnim">
+        <On Terms="Behavior.SquadBlackHoleKnockback.On; ValidateUnit IsNotConstructing" Send="Create"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimClear Attack"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimClear AttackReady"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimClear AttackLeft"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimClear AttackRight"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimPlay KnockbackFlail Flail PlayForever,RandomStartOffset 0.100000 0.100000"/>
+        <On Terms="ActorCreation" Send="TimerSet 3.500000 KnockbackDelay"/>
+        <On Terms="TimerExpired; TimerName KnockbackDelay" Target="_Unit" Send="AnimClear KnockbackFlail"/>
+        <On Terms="TimerExpired; TimerName KnockbackDelay" Send="Destroy"/>
+        <On Terms="Behavior.SquadBlackHoleKnockback.Off" Target="_Unit" Send="AnimClear KnockbackFlail"/>
+        <On Terms="Behavior.SquadBlackHoleKnockback.Off" Send="Destroy"/>
+        <!--
+        <On Terms="Behavior.HHWarHoundKnockback.On; ValidateUnit IsNotConstructing; ValidateUnitType NotSiegedTank" Send="Create"/>
+        <On Terms="Behavior.HHWarHoundKnockback.Off" Target="_Unit" Send="AnimClear KnockbackFlail"/>
+        <On Terms="Behavior.HHWarHoundKnockback.Off" Send="Destroy"/>
+        <On Terms="Behavior.HHReaperKnockback.On; ValidateUnit IsNotConstructing; ValidateUnitType NotSiegedTank" Send="Create"/>
+        <On Terms="Behavior.HHReaperKnockback.Off" Target="_Unit" Send="AnimClear KnockbackFlail"/>
+        <On Terms="Behavior.HHReaperKnockback.Off" Send="Destroy"/>
+        -->
+    </CActorSimple>
+    <CActorModel id="SquadBlackHole" parent="ModelAnimationStyleContinuous">
+        <On Terms="Effect.SquadBlackHolePersistent.Start" Send="Create"/>
+        <On Terms="Effect.SquadBlackHolePersistent.Stop" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.500000"/>
+        <On Terms="AssetPreInit; !ValidatePlayer NoDarkProtoss" Send="ModelLinkCustomize BlackHoleNoTaldarim"/>
+    </CActorModel>
+    <CActorSound id="SquadBlackHoleBirthSound" parent="SoundOneShot">
+        <On Terms="Effect.SquadBlackHolePersistent.Start" Send="Create"/>
+        <Sound value="SquadBlackHoleStart"/>
+        <Layers>
+            <Sound value="BlackHole_Start2"/>
+            <PitchSource value="Actor"/>
+            <PlayDelaySource value="Actor"/>
+            <VolumeSource value="Actor"/>
+            <Chance value="100"/>
+            <Pitch value="-6.000000,-6.000000"/>
+            <PlayDelay value="25,75"/>
+            <Volume value="0.000000,0.000000"/>
+        </Layers>
+        <Layers>
+            <Sound value="BlackHole_Start3"/>
+            <PitchSource value="Actor"/>
+            <PlayDelaySource value="Actor"/>
+            <VolumeSource value="Actor"/>
+            <Chance value="100"/>
+            <Pitch value="-6.000000,-6.000000"/>
+            <PlayDelay value="75,125"/>
+            <Volume value="0.000000,0.000000"/>
+        </Layers>
+    </CActorSound>
+    <CActorSimple id="BlackNuclearBlackHoleKnockbackAnim">
+        <On Terms="Behavior.BlackNuclearBlackHoleKnockback.On; ValidateUnit IsNotConstructing" Send="Create"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimClear Attack"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimClear AttackReady"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimClear AttackLeft"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimClear AttackRight"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimPlay KnockbackFlail Flail PlayForever,RandomStartOffset 0.100000 0.100000"/>
+        <On Terms="ActorCreation" Send="TimerSet 3.500000 KnockbackDelay"/>
+        <On Terms="TimerExpired; TimerName KnockbackDelay" Target="_Unit" Send="AnimClear KnockbackFlail"/>
+        <On Terms="TimerExpired; TimerName KnockbackDelay" Send="Destroy"/>
+        <On Terms="Behavior.BlackNuclearBlackHoleKnockback.Off" Target="_Unit" Send="AnimClear KnockbackFlail"/>
+        <On Terms="Behavior.BlackNuclearBlackHoleKnockback.Off" Send="Destroy"/>
+    </CActorSimple>
+    <CActorSound id="BlackNuclearBlackHoleLoopSound" parent="SoundContinuous">
+        <On Terms="Effect.BlackNuclearBlackHolePersistent.Start" Send="Create"/>
+        <On Terms="Effect.BlackNuclearBlackHolePersistent.Stop" Send="Destroy"/>
+        <Sound value="SquadBlackHoleLoop"/>
+        <Layers>
+            <Sound value="BlackHole_Loop2"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Actor"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="-2.000000,-2.000000"/>
+        </Layers>
+        <Layers>
+            <Sound value="BlackHole_Loop3"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Actor"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="-5.000000,-5.000000"/>
+        </Layers>
+        <Layers>
+            <Sound value="BlackHole_Loop4"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Actor"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="-1.000000,-1.000000"/>
+        </Layers>
+        <Layers>
+            <Sound value="BlackHole_Loop5"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Actor"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="-6.000000,-6.000000"/>
+        </Layers>
+    </CActorSound>
+    <CActorSplat id="VoidSentryBlackHoleCursorSplat2" parent="ProtossCursorSplat" abil="VoidSentryBlackHole2">
+        <On Terms="Abil.AlarakACSoAMothershipV4BlackHole.Guide" Send="Create"/>
+        <On Terms="AssetPreInit; !ValidatePlayer NoDarkProtoss" Send="ModelLinkCustomize VoidProtossAOECursorSplat"/>
+        <Model value="VoidSentryBlackHoleCursorSplat2"/>
+    </CActorSplat>
+    <CActorSound id="SquadBlackHoleDeathSound" parent="SoundOneShot">
+        <On Terms="Effect.SquadBlackHolePersistent.Stop" Send="Create"/>
+        <On Terms="Effect.ZeratulBlackHolePersistent.Stop" Send="Create"/>
+        <Sound value="SquadBlackHoleEnd"/>
+    </CActorSound>
+    <CActorSimple id="SquadBlackHoleFlail">
+        <EditorCategories value=""/>
+        <Supporter Subject="_Selectable"/>
+        <On Terms="Behavior.SquadBlackHole.On" Send="Create"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimPlay Flail Flail PlayForever"/>
+        <On Terms="Behavior.SquadBlackHole.Off" Target="_Unit" Send="AnimClear Flail"/>
+    </CActorSimple>
+    <CActorSound id="SquadBlackHoleLoopSound" parent="SoundContinuous">
+        <On Terms="Effect.SquadBlackHolePersistent.Start" Send="Create"/>
+        <On Terms="Effect.SquadBlackHolePersistent.Stop" Send="Destroy"/>
+        <Sound value="SquadBlackHoleLoop"/>
+        <Layers>
+            <Sound value="BlackHole_Loop2"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Actor"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="-2.000000,-2.000000"/>
+        </Layers>
+        <Layers>
+            <Sound value="BlackHole_Loop3"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Actor"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="-5.000000,-5.000000"/>
+        </Layers>
+        <Layers>
+            <Sound value="BlackHole_Loop4"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Actor"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="-1.000000,-1.000000"/>
+        </Layers>
+        <Layers>
+            <Sound value="BlackHole_Loop5"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Actor"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="-6.000000,-6.000000"/>
+        </Layers>
+    </CActorSound>
+    <CActorRange id="VoidSentryBlackHoleRange2" parent="RangeAbil" abil="VoidSentryBlackHole2">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+    </CActorRange>
     <CActorModel id="WhiteNuclearIceStormSplat" parent="ModelAnimationStyleContinuous">
         <On Terms="Effect.WhiteNuclearDetonatePersistent.Start" Send="Create"/>
         <On Terms="Effect.WhiteNuclearDetonatePersistent.Stop" Send="AnimBracketStop BSD"/>
@@ -1114,8 +1343,8 @@
         <Inherits index="TintColor" value="1"/>
     </CActorSquib>
     <CActorModel id="BlackNuclearDrop">
-        <On Terms="Effect.BlackNuclearDetonate.Start" Send="Create"/>
-        <On Terms="Effect.BlackNuclearDetonate.Start" Send="$Birth"/>
+        <On Terms="Effect.BlackNuclearDetonatePersistent.Start" Send="Create"/>
+        <On Terms="Effect.BlackNuclearDetonatePersistent.Start" Send="$Birth"/>
         <On Terms="Effect.RedNuclearDamage" Send="Destroy"/>
         <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
         <Model value="BlackNukeDrop"/>
@@ -1144,7 +1373,7 @@
         <Radius value="5.000000"/>
     </CActorFoliageFXSpawner>
     <CActorSound id="BlackNuclearDropSound" parent="SoundContinuous">
-        <On Terms="Effect.BlackNuclearDetonate.Start" Send="Create"/>
+        <On Terms="Effect.BlackNuclearDetonatePersistent.Start" Send="Create"/>
         <On Terms="Effect.RedNuclearDamage.Start" Send="Destroy"/>
         <Sound value="Ghost_NukeDrop"/>
     </CActorSound>
@@ -1234,8 +1463,8 @@
     <CActorModel id="BlackNuclearIndicator" parent="ModelAnimationStyleOneShot">
         <Flags index="SuppressSaveLoad" value="0"/>
         <FogVisibility value="Visible"/>
-        <On Terms="Effect.BlackNuclearPersistent.Start" Send="Create"/>
-        <On Terms="Effect.BlackNuclearPersistent.Stop" Send="Destroy"/>
+        <On Terms="Effect.BlackNuclearInitialPersistent.Start" Send="Create"/>
+        <On Terms="Effect.BlackNuclearInitialPersistent.Stop" Send="Destroy"/>
         <On Terms="ActorCreation; ValidatePlayer HaveUnfriendlyNukeIndicator" Send="SetFilter Enemy"/>
         <On Terms="ActorCreation" Send="SetTintColor 0,0,0"/>
         <HostSiteOps Ops="SOpShadow"/>
@@ -3935,8 +4164,8 @@
         <Filter index="Ally" value="1"/>
         <Inherits index="Scale" value="1"/>
         <FogVisibility value="Visible"/>
-        <On Terms="Effect.BlackNuclearPersistent.Start" Send="Create"/>
-        <On Terms="Effect.BlackNuclearPersistent.Stop" Send="AnimBracketStop BSD"/>
+        <On Terms="Effect.BlackNuclearInitialPersistent.Start" Send="Create"/>
+        <On Terms="Effect.BlackNuclearInitialPersistent.Stop" Send="AnimBracketStop BSD"/>
         <On Terms="ActorCreation; !ValidatePlayer HaveUnfriendlyNukeIndicator" Send="SetFilter Enemy"/>
         <Host Subject="GhostNukeTargetBillboard" Actor="Create"/>
     </CActorModel>
