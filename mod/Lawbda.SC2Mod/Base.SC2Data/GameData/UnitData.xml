@@ -4478,7 +4478,15 @@
         <AttackTargetPriority value="11"/>
         <AbilArray Link="SquadBuildinProgress"/>
         <AbilArray Link="SquadQueue5"/>
-        <AbilArray Link="SquadAdvanceEngineBayResearch"/>
+        <AbilArray Link="SquadGiveOrbOrb"/>
+        <AbilArray Link="SquadGiveFireOrb"/>
+        <AbilArray Link="SquadGiveFrostOrb"/>
+        <AbilArray Link="SquadGiveLightningOrb"/>
+        <AbilArray Link="SquadGiveOverjobOrb"/>
+        <AbilArray Link="SquadGivePosionOrb"/>
+        <AbilArray Link="SquadGiveSoulOrb"/>
+        <AbilArray Link="SquadGiveVampireOrb"/>
+        <AbilArray Link="SquadGiveVoodooOrb"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="SquadReactorPowerUser"/>
         <BehaviorArray Link="SquadTechlabPowerUser"/>
@@ -4486,7 +4494,25 @@
             <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Cancel" Row="2" Column="4"/>
             <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="SquadQueue5,CancelSlot" Row="2" Column="4"/>
             <LayoutButtons Face="Halt" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Halt" Row="2" Column="3"/>
-            <LayoutButtons Face="ExtendableInfantryMagazine" Type="AbilCmd" AbilCmd="SquadAdvanceEngineBayResearch,Research1" Row="0" Column="0"/>
+            <LayoutButtons>
+                <Face value="SquadGiveGift"/>
+                <Type value="Submenu"/>
+                <SubmenuCardId value="gift"/>
+                <SubmenuIsSticky value="1"/>
+                <Row value="2"/>
+                <Column value="0"/>
+            </LayoutButtons>
+        </CardLayouts>
+        <CardLayouts CardId="gift">
+            <LayoutButtons Face="GiveSquadOrbOrb" Type="AbilCmd" AbilCmd="SquadGiveOrbOrb,Execute" Row="0" Column="0"/>
+            <LayoutButtons Face="GiveSquadOverjobOrb" Type="AbilCmd" AbilCmd="SquadGiveOverjobOrb,Execute" Row="0" Column="1"/>
+            <LayoutButtons Face="GiveSquadPoisonOrb" Type="AbilCmd" AbilCmd="SquadGivePosionOrb,Execute" Row="0" Column="2"/>
+            <LayoutButtons Face="GiveSquadFrostOrb" Type="AbilCmd" AbilCmd="SquadGiveFrostOrb,Execute" Row="0" Column="3"/>
+            <LayoutButtons Face="GiveSquadFireOrb" Type="AbilCmd" AbilCmd="SquadGiveFireOrb,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="GiveSquadVoodooOrb" Type="AbilCmd" AbilCmd="SquadGiveVoodooOrb,Execute" Row="1" Column="0"/>
+            <LayoutButtons Face="GiveSquadLightningOrb" Type="AbilCmd" AbilCmd="SquadGiveLightningOrb,Execute" Row="1" Column="1"/>
+            <LayoutButtons Face="SquadSoulOrbHallucinationBuff2" Type="AbilCmd" AbilCmd="SquadGiveSoulOrb,Execute" Row="1" Column="2"/>
+            <LayoutButtons Face="GiveSquadVampireOrb" Type="AbilCmd" AbilCmd="SquadGiveVampireOrb,Execute" Row="1" Column="3"/>
         </CardLayouts>
         <Radius value="1.5"/>
         <SeparationRadius value="1.5"/>
@@ -5265,7 +5291,7 @@
         <CardLayouts CardId="Gift">
             <LayoutButtons Face="SmallLifeandRegen" Type="Passive" Row="0" Column="0"/>
             <LayoutButtons Face="ResourceVespeneCrazy" Type="Passive" Row="0" Column="1"/>
-            <LayoutButtons Face="SquadLightingOrb" Type="Passive" Row="0" Column="2"/>
+            <LayoutButtons Face="SquadLightningOrb" Type="Passive" Row="0" Column="2"/>
             <LayoutButtons Face="MediumEnergyandHugeRegen" Type="Passive" Row="1" Column="0"/>
         </CardLayouts>
         <Radius value="0.375"/>

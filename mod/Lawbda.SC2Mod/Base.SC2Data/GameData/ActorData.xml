@@ -235,6 +235,20 @@
         <HostSiteOps Ops="SOpAttachCenter"/>
         <Model value="K5KerriganLevelUp"/>
     </CActorModel>
+    <CActorModel id="SquadGiveOrbGiftLawbdaCore" parent="ModelAnimationStyleOneShot">
+        <On Terms="Abil.SquadGiveSoulOrb.TargetCastStart" Send="Create"/>
+        <On Terms="Abil.SquadGiveVoodooOrb.TargetCastStart" Send="Create"/>
+        <On Terms="Abil.SquadGiveVampireOrb.TargetCastStart" Send="Create"/>
+        <On Terms="Abil.SquadGiveFrostOrb.TargetCastStart" Send="Create"/>
+        <On Terms="Abil.SquadGiveFireOrb.TargetCastStart" Send="Create"/>
+        <On Terms="Abil.SquadGiveLightningOrb.TargetCastStart" Send="Create"/>
+        <On Terms="Abil.SquadGivePosionOrb.TargetCastStart" Send="Create"/>
+        <On Terms="Abil.SquadGiveOrbOrb.TargetCastStart" Send="Create"/>
+        <On Terms="Abil.SquadGiveOverjobOrb.TargetCastStart" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="K5KerriganLevelUp"/>
+    </CActorModel>
     <CActorText id="SquadMineralInvestmentLargeTextKicker40">
         <On Terms="ActorCreation" Send="TimerSet 0.100000 StartMover"/>
         <On Terms="ActorCreation" Send="TimerSet 2.000000 Die"/>
@@ -5662,56 +5676,60 @@
         <Sound value="330mmBarrageCannonsSound"/>
     </CActorSound>
     <CActorModel id="AddSquadImpact" parent="ModelAnimationStyleOneShot">
-        <On Terms="Effect.AddMarine.Start" Send="Create"/>
-        <On Terms="Effect.AddMarauder.Start" Send="Create"/>
-        <On Terms="Effect.AddMedic.Start" Send="Create"/>
-        <On Terms="Effect.AddFirebat.Start" Send="Create"/>
-        <On Terms="Effect.AddGhost.Start" Send="Create"/>
-        <On Terms="Effect.AddSpectre.Start" Send="Create"/>
-        <On Terms="Effect.AddSCV.Start" Send="Create"/>
-        <On Terms="Effect.AddPredator.Start" Send="Create"/>
-        <On Terms="Effect.AddReaper.Start" Send="Create"/>
+        <On Terms="Effect.AddMarineChain.Start" Send="Create"/>
+        <On Terms="Effect.AddMarauderChain.Start" Send="Create"/>
+        <On Terms="Effect.AddMedicChain.Start" Send="Create"/>
+        <On Terms="Effect.AddMuleliskChain.Start" Send="Create"/>
+        <On Terms="Effect.AddFirebatChain.Start" Send="Create"/>
+        <On Terms="Effect.AddGhostChain.Start" Send="Create"/>
+        <On Terms="Effect.AddSpectreChain.Start" Send="Create"/>
+        <On Terms="Effect.AddSCVChain.Start" Send="Create"/>
+        <On Terms="Effect.AddPredatorChain.Start" Send="Create"/>
+        <On Terms="Effect.AddReaperChain.Start" Send="Create"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachCenter"/>
         <Model value="FeedbackImpact"/>
     </CActorModel>
     <CActorSound id="AddSquadImpactSound" parent="SoundOneShot">
-        <On Terms="Effect.AddMarine.Start; At Target" Send="Create"/>
-        <On Terms="Effect.AddMarauder.Start; At Target" Send="Create"/>
-        <On Terms="Effect.AddMedic.Start; At Target" Send="Create"/>
-        <On Terms="Effect.AddFirebat.Start; At Target" Send="Create"/>
-        <On Terms="Effect.AddGhost.Start; At Target" Send="Create"/>
-        <On Terms="Effect.AddSpectre.Start; At Target" Send="Create"/>
-        <On Terms="Effect.AddSCV.Start; At Target" Send="Create"/>
-        <On Terms="Effect.AddPredator.Start; At Target" Send="Create"/>
-        <On Terms="Effect.AddReaper.Start; At Target" Send="Create"/>
+        <On Terms="Effect.AddMarineChain.Start; At Target" Send="Create"/>
+        <On Terms="Effect.AddMarauderChain.Start; At Target" Send="Create"/>
+        <On Terms="Effect.AddMedicChain.Start; At Target" Send="Create"/>
+        <On Terms="Effect.AddMuleliskChain.Start; At Target" Send="Create"/>
+        <On Terms="Effect.AddFirebatChain.Start; At Target" Send="Create"/>
+        <On Terms="Effect.AddGhostChain.Start; At Target" Send="Create"/>
+        <On Terms="Effect.AddSpectreChain.Start; At Target" Send="Create"/>
+        <On Terms="Effect.AddSCVChain.Start; At Target" Send="Create"/>
+        <On Terms="Effect.AddPredatorChain.Start; At Target" Send="Create"/>
+        <On Terms="Effect.AddReaperChain.Start; At Target" Send="Create"/>
         <Host Subject="_Selectable"/>
         <Sound value="Obelisk_ArgusLinkImpact"/>
     </CActorSound>
     <CActorModel id="AddSquadLaunch" parent="ModelAnimationStyleOneShot">
-        <On Terms="Effect.AddMarine.Start; At Caster" Send="Create"/>
-        <On Terms="Effect.AddMarauder.Start; At Caster" Send="Create"/>
-        <On Terms="Effect.AddMedic.Start; At Caster" Send="Create"/>
-        <On Terms="Effect.AddFirebat.Start; At Caster" Send="Create"/>
-        <On Terms="Effect.AddGhost.Start; At Caster" Send="Create"/>
-        <On Terms="Effect.AddSpectre.Start; At Caster" Send="Create"/>
-        <On Terms="Effect.AddSCV.Start; At Caster" Send="Create"/>
-        <On Terms="Effect.AddPredator.Start; At Caster" Send="Create"/>
-        <On Terms="Effect.AddReaper.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AddMarineChain.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AddMarauderChain.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AddMedicChain.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AddMuleliskChain.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AddFirebatChain.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AddGhostChain.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AddSpectreChain.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AddSCVChain.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AddPredatorChain.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AddReaperChain.Start; At Caster" Send="Create"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachOrigin"/>
         <Model value="FeedbackLaunch"/>
     </CActorModel>
     <CActorSound id="AddSquadLaunchSound" parent="SoundOneShot">
-        <On Terms="Effect.AddMarine.Start; At Caster" Send="Create"/>
-        <On Terms="Effect.AddMarauder.Start; At Caster" Send="Create"/>
-        <On Terms="Effect.AddMedic.Start; At Caster" Send="Create"/>
-        <On Terms="Effect.AddFirebat.Start; At Caster" Send="Create"/>
-        <On Terms="Effect.AddGhost.Start; At Caster" Send="Create"/>
-        <On Terms="Effect.AddSpectre.Start; At Caster" Send="Create"/>
-        <On Terms="Effect.AddSCV.Start; At Caster" Send="Create"/>
-        <On Terms="Effect.AddPredator.Start; At Caster" Send="Create"/>
-        <On Terms="Effect.AddReaper.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AddMarineChain.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AddMarauderChain.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AddMedicChain.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AddMuleliskChain.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AddFirebatChain.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AddGhostChain.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AddSpectreChain.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AddSCVChain.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AddPredatorChain.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AddReaperChain.Start; At Caster" Send="Create"/>
         <Host Subject="_Selectable"/>
         <Sound value="Obelisk_ArgusLinkLaunch"/>
     </CActorSound>
@@ -6494,8 +6512,8 @@
         <HostSiteOps Ops="SOpAttachCenter"/>
         <Model value="FeedbackImpact"/>
     </CActorModel>
-    <CActorModel id="SquadGhostGiftLightingFeedbackImpact" parent="ModelAnimationStyleOneShot">
-        <On Terms="Effect.SquadGhostGiftLightingFeedbackDamage.Start; At Target" Send="Create"/>
+    <CActorModel id="SquadGhostGiftLightningFeedbackImpact" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.SquadGhostGiftLightningFeedbackDamage.Start; At Target" Send="Create"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachCenter"/>
         <Model value="FeedbackImpact"/>
@@ -6506,8 +6524,8 @@
         <Host Subject="_Selectable"/>
         <Sound value="Obelisk_ArgusLinkImpact"/>
     </CActorSound>
-    <CActorSound id="SquadGhostGiftLightingImpactSound" parent="SoundOneShot">
-        <On Terms="Effect.SquadGhostGiftLightingFeedbackDamage.Start; At Target" Send="Create"/>
+    <CActorSound id="SquadGhostGiftLightningFeedbackImpactSound" parent="SoundOneShot">
+        <On Terms="Effect.SquadGhostGiftLightningFeedbackDamage.Start; At Target" Send="Create"/>
         <Host Subject="_Selectable"/>
         <Sound value="Obelisk_ArgusLinkImpact"/>
     </CActorSound>
