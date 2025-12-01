@@ -1396,8 +1396,8 @@
         <Model value="BlackNukeDrop"/>
     </CActorModel>
     <CActorModel id="VanillaNuclearDrop">
-        <On Terms="Effect.VanillaNuclearDetonate.Start" Send="Create"/>
-        <On Terms="Effect.VanillaNuclearDetonate.Start" Send="$Birth"/>
+        <On Terms="Effect.VanillaNuclearDetonatePersistent.Start" Send="Create"/>
+        <On Terms="Effect.VanillaNuclearDetonatePersistent.Start" Send="$Birth"/>
         <On Terms="Effect.RedNuclearDamage" Send="Destroy"/>
         <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
         <Model value="VanillaNukeDrop"/>
@@ -1424,7 +1424,7 @@
         <Sound value="Ghost_NukeDrop"/>
     </CActorSound>
     <CActorSound id="VanillaNuclearDropSound" parent="SoundContinuous">
-        <On Terms="Effect.VanillaNuclearDetonate.Start" Send="Create"/>
+        <On Terms="Effect.VanillaNuclearDetonatePersistent.Start" Send="Create"/>
         <On Terms="Effect.RedNuclearDamage.Start" Send="Destroy"/>
         <Sound value="Ghost_NukeDrop"/>
     </CActorSound>
@@ -1518,8 +1518,8 @@
     <CActorModel id="VanillaNuclearIndicator" parent="ModelAnimationStyleOneShot">
         <Flags index="SuppressSaveLoad" value="0"/>
         <FogVisibility value="Visible"/>
-        <On Terms="Effect.VanillaNuclearPersistent.Start" Send="Create"/>
-        <On Terms="Effect.VanillaNuclearPersistent.Stop" Send="Destroy"/>
+        <On Terms="Effect.VanillaNuclearInitialPersistent.Start" Send="Create"/>
+        <On Terms="Effect.VanillaNuclearInitialPersistent.Stop" Send="Destroy"/>
         <On Terms="ActorCreation; ValidatePlayer HaveUnfriendlyNukeIndicator" Send="SetFilter Enemy"/>
         <On Terms="ActorCreation" Send="SetTintColor 255,255,255"/>
         <HostSiteOps Ops="SOpShadow"/>
@@ -4221,8 +4221,8 @@
         <Filter index="Ally" value="1"/>
         <Inherits index="Scale" value="1"/>
         <FogVisibility value="Visible"/>
-        <On Terms="Effect.VanillaNuclearPersistent.Start" Send="Create"/>
-        <On Terms="Effect.VanillaNuclearPersistent.Stop" Send="AnimBracketStop BSD"/>
+        <On Terms="Effect.VanillaNuclearInitialPersistent.Start" Send="Create"/>
+        <On Terms="Effect.VanillaNuclearInitialPersistent.Stop" Send="AnimBracketStop BSD"/>
         <On Terms="ActorCreation; !ValidatePlayer HaveUnfriendlyNukeIndicator" Send="SetFilter Enemy"/>
         <Host Subject="GhostNukeTargetBillboard" Actor="Create"/>
     </CActorModel>
@@ -4253,6 +4253,124 @@
         <On Terms="Effect.HeroNukeDamage.Start; At Effect" Send="Destroy"/>
         <Radius value="8.000000"/>
     </CActorRegionCircle>
+    <CActorSplat id="NuclearAnnihilationMengskSplat" parent="TerranCursorSplat" abil="NuclearAnnihilationMengsk">
+        <Model value="NuclearAnnihilationMengskSplat"/>
+        <Scale value="20.000000"/>
+    </CActorSplat>
+    <CActorSound id="VanillaNuclearDropWhistleAS" parent="SoundOneShot">
+        <On Terms="Effect.VanillaNuclearSmallNukeDropDelayCP.Start; At Effect" Send="Create"/>
+        <Sound value="NuclearAnnihilationNukeDropWhistle"/>
+        <Layers Sound="NuclearAnnihilation_SmallNukeDropWhistle"/>
+    </CActorSound>
+    <CActorModel id="VanillaNuclearSmallNukeDrop">
+        <On Terms="Effect.VanillaNuclearSmallNukeDropDelayCP.Start; At Effect" Send="Create"/>
+        <On Terms="ActorCreation" Send="$Birth"/>
+        <!--On Terms="ActorCreation" Send="Create NuclearAnnihilation_NukeDropWhistle_AS"/>-->
+        <On Terms="AnimDone; AnimName Birth" Send="Destroy"/>
+        <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
+        <Model value="NuclearAnnihilationMengskSmallNukeDrop"/>
+    </CActorModel>
+    <CActorSquib id="VanillaNuclearSmallNukeExplode">
+        <On Terms="Effect.VanillaNuclearSmallNukeDamageSearch.Start; At Effect" Send="Create"/>
+        <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
+        <Map index="None" Model="NuclearAnnihilationMengskSmallNukeExplode" Sound="VanillaNuclearSmallExplode"/>
+    </CActorSquib>
+    <CActorModel id="VanillaNuclearBigNukeDrop">
+        <On Terms="Effect.VanillaNuclearBigNukeDropDelayCP.Initial; At Effect" Send="Create"/>
+        <On Terms="ActorCreation" Send="$Birth"/>
+        <On Terms="AnimDone; AnimName Birth" Send="Destroy"/>
+        <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
+        <Model value="NuclearAnnihilationMengskBigNukeDrop"/>
+    </CActorModel>
+    <CActorModel id="ArtilleryMengskBombardmentTargetingSplat">
+        <On Terms="Effect.ArtilleryMengskBombardmentDropDelayCP.Start; At Effect" Send="Create"/>
+        <On Terms="Effect.ArtilleryMengskBombardmentDropDelayCP.Initial" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand"/>
+        <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
+    </CActorModel>
+    <CActorSound id="VanillaNukeDeployReadyAS" parent="SoundOneShot">
+        <EditorCategories value=""/>
+        <On Terms="Effect.VanillaNuclearBigNukeDropDelayCP.Start; At Effect" Send="Create"/>
+    </CActorSound>
+    <CActorSquib id="VanillaNuclearBigNukeExplode">
+        <On Terms="Effect.VanillaNuclearBigNukeDamageSearch.Start; At Effect" Send="Create"/>
+        <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
+        <Map index="None" Model="NuclearAnnihilationMengskBigNukeExplode" Sound="GhostMengskNukeExplode"/>
+    </CActorSquib>
+    <CActorModel id="GhostMengskNukeCollateralFire">
+        <On Terms="Effect.VanillaNuclearTinyNukeDamage.Start; At Target" Send="Create"/>
+        <HostSiteOps Ops="SOpShadow"/>
+    </CActorModel>
+    <CActorSplat id="GhostMengskNukeCursorSplat" parent="TerranCursorSplat" abil="GhostMengskNuke2">
+        <Model value="GhostMengskNukeCursorSplat"/>
+    </CActorSplat>
+    <CActorModel id="GhostMengskNukeDrop">
+        <On Terms="Effect.VanillaNuclearTinyNukePersistent.Start" Send="Create"/>
+        <On Terms="Effect.VanillaNuclearTinyNukePersistent.Start" Send="$Birth"/>
+        <On Terms="Effect.GhostMengskNukeDamage.Start" Send="Destroy"/>
+        <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
+    </CActorModel>
+    <CActorSquib id="GhostMengskNukeExplode">
+        <FogVisibility value="Visible"/>
+        <On Terms="Effect.VanillaNuclearTinyNukeDamage.Start; At Effect" Send="Create"/>
+        <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
+        <Map index="None" Model="GhostMengskNukeExplode2"/>
+    </CActorSquib>
+    <CActorModel id="VanillaNuclearSmallNukeIndicator">
+        <FogVisibility value="Visible"/>
+        <On Terms="Effect.VanillaNuclearSmallNukeDropDelayCP.Start" Send="Create"/>
+        <On Terms="Effect.VanillaNuclearSmallNukeDropDelayCP.Start" Send="Create"/>
+        <On Terms="Effect.VanillaNuclearSmallNukeDropDelayCP.Stop" Send="Destroy"/>
+        <On Terms="Effect.VanillaNuclearSmallNukeDropDelayCP.Stop" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand"/>
+        <On Terms="ActorCreation; ValidatePlayer HaveUnfriendlyNukeIndicator" Send="SetFilter Enemy"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Model value="GhostMengskNukeIndicator"/>
+    </CActorModel>
+    <CActorModel id="VanillaNuclearSmallNukeIndicatorInProgress">
+        <FogVisibility value="Visible"/>
+        <On Terms="Effect.VanillaNuclearSmallNukeDropDelayCP.Start" Send="Create"/>
+        <On Terms="Effect.VanillaNuclearSmallNukeDamage.Start; FromEffectTreeDescendant" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD {} Stand"/>
+        <On Terms="ActorCreation; ValidatePlayer HaveUnfriendlyNukeIndicator" Send="SetFilter Enemy"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Model value="GhostMengskNukeIndicator"/>
+    </CActorModel>
+    <CActorSquib id="GhostMengskNukeLaunch">
+        <On Terms="Effect.VanillaNuclearTinyNukePersistent2.Start" Send="Create"/>
+        <On Terms="Effect.VanillaNuclearTinyNukeGuidedPersistent.Start" Send="Create"/>
+        <HostSiteOps Ops="SOpSourcePointSationary"/>
+    </CActorSquib>
+    <CActorRange id="GhostMengskNukeRange" parent="RangeAbil" abil="GhostMengskNuke2">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorSound id="GhostMengskNukeSeek" parent="SoundContinuous">
+        <On Terms="Effect.VanillaNuclearTinyNukePersistent2.Initial" Send="Create"/>
+        <On Terms="Effect.VanillaNuclearTinyNukePersistent2.Stop; At Effect" Send="Destroy"/>
+        <On Terms="Effect.VanillaNuclearTinyNukeGuidedPersistent.Initial" Send="Create"/>
+        <On Terms="Effect.VanillaNuclearTinyNukeGuidedPersistent.Stop; At Effect" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="SoundSetPitch Inverse 10.000000@0.000000,0.000000@8750.000000"/>
+        <On Terms="Effect.NukeMengskFastPersistent.Initial" Send="Create"/>
+        <On Terms="Effect.NukeMengskFastPersistent.Stop; At Effect" Send="Destroy"/>
+        <Sound value="Ghost_NukeSeek"/>
+    </CActorSound>
+    <CActorAction id="GhostMengskNukeShieldHitter" parent="AoESplashShieldHitter" effectHit="VanillaNuclearTinyNukeDamage"/>
+    <CActorModel id="GhostMengskNukeTarget">
+        <Filter index="Self" value="1"/>
+        <Filter index="Ally" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <FogVisibility value="Visible"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death ContentPlayOnce"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
+        <On Terms="Effect.VanillaNuclearTinyNukePersistent2.Start" Send="Create"/>
+        <On Terms="Effect.VanillaNuclearTinyNukePersistent2.Stop" Send="AnimBracketStop BSD"/>
+        <On Terms="Effect.VanillaNuclearTinyNukeGuidedPersistent.Start" Send="Create"/>
+        <On Terms="Effect.VanillaNuclearTinyNukeGuidedPersistent.Stop" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation; !ValidatePlayer HaveUnfriendlyNukeIndicator" Send="SetFilter Enemy"/>
+        <Host Subject="GhostNukeTargetBillboard" Actor="Create"/>
+    </CActorModel>
     <CActorModel id="YellowScannerChronoBeamImpact" parent="ModelAnimationStyleContinuous">
         <On Terms="Behavior.YellowScannerChronoBeam.On" Send="Create"/>
         <On Terms="Behavior.YellowScannerChronoBeam.Off" Send="AnimBracketStop BSD"/>
@@ -9470,14 +9588,14 @@
         <Model value="RedNukeCollateralFire"/>
     </CActorModel>
     <CActorModel id="RedNuclearDrop">
-        <On Terms="Effect.RedNuclearDetonate.Start" Send="Create"/>
-        <On Terms="Effect.RedNuclearDetonate.Start" Send="$Birth"/>
+        <On Terms="Effect.RedNuclearDetonatePersistent.Start" Send="Create"/>
+        <On Terms="Effect.RedNuclearDetonatePersistent.Start" Send="$Birth"/>
         <On Terms="Effect.RedNuclearDamage" Send="Destroy"/>
         <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
         <Model value="RedNukeDrop"/>
     </CActorModel>
     <CActorSound id="RedNuclearDropSound" parent="SoundContinuous">
-        <On Terms="Effect.RedNuclearDetonate.Start" Send="Create"/>
+        <On Terms="Effect.RedNuclearDetonatePersistent.Start" Send="Create"/>
         <On Terms="Effect.RedNuclearDamage.Start" Send="Destroy"/>
         <Sound value="Ghost_NukeDrop"/>
     </CActorSound>
@@ -9493,19 +9611,19 @@
     <CActorModel id="RedNuclearIndicator" parent="ModelAnimationStyleOneShot">
         <Flags index="SuppressSaveLoad" value="0"/>
         <FogVisibility value="Visible"/>
-        <On Terms="Effect.RedNuclearPersistent.Start" Send="Create"/>
-        <On Terms="Effect.RedNuclearPersistent.Stop" Send="Destroy"/>
+        <On Terms="Effect.RedNuclearInitialPersistent.Start" Send="Create"/>
+        <On Terms="Effect.RedNuclearInitialPersistent.Stop" Send="Destroy"/>
         <On Terms="ActorCreation; ValidatePlayer HaveUnfriendlyNukeIndicator" Send="SetFilter Enemy"/>
         <HostSiteOps Ops="SOpShadow"/>
     </CActorModel>
     <CActorSquib id="RedNuclearLaunch">
-        <On Terms="Effect.RedNuclearPersistent" Send="Create"/>
+        <On Terms="Effect.RedNuclearInitialPersistent" Send="Create"/>
         <HostSiteOps Ops="SOpSourcePointSationary"/>
         <Map index="None" Model="RedNukeLaunch" Sound="Ghost_NukeLaunch"/>
     </CActorSquib>
     <CActorSound id="RedNuclearSeek" parent="SoundContinuous">
-        <On Terms="Effect.RedNukePersistent.Initial" Send="Create"/>
-        <On Terms="Effect.RedNukePersistent.Stop; At Effect" Send="Destroy"/>
+        <On Terms="Effect.RedNukeInitialPersistent.Initial" Send="Create"/>
+        <On Terms="Effect.RedNukeInitialPersistent.Stop; At Effect" Send="Destroy"/>
         <On Terms="ActorCreation" Send="SoundSetPitch Inverse 10.000000@0.000000,0.000000@8750.000000"/>
         <Sound value="Ghost_NukeSeek"/>
     </CActorSound>
@@ -9518,8 +9636,8 @@
         <Filter index="Ally" value="1"/>
         <Inherits index="Scale" value="1"/>
         <FogVisibility value="Visible"/>
-        <On Terms="Effect.RedNuclearPersistent.Start" Send="Create"/>
-        <On Terms="Effect.RedNuclearPersistent.Stop" Send="AnimBracketStop BSD"/>
+        <On Terms="Effect.RedNuclearInitialPersistent.Start" Send="Create"/>
+        <On Terms="Effect.RedNuclearInitialPersistent.Stop" Send="AnimBracketStop BSD"/>
         <On Terms="ActorCreation; !ValidatePlayer HaveUnfriendlyNukeIndicator" Send="SetFilter Enemy"/>
         <Host Subject="GhostNukeTargetBillboard" Actor="Create"/>
     </CActorModel>
