@@ -217,6 +217,13 @@
         <HeightOffset value="1.500000"/>
         <Text value="Button/Tooltip/##id##"/>
     </CActorText>
+    <CActorModel id="WhiteNuclearIceStormSplat" parent="ModelAnimationStyleContinuous">
+        <On Terms="Effect.WhiteNuclearDetonatePersistent.Start" Send="Create"/>
+        <On Terms="Effect.WhiteNuclearDetonatePersistent.Stop" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation" Send="SetTintColor 255,255,255"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Scale value="1.300000"/>
+    </CActorModel>
     <CActorText id="SquadAutomatedVespenseTextKicker42">
         <On Terms="ActorCreation" Send="TimerSet 0.100000 StartMover"/>
         <On Terms="ActorCreation" Send="TimerSet 2.000000 Die"/>
@@ -1034,6 +1041,13 @@
         <On Terms="ActorCreation" Send="SetTintColor 255,255,255"/>
         <Model value="VanillaNukeCursorSplat"/>
     </CActorSplat>
+    <CActorModel id="WhiteNuclearIceStormSnow" parent="ModelAnimationStyleContinuous">
+        <On Terms="Effect.WhiteNuclearDetonatePersistent.Start" Send="Create"/>
+        <On Terms="Effect.WhiteNuclearDetonatePersistent.Stop" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation" Send="SetTintColor 255,255,255"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Scale value="1.300000"/>
+    </CActorModel>
     <CActorModel id="YellowNuclearCollateralFire">
         <On Terms="Effect.YellowNuclearDamage.Start; At Target" Send="Create"/>
         <HostSiteOps Ops="SOpShadow"/>
@@ -2379,7 +2393,7 @@
         <On Terms="StateChange; StateValid TwoFlames; !StateChanged Normal" Send="Create SquadCaptainNovaFlamesSetTwo"/>
         <On Terms="StateChange; !StateValid OneFlames" Target="SquadCaptainNovaFlamesSetOne" Send="Destroy"/>
         <On Terms="StateChange; !StateValid TwoFlames" Target="SquadCaptainNovaFlamesSetTwo" Send="Destroy"/>
-        <On Terms="StateChange; StateValid TwoFlames" Send="Create SquadCaptainNovaDamage_Medium_Fire_AS"/>
+        <On Terms="StateChange; StateValid TwoFlames" Send="Create SquadCaptainNovaDamageMediumFireAS"/>
         <On Terms="StateChange; !StateValid TwoFlames" Target="SquadCaptainNovaDamageMediumFireAS" Send="Destroy"/>
         <StateArray Name="Normal" Terms="ValidateUnit LifeGEHalf"/>
         <StateArray Name="OneFlames" Terms="ValidateUnit Life12andLife14"/>
