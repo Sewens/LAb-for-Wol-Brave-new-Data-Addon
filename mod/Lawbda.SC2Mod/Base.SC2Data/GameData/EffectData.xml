@@ -58,12 +58,48 @@
         <EffectArray value="BlackNuclearDamage"/>
         <EffectArray value="SquadBlackHolePersistent"/>
     </CEffectSet>
-    <CEffectRandomPointInCircle id="BlueNuclearPsiStormPickRandomPoint">
+    <CEffectCreatePersistent id="YellowNuclearEarthquakeRandomPersistent">
+        <EditorCategories value=""/>
+        <PeriodCount value="5"/>
+        <PeriodicEffectArray value="YellowNuclearEarthquakePickRandomPoint"/>
+        <PeriodicPeriodArray value="0.5"/>
+    </CEffectCreatePersistent>
+    <CEffectApplyBehavior id="YellowNuclearEarthquakeApplyBehavior">
+        <ValidatorArray index="0" removed="1"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="YellowNuclearEarthquake"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="YellowNuclearEarthquakeDamageInitial">
+        <ValidatorArray value="PsiStormUTargetFilters"/>
+        <EditorCategories value="Race:Protoss"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Amount value="10"/>
+        <AttributeBonus index="Structure" value="50"/>
+    </CEffectDamage>
+    <CEffectDamage id="YellowNuclearEarthquakePeriodicDamage">
+        <ValidatorArray value="PsiStormUTargetFilters"/>
+        <EditorCategories value="Race:Protoss"/>
+        <AttributeBonus index="Structure" value="25"/>
+        <Visibility value="Hidden"/>
+        <Amount value="5"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="YellowNuclearEarthquakePersistent">
+        <EditorCategories value="Race:Protoss"/>
+        <InitialEffect value="YellowNuclearEarthquakeSearch"/>
+        <PeriodCount value="50"/>
+        <PeriodicEffectArray value="YellowNuclearEarthquakeSearch"/>
+        <PeriodicPeriodArray value="0.5712"/>
+        <AINotifyEffect value="HighArchonPsiStormSearch"/>
+    </CEffectCreatePersistent>
+    <CEffectRandomPointInCircle id="YellowNuclearEarthquakePickRandomPoint">
         <EditorCategories value="Race:Terran"/>
-        <Marker Link="Effect/BlueNuclearDetonatePersistent"/>
-        <WhichLocation Effect="BlueNuclearDetonatePersistent" Value="TargetUnitOrPoint"/>
-        <Effect value="BlueNuclearPsiStormPersistent"/>
+        <Marker Link="Effect/YellowNuclearDetonatePersistent"/>
+        <WhichLocation Effect="YellowNuclearDetonatePersistent" Value="TargetUnitOrPoint"/>
+        <Effect value="YellowNuclearEarthquakePersistent"/>
         <Radius value="7"/>
+        <Count value="5"/>
     </CEffectRandomPointInCircle>
     <CEffectApplyBehavior id="BlueNuclearPsiStormApplyBehavior">
         <EditorCategories value="Race:Protoss"/>
@@ -98,7 +134,7 @@
     <CEffectCreatePersistent id="BlueNuclearPsiStormRandomPersistent">
         <EditorCategories value=""/>
         <PeriodCount value="25"/>
-        <PeriodicEffectArray value="BlueNuclearPsiStormPickRandomPoint"/>
+        <PeriodicEffectArray value="YellowNuclearEarthquakePickRandomPoint"/>
         <PeriodicPeriodArray value="0.25"/>
     </CEffectCreatePersistent>
     <CEffectEnumArea id="BlueNuclearPsiStormSearch">
@@ -109,6 +145,14 @@
         <AreaArray Radius="0.5" Effect="BlueNuclearPsiStormApplyBehavior"/>
         <SearchFlags index="CallForHelp" value="1"/>
     </CEffectEnumArea>
+    <CEffectEnumArea id="YellowNuclearEarthquakeSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <AINotifyFlags index="HurtFriend" value="1"/>
+        <AINotifyFlags index="HurtEnemy" value="1"/>
+        <SearchFilters value="Structure;Missile,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="1" Effect="YellowNuclearEarthquakeSearchSet"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectEnumArea>
     <CEffectSet id="BlueNuclearPsiStormSearchSet">
         <EditorCategories value=""/>
         <EffectArray value="BlueNuclearPsiStormSearch"/>
@@ -117,6 +161,11 @@
         <EditorCategories value="Race:Terran"/>
         <EffectArray value="BlueNuclearDamage"/>
         <EffectArray value="BlueNuclearPsiStormRandomPersistent"/>
+    </CEffectSet>
+    <CEffectSet id="YellowNuclearEarthquakeSearchSet">
+        <EditorCategories value=""/>
+        <EffectArray value="YellowNuclearEarthquakeApplyBehavior"/>
+        <EffectArray value="YellowNuclearEarthquakePeriodicDamage"/>
     </CEffectSet>
     <CEffectApplyBehavior id="SquadBlackHoleAB">
         <EditorCategories value="Race:Protoss"/>
@@ -1241,7 +1290,7 @@
         <EditorCategories value="Race:Terran"/>
         <WhichLocation Value="TargetPoint"/>
         <CalldownCount value="1"/>
-        <CalldownEffect value="YellowNuclearPersistent"/>
+        <CalldownEffect value="YellowNuclearInitialPersistent"/>
     </CEffectUseCalldown>
     <CEffectDamage id="WhiteNuclearDamage">
         <EditorCategories value="Race:Terran"/>
@@ -1300,7 +1349,7 @@
         <ResponseFlags index="Acquire" value="1"/>
         <ResponseFlags index="Flee" value="1"/>
         <AttributeBonus index="Structure" value="200"/>
-        <Amount value="1"/>
+        <Amount value="50"/>
         <Death value="Fire"/>
         <AreaArray Radius="4" Fraction="1"/>
         <AreaArray Radius="6" Fraction="0.5"/>
@@ -1421,10 +1470,10 @@
         <SearchFlags index="CallForHelp" value="1"/>
         <SearchFlags index="SameCliff" value="0"/>
     </CEffectDamage>
-    <CEffectCreatePersistent id="YellowNuclearDetonate">
+    <CEffectCreatePersistent id="YellowNuclearDetonatePersistent">
         <EditorCategories value="Race:Terran"/>
         <InitialDelay value="1.25"/>
-        <InitialEffect value="YellowNuclearDamage"/>
+        <InitialEffect value="YellowNuclearDetonateSet"/>
         <ExpireDelay value="8.25"/>
         <RevealRadius value="8"/>
         <RevealFlags index="Unfog" value="1"/>
@@ -3826,12 +3875,17 @@
         <RevealRadius value="8"/>
         <RevealFlags index="Unfog" value="1"/>
     </CEffectCreatePersistent>
-    <CEffectCreatePersistent id="YellowNuclearPersistent">
+    <CEffectSet id="YellowNuclearDetonateSet">
+        <EditorCategories value=""/>
+        <EffectArray value="YellowNuclearDamage"/>
+        <EffectArray value="YellowNuclearEarthquakeRandomPersistent"/>
+    </CEffectSet>
+    <CEffectCreatePersistent id="YellowNuclearInitialPersistent">
         <EditorCategories value="Race:Terran"/>
         <Alert value="CalldownLaunchObserver"/>
         <Flags index="Channeled" value="1"/>
         <InitialDelay value="2.75"/>
-        <ExpireEffect value="YellowNuclearDetonate"/>
+        <ExpireEffect value="YellowNuclearDetonatePersistent"/>
         <FinalEffect value="SquadNukeSuicide"/>
         <PeriodCount value="5"/>
         <PeriodicPeriodArray value="0.2"/>

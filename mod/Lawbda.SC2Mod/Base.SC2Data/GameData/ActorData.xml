@@ -270,6 +270,16 @@
         <Model value="HighArchonPsiStormImpact"/>
         <AutoScaleFactor value="0.750000"/>
     </CActorModel>
+    <CActorModel id="YellowNuclearEarthquakeImpact" parent="ModelAnimationStyleContinuous">
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <On Terms="Behavior.YellowNuclearEarthquake.Start" Send="Create"/>
+        <On Terms="Behavior.YellowNuclearEarthquake.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="HybridAWarstompStun"/>
+        <AutoScaleFactor value="0.750000"/>
+    </CActorModel>
     <CActorModel id="BlueNuclearPsiStormModel" parent="ModelAnimationStyleContinuous">
         <On Terms="Effect.BlueNuclearPsiStormPersistent.Start" Send="Create"/>
         <On Terms="Effect.BlueNuclearPsiStormPersistent.Stop" Send="AnimBracketStop BSD"/>
@@ -277,9 +287,22 @@
         <Model value="HighArchonPsiStormModel"/>
         <Scale value="0.500000"/>
     </CActorModel>
+    <CActorModel id="YellowNuclearEarthquakeModel" parent="ModelAnimationStyleContinuous">
+        <On Terms="Effect.YellowNuclearEarthquakePersistent.Start" Send="Create"/>
+        <On Terms="Effect.YellowNuclearEarthquakePersistent.Stop" Send="AnimBracketStop BSD"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Model value="SquadDakrunCoopChargeImpactGround"/>
+        <Scale value="0.250000"/>
+    </CActorModel>
     <CActorSound id="BlueNuclearPsiStormSound" parent="SoundContinuous">
         <On Terms="Effect.BlueNuclearPsiStormPersistent.Start" Send="Create"/>
         <On Terms="Effect.BlueNuclearPsiStormPersistent.Stop" Send="Destroy"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Sound value="HighTemplar_PsionicStormLaunch"/>
+    </CActorSound>
+    <CActorSound id="YellowNuclearEarthquakeSound" parent="SoundContinuous">
+        <On Terms="Effect.YellowNuclearEarthquakePersistent.Start" Send="Create"/>
+        <On Terms="Effect.YellowNuclearEarthquakePersistent.Stop" Send="Destroy"/>
         <HostSiteOps Ops="SOpShadow"/>
         <Sound value="HighTemplar_PsionicStormLaunch"/>
     </CActorSound>
@@ -1347,8 +1370,8 @@
         <Model value="VanillaNukeCollateralFire"/>
     </CActorModel>
     <CActorModel id="YellowNuclearDrop">
-        <On Terms="Effect.YellowNuclearDetonate.Start" Send="Create"/>
-        <On Terms="Effect.YellowNuclearDetonate.Start" Send="$Birth"/>
+        <On Terms="Effect.YellowNuclearDetonatePersistent.Start" Send="Create"/>
+        <On Terms="Effect.YellowNuclearDetonatePersistent.Start" Send="$Birth"/>
         <On Terms="Effect.RedNuclearDamage" Send="Destroy"/>
         <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
         <Model value="YellowNukeDrop"/>
@@ -1380,7 +1403,7 @@
         <Model value="VanillaNukeDrop"/>
     </CActorModel>
     <CActorSound id="YellowNuclearDropSound" parent="SoundContinuous">
-        <On Terms="Effect.YellowNuclearDetonate.Start" Send="Create"/>
+        <On Terms="Effect.YellowNuclearDetonatePersistent.Start" Send="Create"/>
         <On Terms="Effect.RedNuclearDamage.Start" Send="Destroy"/>
         <Sound value="Ghost_NukeDrop"/>
     </CActorSound>
@@ -1466,8 +1489,8 @@
     <CActorModel id="YellowNuclearIndicator" parent="ModelAnimationStyleOneShot">
         <Flags index="SuppressSaveLoad" value="0"/>
         <FogVisibility value="Visible"/>
-        <On Terms="Effect.YellowNuclearPersistent.Start" Send="Create"/>
-        <On Terms="Effect.YellowNuclearPersistent.Stop" Send="Destroy"/>
+        <On Terms="Effect.YellowNuclearInitialPersistent.Start" Send="Create"/>
+        <On Terms="Effect.YellowNuclearInitialPersistent.Stop" Send="Destroy"/>
         <On Terms="ActorCreation; ValidatePlayer HaveUnfriendlyNukeIndicator" Send="SetFilter Enemy"/>
         <On Terms="ActorCreation" Send="SetTintColor 255,255,255"/>
         <HostSiteOps Ops="SOpShadow"/>
@@ -1685,8 +1708,8 @@
         <Filter index="Ally" value="1"/>
         <Inherits index="Scale" value="1"/>
         <FogVisibility value="Visible"/>
-        <On Terms="Effect.YellowNuclearPersistent.Start" Send="Create"/>
-        <On Terms="Effect.YellowNuclearPersistent.Stop" Send="AnimBracketStop BSD"/>
+        <On Terms="Effect.YellowNuclearInitialPersistent.Start" Send="Create"/>
+        <On Terms="Effect.YellowNuclearInitialPersistent.Stop" Send="AnimBracketStop BSD"/>
         <On Terms="ActorCreation; !ValidatePlayer HaveUnfriendlyNukeIndicator" Send="SetFilter Enemy"/>
         <Host Subject="GhostNukeTargetBillboard" Actor="Create"/>
     </CActorModel>
