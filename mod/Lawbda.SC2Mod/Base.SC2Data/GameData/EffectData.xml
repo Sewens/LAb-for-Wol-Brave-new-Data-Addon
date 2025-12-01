@@ -90,7 +90,7 @@
         <InitialEffect value="YellowNuclearEarthquakeSearch"/>
         <PeriodCount value="50"/>
         <PeriodicEffectArray value="YellowNuclearEarthquakeSearch"/>
-        <PeriodicPeriodArray value="0.5712"/>
+        <PeriodicPeriodArray value="0.5"/>
         <AINotifyEffect value="HighArchonPsiStormSearch"/>
     </CEffectCreatePersistent>
     <CEffectRandomPointInCircle id="YellowNuclearEarthquakePickRandomPoint">
@@ -99,7 +99,6 @@
         <WhichLocation Effect="YellowNuclearDetonatePersistent" Value="TargetUnitOrPoint"/>
         <Effect value="YellowNuclearEarthquakePersistent"/>
         <Radius value="7"/>
-        <Count value="5"/>
     </CEffectRandomPointInCircle>
     <CEffectApplyBehavior id="BlueNuclearPsiStormApplyBehavior">
         <EditorCategories value="Race:Protoss"/>
@@ -147,10 +146,9 @@
     </CEffectEnumArea>
     <CEffectEnumArea id="YellowNuclearEarthquakeSearch">
         <EditorCategories value="Race:Protoss"/>
-        <AINotifyFlags index="HurtFriend" value="1"/>
         <AINotifyFlags index="HurtEnemy" value="1"/>
-        <SearchFilters value="Structure;Missile,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
-        <AreaArray Radius="1" Effect="YellowNuclearEarthquakeSearchSet"/>
+        <SearchFilters value="Structure;Player,Ally,Missile,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="3.5" Effect="YellowNuclearEarthquakeSearchSet"/>
         <SearchFlags index="CallForHelp" value="1"/>
     </CEffectEnumArea>
     <CEffectSet id="BlueNuclearPsiStormSearchSet">
@@ -3889,7 +3887,7 @@
         <FinalEffect value="SquadNukeSuicide"/>
         <PeriodCount value="5"/>
         <PeriodicPeriodArray value="0.2"/>
-        <AINotifyEffect value="BlueNuclearDamage"/>
+        <AINotifyEffect value="YellowNuclearDamage"/>
     </CEffectCreatePersistent>
     <CEffectCreatePersistent id="BlackNuclearDetonatePersistent">
         <EditorCategories value="Race:Terran"/>
