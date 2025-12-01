@@ -58,6 +58,66 @@
         <EffectArray value="BlackNuclearDamage"/>
         <EffectArray value="SquadBlackHolePersistent"/>
     </CEffectSet>
+    <CEffectRandomPointInCircle id="BlueNuclearPsiStormPickRandomPoint">
+        <EditorCategories value="Race:Terran"/>
+        <Marker Link="Effect/BlueNuclearDetonatePersistent"/>
+        <WhichLocation Effect="BlueNuclearDetonatePersistent" Value="TargetUnitOrPoint"/>
+        <Effect value="BlueNuclearPsiStormPersistent"/>
+        <Radius value="7"/>
+    </CEffectRandomPointInCircle>
+    <CEffectApplyBehavior id="BlueNuclearPsiStormApplyBehavior">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="BlueNuclearPsiStorm"/>
+        <ValidatorArray index="0" removed="1"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="BlueNuclearPsiStormPeriodicDamage">
+        <ValidatorArray value="PsiStormUTargetFilters"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Visibility value="Hidden"/>
+        <Amount value="5"/>
+        <AttributeBonus index="Mechanical" value="5"/>
+        <AttributeBonus index="Psionic" value="10"/>
+        <AttributeBonus index="Structure" value="5"/>
+    </CEffectDamage>
+    <CEffectDamage id="BlueNuclearPsiStormDamageInitial">
+        <ValidatorArray value="PsiStormUTargetFilters"/>
+        <EditorCategories value="Race:Protoss"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Amount value="10"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="BlueNuclearPsiStormPersistent">
+        <EditorCategories value="Race:Protoss"/>
+        <InitialEffect value="BlueNuclearPsiStormSearchSet"/>
+        <PeriodCount value="6"/>
+        <PeriodicEffectArray value="BlueNuclearPsiStormSearchSet"/>
+        <PeriodicPeriodArray value="0.5712"/>
+        <AINotifyEffect value="HighArchonPsiStormSearch"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="BlueNuclearPsiStormRandomPersistent">
+        <EditorCategories value=""/>
+        <PeriodCount value="25"/>
+        <PeriodicEffectArray value="BlueNuclearPsiStormPickRandomPoint"/>
+        <PeriodicPeriodArray value="0.25"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="BlueNuclearPsiStormSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <AINotifyFlags index="HurtFriend" value="1"/>
+        <AINotifyFlags index="HurtEnemy" value="1"/>
+        <SearchFilters value="-;Player,Ally,Neutral,Missile,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="0.5" Effect="BlueNuclearPsiStormApplyBehavior"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectEnumArea>
+    <CEffectSet id="BlueNuclearPsiStormSearchSet">
+        <EditorCategories value=""/>
+        <EffectArray value="BlueNuclearPsiStormSearch"/>
+    </CEffectSet>
+    <CEffectSet id="BlueNuclearDetonateSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="BlueNuclearDamage"/>
+        <EffectArray value="BlueNuclearPsiStormRandomPersistent"/>
+    </CEffectSet>
     <CEffectApplyBehavior id="SquadBlackHoleAB">
         <EditorCategories value="Race:Protoss"/>
         <Behavior value="SquadBlackHole"/>
@@ -142,7 +202,7 @@
         <EditorCategories value="Race:Zerg"/>
         <Behavior value="SquadBroodlingSpawnFate"/>
     </CEffectApplyBehavior>
-    <CEffectSet id="GreenNuclearDetonateInitialSet">
+    <CEffectSet id="GreenNuclearDetonateSet">
         <EditorCategories value="Race:Terran"/>
         <EffectArray value="GreenNuclearDamage"/>
         <EffectArray value="GreenNuclearSickCloudPickRandomPoint"/>
@@ -1207,7 +1267,7 @@
     <CEffectCreatePersistent id="GreenNuclearDetonatePersistent">
         <EditorCategories value="Race:Terran"/>
         <InitialDelay value="1.25"/>
-        <InitialEffect value="GreenNuclearDetonateInitialSet"/>
+        <InitialEffect value="GreenNuclearDetonateSet"/>
         <ExpireDelay value="8.25"/>
         <RevealRadius value="8"/>
         <RevealFlags index="Unfog" value="1"/>
@@ -1287,7 +1347,7 @@
         <EditorCategories value="Race:Terran"/>
         <WhichLocation Value="TargetPoint"/>
         <CalldownCount value="1"/>
-        <CalldownEffect value="BlueNuclearPersistent"/>
+        <CalldownEffect value="BlueNuclearInitialPersistent"/>
     </CEffectUseCalldown>
     <CEffectDamage id="BlueNuclearDamage">
         <EditorCategories value="Race:Terran"/>
@@ -1296,9 +1356,12 @@
         <AINotifyFlags index="MajorDanger" value="1"/>
         <ResponseFlags index="Acquire" value="1"/>
         <ResponseFlags index="Flee" value="1"/>
-        <AttributeBonus index="Structure" value="200"/>
-        <Amount value="1"/>
-        <Death value="Fire"/>
+        <AttributeBonus index="Mechanical" value="100"/>
+        <AttributeBonus index="Psionic" value="500"/>
+        <AttributeBonus index="Structure" value="50"/>
+        <AttributeBonus index="Hover" value="500"/>
+        <Amount value="100"/>
+        <Death value="Freeze"/>
         <AreaArray Radius="4" Fraction="1"/>
         <AreaArray Radius="6" Fraction="0.5"/>
         <AreaArray Radius="8" Fraction="0.25"/>
@@ -1306,20 +1369,20 @@
         <SearchFlags index="CallForHelp" value="1"/>
         <SearchFlags index="SameCliff" value="0"/>
     </CEffectDamage>
-    <CEffectCreatePersistent id="BlueNuclearDetonate">
+    <CEffectCreatePersistent id="BlueNuclearDetonatePersistent">
         <EditorCategories value="Race:Terran"/>
         <InitialDelay value="1.25"/>
-        <InitialEffect value="BlueNuclearDamage"/>
+        <InitialEffect value="BlueNuclearDetonateSet"/>
         <ExpireDelay value="8.25"/>
         <RevealRadius value="8"/>
         <RevealFlags index="Unfog" value="1"/>
     </CEffectCreatePersistent>
-    <CEffectCreatePersistent id="BlueNuclearPersistent">
+    <CEffectCreatePersistent id="BlueNuclearInitialPersistent">
         <EditorCategories value="Race:Terran"/>
         <Alert value="CalldownLaunchObserver"/>
         <Flags index="Channeled" value="1"/>
         <InitialDelay value="2.75"/>
-        <ExpireEffect value="BlueNuclearDetonate"/>
+        <ExpireEffect value="BlueNuclearDetonatePersistent"/>
         <FinalEffect value="SquadNukeSuicide"/>
         <PeriodCount value="5"/>
         <PeriodicPeriodArray value="0.2"/>

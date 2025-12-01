@@ -260,6 +260,29 @@
         <On Terms="ActorCreation" Target="_Unit" Send="AnimPlay Flail Flail PlayForever"/>
         <On Terms="Behavior.BlackNuclearBlackHole.Off" Target="_Unit" Send="AnimClear Flail"/>
     </CActorSimple>
+    <CActorModel id="BlueNuclearPsiStormImpact" parent="ModelAnimationStyleContinuous">
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <On Terms="Behavior.BlueNuclearPsiStorm.Start" Send="Create"/>
+        <On Terms="Behavior.BlueNuclearPsiStorm.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="HighArchonPsiStormImpact"/>
+        <AutoScaleFactor value="0.750000"/>
+    </CActorModel>
+    <CActorModel id="BlueNuclearPsiStormModel" parent="ModelAnimationStyleContinuous">
+        <On Terms="Effect.BlueNuclearPsiStormPersistent.Start" Send="Create"/>
+        <On Terms="Effect.BlueNuclearPsiStormPersistent.Stop" Send="AnimBracketStop BSD"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Model value="HighArchonPsiStormModel"/>
+        <Scale value="0.500000"/>
+    </CActorModel>
+    <CActorSound id="BlueNuclearPsiStormSound" parent="SoundContinuous">
+        <On Terms="Effect.BlueNuclearPsiStormPersistent.Start" Send="Create"/>
+        <On Terms="Effect.BlueNuclearPsiStormPersistent.Stop" Send="Destroy"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Sound value="HighTemplar_PsionicStormLaunch"/>
+    </CActorSound>
     <!--
     <CActorSplat id="SquadBlackHoleKnockbackSplat" parent="BurrowedSplat" unitName="K5Kerrigan">
         <Inherits index="BaseModelScale" value="0"/>
@@ -1315,8 +1338,8 @@
         <Sound value="Ghost_NukeDrop"/>
     </CActorSound>
     <CActorSplat id="BlackNuclearCursorSplat" parent="TerranCursorSplat" abil="NuclearStrikeBlack">
-        <On Terms="ActorCreation" Send="SetTintColor 0,0,0"/>
         <Model value="BlackNukeCursorSplat"/>
+        <On Terms="ActorCreation" Send="SetTintColor 86,112,150"/>
     </CActorSplat>
     <CActorModel id="VanillaNuclearCollateralFire">
         <On Terms="Effect.VanillaNuclearDamage.Start; At Target" Send="Create"/>
@@ -2176,14 +2199,14 @@
         <Model value="BlueNukeCollateralFire"/>
     </CActorModel>
     <CActorModel id="BlueNuclearDrop">
-        <On Terms="Effect.BlueNuclearDetonate.Start" Send="Create"/>
-        <On Terms="Effect.BlueNuclearDetonate.Start" Send="$Birth"/>
+        <On Terms="Effect.BlueNuclearDetonatePersistent.Start" Send="Create"/>
+        <On Terms="Effect.BlueNuclearDetonatePersistent.Start" Send="$Birth"/>
         <On Terms="Effect.RedNuclearDamage" Send="Destroy"/>
         <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
         <Model value="BlueNukeDrop"/>
     </CActorModel>
     <CActorSound id="BlueNuclearDropSound" parent="SoundContinuous">
-        <On Terms="Effect.BlueNuclearDetonate.Start" Send="Create"/>
+        <On Terms="Effect.BlueNuclearDetonatePersistent.Start" Send="Create"/>
         <On Terms="Effect.RedNuclearDamage.Start" Send="Destroy"/>
         <Sound value="Ghost_NukeDrop"/>
     </CActorSound>
@@ -2199,8 +2222,8 @@
     <CActorModel id="BlueNuclearIndicator" parent="ModelAnimationStyleOneShot">
         <Flags index="SuppressSaveLoad" value="0"/>
         <FogVisibility value="Visible"/>
-        <On Terms="Effect.BlueNuclearPersistent.Start" Send="Create"/>
-        <On Terms="Effect.BlueNuclearPersistent.Stop" Send="Destroy"/>
+        <On Terms="Effect.BlueNuclearInitialPersistent.Start" Send="Create"/>
+        <On Terms="Effect.BlueNuclearInitialPersistent.Stop" Send="Destroy"/>
         <On Terms="ActorCreation; ValidatePlayer HaveUnfriendlyNukeIndicator" Send="SetFilter Enemy"/>
         <On Terms="ActorCreation" Send="SetTintColor 31,6,255"/>
         <HostSiteOps Ops="SOpShadow"/>
@@ -2219,8 +2242,8 @@
         <Filter index="Ally" value="1"/>
         <Inherits index="Scale" value="1"/>
         <FogVisibility value="Visible"/>
-        <On Terms="Effect.BlueNuclearPersistent.Start" Send="Create"/>
-        <On Terms="Effect.BlueNuclearPersistent.Stop" Send="AnimBracketStop BSD"/>
+        <On Terms="Effect.BlueNuclearInitialPersistent.Start" Send="Create"/>
+        <On Terms="Effect.BlueNuclearInitialPersistent.Stop" Send="AnimBracketStop BSD"/>
         <On Terms="ActorCreation; !ValidatePlayer HaveUnfriendlyNukeIndicator" Send="SetFilter Enemy"/>
         <Host Subject="GhostNukeTargetBillboard" Actor="Create"/>
     </CActorModel>
