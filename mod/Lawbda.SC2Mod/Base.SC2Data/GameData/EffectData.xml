@@ -30,6 +30,15 @@
     <CEffectEnumArea default="1" id="SquadAbilSearchRadiusExt" parent="SquadAbilSearch">
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
+    <CEffectApplyBehavior id="SquadBroodlingTimedLife">
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="SquadBroodlingSpawnFate"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="GreenNuclearDetonateInitialSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="GreenNuclearDamage"/>
+        <EffectArray value="GreenNuclearSickCloudPickRandomPoint"/>
+    </CEffectSet>
     <CEffectCreatePersistent id="SquadArtilleryMengskExperimentalStrikeCloudCP">
         <EditorCategories value="Race:Terran"/>
         <InitialDelay value="1.25"/>
@@ -71,6 +80,7 @@
         <Amount value="10"/>
         <Death value="Disintegrate"/>
         <SearchFlags index="CallForHelp" value="0"/>
+        <AttributeBonus index="Biological" value="15"/>
     </CEffectDamage>
     <CEffectSet id="SquadArtilleryMengskExperimentalStrikeInitialSearchSet">
         <EditorCategories value=""/>
@@ -872,7 +882,7 @@
         <EditorCategories value="Race:Terran"/>
         <WhichLocation Value="TargetPoint"/>
         <CalldownCount value="1"/>
-        <CalldownEffect value="GreenNuclearPersistent"/>
+        <CalldownEffect value="GreenNuclearInitialPersistent"/>
     </CEffectUseCalldown>
     <CEffectMorph id="MorphBunkerHiveMindEmulator">
         <EditorCategories value=""/>
@@ -1025,7 +1035,7 @@
         <ResponseFlags index="Acquire" value="1"/>
         <ResponseFlags index="Flee" value="1"/>
         <AttributeBonus index="Structure" value="200"/>
-        <Amount value="1"/>
+        <Amount value="50"/>
         <Death value="Fire"/>
         <AreaArray Radius="4" Fraction="1"/>
         <AreaArray Radius="6" Fraction="0.5"/>
@@ -1068,21 +1078,21 @@
         <SearchFlags index="CallForHelp" value="1"/>
         <SearchFlags index="SameCliff" value="0"/>
     </CEffectDamage>
-    <CEffectCreatePersistent id="GreenNuclearDetonate">
+    <CEffectCreatePersistent id="GreenNuclearDetonatePersistent">
         <EditorCategories value="Race:Terran"/>
         <InitialDelay value="1.25"/>
-        <InitialEffect value="GreenNuclearDamage"/>
+        <InitialEffect value="GreenNuclearDetonateInitialSet"/>
         <ExpireDelay value="8.25"/>
         <RevealRadius value="8"/>
         <RevealFlags index="Unfog" value="1"/>
     </CEffectCreatePersistent>
     <CEffectRandomPointInCircle id="GreenNuclearSickCloudPickRandomPoint">
         <EditorCategories value="Race:Terran"/>
-        <Marker Link="Effect/GreenNuclearDetonate">
-            <MatchFlags index="CasterUnit" value="1"/>
-        </Marker>
+        <Marker Link="Effect/GreenNuclearDetonate"/>
         <Effect value="SquadArtilleryMengskExperimentalStrikeSet"/>
-        <Radius value="9"/>
+        <Radius value="7"/>
+        <WhichLocation Effect="GreenNuclearDetonatePersistent" Value="TargetUnitOrPoint"/>
+        <Count value="5"/>
     </CEffectRandomPointInCircle>
     <CEffectUseCalldown id="BlackNuclear">
         <EditorCategories value="Race:Terran"/>
@@ -1121,12 +1131,12 @@
         <RevealRadius value="8"/>
         <RevealFlags index="Unfog" value="1"/>
     </CEffectCreatePersistent>
-    <CEffectCreatePersistent id="GreenNuclearPersistent">
+    <CEffectCreatePersistent id="GreenNuclearInitialPersistent">
         <EditorCategories value="Race:Terran"/>
         <Alert value="CalldownLaunchObserver"/>
         <Flags index="Channeled" value="1"/>
         <InitialDelay value="2.75"/>
-        <ExpireEffect value="GreenNuclearDetonate"/>
+        <ExpireEffect value="GreenNuclearDetonatePersistent"/>
         <FinalEffect value="SquadNukeSuicide"/>
         <PeriodCount value="5"/>
         <PeriodicPeriodArray value="0.2"/>
@@ -8250,4 +8260,19 @@
         <WhichUnit Value="Caster"/>
         <BehaviorLink value="SquadViperAbductYoinkWait"/>
     </CEffectRemoveBehavior>
+    <CEffectCreateUnit id="GreenNuclearSpawnBroodling6">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichLocation Value="TargetPoint"/>
+        <CreateFlags index="Placement" value="0"/>
+        <SpawnOwner Value="Caster"/>
+        <SpawnEffect value="SquadBroodlingTimedLife"/>
+        <SpawnUnit value="Broodling"/>
+        <SpawnCount value="6"/>
+    </CEffectCreateUnit>
+    <CEffectCreatePersistent id="GreenNuclearSpawnBroodling6Persistent">
+        <ValidatorArray value="CasterIsNotHidden"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ExpireDelay value="0.5"/>
+        <FinalEffect value="GreenNuclearSpawnBroodling6"/>
+    </CEffectCreatePersistent>
 </Catalog>

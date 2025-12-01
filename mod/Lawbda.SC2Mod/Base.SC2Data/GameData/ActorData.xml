@@ -1032,8 +1032,8 @@
         <Model value="WhiteNukeCursorSplat"/>
     </CActorSplat>
     <CActorModel id="GreenNuclearDrop">
-        <On Terms="Effect.GreenNuclearDetonate.Start" Send="Create"/>
-        <On Terms="Effect.GreenNuclearDetonate.Start" Send="$Birth"/>
+        <On Terms="Effect.GreenNuclearDetonatePersistent.Start" Send="Create"/>
+        <On Terms="Effect.GreenNuclearDetonatePersistent.Start" Send="$Birth"/>
         <On Terms="Effect.RedNuclearDamage" Send="Destroy"/>
         <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
         <Model value="GreenNukeDrop"/>
@@ -1055,7 +1055,7 @@
         <Model value="WhiteNukeDrop"/>
     </CActorModel>
     <CActorSound id="GreenNuclearDropSound" parent="SoundContinuous">
-        <On Terms="Effect.GreenNuclearDetonate.Start" Send="Create"/>
+        <On Terms="Effect.GreenNuclearDetonatePersistent.Start" Send="Create"/>
         <On Terms="Effect.RedNuclearDamage.Start" Send="Destroy"/>
         <Sound value="Ghost_NukeDrop"/>
     </CActorSound>
@@ -1141,8 +1141,8 @@
     <CActorModel id="GreenNuclearIndicator" parent="ModelAnimationStyleOneShot">
         <Flags index="SuppressSaveLoad" value="0"/>
         <FogVisibility value="Visible"/>
-        <On Terms="Effect.GreenNuclearPersistent.Start" Send="Create"/>
-        <On Terms="Effect.GreenNuclearPersistent.Stop" Send="Destroy"/>
+        <On Terms="Effect.GreenNuclearInitialPersistent.Start" Send="Create"/>
+        <On Terms="Effect.GreenNuclearInitialPersistent.Stop" Send="Destroy"/>
         <On Terms="ActorCreation; ValidatePlayer HaveUnfriendlyNukeIndicator" Send="SetFilter Enemy"/>
         <On Terms="ActorCreation" Send="SetTintColor 49,239,44"/>
         <HostSiteOps Ops="SOpShadow"/>
@@ -1250,8 +1250,8 @@
         <Filter index="Ally" value="1"/>
         <Inherits index="Scale" value="1"/>
         <FogVisibility value="Visible"/>
-        <On Terms="Effect.GreenNuclearPersistent.Start" Send="Create"/>
-        <On Terms="Effect.GreenNuclearPersistent.Stop" Send="AnimBracketStop BSD"/>
+        <On Terms="Effect.GreenNuclearInitialPersistent.Start" Send="Create"/>
+        <On Terms="Effect.GreenNuclearInitialPersistent.Stop" Send="AnimBracketStop BSD"/>
         <On Terms="ActorCreation; !ValidatePlayer HaveUnfriendlyNukeIndicator" Send="SetFilter Enemy"/>
         <Host Subject="GhostNukeTargetBillboard" Actor="Create"/>
     </CActorModel>

@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorBuff id="SquadBroodlingSpawnFate" parent="TimedLife">
+        <InfoIcon value="Assets\Textures\btn-ability-zerg-explode.dds"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Duration value="8"/>
+        <KillCredit Value="Unknown"/>
+    </CBehaviorBuff>
     <CBehaviorBuff id="SquadArtilleryMengskCloudSickness">
         <InfoIcon value="Assets\Textures\btn-ability-mengsk-topbar-contaminatedstrike.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <BuffFlags index="Extend" value="1"/>
-        <Duration value="5"/>
+        <Duration value="15"/>
         <Period value="1"/>
         <PeriodicEffect value="SquadArtilleryMengskExperimentalStrikePeriodicDamage"/>
         <Modification>
@@ -415,8 +421,12 @@
         </VeterancyLevelArray>
     </CBehaviorVeterancy>
     <CBehaviorBuff id="SquadArtilleryMengskFear">
-        <InfoIcon value="Assets\Textures\mutator_fear_skull_diff.dds"/>
+        <InfoIcon value="Assets\Textures\fearex3_coop.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="15"/>
+        <Modification>
+            <DeathResponse Effect="GreenNuclearSpawnBroodling6Persistent"/>
+        </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadAutoHarvestMineral">
         <InfoFlags index="Hidden" value="1"/>
