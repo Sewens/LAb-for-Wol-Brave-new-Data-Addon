@@ -5044,12 +5044,49 @@
         <AbilArray Link="SquadBuildinProgress"/>
         <AbilArray Link="SquadQueue5"/>
         <AbilArray Link="NuclearWarheadVanilla"/>
+        <AbilArray Link="NuclearWarheadBlack"/>
+        <AbilArray Link="NuclearWarheadBlue"/>
+        <AbilArray Link="NuclearWarheadGreen"/>
+        <AbilArray Link="NuclearWarheadRed"/>
+        <AbilArray Link="NuclearWarheadWhite"/>
+        <AbilArray Link="NuclearWarheadYellow"/>
+        <AbilArray Link="GlobalNuclearStrikeBlack"/>
+        <AbilArray Link="GlobalNuclearStrikeBlue"/>
+        <AbilArray Link="GlobalNuclearStrikeGreen"/>
+        <AbilArray Link="GlobalNuclearStrikeRed"/>
+        <AbilArray Link="GlobalNuclearStrikeVanilla"/>
+        <AbilArray Link="GlobalNuclearStrikeWhite"/>
+        <AbilArray Link="GlobalNuclearStrikeYelllow"/>
         <BehaviorArray Link="TerranBuildingBurnDown"/>
         <BehaviorArray Link="SquadTechlabPowerUser"/>
         <BehaviorArray Link="SquadReactorPowerUser"/>
         <CardLayouts>
             <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="SquadBuildinProgress,Halt" Row="2" Column="4"/>
             <LayoutButtons Face="SelectBuilder" Type="SelectBuilder" Row="1" Column="3"/>
+            <LayoutButtons Face="NucolorWarheadVanilla" Type="AbilCmd" AbilCmd="NuclearWarheadVanilla,Ammo1" Row="0" Column="0"/>
+            <LayoutButtons Face="NucolorWarheadBlack" Type="AbilCmd" AbilCmd="NuclearWarheadBlack,Ammo1" Row="1" Column="2"/>
+            <LayoutButtons Face="NucolorWarheadBlue" Type="AbilCmd" AbilCmd="NuclearWarheadBlue,Ammo1" Row="0" Column="2"/>
+            <LayoutButtons Face="NucolorWarheadGreen" Type="AbilCmd" AbilCmd="NuclearWarheadGreen,Ammo1" Row="0" Column="3"/>
+            <LayoutButtons Face="NucolorWarheadRed" Type="AbilCmd" AbilCmd="NuclearWarheadRed,Ammo1" Row="0" Column="1"/>
+            <LayoutButtons Face="NucolorWarheadWhite" Type="AbilCmd" AbilCmd="NuclearWarheadWhite,Ammo1" Row="1" Column="0"/>
+            <LayoutButtons Face="NucolorWarheadYellow" Type="AbilCmd" AbilCmd="NuclearWarheadYellow,Ammo1" Row="1" Column="1"/>
+            <LayoutButtons>
+                <Face value="NucolorCommandPanel"/>
+                <Type value="Submenu"/>
+                <Requirements value="HaveNuclearAnnihilation"/>
+                <SubmenuCardId value="nuke"/>
+                <Row value="2"/>
+                <Column value="0"/>
+            </LayoutButtons>
+        </CardLayouts>
+        <CardLayouts CardId="nuke">
+            <LayoutButtons Face="NucolorStrikeVanilla" Type="AbilCmd" AbilCmd="GlobalNuclearStrikeVanilla,Execute" Row="0" Column="0"/>
+            <LayoutButtons Face="NucolorStrikeBlue" Type="AbilCmd" AbilCmd="GlobalNuclearStrikeBlue,Execute" Row="0" Column="1"/>
+            <LayoutButtons Face="NucolorStrikeGreen" Type="AbilCmd" AbilCmd="GlobalNuclearStrikeGreen,Execute" Row="0" Column="2"/>
+            <LayoutButtons Face="NucolorStrikeYellow" Type="AbilCmd" AbilCmd="GlobalNuclearStrikeYelllow,Execute" Row="0" Column="3"/>
+            <LayoutButtons Face="NucolorStrikeRed" Type="AbilCmd" AbilCmd="GlobalNuclearStrikeRed,Execute" Row="1" Column="0"/>
+            <LayoutButtons Face="NucolorStrikeWhite" Type="AbilCmd" AbilCmd="GlobalNuclearStrikeWhite,Execute" Row="1" Column="1"/>
+            <LayoutButtons Face="NucolorStrikeBlack" Type="AbilCmd" AbilCmd="GlobalNuclearStrikeBlack,Execute" Row="1" Column="2"/>
         </CardLayouts>
         <Radius value="1.5"/>
         <SeparationRadius value="1.5"/>
@@ -5120,8 +5157,8 @@
             <LayoutButtons Face="Enband" Type="AbilCmd" AbilCmd="AddMuleliskToSquad,Execute" Row="1" Column="4"/>
             <LayoutButtons Face="SquadGiftTooltips" Type="Submenu" SubmenuCardId="Gift" Row="1" Column="2"/>
             <LayoutButtons Face="Repair" Type="AbilCmd" AbilCmd="SquadMuleliskRepair,Execute" Row="1" Column="1"/>
-            <LayoutButtons Face="WhiteNuke" Type="AbilCmd" AbilCmd="NuclearStrikeVanilla,Execute" Row="2" Column="0"/>
-            <LayoutButtons Face="NucolorBase" Type="AbilCmd" AbilCmd="NuclearWarheadVanilla,Ammo1" Row="2" Column="1"/>
+            <LayoutButtons Face="NucolorWarheadWhite" Type="AbilCmd" AbilCmd="NuclearStrikeVanilla,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="NucolorWarheadVanilla" Type="AbilCmd" AbilCmd="NuclearWarheadVanilla,Ammo1" Row="2" Column="1"/>
         </CardLayouts>
         <CardLayouts CardId="Gift">
             <LayoutButtons Face="HugeLifeandRegen" Type="Passive" Row="0" Column="0"/>
@@ -5189,6 +5226,13 @@
         <AbilArray Link="SquadInfantry"/>
         <AbilArray Link="QueueMagazine"/>
         <AbilArray Link="DisbandSquad"/>
+        <AbilArray Link="NuclearStrikeVanilla"/>
+        <AbilArray Link="NuclearStrikeBlue"/>
+        <AbilArray Link="NuclearStrikeGreen"/>
+        <AbilArray Link="NuclearStrikeYelllow"/>
+        <AbilArray Link="NuclearStrikeRed"/>
+        <AbilArray Link="NuclearStrikeWhite"/>
+        <AbilArray Link="NuclearStrikeBlack"/>
         <WeaponArray Link="SquadSpecterAGR14GaussRifle"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -5201,12 +5245,22 @@
             <LayoutButtons Face="Enband" Type="AbilCmd" AbilCmd="AddSpectreToSquad,Execute" Row="1" Column="4"/>
             <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="3"/>
             <LayoutButtons Face="SquadGiftTooltips" Type="Submenu" SubmenuCardId="Gift" Row="1" Column="2"/>
+            <LayoutButtons Face="NucolorCommandPanel" Type="Submenu" SubmenuCardId="nuke" Row="1" Column="0"/>
         </CardLayouts>
         <CardLayouts CardId="Gift">
             <LayoutButtons Face="SmallLifeandRegen" Type="Passive" Row="0" Column="0"/>
             <LayoutButtons Face="ResourceTerrazineCrazy" Type="Passive" Row="0" Column="1"/>
             <LayoutButtons Face="SquadVoodooOrb" Type="Passive" Row="0" Column="2"/>
             <LayoutButtons Face="HugeEnergyandMediumRegen" Row="1" Column="0"/>
+        </CardLayouts>
+        <CardLayouts CardId="nuke">
+            <LayoutButtons Face="NucolorStrikeVanilla" Type="AbilCmd" AbilCmd="NuclearStrikeVanilla,Execute" Row="0" Column="0"/>
+            <LayoutButtons Face="NucolorStrikeBlue" Type="AbilCmd" AbilCmd="NuclearStrikeBlue,Execute" Row="0" Column="1"/>
+            <LayoutButtons Face="NucolorStrikeGreen" Type="AbilCmd" AbilCmd="NuclearStrikeGreen,Execute" Row="0" Column="2"/>
+            <LayoutButtons Face="NucolorStrikeYellow" Type="AbilCmd" AbilCmd="NuclearStrikeYelllow,Execute" Row="0" Column="3"/>
+            <LayoutButtons Face="NucolorStrikeRed" Type="AbilCmd" AbilCmd="NuclearStrikeRed,Execute" Row="1" Column="0"/>
+            <LayoutButtons Face="NucolorStrikeWhite" Type="AbilCmd" AbilCmd="NuclearStrikeWhite,Execute" Row="1" Column="1"/>
+            <LayoutButtons Face="NucolorStrikeBlack" Type="AbilCmd" AbilCmd="NuclearStrikeBlack,Execute" Row="1" Column="2"/>
         </CardLayouts>
         <Radius value="0.375"/>
         <SeparationRadius value="0.375"/>
@@ -5280,6 +5334,13 @@
         <AbilArray Link="DisbandSquad"/>
         <AbilArray Link="AddGhostToSquad"/>
         <AbilArray Link="SquadGhostTripleSnipe"/>
+        <AbilArray Link="NuclearStrikeVanilla"/>
+        <AbilArray Link="NuclearStrikeBlue"/>
+        <AbilArray Link="NuclearStrikeGreen"/>
+        <AbilArray Link="NuclearStrikeYelllow"/>
+        <AbilArray Link="NuclearStrikeRed"/>
+        <AbilArray Link="NuclearStrikeWhite"/>
+        <AbilArray Link="NuclearStrikeBlack"/>
         <WeaponArray Link="SquadGhostC10CanisterRifle"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -5293,12 +5354,22 @@
             <LayoutButtons Face="Enband" Type="AbilCmd" AbilCmd="AddGhostToSquad,Execute" Row="1" Column="4"/>
             <LayoutButtons Face="Disband" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="3"/>
             <LayoutButtons Face="SquadGiftTooltips" Type="Submenu" SubmenuCardId="Gift" Row="1" Column="2"/>
+            <LayoutButtons Face="NucolorCommandPanel" Type="Submenu" SubmenuCardId="nuke" Row="1" Column="0"/>
         </CardLayouts>
         <CardLayouts CardId="Gift">
             <LayoutButtons Face="SmallLifeandRegen" Type="Passive" Row="0" Column="0"/>
             <LayoutButtons Face="ResourceVespeneCrazy" Type="Passive" Row="0" Column="1"/>
             <LayoutButtons Face="SquadLightningOrb" Type="Passive" Row="0" Column="2"/>
             <LayoutButtons Face="MediumEnergyandHugeRegen" Type="Passive" Row="1" Column="0"/>
+        </CardLayouts>
+        <CardLayouts CardId="nuke">
+            <LayoutButtons Face="NucolorStrikeVanilla" Type="AbilCmd" AbilCmd="NuclearStrikeVanilla,Execute" Row="0" Column="0"/>
+            <LayoutButtons Face="NucolorStrikeBlue" Type="AbilCmd" AbilCmd="NuclearStrikeBlue,Execute" Row="0" Column="1"/>
+            <LayoutButtons Face="NucolorStrikeGreen" Type="AbilCmd" AbilCmd="NuclearStrikeGreen,Execute" Row="0" Column="2"/>
+            <LayoutButtons Face="NucolorStrikeYellow" Type="AbilCmd" AbilCmd="NuclearStrikeYelllow,Execute" Row="0" Column="3"/>
+            <LayoutButtons Face="NucolorStrikeRed" Type="AbilCmd" AbilCmd="NuclearStrikeRed,Execute" Row="1" Column="0"/>
+            <LayoutButtons Face="NucolorStrikeWhite" Type="AbilCmd" AbilCmd="NuclearStrikeWhite,Execute" Row="1" Column="1"/>
+            <LayoutButtons Face="NucolorStrikeBlack" Type="AbilCmd" AbilCmd="NuclearStrikeBlack,Execute" Row="1" Column="2"/>
         </CardLayouts>
         <Radius value="0.375"/>
         <SeparationRadius value="0.375"/>

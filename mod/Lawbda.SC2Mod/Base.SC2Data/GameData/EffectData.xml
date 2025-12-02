@@ -92,13 +92,13 @@
         <ResponseFlags index="Acquire" value="1"/>
         <ResponseFlags index="Flee" value="1"/>
         <Flags index="Notification" value="1"/>
-        <Amount value="10"/>
-        <AttributeBonus index="Structure" value="50"/>
+        <Amount value="50"/>
+        <AttributeBonus index="Structure" value="250"/>
     </CEffectDamage>
     <CEffectDamage id="YellowNuclearEarthquakePeriodicDamage">
         <ValidatorArray value="PsiStormUTargetFilters"/>
         <EditorCategories value="Race:Protoss"/>
-        <AttributeBonus index="Structure" value="25"/>
+        <AttributeBonus index="Structure" value="75"/>
         <Visibility value="Hidden"/>
         <Amount value="5"/>
     </CEffectDamage>
@@ -132,7 +132,6 @@
         <AttributeBonus index="Structure" value="5"/>
     </CEffectDamage>
     <CEffectDamage id="BlueNuclearPsiStormDamageInitial">
-        <ValidatorArray value="PsiStormUTargetFilters"/>
         <EditorCategories value="Race:Protoss"/>
         <ResponseFlags index="Acquire" value="1"/>
         <ResponseFlags index="Flee" value="1"/>
@@ -170,7 +169,7 @@
     <CEffectEnumArea id="YellowNuclearEarthquakeSearch">
         <EditorCategories value="Race:Protoss"/>
         <AINotifyFlags index="HurtEnemy" value="1"/>
-        <SearchFilters value="Structure;Player,Ally,Missile,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
+        <SearchFilters value="-;Player,Ally,Missile,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
         <AreaArray Radius="3.5" Effect="YellowNuclearEarthquakeSearchSet"/>
         <SearchFlags index="CallForHelp" value="1"/>
     </CEffectEnumArea>
@@ -282,7 +281,7 @@
         <InitialDelay value="1.25"/>
         <InitialEffect value="SquadArtilleryMengskExperimentalStrikeInitialSearch"/>
         <ExpireDelay value="3"/>
-        <PeriodCount value="5"/>
+        <PeriodCount value="8"/>
         <PeriodicEffectArray value="SquadArtilleryMengskExperimentalStrikeCloudSearch"/>
         <PeriodicPeriodArray value="1"/>
         <RevealRadius value="4"/>
@@ -290,11 +289,11 @@
     </CEffectCreatePersistent>
     <CEffectEnumArea id="SquadArtilleryMengskExperimentalStrikeCloudSearch">
         <EditorCategories value="Race:Zerg"/>
-        <SearchFilters value="-;Player,Ally,Neutral,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <SearchFilters value="Biological;Player,Ally,Neutral,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
         <AreaArray Radius="3" Effect="SquadArtilleryMengskExperimentalStrikeCouldSicknessAB"/>
     </CEffectEnumArea>
     <CEffectApplyBehavior id="SquadArtilleryMengskExperimentalStrikeCouldSicknessAB">
-        <ValidatorArray index="0" value="ArtilleryMengskExperimentalStrikeFearABTargetFilters"/>
+        <ValidatorArray index="0" removed="1"/>
         <EditorCategories value="Race:Terran"/>
         <Marker Link="Effect/SquadArtilleryMengskExperimentalStrikeFearApply"/>
         <Behavior value="SquadArtilleryMengskCloudSickness"/>
@@ -308,17 +307,17 @@
         <SearchFilters value="-;Player,Ally,Neutral,Structure,Heroic,User1,Missile,Destructible,Stasis,Dead,Hidden,Invulnerable,MapBoss"/>
         <AreaArray Radius="3" Effect="SquadArtilleryMengskExperimentalStrikeInitialSearchSet"/>
     </CEffectEnumArea>
-    <CEffectDamage id="SquadArtilleryMengskExperimentalStrikePeriodicDamage" parent="DU_WEAP">
+    <CEffectDamage id="SquadArtilleryMengskExperimentalStrikeCloudPeriodicDamage" parent="DU_WEAP">
         <EditorCategories value="Race:Zerg"/>
         <Marker Link="Effect/SquadArtilleryMengskExperimentalStrikeInitialDamage"/>
         <ResponseFlags index="Acquire" value="0"/>
         <ResponseFlags index="Flee" value="0"/>
+        <AttributeBonus index="Biological" value="35"/>
         <ArmorReduction value="0"/>
         <Kind value="Spell"/>
-        <Amount value="10"/>
+        <Amount value="15"/>
         <Death value="Disintegrate"/>
         <SearchFlags index="CallForHelp" value="0"/>
-        <AttributeBonus index="Biological" value="15"/>
     </CEffectDamage>
     <CEffectSet id="SquadArtilleryMengskExperimentalStrikeInitialSearchSet">
         <EditorCategories value=""/>
@@ -1465,7 +1464,7 @@
         <AINotifyFlags index="MajorDanger" value="1"/>
         <ResponseFlags index="Acquire" value="1"/>
         <ResponseFlags index="Flee" value="1"/>
-        <Amount value="5"/>
+        <Amount value="50"/>
         <Death value="Fire"/>
         <AreaArray Radius="4" Fraction="1"/>
         <AreaArray Radius="6" Fraction="0.5"/>
@@ -7632,14 +7631,6 @@
         <SearchFlags index="SameCliff" value="0"/>
         <DamageInheritEffect value="RedNuclearSearhVictim"/>
     </CEffectDamage>
-    <CEffectCreatePersistent id="SquadNukeDetonate">
-        <EditorCategories value="Race:Terran"/>
-        <InitialDelay value="1.25"/>
-        <InitialEffect value="RedNuclearDamage"/>
-        <ExpireDelay value="8.25"/>
-        <RevealRadius value="8"/>
-        <RevealFlags index="Unfog" value="1"/>
-    </CEffectCreatePersistent>
     <CEffectDamage id="SquadNukeSuicide">
         <EditorCategories value="Race:Terran"/>
         <ImpactLocation Value="SourceUnit"/>
