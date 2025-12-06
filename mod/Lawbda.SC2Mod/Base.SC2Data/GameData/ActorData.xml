@@ -427,11 +427,6 @@
             <Volume value="-6.000000,-6.000000"/>
         </Layers>
     </CActorSound>
-    <CActorSplat id="VoidSentryBlackHoleCursorSplat2" parent="ProtossCursorSplat" abil="VoidSentryBlackHole2">
-        <On Terms="Abil.AlarakACSoAMothershipV4BlackHole.Guide" Send="Create"/>
-        <On Terms="AssetPreInit; !ValidatePlayer NoDarkProtoss" Send="ModelLinkCustomize VoidProtossAOECursorSplat"/>
-        <Model value="VoidSentryBlackHoleCursorSplat2"/>
-    </CActorSplat>
     <CActorSound id="SquadBlackHoleDeathSound" parent="SoundOneShot">
         <On Terms="Effect.SquadBlackHolePersistent.Stop" Send="Create"/>
         <On Terms="Effect.ZeratulBlackHolePersistent.Stop" Send="Create"/>
@@ -489,9 +484,6 @@
             <Volume value="-6.000000,-6.000000"/>
         </Layers>
     </CActorSound>
-    <CActorRange id="VoidSentryBlackHoleRange2" parent="RangeAbil" abil="VoidSentryBlackHole2">
-        <Icon value="Assets\Textures\RadarIcon2.dds"/>
-    </CActorRange>
     <CActorModel id="WhiteNuclearIceStormSplat" parent="ModelAnimationStyleContinuous">
         <On Terms="Effect.WhiteNuclearDetonatePersistent.Start" Send="Create"/>
         <On Terms="Effect.WhiteNuclearDetonatePersistent.Stop" Send="AnimBracketStop BSD"/>
@@ -6166,40 +6158,174 @@
         <Icon value="Assets\Textures\RadarIcon2.dds"/>
         <IconArcLength value="3.250000"/>
     </CActorRange>
-    <CActorUnit id="SquadMedivac" parent="GenericUnitStandard" unitName="SquadMedivac">
+    <CActorModel id="SquadSiegeTankSiegedTransit">
+        <Aliases value="_Turret"/>
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="TeamColor" value="1"/>
+        <Inherits index="TintColor" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <Inherits index="WarpGroup" value="1"/>
+        <On Terms="UnitBirth.SquadMedivac" Send="Create"/>
+        <On Terms="UnitDeath; IsStatus CarryingTank 1" Send="Create SquadSiegeTankSiegedTransitDeath"/>
+        <On Terms="UnitDeath" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="SetVisibility"/>
+        <On Terms="Behavior.SquadMedivacSiegeTankAirlift.On" Send="SetVisibility 1"/>
+        <On Terms="Behavior.SquadMedivacSiegeTankAirlift.Off" Send="SetVisibility"/>
+        <On Terms="AbilTransport.SquadMedivacTransport.TransportLoad; AbilTransport SquadSiegeTankSieged" Send="StatusSet CarryingTank 1"/>
+        <On Terms="AbilTransport.SquadMedivacTransport.TransportUnload; AbilTransport SquadSiegeTankSieged" Send="StatusSet CarryingTank 0"/>
+        <On Terms="Behavior.SquadMedivacUnloadTracker.On" Send="StatusSet CarryingTank 0"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD {} Fly"/>
+        <On Terms="WeaponStart.*.AttackStart" Send="AnimBracketStart Attack Fly,Attack"/>
+        <On Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SiegeTankMengskSiegedCargoSOpOffset"/>
+    </CActorModel>
+    <CActorModel id="SquadSiegeTankSiegedTransitDeath">
+        <On Terms="ActorCreation" Send="$Death"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <HostSiteOps Ops="SOpBasicCreatorStationary"/>
+        <Model value="TerranLargeUnitDeath"/>
+    </CActorModel>
+    <CActorEventMacro id="SquadMedivacTransportAnim">
+        <On Terms="Abil.SquadMedivacTransport.TransportUnloadStart" Send="AnimBracketStart Unload Work,Start Work Work,End"/>
+        <On Terms="Abil.SquadMedivacTransport.TransportUnloadStop" Send="AnimBracketStop Unload"/>
+    </CActorEventMacro>
+    <CActorUnit id="SquadMedivac" parent="GenericUnitBase" unitName="SquadMedivac">
+        <StatusBarOn index="Custom" value="1"/>
+        <Aliases value="_Unit"/>
+        <Aliases value="_Selectable"/>
         <Aliases value="_UnitLarge"/>
-        <Macros value="MedivacTransportAnim"/>
+        <Macros value="DeadAnimationMacro"/>
+        <Macros value="SquadMedivacTransportAnim"/>
         <Macros value="TerrainSquibAnimations"/>
         <Macros value="PhysicsDeathsSwarmAir"/>
         <Macros value="PhysicsDeathsVoidAir"/>
+        <!--On Terms="UnitBirth.SquadMedivac" Send="Create SoundEmitter Medivac_Ambience"/-->
+        <On Terms="UnitBirth.SquadMedivac" Send="Create"/>
+        <On Terms="UnitRevive.SquadMedivac" Send="Create"/>
+        <On Terms="UnitRevive.SquadMedivac" Send="RefSet ::HostTurretBody _Selectable"/>
+        <On Terms="UnitConstruction.SquadMedivac.Start" Send="Create"/>
+        <On Terms="UnitConstruction.SquadMedivac.Finish" Send="AnimPlay ConstructionDeath Stand,Birth,Death FullMatch"/>
+        <On Terms="AnimDone.*.Missing; AnimName ConstructionDeath" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit IsFlying; Option Shadow Low; $AllowBlobShadow" Send="Create FlyerShadow"/>
+        <On Terms="ActorCreation; ValidateUnit IsNotFlying; Option Shadow Low; $AllowBlobShadow" Send="Create GroundShadow"/>
+        <On Terms="StatusOn.*.PreTargetingModel" Send="Create ModelPretargetGround"/>
+        <On Terms="StatusOff.*.PreTargetingModel" Target="ModelPretargetGround" Send="Destroy"/>
+        <On Terms="StatusOn.*.PreTargetingModel; ValidateUnit IsFlying" Send="Create GroundPreSelection"/>
+        <On Terms="StatusOff.*.PreTargetingModel" Target="GroundPreSelection" Send="Destroy"/>
+        <On Terms="StatusIncrement.*.PreTargetingModel; IsStatus PreTargetingModel 2" Send="StatusSet PreTargetingModel 1"/>
+        <On Terms="PreTargetingUpdate.*.Start" Send="SetTintColorBlendPair 255,192,192 255,128,128 0.150000 Bounce Pretarget"/>
+        <On Terms="PreTargetingUpdate.*.Stop" Send="ClearTintColor 0.100000 Pretarget"/>
+        <On Terms="StatusOn.*.PreTargetingTint" Send="PreTargetingUpdate Start"/>
+        <On Terms="StatusOff.*.PreTargetingTint" Send="PreTargetingUpdate Stop"/>
+        <On Terms="StatusIncrement.*.PreTargetingTint; IsStatus PreTargetingTint 2" Send="StatusSet PreTargetingTint 1"/>
+        <On Terms="CursorUpdate.*.Start; ValidateUnit IsFlying" Send="StatusIncrement FlyerHelper"/>
+        <On Terms="CursorUpdate.*.Stop; ValidateUnit IsFlying; HasStatus FlyerHelper" Send="StatusDecrement FlyerHelper"/>
+        <On Terms="ActorCreation; ScopeContains GroundLocalSelection" Send="StatusSet Selected 1"/>
+        <On Terms="SelectionLocalUpdate.*.Start" Send="StatusSet Selected 1"/>
+        <On Terms="SelectionLocalUpdate.*.Stop" Send="StatusSet Selected 0"/>
+        <On Terms="StatusOn.*.Selected; ValidateUnit IsFlying" Send="StatusIncrement FlyerHelper"/>
+        <On Terms="StatusOff.*.Selected; ValidateUnit IsFlying; HasStatus FlyerHelper" Send="StatusDecrement FlyerHelper"/>
+        <On Terms="StatusOn.*.FlyerHelper; FlyerHelper All" Send="Create FlyerHelperSplat"/>
+        <On Terms="StatusOn.*.FlyerHelper; FlyerHelper Selected" Send="Create FlyerHelperSplat"/>
+        <On Terms="StatusOff.*.FlyerHelper; FlyerHelper Selected" Target="FlyerHelperSplat" Send="Destroy"/>
+        <On Terms="ActorCreation; FlyerHelper All; ValidateUnit IsFlying" Send="Create FlyerHelperSplat"/>
+        <On Terms="ActorDestruction; FlyerHelper All; !HasStatus FlyerHelper" Target="FlyerHelperSplat" Send="Destroy"/>
+        <On Terms="FlyerHelperChange; FlyerHelper None" Target="FlyerHelperSplat" Send="Destroy"/>
+        <On Terms="FlyerHelperChange; FlyerHelper Selected; HasStatus FlyerHelper; !ScopeContains FlyerHelperSplat" Send="Create FlyerHelperSplat"/>
+        <On Terms="FlyerHelperChange; FlyerHelper Selected; !HasStatus FlyerHelper" Target="FlyerHelperSplat" Send="Destroy"/>
+        <On Terms="FlyerHelperChange; FlyerHelper All; ValidateUnit IsFlying; !ScopeContains FlyerHelperSplat" Send="Create FlyerHelperSplat"/>
+        <On Terms="UnitBirth.*.Normal" Send="$Birth 0 0.000000"/>
+        <On Terms="UnitFidget" Send="AnimPlay Fidget Fidget"/>
+        <On Terms="UnitMovementUpdate.*.Walk" Send="AnimClear Fidget"/>
+        <On Terms="UnitDetectedByViewer.*.On; ValidateUnit IsHallucination" Target="_HallucinationTinter" Send="Signal HallucinationTintOn"/>
+        <On Terms="UnitDetectedByViewer.*.Off; ValidateUnit IsHallucination" Target="_HallucinationTinter" Send="Signal HallucinationTintOff"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit NotStructure; IsStatus InAir 1" Send="DeathCustomize AntiGravGeneric"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit IsProtossUnit; IsStatus InAir 1" Send="DeathCustomize AntiGravProtoss"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit IsTerranUnit; IsStatus InAir 1" Send="DeathCustomize AntiGravTerran"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit IsZergUnit; IsStatus InAir 1" Send="DeathCustomize AntiGravZerg"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit IsVortexed" Send="DeathCustomize Vortex"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit HasForceLowDeathProtoss" Send="DeathCustomize AntiGravProtoss"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit HasForceLowDeathZerg" Send="DeathCustomize AntiGravZerg"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit HasForceLowDeathTerran" Send="DeathCustomize AntiGravTerran"/>
+        <On Terms="Behavior.PhoenixAntiGrav.On" Send="ModelSuddenMotionStart"/>
+        <On Terms="Behavior.PhoenixAntiGrav.Off" Send="ModelSuddenMotionStop"/>
+        <On Terms="Behavior.ForceLowDeath.On" Send="DeathCustomsEnablePhysics 0"/>
+        <On Terms="UnitTaunt.*.Start; Taunt" Send="AnimPlay Cheer Stand,Victory"/>
+        <On Terms="UnitTaunt.*.Stop; Taunt" Send="AnimClear Cheer"/>
+        <On Terms="UnitTaunt.*.Start; Taunt Dance" Send="AnimPlay Dance Stand,Dance"/>
+        <On Terms="UnitTaunt.*.Stop; Taunt Dance" Send="AnimClear Dance"/>
+        <On Terms="UnitTaunt.*.Start; Taunt Tease" Send="AnimPlay Taunt Taunt"/>
+        <On Terms="UnitTaunt.*.Stop; Taunt Tease" Send="AnimClear Taunt"/>
+        <On Terms="ActorCreation" Send="StatusSet InAir 0"/>
+        <On Terms="UnitHeightUpdate.*.Lift" Send="StatusSet InAir 1"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="StatusSet InAir 0"/>
+        <On Terms="BuildCoachHover.*.On" Send="TimerKill DelayUnhighlight"/>
+        <On Terms="BuildCoachHover.*.On" Send="SetTintColor 0,255,0 0.100000"/>
+        <On Terms="BuildCoachHover.*.Off" Send="TimerSet 0.300000 DelayUnhighlight"/>
+        <On Terms="TimerExpired; TimerName DelayUnhighlight" Send="SetTintColor 255,255,255 0.500000"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="WeaponStart.*.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStart.*.AttackStart; AnimPlaying Birth" Send="AnimClear Birth"/>
+        <On Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <!-- heal anim-->
         <On Terms="Abil.SquadMedivacHeal.SourceChannelStart" Send="$Spell PlayForever"/>
         <On Terms="Abil.SquadMedivacHeal.SourceChannelStop" Send="AnimClear Spell"/>
-        <On Terms="AbilTransport.SquadMedivacTransport.TransportLoad; AbilTransport SquadThor" Send="Create SquadThorTransit"/>
-        <On Terms="Signal.*.SquadThorTransit" Send="RefSetFromMsg ::actor.SquadThorAP ::Sender"/>
-        <On Terms="AbilTransport.SquadMedivacTransport.PassengerKilled; AbilTransport SquadThor" Target="::actor.SquadThorAP" Send="Signal Dead"/>
-        <On Terms="UnitDeath" Target="::actor.SquadThorAP" Send="Signal Dead"/>
+        <On Terms="ActorCreation; ValidateUnit MedivacUpgrade" Send="ModelSwap MedivacUpgrade"/>
         <On Terms="Abil.SquadMedivacDoubleBeamHeal.SourceChannelStart" Send="$Spell PlayForever"/>
         <On Terms="Abil.SquadMedivacDoubleBeamHeal.SourceChannelStop" Send="AnimClear Spell"/>
         <On Terms="UnitHeightUpdate.*.Land" Send="Create Medivac_Land"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit HaveVoidShade" Send="DeathCustomize Shadow"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
         <On Terms="Behavior.SquadAfterburner.On" Send="AnimPlay Turbo Spell,B"/>
         <On Terms="Behavior.SquadAfterburner.On" Send="StatusSet Turbo 1"/>
         <On Terms="Behavior.SquadAfterburner.Off" Send="StatusSet Turbo 0"/>
-        <On Terms="UnitMovementUpdate.*.Walk; IsStatus Turbo 1" Send="Create Medivac_MovementAfterburner"/>
+        <!--On Terms="UnitMovementUpdate.*.Walk; IsStatus Turbo 1" Send="Create Medivac_MovementAfterburner"/-->
+        <!-- load siege tank and thor anim-->
+        <On Terms="AbilTransport.SquadMedivacTransport.TransportLoad; AbilTransport SquadSiegeTankSieged" Send="Create SquadSiegeTankSiegedTransit"/>
+        <!--On Terms="AbilTransport.SquadMedivacTransport.TransportLoad; AbilTransport SquadSiegeTank" Send="Create SquadSiegeTankSiegedTransit"/-->
+        <On Terms="Signal.*.SiegeTankMengskSiegedTransit" Send="RefSetFromMsg ::actor.SquadSiegeTankSieged ::Sender"/>
+        <On Terms="UnitDeath" Target="::actor.SquadSiegeTankSieged" Send="Signal Dead"/>
+        <On Terms="AbilTransport.SquadMedivacTransport.TransportLoad; AbilTransport SquadThorEP" Send="Create SquadThorTransit"/>
         <On Terms="AbilTransport.SquadMedivacTransport.TransportLoad; AbilTransport SquadThorAP" Send="Create SquadThorTransit"/>
-        <On Terms="AbilTransport.SquadMedivacTransport.PassengerKilled; AbilTransport SquadThorAP" Target="::actor.SquadThorAP" Send="Signal Dead"/>
-        <On Terms="UnitDeathCustomize; ValidateUnit HaveVoidShade" Send="DeathCustomize Shadow"/>
-        <On Terms="UnitDeathCustomize; ValidateUnit HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
-        <On Terms="Abil.SquadMedivacDoubleBeamHeal.SourceChannelStart" Send="$Spell PlayForever"/>
-        <On Terms="Abil.SquadMedivacDoubleBeamHeal.SourceChannelStop" Send="AnimClear Spell"/>
-        <HostSiteOps Ops="SOpBankerMedivac"/>
-        <Model value="Medivac_CovertOps_Collection"/>
+        <On Terms="Signal.*.SquadThorTransit" Send="RefSetFromMsg ::actor.SquadThor ::Sender"/>
+        <On Terms="AbilTransport.SquadMedivacTransport.PassengerKilled; AbilTransport SquadThorEP" Target="::actor.SquadThorEP" Send="Signal Dead"/>
+        <On Terms="UnitDeath" Target="::actor.SquadThor" Send="Signal Dead"/>
+        <On Terms="ActorCreation" Send="Attach _Turret {Center 0} SiegeTankMengskSiegedCargoSOpOffset"/>
+        <!--
+        <On Terms="Behavior.MedivacMengskSiegeTankAirlift.On" Send="SetShowStatusBar 1 Custom"/>
+        <On Terms="Behavior.MedivacMengskSiegeTankAirlift.On" Send="SetShowStatusBar 0 Life"/>
+        <On Terms="Behavior.MedivacMengskSiegeTankAirlift.On" Send="SetShowStatusBar 0 Shields"/>
+        <On Terms="Behavior.MedivacMengskSiegeTankAirlift.On" Send="SetShowStatusBar 0 Energy"/>
+        <On Terms="Behavior.MedivacMengskSiegeTankAirlift.On" Send="SetShowStatusBar 0 Cargo"/>
+        <On Terms="Behavior.MedivacMengskSiegeTankAirlift.On" Send="SetShowStatusBar 0 Duration"/>
+        <On Terms="Behavior.MedivacMengskSiegeTankAirlift.Off" Send="SetShowStatusBar 0 Custom"/>
+        <On Terms="Behavior.MedivacMengskSiegeTankAirlift.Off" Send="SetShowStatusBar 1 Life"/>
+        <On Terms="Behavior.MedivacMengskSiegeTankAirlift.Off" Send="SetShowStatusBar 1 Shields"/>
+        <On Terms="Behavior.MedivacMengskSiegeTankAirlift.Off" Send="SetShowStatusBar 1 Energy"/>
+        <On Terms="Behavior.MedivacMengskSiegeTankAirlift.Off" Send="SetShowStatusBar 1 Cargo"/>
+        <On Terms="Behavior.MedivacMengskSiegeTankAirlift.Off" Send="SetShowStatusBar 1 Duration"/>
+        <On Terms="Upgrade.MedivacMengskPermanentCloak.Add" Send="Create ShieldImpact"/>
+-->
+        <On Terms="Behavior.SquadMedivacSiegeTankAirlift.On" Send="HostSiteOpsSet ::Host SquadMedivacBankerSOp"/>
+        <On Terms="Behavior.SquadMedivacSiegeTankAirlift.Off" Send="HostSiteOpsSet ::Host SOpBankerMedivac"/>
+        <HostSiteOps Ops="SquadMedivacBankerSOp"/>
+        <Model value="Medivac_Mengsk_COOP"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
+        <EventDataFootprint Actor="UnitFootprint" Model="MedivacFootprint"/>
+        <EventDataSound Actor="UnitSound"/>
         <Baselines index="Walk" BlendIn="1.500000" BlendOut="2.000000"/>
-        <BuildModel value="Medivac_CovertOps_Collection"/>
-        <DeathArray index="Normal" ModelLink="Medivac_CovertOps_Death" SoundLink="Medivac_Explode"/>
+        <BuildModel value="Medivac_Mengsk_COOP"/>
+        <DeathArray index="Normal" ModelLink="Medivac_Mengsk_COOP_Death" SoundLink="Medivac_Explode" VoiceLink="MedivacDeathVoice"/>
+        <DeathCustoms ModelLink="ZergSmallUnitDeathLow" Name="AntiGravGeneric"/>
+        <DeathCustoms ModelLink="ProtossSmallUnitDeathLow" Name="AntiGravProtoss"/>
+        <DeathCustoms ModelLink="TerranSmallUnitDeathLow" Name="AntiGravTerran"/>
+        <DeathCustoms ModelLink="ZergSmallUnitDeathLow" Name="AntiGravZerg"/>
+        <DeathCustoms ModelLink="Invisible" Name="Vortex"/>
         <DeathCustoms>
             <ActorModel value="SquadMedivacDeathRagdoll"/>
-            <ModelLink value="Medivac_CovertOps_DeathRagdoll"/>
+            <ModelLink value="Medivac_Mengsk_COOP_DeathRagdoll"/>
             <Name value="RagdollBasic"/>
             <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
             <BodySquibs Name="Basic" Model="TerranSquibDeathRagdoll"/>
@@ -6222,10 +6348,25 @@
             <VoiceLink value="ShadowUnit_DeathVox"/>
             <Name value="Shadow"/>
         </DeathCustoms>
+        <DeathCustomData Name="RagdollBasic" SyncPassChance="50"/>
+        <DeathCustomData Name="RagdollBasicAndGibNoBlood" Members="RagdollBasicNoBlood;RagdollGibNoBlood" SyncPassChance="50"/>
+        <DeathCustomData Name="RagdollBaneling" Supersedes="RagdollBasic" SyncPassChance="50"/>
+        <DeathCustomData Name="RagdollSiegeTank" Supersedes="RagdollBasic" SyncPassChance="55"/>
+        <DeathCustomData Name="RagdollNuke" Supersedes="RagdollBasic" SyncPassChance="50"/>
+        <DeathCustomData Name="RagdollUltraUnburrow"/>
+        <DeathCustomData Name="RagdollSpineCrawlerHurl" SyncPassChance="25"/>
+        <DeathCustomData Name="RagdollOverkillDPRH" SyncPassChance="50"/>
+        <DeathCustomData Name="RagdollOverkillDOI" SyncPassChance="33"/>
+        <DeathCustomData Name="RagdollFire" Supersedes="RagdollBasic,RagdollOverkillDOI,RagdollOverkillDPRH" SyncPassChance="50"/>
+        <DeathCustomData Name="RagdollAcid" Supersedes="RagdollBasic,RagdollOverkillDOI,RagdollOverkillDPRH" SyncPassChance="50"/>
+        <DeathCustomData Name="RagdollMidair" Supersedes="RagdollBasic,RagdollOverkillDOI,RagdollOverkillDPRH"/>
+        <DeathCustomData Name="RagdollUpgraded" Supersedes="RagdollBasic,RagdollOverkillDOI,RagdollOverkillDPRH" SyncPassChance="50"/>
+        <DeathCustomData Name="RagdollUpgradedMidair" Supersedes="RagdollBasic,RagdollOverkillDOI,RagdollOverkillDPRH,RagdollMidair"/>
+        <DeathCustomData Name="RagdollAoE"/>
         <DeathActorModel value="UnitDeathModelWithDeathMotionFlier"/>
         <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
-        <PlacementModel value="Medivac_CovertOps_Collection"/>
-        <PortraitModel value="Medivac_CovertOps_Portrait"/>
+        <PlacementModel value="Medivac_Mengsk_COOP"/>
+        <PortraitModel value="MedivacMengskPortrait"/>
         <TerrainSquibs>
             <MovementDistance value="0.150000,0.150000"/>
             <IdlePeriod value="0.250000,0.500000"/>
@@ -6234,17 +6375,23 @@
             <AttachQuery Methods="AMFilterCenter"/>
             <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleMassive15"/>
         </TerrainSquibs>
-        <AbilSoundArray AbilCmd="SquadMedivacHeal,Execute" Sound="Medivac_HealVO"/>
-        <AbilSoundArray AbilCmd="SquadMedivacTransport,255" Sound="Medivac_LoadVO"/>
-        <AbilSoundArray AbilCmd="SquadMedivacTransport,255" Sound="Medivac_UnloadVO"/>
+        <AbilSoundArray AbilCmd="SquadMedivacHeal,0" Sound="Medivac_HealVO"/>
+        <AbilSoundArray AbilCmd="SquadMedivacTransport,0" Sound="Medivac_LoadVO"/>
+        <AbilSoundArray AbilCmd="SquadMedivacTransport,2" Sound="Medivac_UnloadVO"/>
         <BarOffset value="50"/>
         <BarWidth value="80"/>
+        <CustomUnitStatusOffset value="0,-30"/>
         <GroupIcon>
             <Image value="Assets\Textures\Wireframe-Terran-Medivac.dds"/>
         </GroupIcon>
-        <HeroIcon value="Assets\Textures\btn-unit-terran-medivac.dds"/>
+        <GroupSoundArray index="What" value="Medivac_GroupWhat"/>
+        <GroupSoundArray index="Yes" value="Medivac_GroupYes"/>
+        <GroupSoundArray index="Attack" value="Medivac_GroupAttack"/>
+        <GroupSoundArray index="Board" value="Medivac_GroupBoard"/>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-medivacmengsk.dds"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
         <NameOffset value="50"/>
+        <SoundArray index="Birth" value="Medivac_Birth"/>
         <SoundArray index="Ready" value="Medivac_Ready"/>
         <SoundArray index="Help" value="Medivac_Help"/>
         <SoundArray index="What" value="Medivac_What"/>
@@ -6252,11 +6399,93 @@
         <SoundArray index="Attack" value="Medivac_Attack"/>
         <SoundArray index="Pissed" value="Medivac_Pissed"/>
         <SoundArray index="Movement" value="Medivac_Movement"/>
-        <UnitIcon value="Assets\Textures\btn-unit-terran-medivac.dds"/>
+        <SoundArray index="Turning" value="Medivac_Turning"/>
+        <SoundArray index="Board" value="Medivac_Board"/>
+        <SoundArray index="Click" value="Medivac_Click"/>
+        <SoundArray index="ClickError" value="Medivac_ClickError"/>
+        <SoundArray index="Highlight" value="Medivac_Highlight"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-medivacmengsk.dds"/>
         <Wireframe>
             <Image value="Assets\Textures\Wireframe-Terran-Medivac.dds"/>
         </Wireframe>
+        <!--
+        <StatusColors index="Shields" BackgroundColor="255,0,0,0" EmptyColor="255,80,80,80">
+            <ColorArray value="255,0,0,255"/>
+        </StatusColors>
+        <StatusColors index="Life" BackgroundColor="255,0,0,0" EmptyColor="255,80,80,80">
+            <ColorArray value="255,208,34,0"/>
+            <ColorArray value="255,208,34,0"/>
+            <ColorArray value="255,229,129,0"/>
+            <ColorArray value="255,229,129,0"/>
+            <ColorArray value="255,229,221,0"/>
+            <ColorArray value="255,229,221,0"/>
+            <ColorArray value="255,22,229,0"/>
+            <ColorArray value="255,22,229,0"/>
+        </StatusColors>
+        <StatusColors index="Energy" BackgroundColor="255,0,0,0" EmptyColor="255,80,80,80">
+            <ColorArray value="255,150,40,220"/>
+        </StatusColors>
+        <StatusColors index="Cargo" BackgroundColor="255,0,0,0" EmptyColor="255,77,60,15">
+            <ColorArray value="255,255,255,255"/>
+        </StatusColors>
+        <StatusColors index="Progress" BackgroundColor="255,0,0,0" EmptyColor="255,80,80,80">
+            <ColorArray value="255,0,200,200"/>
+        </StatusColors>
+        <StatusColors index="Duration" BackgroundColor="255,0,0,0" EmptyColor="255,40,40,40">
+            <ColorArray value="255,120,120,120"/>
+        </StatusColors>
+        <StatusColors index="Magazine" BackgroundColor="255,0,0,0" EmptyColor="255,77,60,15">
+            <ColorArray value="255,128,128,64"/>
+        </StatusColors>
+
+        <StatusTextInfo>
+            <Offset value="0,16"/>
+            <Attachment value="Ref_StatusBar"/>
+            <FontSize value="16"/>
+            <BackgroundColor value="255,255,255,255"/>
+            <BackgroundImage value="Assets\Textures\ui_ingame_workercount_bg.dds"/>
+        </StatusTextInfo>
+-->
     </CActorUnit>
+    <CActorSiteOpBankerUnit id="SquadMedivacBankerSOp" parent="SOpBankerUnit">
+        <RollMax value="10.000000"/>
+        <RollInActivationAngle value="20.000000"/>
+        <RollInArc value="140.000000"/>
+        <RollOutDuration value="1.200000"/>
+    </CActorSiteOpBankerUnit>
+    <CActorModel id="SquadThorMengskTransit">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="TeamColor" value="1"/>
+        <Inherits index="TintColor" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <Inherits index="WarpGroup" value="1"/>
+        <On Terms="ActorCreation" Target="::Creator" Send="Signal ThorMengskTransit"/>
+        <On Terms="ActorCreation" Send="AnimPlay Start Stand,Work,Start"/>
+        <On Terms="AnimDone; AnimName Start" Send="AnimPlay Work Stand,Work PlayForever"/>
+        <On Terms="AbilTransport.MedivacMengskTransport.TransportUnload" Send="Destroy"/>
+        <On Terms="Behavior.SquadMedivacUnloadTracker.On" Send="Destroy"/>
+        <On Terms="Signal.*.Dead" Send="Create ThorMengskTransitDeath"/>
+        <On Terms="Signal.*.Dead" Send="Destroy"/>
+        <Host Subject="::Creator"/>
+        <HostSiteOps Ops="SOpAttachCenter ThorMengskTransitSOpOffset"/>
+        <Model value="ThorMengskTransit"/>
+    </CActorModel>
+    <CActorModel id="ThorMengskTransitDeath">
+        <On Terms="ActorCreation" Send="$Death"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <HostSiteOps Ops="SOpBasicCreatorStationary"/>
+        <Model value="TerranLargeUnitDeath"/>
+    </CActorModel>
+    <CActorSound id="ThorMengskTransitLandSound" parent="SoundOneShot">
+        <Sound value="ThorMengskTransitLand"/>
+        <Layers Sound="SiegeTank_Land_RockDebris"/>
+    </CActorSound>
+    <CActorSiteOpLocalOffset id="ThorMengskTransitSOpOffset">
+        <LocalOffset value="0.000000,0.000000,-2.500000"/>
+    </CActorSiteOpLocalOffset>
+    <CActorSiteOpLocalOffset id="SiegeTankMengskSiegedCargoSOpOffset">
+        <LocalOffset value="0.000000,0.000000,-1.800000"/>
+    </CActorSiteOpLocalOffset>
     <CActorSite id="SquadMedivacDoubleHealBeamImpactSite" parent="SiteCenter">
         <On Terms="Effect.SquadMedivacHealTargetPersistent.Start; At Target" Send="Create"/>
         <On Terms="Effect.SquadMedivacHealTargetPersistent.Stop" Send="Destroy"/>
@@ -6469,6 +6698,13 @@
             <Image value="Assets\Textures\Wireframe-Terran-siegetank-mercenary-siegemode.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorEventMacro id="SquadMedivacUnloadDropAnim">
+        <On Terms="AbilTransport.SquadMedivacTransport.CargoLoad" Send="AnimBracketStart Unload IGNORE Unload Unload,End DontResetOnUnhide"/>
+        <On Terms="AbilTransport.SquadMedivacTransport.CargoUnload" Send="AnimBracketStop Unload"/>
+        <On Terms="AbilTransport.SquadMedivacTransport.CargoUnloadSuppressed" Send="AnimBracketStop Unload"/>
+        <On Terms="AbilTransport.SquadMedivacTransport.TransportLoad" Send="AnimBracketStart Unload IGNORE Unload Unload,End DontResetOnUnhide"/>
+        <On Terms="AbilTransport.SquadMedivacTransport.TransportUnload" Send="AnimBracketStop Unload"/>
+    </CActorEventMacro>
     <CActorUnit id="SquadSiegeTankSieged" parent="GenericUnitMorph" unitName="SquadSiegeTankSieged">
         <Aliases value="_UnitLarge"/>
         <Model value="SiegeTank_Commando_Sieged"/>
@@ -6477,6 +6713,13 @@
         <PortraitModel value="SiegeTank_Commando_Collection_Portrait"/>
         <BarOffset value="65"/>
         <BarWidth value="102"/>
+        <!-- load by medivac-->
+        <On Terms="AbilTransport.*.CargoLoad; CreepEngulfs" Send="CreepEngulfmentStop"/>
+        <On Terms="AbilTransport.*.CargoLoad; CreepIntersects" Send="CreepEngulfmentStop"/>
+        <On Terms="AbilTransport.*.CargoLoad" Send="AliasRemove _CreepEngulfable"/>
+        <On Terms="AbilTransport.*.CargoUnload" Send="AliasAdd _CreepEngulfable"/>
+        <On Terms="AbilTransport.*.CargoUnload; CreepIntersects" Send="CreepEngulfmentStartTransition"/>
+        <On Terms="AbilTransport.*.CargoUnload; CreepEngulfs" Send="CreepEngulfmentStartTransition"/>
         <GroupIcon>
             <Image value="Assets\Textures\Wireframe-Terran-siegetank-mercenary-siegemode.dds"/>
         </GroupIcon>
@@ -6581,6 +6824,13 @@
         <On Terms="UnitHeightUpdate.*.Land" Send="Create SquadSiegeTankLand"/>
         <On Terms="UnitDeathCustomize; ValidateUnit HaveVoidShade" Send="DeathCustomize Shadow"/>
         <On Terms="UnitDeathCustomize; ValidateUnit HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
+        <!--load by medivac-->
+        <On Terms="AbilTransport.*.CargoLoad; CreepEngulfs" Send="CreepEngulfmentStop"/>
+        <On Terms="AbilTransport.*.CargoLoad; CreepIntersects" Send="CreepEngulfmentStop"/>
+        <On Terms="AbilTransport.*.CargoLoad" Send="AliasRemove _CreepEngulfable"/>
+        <On Terms="AbilTransport.*.CargoUnload" Send="AliasAdd _CreepEngulfable"/>
+        <On Terms="AbilTransport.*.CargoUnload; CreepIntersects" Send="CreepEngulfmentStartTransition"/>
+        <On Terms="AbilTransport.*.CargoUnload; CreepEngulfs" Send="CreepEngulfmentStartTransition"/>
         <Model value="SiegeTank_Commando"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
         <CreepHeightClass value="Tiny"/>
@@ -11450,6 +11700,10 @@
         <On Terms="Abil.SquadThor330mmBarrageCannons.SourceChannelStop" Send="AnimClear Spell"/>
         <On Terms="Abil.SquadThor330mmBarrageCannons.SourceFinishStart" Send="AnimPlay MorphEnd Morph,End NonLooping"/>
         <On Terms="Abil.SquadThor330mmBarrageCannons.SourceFinishStop" Send="AnimClear MorphEnd"/>
+        <!-- When picked up by a Medivac -->
+        <On Terms="AbilTransport.SquadMedivacTransport.CargoUnload" Send="AnimPlay Unload Spell,A 0 0.000000"/>
+        <On Terms="WeaponStart.*.AttackStart; AnimPlaying Unload" Send="AnimClear Unload"/>
+        <On Terms="UnitMovementUpdate.*.Walk; AnimPlaying Unload" Send="AnimClear Unload"/>
         <Model value="Thor_Umojan"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
         <EventDataFootprint index="0" Actor="" Model=""/>
@@ -11640,14 +11894,16 @@
         <On Terms="ActorCreation" Target="::Creator" Send="Signal ThorTransit"/>
         <On Terms="ActorCreation" Send="AnimPlay Start Stand,Work,Start"/>
         <On Terms="AnimDone; AnimName Start" Send="AnimPlay Work Stand,Work PlayForever"/>
-        <On Terms="AbilTransport.MedivacTransport.TransportUnload" Send="Destroy"/>
+        <On Terms="AbilTransport.SquadMedivacTransport.TransportUnload" Send="Destroy"/>
         <On Terms="Signal.*.Dead" Send="Create SquadThorTransitDeath"/>
         <On Terms="Signal.*.Dead" Send="Destroy"/>
         <On Terms="ActorCreation; PlayerHasReward ThorCE" Send="ModelSwap ThorCETransit"/>
-        <On Terms="AbilTransport.SpecOpsDropshipTransport.TransportUnload; AbilTransport Thor" Send="Destroy"/>
-        <On Terms="AbilTransport.SpecOpsDropshipTransport.CargoUnload; AbilTransport Thor" Send="Destroy"/>
-        <On Terms="AbilTransport.SpecOpsDropshipTransport.TransportUnload; AbilTransport Thor" Send="Destroy"/>
-        <On Terms="AbilTransport.SpecOpsDropshipTransport.CargoUnload; AbilTransport Thor" Send="Destroy"/>
+        <On Terms="AbilTransport.SquadMedivacTransport.TransportUnload; AbilTransport SquadThor" Send="Destroy"/>
+        <On Terms="AbilTransport.SquadMedivacTransport.CargoUnload; AbilTransport SquadThor" Send="Destroy"/>
+        <!--
+        <On Terms="AbilTransport.SquadMedivacTransport.TransportUnload; AbilTransport SquadThor" Send="Destroy"/>
+        <On Terms="AbilTransport.SquadMedivacTransport.CargoUnload; AbilTransport SquadThor" Send="Destroy"/>
+-->
         <Host Subject="::Creator"/>
         <HostSiteOps Ops="SOpAttachCenter ThorCargoSOpOffset"/>
         <Model value="Thor_Umojan_Transit"/>

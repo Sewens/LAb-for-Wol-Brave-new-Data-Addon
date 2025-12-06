@@ -1,5 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorBuff id="SquadMedivacUnloadTracker">
+        <BehaviorFlags index="EnabledWhileDead" value="1"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="0.0625"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadMedivacSiegeTankAirlift">
+        <BehaviorFlags index="EnabledWhileDead" value="1"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Modification>
+            <AbilLinkDisableArray value="MedivacMengskHeal"/>
+            <AbilLinkDisableArray value="MedivacMengskDoubleBeamHeal"/>
+            <WeaponEnableArray value="MedivacMengskSiegeTankAirlift"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorAttribute id="MedivacMengskSiegeTankAirliftLevel">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <MaxPoints value="3"/>
+        <Modification>
+            <DamageDealtFraction index="Melee" value="0.25"/>
+            <DamageDealtFraction index="Ranged" value="0.25"/>
+            <DamageDealtFraction index="Splash" value="0.25"/>
+        </Modification>
+    </CBehaviorAttribute>
     <CBehaviorBuff id="BlackNuclearBlackHole">
         <Alignment value="Negative"/>
         <InfoIcon value="Assets\Textures\btn-ability-protoss-blackhole.dds"/>

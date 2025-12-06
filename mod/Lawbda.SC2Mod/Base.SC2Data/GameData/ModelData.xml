@@ -21,6 +21,56 @@
         <Flags index="Wait" value="0"/>
         <Priority value="24"/>
     </CModel>
+    <CModel id="ThorMengskTransit" parent="ThorTransitBase">
+        <Model value="Assets\COOP\Mengsk\Units\Thor_Mengsk_COOP_Transit\Thor_Mengsk_COOP_Transit.m3"/>
+        <Events>
+            <Anim value="Stand,Work,Start,00"/>
+            <Name value="ThorMengsk_Transit"/>
+            <Type value="Sound"/>
+            <Time value="0.105000"/>
+            <Payload value="ThorMengsk_Transit"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,Work,Start,00"/>
+            <Name value="ThorMengsk_Transit_Start"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="ThorMengsk_Transit_Start"/>
+        </Events>
+        <ScaleMax value="0.550000,0.550000,0.550000"/>
+        <ScaleMin value="0.550000,0.550000,0.550000"/>
+    </CModel>
+    <CModel id="SquadSiegeTankSiegedTransit" parent="PersistentSpellFX">
+        <Model value="Assets\Units\Terran\SiegeTank_Umojan_Sieged\SiegeTank_Umojan_Sieged.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <ScaleMax value="0.800000,0.800000,0.800000"/>
+        <ScaleMin value="0.800000,0.800000,0.800000"/>
+        <SelectionRadius value="0.769000"/>
+        <ShadowRadius value="0.769000"/>
+    </CModel>
+    <CModel id="Medivac_Mengsk_COOP" parent="Unit_COOP" COOP="Mengsk" Race="Terran">
+        <Radius value="0.750000"/>
+        <ScaleMax value="0.700000,0.700000,0.700000"/>
+        <ScaleMin value="0.700000,0.700000,0.700000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.500000"/>
+        <SelectionRadius value="1.071200"/>
+        <ShadowRadius value="1.071200"/>
+        <SquibTypeDefault value="Metal"/>
+    </CModel>
+    <CModel id="Medivac_Mengsk_COOP_Death" parent="UnitDeath_COOP" COOP="Mengsk" Race="Terran">
+        <VariationCount value="2"/>
+    </CModel>
+    <CModel id="Medivac_Mengsk_COOP_DeathRagdoll" parent="UnitDeath_COOP" COOP="Mengsk" Race="Terran"/>
+    <CModel id="MedivacMengskHealBeam" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Terran\MedivacBeam\MedivacBeam.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <RadiusLoose value="1.000000"/>
+    </CModel>
+    <CModel id="MedivacMengskPortrait" parent="MedivacPortraitBase">
+        <Model value="Assets\Portraits\Terran\MedivacPortrait\MedivacPortrait.m3"/>
+        <Image value="Assets\Textures\MedivacPortrait_Static.dds"/>
+        <Lighting value="MedivacPortrait"/>
+    </CModel>
     <CModel id="NuclearAnnihilationMengskBigNukeDrop" parent="OneShotSpellFX">
         <Model value="Assets\Effects\Terran\NukeFalling\NukeFalling.m3"/>
         <AnimSpeed value="0.260000"/>

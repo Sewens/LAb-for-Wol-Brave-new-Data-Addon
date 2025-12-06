@@ -1172,18 +1172,13 @@
         <Flags index="ShowStatus" value="0"/>
         <Flags index="Transient" value="1"/>
         <Flags index="WaitForFood" value="0"/>
-        <Leash value="1"/>
-        <InfoArray index="Ammo1" Distance="0.25" Manage="Recall" Unit="SquadWraith">
-            <Charge>
-                <CountMax value="1"/>
-                <CountUse value="1"/>
-                <Link value="Abil/##id##"/>
-                <Location value="Unit"/>
-            </Charge>
+        <Leash value="12"/>
+        <InfoArray index="Ammo1" Time="8" CountStart="3" Manage="Recall" Unit="SquadWraith">
+            <Charge Link="Abil/##id##" Location="Unit"/>
             <Cooldown Link="Abil/##id##"/>
             <Button DefaultButtonFace="BuildSquadWraith"/>
             <Flags index="AutoBuild" value="1"/>
-            <Flags index="AutoBuildOn" value="1"/>
+            <Flags index="External" value="1"/>
             <Flags index="LeashRetarget" value="1"/>
         </InfoArray>
         <InfoArray index="Ammo2" Distance="0.25" Manage="Recall" Unit="SquadVikingA">
@@ -1196,7 +1191,6 @@
             <Cooldown Link="Abil/##id##"/>
             <Button DefaultButtonFace="BuildSquadViking"/>
             <Flags index="AutoBuild" value="1"/>
-            <Flags index="AutoBuildOn" value="1"/>
             <Flags index="External" value="1"/>
             <Flags index="LeashRetarget" value="1"/>
         </InfoArray>
@@ -1204,13 +1198,12 @@
             <Charge>
                 <CountMax value="1"/>
                 <CountUse value="1"/>
-                <Link value="Abil/AddMedicToSquad"/>
+                <Link value="Abil/##id##"/>
                 <Location value="Unit"/>
             </Charge>
             <Cooldown Link="Abil/##id##"/>
             <Button DefaultButtonFace="BuildSquadBanshee"/>
             <Flags index="AutoBuild" value="1"/>
-            <Flags index="AutoBuildOn" value="1"/>
             <Flags index="External" value="1"/>
             <Flags index="LeashRetarget" value="1"/>
         </InfoArray>
@@ -1218,13 +1211,12 @@
             <Charge>
                 <CountMax value="1"/>
                 <CountUse value="1"/>
-                <Link value="Abil/AddFirebatToSquad"/>
+                <Link value="Abil/##id##"/>
                 <Location value="Unit"/>
             </Charge>
             <Cooldown Link="Abil/##id##"/>
             <Button DefaultButtonFace="BuildSquadRaven"/>
             <Flags index="AutoBuild" value="1"/>
-            <Flags index="AutoBuildOn" value="1"/>
             <Flags index="External" value="1"/>
             <Flags index="LeashRetarget" value="1"/>
         </InfoArray>
@@ -1238,7 +1230,6 @@
             <Cooldown Link="Abil/##id##"/>
             <Button DefaultButtonFace="BuildSquadScienceVessel"/>
             <Flags index="AutoBuild" value="1"/>
-            <Flags index="AutoBuildOn" value="1"/>
             <Flags index="External" value="1"/>
             <Flags index="LeashRetarget" value="1"/>
         </InfoArray>
@@ -1252,14 +1243,12 @@
             <Cooldown Link="Abil/##id##"/>
             <Button DefaultButtonFace="BuildSquadBattlecruiser"/>
             <Flags index="AutoBuild" value="1"/>
-            <Flags index="AutoBuildOn" value="1"/>
             <Flags index="External" value="1"/>
             <Flags index="LeashRetarget" value="1"/>
         </InfoArray>
         <InfoArray index="Ammo7" Manage="Recall" Unit="SquadMedivac">
             <Charge CountMax="1" CountUse="1" Link="Abil/##id##"/>
             <Cooldown Link="Abil/##id##"/>
-            <Button DefaultButtonFace="BuildSquadMedivac"/>
             <Flags index="AutoBuild" value="1"/>
             <Flags index="AutoBuildOn" value="1"/>
             <Flags index="External" value="1"/>
@@ -1269,7 +1258,7 @@
         <ExternalAngle value="45"/>
         <ExternalAngle value="315"/>
         <ExternalAngle value="135"/>
-        <MaxCount value="4"/>
+        <MaxCount value="8"/>
     </CAbilArmMagazine>
     <CAbilBehavior id="SquadVikingAssaultModeSwitch">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -2645,12 +2634,13 @@
             <Flags index="Hidden" value="1"/>
         </CmdButtonArray>
         <Flags index="CargoDeath" value="1"/>
-        <MaxCargoCount value="9"/>
+        <MaxCargoCount value="8"/>
         <MaxCargoSize value="8"/>
-        <TotalCargoSpace value="9"/>
+        <TotalCargoSpace value="8"/>
         <UnloadPeriod value="1"/>
         <TargetFilters value="Visible;Ally,Neutral,Enemy,Buried,UnderConstruction,Dead,Hidden"/>
         <LoadValidatorArray value="NotWidowMineTarget"/>
+        <Range value="3"/>
     </CAbilTransport>
     <CAbilMorph id="SquadSiegeMode">
         <OrderArray index="0">
@@ -2725,7 +2715,6 @@
     <CAbilEffectInstant id="BehemothAfterburner">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Effect index="0" value="BehemothAfterburnerPersistent"/>
-        <Effect value="BehemothAfterburnerApply"/>
         <Flags index="Transient" value="1"/>
         <Cost>
             <Cooldown TimeUse="20"/>
@@ -4062,6 +4051,9 @@
         <UseMarkerArray index="Cast" value="0"/>
         <UseMarkerArray index="Channel" value="0"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="Disband"/>
+        <InterruptCost>
+            <Cooldown TimeUse="30"/>
+        </InterruptCost>
     </CAbilEffectInstant>
     <CAbilEffectTarget id="MedicFlashBangGrenade">
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
