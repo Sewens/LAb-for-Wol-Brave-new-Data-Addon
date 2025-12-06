@@ -6165,6 +6165,7 @@
         <Inherits index="TintColor" value="1"/>
         <Inherits index="Visibility" value="1"/>
         <Inherits index="WarpGroup" value="1"/>
+        <On Terms="UnitBirth.SquadMedivac" Send="Create"/>
         <On Terms="ActorCreation" Target="::Creator" Send="Signal SiegeTankSiegedTransit"/>
         <On Terms="ActorCreation" Send="AnimPlay Start Stand,Work,Start"/>
         <On Terms="AnimDone; AnimName Start" Send="AnimPlay Work Stand,Work PlayForever"/>
@@ -6172,11 +6173,10 @@
         <On Terms="UnitDeath" Send="Destroy"/>
         <On Terms="AbilTransport.SquadMedivacTransport.TransportUnload" Send="Destroy"/>
         <On Terms="Signal.*.Dead" Send="Destroy"/>
-        <!--
-        <On Terms="UnitBirth.SquadMedivac" Send="Create"/>
         <On Terms="ActorCreation" Send="SetVisibility"/>
         <On Terms="Behavior.SquadMedivacSiegeTankAirlift.On" Send="SetVisibility 1"/>
         <On Terms="Behavior.SquadMedivacSiegeTankAirlift.Off" Send="SetVisibility"/>
+        <!--
         <On Terms="Behavior.SquadMedivacUnloadTracker.On" Send="StatusSet CarryingTank 0"/>
         -->
         <On Terms="AbilTransport.SquadMedivacTransport.TransportLoad; AbilTransport SquadSiegeTankSieged" Send="StatusSet CarryingTank 1"/>
@@ -6309,7 +6309,7 @@
         <On Terms="Signal.*.SquadThorTransit" Send="RefSetFromMsg ::actor.SquadThor ::Sender"/>
         <On Terms="AbilTransport.SquadMedivacTransport.PassengerKilled; AbilTransport SquadThorEP" Target="::actor.SquadThorEP" Send="Signal Dead"/>
         <On Terms="UnitDeath" Target="::actor.SquadThor" Send="Signal Dead"/>
-        <On Terms="AbilTransport.SquadMedivacTransport.TransportLoad" Send="Attach _Turret {Center 0} SiegeTankMengskSiegedCargoSOpOffset"/>
+        <On Terms="ActorCreation" Send="Attach _Turret {Center 0} SiegeTankMengskSiegedCargoSOpOffset"/>
         <!--
         <On Terms="Behavior.MedivacMengskSiegeTankAirlift.On" Send="SetShowStatusBar 1 Custom"/>
         <On Terms="Behavior.MedivacMengskSiegeTankAirlift.On" Send="SetShowStatusBar 0 Life"/>
@@ -6470,6 +6470,7 @@
         <RollInArc value="140.000000"/>
         <RollOutDuration value="1.200000"/>
     </CActorSiteOpBankerUnit>
+    <!--
     <CActorModel id="SquadThorMengskTransit">
         <Inherits index="CloakEffect" value="1"/>
         <Inherits index="TeamColor" value="1"/>
@@ -6496,6 +6497,7 @@
         <Sound value="ThorMengskTransitLand"/>
         <Layers Sound="SiegeTank_Land_RockDebris"/>
     </CActorSound>
+-->
     <CActorSiteOpLocalOffset id="ThorMengskTransitSOpOffset">
         <LocalOffset value="0.000000,0.000000,-2.500000"/>
     </CActorSiteOpLocalOffset>
