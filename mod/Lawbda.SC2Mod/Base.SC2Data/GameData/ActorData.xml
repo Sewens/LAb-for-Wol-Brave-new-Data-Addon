@@ -6165,15 +6165,22 @@
         <Inherits index="TintColor" value="1"/>
         <Inherits index="Visibility" value="1"/>
         <Inherits index="WarpGroup" value="1"/>
-        <On Terms="UnitBirth.SquadMedivac" Send="Create"/>
+        <On Terms="ActorCreation" Target="::Creator" Send="Signal SiegeTankSiegedTransit"/>
+        <On Terms="ActorCreation" Send="AnimPlay Start Stand,Work,Start"/>
+        <On Terms="AnimDone; AnimName Start" Send="AnimPlay Work Stand,Work PlayForever"/>
         <On Terms="UnitDeath; IsStatus CarryingTank 1" Send="Create SquadSiegeTankSiegedTransitDeath"/>
         <On Terms="UnitDeath" Send="Destroy"/>
+        <On Terms="AbilTransport.SquadMedivacTransport.TransportUnload" Send="Destroy"/>
+        <On Terms="Signal.*.Dead" Send="Destroy"/>
+        <!--
+        <On Terms="UnitBirth.SquadMedivac" Send="Create"/>
         <On Terms="ActorCreation" Send="SetVisibility"/>
         <On Terms="Behavior.SquadMedivacSiegeTankAirlift.On" Send="SetVisibility 1"/>
         <On Terms="Behavior.SquadMedivacSiegeTankAirlift.Off" Send="SetVisibility"/>
+        <On Terms="Behavior.SquadMedivacUnloadTracker.On" Send="StatusSet CarryingTank 0"/>
+        -->
         <On Terms="AbilTransport.SquadMedivacTransport.TransportLoad; AbilTransport SquadSiegeTankSieged" Send="StatusSet CarryingTank 1"/>
         <On Terms="AbilTransport.SquadMedivacTransport.TransportUnload; AbilTransport SquadSiegeTankSieged" Send="StatusSet CarryingTank 0"/>
-        <On Terms="Behavior.SquadMedivacUnloadTracker.On" Send="StatusSet CarryingTank 0"/>
         <On Terms="ActorCreation" Send="AnimBracketStart BSD {} Fly"/>
         <On Terms="WeaponStart.*.AttackStart" Send="AnimBracketStart Attack Fly,Attack"/>
         <On Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
@@ -6190,6 +6197,14 @@
         <On Terms="Abil.SquadMedivacTransport.TransportUnloadStart" Send="AnimBracketStart Unload Work,Start Work Work,End"/>
         <On Terms="Abil.SquadMedivacTransport.TransportUnloadStop" Send="AnimBracketStop Unload"/>
     </CActorEventMacro>
+    <CActorTurret id="SquadMedivacSiegeTankAirliftTurret">
+        <On Terms="TurretEnable.SquadMedivacSiegeTankAirliftTurret" Send="Create"/>
+        <TurretBody Subject="SquadSiegeTankSiegedTransit"/>
+    </CActorTurret>
+    <CActorTurret id="SquadMedivacThorAirliftTurret">
+        <On Terms="TurretEnable.SquadMedivacThorAirliftTurret" Send="Create"/>
+        <TurretBody Subject="SquadThorTransit"/>
+    </CActorTurret>
     <CActorUnit id="SquadMedivac" parent="GenericUnitBase" unitName="SquadMedivac">
         <StatusBarOn index="Custom" value="1"/>
         <Aliases value="_Unit"/>
@@ -6200,11 +6215,13 @@
         <Macros value="TerrainSquibAnimations"/>
         <Macros value="PhysicsDeathsSwarmAir"/>
         <Macros value="PhysicsDeathsVoidAir"/>
-        <!--On Terms="UnitBirth.SquadMedivac" Send="Create SoundEmitter Medivac_Ambience"/-->
-        <On Terms="UnitBirth.SquadMedivac" Send="Create"/>
+        <!--
+        <On Terms="UnitBirth.SquadMedivac" Send="Create SoundEmitter Medivac_Ambience"/>
         <On Terms="UnitRevive.SquadMedivac" Send="Create"/>
-        <On Terms="UnitRevive.SquadMedivac" Send="RefSet ::HostTurretBody _Selectable"/>
+        <On Terms="UnitBirth.SquadMedivac" Send="Create"/>
         <On Terms="UnitConstruction.SquadMedivac.Start" Send="Create"/>
+        <On Terms="UnitRevive.SquadMedivac" Send="RefSet ::HostTurretBody _Selectable"/>
+-->
         <On Terms="UnitConstruction.SquadMedivac.Finish" Send="AnimPlay ConstructionDeath Stand,Birth,Death FullMatch"/>
         <On Terms="AnimDone.*.Missing; AnimName ConstructionDeath" Send="Destroy"/>
         <On Terms="ActorCreation; ValidateUnit IsFlying; Option Shadow Low; $AllowBlobShadow" Send="Create FlyerShadow"/>
@@ -6281,18 +6298,18 @@
         <On Terms="Behavior.SquadAfterburner.On" Send="AnimPlay Turbo Spell,B"/>
         <On Terms="Behavior.SquadAfterburner.On" Send="StatusSet Turbo 1"/>
         <On Terms="Behavior.SquadAfterburner.Off" Send="StatusSet Turbo 0"/>
-        <!--On Terms="UnitMovementUpdate.*.Walk; IsStatus Turbo 1" Send="Create Medivac_MovementAfterburner"/-->
+        <On Terms="UnitMovementUpdate.*.Walk; IsStatus Turbo 1" Send="Create SquadMedivacIgniteAfterburners"/>
         <!-- load siege tank and thor anim-->
         <On Terms="AbilTransport.SquadMedivacTransport.TransportLoad; AbilTransport SquadSiegeTankSieged" Send="Create SquadSiegeTankSiegedTransit"/>
         <!--On Terms="AbilTransport.SquadMedivacTransport.TransportLoad; AbilTransport SquadSiegeTank" Send="Create SquadSiegeTankSiegedTransit"/-->
-        <On Terms="Signal.*.SiegeTankMengskSiegedTransit" Send="RefSetFromMsg ::actor.SquadSiegeTankSieged ::Sender"/>
+        <On Terms="Signal.*.SquadSiegeTankSiegedTransit" Send="RefSetFromMsg ::actor.SquadSiegeTankSieged ::Sender"/>
         <On Terms="UnitDeath" Target="::actor.SquadSiegeTankSieged" Send="Signal Dead"/>
         <On Terms="AbilTransport.SquadMedivacTransport.TransportLoad; AbilTransport SquadThorEP" Send="Create SquadThorTransit"/>
         <On Terms="AbilTransport.SquadMedivacTransport.TransportLoad; AbilTransport SquadThorAP" Send="Create SquadThorTransit"/>
         <On Terms="Signal.*.SquadThorTransit" Send="RefSetFromMsg ::actor.SquadThor ::Sender"/>
         <On Terms="AbilTransport.SquadMedivacTransport.PassengerKilled; AbilTransport SquadThorEP" Target="::actor.SquadThorEP" Send="Signal Dead"/>
         <On Terms="UnitDeath" Target="::actor.SquadThor" Send="Signal Dead"/>
-        <On Terms="ActorCreation" Send="Attach _Turret {Center 0} SiegeTankMengskSiegedCargoSOpOffset"/>
+        <On Terms="AbilTransport.SquadMedivacTransport.TransportLoad" Send="Attach _Turret {Center 0} SiegeTankMengskSiegedCargoSOpOffset"/>
         <!--
         <On Terms="Behavior.MedivacMengskSiegeTankAirlift.On" Send="SetShowStatusBar 1 Custom"/>
         <On Terms="Behavior.MedivacMengskSiegeTankAirlift.On" Send="SetShowStatusBar 0 Life"/>
@@ -6311,13 +6328,13 @@
         <On Terms="Behavior.SquadMedivacSiegeTankAirlift.On" Send="HostSiteOpsSet ::Host SquadMedivacBankerSOp"/>
         <On Terms="Behavior.SquadMedivacSiegeTankAirlift.Off" Send="HostSiteOpsSet ::Host SOpBankerMedivac"/>
         <HostSiteOps Ops="SquadMedivacBankerSOp"/>
-        <Model value="Medivac_Mengsk_COOP"/>
+        <Model value="SquadMedivacMengsk"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
         <EventDataFootprint Actor="UnitFootprint" Model="MedivacFootprint"/>
         <EventDataSound Actor="UnitSound"/>
         <Baselines index="Walk" BlendIn="1.500000" BlendOut="2.000000"/>
-        <BuildModel value="Medivac_Mengsk_COOP"/>
-        <DeathArray index="Normal" ModelLink="Medivac_Mengsk_COOP_Death" SoundLink="Medivac_Explode" VoiceLink="MedivacDeathVoice"/>
+        <BuildModel value="SquadMedivacMengsk"/>
+        <DeathArray index="Normal" ModelLink="SquadMedivacMengskDeath" SoundLink="Medivac_Explode" VoiceLink="MedivacDeathVoice"/>
         <DeathCustoms ModelLink="ZergSmallUnitDeathLow" Name="AntiGravGeneric"/>
         <DeathCustoms ModelLink="ProtossSmallUnitDeathLow" Name="AntiGravProtoss"/>
         <DeathCustoms ModelLink="TerranSmallUnitDeathLow" Name="AntiGravTerran"/>
@@ -6325,7 +6342,7 @@
         <DeathCustoms ModelLink="Invisible" Name="Vortex"/>
         <DeathCustoms>
             <ActorModel value="SquadMedivacDeathRagdoll"/>
-            <ModelLink value="Medivac_Mengsk_COOP_DeathRagdoll"/>
+            <ModelLink value="SquadMedivacMengskDeathRagdoll"/>
             <Name value="RagdollBasic"/>
             <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
             <BodySquibs Name="Basic" Model="TerranSquibDeathRagdoll"/>
@@ -6365,8 +6382,8 @@
         <DeathCustomData Name="RagdollAoE"/>
         <DeathActorModel value="UnitDeathModelWithDeathMotionFlier"/>
         <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
-        <PlacementModel value="Medivac_Mengsk_COOP"/>
-        <PortraitModel value="MedivacMengskPortrait"/>
+        <PlacementModel value="SquadMedivacMengsk"/>
+        <PortraitModel value="SquadMedivacMengskPortrait"/>
         <TerrainSquibs>
             <MovementDistance value="0.150000,0.150000"/>
             <IdlePeriod value="0.250000,0.500000"/>
@@ -6468,15 +6485,14 @@
         <On Terms="Signal.*.Dead" Send="Destroy"/>
         <Host Subject="::Creator"/>
         <HostSiteOps Ops="SOpAttachCenter ThorMengskTransitSOpOffset"/>
-        <Model value="ThorMengskTransit"/>
     </CActorModel>
-    <CActorModel id="ThorMengskTransitDeath">
+    <CActorModel id="SquadThorMengskTransitDeath">
         <On Terms="ActorCreation" Send="$Death"/>
         <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
         <HostSiteOps Ops="SOpBasicCreatorStationary"/>
         <Model value="TerranLargeUnitDeath"/>
     </CActorModel>
-    <CActorSound id="ThorMengskTransitLandSound" parent="SoundOneShot">
+    <CActorSound id="SquadThorMengskTransitLandSound" parent="SoundOneShot">
         <Sound value="ThorMengskTransitLand"/>
         <Layers Sound="SiegeTank_Land_RockDebris"/>
     </CActorSound>
@@ -6707,10 +6723,10 @@
     </CActorEventMacro>
     <CActorUnit id="SquadSiegeTankSieged" parent="GenericUnitMorph" unitName="SquadSiegeTankSieged">
         <Aliases value="_UnitLarge"/>
-        <Model value="SiegeTank_Commando_Sieged"/>
+        <Model value="SiegeTank_Umojan_Sieged"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
-        <DeathArray index="Normal" ModelLink="SiegeTank_Commando_Sieged_Death" SoundLink="SiegeTank_Explode"/>
-        <PortraitModel value="SiegeTank_Commando_Collection_Portrait"/>
+        <DeathArray index="Normal" ModelLink="SiegeTank_Umojan_Sieged_Death" SoundLink="SiegeTank_Explode"/>
+        <PortraitModel value="SiegeTank_Umojan_Portrait"/>
         <BarOffset value="65"/>
         <BarWidth value="102"/>
         <!-- load by medivac-->
@@ -6720,6 +6736,9 @@
         <On Terms="AbilTransport.*.CargoUnload" Send="AliasAdd _CreepEngulfable"/>
         <On Terms="AbilTransport.*.CargoUnload; CreepIntersects" Send="CreepEngulfmentStartTransition"/>
         <On Terms="AbilTransport.*.CargoUnload; CreepEngulfs" Send="CreepEngulfmentStartTransition"/>
+        <On Terms="AbilTransport.SquadMedivacTransport.CargoUnload" Send="AnimPlay Unload Spell,A 0 0.000000"/>
+        <On Terms="WeaponStart.*.AttackStart; AnimPlaying Unload" Send="AnimClear Unload"/>
+        <On Terms="UnitMovementUpdate.*.Walk; AnimPlaying Unload" Send="AnimClear Unload"/>
         <GroupIcon>
             <Image value="Assets\Textures\Wireframe-Terran-siegetank-mercenary-siegemode.dds"/>
         </GroupIcon>
@@ -6831,11 +6850,11 @@
         <On Terms="AbilTransport.*.CargoUnload" Send="AliasAdd _CreepEngulfable"/>
         <On Terms="AbilTransport.*.CargoUnload; CreepIntersects" Send="CreepEngulfmentStartTransition"/>
         <On Terms="AbilTransport.*.CargoUnload; CreepEngulfs" Send="CreepEngulfmentStartTransition"/>
-        <Model value="SiegeTank_Commando"/>
+        <Model value="SiegeTank_Umojan"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
         <CreepHeightClass value="Tiny"/>
-        <BuildModel value="SiegeTank_Commando"/>
-        <DeathArray index="Normal" ModelLink="SiegeTank_Commando_Death" SoundLink="SiegeTank_Explode"/>
+        <BuildModel value="SiegeTank_Umojan"/>
+        <DeathArray index="Normal" ModelLink="SiegeTank_Umojan_Death" SoundLink="SiegeTank_Explode"/>
         <DeathCustoms ModelLink="TerranLargeUnitDeathLow" Name="AntiGravTerran"/>
         <DeathCustoms ActorModel="SiegeTankDeathRagdoll" ModelLink="SiegeTankDeathRagdoll" Name="RagdollBasic">
             <BodySquibs Name="Basic" Model="TerranSquibDeathRagdoll"/>
@@ -6865,8 +6884,8 @@
         </DeathCustoms>
         <DeathCustomData Name="RagdollBasic"/>
         <DeathActorModel value="UnitDeathModelWithDeathMotionGround"/>
-        <PlacementModel value="SiegeTank_Commando"/>
-        <PortraitModel value="SiegeTank_Commando_Portrait"/>
+        <PlacementModel value="SiegeTank_Umojan"/>
+        <PortraitModel value="SiegeTank_Umojan_Portrait"/>
         <StandAnimTurnTime value="3.33"/>
         <TerrainSquibs>
             <MovementDistance value="0.150000,0.150000"/>
