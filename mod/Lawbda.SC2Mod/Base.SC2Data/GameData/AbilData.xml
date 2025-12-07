@@ -393,6 +393,19 @@
         <AINotifyEffect value="PrimalHeal"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadMineralInvestmentLarge" Requirements="HaveCapitalismRoad"/>
     </CAbilEffectInstant>
+    <CAbilBehavior id="SquadMedivacMortarLauncherSwitch">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="On" DefaultButtonFace="SquadMedivacMortarLauncher" Requirements="HaveMedivacArmamentStabilizers">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="Off" DefaultButtonFace="SquadMedivacSpiltShell" Requirements="HaveMedivacArmamentStabilizers">
+            <Flags index="ShowInGlossary" value="1"/>
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Flags index="Toggle" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <BehaviorArray value="SquadSiegeTankMortarLauncherSwitch"/>
+    </CAbilBehavior>
     <CAbilEffectInstant id="SquadVespenseInvestmentLarge">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Effect index="0" value="SquadVespenseInvestmentLargeSet"/>
@@ -982,16 +995,16 @@
     </CAbilAugment>
     <CAbilBehavior id="SquadSiegeTankMortarLauncherSwitch">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <CmdButtonArray index="On" DefaultButtonFace="SquadSiegeTankMortarLauncher" Requirements="HaveSiegeTankSiegeWeaponUpgrade">
+        <CmdButtonArray index="On" DefaultButtonFace="SquadSiegeTankSiegedMortarLauncher" Requirements="HaveSiegeTankSiegeWeaponUpgrade">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
-        <CmdButtonArray index="Off" DefaultButtonFace="SquadSiegeTankSpiltShell" Requirements="HaveSiegeTankSiegeWeaponUpgrade">
+        <CmdButtonArray index="Off" DefaultButtonFace="SquadSiegeTankSiegedSpiltShell" Requirements="HaveSiegeTankSiegeWeaponUpgrade">
             <Flags index="ShowInGlossary" value="1"/>
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
         <Flags index="Toggle" value="1"/>
         <Flags index="Transient" value="1"/>
-        <BehaviorArray value="SquadSiegeTankMortarLauncherSwitch"/>
+        <BehaviorArray value="SquadMedivacLauncherSwitch"/>
     </CAbilBehavior>
     <CAbilBehavior id="SquadMisiileTurretHellstormMissileSwitch">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -2637,8 +2650,8 @@
         <MaxCargoCount value="8"/>
         <MaxCargoSize value="8"/>
         <TotalCargoSpace value="8"/>
-        <LoadCargoEffect value="SquadMedivacSiegeTankAirliftAB"/>
-        <UnloadCargoEffect value="SquadMedivacSiegeTankAirliftRB"/>
+        <LoadCargoEffect value="SquadMedivacLoadTransitSwitch"/>
+        <UnloadCargoEffect value="SquadMedivacUnLoadTransitSwitch"/>
         <UnloadPeriod value="0.5"/>
         <TargetFilters value="Visible;Ally,Neutral,Enemy,Buried,UnderConstruction,Dead,Hidden"/>
         <LoadValidatorArray value="NotWidowMineTarget"/>

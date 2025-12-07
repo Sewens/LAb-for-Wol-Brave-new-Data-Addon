@@ -30,15 +30,30 @@
     <CEffectEnumArea default="1" id="SquadAbilSearchRadiusExt" parent="SquadAbilSearch">
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
-    <CEffectApplyBehavior id="SquadMedivacSiegeTankAirliftAB">
+    <CEffectApplyBehavior id="SquadMedivacCrucioShockCannonEnableAB">
         <EditorCategories value=""/>
         <WhichUnit Value="Caster"/>
-        <Behavior value="SquadMedivacSiegeTankAirlift"/>
+        <Behavior value="SquadMedivacCrucioShockCannonEnable"/>
     </CEffectApplyBehavior>
-    <CEffectRemoveBehavior id="SquadMedivacSiegeTankAirliftRB">
+    <CEffectSwitch id="SquadMedivacLoadTransitSwitch">
+        <EditorCategories value="Race:Terran"/>
+        <CaseArray Validator="HaveMedivacArmamentStabilizers" Effect="SquadMedivacSpiltShellEnableAB"/>
+        <CaseDefault value="SquadMedivacCrucioShockCannonEnableAB"/>
+    </CEffectSwitch>
+    <CEffectSwitch id="SquadMedivacUnLoadTransitSwitch">
+        <EditorCategories value="Race:Terran"/>
+        <CaseArray Validator="HaveMedivacArmamentStabilizers" Effect="SquadMedivacSpiltShellEnableRB"/>
+        <CaseDefault value="SquadMedivacCrucioShockCannonEnableRB"/>
+    </CEffectSwitch>
+    <CEffectApplyBehavior id="SquadMedivacSpiltShellEnableAB">
         <EditorCategories value=""/>
         <WhichUnit Value="Caster"/>
-        <BehaviorLink value="SquadMedivacSiegeTankAirlift"/>
+        <Behavior value="SquadMedivacSpiltShellEnable"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="SquadMedivacCrucioShockCannonEnableRB">
+        <EditorCategories value=""/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="SquadMedivacCrucioShockCannonEnable"/>
     </CEffectRemoveBehavior>
     <CEffectSet id="BlackNuclearBlackHolePersistentSet">
         <EditorCategories value=""/>
@@ -98,6 +113,11 @@
         <Death value="Blast"/>
         <SearchFilters value="Ground;Self,Missile,Stasis,Dead,Hidden,Invulnerable"/>
     </CEffectDamage>
+    <CEffectRemoveBehavior id="SquadMedivacSpiltShellEnableRB">
+        <EditorCategories value=""/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="SquadMedivacSpiltShellEnable"/>
+    </CEffectRemoveBehavior>
     <CEffectSet id="SquadMedivacCrucioShockCannonSet">
         <EffectArray value="SquadMedivacCrucioShockCannonDirected"/>
         <EffectArray value="SquadMedivacCrucioShockCannonBlast"/>
