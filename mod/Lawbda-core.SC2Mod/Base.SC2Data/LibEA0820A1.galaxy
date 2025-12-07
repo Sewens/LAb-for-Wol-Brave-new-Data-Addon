@@ -71,29 +71,29 @@ void libEA0820A1_InitVariables () {
     for (init_i = 0; init_i <= 100; init_i += 1) {
         libEA0820A1_gv_tSX_Tech_Status[init_i] = libEA0820A1_ge_StoryTechStates_TechUnavailable;
     }
-    libEA0820A1_gv_TSC_RESEARCH_LAST = ((libEA0820A1_ge_StoryResearchID_ResearchLast) - 1);
+    libEA0820A1_gv_TSC_RESEARCH_LAST = ((libEA0820A1_ge_StoryResearchIDLawbda_ResearchLast) - 1);
     for (init_i = 0; init_i <= 30; init_i += 1) {
-        libEA0820A1_gv_tS_ResearchID[init_i] = libEA0820A1_ge_StoryResearchID_ResearchNone;
+        libEA0820A1_gv_tS_ResearchID_lawbda[init_i] = libEA0820A1_ge_StoryResearchIDLawbda_ResearchNone;
     }
     for (init_i = 0; init_i <= 3; init_i += 1) {
         for (init_j = 0; init_j <= 10; init_j += 1) {
             for (init_k = 0; init_k <= 3; init_k += 1) {
-                libEA0820A1_gv_tS_ResearchIDInUIStructure[init_i][init_j][init_k] = libEA0820A1_ge_StoryResearchID_ResearchNone;
+                libEA0820A1_gv_tS_ResearchIDInUIStructure_lawbda[init_i][init_j][init_k] = libEA0820A1_ge_StoryResearchIDLawbda_ResearchNone;
             }
         }
     }
     for (init_i = 0; init_i <= 30; init_i += 1) {
-        libEA0820A1_gv_tS_ResearchCategory[init_i] = libEA0820A1_ge_StoryResearchCategory_ResearchCategoryNone;
+        libEA0820A1_gv_tS_ResearchCategory_lawbda[init_i] = libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryNone;
     }
     for (init_i = 0; init_i <= 30; init_i += 1) {
-        libEA0820A1_gv_tS_ResearchUIItem[init_i] = c_invalidResearchItemId;
+        libEA0820A1_gv_tS_ResearchUIItem_lawbda[init_i] = c_invalidResearchItemId;
     }
     for (init_i = 0; init_i <= 25; init_i += 1) {
-        libEA0820A1_gv_tS_ResearchObjID[init_i] = libEA0820A1_ge_StoryResearchObject_ResearchObjectNone;
+        libEA0820A1_gv_tS_ResearchObjID_lawbda[init_i] = libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectNone;
     }
     for (init_i = 0; init_i <= 35; init_i += 1) {
         for (init_j = 0; init_j <= 2; init_j += 1) {
-            libEA0820A1_gv_tS_ResearchMissionObjects[init_i][init_j] = libEA0820A1_ge_StoryResearchObject_ResearchObjectNone;
+            libEA0820A1_gv_tS_ResearchMissionObjects_lawbda[init_i][init_j] = libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectNone;
         }
     }
     for (init_i = 0; init_i <= 2; init_i += 1) {
@@ -1668,16 +1668,33 @@ void libEA0820A1_gf_TS_HelpTechTree_UpdatePanel () {
     }
 }
 
+int libEA0820A1_gf_TS_MissionRewardResearchPoints_lawbda (int lp_mission, int lp_researchCategory) {
+    // Automatic Variable Declarations
+    int auto3CA091BC_val;
+
+    // Implementation
+    auto3CA091BC_val = lp_researchCategory;
+    if (auto3CA091BC_val == libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss) {
+        return FixedToInt(ConversationDataStateFixedValue(libCamp_gf_TS_MapConvoID(lp_mission), "ResearchProtoss"));
+    }
+    else if (auto3CA091BC_val == libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg) {
+        return FixedToInt(ConversationDataStateFixedValue(libCamp_gf_TS_MapConvoID(lp_mission), "ResearchZerg"));
+    }
+    else {
+    }
+    return 0;
+}
+
 text libEA0820A1_gf_StoryResearchName (int lp_researchID) {
     // Automatic Variable Declarations
     // Implementation
-    return ConversationDataStateName(libEA0820A1_gv_tS_ResearchConvoID[(lp_researchID)]);
+    return ConversationDataStateName(libEA0820A1_gv_tS_ResearchConvoID_lawbda[(lp_researchID)]);
 }
 
 text libEA0820A1_gf_StoryResearchDescription (int lp_researchID) {
     // Automatic Variable Declarations
     // Implementation
-    return ConversationDataStateText(libEA0820A1_gv_tS_ResearchConvoID[(lp_researchID)], ("Description"));
+    return ConversationDataStateText(libEA0820A1_gv_tS_ResearchConvoID_lawbda[(lp_researchID)], ("Description"));
 }
 
 int libEA0820A1_gf_StoryResearchCategory (int lp_researchID) {
@@ -1685,64 +1702,135 @@ int libEA0820A1_gf_StoryResearchCategory (int lp_researchID) {
     int auto702D8390_val;
 
     // Implementation
-    auto702D8390_val = FixedToInt(ConversationDataStateFixedValue(libEA0820A1_gv_tS_ResearchConvoID[(lp_researchID)], ("Category")));
-    if (auto702D8390_val == (libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss)) {
-        return libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss;
+    auto702D8390_val = FixedToInt(ConversationDataStateFixedValue(libEA0820A1_gv_tS_ResearchConvoID_lawbda[(lp_researchID)], ("Category")));
+    if (auto702D8390_val == (libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss)) {
+        return libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss;
     }
-    else if (auto702D8390_val == (libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg)) {
-        return libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg;
+    else if (auto702D8390_val == (libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg)) {
+        return libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg;
     }
     else {
-        return libEA0820A1_ge_StoryResearchCategory_ResearchCategoryNone;
+        return libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryNone;
     }
 }
 
 string libEA0820A1_gf_StoryResearchIcon (int lp_researchID) {
     // Automatic Variable Declarations
     // Implementation
-    return ConversationDataStateImagePath(libEA0820A1_gv_tS_ResearchConvoID[(lp_researchID)]);
+    return ConversationDataStateImagePath(libEA0820A1_gv_tS_ResearchConvoID_lawbda[(lp_researchID)]);
 }
 
 text libEA0820A1_gf_StoryResearchTooltip (int lp_researchID) {
     // Automatic Variable Declarations
     // Implementation
-    return ConversationDataStateText(libEA0820A1_gv_tS_ResearchConvoID[(lp_researchID)], ("Tooltip"));
+    return ConversationDataStateText(libEA0820A1_gv_tS_ResearchConvoID_lawbda[(lp_researchID)], ("Tooltip"));
 }
 
 text libEA0820A1_gf_StoryResearchConfirmationText (int lp_researchID) {
     // Automatic Variable Declarations
     // Implementation
-    return ConversationDataStateText(libEA0820A1_gv_tS_ResearchConvoID[(lp_researchID)], ("Confirmation"));
+    return ConversationDataStateText(libEA0820A1_gv_tS_ResearchConvoID_lawbda[(lp_researchID)], ("Confirmation"));
 }
 
 string libEA0820A1_gf_StoryResearchMovie (int lp_researchID) {
     // Automatic Variable Declarations
     // Implementation
-    return ConversationDataStateMoviePath(libEA0820A1_gv_tS_ResearchConvoID[(lp_researchID)]);
+    return ConversationDataStateMoviePath(libEA0820A1_gv_tS_ResearchConvoID_lawbda[(lp_researchID)]);
 }
 
 int libEA0820A1_gf_StoryResearchLevelRequirement (int lp_researchID) {
     // Automatic Variable Declarations
     // Implementation
-    return FixedToInt(ConversationDataStateFixedValue(libEA0820A1_gv_tS_ResearchConvoID[(lp_researchID)], ("Required Level")));
+    return FixedToInt(ConversationDataStateFixedValue(libEA0820A1_gv_tS_ResearchConvoID_lawbda[(lp_researchID)], ("Required Level")));
 }
 
 int libEA0820A1_gf_StoryResearchMissionObject (int lp_missionID) {
     // Automatic Variable Declarations
     // Implementation
-    return libEA0820A1_gv_tS_ResearchMissionObjects[(lp_missionID)][0];
+    return libEA0820A1_gv_tS_ResearchMissionObjects_lawbda[(lp_missionID)][0];
 }
 
 int libEA0820A1_gf_StoryResearchMissionProgress (int lp_missionID, int lp_researchCat) {
     // Automatic Variable Declarations
     // Implementation
-    return libEA0820A1_gv_tSX_ResearchMissionProgress[(lp_missionID)][(lp_researchCat)];
+    return libEA0820A1_gv_tSX_ResearchMissionProgress_lawbda[(lp_missionID)][(lp_researchCat)];
 }
 
 bool libEA0820A1_gf_StoryResearchStateCheck (int lp_researchID, int lp_state) {
     // Automatic Variable Declarations
     // Implementation
-    return (libEA0820A1_gv_tSX_ResearchState[(lp_researchID)] == (lp_state));
+    return (libEA0820A1_gv_tSX_ResearchState_lawbda[(lp_researchID)] == (lp_state));
+}
+
+int libEA0820A1_gf_StoryResearchGetAliasResearchID (int lp_researchID) {
+    // Automatic Variable Declarations
+    int auto4854E1EF_val;
+
+    // Implementation
+    auto4854E1EF_val = lp_researchID;
+    if (auto4854E1EF_val == libEA0820A1_ge_StoryResearchIDLawbda_ResearchP11) {
+        return libEA0820A1_ge_StoryResearchIDLawbda_ResearchP12;
+    }
+    else if (auto4854E1EF_val == libEA0820A1_ge_StoryResearchIDLawbda_ResearchP12) {
+        return libEA0820A1_ge_StoryResearchIDLawbda_ResearchP11;
+    }
+    else if (auto4854E1EF_val == libEA0820A1_ge_StoryResearchIDLawbda_ResearchP21) {
+        return libEA0820A1_ge_StoryResearchIDLawbda_ResearchP22;
+    }
+    else if (auto4854E1EF_val == libEA0820A1_ge_StoryResearchIDLawbda_ResearchP22) {
+        return libEA0820A1_ge_StoryResearchIDLawbda_ResearchP21;
+    }
+    else if (auto4854E1EF_val == libEA0820A1_ge_StoryResearchIDLawbda_ResearchP31) {
+        return libEA0820A1_ge_StoryResearchIDLawbda_ResearchP32;
+    }
+    else if (auto4854E1EF_val == libEA0820A1_ge_StoryResearchIDLawbda_ResearchP32) {
+        return libEA0820A1_ge_StoryResearchIDLawbda_ResearchP31;
+    }
+    else if (auto4854E1EF_val == libEA0820A1_ge_StoryResearchIDLawbda_ResearchP41) {
+        return libEA0820A1_ge_StoryResearchIDLawbda_ResearchP42;
+    }
+    else if (auto4854E1EF_val == libEA0820A1_ge_StoryResearchIDLawbda_ResearchP42) {
+        return libEA0820A1_ge_StoryResearchIDLawbda_ResearchP41;
+    }
+    else if (auto4854E1EF_val == libEA0820A1_ge_StoryResearchIDLawbda_ResearchP51) {
+        return libEA0820A1_ge_StoryResearchIDLawbda_ResearchP52;
+    }
+    else if (auto4854E1EF_val == libEA0820A1_ge_StoryResearchIDLawbda_ResearchP52) {
+        return libEA0820A1_ge_StoryResearchIDLawbda_ResearchP51;
+    }
+    else if (auto4854E1EF_val == libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ11) {
+        return libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ12;
+    }
+    else if (auto4854E1EF_val == libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ12) {
+        return libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ11;
+    }
+    else if (auto4854E1EF_val == libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ21) {
+        return libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ22;
+    }
+    else if (auto4854E1EF_val == libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ22) {
+        return libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ21;
+    }
+    else if (auto4854E1EF_val == libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ31) {
+        return libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ32;
+    }
+    else if (auto4854E1EF_val == libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ32) {
+        return libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ31;
+    }
+    else if (auto4854E1EF_val == libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ41) {
+        return libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ42;
+    }
+    else if (auto4854E1EF_val == libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ42) {
+        return libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ41;
+    }
+    else if (auto4854E1EF_val == libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ51) {
+        return libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ52;
+    }
+    else if (auto4854E1EF_val == libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ52) {
+        return libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ51;
+    }
+    else {
+    }
+    return libEA0820A1_ge_StoryResearchIDLawbda_ResearchLast;
 }
 
 int libEA0820A1_gf_StoryResearchPoints (int lp_categeory) {
@@ -1759,10 +1847,10 @@ int libEA0820A1_gf_StoryResearchPoints (int lp_categeory) {
 
     // Implementation
     auto11394955_val = lp_categeory;
-    if (auto11394955_val == libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss) {
+    if (auto11394955_val == libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss) {
         lv_points = FixedToInt(ConversationDataStateFixedValue("LabResearchConstants|ResearchStartPointProt", "Value"));
     }
-    else if (auto11394955_val == libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg) {
+    else if (auto11394955_val == libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg) {
         lv_points = FixedToInt(ConversationDataStateFixedValue("LabResearchConstants|ResearchStartPointZerg", "Value"));
     }
     else {
@@ -1772,6 +1860,7 @@ int libEA0820A1_gf_StoryResearchPoints (int lp_categeory) {
         lv_indexMission = libCamp_gv_tS_MapID[auto7C5F7063_i];
         if ((libCamp_gf_MissionStatusCheck(lv_indexMission, libCamp_ge_MissionStatus_Completed) == true)) {
             lv_points += (libEA0820A1_gf_StoryResearchMissionProgress(lv_indexMission, lp_categeory) * 1);
+            lv_points += libEA0820A1_gf_TS_MissionRewardResearchPoints_lawbda(lv_indexMission, lp_categeory);
         }
 
         auto7C5F7063_i = auto7C5F7063_i + 1;
@@ -1783,13 +1872,13 @@ int libEA0820A1_gf_StoryResearchPoints (int lp_categeory) {
 int libEA0820A1_gf_StoryResearchPointsOld (int lp_categeory) {
     // Automatic Variable Declarations
     // Implementation
-    return libEA0820A1_gv_tSX_ResearchPointsOld[(lp_categeory)];
+    return libEA0820A1_gv_tSX_ResearchPointsOld_lawbda[(lp_categeory)];
 }
 
 int libEA0820A1_gf_StoryResearchPointsConverted (int lp_categeory) {
     // Automatic Variable Declarations
     // Implementation
-    return libEA0820A1_gv_tSX_ResearchPointsConverted[(lp_categeory)];
+    return libEA0820A1_gv_tSX_ResearchPointsConverted_lawbda[(lp_categeory)];
 }
 
 int libEA0820A1_gf_StoryResearchPointCap (int lp_categeory) {
@@ -1798,10 +1887,10 @@ int libEA0820A1_gf_StoryResearchPointCap (int lp_categeory) {
 
     // Implementation
     auto68EEB448_val = lp_categeory;
-    if (auto68EEB448_val == libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss) {
+    if (auto68EEB448_val == libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss) {
         return FixedToInt(ConversationDataStateFixedValue("LabResearchConstants|ResearchPointCapProt", "Value"));
     }
-    else if (auto68EEB448_val == libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg) {
+    else if (auto68EEB448_val == libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg) {
         return FixedToInt(ConversationDataStateFixedValue("LabResearchConstants|ResearchPointCapZerg", "Value"));
     }
     else {
@@ -1818,49 +1907,49 @@ int libEA0820A1_gf_StoryResearchCreditsPerPoint () {
 int libEA0820A1_gf_TS_StoryResearchUIItem (int lp_researchID) {
     // Automatic Variable Declarations
     // Implementation
-    return libEA0820A1_gv_tS_ResearchUIItem[(lp_researchID)];
+    return libEA0820A1_gv_tS_ResearchUIItem_lawbda[(lp_researchID)];
 }
 
 string libEA0820A1_gf_TS_StoryResearchRewardUpgrade1 (int lp_researchID) {
     // Automatic Variable Declarations
     // Implementation
-    return ConversationDataStateUpgrade(libEA0820A1_gv_tS_ResearchConvoID[(lp_researchID)], ("Upgrade 1"));
+    return ConversationDataStateUpgrade(libEA0820A1_gv_tS_ResearchConvoID_lawbda[(lp_researchID)], ("Upgrade 1"));
 }
 
 string libEA0820A1_gf_TS_StoryResearchRewardUpgrade2 (int lp_researchID) {
     // Automatic Variable Declarations
     // Implementation
-    return ConversationDataStateUpgrade(libEA0820A1_gv_tS_ResearchConvoID[(lp_researchID)], ("Upgrade 2"));
+    return ConversationDataStateUpgrade(libEA0820A1_gv_tS_ResearchConvoID_lawbda[(lp_researchID)], ("Upgrade 2"));
 }
 
 abilcmd libEA0820A1_gf_TS_StoryResearchRewardAC1 (int lp_researchID) {
     // Automatic Variable Declarations
     // Implementation
-    return ConversationDataStateAbilCmd(libEA0820A1_gv_tS_ResearchConvoID[(lp_researchID)], ("Ability Command 1"));
+    return ConversationDataStateAbilCmd(libEA0820A1_gv_tS_ResearchConvoID_lawbda[(lp_researchID)], ("Ability Command 1"));
 }
 
 abilcmd libEA0820A1_gf_TS_StoryResearchRewardAC2 (int lp_researchID) {
     // Automatic Variable Declarations
     // Implementation
-    return ConversationDataStateAbilCmd(libEA0820A1_gv_tS_ResearchConvoID[(lp_researchID)], ("Ability Command 2"));
+    return ConversationDataStateAbilCmd(libEA0820A1_gv_tS_ResearchConvoID_lawbda[(lp_researchID)], ("Ability Command 2"));
 }
 
 int libEA0820A1_gf_TS_StoryResearchMissionProgressCurrent (int lp_categeory) {
     // Automatic Variable Declarations
     // Implementation
-    return libEA0820A1_gv_tS_ResearchMissionProgressCurrent[(lp_categeory)];
+    return libEA0820A1_gv_tS_ResearchMissionProgressCurrent_lawbda[(lp_categeory)];
 }
 
 int libEA0820A1_gf_TS_StoryResearchMissionObject (int lp_mission, int lp_index) {
     // Automatic Variable Declarations
     // Implementation
-    return libEA0820A1_gv_tS_ResearchMissionObjects[(lp_mission)][lp_index];
+    return libEA0820A1_gv_tS_ResearchMissionObjects_lawbda[(lp_mission)][lp_index];
 }
 
 int libEA0820A1_gf_TS_StoryResearchMissionObjectCount (int lp_mission, int lp_index) {
     // Automatic Variable Declarations
     // Implementation
-    return libEA0820A1_gv_tS_ResearchMissionObjectCount[(lp_mission)][lp_index];
+    return libEA0820A1_gv_tS_ResearchMissionObjectCount_lawbda[(lp_mission)][lp_index];
 }
 
 int libEA0820A1_gf_TS_StoryResearchMissionMainObjectiveReward (int lp_mission, int lp_category) {
@@ -1881,7 +1970,7 @@ int libEA0820A1_gf_TS_StoryResearchMissionMainObjectiveReward (int lp_mission, i
     auto42D1FA6B_val = lp_mission;
     if (auto42D1FA6B_val == libCamp_ge_MapID_MapTZeratul01) {
         auto2B264589_val = lp_category;
-        if (auto2B264589_val == libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss) {
+        if (auto2B264589_val == libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss) {
             return 3;
         }
         else {
@@ -1889,7 +1978,7 @@ int libEA0820A1_gf_TS_StoryResearchMissionMainObjectiveReward (int lp_mission, i
     }
     else if (auto42D1FA6B_val == libCamp_ge_MapID_MapTZeratul02) {
         auto2B241696_val = lp_category;
-        if (auto2B241696_val == libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg) {
+        if (auto2B241696_val == libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg) {
             return 3;
         }
         else {
@@ -1897,7 +1986,7 @@ int libEA0820A1_gf_TS_StoryResearchMissionMainObjectiveReward (int lp_mission, i
     }
     else if (auto42D1FA6B_val == libCamp_ge_MapID_MapTZeratul03) {
         autoC562F4AA_val = lp_category;
-        if (autoC562F4AA_val == libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg) {
+        if (autoC562F4AA_val == libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg) {
             return 4;
         }
         else {
@@ -1905,7 +1994,7 @@ int libEA0820A1_gf_TS_StoryResearchMissionMainObjectiveReward (int lp_mission, i
     }
     else if (auto42D1FA6B_val == libCamp_ge_MapID_MapTZeratul04) {
         autoFC1EDCD8_val = lp_category;
-        if (autoFC1EDCD8_val == libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg) {
+        if (autoFC1EDCD8_val == libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg) {
             return 3;
         }
         else {
@@ -1946,7 +2035,7 @@ int libEA0820A1_gf_TS_StoryResearchTier (int lp_research) {
 int libEA0820A1_gf_TS_StoryResearchSlot (int lp_research) {
     // Automatic Variable Declarations
     // Implementation
-    return libEA0820A1_gv_tS_ResearchSlot[(lp_research)];
+    return libEA0820A1_gv_tS_ResearchSlot_lawbda[(lp_research)];
 }
 
 int libEA0820A1_gf_TS_StoryResearchTheOtherOfTheSameTier (int lp_research) {
@@ -1962,7 +2051,7 @@ int libEA0820A1_gf_TS_StoryResearchTheOtherOfTheSameTier (int lp_research) {
     lv_catIndex = (libEA0820A1_gf_StoryResearchCategory(lp_research));
     lv_tierIndex = libEA0820A1_gf_TS_StoryResearchTier(lp_research);
     lv_slotIndex = libEA0820A1_gf_TS_StoryResearchSlot(lp_research);
-    return libEA0820A1_gv_tS_ResearchIDInUIStructure[lv_catIndex][lv_tierIndex][(3 - lv_slotIndex)];
+    return libEA0820A1_gv_tS_ResearchIDInUIStructure_lawbda[lv_catIndex][lv_tierIndex][(3 - lv_slotIndex)];
 }
 
 int libEA0820A1_gf_StoryResearchObjectReward (int lp_researchObject, int lp_category) {
@@ -1977,15 +2066,15 @@ int libEA0820A1_gf_StoryResearchObjectReward (int lp_researchObject, int lp_cate
 
     // Implementation
     auto17CC2834_val = lp_category;
-    if (auto17CC2834_val == libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss) {
+    if (auto17CC2834_val == libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss) {
         lv_name = "RewardProtoss";
     }
-    else if (auto17CC2834_val == libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg) {
+    else if (auto17CC2834_val == libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg) {
         lv_name = "RewardZerg";
     }
     else {
     }
-    return FixedToInt(ConversationDataStateFixedValue(libEA0820A1_gv_tS_ResearchObjConvoID[(lp_researchObject)], lv_name));
+    return FixedToInt(ConversationDataStateFixedValue(libEA0820A1_gv_tS_ResearchObjConvoID_lawbda[(lp_researchObject)], lv_name));
 }
 
 text libEA0820A1_gf_StoryResearchSupplementTextForObjective (int lp_researchObject, int lp_style, int lp_total, int lp_progress) {
@@ -1999,30 +2088,30 @@ text libEA0820A1_gf_StoryResearchSupplementTextForObjective (int lp_researchObje
     int autoC363EB53_val;
 
     // Variable Initialization
-    lv_category = libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss;
+    lv_category = libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss;
 
     // Implementation
-    lv_category = libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss;
+    lv_category = libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss;
     lv_reward = libEA0820A1_gf_StoryResearchObjectReward(lp_researchObject, lv_category);
     if ((lv_reward == 0)) {
-        lv_category = libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg;
+        lv_category = libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg;
         lv_reward = libEA0820A1_gf_StoryResearchObjectReward(lp_researchObject, lv_category);
     }
 
     auto68742A8C_val = lp_style;
-    if (auto68742A8C_val == libEA0820A1_ge_StoryResearchObjectiveTextStyle_Multipart) {
+    if (auto68742A8C_val == libEA0820A1_ge_StoryResearchObjectiveTextStyleLawbda_Multipart) {
         lv_text = (lv_text + StringExternal("Param/Value/lib_EA0820A1_CA95D961") + IntToText((lp_progress * lv_reward)) + StringExternal("Param/Value/lib_EA0820A1_FFB8716E") + IntToText((lp_total * lv_reward)) + StringExternal("Param/Value/lib_EA0820A1_71C40474"));
     }
-    else if (auto68742A8C_val == libEA0820A1_ge_StoryResearchObjectiveTextStyle_Lumpsum) {
+    else if (auto68742A8C_val == libEA0820A1_ge_StoryResearchObjectiveTextStyleLawbda_Lumpsum) {
         lv_text = (lv_text);
     }
     else {
     }
     autoC363EB53_val = lv_category;
-    if (autoC363EB53_val == libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss) {
+    if (autoC363EB53_val == libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss) {
         lv_text = (lv_text + StringExternal("Param/Value/lib_EA0820A1_C78F7A67"));
     }
-    else if (autoC363EB53_val == libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg) {
+    else if (autoC363EB53_val == libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg) {
         lv_text = (lv_text + StringExternal("Param/Value/lib_EA0820A1_970B601A"));
     }
     else {
@@ -2045,16 +2134,16 @@ void libEA0820A1_gf_TS_InitializeResearchDataSingle (int lp_iD, string lp_convoI
 
     // Implementation
     lv_researchIndex = (lp_iD);
-    libEA0820A1_gv_tS_ResearchID[lv_researchIndex] = lp_iD;
-    libEA0820A1_gv_tS_ResearchConvoID[lv_researchIndex] = lp_convoID;
-    libEA0820A1_gv_tS_ResearchUIItem[lv_researchIndex] = c_invalidResearchItemId;
+    libEA0820A1_gv_tS_ResearchID_lawbda[lv_researchIndex] = lp_iD;
+    libEA0820A1_gv_tS_ResearchConvoID_lawbda[lv_researchIndex] = lp_convoID;
+    libEA0820A1_gv_tS_ResearchUIItem_lawbda[lv_researchIndex] = c_invalidResearchItemId;
     lv_catIndex = (libEA0820A1_gf_StoryResearchCategory(lp_iD));
     lv_tierIndex = libEA0820A1_gf_TS_StoryResearchTier(lp_iD);
     lv_slotIndex = 1;
     for ( ; ( (auto57621C8E_ai >= 0 && lv_slotIndex <= auto57621C8E_ae) || (auto57621C8E_ai < 0 && lv_slotIndex >= auto57621C8E_ae) ) ; lv_slotIndex += auto57621C8E_ai ) {
-        if ((libEA0820A1_gv_tS_ResearchIDInUIStructure[lv_catIndex][lv_tierIndex][lv_slotIndex] == libEA0820A1_ge_StoryResearchID_ResearchNone)) {
-            libEA0820A1_gv_tS_ResearchIDInUIStructure[lv_catIndex][lv_tierIndex][lv_slotIndex] = lp_iD;
-            libEA0820A1_gv_tS_ResearchSlot[lv_researchIndex] = lv_slotIndex;
+        if ((libEA0820A1_gv_tS_ResearchIDInUIStructure_lawbda[lv_catIndex][lv_tierIndex][lv_slotIndex] == libEA0820A1_ge_StoryResearchIDLawbda_ResearchNone)) {
+            libEA0820A1_gv_tS_ResearchIDInUIStructure_lawbda[lv_catIndex][lv_tierIndex][lv_slotIndex] = lp_iD;
+            libEA0820A1_gv_tS_ResearchSlot_lawbda[lv_researchIndex] = lv_slotIndex;
             break;
         }
 
@@ -2073,69 +2162,69 @@ void libEA0820A1_gf_TS_InitializeResearchData () {
 
     // Implementation
     libEA0820A1_gf_TS_InitializeResearchObjData();
-    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchID_ResearchP11UltraCapacitors, "LabResearch|ResearchP1_1");
-    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchID_ResearchP12VanadiumPlating, "LabResearch|ResearchP1_2");
-    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchID_ResearchP21OrbitalDepots, "LabResearch|ResearchP2_1");
-    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchID_ResearchP22MicroFiltering, "LabResearch|ResearchP2_2");
-    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchID_ResearchP31AutomatedRefinery, "LabResearch|ResearchP3_1");
-    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchID_ResearchP32CommandCenterReactor, "LabResearch|ResearchP3_2");
-    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchID_ResearchP41Raven, "LabResearch|ResearchP4_1");
-    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchID_ResearchP42ScienceVessel, "LabResearch|ResearchP4_2");
-    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchID_ResearchP51TechReactor, "LabResearch|ResearchP5_1");
-    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchID_ResearchP52OrbitalStrike, "LabResearch|ResearchP5_2");
-    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchID_ResearchZ11ShrikeTurret, "LabResearch|ResearchZ1_1");
-    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchID_ResearchZ12FortifiedBunker, "LabResearch|ResearchZ1_2");
-    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchID_ResearchZ21PlanetaryFortress, "LabResearch|ResearchZ2_1");
-    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchID_ResearchZ22PerditionTurret, "LabResearch|ResearchZ2_2");
-    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchID_ResearchZ31Predator, "LabResearch|ResearchZ3_1");
-    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchID_ResearchZ32Hercules, "LabResearch|ResearchZ3_2");
-    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchID_ResearchZ41CellularReactors, "LabResearch|ResearchZ4_1");
-    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchID_ResearchZ42RegenerativeBioSteel, "LabResearch|ResearchZ4_2");
-    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchID_ResearchZ51HiveMindEmulator, "LabResearch|ResearchZ5_1");
-    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchID_ResearchZ52SigmaProjector, "LabResearch|ResearchZ5_2");
-    libEA0820A1_gv_tS_ResearchMissionObjects[(libCamp_ge_MapID_MapTHanson01)][1] = libEA0820A1_ge_StoryResearchObject_ResearchObjectFindChrysalisDNA;
-    libEA0820A1_gv_tS_ResearchMissionObjectCount[(libCamp_ge_MapID_MapTHanson01)][1] = 3;
-    libEA0820A1_gv_tS_ResearchMissionObjects[(libCamp_ge_MapID_MapTHanson02)][1] = libEA0820A1_ge_StoryResearchObject_ResearchObjectKilltheInfestors;
-    libEA0820A1_gv_tS_ResearchMissionObjectCount[(libCamp_ge_MapID_MapTHanson02)][1] = 2;
-    libEA0820A1_gv_tS_ResearchMissionObjects[(libCamp_ge_MapID_MapTHorner01)][1] = libEA0820A1_ge_StoryResearchObject_ResearchObjectFindDefilerBoneSamples;
-    libEA0820A1_gv_tS_ResearchMissionObjectCount[(libCamp_ge_MapID_MapTHorner01)][1] = 3;
-    libEA0820A1_gv_tS_ResearchMissionObjects[(libCamp_ge_MapID_MapTHorner02)][1] = libEA0820A1_ge_StoryResearchObject_ResearchObjectFindProtossRelicContraband;
-    libEA0820A1_gv_tS_ResearchMissionObjectCount[(libCamp_ge_MapID_MapTHorner02)][1] = 3;
-    libEA0820A1_gv_tS_ResearchMissionObjects[(libCamp_ge_MapID_MapTHorner03)][1] = libEA0820A1_ge_StoryResearchObject_ResearchObjectFindDevourerTissueSamples;
-    libEA0820A1_gv_tS_ResearchMissionObjectCount[(libCamp_ge_MapID_MapTHorner03)][1] = 3;
-    libEA0820A1_gv_tS_ResearchMissionObjects[(libCamp_ge_MapID_MapTValerian01)][1] = libEA0820A1_ge_StoryResearchObject_ResearchObjectDestroytheSporeCannons;
-    libEA0820A1_gv_tS_ResearchMissionObjectCount[(libCamp_ge_MapID_MapTValerian01)][1] = 4;
-    libEA0820A1_gv_tS_ResearchMissionObjects[(libCamp_ge_MapID_MapTTychus01)][1] = libEA0820A1_ge_StoryResearchObject_ResearchObjectFindProtossRelics;
-    libEA0820A1_gv_tS_ResearchMissionObjectCount[(libCamp_ge_MapID_MapTTychus01)][1] = 4;
-    libEA0820A1_gv_tS_ResearchMissionObjects[(libCamp_ge_MapID_MapTTychus02)][1] = libEA0820A1_ge_StoryResearchObject_ResearchObjectFindProtossRelics;
-    libEA0820A1_gv_tS_ResearchMissionObjectCount[(libCamp_ge_MapID_MapTTychus02)][1] = 3;
-    libEA0820A1_gv_tS_ResearchMissionObjects[(libCamp_ge_MapID_MapTTychus04)][1] = libEA0820A1_ge_StoryResearchObject_ResearchObjectFindProtossRelics;
-    libEA0820A1_gv_tS_ResearchMissionObjectCount[(libCamp_ge_MapID_MapTTychus04)][1] = 4;
-    libEA0820A1_gv_tS_ResearchMissionObjects[(libCamp_ge_MapID_MapTTosh02)][1] = libEA0820A1_ge_StoryResearchObject_ResearchObjectFindProtossRelics;
-    libEA0820A1_gv_tS_ResearchMissionObjectCount[(libCamp_ge_MapID_MapTTosh02)][1] = 3;
-    libEA0820A1_gv_tS_ResearchMissionObjects[(libCamp_ge_MapID_MapTHorner05S)][2] = libEA0820A1_ge_StoryResearchObject_ResearchObjectFindProtossRelics;
-    libEA0820A1_gv_tS_ResearchMissionObjectCount[(libCamp_ge_MapID_MapTHorner05S)][2] = 4;
-    libEA0820A1_gv_tS_ResearchMissionObjects[(libCamp_ge_MapID_MapTTychus05)][1] = libEA0820A1_ge_StoryResearchObject_ResearchObjectRescuePrisoners;
-    libEA0820A1_gv_tS_ResearchMissionObjectCount[(libCamp_ge_MapID_MapTTychus05)][1] = 4;
-    libEA0820A1_gv_tS_ResearchMissionObjects[(libCamp_ge_MapID_MapTTosh01)][1] = libEA0820A1_ge_StoryResearchObject_ResearchObjectKilltheBrutalisk;
-    libEA0820A1_gv_tS_ResearchMissionObjectCount[(libCamp_ge_MapID_MapTTosh01)][1] = 1;
-    libEA0820A1_gv_tS_ResearchMissionObjects[(libCamp_ge_MapID_MapTTychus03)][1] = libEA0820A1_ge_StoryResearchObject_ResearchObjectKilltheBrutalisk;
-    libEA0820A1_gv_tS_ResearchMissionObjectCount[(libCamp_ge_MapID_MapTTychus03)][1] = 1;
-    libEA0820A1_gv_tS_ResearchMissionObjects[(libCamp_ge_MapID_MapTHorner05S)][1] = libEA0820A1_ge_StoryResearchObject_ResearchObjectKilltheBrutalisk;
-    libEA0820A1_gv_tS_ResearchMissionObjectCount[(libCamp_ge_MapID_MapTHorner05S)][1] = 1;
-    libEA0820A1_gv_tS_ResearchMissionObjects[(libCamp_ge_MapID_MapTZeratul01)][1] = libEA0820A1_ge_StoryResearchObject_ResearchObjectDestroyHatcheries;
-    libEA0820A1_gv_tS_ResearchMissionObjectCount[(libCamp_ge_MapID_MapTZeratul01)][1] = 3;
-    libEA0820A1_gv_tS_ResearchMissionObjects[(libCamp_ge_MapID_MapTZeratul02)][1] = libEA0820A1_ge_StoryResearchObject_ResearchObjectPowertheAbandonedStructure;
-    libEA0820A1_gv_tS_ResearchMissionObjectCount[(libCamp_ge_MapID_MapTZeratul02)][1] = 3;
-    libEA0820A1_gv_tS_ResearchMissionObjects[(libCamp_ge_MapID_MapTZeratul03)][1] = libEA0820A1_ge_StoryResearchObject_ResearchObjectPowertheObelisks;
-    libEA0820A1_gv_tS_ResearchMissionObjectCount[(libCamp_ge_MapID_MapTZeratul03)][1] = 2;
-    libEA0820A1_gv_tS_ResearchMissionObjects[(libCamp_ge_MapID_MapTZeratul04)][1] = libEA0820A1_ge_StoryResearchObject_ResearchObjectProtecttheArchive;
-    libEA0820A1_gv_tS_ResearchMissionObjectCount[(libCamp_ge_MapID_MapTZeratul04)][1] = 1;
+    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchIDLawbda_ResearchP11, "LabResearch|ResearchP1_1");
+    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchIDLawbda_ResearchP12, "LabResearch|ResearchP1_2");
+    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchIDLawbda_ResearchP21, "LabResearch|ResearchP2_1");
+    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchIDLawbda_ResearchP22, "LabResearch|ResearchP2_2");
+    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchIDLawbda_ResearchP31, "LabResearch|ResearchP3_1");
+    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchIDLawbda_ResearchP32, "LabResearch|ResearchP3_2");
+    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchIDLawbda_ResearchP41, "LabResearch|ResearchP4_1");
+    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchIDLawbda_ResearchP42, "LabResearch|ResearchP4_2");
+    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchIDLawbda_ResearchP51, "LabResearch|ResearchP5_1");
+    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchIDLawbda_ResearchP52, "LabResearch|ResearchP5_2");
+    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ11, "LabResearch|ResearchZ1_1");
+    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ12, "LabResearch|ResearchZ1_2");
+    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ21, "LabResearch|ResearchZ2_1");
+    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ22, "LabResearch|ResearchZ2_2");
+    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ31, "LabResearch|ResearchZ3_1");
+    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ32, "LabResearch|ResearchZ3_2");
+    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ41, "LabResearch|ResearchZ4_1");
+    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ42, "LabResearch|ResearchZ4_2");
+    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ51, "LabResearch|ResearchZ5_1");
+    libEA0820A1_gf_TS_InitializeResearchDataSingle(libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ52, "LabResearch|ResearchZ5_2");
+    libEA0820A1_gv_tS_ResearchMissionObjects_lawbda[(libCamp_ge_MapID_MapTHanson01)][1] = libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectFindChrysalisDNA;
+    libEA0820A1_gv_tS_ResearchMissionObjectCount_lawbda[(libCamp_ge_MapID_MapTHanson01)][1] = 3;
+    libEA0820A1_gv_tS_ResearchMissionObjects_lawbda[(libCamp_ge_MapID_MapTHanson02)][1] = libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectKilltheInfestors;
+    libEA0820A1_gv_tS_ResearchMissionObjectCount_lawbda[(libCamp_ge_MapID_MapTHanson02)][1] = 2;
+    libEA0820A1_gv_tS_ResearchMissionObjects_lawbda[(libCamp_ge_MapID_MapTHorner01)][1] = libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectFindDefilerBoneSamples;
+    libEA0820A1_gv_tS_ResearchMissionObjectCount_lawbda[(libCamp_ge_MapID_MapTHorner01)][1] = 3;
+    libEA0820A1_gv_tS_ResearchMissionObjects_lawbda[(libCamp_ge_MapID_MapTHorner02)][1] = libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectFindProtossRelicContraband;
+    libEA0820A1_gv_tS_ResearchMissionObjectCount_lawbda[(libCamp_ge_MapID_MapTHorner02)][1] = 3;
+    libEA0820A1_gv_tS_ResearchMissionObjects_lawbda[(libCamp_ge_MapID_MapTHorner03)][1] = libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectFindDevourerTissueSamples;
+    libEA0820A1_gv_tS_ResearchMissionObjectCount_lawbda[(libCamp_ge_MapID_MapTHorner03)][1] = 3;
+    libEA0820A1_gv_tS_ResearchMissionObjects_lawbda[(libCamp_ge_MapID_MapTValerian01)][1] = libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectDestroytheSporeCannons;
+    libEA0820A1_gv_tS_ResearchMissionObjectCount_lawbda[(libCamp_ge_MapID_MapTValerian01)][1] = 4;
+    libEA0820A1_gv_tS_ResearchMissionObjects_lawbda[(libCamp_ge_MapID_MapTTychus01)][1] = libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectFindProtossRelics;
+    libEA0820A1_gv_tS_ResearchMissionObjectCount_lawbda[(libCamp_ge_MapID_MapTTychus01)][1] = 4;
+    libEA0820A1_gv_tS_ResearchMissionObjects_lawbda[(libCamp_ge_MapID_MapTTychus02)][1] = libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectFindProtossRelics;
+    libEA0820A1_gv_tS_ResearchMissionObjectCount_lawbda[(libCamp_ge_MapID_MapTTychus02)][1] = 3;
+    libEA0820A1_gv_tS_ResearchMissionObjects_lawbda[(libCamp_ge_MapID_MapTTychus04)][1] = libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectFindProtossRelics;
+    libEA0820A1_gv_tS_ResearchMissionObjectCount_lawbda[(libCamp_ge_MapID_MapTTychus04)][1] = 4;
+    libEA0820A1_gv_tS_ResearchMissionObjects_lawbda[(libCamp_ge_MapID_MapTTosh02)][1] = libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectFindProtossRelics;
+    libEA0820A1_gv_tS_ResearchMissionObjectCount_lawbda[(libCamp_ge_MapID_MapTTosh02)][1] = 3;
+    libEA0820A1_gv_tS_ResearchMissionObjects_lawbda[(libCamp_ge_MapID_MapTHorner05S)][2] = libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectFindProtossRelics;
+    libEA0820A1_gv_tS_ResearchMissionObjectCount_lawbda[(libCamp_ge_MapID_MapTHorner05S)][2] = 4;
+    libEA0820A1_gv_tS_ResearchMissionObjects_lawbda[(libCamp_ge_MapID_MapTTychus05)][1] = libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectRescuePrisoners;
+    libEA0820A1_gv_tS_ResearchMissionObjectCount_lawbda[(libCamp_ge_MapID_MapTTychus05)][1] = 4;
+    libEA0820A1_gv_tS_ResearchMissionObjects_lawbda[(libCamp_ge_MapID_MapTTosh01)][1] = libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectKilltheBrutalisk;
+    libEA0820A1_gv_tS_ResearchMissionObjectCount_lawbda[(libCamp_ge_MapID_MapTTosh01)][1] = 1;
+    libEA0820A1_gv_tS_ResearchMissionObjects_lawbda[(libCamp_ge_MapID_MapTTychus03)][1] = libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectKilltheBrutalisk;
+    libEA0820A1_gv_tS_ResearchMissionObjectCount_lawbda[(libCamp_ge_MapID_MapTTychus03)][1] = 1;
+    libEA0820A1_gv_tS_ResearchMissionObjects_lawbda[(libCamp_ge_MapID_MapTHorner05S)][1] = libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectKilltheBrutalisk;
+    libEA0820A1_gv_tS_ResearchMissionObjectCount_lawbda[(libCamp_ge_MapID_MapTHorner05S)][1] = 1;
+    libEA0820A1_gv_tS_ResearchMissionObjects_lawbda[(libCamp_ge_MapID_MapTZeratul01)][1] = libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectDestroyHatcheries;
+    libEA0820A1_gv_tS_ResearchMissionObjectCount_lawbda[(libCamp_ge_MapID_MapTZeratul01)][1] = 3;
+    libEA0820A1_gv_tS_ResearchMissionObjects_lawbda[(libCamp_ge_MapID_MapTZeratul02)][1] = libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectPowertheAbandonedStructure;
+    libEA0820A1_gv_tS_ResearchMissionObjectCount_lawbda[(libCamp_ge_MapID_MapTZeratul02)][1] = 3;
+    libEA0820A1_gv_tS_ResearchMissionObjects_lawbda[(libCamp_ge_MapID_MapTZeratul03)][1] = libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectPowertheObelisks;
+    libEA0820A1_gv_tS_ResearchMissionObjectCount_lawbda[(libCamp_ge_MapID_MapTZeratul03)][1] = 2;
+    libEA0820A1_gv_tS_ResearchMissionObjects_lawbda[(libCamp_ge_MapID_MapTZeratul04)][1] = libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectProtecttheArchive;
+    libEA0820A1_gv_tS_ResearchMissionObjectCount_lawbda[(libCamp_ge_MapID_MapTZeratul04)][1] = 1;
     auto6ABD6992_i = libCamp_gv_TSC_MISSION_FIRST;
     while (auto6ABD6992_i <= libCamp_gv_TSC_MISSION_LAST) {
         lv_indexMission = libCamp_gv_tS_MapID[auto6ABD6992_i];
-        libEA0820A1_gv_tSX_ResearchMissionProgress[(lv_indexMission)][(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss)] = 0;
-        libEA0820A1_gv_tSX_ResearchMissionProgress[(lv_indexMission)][(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg)] = 0;
+        libEA0820A1_gv_tSX_ResearchMissionProgress_lawbda[(lv_indexMission)][(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss)] = 0;
+        libEA0820A1_gv_tSX_ResearchMissionProgress_lawbda[(lv_indexMission)][(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg)] = 0;
         auto6ABD6992_i = auto6ABD6992_i + 1;
     }
 }
@@ -2149,33 +2238,33 @@ void libEA0820A1_gf_TS_InitializeResearchObjDataSingle (int lp_iD, string lp_con
 
     // Implementation
     lv_researchObjIndex = (lp_iD);
-    libEA0820A1_gv_tS_ResearchObjID[lv_researchObjIndex] = lp_iD;
-    libEA0820A1_gv_tS_ResearchObjConvoID[lv_researchObjIndex] = lp_convoID;
+    libEA0820A1_gv_tS_ResearchObjID_lawbda[lv_researchObjIndex] = lp_iD;
+    libEA0820A1_gv_tS_ResearchObjConvoID_lawbda[lv_researchObjIndex] = lp_convoID;
 }
 
 void libEA0820A1_gf_TS_InitializeResearchObjData () {
     // Automatic Variable Declarations
     // Implementation
-    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObject_ResearchObjectFindChrysalisDNA, "LabResearchObject|FindChrysalisDNA");
-    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObject_ResearchObjectKilltheInfestors, "LabResearchObject|KillInfestors");
-    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObject_ResearchObjectDestroyHatcheries, "LabResearchObject|DestroyHatcheries");
-    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObject_ResearchObjectFindDefilerBoneSamples, "LabResearchObject|FindDefilerBoneSamples");
-    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObject_ResearchObjectFindDevourerTissueSamples, "LabResearchObject|FindCerebrateTissueSamples");
-    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObject_ResearchObjectDestroytheSporeCannons, "LabResearchObject|KillSporeCannons");
-    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObject_ResearchObjectDestroythePreserverPrisons, "LabResearchObject|DestroyPreserverPrisons");
-    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObject_ResearchObjectOvermindTendrils, "LabResearchObject|OvermindTendrils");
-    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObject_ResearchObjectKill1500Zerg, "LabResearchObject|Kill1500Zerg");
-    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObject_ResearchObjectKilltheBrutalisk, "LabResearchObject|KillBrutalisk");
-    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObject_ResearchObjectKilltheBrutalisk, "LabResearchObject|KillBrutalisk");
-    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObject_ResearchObjectKilltheBrutalisk, "LabResearchObject|KillBrutalisk");
-    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObject_ResearchObjectFindProtossRelics, "LabResearchObject|FindProtossRelic");
-    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObject_ResearchObjectFindProtossRelicContraband, "LabResearchObject|FindProtossRelicContraband");
-    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObject_ResearchObjectPowertheAbandonedStructure, "LabResearchObject|PowerupAbandonedStructure");
-    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObject_ResearchObjectPowertheObelisks, "LabResearchObject|PowerupAncientObelisk");
-    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObject_ResearchObjectFindtheProtossPsiElements, "LabResearchObject|FindProtossPsiElements");
-    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObject_ResearchObjectVisittheShrines, "LabResearchObject|VisitEachShrine");
-    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObject_ResearchObjectProtecttheArchive, "LabResearchObject|ProtectArchive");
-    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObject_ResearchObjectRescuePrisoners, "LabResearchObject|ReleasePrisoners");
+    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectFindChrysalisDNA, "LabResearchObject|FindChrysalisDNA");
+    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectKilltheInfestors, "LabResearchObject|KillInfestors");
+    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectDestroyHatcheries, "LabResearchObject|DestroyHatcheries");
+    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectFindDefilerBoneSamples, "LabResearchObject|FindDefilerBoneSamples");
+    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectFindDevourerTissueSamples, "LabResearchObject|FindCerebrateTissueSamples");
+    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectDestroytheSporeCannons, "LabResearchObject|KillSporeCannons");
+    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectDestroythePreserverPrisons, "LabResearchObject|DestroyPreserverPrisons");
+    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectOvermindTendrils, "LabResearchObject|OvermindTendrils");
+    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectKill1500Zerg, "LabResearchObject|Kill1500Zerg");
+    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectKilltheBrutalisk, "LabResearchObject|KillBrutalisk");
+    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectKilltheBrutalisk, "LabResearchObject|KillBrutalisk");
+    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectKilltheBrutalisk, "LabResearchObject|KillBrutalisk");
+    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectFindProtossRelics, "LabResearchObject|FindProtossRelic");
+    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectFindProtossRelicContraband, "LabResearchObject|FindProtossRelicContraband");
+    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectPowertheAbandonedStructure, "LabResearchObject|PowerupAbandonedStructure");
+    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectPowertheObelisks, "LabResearchObject|PowerupAncientObelisk");
+    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectFindtheProtossPsiElements, "LabResearchObject|FindProtossPsiElements");
+    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectVisittheShrines, "LabResearchObject|VisitEachShrine");
+    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectProtecttheArchive, "LabResearchObject|ProtectArchive");
+    libEA0820A1_gf_TS_InitializeResearchObjDataSingle(libEA0820A1_ge_StoryResearchObjectLawbda_ResearchObjectRescuePrisoners, "LabResearchObject|ReleasePrisoners");
 }
 
 void libEA0820A1_gf_TS_ResetResearchData () {
@@ -2188,7 +2277,7 @@ void libEA0820A1_gf_TS_ResetResearchData () {
     int auto9B138DF6_i;
 
     // Variable Initialization
-    lv_indexResearch = libEA0820A1_ge_StoryResearchID_ResearchNone;
+    lv_indexResearch = libEA0820A1_ge_StoryResearchIDLawbda_ResearchNone;
     lv_indexMission = libCamp_ge_MapID_MapNone;
 
     // Implementation
@@ -2198,21 +2287,21 @@ void libEA0820A1_gf_TS_ResetResearchData () {
         auto9B138DF6_i = libCamp_gv_TSC_MISSION_FIRST;
         while (auto9B138DF6_i <= libCamp_gv_TSC_MISSION_LAST) {
             lv_indexMission = libCamp_gv_tS_MapID[auto9B138DF6_i];
-            libEA0820A1_gv_tSX_ResearchMissionProgress[(lv_indexResearch)][(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss)] = 0;
-            libEA0820A1_gv_tSX_ResearchMissionProgress[(lv_indexResearch)][(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg)] = 0;
+            libEA0820A1_gv_tSX_ResearchMissionProgress_lawbda[(lv_indexResearch)][(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss)] = 0;
+            libEA0820A1_gv_tSX_ResearchMissionProgress_lawbda[(lv_indexResearch)][(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg)] = 0;
             auto9B138DF6_i = auto9B138DF6_i + 1;
         }
-        libEA0820A1_gv_tSX_ResearchState[(lv_indexResearch)] = (libEA0820A1_ge_StoryResearchState_ResearchStateAvailable);
+        libEA0820A1_gv_tSX_ResearchState_lawbda[(lv_indexResearch)] = (libEA0820A1_ge_StoryResearchStateLawbda_ResearchStateAvailable);
         auto9996140E_i = auto9996140E_i + 1;
     }
-    libEA0820A1_gv_tS_ResearchMissionProgressCurrent[(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss)] = 0;
-    libEA0820A1_gv_tS_ResearchMissionProgressCurrent[(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg)] = 0;
-    libCamp_gv_tSX_DebugResearchLevel[(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss)] = 0;
-    libCamp_gv_tSX_DebugResearchLevel[(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg)] = 0;
-    libEA0820A1_gv_tSX_ResearchPointsConverted[(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss)] = 0;
-    libEA0820A1_gv_tSX_ResearchPointsConverted[(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg)] = 0;
-    libEA0820A1_gv_tSX_ResearchUIOldPoints[(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss)] = 0;
-    libEA0820A1_gv_tSX_ResearchUIOldPoints[(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg)] = 0;
+    libEA0820A1_gv_tS_ResearchMissionProgressCurrent_lawbda[(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss)] = 0;
+    libEA0820A1_gv_tS_ResearchMissionProgressCurrent_lawbda[(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg)] = 0;
+    libCamp_gv_tSX_DebugResearchLevel[(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss)] = 0;
+    libCamp_gv_tSX_DebugResearchLevel[(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg)] = 0;
+    libEA0820A1_gv_tSX_ResearchPointsConverted_lawbda[(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss)] = 0;
+    libEA0820A1_gv_tSX_ResearchPointsConverted_lawbda[(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg)] = 0;
+    libEA0820A1_gv_tSX_ResearchUIOldPoints[(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss)] = 0;
+    libEA0820A1_gv_tSX_ResearchUIOldPoints[(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg)] = 0;
 }
 
 void libEA0820A1_gf_TS_ApplyResearchesTech (int lp_player) {
@@ -2223,25 +2312,22 @@ void libEA0820A1_gf_TS_ApplyResearchesTech (int lp_player) {
 
     // Automatic Variable Declarations
     int autoD5568A63_i;
-    unitgroup auto106456F3_g;
-    int auto106456F3_u;
-    unit auto106456F3_var;
 
     // Variable Initialization
-    lv_indexResearch = libEA0820A1_ge_StoryResearchID_ResearchNone;
+    lv_indexResearch = libEA0820A1_ge_StoryResearchIDLawbda_ResearchNone;
     lv_allowDisallow = true;
 
     // Implementation
     autoD5568A63_i = libCamp_gv_TSC_RESEARCH_FIRST;
     while (autoD5568A63_i <= libCamp_gv_TSC_RESEARCH_LAST) {
         lv_indexResearch = libCamp_gv_tS_ResearchID[autoD5568A63_i];
-        if ((libEA0820A1_gf_StoryResearchStateCheck(lv_indexResearch, libEA0820A1_ge_StoryResearchState_ResearchStatePurchased) == true)) {
+        if ((libEA0820A1_gf_StoryResearchStateCheck(lv_indexResearch, libEA0820A1_ge_StoryResearchStateLawbda_ResearchStatePurchased) == true)) {
             lv_level = 1;
             lv_allowDisallow = true;
         }
         else {
             lv_level = 0;
-            lv_allowDisallow = false;
+            lv_allowDisallow = true;
         }
         if ((libEA0820A1_gf_TS_StoryResearchRewardUpgrade1(lv_indexResearch) != null)) {
             libNtve_gf_SetUpgradeLevelForPlayer(lp_player, libEA0820A1_gf_TS_StoryResearchRewardUpgrade1(lv_indexResearch), lv_level);
@@ -2261,57 +2347,46 @@ void libEA0820A1_gf_TS_ApplyResearchesTech (int lp_player) {
 
         autoD5568A63_i = autoD5568A63_i + 1;
     }
-    libCamp_gf_TS_UpdateTechAddons(lp_player);
-    libCamp_gf_TS_UpdateTechUpgrades(lp_player);
-    libEA0820A1_gf_TS_UpdateResearchUnitHelpPanel(lp_player);
-    if ((TechTreeUpgradeCount(lp_player, "CellularReactors", c_techCountQueuedOrBetter) == 1)) {
-        auto106456F3_g = UnitGroup(null, lp_player, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterStructure) | (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32))), 0);
-        auto106456F3_u = UnitGroupCount(auto106456F3_g, c_unitCountAll);
-        for (;; auto106456F3_u -= 1) {
-            auto106456F3_var = UnitGroupUnitFromEnd(auto106456F3_g, auto106456F3_u);
-            if (auto106456F3_var == null) { break; }
-            UnitSetPropertyFixed(auto106456F3_var, c_unitPropEnergy, (UnitGetPropertyFixed(auto106456F3_var, c_unitPropEnergy, c_unitPropCurrent) + 100.0));
-        }
-    }
-
+    libEA0820A1_gf_TS_UpdateTechAddons(lp_player);
+    libEA0820A1_gf_TS_UpdateTechUpgrades(lp_player);
 }
 
 void libEA0820A1_gf_TS_UpdateResearchUnitHelpPanel (int lp_player) {
     // Automatic Variable Declarations
     // Implementation
-    if ((libEA0820A1_gf_StoryResearchStateCheck(libEA0820A1_ge_StoryResearchID_ResearchP41Raven, libEA0820A1_ge_StoryResearchState_ResearchStatePurchased) == true)) {
+    if ((libEA0820A1_gf_StoryResearchStateCheck(libEA0820A1_ge_StoryResearchIDLawbda_ResearchP41, libEA0820A1_ge_StoryResearchStateLawbda_ResearchStatePurchased) == true)) {
         libCamp_gf_AddUnitTypeToUnitHelpPanel("Raven", true, lp_player);
     }
 
-    if ((libEA0820A1_gf_StoryResearchStateCheck(libEA0820A1_ge_StoryResearchID_ResearchP42ScienceVessel, libEA0820A1_ge_StoryResearchState_ResearchStatePurchased) == true)) {
+    if ((libEA0820A1_gf_StoryResearchStateCheck(libEA0820A1_ge_StoryResearchIDLawbda_ResearchP42, libEA0820A1_ge_StoryResearchStateLawbda_ResearchStatePurchased) == true)) {
         libCamp_gf_AddUnitTypeToUnitHelpPanel("ScienceVessel", true, lp_player);
     }
 
-    if ((libEA0820A1_gf_StoryResearchStateCheck(libEA0820A1_ge_StoryResearchID_ResearchP51TechReactor, libEA0820A1_ge_StoryResearchState_ResearchStatePurchased) == true)) {
+    if ((libEA0820A1_gf_StoryResearchStateCheck(libEA0820A1_ge_StoryResearchIDLawbda_ResearchP51, libEA0820A1_ge_StoryResearchStateLawbda_ResearchStatePurchased) == true)) {
         libCamp_gf_AddUnitTypeToUnitHelpPanel("TechReactor", true, lp_player);
     }
 
-    if ((libEA0820A1_gf_StoryResearchStateCheck(libEA0820A1_ge_StoryResearchID_ResearchZ21PlanetaryFortress, libEA0820A1_ge_StoryResearchState_ResearchStatePurchased) == true)) {
+    if ((libEA0820A1_gf_StoryResearchStateCheck(libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ21, libEA0820A1_ge_StoryResearchStateLawbda_ResearchStatePurchased) == true)) {
         libCamp_gf_AddUnitTypeToUnitHelpPanel("PlanetaryFortress", true, lp_player);
     }
 
-    if ((libEA0820A1_gf_StoryResearchStateCheck(libEA0820A1_ge_StoryResearchID_ResearchZ22PerditionTurret, libEA0820A1_ge_StoryResearchState_ResearchStatePurchased) == true)) {
+    if ((libEA0820A1_gf_StoryResearchStateCheck(libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ22, libEA0820A1_ge_StoryResearchStateLawbda_ResearchStatePurchased) == true)) {
         libCamp_gf_AddUnitTypeToUnitHelpPanel("PerditionTurret", true, lp_player);
     }
 
-    if ((libEA0820A1_gf_StoryResearchStateCheck(libEA0820A1_ge_StoryResearchID_ResearchZ31Predator, libEA0820A1_ge_StoryResearchState_ResearchStatePurchased) == true)) {
+    if ((libEA0820A1_gf_StoryResearchStateCheck(libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ31, libEA0820A1_ge_StoryResearchStateLawbda_ResearchStatePurchased) == true)) {
         libCamp_gf_AddUnitTypeToUnitHelpPanel("Predator", true, lp_player);
     }
 
-    if ((libEA0820A1_gf_StoryResearchStateCheck(libEA0820A1_ge_StoryResearchID_ResearchZ32Hercules, libEA0820A1_ge_StoryResearchState_ResearchStatePurchased) == true)) {
+    if ((libEA0820A1_gf_StoryResearchStateCheck(libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ32, libEA0820A1_ge_StoryResearchStateLawbda_ResearchStatePurchased) == true)) {
         libCamp_gf_AddUnitTypeToUnitHelpPanel("Hercules", true, lp_player);
     }
 
-    if ((libEA0820A1_gf_StoryResearchStateCheck(libEA0820A1_ge_StoryResearchID_ResearchZ51HiveMindEmulator, libEA0820A1_ge_StoryResearchState_ResearchStatePurchased) == true)) {
+    if ((libEA0820A1_gf_StoryResearchStateCheck(libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ51, libEA0820A1_ge_StoryResearchStateLawbda_ResearchStatePurchased) == true)) {
         libCamp_gf_AddUnitTypeToUnitHelpPanel("HiveMindEmulator", true, lp_player);
     }
 
-    if ((libEA0820A1_gf_StoryResearchStateCheck(libEA0820A1_ge_StoryResearchID_ResearchZ52SigmaProjector, libEA0820A1_ge_StoryResearchState_ResearchStatePurchased) == true)) {
+    if ((libEA0820A1_gf_StoryResearchStateCheck(libEA0820A1_ge_StoryResearchIDLawbda_ResearchZ52, libEA0820A1_ge_StoryResearchStateLawbda_ResearchStatePurchased) == true)) {
         libCamp_gf_AddUnitTypeToUnitHelpPanel("PsiDisruptor", true, lp_player);
     }
 
@@ -2320,20 +2395,20 @@ void libEA0820A1_gf_TS_UpdateResearchUnitHelpPanel (int lp_player) {
 void libEA0820A1_gf_AddProgressToStoryResearch (int lp_researchObject, int lp_count) {
     // Automatic Variable Declarations
     // Implementation
-    libEA0820A1_gv_tS_ResearchMissionProgressCurrent[(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss)] += (lp_count * libEA0820A1_gf_StoryResearchObjectReward(lp_researchObject, libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss));
-    libEA0820A1_gv_tS_ResearchMissionProgressCurrent[(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg)] += (lp_count * libEA0820A1_gf_StoryResearchObjectReward(lp_researchObject, libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg));
-    TriggerDebugOutput(1, (StringExternal("Param/Value/lib_EA0820A1_E65B5FEE") + IntToText(libEA0820A1_gv_tS_ResearchMissionProgressCurrent[(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg)])), false);
-    TriggerDebugOutput(1, (StringExternal("Param/Value/lib_EA0820A1_9FC48590") + IntToText(libEA0820A1_gf_StoryResearchMissionProgress(libCamp_gv_tS_CurrentMap, libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg))), false);
-    TriggerDebugOutput(1, (StringExternal("Param/Value/lib_EA0820A1_AAA87E03") + IntToText(libEA0820A1_gv_tS_ResearchMissionProgressCurrent[(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss)])), false);
-    TriggerDebugOutput(1, (StringExternal("Param/Value/lib_EA0820A1_82049B55") + IntToText(libEA0820A1_gf_StoryResearchMissionProgress(libCamp_gv_tS_CurrentMap, libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss))), false);
-    if ((libEA0820A1_gf_TS_StoryResearchMissionProgressCurrent(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss) > libEA0820A1_gf_StoryResearchMissionProgress(libCamp_gv_tS_CurrentMap, libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss))) {
-        libEA0820A1_gv_tSX_ResearchMissionProgress[(libCamp_gv_tS_CurrentMap)][(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss)] = libEA0820A1_gf_TS_StoryResearchMissionProgressCurrent(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss);
-        TriggerDebugOutput(1, (StringExternal("Param/Value/lib_EA0820A1_A228AC32") + IntToText(libEA0820A1_gf_StoryResearchMissionProgress(libCamp_gv_tS_CurrentMap, libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss))), false);
+    libEA0820A1_gv_tS_ResearchMissionProgressCurrent_lawbda[(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss)] += (lp_count * libEA0820A1_gf_StoryResearchObjectReward(lp_researchObject, libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss));
+    libEA0820A1_gv_tS_ResearchMissionProgressCurrent_lawbda[(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg)] += (lp_count * libEA0820A1_gf_StoryResearchObjectReward(lp_researchObject, libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg));
+    TriggerDebugOutput(1, (StringExternal("Param/Value/lib_EA0820A1_E65B5FEE") + IntToText(libEA0820A1_gv_tS_ResearchMissionProgressCurrent_lawbda[(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg)])), false);
+    TriggerDebugOutput(1, (StringExternal("Param/Value/lib_EA0820A1_9FC48590") + IntToText(libEA0820A1_gf_StoryResearchMissionProgress(libCamp_gv_tS_CurrentMap, libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg))), false);
+    TriggerDebugOutput(1, (StringExternal("Param/Value/lib_EA0820A1_AAA87E03") + IntToText(libEA0820A1_gv_tS_ResearchMissionProgressCurrent_lawbda[(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss)])), false);
+    TriggerDebugOutput(1, (StringExternal("Param/Value/lib_EA0820A1_82049B55") + IntToText(libEA0820A1_gf_StoryResearchMissionProgress(libCamp_gv_tS_CurrentMap, libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss))), false);
+    if ((libEA0820A1_gf_TS_StoryResearchMissionProgressCurrent(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss) > libEA0820A1_gf_StoryResearchMissionProgress(libCamp_gv_tS_CurrentMap, libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss))) {
+        libEA0820A1_gv_tSX_ResearchMissionProgress_lawbda[(libCamp_gv_tS_CurrentMap)][(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss)] = libEA0820A1_gf_TS_StoryResearchMissionProgressCurrent(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss);
+        TriggerDebugOutput(1, (StringExternal("Param/Value/lib_EA0820A1_A228AC32") + IntToText(libEA0820A1_gf_StoryResearchMissionProgress(libCamp_gv_tS_CurrentMap, libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss))), false);
     }
 
-    if ((libEA0820A1_gf_TS_StoryResearchMissionProgressCurrent(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg) > libEA0820A1_gf_StoryResearchMissionProgress(libCamp_gv_tS_CurrentMap, libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg))) {
-        libEA0820A1_gv_tSX_ResearchMissionProgress[(libCamp_gv_tS_CurrentMap)][(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg)] = libEA0820A1_gf_TS_StoryResearchMissionProgressCurrent(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg);
-        TriggerDebugOutput(1, (StringExternal("Param/Value/lib_EA0820A1_159AC301") + IntToText(libEA0820A1_gf_StoryResearchMissionProgress(libCamp_gv_tS_CurrentMap, libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg))), false);
+    if ((libEA0820A1_gf_TS_StoryResearchMissionProgressCurrent(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg) > libEA0820A1_gf_StoryResearchMissionProgress(libCamp_gv_tS_CurrentMap, libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg))) {
+        libEA0820A1_gv_tSX_ResearchMissionProgress_lawbda[(libCamp_gv_tS_CurrentMap)][(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg)] = libEA0820A1_gf_TS_StoryResearchMissionProgressCurrent(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg);
+        TriggerDebugOutput(1, (StringExternal("Param/Value/lib_EA0820A1_159AC301") + IntToText(libEA0820A1_gf_StoryResearchMissionProgress(libCamp_gv_tS_CurrentMap, libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg))), false);
     }
 
 }
@@ -2341,19 +2416,55 @@ void libEA0820A1_gf_AddProgressToStoryResearch (int lp_researchObject, int lp_co
 void libEA0820A1_gf_SetStoryResearchPurchased (int lp_researchID) {
     // Automatic Variable Declarations
     // Implementation
-    libEA0820A1_gv_tSX_ResearchState[(lp_researchID)] = libEA0820A1_ge_StoryResearchState_ResearchStatePurchased;
+    libEA0820A1_gv_tSX_ResearchState_lawbda[(lp_researchID)] = libEA0820A1_ge_StoryResearchStateLawbda_ResearchStatePurchased;
+}
+
+void libEA0820A1_gf_SetStoryResearchAvailable (int lp_researchID) {
+    // Automatic Variable Declarations
+    // Implementation
+    libEA0820A1_gv_tSX_ResearchState_lawbda[(lp_researchID)] = libEA0820A1_ge_StoryResearchStateLawbda_ResearchStateAvailable;
 }
 
 void libEA0820A1_gf_SetStoryResearchPointsConverted (int lp_category, int lp_points) {
     // Automatic Variable Declarations
     // Implementation
-    libEA0820A1_gv_tSX_ResearchPointsConverted[(lp_category)] = lp_points;
+    libEA0820A1_gv_tSX_ResearchPointsConverted_lawbda[(lp_category)] = lp_points;
 }
 
 void libEA0820A1_gf_SetStoryResearchPointsOld (int lp_category, int lp_points) {
     // Automatic Variable Declarations
     // Implementation
-    libEA0820A1_gv_tSX_ResearchPointsOld[(lp_category)] = lp_points;
+    libEA0820A1_gv_tSX_ResearchPointsOld_lawbda[(lp_category)] = lp_points;
+}
+
+void libEA0820A1_gf_TS_AddRecentResearch (int lp_research) {
+    // Variable Declarations
+    int lv_index;
+
+    // Automatic Variable Declarations
+    const int auto183864F6_ae = libCamp_gv_tS_RecentResearchMax;
+    const int auto183864F6_ai = 1;
+    const int auto8FE83183_ae = libCamp_gv_tS_RecentResearchMax;
+    const int auto8FE83183_ai = 1;
+
+    // Variable Initialization
+
+    // Implementation
+    lv_index = 1;
+    for ( ; ( (auto183864F6_ai >= 0 && lv_index <= auto183864F6_ae) || (auto183864F6_ai < 0 && lv_index >= auto183864F6_ae) ) ; lv_index += auto183864F6_ai ) {
+        if ((libCamp_gv_tSX_RecentResearch[lv_index] == libCamp_ge_StoryResearchID_ResearchNone)) {
+            libCamp_gv_tSX_RecentResearch[lv_index] = lp_research;
+            libCamp_gf_TS_UpdateCharacterSheepPanel();
+            return ;
+        }
+
+    }
+    lv_index = 2;
+    for ( ; ( (auto8FE83183_ai >= 0 && lv_index <= auto8FE83183_ae) || (auto8FE83183_ai < 0 && lv_index >= auto8FE83183_ae) ) ; lv_index += auto8FE83183_ai ) {
+        libCamp_gv_tSX_RecentResearch[(lv_index - 1)] = libCamp_gv_tSX_RecentResearch[lv_index];
+    }
+    libCamp_gv_tSX_RecentResearch[libCamp_gv_tS_RecentResearchMax] = lp_research;
+    libCamp_gf_TS_UpdateCharacterSheepPanel();
 }
 
 int libEA0820A1_gf_TS_StoryResearchPointsOld (int lp_categeory) {
@@ -2370,7 +2481,7 @@ int libEA0820A1_gf_TS_ResearchUIResearchID (int lp_researchItem) {
     int auto8D3579C9_i;
 
     // Variable Initialization
-    lv_indexResearch = libEA0820A1_ge_StoryResearchID_ResearchNone;
+    lv_indexResearch = libEA0820A1_ge_StoryResearchIDLawbda_ResearchNone;
 
     // Implementation
     auto8D3579C9_i = libCamp_gv_TSC_RESEARCH_FIRST;
@@ -2382,7 +2493,7 @@ int libEA0820A1_gf_TS_ResearchUIResearchID (int lp_researchItem) {
 
         auto8D3579C9_i = auto8D3579C9_i + 1;
     }
-    return libEA0820A1_ge_StoryResearchID_ResearchNone;
+    return libEA0820A1_ge_StoryResearchIDLawbda_ResearchNone;
 }
 
 void libEA0820A1_gf_DisplayResearchPanel (trigger lp_exitCallback) {
@@ -2391,13 +2502,13 @@ void libEA0820A1_gf_DisplayResearchPanel (trigger lp_exitCallback) {
     libEA0820A1_gv_tS_ResearchUIExitCallback = lp_exitCallback;
     libEA0820A1_gv_tS_ResearchUIExitEnabled = false;
     libEA0820A1_gf_TS_ResearchUICreate();
-    ResearchCategorySetCurrentLevel(libEA0820A1_gv_tS_ResearchUICategories[(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss)], libEA0820A1_gv_tSX_ResearchUIOldPoints[(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss)]);
-    ResearchCategorySetCurrentLevel(libEA0820A1_gv_tS_ResearchUICategories[(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg)], libEA0820A1_gv_tSX_ResearchUIOldPoints[(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg)]);
-    ResearchCategorySetLastLevel(libEA0820A1_gv_tS_ResearchUICategories[(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss)], libEA0820A1_gv_tSX_ResearchUIOldPoints[(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss)]);
-    ResearchCategorySetLastLevel(libEA0820A1_gv_tS_ResearchUICategories[(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg)], libEA0820A1_gv_tSX_ResearchUIOldPoints[(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg)]);
+    ResearchCategorySetCurrentLevel(libEA0820A1_gv_tS_ResearchUICategories[(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss)], libEA0820A1_gv_tSX_ResearchUIOldPoints[(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss)]);
+    ResearchCategorySetCurrentLevel(libEA0820A1_gv_tS_ResearchUICategories[(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg)], libEA0820A1_gv_tSX_ResearchUIOldPoints[(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg)]);
+    ResearchCategorySetLastLevel(libEA0820A1_gv_tS_ResearchUICategories[(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss)], libEA0820A1_gv_tSX_ResearchUIOldPoints[(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss)]);
+    ResearchCategorySetLastLevel(libEA0820A1_gv_tS_ResearchUICategories[(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg)], libEA0820A1_gv_tSX_ResearchUIOldPoints[(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg)]);
     libEA0820A1_gf_TS_ResearchUIUpdate();
-    libEA0820A1_gv_tSX_ResearchUIOldPoints[(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss)] = libEA0820A1_gf_StoryResearchPoints(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss);
-    libEA0820A1_gv_tSX_ResearchUIOldPoints[(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg)] = libEA0820A1_gf_StoryResearchPoints(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg);
+    libEA0820A1_gv_tSX_ResearchUIOldPoints[(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss)] = libEA0820A1_gf_StoryResearchPoints(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss);
+    libEA0820A1_gv_tSX_ResearchUIOldPoints[(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg)] = libEA0820A1_gf_StoryResearchPoints(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg);
     libEA0820A1_gv_tS_ResearchUIExitEnabled = true;
     UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeResearchPanel, true);
 }
@@ -2425,8 +2536,8 @@ void libEA0820A1_gf_TS_ResearchUICreate () {
     int auto4F4D0C9E_i;
 
     // Variable Initialization
-    lv_indexCategory = libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss;
-    lv_indexResearch = libEA0820A1_ge_StoryResearchID_ResearchNone;
+    lv_indexCategory = libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss;
+    lv_indexResearch = libEA0820A1_ge_StoryResearchIDLawbda_ResearchNone;
     for (init_i = 0; init_i <= 2; init_i += 1) {
         for (init_j = 0; init_j <= 5; init_j += 1) {
             for (init_k = 0; init_k <= 2; init_k += 1) {
@@ -2444,12 +2555,12 @@ void libEA0820A1_gf_TS_ResearchUICreate () {
     lv_categoryIndex = 1;
     for ( ; ( (autoC7882C1D_ai >= 0 && lv_categoryIndex <= autoC7882C1D_ae) || (autoC7882C1D_ai < 0 && lv_categoryIndex >= autoC7882C1D_ae) ) ; lv_categoryIndex += autoC7882C1D_ai ) {
         autoD64EA0F4_val = lv_categoryIndex;
-        if (autoD64EA0F4_val == (libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss)) {
-            lv_indexCategory = libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss;
+        if (autoD64EA0F4_val == (libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss)) {
+            lv_indexCategory = libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss;
             lv_categoryName = StringExternal("Param/Value/lib_EA0820A1_C7768517");
         }
-        else if (autoD64EA0F4_val == (libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg)) {
-            lv_indexCategory = libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg;
+        else if (autoD64EA0F4_val == (libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg)) {
+            lv_indexCategory = libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg;
             lv_categoryName = StringExternal("Param/Value/lib_EA0820A1_A71D5A08");
         }
         else {
@@ -2472,7 +2583,7 @@ void libEA0820A1_gf_TS_ResearchUICreate () {
         lv_tierIndex = libEA0820A1_gf_TS_StoryResearchTier(lv_indexResearch);
         lv_slotIndex = libEA0820A1_gf_TS_StoryResearchSlot(lv_indexResearch);
         ResearchItemCreate(PlayerGroupAll(), libEA0820A1_gv_tS_ResearchUITiers[lv_categoryIndex][lv_tierIndex], lv_slotIndex);
-        libEA0820A1_gv_tS_ResearchUIItem[(lv_indexResearch)] = ResearchItemLastCreated();
+        libEA0820A1_gv_tS_ResearchUIItem_lawbda[(lv_indexResearch)] = ResearchItemLastCreated();
         lv_uIItem[lv_categoryIndex][lv_tierIndex][lv_slotIndex] = ResearchItemLastCreated();
         ResearchItemSetNameText(ResearchItemLastCreated(), libEA0820A1_gf_StoryResearchName(lv_indexResearch));
         ResearchItemSetDescriptionText(ResearchItemLastCreated(), libEA0820A1_gf_StoryResearchDescription(lv_indexResearch));
@@ -2497,39 +2608,39 @@ void libEA0820A1_gf_TS_ResearchUIUpdate () {
     int autoF26439FE_val;
 
     // Variable Initialization
-    lv_indexResearch = libEA0820A1_ge_StoryResearchID_ResearchNone;
-    lv_otherResearch = libEA0820A1_ge_StoryResearchID_ResearchNone;
+    lv_indexResearch = libEA0820A1_ge_StoryResearchIDLawbda_ResearchNone;
+    lv_otherResearch = libEA0820A1_ge_StoryResearchIDLawbda_ResearchNone;
 
     // Implementation
     libEA0820A1_gf_TS_ResearchUICreate();
-    ResearchCategorySetCurrentLevel(libEA0820A1_gv_tS_ResearchUICategories[(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss)], MinI(libEA0820A1_gf_StoryResearchPointCap(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss), libEA0820A1_gf_StoryResearchPoints(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss)));
-    ResearchCategorySetCurrentLevel(libEA0820A1_gv_tS_ResearchUICategories[(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg)], MinI(libEA0820A1_gf_StoryResearchPointCap(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg), libEA0820A1_gf_StoryResearchPoints(libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg)));
+    ResearchCategorySetCurrentLevel(libEA0820A1_gv_tS_ResearchUICategories[(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss)], MinI(libEA0820A1_gf_StoryResearchPointCap(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss), libEA0820A1_gf_StoryResearchPoints(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss)));
+    ResearchCategorySetCurrentLevel(libEA0820A1_gv_tS_ResearchUICategories[(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg)], MinI(libEA0820A1_gf_StoryResearchPointCap(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg), libEA0820A1_gf_StoryResearchPoints(libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg)));
     auto8DA52E49_i = libCamp_gv_TSC_RESEARCH_FIRST;
     while (auto8DA52E49_i <= libCamp_gv_TSC_RESEARCH_LAST) {
         lv_indexResearch = libCamp_gv_tS_ResearchID[auto8DA52E49_i];
-        ResearchItemSetTooltipText(libEA0820A1_gv_tS_ResearchUIItem[(lv_indexResearch)], libEA0820A1_gf_StoryResearchTooltip(lv_indexResearch));
+        ResearchItemSetTooltipText(libEA0820A1_gv_tS_ResearchUIItem_lawbda[(lv_indexResearch)], libEA0820A1_gf_StoryResearchTooltip(lv_indexResearch));
         ResearchItemSetState(libEA0820A1_gf_TS_StoryResearchUIItem(lv_indexResearch), c_researchItemStateEnabled);
         auto8DA52E49_i = auto8DA52E49_i + 1;
     }
     autoD043C6D6_i = libCamp_gv_TSC_RESEARCH_FIRST;
     while (autoD043C6D6_i <= libCamp_gv_TSC_RESEARCH_LAST) {
         lv_indexResearch = libCamp_gv_tS_ResearchID[autoD043C6D6_i];
-        if ((libEA0820A1_gf_StoryResearchStateCheck(lv_indexResearch, libEA0820A1_ge_StoryResearchState_ResearchStatePurchased) == true)) {
+        if ((libEA0820A1_gf_StoryResearchStateCheck(lv_indexResearch, libEA0820A1_ge_StoryResearchStateLawbda_ResearchStatePurchased) == true)) {
             ResearchItemSetState(libEA0820A1_gf_TS_StoryResearchUIItem(lv_indexResearch), c_researchItemStatePurchased);
-            lv_otherResearch = libEA0820A1_gf_TS_StoryResearchTheOtherOfTheSameTier(lv_indexResearch);
-            ResearchItemSetState(libEA0820A1_gf_TS_StoryResearchUIItem(lv_otherResearch), c_researchItemStateDisabled);
+            lv_otherResearch = libEA0820A1_gf_StoryResearchGetAliasResearchID(lv_indexResearch);
+            ResearchItemSetState(libEA0820A1_gf_TS_StoryResearchUIItem(lv_otherResearch), c_researchItemStateEnabled);
             autoF26439FE_val = libEA0820A1_gf_StoryResearchCategory(lv_otherResearch);
-            if (autoF26439FE_val == libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss) {
+            if (autoF26439FE_val == libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss) {
                 lv_tip = (StringExternal("Param/Value/lib_EA0820A1_18AA5C2D") + libEA0820A1_gf_StoryResearchName(lv_otherResearch) + StringExternal("Param/Value/lib_EA0820A1_5550BDDF"));
                 libEA0820A1_gf_TS_ResearchUIClearProtossConfirmationText();
             }
-            else if (autoF26439FE_val == libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg) {
+            else if (autoF26439FE_val == libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg) {
                 lv_tip = (StringExternal("Param/Value/lib_EA0820A1_EA18481C") + libEA0820A1_gf_StoryResearchName(lv_otherResearch) + StringExternal("Param/Value/lib_EA0820A1_514499A1"));
                 libEA0820A1_gf_TS_ResearchUIClearZergConfirmationText();
             }
             else {
             }
-            ResearchItemSetTooltipText(libEA0820A1_gv_tS_ResearchUIItem[(lv_otherResearch)], lv_tip);
+            ResearchItemSetTooltipText(libEA0820A1_gv_tS_ResearchUIItem_lawbda[(lv_otherResearch)], lv_tip);
         }
 
         autoD043C6D6_i = autoD043C6D6_i + 1;
@@ -2545,14 +2656,14 @@ void libEA0820A1_gf_TS_ResearchUIClearProtossConfirmationText () {
     int auto31C8FDEA_i;
 
     // Variable Initialization
-    lv_indexResearch = libEA0820A1_ge_StoryResearchID_ResearchNone;
-    lv_otherResearch = libEA0820A1_ge_StoryResearchID_ResearchNone;
+    lv_indexResearch = libEA0820A1_ge_StoryResearchIDLawbda_ResearchNone;
+    lv_otherResearch = libEA0820A1_ge_StoryResearchIDLawbda_ResearchNone;
 
     // Implementation
     auto31C8FDEA_i = libCamp_gv_TSC_RESEARCH_FIRST;
     while (auto31C8FDEA_i <= libCamp_gv_TSC_RESEARCH_LAST) {
         lv_indexResearch = libCamp_gv_tS_ResearchID[auto31C8FDEA_i];
-        if ((libEA0820A1_gf_StoryResearchCategory(lv_indexResearch) == libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss)) {
+        if ((libEA0820A1_gf_StoryResearchCategory(lv_indexResearch) == libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss)) {
             ResearchItemSetConfirmationText(libEA0820A1_gf_TS_StoryResearchUIItem(lv_indexResearch), StringToText(""));
         }
 
@@ -2569,14 +2680,14 @@ void libEA0820A1_gf_TS_ResearchUIClearZergConfirmationText () {
     int autoDF39CEEF_i;
 
     // Variable Initialization
-    lv_indexResearch = libEA0820A1_ge_StoryResearchID_ResearchNone;
-    lv_otherResearch = libEA0820A1_ge_StoryResearchID_ResearchNone;
+    lv_indexResearch = libEA0820A1_ge_StoryResearchIDLawbda_ResearchNone;
+    lv_otherResearch = libEA0820A1_ge_StoryResearchIDLawbda_ResearchNone;
 
     // Implementation
     autoDF39CEEF_i = libCamp_gv_TSC_RESEARCH_FIRST;
     while (autoDF39CEEF_i <= libCamp_gv_TSC_RESEARCH_LAST) {
         lv_indexResearch = libCamp_gv_tS_ResearchID[autoDF39CEEF_i];
-        if ((libEA0820A1_gf_StoryResearchCategory(lv_indexResearch) == libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg)) {
+        if ((libEA0820A1_gf_StoryResearchCategory(lv_indexResearch) == libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg)) {
             ResearchItemSetConfirmationText(libEA0820A1_gf_TS_StoryResearchUIItem(lv_indexResearch), StringToText(""));
         }
 
@@ -2592,7 +2703,7 @@ void libEA0820A1_gf_GameStart (trigger t) {
 
 // Triggers
 //--------------------------------------------------------------------------------------------------
-// Trigger: TS Tech Console Exit
+// Trigger: TS Tech Console Exit @ Lawbda
 //--------------------------------------------------------------------------------------------------
 bool libEA0820A1_gt_TSTechConsoleExit_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
@@ -2615,7 +2726,7 @@ void libEA0820A1_gt_TSTechConsoleExit_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
-// Trigger: TS Tech Item Selected
+// Trigger: TS Tech Item Selected @ Lawbda
 //--------------------------------------------------------------------------------------------------
 bool libEA0820A1_gt_TSTechItemSelected_Func (bool testConds, bool runActions) {
     // Variable Declarations
@@ -2652,7 +2763,7 @@ void libEA0820A1_gt_TSTechItemSelected_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
-// Trigger: TS Tech Category Selected
+// Trigger: TS Tech Category Selected @ Lawbda
 //--------------------------------------------------------------------------------------------------
 bool libEA0820A1_gt_TSTechCategorySelected_Func (bool testConds, bool runActions) {
     // Variable Declarations
@@ -2680,7 +2791,7 @@ void libEA0820A1_gt_TSTechCategorySelected_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
-// Trigger: TS Tech Console Purchase
+// Trigger: TS Tech Console Purchase @ Lawbda
 //--------------------------------------------------------------------------------------------------
 bool libEA0820A1_gt_TSTechConsolePurchase_Func (bool testConds, bool runActions) {
     // Variable Declarations
@@ -2721,7 +2832,7 @@ void libEA0820A1_gt_TSTechConsolePurchase_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
-// Trigger: TS_Tech_CalldownSupplyDepot
+// Trigger: TS_Tech_CalldownSupplyDepot @ Lawbda
 //--------------------------------------------------------------------------------------------------
 bool libEA0820A1_gt_TS_Tech_CalldownSupplyDepot_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
@@ -2742,22 +2853,25 @@ void libEA0820A1_gt_TS_Tech_CalldownSupplyDepot_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
-// Trigger: TS_ResearchUI - Purchase
+// Trigger: TS_ResearchUI - Purchase @ Lawbda
 //--------------------------------------------------------------------------------------------------
 bool libEA0820A1_gt_TS_ResearchUIPurchase_Func (bool testConds, bool runActions) {
     // Variable Declarations
+    int lv_ResearchIDAlias;
     int lv_researchID;
     int lv_purchasedCountZerg;
     int lv_purchasedCountProt;
     int lv_indexResearch;
 
     // Automatic Variable Declarations
+    int auto7C6CE10F_val;
     int autoB064EF4F_i;
     int auto66E5084B_val;
 
     // Variable Initialization
-    lv_researchID = libEA0820A1_ge_StoryResearchID_ResearchNone;
-    lv_indexResearch = libEA0820A1_ge_StoryResearchID_ResearchNone;
+    lv_ResearchIDAlias = libEA0820A1_ge_StoryResearchIDLawbda_ResearchNone;
+    lv_researchID = libEA0820A1_ge_StoryResearchIDLawbda_ResearchNone;
+    lv_indexResearch = libEA0820A1_ge_StoryResearchIDLawbda_ResearchNone;
 
     // Actions
     if (!runActions) {
@@ -2765,25 +2879,38 @@ bool libEA0820A1_gt_TS_ResearchUIPurchase_Func (bool testConds, bool runActions)
     }
 
     lv_researchID = libEA0820A1_gf_TS_ResearchUIResearchID(ResearchItemGetSelected(1));
-    if ((lv_researchID == libEA0820A1_ge_StoryResearchID_ResearchNone)) {
+    lv_ResearchIDAlias = libEA0820A1_gf_StoryResearchGetAliasResearchID(lv_researchID);
+    if ((lv_researchID == libEA0820A1_ge_StoryResearchIDLawbda_ResearchNone)) {
         return true;
     }
 
-    ResearchItemPurchase(ResearchItemGetSelected(1));
-    libEA0820A1_gf_SetStoryResearchPurchased(lv_researchID);
+    auto7C6CE10F_val = libEA0820A1_gv_tSX_ResearchState_lawbda[(lv_ResearchIDAlias)];
+    if (auto7C6CE10F_val == libEA0820A1_ge_StoryResearchStateLawbda_ResearchStatePurchased) {
+        libEA0820A1_gf_SetStoryResearchAvailable(lv_ResearchIDAlias);
+        ResearchItemSetState(libEA0820A1_gv_tS_ResearchUIItem_lawbda[(lv_ResearchIDAlias)], c_researchItemStateEnabled);
+        libEA0820A1_gf_SetStoryResearchPurchased(lv_researchID);
+        ResearchItemSetState(libEA0820A1_gv_tS_ResearchUIItem_lawbda[(lv_researchID)], c_researchItemStatePurchased);
+    }
+    else if (auto7C6CE10F_val == libEA0820A1_ge_StoryResearchStateLawbda_ResearchStateAvailable) {
+        libEA0820A1_gf_SetStoryResearchPurchased(lv_researchID);
+        ResearchItemSetState(libEA0820A1_gv_tS_ResearchUIItem_lawbda[(lv_researchID)], c_researchItemStatePurchased);
+    }
+    else {
+    }
     libEA0820A1_gf_TS_ResearchUIUpdate();
+    libEA0820A1_gf_TS_AddRecentResearch(lv_researchID);
     lv_purchasedCountZerg = 0;
     lv_purchasedCountProt = 0;
     autoB064EF4F_i = libCamp_gv_TSC_RESEARCH_FIRST;
     while (autoB064EF4F_i <= libCamp_gv_TSC_RESEARCH_LAST) {
         lv_indexResearch = libCamp_gv_tS_ResearchID[autoB064EF4F_i];
-        if ((libEA0820A1_gf_StoryResearchStateCheck(lv_indexResearch, libEA0820A1_ge_StoryResearchState_ResearchStatePurchased) == true)) {
+        if ((libEA0820A1_gf_StoryResearchStateCheck(lv_indexResearch, libEA0820A1_ge_StoryResearchStateLawbda_ResearchStatePurchased) == true)) {
             auto66E5084B_val = libEA0820A1_gf_StoryResearchCategory(lv_indexResearch);
-            if (auto66E5084B_val == libEA0820A1_ge_StoryResearchCategory_ResearchCategoryZerg) {
+            if (auto66E5084B_val == libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryZerg) {
                 lv_purchasedCountZerg += 1;
                 libEA0820A1_gf_TS_ResearchUIClearZergConfirmationText();
             }
-            else if (auto66E5084B_val == libEA0820A1_ge_StoryResearchCategory_ResearchCategoryProtoss) {
+            else if (auto66E5084B_val == libEA0820A1_ge_StoryResearchCategoryLawbda_ResearchCategoryProtoss) {
                 lv_purchasedCountProt += 1;
                 libEA0820A1_gf_TS_ResearchUIClearProtossConfirmationText();
             }
@@ -2805,7 +2932,7 @@ void libEA0820A1_gt_TS_ResearchUIPurchase_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
-// Trigger: TS_ResearchUI - Exit
+// Trigger: TS_ResearchUI - Exit @ Lawbda
 //--------------------------------------------------------------------------------------------------
 bool libEA0820A1_gt_TS_ResearchUIExit_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
@@ -3031,6 +3158,15 @@ bool libEA0820A1_gt_Init00ReplaceUnit_Func (bool testConds, bool runActions) {
         else if (auto0E6DA1A2_val == "SiegeTankSieged") {
             libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "SquadSiegeTankSieged", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
         }
+        else if (auto0E6DA1A2_val == "Raynor") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "CaptainFreeman", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "Raynor01") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "CaptainFreeman", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "RaynorCommando") {
+            libNtve_gf_ReplaceUnit(libEA0820A1_gv_unitForReplaced, "CaptainFreeman", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
         else {
         }
     }
@@ -3062,6 +3198,26 @@ void libEA0820A1_gt_OnPlayer1GetUnit_Init () {
     TriggerAddEventUnitChangeOwner(libEA0820A1_gt_OnPlayer1GetUnit, null);
 }
 
+//--------------------------------------------------------------------------------------------------
+// Trigger: OnPlayer1GetUnit 2
+//--------------------------------------------------------------------------------------------------
+bool libEA0820A1_gt_OnPlayer1Birth_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerExecute(libEA0820A1_gt_Init00ReplaceUnit, true, true);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libEA0820A1_gt_OnPlayer1Birth_Init () {
+    libEA0820A1_gt_OnPlayer1Birth = TriggerCreate("libEA0820A1_gt_OnPlayer1Birth_Func");
+    TriggerAddEventUnitCreated(libEA0820A1_gt_OnPlayer1Birth, null, null, null);
+}
+
 void libEA0820A1_InitTriggers () {
     libEA0820A1_gt_TSTechConsoleExit_Init();
     libEA0820A1_gt_TSTechItemSelected_Init();
@@ -3073,6 +3229,7 @@ void libEA0820A1_InitTriggers () {
     libEA0820A1_gt_Initialization_Init();
     libEA0820A1_gt_Init00ReplaceUnit_Init();
     libEA0820A1_gt_OnPlayer1GetUnit_Init();
+    libEA0820A1_gt_OnPlayer1Birth_Init();
 }
 
 //--------------------------------------------------------------------------------------------------
