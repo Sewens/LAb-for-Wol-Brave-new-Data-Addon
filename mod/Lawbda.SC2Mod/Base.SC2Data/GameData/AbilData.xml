@@ -1844,7 +1844,7 @@
         <Flags index="AutoCastOn" value="1"/>
         <Flags index="Transient" value="1"/>
         <InterruptCost>
-            <Cooldown TimeUse="20"/>
+            <Cooldown TimeUse="15"/>
         </InterruptCost>
         <Range value="1"/>
         <Arc value="360"/>
@@ -1856,7 +1856,7 @@
         </Marker>
         <CursorEffect value="SquadForceFieldPlacement"/>
         <AINotifyEffect value="SquadForceField"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="SquadHavocForceField"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadHavocForceField" Requirements="HaveSupplyDepotActiveProtectionSystem"/>
         <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
         <PlaceUnit value="SquadForceField"/>
     </CAbilEffectTarget>
@@ -4509,6 +4509,9 @@
         </InfoArray>
         <InfoArray index="Build21" Unit="SquadFuturesExchange" Time="60">
             <Button DefaultButtonFace="BuildSquadFutureExchange" Requirements="NoFuturesExchange"/>
+        </InfoArray>
+        <InfoArray index="Build22" Unit="SquadBunkerVanilla" Time="45">
+            <Button DefaultButtonFace="BuildSquadBunkerVanilla"/>
         </InfoArray>
         <InfoArray index="Build28" Unit="SquadTechlab" Time="25">
             <Button DefaultButtonFace="BuildSquadTechLab" Requirements="HaveSquadBarracks"/>
