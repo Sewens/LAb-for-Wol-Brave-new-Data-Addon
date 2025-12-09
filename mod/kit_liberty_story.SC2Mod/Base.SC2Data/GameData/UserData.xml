@@ -16,7 +16,7 @@
             </Int>
         </Instances>
         <Instances Id="ResearchPointToCredits">
-            <Int Int="10000">
+            <Int Int="100000">
                 <Field Id="Value"/>
             </Int>
         </Instances>
@@ -5122,17 +5122,6 @@
                 <Field Id="Group"/>
             </User>
         </Instances>
-        <Instances Id="SquadSCV">
-            <Text Text="UserData/TechUnit/SquadSCV_Name">
-                <Field Id="Name"/>
-            </Text>
-            <Unit Unit="SquadSCV">
-                <Field Id="Variants"/>
-            </Unit>
-            <Unit Unit="SquadSCVJumper">
-                <Field Id="Variants" Index="1"/>
-            </Unit>
-        </Instances>
         <Instances Id="CommandCenter">
             <Text Text="UserData/TechUnit/CommandCenter_Name">
                 <Field Id="Name"/>
@@ -5148,6 +5137,20 @@
             </Unit>
             <Unit Unit="SquadOrbitalCommandFlying">
                 <Field Id="Variants" Index="3"/>
+            </Unit>
+            <User Type="TechGroup" Instance="Base">
+                <Field Id="Group"/>
+            </User>
+        </Instances>
+        <Instances Id="SupplyDepot">
+            <Text Text="UserData/TechUnit/SupplyDepot_Name">
+                <Field Id="Name"/>
+            </Text>
+            <Unit Unit="SquadSupplyDepot">
+                <Field Id="Variants"/>
+            </Unit>
+            <Unit Unit="SquadSupplyDepotLowered">
+                <Field Id="Variants" Index="1"/>
             </Unit>
             <User Type="TechGroup" Instance="Base">
                 <Field Id="Group"/>
@@ -5455,16 +5458,16 @@
                 <Field Id="Variants"/>
             </Unit>
         </Instances>
-        <Instances Id="SquadHercules">
-            <Text Text="UserData/TechUnit/SquadHercules_Name">
+        <Instances Id="Hercules">
+            <Text Text="UserData/TechUnit/Hercules_Name">
                 <Field Id="Name"/>
             </Text>
             <Unit Unit="SquadHercules">
                 <Field Id="Variants"/>
             </Unit>
         </Instances>
-        <Instances Id="SquadPsiDisruptor">
-            <Text Text="UserData/TechUnit/SquadPsiDisruptor_Name">
+        <Instances Id="PsiDisruptor">
+            <Text Text="UserData/TechUnit/PsiDisruptor_Name">
                 <Field Id="Name"/>
             </Text>
             <Unit Unit="SquadPsiDisrupter">
@@ -5474,8 +5477,8 @@
                 <Field Id="Variants" Index="1"/>
             </Unit>
         </Instances>
-        <Instances Id="SquadHiveMindEmulator">
-            <Text Text="UserData/TechUnit/SquadHiveMindEmulator_Name">
+        <Instances Id="HiveMindEmulator">
+            <Text Text="UserData/TechUnit/HiveMindEmulator_Name">
                 <Field Id="Name"/>
             </Text>
             <Unit Unit="SquadHiveMindEmulator">
@@ -6658,15 +6661,15 @@
         <Instances Id="[Default]"/>
         <Instances Id="Tech_Bunker_1"/>
         <Instances Id="Tech_Bunker_2"/>
-        <Instances Id="Tech_SCV_1">
-            <Int Int="9">
-                <Field Id="RequiredMissions"/>
-            </Int>
+        <Instances Id="Tech_SensorTower_1">
+            <Image>
+                <Field Id="Image"/>
+            </Image>
         </Instances>
-        <Instances Id="Tech_SCV_2">
-            <Int Int="9">
-                <Field Id="RequiredMissions"/>
-            </Int>
+        <Instances Id="Tech_SensorTower_2">
+            <Image>
+                <Field Id="Image"/>
+            </Image>
         </Instances>
         <Instances Id="Tech_CommandCenter_1">
             <Int Int="12">
@@ -6690,11 +6693,7 @@
         <Instances Id="Tech_Marauder_2"/>
         <Instances Id="Tech_Reaper_1"/>
         <Instances Id="Tech_Reaper_2"/>
-        <Instances Id="Tech_Hellion_1">
-            <Image Image="Assets\Textures\terranarmory_hellion_upgradeimage_1.dds">
-                <Field Id="Image"/>
-            </Image>
-        </Instances>
+        <Instances Id="Tech_Hellion_1"/>
         <Instances Id="Tech_Hellion_2"/>
         <Instances Id="Tech_Goliath_1"/>
         <Instances Id="Tech_Goliath_2"/>
@@ -6703,72 +6702,38 @@
         <Instances Id="Tech_Vulture_1"/>
         <Instances Id="Tech_Vulture_2"/>
         <Instances Id="Tech_SiegeTank_1"/>
-        <Instances Id="Tech_SiegeTank_2">
-            <Image Image="Assets\Textures\terranarmory_siegetank_upgradeimage_2.dds">
-                <Field Id="Image"/>
-            </Image>
-        </Instances>
-        <Instances Id="Tech_Medivac_1">
-            <Image Image="Assets\Textures\terranarmory_medivac_upgradeimage_1.dds">
-                <Field Id="Image"/>
-            </Image>
-        </Instances>
+        <Instances Id="Tech_SiegeTank_2"/>
+        <Instances Id="Tech_Medivac_1"/>
         <Instances Id="Tech_Medivac_2"/>
-        <Instances Id="Tech_Wraith_1">
-            <Image Image="Assets\Textures\terranarmory_wraith_upgradeimage_1.dds">
-                <Field Id="Image"/>
-            </Image>
-        </Instances>
+        <Instances Id="Tech_Wraith_1"/>
         <Instances Id="Tech_Wraith_2"/>
         <Instances Id="Tech_Viking_1"/>
         <Instances Id="Tech_Viking_2"/>
-        <Instances Id="Tech_Banshee_1">
-            <Image Image="Assets\Textures\terranarmory_banshee_upgradeimage_1.dds">
-                <Field Id="Image"/>
-            </Image>
-        </Instances>
+        <Instances Id="Tech_Banshee_1"/>
         <Instances Id="Tech_Banshee_2"/>
-        <Instances Id="Tech_Battlecruiser_1">
-            <Image Image="Assets\Textures\terranarmory_battlecruiser_upgradeimage_1.dds">
-                <Field Id="Image"/>
-            </Image>
-        </Instances>
-        <Instances Id="Tech_Battlecruiser_2">
-            <Image Image="Assets\Textures\terranarmory_battlecruiser_upgradeimage_2.dds">
-                <Field Id="Image"/>
-            </Image>
-        </Instances>
+        <Instances Id="Tech_Battlecruiser_1"/>
+        <Instances Id="Tech_Battlecruiser_2"/>
         <Instances Id="Tech_Ghost_1"/>
         <Instances Id="Tech_Ghost_2"/>
         <Instances Id="Tech_Spectre_1"/>
         <Instances Id="Tech_Spectre_2"/>
-        <Instances Id="Tech_Thor_1">
-            <Image Image="Assets\Textures\terranarmory_thor_upgradeimage_1.dds">
+        <Instances Id="Tech_Thor_1"/>
+        <Instances Id="Tech_Thor_2"/>
+        <Instances Id="Tech_PerditionTurret_1"/>
+        <Instances Id="Tech_PerditionTurret_2"/>
+        <Instances Id="Tech_Predator_1"/>
+        <Instances Id="Tech_Predator_2"/>
+        <Instances Id="Tech_Raven_1"/>
+        <Instances Id="Tech_Raven_2"/>
+        <Instances Id="Tech_ScienceVessel_1"/>
+        <Instances Id="Tech_ScienceVessel_2"/>
+        <Instances Id="Tech_SupplyDepot_1">
+            <Image>
                 <Field Id="Image"/>
             </Image>
         </Instances>
-        <Instances Id="Tech_Thor_2">
-            <Image Image="Assets\Textures\terranarmory_thor_upgradeimage_2.dds">
-                <Field Id="Image"/>
-            </Image>
-        </Instances>
-        <Instances Id="Tech_PerditionTurret_1">
-            <Image Image="Assets\Textures\terranarmory_perditionturret_upgradeimage_1.dds">
-                <Field Id="Image"/>
-            </Image>
-        </Instances>
-        <Instances Id="Tech_PerditionTurret_2">
-            <Image Image="Assets\Textures\terranarmory_perditionturret_upgradeimage_2.dds">
-                <Field Id="Image"/>
-            </Image>
-        </Instances>
-        <Instances Id="Tech_Predator_1">
-            <Image Image="Assets\Textures\terranarmory_predator_upgradeimage_1.dds">
-                <Field Id="Image"/>
-            </Image>
-        </Instances>
-        <Instances Id="Tech_Predator_2">
-            <Image Image="Assets\Textures\terranarmory_predator_upgradeimage_2.dds">
+        <Instances Id="Tech_SupplyDepot_2">
+            <Image>
                 <Field Id="Image"/>
             </Image>
         </Instances>
