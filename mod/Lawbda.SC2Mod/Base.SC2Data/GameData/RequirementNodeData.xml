@@ -12,6 +12,16 @@
     <CRequirementAllowUpgrade id="AllowUpgradeSquadTerranInfantryArmorHarvestBonusLevel1">
         <Link value="SquadTerranInfantryArmorHarvestBonusLevel1"/>
     </CRequirementAllowUpgrade>
+    <CRequirementAnd id="AndEq3446134918CountUpgradeSquadTerranInfantryArmorLevel1CompleteOnly1CountUnitArmoryCompleteOnlyTechTreeCheat">
+        <Tooltip value="RequirementNode/Tooltip/##id##"/>
+        <OperandArray value="Eq3446134918CountUpgradeSquadTerranInfantryArmorLevel1CompleteOnly1"/>
+        <OperandArray value="CountUnitArmoryCompleteOnlyTechTreeCheat"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AndEq3722837715CountUpgradeSquadTerranInfantryArmorLevel2CompleteOnly1CountUnitArmoryCompleteOnlyTechTreeCheat">
+        <Tooltip value="RequirementNode/Tooltip/##id##"/>
+        <OperandArray value="Eq3722837715CountUpgradeSquadTerranInfantryArmorLevel2CompleteOnly1"/>
+        <OperandArray value="CountUnitArmoryCompleteOnlyTechTreeCheat"/>
+    </CRequirementAnd>
     <CRequirementAnd id="AndNotCountUpgradeScannerSweepAlphaUpgradeDummyCompleteOnly">
         <OperandArray value="NotCountUpgradeScannerSweepAlphaUpgradeDummyCompleteOnly"/>
     </CRequirementAnd>
@@ -47,15 +57,38 @@
         <OperandArray value="CountUpgradeWarMinerWagonCompleteOnly"/>
         <OperandArray value="CountUpgradeSquadTerranInfantryWeaponsHarvestBonusLevel2CompleteOnly"/>
     </CRequirementAnd>
+    <CRequirementAnd id="AndTechTreeCheatCountUpgradeWarMinerWagonCompleteOnlyNotCountUpgradeSquadTerranInfantryArmorHarvestBonusLevel1CompleteOnly">
+        <Flags index="TechTreeCheat" value="1"/>
+        <OperandArray value="CountUpgradeWarMinerWagonCompleteOnly"/>
+        <OperandArray value="NotCountUpgradeSquadTerranInfantryArmorHarvestBonusLevel1CompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AndTechTreeCheatCountUpgradeWarMinerWagonCompleteOnlyNotCountUpgradeSquadTerranInfantryWeaponsHarvestBonusLevel1CompleteOnly">
+        <Flags index="TechTreeCheat" value="1"/>
+        <OperandArray value="CountUpgradeWarMinerWagonCompleteOnly"/>
+        <OperandArray value="NotCountUpgradeSquadTerranInfantryWeaponsHarvestBonusLevel1CompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AndTechTreeCheatNotCountUpgradeWarMinerWagonCompleteOnlyNotCountUpgradeSquadTerranInfantryWeaponsLevel1CompleteOnly">
+        <Flags index="TechTreeCheat" value="1"/>
+        <OperandArray value="NotCountUpgradeWarMinerWagonCompleteOnly"/>
+        <OperandArray value="NotCountUpgradeSquadTerranInfantryWeaponsLevel1CompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AndTechTreeCheatNotCountUpgradeWarMinerWagonQueuedOnlyNotCountUpgradeSquadTerranInfantryArmorLevel1CompleteOnly">
+        <Flags index="TechTreeCheat" value="1"/>
+        <OperandArray value="NotCountUpgradeWarMinerWagonQueuedOnly"/>
+        <OperandArray value="NotCountUpgradeSquadTerranInfantryArmorLevel1CompleteOnly"/>
+    </CRequirementAnd>
     <CRequirementCountUnit id="CountUnitSquadFuturesExchangeQueuedOnly">
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="SquadFuturesExchange"/>
     </CRequirementCountUnit>
+    <CRequirementCountUpgrade id="CountUpgradeAddonStructureOptimizationQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AddonStructureOptimization" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
     <CRequirementCountUpgrade id="CountUpgradeBattlecruiserSuperSmashCompleteOnlyTechTreeCheat">
         <Count Link="BattlecruiserSuperSmash" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
     <CRequirementCountUpgrade id="CountUpgradeBattlecruiserUltraCapacitorsCompleteOnlyTechTreeCheat">
-        <Tooltip value="RequirementNode/Tooltip/##id##"/>
         <Count Link="BattlecruiserUltraCapacitors" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
     <CRequirementCountUpgrade id="CountUpgradeCapitalismRoadCompleteOnlyTechTreeCheat">
@@ -70,9 +103,56 @@
     <CRequirementCountUpgrade id="CountUpgradeNuclearAnnihilationCompleteOnlyTechTreeCheat">
         <Count Link="NuclearAnnihilation" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="CountUpgradeSOALaserAttackCompleteOnly"/>
     <CRequirementCountUpgrade id="CountUpgradeSociallismRoadCompleteOnlyTechTreeCheat">
         <Count Link="SociallismRoad" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="CountUpgradeSquadTerranInfantryArmorLevel1QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value="RequirementNode/Tooltip/##id##"/>
+        <Count Link="SquadTerranInfantryArmorLevel1" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="CountUpgradeSquadTerranInfantryArmorLevel2QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value="RequirementNode/Tooltip/##id##"/>
+        <Count Link="SquadTerranInfantryArmorLevel2" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="CountUpgradeSquadTerranInfantryArmorLevel3QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value="RequirementNode/Tooltip/##id##"/>
+        <Count Link="SquadTerranInfantryArmorLevel3" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="CountUpgradeWarMinerWagonQueuedOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="WarMinerWagon"/>
+    </CRequirementCountUpgrade>
+    <CRequirementEq id="Eq3446134918CountUpgradeSquadTerranInfantryArmorLevel1CompleteOnly1">
+        <OperandArray index="0" value="CountUpgradeSquadTerranInfantryArmorLevel1CompleteOnly"/>
+        <OperandArray index="1" value="1"/>
+    </CRequirementEq>
+    <CRequirementEq id="Eq3722837715CountUpgradeSquadTerranInfantryArmorLevel2CompleteOnly1">
+        <OperandArray index="0" value="CountUpgradeSquadTerranInfantryArmorLevel2CompleteOnly"/>
+        <OperandArray index="1" value="1"/>
+    </CRequirementEq>
+    <CRequirementEq id="EqCountUpgradeAddonStructureOptimizationQueuedOrBetter0">
+        <OperandArray index="0" value="CountUpgradeAddonStructureOptimizationQueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementEq id="EqCountUpgradeSquadTerranInfantryArmorLevel1QueuedOrBetter0">
+        <Tooltip value="RequirementNode/Tooltip/##id##"/>
+        <OperandArray index="0" value="CountUpgradeSquadTerranInfantryArmorLevel1QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementEq id="EqCountUpgradeSquadTerranInfantryArmorLevel2QueuedOrBetter0">
+        <Tooltip value="RequirementNode/Tooltip/##id##"/>
+        <OperandArray index="0" value="CountUpgradeSquadTerranInfantryArmorLevel2QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementEq id="EqCountUpgradeSquadTerranInfantryArmorLevel3QueuedOrBetter0">
+        <Tooltip value="RequirementNode/Tooltip/##id##"/>
+        <OperandArray index="0" value="CountUpgradeSquadTerranInfantryArmorLevel3QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
     <CRequirementAnd id="HaveWarMinerWagonandInfantryWeaponLv3">
         <Flags index="TechTreeCheat" value="1"/>
         <OperandArray value="CountUpgradeWarMinerWagonCompleteOnly"/>
@@ -664,8 +744,23 @@
     <CRequirementNot id="NotCountUpgradeScannerSweepYellowUpgradeDummyCompleteOnly">
         <OperandArray index="0" value="CountUpgradeScannerSweepYellowUpgradeDummyCompleteOnly"/>
     </CRequirementNot>
+    <CRequirementNot id="NotCountUpgradeSquadTerranInfantryArmorHarvestBonusLevel1CompleteOnly">
+        <OperandArray index="0" value="CountUpgradeSquadTerranInfantryArmorHarvestBonusLevel1CompleteOnly"/>
+    </CRequirementNot>
+    <CRequirementNot id="NotCountUpgradeSquadTerranInfantryArmorLevel1CompleteOnly">
+        <OperandArray index="0" value="CountUpgradeSquadTerranInfantryArmorLevel1CompleteOnly"/>
+    </CRequirementNot>
+    <CRequirementNot id="NotCountUpgradeSquadTerranInfantryWeaponsHarvestBonusLevel1CompleteOnly">
+        <OperandArray index="0" value="CountUpgradeSquadTerranInfantryWeaponsHarvestBonusLevel1CompleteOnly"/>
+    </CRequirementNot>
+    <CRequirementNot id="NotCountUpgradeSquadTerranInfantryWeaponsLevel1CompleteOnly">
+        <OperandArray index="0" value="CountUpgradeSquadTerranInfantryWeaponsLevel1CompleteOnly"/>
+    </CRequirementNot>
     <CRequirementNot id="NotCountUpgradeWarMinerWagonCompleteOnly">
         <OperandArray index="0" value="CountUpgradeWarMinerWagonCompleteOnly"/>
+    </CRequirementNot>
+    <CRequirementNot id="NotCountUpgradeWarMinerWagonQueuedOnly">
+        <OperandArray index="0" value="CountUpgradeWarMinerWagonQueuedOnly"/>
     </CRequirementNot>
     <CRequirementNot id="NotTechTreeCheatCountUnitSquadFuturesExchangeQueuedOnly">
         <Flags index="TechTreeCheat" value="1"/>
@@ -694,10 +789,6 @@
     <CRequirementNot id="NotTechTreeCheatCountUpgradeScannerGroup3UpgradeCompleteOnly">
         <Flags index="TechTreeCheat" value="1"/>
         <OperandArray index="0" value="CountUpgradeScannerGroup3UpgradeCompleteOnly"/>
-    </CRequirementNot>
-    <CRequirementNot id="NotTechTreeCheatCountUpgradeWarMinerWagonCompleteOnly">
-        <Flags index="TechTreeCheat" value="1"/>
-        <OperandArray index="0" value="CountUpgradeWarMinerWagonCompleteOnly"/>
     </CRequirementNot>
     <CRequirementOr id="OrCountUpgradeSquadTerranInfantryArmorHarvestBonusLevel1CompleteOnlyCountUpgradeSquadTerranInfantryArmorLevel1CompleteOnly">
         <OperandArray value="CountUpgradeSquadTerranInfantryArmorHarvestBonusLevel1CompleteOnly"/>
