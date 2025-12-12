@@ -424,19 +424,19 @@ Behavior/Name/VultureVanillaMode=Vulture Vanilla Mode
 Behavior/Name/WhiteNuclearIce=White Nuclear Ice
 Behavior/Name/YellowNuclearEarthquake=Yellow Nuclear Earthquake
 Behavior/Name/YellowScannerChronoBeam=Yellow Scanner Chrono Beam
-Behavior/Tooltip/BehemothAfterburner=<c val="F0F50A"></c>Speed Bonus Stack: </c><d ref="$BehaviorStackCount:BehemothAfterburner$"/>
+Behavior/Tooltip/BehemothAfterburner=<s val="_LawbdaBaseTooltip"><c val="F0F50A"></c>Speed Bonus Stack: </c><d ref="$BehaviorStackCount:BehemothAfterburner$"/></s>
 Behavior/Tooltip/BlueNuclearPsiStorm=Target is under the effects of Psionic Storm and will take massive damage while in this area of effect.
-Behavior/Tooltip/CCResourceMessage=Your resource has been messaged.
+Behavior/Tooltip/CCResourceMessage=Resource affected by this behavior can slowly regenerate <s val="_LawbdaHighLightGreen"><d ref="Behavior,CCResourceMessage,Period" precision="2"/> times</s> in <s val="_LawbdaHighLightGreen"><d ref="Behavior,CCResourceMessage,Duration" precision="2"/> seconds</s> every <s val="_LawbdaHighLightGreen"><d ref="Behavior,CCResourceMessageRegenAura,Period" precision="2"/> seconds</s>.<n/><s val="_LawbdaUnitStyle">Your resource has been messaged.</s>
 Behavior/Tooltip/DamageBuffer=Convert imidiately damage in 10s vital reduction.
-Behavior/Tooltip/HeroLevelUpTo10=Heroes can gain experience from battle, when veterancy level up, heroes can obtain skill points for abilities level.
+Behavior/Tooltip/HeroLevelUpTo10=<s val="_LawbdaBaseTooltip">Heroes can gain experience from battle, when veterancy level up, heroes can obtain damage taken reduce in <s val="_LawbdaHighLightGreen"><d ref="Behavior,HeroLevelUpTo10,SharedXPFraction[DamageTaken]*100" precision="2"/>%</s> and all damage bonus in <s val="_LawbdaHighLightGreen"><d ref="Behavior,HeroLevelUpTo10,SharedXPFraction[DamageDealt]*100" precision="2"/>%</s>.</s>
 Behavior/Tooltip/MagazineBaseTracker2=<c val="000000">Current Magazine unit:</c>
 Behavior/Tooltip/MagazineGhostTracker2=<c val="000000">Current Magazine unit:</c>
 Behavior/Tooltip/MagazineGhostTracker22=<c val="000000">Current Magazine unit:</c>
 Behavior/Tooltip/MagazineMarineTracker2=<c val="000000">Current Magazine unit:</c>
 Behavior/Tooltip/MagazineMedicTracker2=<c val="000000">Current Magazine unit:</c>
 Behavior/Tooltip/MagazineReaperTracker2=<c val="000000">Current Magazine unit:</c>
-Behavior/Tooltip/MarauderFrostArmorSlow=Target's movement speed is reduced for a short period of time.
-Behavior/Tooltip/MultiMineralAutoHarvest=Marauder helping you harvest now.
+Behavior/Tooltip/MarauderFrostArmorSlow=<s val="_LawbdaBaseTooltip">Target's movement speed is reduced for a short period of time.</s>
+Behavior/Tooltip/MultiMineralAutoHarvest=<s val="_LawbdaBaseTooltip">Captain will bonus from marauder's help in harvesting, automatic harvest most <s val="_LawbdaHighLightGreen"><d ref="Effect,MultiMineralAutoHarvestSearch,MaxCount" precision="2"/></s> mineral targets for <s val="_LawbdaHighLightTin"><d ref="0-Effect,MultiMineralAutoHarvest,Resources" precision="2"/></s> minerals  every <s val="_LawbdaHighLightGreen"><d ref="Behavior,MultiMineralAutoHarvestAura,Period" precision="2"/></s> seconds.</s><n/><s val="_LawbdaUnitStyle">Marauder helping you harvest now.</s>
 Behavior/Tooltip/OrbOrb=Increase all kinds of damage by <d ref="Behavior,OrbOrb,Modification.DamageDealtFraction[Ranged]"/>.
 Behavior/Tooltip/OverjobOrb=Add 10% heal effect, 25% melee damage increase.
 Behavior/Tooltip/ResourceMessage=Your resource has been messaged.
@@ -972,7 +972,7 @@ Button/Tooltip/BuildSquadThor=Heavy assault mech.<n/><n/><c val="#ColorAttackInf
 Button/Tooltip/BuildSquadViking=Durable support flyer. Loaded with strong anti-capital air missiles. Can switch into Assault Mode to attack ground units.<n/><n/><c val="#ColorAttackInfo">Can attack air units.</c>
 Button/Tooltip/BuildSquadVulture=Fast skirmish unit. Can use the Spider Mine ability.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/BuildSquadWraith=Highly mobile flying unit. Excellent at surgical strikes.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
-Button/Tooltip/BulletTime=Freezes all enemies in time for <d ref="Behavior,SOATimeFreeze,Duration"/> seconds.
+Button/Tooltip/BulletTime=<s val="_LawbdaBaseTooltip">Reduce time scales of all units in time for <d ref="Behavior,SquadBulletTimeForEnemy,Duration * Effect,SquadBulletTimeForEnemyCP,PeriodCount" precision="2" /> seconds.<n/>Reduce time scale for allay into <d ref="Behavior,SquadBulletTimeForPlayer,Modification.TimeScale * 100" precision="2"/>%.<n/>Reduce time scale for enemy into <d ref="Behavior,SquadBulletTimeForEnemy,Modification.TimeScale * 100"precision="2"/>%.<n/></s>
 Button/Tooltip/CaptainPredator=Anti-infantry specialist that deals area damage with each attack.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/ClimaxImpact01=<s val="Kicker_Gas">+1 </s><IMG path="Assets\Textures\icon-gas-terran.dds" height="28" width="28"/>
 Button/Tooltip/CommandCenterUpgrade=Reduces the cost and time required to research upgrades at Tech Labs and the Ghost Academy by 50%.
@@ -987,8 +987,8 @@ Button/Tooltip/ExtendableInfantryMagazine=Upgrade infantry squad magazine size f
 Button/Tooltip/FreemanShooterAura=Captain Freeman offer +<d ref="Behavior,SquadShooterAuraBuff,Modification.RangedWeaponRange"/> range for non-melee weapons in <d ref="Effect,SquadShooterAuraSearch,AreaArray[0].Radius"/>  raiuds.
 Button/Tooltip/GhostHoldFire2=Orders selected units to holster their weapons and avoid engaging enemies, unless given a direct command. Units holding fire will flee if attacked.
 Button/Tooltip/HarvestResourceMessage=Give a message to nearby resource.
-Button/Tooltip/HugeEnergyandMediumRegen=<s val="_LawbdaBaseTooltip">Give captain <c val="18F7FC">+<d ref="Behavior,EnergyHugeMaxandMediumRegeneration,Modification.VitalMaxAdditiveMultiplierArray[Energy]"precision="2"/> max energy</c> and <c val="18F7FC">+<d ref="Behavior,EnergyHugeMaxandMediumRegeneration,Modification.VitalRegenArray[Energy]" precision="2"/></c> energy regeneration rate bonus.</s>
-Button/Tooltip/HugeLifeandRegen=<s val="_LawbdaBaseTooltip">Give captain <c val="43F017">+<d ref="Behavior,UnitHugeAddMaxLife,Modification.VitalMaxArray[Life]"/> max life</c>,<c val="43F017">+<d ref="Behavior,UnitHugeAddMaxLife,Modification.VitalMaxFractionArray[Life]" precision="2"/>max life</c> and <c val="43F017">+<d ref="Behavior,UnitHugeAddMaxLife,Modification.VitalRegenArray[Life]" precision="2"/></c> life regeneration rate bonus.</s>
+Button/Tooltip/HugeEnergyandMediumRegen=<s val="_LawbdaBaseTooltip">Give captain <s val="_LawbdaHighLightTin">+<d ref="Behavior,EnergyHugeMaxandMediumRegeneration,Modification.VitalMaxAdditiveMultiplierArray[Energy]"precision="2"/> max energy</s> and <s val="_LawbdaHighLightTin">+<d ref="Behavior,EnergyHugeMaxandMediumRegeneration,Modification.VitalRegenArray[Energy]" precision="2"/></s> energy regeneration rate bonus.</s>
+Button/Tooltip/HugeLifeandRegen=<s val="_LawbdaBaseTooltip">Give captain <s val="_LawbdaHighLightGreen">+<d ref="Behavior,UnitHugeAddMaxLife,Modification.VitalMaxArray[Life]"/> max life</s>,<s val="_LawbdaHighLightGreen">+<d ref="Behavior,UnitHugeAddMaxLife,Modification.VitalMaxFractionArray[Life]" precision="2"/>max life</s> and <s val="_LawbdaHighLightGreen">+<d ref="Behavior,UnitHugeAddMaxLife,Modification.VitalRegenArray[Life]" precision="2"/></s> life regeneration rate bonus.</s>
 Button/Tooltip/IncineratorNozzles3=Increases the Firebat's damage radius by 40%.
 Button/Tooltip/InfantryFightingVehicle=Infantry Fighting Vehicle. Providing a shelter for infantry duration. Passenger can attack, repair and cast ability from this vehicle.
 Button/Tooltip/InfantrySquadCover=Bunker Cargo load accumulator: <d ref="Accumulator,CargoSizeBunker,"/>
@@ -997,14 +997,14 @@ Button/Tooltip/KraithMarineModel=An immense Pack Leader who charges at foes. Can
 Button/Tooltip/LawbdaCore=Generates electromagnetic pulses that damage Protoss shields.
 Button/Tooltip/LootGasTextTier12=<IMG path="Assets\Textures\climax-impact01.dds" height="96" width="96"/>
 Button/Tooltip/LootGasTextTier2=<s val="Kicker_Gas">+50 </s><IMG path="Assets\Textures\icon-gas-terran.dds" height="28" width="28"/>
-Button/Tooltip/LootResourceTextTier1=<s val="Kicker_Minerals">+<d ref="Effect,LootonDealDamageTier1,Resources[Minerals]"/></s><n/><s val="Kicker_Gas">+<d ref="Effect,LootonDealDamageTier1,Resources[Vespene]"/></s>
-Button/Tooltip/LootResourceTextTier2=<s val="Kicker_Minerals">+<d ref="Effect,LootonDealDamageTier2,Resources[Minerals]"/></s><n/><s val="Kicker_Gas">+<d ref="Effect,LootonDealDamageTier2,Resources[Vespene]"/></s>
-Button/Tooltip/LootResourceTextTier3=<s val="Kicker_Minerals">+<d ref="Effect,LootonDealDamageTier3,Resources[Minerals]"/></s><n/><s val="Kicker_Gas">+<d ref="Effect,LootonDealDamageTier3,Resources[Vespene]"/></s>
-Button/Tooltip/LootResourceTextTier4=<s val="Kicker_Minerals">+<d ref="Effect,LootonDealDamageTier4,Resources[Minerals]"/></s><n/><s val="Kicker_Gas">+<d ref="Effect,LootonDealDamageTier4,Resources[Vespene]"/></s>
-Button/Tooltip/LootResourceTextTier5=<s val="Kicker_Minerals">+<d ref="Effect,LootonDealDamageTier5,Resources[Minerals]"/></s><n/><s val="Kicker_Gas">+<d ref="Effect,LootonDealDamageTier5,Resources[Vespene]"/></s>
+Button/Tooltip/LootResourceTextTier1=<s val="Kicker_Minerals">+<d ref="Effect,LootonDealDamageTier1,Resources[Minerals]"/></s><IMG path="Assets\Textures\icon-mineral.dds" height="28" width="28"/><n/><s val="Kicker_Gas">+<d ref="Effect,LootonDealDamageTier1,Resources[Vespene]"/><IMG path="Assets\Textures\icon-gas-terran.dds" height="28" width="28"/></s>
+Button/Tooltip/LootResourceTextTier2=<s val="Kicker_Minerals">+<d ref="Effect,LootonDealDamageTier2,Resources[Minerals]"/></s><IMG path="Assets\Textures\icon-mineral.dds" height="28" width="28"/><n/><s val="Kicker_Gas">+<d ref="Effect,LootonDealDamageTier2,Resources[Vespene]"/><IMG path="Assets\Textures\icon-gas-terran.dds" height="28" width="28"/></s>
+Button/Tooltip/LootResourceTextTier3=<s val="Kicker_Minerals">+<d ref="Effect,LootonDealDamageTier3,Resources[Minerals]"/></s><IMG path="Assets\Textures\icon-mineral.dds" height="28" width="28"/><n/><s val="Kicker_Gas">+<d ref="Effect,LootonDealDamageTier3,Resources[Vespene]"/><IMG path="Assets\Textures\icon-gas-terran.dds" height="28" width="28"/></s>
+Button/Tooltip/LootResourceTextTier4=<s val="Kicker_Minerals">+<d ref="Effect,LootonDealDamageTier4,Resources[Minerals]"/></s><IMG path="Assets\Textures\icon-mineral.dds" height="28" width="28"/><n/><s val="Kicker_Gas">+<d ref="Effect,LootonDealDamageTier4,Resources[Vespene]"/><IMG path="Assets\Textures\icon-gas-terran.dds" height="28" width="28"/></s>
+Button/Tooltip/LootResourceTextTier5=<s val="Kicker_Minerals">+<d ref="Effect,LootonDealDamageTier5,Resources[Minerals]"/></s><IMG path="Assets\Textures\icon-mineral.dds" height="28" width="28"/><n/><s val="Kicker_Gas">+<d ref="Effect,LootonDealDamageTier5,Resources[Vespene]"/><IMG path="Assets\Textures\icon-gas-terran.dds" height="28" width="28"/></s>
 Button/Tooltip/Medic2=Support trooper. Heals nearby biological units.
-Button/Tooltip/MediumEnergyandHugeRegen=<s val="_LawbdaBaseTooltip">Give captain <c val="18F7FC">+<d ref="Behavior,EnergyMediumMaxandLargeRegeneration,Modification.VitalMaxAdditiveMultiplierArray[Energy]"precision="2"/> max energy</c> and <c val="18F7FC">+<d ref="Behavior,EnergyMediumMaxandLargeRegeneration,Modification.VitalRegenArray[Energy]" precision="2"/></c> energy regeneration rate bonus.</s>
-Button/Tooltip/MediumLifeandRegen=<s val="_LawbdaBaseTooltip">Give captain <c val="43F017">+<d ref="Behavior,UnitMediumAddMaxLife,Modification.VitalMaxArray[Life]"/> max life</c>,<c val="43F017">+<d ref="Behavior,UnitMediumAddMaxLife,Modification.VitalMaxFractionArray[Life]" precision="2"/>max life</c> and <c val="43F017">+<d ref="Behavior,UnitMediumAddMaxLife,Modification.VitalRegenArray[Life]" precision="2"/></c> life regeneration rate bonus.</s>
+Button/Tooltip/MediumEnergyandHugeRegen=<s val="_LawbdaBaseTooltip">Give captain <s val="_LawbdaHighLightTin">+<d ref="Behavior,EnergyMediumMaxandLargeRegeneration,Modification.VitalMaxAdditiveMultiplierArray[Energy]"precision="2"/> max energy</s> and <s val="_LawbdaHighLightTin">+<d ref="Behavior,EnergyMediumMaxandLargeRegeneration,Modification.VitalRegenArray[Energy]" precision="2"/></s> energy regeneration rate bonus.</s>
+Button/Tooltip/MediumLifeandRegen=<s val="_LawbdaBaseTooltip">Give captain <s val="_LawbdaHighLightGreen">+<d ref="Behavior,UnitMediumAddMaxLife,Modification.VitalMaxArray[Life]"/> max life</s>,<s val="_LawbdaHighLightGreen">+<d ref="Behavior,UnitMediumAddMaxLife,Modification.VitalMaxFractionArray[Life]" precision="2"/>max life</s> and <s val="_LawbdaHighLightGreen">+<d ref="Behavior,UnitMediumAddMaxLife,Modification.VitalRegenArray[Life]" precision="2"/></s> life regeneration rate bonus.</s>
 Button/Tooltip/MexicoProtocal=History on old terran public shown that boarder control always A hard problem.<n/>Now scientist showing a brave new technology based on Protoss Revenant.<n/>Allowing us building walls, building Great Walls to protect us from the outsider.
 Button/Tooltip/Minecraft=Spider mine will hold different behaviors on different magazine unit in squad.
 Button/Tooltip/NucolorMagicBook=The Medivac can heal two targets at once.
@@ -1030,10 +1030,10 @@ Button/Tooltip/ScannerSweepGreen=Reveals an area of the map, detecting cloaked a
 Button/Tooltip/ScannerSweepLockPassive=Unlock Colorful Scanner Sweep in Fusion Core.
 Button/Tooltip/ScannerSweepRed=Reveals an area of the map, detecting cloaked and burrowed units. Lasts <d time="12"/>.
 Button/Tooltip/ScannerSweepVanilla=Reveals an area of the map, detecting cloaked and burrowed units. Lasts <d time="12"/>.
-Button/Tooltip/SmallLifeandRegen=<s val="_LawbdaBaseTooltip">Give captain <c val="43F017">+<d ref="Behavior,UnitSmallAddMaxLife,Modification.VitalMaxArray[Life]"/> max life</c>,<c val="43F017">+<d ref="Behavior,UnitSmallAddMaxLife,Modification.VitalMaxFractionArray[Life]" precision="2"/>max life</c> and <c val="43F017">+<d ref="Behavior,UnitSmallAddMaxLife,Modification.VitalRegenArray[Life]" precision="2"/></c> life regeneration rate bonus.</s>
+Button/Tooltip/SmallLifeandRegen=<s val="_LawbdaBaseTooltip">Give captain <s val="_LawbdaHighLightGreen">+<d ref="Behavior,UnitSmallAddMaxLife,Modification.VitalMaxArray[Life]"/> max life</s>,<s val="_LawbdaHighLightGreen">+<d ref="Behavior,UnitSmallAddMaxLife,Modification.VitalMaxFractionArray[Life]" precision="2"/>max life</s> and <s val="_LawbdaHighLightGreen">+<d ref="Behavior,UnitSmallAddMaxLife,Modification.VitalRegenArray[Life]" precision="2"/></s> life regeneration rate bonus.</s>
 Button/Tooltip/SpikeArmor=Damage caused by Spine Lash increased to 30.
 Button/Tooltip/SquadAddonTacticalJump=After <d time="6"/>, warps to the target location. Battlecruiser is invulnerable while warping.<n/><n/><c val="#ColorAttackInfo">Does not require vision.</c>
-Button/Tooltip/SquadAfterburner=<n/>Increases the Scout's movement speed by 100% for <d time="10"/>.
+Button/Tooltip/SquadAfterburner=<s val="_LawbdaBaseTooltip"><n/>Increases the Unit's movement speed to <s val="_LawbdaHighLightGreen"><d ref="Behavior,SquadAfterburner,Modification.MoveSpeedMultiplier*100" precision="4"/>%</s> for <d ref="Behavior,SquadAfterburner,Duration" precision="2"/>s.
 Button/Tooltip/SquadArmory=Contains weapon and armor upgrades for Factory and Starport units.
 Button/Tooltip/SquadAttackRedirect=Targets and attacks the target unit until it is destroyed or moves out of range.
 Button/Tooltip/SquadAutomatedMineralTextKicker4=<s val="Kicker_Minerals">+4 </s><IMG path="Assets\Textures\icon-mineral.dds" height="28" width="28"/>
@@ -1097,7 +1097,7 @@ Button/Tooltip/SquadGhostEMPRound=Creates an electromagnetic pulse that does 100
 Button/Tooltip/SquadGhostOcularImplants=Increases Ghost weapon range by 2. Increases sight radius by 3.
 Button/Tooltip/SquadGhostResearchCaduceusReactor=Increases the starting energy of <c val="ffff8a">Medivacs</c> by <d ref="Upgrade,MedivacCaduceusReactor,EffectArray[0].Value"/>.
 Button/Tooltip/SquadGhostResearchMoebiusReactor=Increases the starting energy of <c val="ffff8a">Ghosts</c> by <d ref="Upgrade,GhostMoebiusReactor,EffectArray[0].Value"/>.
-Button/Tooltip/SquadGhostSnipe=A careful shot, dealing <d ref="Effect,SnipeDamage,Amount"/> (<d ref="Effect,SnipeDamage,Amount + Effect,SnipeDamage,AttributeBonus[5]"/> vs. Psionic) damage. Ignores armor.<n/><n/><c val="#ColorAttackInfo">Can only target biological units.</c>
+Button/Tooltip/SquadGhostSnipe=<s val="_LawbdaBaseTooltip">A careful shot, dealing <d ref="Effect,SnipeDamage,Amount"/> (<d ref="Effect,SquadSnipeDamage,Amount + Effect,SquadSnipeDamage,AttributeBonus[5]"/> vs. Psionic) damage, Ignores armor.<n/></s>
 Button/Tooltip/SquadGhostSnipe2=A careful shot, dealing <d ref="Effect,SnipeDamage,Amount"/> (<d ref="Effect,SnipeDamage,Amount + Effect,SnipeDamage,AttributeBonus[5]"/> vs. Psionic) damage. Ignores armor.<n/><n/><c val="#ColorAttackInfo">Can only target biological units.</c>
 Button/Tooltip/SquadGhostTripleSnipe=A careful shot, dealing <d ref="Effect,SnipeDamage,Amount"/> (<d ref="Effect,SnipeDamage,Amount + Effect,SnipeDamage,AttributeBonus[5]"/> vs. Psionic) damage. Ignores armor.<n/><n/><c val="#ColorAttackInfo">Can only target biological units.</c>
 Button/Tooltip/SquadGiftTooltips=<s val="_LawbdaBaseTooltip">Units can give various bonus gift for the captain unit while join as team member.</s>
@@ -1159,12 +1159,12 @@ Button/Tooltip/SquadMedivacSpiltShell=Missile Pods deal <d ref="Effect,Hurricane
 Button/Tooltip/SquadMedivacUnloadAll=Unloads all units.
 Button/Tooltip/SquadMercCompound=Trains Mercenary units.
 Button/Tooltip/SquadMindControl=Permanently converts targeted Zerg unit to player control.<n/><n/><c val="#ColorAttackInfo">Heroic units are immune.</c>
-Button/Tooltip/SquadMineralExchange=+100 minerals.
+Button/Tooltip/SquadMineralExchange=<s val="_LawbdaBaseTooltip">Cost every 100 vespene for <d ref="Effect,SquadMineralExchange200,Resources[Minerals]" precision="2"/> minerals.</s>
 Button/Tooltip/SquadMineralInvestmentLarge=+100 minerals.
 Button/Tooltip/SquadMineralInvestmentLargeTextKicker40=<s val="Kicker_Minerals">+<d ref="Effect,SquadMineralInvestmentLargeMP40,Resources[Minerals]"/> </s><IMG path="Assets\Textures\icon-mineral.dds" height="28" width="28"/>
-Button/Tooltip/SquadMineralInvestmentMedium=+100 minerals.
+Button/Tooltip/SquadMineralInvestmentMedium=<s val="_LawbdaBaseTooltip">Cost every 100 vespene for <d ref="Effect,SquadMineralExchange200,Resources[Minerals]" precision="2"/> minerals.</s>
 Button/Tooltip/SquadMineralInvestmentMediumTextKicker20=<s val="Kicker_Minerals">+<d ref="Effect,SquadMineralInvestmentMediumMP20,Resources[Minerals]"/> </s><IMG path="Assets\Textures\icon-mineral.dds" height="28" width="28"/>
-Button/Tooltip/SquadMineralInvestmentSmall=+100 minerals.
+Button/Tooltip/SquadMineralInvestmentSmall=<s val="_LawbdaBaseTooltip">Cost every 100 vespene for <d ref="Effect,SquadMineralExchange200,Resources[Minerals]" precision="2"/> minerals.</s>
 Button/Tooltip/SquadMineralInvestmentSmallTextKicker8=<s val="Kicker_Minerals">+<d ref="Effect,SquadMineralInvestmentSmallMP8,Resources[Minerals]"/> </s><IMG path="Assets\Textures\icon-mineral.dds" height="28" width="28"/>
 Button/Tooltip/SquadMissilePods=Missile Pods deal <d ref="Effect,HurricaneMissileDamage,Amount * Effect,HurricaneMissileDamagePersistent,PeriodCount"/> (+<d ref="Effect,HurricaneMissileDamage,AttributeBonus[0] * Effect,HurricaneMissileDamagePersistent,PeriodCount"/> vs. light) damage to air units in target area.
 Button/Tooltip/SquadMissileTurret=Primary anti-air defensive structure. <n/><n/><c val="#ColorAttackInfo">Can attack air units.</c><n/><c val="FFE303">Detector</c>
@@ -1178,9 +1178,9 @@ Button/Tooltip/SquadNanoEnergyCharge=Charges a friendly unit.<n/><n/><c val="f07
 Button/Tooltip/SquadNeuralParasite=Target unit is controlled by the Infestor until one of them dies or the Infestor relinquishes control. The Infestor cannot take any other action while controlling an enemy unit.<n/><n/><c val="#ColorAttackInfo">Can target ground units.</c><n/><c val="ffff8a">Channeled ability</c>
 Button/Tooltip/SquadOrbitalCommandFlying=Primary structure. Must land to receive resources, produce units, or use abilities.
 Button/Tooltip/SquadOrbitalCommandUnit=Primary structure. Used to train SCVs and receive gathered resources. Can use the Scanner Sweep and Calldown: Extra Supplies abilities.
-Button/Tooltip/SquadPickupScrapLargeText=<s val="Kicker_Minerals">+<d ref="Effect,SquadPickupScrapLargeResources,Resources[0]"/> </s><n/><s val="Kicker_Gas">+<d ref="Effect,SquadPickupScrapLargeResources,Resources[1]"/> </s>
-Button/Tooltip/SquadPickupScrapMediumText=<s val="Kicker_Minerals">+<d ref="Effect,SquadPickupScrapMediumResources,Resources[0]"/> </s><n/><s val="Kicker_Gas">+<d ref="Effect,SquadPickupScrapMediumResources,Resources[1]"/> </s>
-Button/Tooltip/SquadPickupScrapSmallText=<s val="Kicker_Minerals">+<d ref="Effect,SquadPickupScrapSmallResources,Resources[0]"/> </s><n/><s val="Kicker_Gas">+<d ref="Effect,SquadPickupScrapSmallResources,Resources[1]"/> </s>
+Button/Tooltip/SquadPickupScrapLargeText=<s val="Kicker_Minerals">+<d ref="Effect,SquadPickupScrapLargeResources,Resources[0]"/><IMG path="Assets\Textures\icon-mineral.dds" height="28" width="28"/></s><n/><s val="Kicker_Gas">+<d ref="Effect,SquadPickupScrapLargeResources,Resources[1]"/><IMG path="Assets\Textures\icon-gas-terran.dds" height="28" width="28"/></s>
+Button/Tooltip/SquadPickupScrapMediumText=<s val="Kicker_Minerals">+<d ref="Effect,SquadPickupScrapMediumResources,Resources[0]"/><IMG path="Assets\Textures\icon-mineral.dds" height="28" width="28"/></s><n/><s val="Kicker_Gas">+<d ref="Effect,SquadPickupScrapMediumResources,Resources[1]"/><IMG path="Assets\Textures\icon-gas-terran.dds" height="28" width="28"/></s>
+Button/Tooltip/SquadPickupScrapSmallText=<s val="Kicker_Minerals">+<d ref="Effect,SquadPickupScrapSmallResources,Resources[0]"/><IMG path="Assets\Textures\icon-mineral.dds" height="28" width="28"/></s><n/><s val="Kicker_Gas">+<d ref="Effect,SquadPickupScrapSmallResources,Resources[1]"/><IMG path="Assets\Textures\icon-gas-terran.dds" height="28" width="28"/></s>
 Button/Tooltip/SquadPlanetaryFortress=Primary structure. Used to train SCVs and receive gathered resources. Has exceptional combat capabilities that are extremely potent against swarms of small units.<n/><n/><c val="ffff8a">Can attack ground units.</c>
 Button/Tooltip/SquadPlanetaryFortressStop=Orders selected units to cancel all orders and stop moving.
 Button/Tooltip/SquadPointDefenseDrone=Uses a laser to shoot down enemy missiles.  <n/>Cannot target special attacks. <n/>Times out after <d ref="Behavior,PointDefenseDroneTimedLife,Duration"/> seconds.<n/><n/><c val="f078ff">Each shot consumes 10 energy.</c>
@@ -1301,12 +1301,12 @@ Button/Tooltip/SquadTomahawkPowerCells=Wraith starts with 100 additional energy.
 Button/Tooltip/SquadUltralisk=Heavy assault beast. Has an area-damage attack.<n/><n/><c val="ffff8a">Can attack ground units.</c>
 Button/Tooltip/SquadUnloadBodyAll=Unloads all units.
 Button/Tooltip/SquadUpgradeStructureArmor=Upgrades the armor of <c val="ffff8a">structures</c> by 2.
-Button/Tooltip/SquadVespenseExchange=Vespene gas harvesting efficiency increased by 25%.
+Button/Tooltip/SquadVespenseExchange=<s val="_LawbdaBaseTooltip">Cost every 100 mineral for <d ref="Effect,SquadVespenseExchange25,Resources[Vespene]" precision="2"/> vespene.</s>
 Button/Tooltip/SquadVespenseInvestmentLarge=+100 minerals.
 Button/Tooltip/SquadVespenseInvestmentLargeTextKicker20=<s val="Kicker_Refinery">+<d ref="Effect,SquadVespenseInvestmentLargeMP20,Resources[Vespene]"/> </s><IMG path="Assets\Textures\icon-gas-terran.dds" height="28" width="28"/>
-Button/Tooltip/SquadVespenseInvestmentMedium=+100 minerals.
+Button/Tooltip/SquadVespenseInvestmentMedium=<s val="_LawbdaBaseTooltip">Cost every 100 vespene for <d ref="Effect,SquadMineralExchange200,Resources[Minerals]" precision="2"/> minerals.</s>
 Button/Tooltip/SquadVespenseInvestmentMediumTextKicker10=<s val="Kicker_Refinery">+<d ref="Effect,SquadVespenseInvestmentMediumMP10,Resources[Vespene]"/> </s><IMG path="Assets\Textures\icon-gas-terran.dds" height="28" width="28"/>
-Button/Tooltip/SquadVespenseInvestmentSmall=+100 minerals.
+Button/Tooltip/SquadVespenseInvestmentSmall=<s val="_LawbdaBaseTooltip">Cost every 100 vespene for <d ref="Effect,SquadMineralExchange200,Resources[Minerals]" precision="2"/> minerals.</s>
 Button/Tooltip/SquadVespenseInvestmentSmallTextKicker4=<s val="Kicker_Refinery">+<d ref="Effect,SquadVespenseInvestmentSmallMP4,Resources[Vespene]"/> </s><IMG path="Assets\Textures\icon-gas-terran.dds" height="28" width="28"/>
 Button/Tooltip/SquadVikin=Request 3 Hel's Angels Mercenaries.<n/><n/>Pirate Vikings with exceptional aerial expertise.
 Button/Tooltip/SquadVikinResearchJotunBoosters=<c val="ffff8a">Viking</c> Lanzer Torpedoes gain +2 range.
@@ -2646,8 +2646,29 @@ RequirementNode/Tooltip/CountUnitSquadGhostAcademyCompleteOnly1989774637TechTree
 RequirementNode/Tooltip/CountUnitSquadOrbitalCommandCompleteOnly1880127587TechTreeCheat=Must have Orbital Command Center.
 RequirementNode/Tooltip/CountUnitSquadPlanetaryFortressCompleteOnly112945196TechTreeCheat=Must have Planetary Fortress.
 RequirementNode/Tooltip/CountUnitSquadStarportCompleteOnly609517851TechTreeCheat=Must have Starport.
+RequirementNode/Tooltip/CountUpgradeSquadTerranInfantryArmorHarvestBonusLevel1CompleteOnly1429793488=Terran Infantry Weapons Level 1
+RequirementNode/Tooltip/CountUpgradeSquadTerranInfantryArmorHarvestBonusLevel2CompleteOnly1429793488=Terran Infantry Weapons Level 1
+RequirementNode/Tooltip/CountUpgradeSquadTerranInfantryArmorHarvestBonusLevel3CompleteOnly1429793488=Terran Infantry Weapons Level 1
+RequirementNode/Tooltip/CountUpgradeSquadTerranInfantryWeaponsHarvestBonusLevel1CompleteOnly1429793488=Terran Infantry Weapons Level 1
+RequirementNode/Tooltip/CountUpgradeSquadTerranInfantryWeaponsHarvestBonusLevel2CompleteOnly1429793488=Terran Infantry Weapons Level 1
+RequirementNode/Tooltip/CountUpgradeSquadTerranVehicleAndShipPlatingDefenceStructureBonusLevel1CompleteOnly1429793488=Terran Infantry Weapons Level 1
+RequirementNode/Tooltip/CountUpgradeSquadTerranVehicleAndShipPlatingDefenceStructureBonusLevel2CompleteOnly1429793488=Terran Infantry Weapons Level 1
+RequirementNode/Tooltip/CountUpgradeSquadTerranVehicleAndShipPlatingDefenceStructureBonusLevel3CompleteOnly1429793488=Terran Infantry Weapons Level 1
+RequirementNode/Tooltip/CountUpgradeSquadTerranVehicleAndShipWeaponsDefenceStructureBonusLevel1CompleteOnly1429793488=Terran Infantry Weapons Level 1
+RequirementNode/Tooltip/CountUpgradeSquadTerranVehicleAndShipWeaponsDefenceStructureBonusLevel2CompleteOnly1429793488=Terran Infantry Weapons Level 1
+RequirementNode/Tooltip/CountUpgradeSquadTerranVehicleAndShipWeaponsDefenceStructureBonusLevel3CompleteOnly1429793488=Terran Infantry Weapons Level 1
 RequirementNode/Tooltip/Eq3446134918CountUpgradeSquadTerranInfantryArmorLevel1CompleteOnly1=Terran Infantry Armor Level 1
-RequirementNode/Tooltip/Eq3722837715CountUpgradeSquadTerranInfantryArmorLevel2CompleteOnly1=Terran Infantry Armor Level 2
+RequirementNode/Tooltip/Eq3446134918CountUpgradeSquadTerranInfantryArmorLevel2CompleteOnly1=Terran Infantry Armor Level 1
+RequirementNode/Tooltip/Eq3446134918CountUpgradeSquadTerranInfantryWeaponsLevel1CompleteOnly1=Terran Infantry Armor Level 1
+RequirementNode/Tooltip/Eq3446134918CountUpgradeSquadTerranInfantryWeaponsLevel2CompleteOnly1=Terran Infantry Armor Level 1
+RequirementNode/Tooltip/Eq3446134918CountUpgradeSquadTerranVehicleAndShipPlatingLevel1CompleteOnly1=Terran Infantry Armor Level 1
+RequirementNode/Tooltip/Eq3446134918CountUpgradeSquadTerranVehicleAndShipPlatingLevel2CompleteOnly1=Terran Infantry Armor Level 1
+RequirementNode/Tooltip/Eq3446134918CountUpgradeSquadTerranVehicleAndShipWeaponsLevel1CompleteOnly1=Terran Infantry Armor Level 1
+RequirementNode/Tooltip/Eq3446134918CountUpgradeSquadTerranVehicleAndShipWeaponsLevel2CompleteOnly1=Terran Infantry Armor Level 1
+RequirementNode/Tooltip/Eq3722837715CountUpgradeSquadTerranInfantryArmorLevel3CompleteOnly1=Terran Infantry Armor Level 2
+RequirementNode/Tooltip/Eq3722837715CountUpgradeSquadTerranInfantryWeaponsLevel3CompleteOnly1=Terran Infantry Armor Level 2
+RequirementNode/Tooltip/Eq3722837715CountUpgradeSquadTerranVehicleAndShipPlatingLevel3CompleteOnly1=Terran Infantry Armor Level 2
+RequirementNode/Tooltip/Eq3722837715CountUpgradeSquadTerranVehicleAndShipWeaponsLevel3CompleteOnly1=Terran Infantry Armor Level 2
 RequirementNode/Tooltip/Not2920725521CountUnitCaptainFreemanQueuedOrBetterOrRevivable=No Captain Freeman on filed.
 RequirementNode/Tooltip/PoweredByBarracks=Powered by Tech Lab
 RequirementNode/Tooltip/PoweredByCommandCenter=Powered by Tech Lab
@@ -2675,7 +2696,7 @@ UI/HarvesterCountMine=
 UI/HarvesterCountMiner=
 UI/HarvesterCountMinera=
 UI/HarvesterCountMineral=
-UI/HarvesterCountMinerals=<img path="@@UI/ResourceIconNoBackground0" alignment="AbsoluteMiddle" width="20" height="20"/> Workers:<c val="%colorValue%"> %current%/%ideal%</c>
+UI/HarvesterCountMinerals=<s val="_LawbdaUnitStyle"><img path="@@UI/ResourceIconNoBackground0" alignment="AbsoluteMiddle" width="20" height="20"/> Workers:<c val="%colorValue%"> %current%/%ideal%</c></s>
 Unit/Category/Lawbda=Lawbda Mode
 Unit/Name/CaptainExcavator=Mobile Destruction Vehicle
 Unit/Name/CaptainFreeman=Captain Freeman
