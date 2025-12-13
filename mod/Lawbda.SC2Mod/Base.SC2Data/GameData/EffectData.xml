@@ -30,6 +30,22 @@
     <CEffectEnumArea default="1" id="SquadAbilSearchRadiusExt" parent="SquadAbilSearch">
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
+    <CEffectApplyBehavior id="SquadSwannFrostBettyPoisonGasCloudAB">
+        <ValidatorArray value="NotUltraliskVars"/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadSwannFrostBettyPoisonGas"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="SquadSwannFrostBettyPoisonGasCloudDamage">
+        <EditorCategories value=""/>
+        <AttributeBonus index="Light" value="5"/>
+        <AttributeBonus index="Biological" value="5"/>
+        <Amount value="5"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="SquadSwannFrostBettyPoisonGasCloudSearch">
+        <EditorCategories value="Race:Terran"/>
+        <SearchFilters value="Visible;Self,Player,Ally,Neutral,Structure,Missile,Invulnerable"/>
+        <AreaArray Radius="3" Effect="SquadSwannFrostBettyPoisonGasCloudSet"/>
+    </CEffectEnumArea>
     <CEffectApplyBehavior id="SquadStetmannHealDamageGrenadeStunAB">
         <ValidatorArray index="0" value="NotFrenzied"/>
         <ValidatorArray value="TargetIsNotUnstoppable"/>
@@ -444,11 +460,22 @@
         <ImpactEffect value="SquadSwannConcussiveGrenadeDamage"/>
         <AmmoUnit value="SquadSwannConcussiveGrenadeMissile"/>
     </CEffectLaunchMissile>
-    <CEffectCreateUnit id="SquadSwannPlaceTurretCreateUnit">
+    <CEffectSet id="SquadSwannFrostBettyPoisonGasCloudSet">
+        <EditorCategories value=""/>
+        <EffectArray value="SquadSwannFrostBettyPoisonGasCloudAB"/>
+        <EffectArray value="SquadSwannFrostBettyPoisonGasCloudDamage"/>
+    </CEffectSet>
+    <CEffectCreateUnit id="SquadSwannPlaceFlamingBettyCreateUnit">
         <EditorCategories value="Race:Terran"/>
         <WhichLocation Value="TargetPoint"/>
         <SpawnEffect value="SquadSwannPlaceTurretTimedLife"/>
         <SpawnUnit value="SquadSwannFlamingBetty"/>
+    </CEffectCreateUnit>
+    <CEffectCreateUnit id="SquadSwannPlaceFrostBettyCreateUnit">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetPoint"/>
+        <SpawnEffect value="SquadSwannPlaceTurretTimedLife"/>
+        <SpawnUnit value="SquadSwannFrostBetty"/>
     </CEffectCreateUnit>
     <CEffectApplyBehavior id="SquadSwannPlaceTurretTimedLife">
         <EditorCategories value=""/>

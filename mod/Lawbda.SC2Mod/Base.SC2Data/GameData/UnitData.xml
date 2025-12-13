@@ -1,5 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CUnit id="SquadSwannFrostBetty">
+        <DeathRevealRadius value="3"/>
+        <Facing value="29.9926"/>
+        <Race value="Terr"/>
+        <Mob value="Campaign"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="AIDefense" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="250"/>
+        <LifeMax value="250"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranBuildingPlating"/>
+        <Sight value="7"/>
+        <CostResource index="Minerals" value="150"/>
+        <RepairTime value="33.3332"/>
+        <AttackTargetPriority value="20"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <BehaviorArray Link="SquadSwannFrostBettyPoisonGasFiring"/>
+        <BehaviorArray Link="MarauderFrostArmor"/>
+        <WeaponArray Turret="SquadSwannFrostBettyTurret"/>
+        <CardLayouts>
+            <LayoutButtons Face="Detector" Type="Passive" Behavior="DistortionSensors" Row="2" Column="3"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="FrostArmor" Type="Passive" Behavior="MarauderFrostArmor" Row="2" Column="1"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+        </CardLayouts>
+        <Radius value="0.75"/>
+        <SeparationRadius value="0.75"/>
+        <Footprint value="FootprintAutoTurret"/>
+        <PlacementFootprint value="FootprintAutoTurret"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="12"/>
+        <MinimapRadius value="0.75"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Campaign"/>
+        <GlossaryPriority value="263"/>
+        <KillDisplay value="Always"/>
+        <RankDisplay value="Always"/>
+    </CUnit>
     <CUnit id="SquadStetmannHealDamageGrenade" parent="MISSILE">
         <Race value="Terr"/>
         <Mover value="TossFlashGrenade"/>
@@ -117,7 +168,8 @@
         <CardLayouts>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
-            <LayoutButtons Face="Dismantle" Type="AbilCmd" AbilCmd="DismantleTurret,0" Row="2" Column="0"/>
+            <LayoutButtons Face="Dismantle" Type="AbilCmd" AbilCmd="DismantleTurret,255" Row="2" Column="0"/>
+            <LayoutButtons Face="ImmolationArmor" Type="Passive" Behavior="FirebatImmolationArmor" Row="2" Column="1"/>
         </CardLayouts>
         <Radius value="0.75"/>
         <SeparationRadius value="0.75"/>
@@ -132,6 +184,7 @@
         <GlossaryCategory value="Unit/Category/TerranUnits"/>
         <GlossaryPriority value="360"/>
         <HotkeyCategory value="Unit/Category/TerranStory"/>
+        <BehaviorArray Link="FirebatImmolationArmor"/>
     </CUnit>
     <CUnit id="SquadFuturesExchange">
         <Description value="Button/Tooltip/Biodome"/>
@@ -7554,10 +7607,11 @@
         <AbilArray Link="stop"/>
         <AbilArray Link="attack"/>
         <AbilArray Link="move"/>
-        <AbilArray Link="SquadSwannPlaceTurret"/>
+        <AbilArray Link="SquadSwannPlaceFlamingBetty"/>
         <AbilArray Link="QueueMagazine"/>
         <AbilArray Link="SquadInfantry"/>
         <AbilArray Link="DisbandSquad"/>
+        <AbilArray Link="SquadSwannPlaceFrostBetty"/>
         <BehaviorArray Link="SquadHeroDeathPrevention"/>
         <BehaviorArray Link="HeroLevelUpTo10"/>
         <WeaponArray Link="SquadSwannConcussiveGrenade"/>
@@ -7568,7 +7622,8 @@
             <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
-            <LayoutButtons Face="SquadSwannPlaceFlamingBetty" Type="AbilCmd" AbilCmd="SquadSwannPlaceTurret,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="SquadSwannPlaceFlamingBetty" Type="AbilCmd" AbilCmd="SquadSwannPlaceFlamingBetty,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="SquadSwannPlaceFrostBetty" Type="AbilCmd" AbilCmd="SquadSwannPlaceFrostBetty,Execute" Row="2" Column="1"/>
         </CardLayouts>
         <InnerRadius value="0.5"/>
         <CargoSize value="2"/>

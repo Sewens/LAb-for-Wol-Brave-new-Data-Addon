@@ -215,6 +215,59 @@
         <HeightOffset value="1.500000"/>
         <Text value="Button/Tooltip/##id##"/>
     </CActorText>
+    <CActorUnit id="SquadSwannFrostBetty" parent="TerranBuilding" unitName="SquadSwannFrostBetty">
+        <Aliases value="_UnitSmall"/>
+        <!--
+        <On Terms="UnitBirth.SquadSwannFrostBetty" Send="Create"/>
+        <On Terms="UnitBirth.SquadFrostBetty" Send="AnimBracketStart Work Stand,Work,Start Stand,Work Stand,Work,End ClosingFull,OpeningPlayForever,Instant"/>
+        
+        <On Terms="AbilMorph.*.Start; MorphTo LabTurret" Target="Doodad_UmojanLabGasTurret_StandWork" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Start; MorphTo LabTurret" Send="AnimBracketStop Work"/>
+
+        <On Terms="AbilMorph.*.Start; MorphTo LabTurret" Target="SquadSwannFrostBettyPoisonGasCloud" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart GL_BSD_B GLbirth,B GLstand,B GLdeath,B"/>
+
+        <On Terms="UnitBirth.SquadSwannFrostBetty" Send="Create SquadSwannFrostBettyPoisonGasCloud"/>
+-->
+        <On Terms="UnitBirth.SquadSwannFrostBetty" Send="AnimBracketStart Work Stand,Work,Start Stand,Work Stand,Work,End ClosingFull,OpeningPlayForever"/>
+        <On Terms="UnitBirth.SquadSwannFrostBetty" Send="Create Doodad_UmojanLabGasTurret_StandWork"/>
+        <CreepHeightClass value="Small"/>
+        <DeathArray index="Normal" ModelLink="SquadSwannFrostBettyDeath" SoundLink="PerditionTurret_Explode"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="PerditionTurret_Explode"/>
+        <DeathCustoms ModelLink="TerranBuildingDeath" SoundLink="Terran_ExplosionMedium" Name="Burrowed"/>
+        <PlacementModel value="PerditionTurretPlacement"/>
+        <PlacementSound value="Terran_BuildingPlacement"/>
+        <PortraitModel value="SquadAdjutantPortrait"/>
+        <BarOffset value="75"/>
+        <BarWidth value="85"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-LabGasTurret.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\Wireframe-Terran-LabGasTurret.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-buildingarmor.dds"/>
+        <SoundArray index="Construction" value="Terran_ConstructionWhat"/>
+        <UnitIcon value="Assets\Textures\Wireframe-Terran-LabGasTurret.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-LabGasTurret.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorTurret id="SquadSwannFrostBettyTurret">
+        <On Terms="TurretEnable.SquadSwannFrostBettyTurret" Send="Create"/>
+    </CActorTurret>
+    <CActorSound id="Doodad_UmojanLabGasTurret_StandWork" parent="SoundContinuous"/>
+    <CActorModel id="SquadSwannFrostBettyPoisonGasCloud" parent="ModelAddition">
+        <On Terms="Behavior.SquadSwannFrostBettyPoisonGasFiring.On" Send="Create"/>
+        <On Terms="Behavior.SquadSwannFrostBettyPoisonGasFiring.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation" Send="SetOpacity"/>
+        <On Terms="ActorCreation" Send="SetOpacity 1.000000 3.000000"/>
+        <On Terms="ActorCreation" Send="SetTintColor 81,215,234"/>
+        <Inherits index="Visibility" value="0"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+        <CreepHeightClass value="Small"/>
+        <Model value="LabTurretPoisonGasCloud"/>
+        <Scale value="0.300000"/>
+    </CActorModel>
     <CActorRange id="SquadStetmannHealDamageGrenadeRange" parent="RangeAbil" abil="SquadStetmannHealDamageGrenade"/>
     <CActorModel id="SquadStetmannHealDamageGrenadeHDOTImpact" parent="ModelAnimationStyleOneShot">
         <On Terms="Effect.SquadStetmannHealDamageGrenadeHealonTime.Start" Send="Create"/>
@@ -617,7 +670,7 @@
         <On Terms="WeaponStop.SquadSwannFist.AttackStop" Send="AnimBracketStop AttackCover"/>
         <On Terms="TimerExpired; TimerName MeleeAttackLaunch" Send="Create Swann_MeleeAttackLaunch"/>
         <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
-        <On Terms="Abil.SquadSwannPlaceTurret.SourceCastStart" Send="$Spell 0 -1.000000 -1.000000 1.000000 AsDuration"/>
+        <On Terms="Abil.SquadSwannPlaceFlamingBetty.SourceCastStart" Send="$Spell 0 -1.000000 -1.000000 1.000000 AsDuration"/>
         <Model value="Swann"/>
         <BuildModel value="Swann"/>
         <DeathArray index="Normal" ModelLink="MarauderDeath" SoundLink="Swann_Explode"/>
@@ -626,7 +679,7 @@
         <PlacementModel value="Swann"/>
         <PortraitModel value="SwannMarauderPortrait"/>
         <WalkAnimMoveSpeed value="2.25"/>
-        <AbilSoundArray AbilCmd="SquadSwannPlaceTurret,Execute" Sound="Swann_PlaceTurretVO"/>
+        <AbilSoundArray AbilCmd="SquadSwannPlaceFlamingBetty,255" Sound="Swann_PlaceTurretVO"/>
         <BarOffset value="60"/>
         <BarWidth value="50"/>
         <ErrorArray Error="CantSeeBuildLocation" Sound="e_cmdBuildTechRequirementsNotMet_Terr"/>
