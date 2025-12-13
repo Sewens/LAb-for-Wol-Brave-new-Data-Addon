@@ -30,6 +30,432 @@
     <CEffectEnumArea default="1" id="SquadAbilSearchRadiusExt" parent="SquadAbilSearch">
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
+    <CEffectDamage id="SquadOdinBarrageDamage">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Amount value="125"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="SquadOdinBarragePersistent">
+        <ValidatorArray value="OdinRepairing"/>
+        <ValidatorArray value="CliffLevelGE1"/>
+        <EditorCategories value="Race:Terran"/>
+        <Flags index="Channeled" value="1"/>
+        <PeriodCount value="12"/>
+        <PeriodicEffectArray value="SquadOdinBarrageSearchArea"/>
+        <PeriodicPeriodArray value="0.4"/>
+        <RevealRadius value="5"/>
+        <RevealFlags index="Unfog" value="1"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="SquadOdinBarrageSearchArea">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Effect="SquadOdinBarragePersistent"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="3" Effect="SquadOdinBarrageDamage"/>
+    </CEffectEnumArea>
+    <CEffectDamage id="SquadOdinAnnihilateDamage">
+        <ValidatorArray value="noMarkers"/>
+        <EditorCategories value="Race:Terran"/>
+        <Amount value="300"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="SquadOdinAnnihilateInitialCreatePersistent">
+        <EditorCategories value=""/>
+        <Marker>
+            <MatchFlags index="Id" value="1"/>
+        </Marker>
+        <WhichLocation Value="CasterPoint"/>
+        <Flags index="Channeled" value="1"/>
+        <PeriodCount value="8"/>
+        <PeriodicEffectArray value="SquadOdinAnnihilateSearch"/>
+        <PeriodicOffsetArray value="0,-2,0"/>
+        <PeriodicOffsetArray value="0,-3,0"/>
+        <PeriodicOffsetArray value="0,-4,0"/>
+        <PeriodicOffsetArray value="0,-5,0"/>
+        <PeriodicOffsetArray value="0,-6,0"/>
+        <PeriodicOffsetArray value="0,-7,0"/>
+        <PeriodicOffsetArray value="0,-8,0"/>
+        <PeriodicOffsetArray value="0,-9,0"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0.1"/>
+        <PeriodicPeriodArray value="0.1"/>
+        <PeriodicPeriodArray value="0.1"/>
+        <PeriodicPeriodArray value="0.1"/>
+        <PeriodicPeriodArray value="0.1"/>
+        <PeriodicPeriodArray value="0.1"/>
+        <PeriodicPeriodArray value="0.1"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="SquadOdinAnnihilateSearch">
+        <EditorCategories value=""/>
+        <SearchFilters value="Ground;Self,Player,Ally,Neutral,Missile,Item,Stasis,Dead,Invulnerable"/>
+        <AreaArray Radius="3" Effect="SquadOdinAnnihilateDamage"/>
+    </CEffectEnumArea>
+    <CEffectCreatePersistent id="SquadOdinHandGunPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnitOrPoint"/>
+        <Flags index="Channeled" value="1"/>
+        <PeriodCount value="2"/>
+        <PeriodicEffectArray value="SquadOdinHandGunLeft"/>
+        <PeriodicEffectArray value="SquadOdinHandGunRight"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="SquadOdinAAPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <Flags index="Channeled" value="1"/>
+        <PeriodCount value="4"/>
+        <PeriodicEffectArray value="SquadOdinAALaunchMissile"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0.2"/>
+        <PeriodicPeriodArray value="0.2"/>
+        <PeriodicPeriodArray value="0.2"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="SquadOdinAADamage" parent="DU_WEAP_SPLASH">
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Ranged"/>
+        <Amount value="25"/>
+        <Death value="Blast"/>
+        <AreaArray Radius="1.5" Fraction="1"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Air;Self,Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="SquadOdinAALaunchMissile">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="SquadOdinAADamage"/>
+        <AmmoUnit value="SquadOdinAntiAirMissile"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="SquadOdinDashAttackSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadOdinDashAttackWalkSpeedAB"/>
+        <TargetLocationType value="Point"/>
+    </CEffectSet>
+    <CEffectEnumArea id="SquadOdinDashAttackDummySearch">
+        <SearchFilters value="Ground;Self,Player,Ally,Missile,Item,Stasis,Dead,Hidden"/>
+        <AreaArray RectangleWidth="2.5" RectangleHeight="10" Effect="SquadOdinDashAttackDummyImpact"/>
+    </CEffectEnumArea>
+    <CEffectDamage id="SquadOdinDashAttackDummyImpact"/>
+    <CEffectDamage id="SquadOdinDashAttackDamage" parent="DU_WEAP">
+        <ValidatorArray value="EnemyTarget"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Marker Link="SquadOdinDashAttack">
+            <MatchFlags index="Link" value="1"/>
+        </Marker>
+        <AINotifyFlags index="HurtEnemy" value="1"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <ArmorReduction value="0"/>
+        <Kind value="Splash"/>
+        <Amount value="50"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+    </CEffectDamage>
+    <CEffectRemoveBehavior id="SquadOdinDashAttackStopRB">
+        <EditorCategories value="Race:Zerg"/>
+        <BehaviorLink value="SquadOdinPsiStrikeDamaged"/>
+    </CEffectRemoveBehavior>
+    <CEffectEnumArea id="SquadOdinDashAttackStopSearch">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Value="CasterUnit"/>
+        <SearchFilters value="Ground,Visible;Self,Player,Ally,Neutral,Structure,Missile,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="10" Effect="SquadOdinDashAttackStopRB"/>
+    </CEffectEnumArea>
+    <CEffectEnumArea id="SquadOdinDashAttackTargetSearch">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Value="SourceUnit"/>
+        <SearchFilters value="Ground,Visible;Self,Player,Ally,Neutral,Structure,Missile,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="1" Effect="SquadOdinDashAttackTargetSet"/>
+    </CEffectEnumArea>
+    <CEffectSet id="SquadOdinDashAttackTargetSet">
+        <ValidatorArray value="CasterIsNotHidden"/>
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="SquadOdinDashAttackDamage"/>
+        <EffectArray value="SquadOdinDashAttackUnitKnockbackBy5"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="SquadOdinDashAttackWalkSpeedAB">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="SquadOdinDashAttackWalkSpeed"/>
+    </CEffectApplyBehavior>
+    <CEffectIssueOrder id="SquadOdinDashAttackWalkStopOrder">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Source"/>
+        <Abil value="stop"/>
+        <Player Value="Source"/>
+    </CEffectIssueOrder>
+    <CEffectSet id="SquadOdinDashAttackWalkStopSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadOdinDashAttackStopSearch"/>
+        <EffectArray value="SquadOdinDashAttackWalkStopOrder"/>
+    </CEffectSet>
+    <CEffectDamage id="SquadOdinHandGunDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <AttributeBonus index="Structure" value="115"/>
+        <Kind value="Ranged"/>
+        <Amount value="85"/>
+        <Death value="Blast"/>
+        <ExcludeArray Value="Target"/>
+    </CEffectDamage>
+    <CEffectDamage id="SquadOdinHandGunLeft" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Marker Link="Effect/OdinDamage"/>
+        <AttributeBonus index="Structure" value="115"/>
+        <Kind value="Ranged"/>
+        <Amount value="85"/>
+        <Death value="Blast"/>
+        <AreaArray Radius="1" Fraction="1"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Neutral,Missile,Stasis,Hidden,Invulnerable"/>
+    </CEffectDamage>
+    <CEffectDamage id="SquadOdinHandGunRight" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Marker Link="Effect/OdinDamage"/>
+        <AttributeBonus index="Structure" value="115"/>
+        <Kind value="Ranged"/>
+        <Amount value="85"/>
+        <Death value="Blast"/>
+        <AreaArray Radius="1" Fraction="1"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Neutral,Missile,Stasis,Hidden,Invulnerable"/>
+    </CEffectDamage>
+    <CEffectApplyBehavior id="SquadOdinDashAttackPrecursorUnitKnockbackAB">
+        <Behavior value="SquadOdinPrecursorUnitKnockback"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="SquadOdinDashAttackSuicideRemove">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="SourceUnit"/>
+        <Flags index="Kill" value="1"/>
+        <Death value="Remove"/>
+    </CEffectDamage>
+    <CEffectCreateUnit id="SquadOdinDashAttackUnitKnockbackBy5">
+        <ValidatorArray value="NoPreventKnockback"/>
+        <EditorCategories value="Race:Zerg"/>
+        <CreateFlags index="Birth" value="0"/>
+        <CreateFlags index="DropOff" value="0"/>
+        <CreateFlags index="PlacementIgnoreBlockers" value="1"/>
+        <CreateFlags index="Precursor" value="1"/>
+        <CreateFlags index="ProvideFood" value="0"/>
+        <CreateFlags index="TechComplete" value="0"/>
+        <CreateFlags index="UseFood" value="0"/>
+        <CreateFlags index="NormalizeSpawnOffset" value="0"/>
+        <SpawnOwner Value="Neutral"/>
+        <SpawnEffect value="SquadOdinDashAttackUnitKnockbackBy5CreatePHSet"/>
+        <SpawnRange value="6"/>
+        <SpawnOffset value="0,5"/>
+        <TypeFallbackUnit Value="Target"/>
+    </CEffectCreateUnit>
+    <CEffectApplyBehavior id="SquadOdinDashAttackUnitKnockbackBy5AB">
+        <WhichUnit Effect="SquadOdinDashAttackUnitKnockbackBy5"/>
+        <Behavior value="UnitKnockback"/>
+        <ValidatorArray index="0" removed="1"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="SquadOdinDashAttackUnitKnockbackBy5CreatePHSet">
+        <EffectArray value="SquadOdinDashAttackPrecursorUnitKnockbackAB"/>
+        <EffectArray value="SquadOdinDashAttackUnitKnockbackBy5AB"/>
+        <EffectArray value="SquadOdinDashAttackUnitKnockbackBy5PHLM"/>
+    </CEffectSet>
+    <CEffectCreatePersistent id="SquadOdinDashAttackUnitKnockbackBy5ImpactCP">
+        <WhichLocation Value="CasterUnit"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffectArray value="SquadOdinDashAttackUnitKnockbackBy5RB"/>
+        <PeriodicPeriodArray value="0.0625"/>
+    </CEffectCreatePersistent>
+    <CEffectLaunchMissile id="SquadOdinDashAttackUnitKnockbackBy5PHLM">
+        <ValidatorArray value="UnitKnockbackBy5PHLMNotDead"/>
+        <LaunchLocation Effect="SquadOdinDashAttackUnitKnockbackBy5" Value="TargetUnit"/>
+        <ImpactEffect value="SquadOdinDashAttackUnitKnockbackBy5ImpactCP"/>
+        <Flags index="2D" value="1"/>
+        <Movers Link="UnitKnockbackMover5"/>
+        <DeathType value="Unknown"/>
+    </CEffectLaunchMissile>
+    <CEffectRemoveBehavior id="SquadOdinDashAttackUnitKnockbackBy5RB">
+        <WhichUnit Effect="SquadOdinDashAttackUnitKnockbackBy5"/>
+        <BehaviorLink value="UnitKnockback"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="SquadStetmannUltraHealGunApply">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadStetmannUltraHealGun"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="SquadStetmannUltraHealGunDamageonTime">
+        <EditorCategories value="Race:Terran"/>
+        <AINotifyFlags index="HelpFriend" value="1"/>
+        <CanBeBlocked value="1"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Visibility value="Visible"/>
+        <Flags index="Notification" value="1"/>
+        <Type value="Fire"/>
+        <Amount value="1"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="OffsetAreaByAngle" value="1"/>
+    </CEffectDamage>
+    <CEffectModifyUnit id="SquadStetmannUltraHealGunHealonTime">
+        <EditorCategories value="Race:Terran"/>
+        <VitalArray index="Life">
+            <Change value="1"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectLaunchMissile id="SquadStetmannUltraHealGunLaunchMissile">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="SquadStetmannUltraHealGunApply"/>
+        <AmmoUnit value="SquadStetmannUltraHealGunMissile"/>
+    </CEffectLaunchMissile>
+    <CEffectEnumArea id="SquadStetmannUltraHealGunSearch">
+        <EditorCategories value=""/>
+        <SearchFilters value="Ground;Robotic,Structure,Missile,Visible,Dead"/>
+        <AreaArray MaxCount="4" Radius="3" Effect="SquadStetmannUltraHealGunSearchSwitch"/>
+    </CEffectEnumArea>
+    <CEffectSwitch id="SquadStetmannUltraHealGunSearchSwitch">
+        <EditorCategories value="Race:Terran"/>
+        <CaseArray Validator="TargetisEnemy" Effect="SquadStetmannUltraHealGunLaunchMissile" FallThrough="1"/>
+        <CaseArray Validator="SquadMedicHealGunHealTarget" Effect="SquadStetmannUltraHealGunLaunchMissile"/>
+    </CEffectSwitch>
+    <CEffectSwitch id="SquadStetmannUltraHealGunSwitch">
+        <EditorCategories value="Race:Terran"/>
+        <CaseArray Validator="SquadMedicHealGunHealTarget" Effect="SquadStetmannUltraHealGunHealonTime"/>
+        <CaseArray Validator="TargetisEnemy" Effect="SquadStetmannUltraHealGunDamageonTime"/>
+    </CEffectSwitch>
+    <CEffectCreatePersistent id="SquadSwannFlamingBettyFlameThrowerCreatePersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="SourcePoint"/>
+        <OffsetVectorStartLocation Value="SourcePoint"/>
+        <Flags index="Channeled" value="1"/>
+        <PeriodCount value="12"/>
+        <PeriodicEffectArray value="SquadSwannFlamingBettyFlameThrowerSearchArea"/>
+        <PeriodicOffsetArray value="0,-0.5,0"/>
+        <PeriodicOffsetArray value="0,-1,0"/>
+        <PeriodicOffsetArray value="0,-1.5,0"/>
+        <PeriodicOffsetArray value="0,-2,0"/>
+        <PeriodicOffsetArray value="0,-2.5,0"/>
+        <PeriodicOffsetArray value="0,-3,0"/>
+        <PeriodicOffsetArray value="0,-3.5,0"/>
+        <PeriodicOffsetArray value="0,-4,0"/>
+        <PeriodicOffsetArray value="0,-4.5,0"/>
+        <PeriodicOffsetArray value="0,-5,0"/>
+        <PeriodicOffsetArray value="0,-5.5,0"/>
+        <PeriodicOffsetArray value="0,-6,0"/>
+        <PeriodicPeriodArray value="0.022"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="SquadSwannFlamingBettyFlameThrowerDamage" parent="DU_WEAP_SPLASH">
+        <ValidatorArray value="noMarkers"/>
+        <EditorCategories value="Race:Terran"/>
+        <Amount value="14"/>
+        <Death value="Fire"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="SquadSwannFlamingBettyFlameThrowerSearchArea" parent="EA_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <SearchFilters value="Ground;Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="0.6" Effect="SquadSwannFlamingBettyFlameThrowerDamage"/>
+    </CEffectEnumArea>
+    <CEffectSet id="SquadSwannFlamingBettyFlameThrowerSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadSwannFlamingBettyFlameThrowerCreatePersistent"/>
+        <EffectArray value="SquadSwannFlamingBettyFlameThrowerDamage"/>
+    </CEffectSet>
+    <CEffectCreatePersistent id="SquadSwannConcussiveGrenadeCreatePersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <Flags index="Channeled" value="1"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffectArray value="SquadSwannConcussiveGrenadeLaunchMissile"/>
+        <PeriodicPeriodArray value="0.5"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="SquadSwannConcussiveGrenadeDamage">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <ArmorReduction value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Kind value="Ranged"/>
+        <Amount value="25"/>
+        <Death value="Blast"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="OffsetByUnitRadius" value="1"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="SquadSwannConcussiveGrenadeLaunchMissile">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="SquadSwannConcussiveGrenadeDamage"/>
+        <AmmoUnit value="SquadSwannConcussiveGrenadeMissile"/>
+    </CEffectLaunchMissile>
+    <CEffectCreateUnit id="SquadSwannPlaceTurretCreateUnit">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetPoint"/>
+        <SpawnEffect value="SquadSwannPlaceTurretTimedLife"/>
+        <SpawnUnit value="SquadSwannFlamingBetty"/>
+    </CEffectCreateUnit>
+    <CEffectApplyBehavior id="SquadSwannPlaceTurretTimedLife">
+        <EditorCategories value=""/>
+        <Behavior value="SquadTurretTimedLife"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="SquadSwannKill">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Flags index="Kill" value="1"/>
+        <Flags index="Notification" value="1"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectDamage>
+    <CEffectApplyBehavior id="SquadApplyIncapBehavior">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="SquadIncapacitated"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadApplyIncapStandUpTimer">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadIncapacitatedStandUp"/>
+    </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="SquadSwannMeleePersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <Flags index="Channeled" value="1"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffectArray value="SquadSwannConcussiveGrenadeDamage"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="TossGrenadeDamage2">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Amount value="200"/>
+        <AreaArray Radius="2" Fraction="1"/>
+        <SearchFilters value="Visible;Self,Player,Ally,Air,Missile,Stasis,Dead,Invulnerable"/>
+        <SearchFlags index="ExtendByUnitRadius" value="1"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="SquadTossGrenadeDelay">
+        <EditorCategories value="Race:Terran"/>
+        <Flags index="Channeled" value="1"/>
+        <ExpireDelay value="0.3125"/>
+        <FinalEffect value="SquadTossGrenadeLaunchMissile"/>
+    </CEffectCreatePersistent>
+    <CEffectLaunchMissile id="SquadTossGrenadeLaunchMissile">
+        <ValidatorArray index="0" value="HasVision"/>
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <ImpactEffect value="TossGrenadeDamage2"/>
+        <AmmoUnit value="SquadTossGrenade"/>
+    </CEffectLaunchMissile>
+    <CEffectModifyUnit id="SquadIncapHeal">
+        <EditorCategories value="Race:Terran"/>
+        <VitalArray index="Life">
+            <ChangeFraction value="0.2"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectIssueOrder id="SquadCancelTerrazineHarvestIssueOrder">
+        <EditorCategories value="Race:Terran"/>
+        <Abil value="stop"/>
+    </CEffectIssueOrder>
+    <CEffectRemoveBehavior id="SquadCancelTerrazineHarvestRemoveBehavior">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <BehaviorLink value="SquadHarvestingTerrazine"/>
+    </CEffectRemoveBehavior>
+    <CEffectSet id="SquadCancelTerrazineHarvestSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadCancelTerrazineHarvestRemoveBehavior"/>
+        <EffectArray value="SquadCancelTerrazineHarvestIssueOrder"/>
+    </CEffectSet>
     <CEffectApplyBehavior id="SquadMedivacCrucioShockCannonEnableAB">
         <EditorCategories value=""/>
         <WhichUnit Value="Caster"/>
@@ -247,6 +673,20 @@
         <OffsetRandMode value="RandomNoRepeat"/>
         <PeriodRandMode value="RandomNoRepeat"/>
     </CEffectCreatePersistent>
+    <CEffectDamage id="SquadTychusAttackDamage">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <ArmorReduction value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Kind value="Ranged"/>
+        <Amount value="5"/>
+        <AreaArray Radius="1.25" Fraction="0.5"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Visible;Self,Player,Ally"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="OffsetByUnitRadius" value="1"/>
+    </CEffectDamage>
     <CEffectSet id="VanillaNuclearDetonateSet">
         <EditorCategories value=""/>
         <EffectArray value="VanillaNuclearDamage"/>

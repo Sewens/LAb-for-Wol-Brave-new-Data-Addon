@@ -215,6 +215,146 @@
         <HeightOffset value="1.500000"/>
         <Text value="Button/Tooltip/##id##"/>
     </CActorText>
+    <CActorModel id="SquadOdinBarrageModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.SquadOdinBarrageSearchArea.Impact" Send="Create"/>
+        <HostSiteOps Ops="SOpTargetPoint OdinBarrageVariance"/>
+    </CActorModel>
+    <CActorSound id="SquadOdinBarrageSound" parent="SoundOneShot">
+        <On Terms="Effect.SquadOdinBarrageSearchArea.Impact" Send="Create"/>
+    </CActorSound>
+    <CActorSimple id="SquadOdinKnockbackAnim">
+        <On Terms="Behavior.UnitKnockback.On; ValidateUnit IsNotConstructing" Send="Create"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimClear Attack"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimClear AttackReady"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimClear AttackLeft"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimClear AttackRight"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimPlay KnockbackFlail Flail PlayForever,RandomStartOffset 0.100000 0.100000"/>
+        <On Terms="ActorCreation" Send="TimerSet 3.500000 KnockbackDelay"/>
+        <On Terms="TimerExpired; TimerName KnockbackDelay" Target="_Unit" Send="AnimClear KnockbackFlail"/>
+        <On Terms="TimerExpired; TimerName KnockbackDelay" Send="Destroy"/>
+        <On Terms="Behavior.UnitKnockback.Off" Target="_Unit" Send="AnimClear KnockbackFlail"/>
+        <On Terms="Behavior.UnitKnockback.Off" Send="Destroy"/>
+        <!--
+        <On Terms="Behavior.HHWarHoundKnockback.On; ValidateUnit IsNotConstructing; ValidateUnitType NotSiegedTank" Send="Create"/>
+        <On Terms="Behavior.HHWarHoundKnockback.Off" Target="_Unit" Send="AnimClear KnockbackFlail"/>
+        <On Terms="Behavior.HHWarHoundKnockback.Off" Send="Destroy"/>
+        <On Terms="Behavior.HHReaperKnockback.On; ValidateUnit IsNotConstructing; ValidateUnitType NotSiegedTank" Send="Create"/>
+        <On Terms="Behavior.HHReaperKnockback.Off" Target="_Unit" Send="AnimClear KnockbackFlail"/>
+        <On Terms="Behavior.HHReaperKnockback.Off" Send="Destroy"/>
+-->
+    </CActorSimple>
+    <CActorModel id="SquadOdinAnnihilate" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.SquadOdinAnnihilateSearch.Start" Send="Create"/>
+    </CActorModel>
+    <CActorModel id="SquadOdinAnnihilateImpact" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.SquadOdinAnnihilateDamage.Start; At TargetOuter" Send="Create"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+        <Model value="SquadOdinAnnihilateHellionTankAttackFireAddition"/>
+    </CActorModel>
+    <CActorSound id="SquadOdinAnnihilateCastActorSound" parent="SoundOneShot">
+        <On Terms="Effect.SquadOdinAnnihilateInitialCreatePersistent.Start" Send="Create"/>
+        <Sound value="Marauder_AttackLaunch"/>
+    </CActorSound>
+    <CActorSound id="SquadOdinAnnihilateImpactActorSound" parent="SoundOneShot">
+        <On Terms="Effect.SquadOdinAnnihilateDamage.Start" Send="Create"/>
+        <Sound value="Marauder_AttackImpact"/>
+    </CActorSound>
+    <CActorUnit id="SquadOdin" parent="GenericUnitBase" unitName="SquadOdin">
+        <Aliases value="_UnitHuge"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo Odin" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom Odin" Send="Destroy"/>
+        <On Terms="WeaponStart.Odin.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.Odin.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="Abil.OdinEMPBurst.SourceCastStart" Send="AnimPlay EMPBurst Attack NonLooping"/>
+        <On Terms="Abil.OdinBarrage.SourcePrepStart" Send="AnimPlay Morph Morph 0 -1.000000 -1.000000 1.500000 AsTimeScale"/>
+        <On Terms="Abil.OdinBarrage.SourceChannelStart" Send="AnimPlay LoopA Spell"/>
+        <On Terms="Abil.OdinBarrage.SourceChannelStart" Send="AnimClear Morph"/>
+        <On Terms="AnimDone; AnimName LoopA" Send="AnimPlay LoopB Spell"/>
+        <On Terms="AnimDone; AnimName LoopB" Send="AnimPlay LoopC Spell"/>
+        <On Terms="AnimDone; AnimName LoopC" Send="AnimPlay LoopD Spell"/>
+        <On Terms="Abil.OdinBarrage.SourceChannelStop" Send="AnimClear LoopA"/>
+        <On Terms="Abil.OdinBarrage.SourceChannelStop" Send="AnimClear LoopB"/>
+        <On Terms="Abil.OdinBarrage.SourceChannelStop" Send="AnimClear LoopC"/>
+        <On Terms="Abil.OdinBarrage.SourceChannelStop" Send="AnimClear LoopD"/>
+        <On Terms="Abil.OdinBarrage.SourceChannelStop" Send="AnimPlay MorphEnd Morph,End 0 -1.000000 -1.000000 1.833000 AsTimeScale"/>
+        <On Terms="ModelEvent; ModelEventName OdinVictoryLeftSound" Send="Create OdinLeftCheerSquib"/>
+        <On Terms="ModelEvent; ModelEventName OdinVictoryLeftSound" Send="Create OdinLeftCheerSquibB"/>
+        <On Terms="ModelEvent; ModelEventName OdinVictoryRightSound" Send="Create OdinRightCheerSquib"/>
+        <On Terms="ModelEvent; ModelEventName OdinVictoryRightSound" Send="Create OdinRightCheerSquibB"/>
+        <On Terms="Behavior.NovaOdinUnderConstruction.On" Send="ModelSwap NovaOdinBirth"/>
+        <On Terms="Behavior.NovaOdinUnderConstruction.Off" Send="ModelSwap Odin"/>
+        <On Terms="ModelSwapped; ModelSwapTo NovaOdinBirth" Send="AnimPlay NovaOdinBirth Work,End NonLooping -1.000000 -1.000000 3.000000 AsDuration"/>
+        <On Terms="ModelSwapped; ModelSwapFrom NovaOdinBirth" Send="AnimPlay NovaOdinBirth Dead NonLooping"/>
+        <On Terms="Abil.NovaOdinAnnihilate.SourcePrepStart" Send="AnimPlay Morph Morph 0 -1.000000 -1.000000 1.000000 AsDuration"/>
+        <On Terms="Abil.NovaOdinAnnihilate.SourceChannelStart" Send="AnimPlay LoopA Spell"/>
+        <On Terms="Abil.NovaOdinAnnihilate.SourceChannelStart" Send="AnimClear Morph"/>
+        <On Terms="Abil.NovaOdinAnnihilate.SourceChannelStop" Send="AnimClear LoopA"/>
+        <On Terms="Abil.NovaOdinAnnihilate.SourceChannelStop" Send="AnimClear LoopB"/>
+        <On Terms="Abil.NovaOdinAnnihilate.SourceChannelStop" Send="AnimClear LoopC"/>
+        <On Terms="Abil.NovaOdinAnnihilate.SourceChannelStop" Send="AnimClear LoopD"/>
+        <On Terms="Abil.NovaOdinAnnihilate.SourceChannelStop" Send="AnimPlay MorphEnd Morph,End 0 -1.000000 -1.000000 1.833000 AsTimeScale"/>
+        <EventDataSound Name="Clunk" Actor="UnitSound" Sound="OdinBuild_Clunk"/>
+        <EventDataSound Name="Weld" Actor="UnitSound" Sound="OdinBuild_Weld"/>
+        <EventDataSound Name="Whirr" Actor="UnitSound" Sound="OdinBuild_Whirr"/>
+        <DeathArray index="Normal" ModelLink="SquadOdinDeath" SoundLink="SquadOdinExplode"/>
+        <PortraitModel value="SquadOdinPortrait"/>
+        <StandAnimTurnTime value="5"/>
+        <WalkAnimMoveSpeed value="1.75"/>
+        <BarOffset value="200"/>
+        <BarWidth value="220"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Odin.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\BTN-Unit-Terran-Odin.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <NameOffset value="40"/>
+        <SoundArray index="Birth" value="Thor_Birth"/>
+        <SoundArray index="Ready" value="Thor_Ready"/>
+        <SoundArray index="Help" value="Thor_Help"/>
+        <SoundArray index="What" value="Thor_What"/>
+        <SoundArray index="Yes" value="Thor_Yes"/>
+        <SoundArray index="Attack" value="Thor_Attack"/>
+        <SoundArray index="Pissed" value="Thor_Pissed"/>
+        <SoundArray index="Movement" value="Thor_Movement"/>
+        <SoundArray index="Turning" value="Thor_Turning"/>
+        <SoundArray index="Board" value="Thor_Board"/>
+        <StatusBarOn index="Duration" value="1"/>
+        <UnitIcon value="Assets\Textures\BTN-Unit-Terran-Odin.dds"/>
+        <UnitKillRank Text="UnitKillRank/SquadOdin"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Odin.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="SquadOdinAAAttack" parent="GenericAttack" effectImpact="SquadOdinAADamage" effectLaunch="SquadOdinAALaunchMissile">
+        <LaunchAttachQuery Methods="AMFilterOdinAA AMPatternOdinAA"/>
+    </CActorAction>
+    <CActorMissile id="SquadOdinAAAttackMissile" parent="GenericAttackMissile" unitName="SquadOdinAntiAirMissile">
+        <Model value="SquadOdinAAWeapon"/>
+    </CActorMissile>
+    <CActorModel id="SquadOdinDashAttackImpact" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.SquadOdinDashAttackDamage.Start; At Target" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="SquadOdinDashAttackWeaponPsiStrikeImpact"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorModel id="SquadOdinDashAttackModel" parent="ModelAnimationStyleContinuous">
+        <On Terms="Behavior.SquadOdinDashAttackWalkSpeed.On" Send="Create"/>
+        <On Terms="Behavior.SquadOdinDashAttackWalkSpeed.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+        <Model value="SquadOdinDashAttackPsiStrikeModel"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorAction id="SquadOdinLeftAttack" parent="GenericAttack" effectLaunch="SquadOdinHandGunLeft">
+        <LaunchAttachQuery Methods="CustomA"/>
+        <LaunchAssets Model="SquadOdinGroundAttackLaunch"/>
+        <ImpactMap index="None" Model="SquadOdinGroundAttackImpact"/>
+    </CActorAction>
+    <CActorAction id="SquadOdinRightAttack" parent="GenericAttack" effectLaunch="SquadOdinHandGunRight">
+        <LaunchAttachQuery Methods="CustomB"/>
+        <LaunchAssets Model="SquadOdinGroundAttackLaunch"/>
+    </CActorAction>
     <CActorModel id="BlackNuclearBlackHole" parent="ModelAnimationStyleContinuous">
         <On Terms="Effect.BlackNuclearBlackHolePersistent.Start" Send="Create"/>
         <On Terms="Effect.BlackNuclearBlackHolePersistent.Stop" Send="AnimBracketStop BSD"/>
@@ -267,6 +407,229 @@
         <HostSiteOps Ops="SOpAttachCenter"/>
         <Model value="HighArchonPsiStormImpact"/>
         <AutoScaleFactor value="0.750000"/>
+    </CActorModel>
+    <CActorAction id="SquadStetmannUltraHealGun" parent="GenericAttackBase">
+        <On Terms="Effect.SquadStetmannUltraHealGunLaunchMissile.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.SquadStetmannUltraHealGunApply.Start; At Caster; FromEffectTreeDescendant" Send="ActionDamage"/>
+        <On Terms="Effect.SquadStetmannUltraHealGunApply.Stop; At Caster; FromEffectTreeDescendant" Send="ActionDamagePhysics"/>
+        <LaunchAttachQuery Methods="AMFilterWeapon"/>
+        <LaunchAssets Sound="Interceptor_AttackLaunch"/>
+        <Beam value="SquadStetmannUltraHealGunMissile"/>
+        <BeamScope value="Caster"/>
+        <ImpactMap index="None" Model="InterceptorAttackImpact" Sound="Interceptor_AttackImpact"/>
+        <ImpactModel value="DarkInterceptorTestImpact"/>
+        <DamagePhysics Name="InterceptorBeamImpact" MatchKeys="Basic" Physics="InterceptorAttackDeathForce"/>
+        <DamagePhysics Name="InterceptorBeamImpact" MatchKeys="BasicAir" Physics="InterceptorAttackAirDeathForce"/>
+        <ActionFlags index="ImpactMonitorsTeleports" value="1"/>
+    </CActorAction>
+    <CActorBeamSimple id="SquadStetmannUltraHealGunBeam" parent="GenericAttackBeam">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="ActorCreation" Send="SetTintColor {0,255,0 5.000000}"/>
+        <On Terms="Effect.SquadStetmannUltraHealGunLaunchMissile.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.SquadStetmannUltraHealGunApply.Start" Send="Create WarHoundImpactHoldingSite"/>
+        <On Terms="Effect.SquadStetmannUltraHealGunApply.Start" Send="RefSet ::HostImpact WarHoundImpactHoldingSite"/>
+        <Host Subject="_Selectable"/>
+        <Model value="WarHoundBeam"/>
+        <HostLaunch Subject="_Selectable" Actor="Find"/>
+        <HostLaunchSiteOps Ops="SOpAttachWeapon" HoldPosition="1" HoldRotation="1"/>
+        <HostImpact Subject="_Missile" Actor="Find"/>
+        <HostImpactSiteOps Ops="SOpAttachCenter"/>
+    </CActorBeamSimple>
+    <CActorSound id="SquadStetmannUltraHealGunBirthSound" parent="SoundOneShot">
+        <On Terms="Behavior.SquadStetmannUltraHealGun.On" Send="Create"/>
+        <Sound value="Infestor_AttackImpact_NP"/>
+    </CActorSound>
+    <CActorMissile id="SquadStetmannUltraHealGunMissile" parent="GenericAttackMissile" unitName="SquadStetmannUltraHealGunMissile">
+        <Model value="Invisible"/>
+    </CActorMissile>
+    <CActorModel id="SquadStetmannUltraHealGunModel" parent="ModelAddition">
+        <On Terms="Behavior.SquadStetmannUltraHealGun.On" Send="Create"/>
+        <On Terms="Behavior.SquadStetmannUltraHealGun.On" Target="::Main" Send="SetSoundSuffix _NP"/>
+        <On Terms="Behavior.SquadStetmannUltraHealGun.On" Target="::Main" Send="PlayUnitSound Ready"/>
+        <On Terms="Behavior.SquadStetmannUltraHealGun.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="Behavior.SquadStetmannUltraHealGun.Off; ValidateUnit SourceNotDead" Target="::Main" Send="SetSoundSuffix"/>
+        <HostSiteOps Ops="SOpAttachHead"/>
+        <Model value="MedicHealModel"/>
+    </CActorModel>
+    <CActorModel id="SquadStetmannUltraHealGunRegenImpact" parent="ModelAnimationStyleOneShot">
+        <On Terms="UnitRegen.SquadStetmannHealGun.LifeOn" Send="Create"/>
+        <On Terms="Behavior.SquadStetmannUltraHealGun.On" Send="Create"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart Regen Birth"/>
+        <On Terms="Behavior.SquadStetmannUltraHealGun.Off" Send="AnimBracketStop Regen"/>
+        <On Terms="Behavior.SquadStetmannUltraHealGun.Off" Send="Destroy"/>
+        <On Terms="UnitRegen.SquadStetmannHealGun.LifeOff" Send="Destroy"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachHardPoint"/>
+        <Model value="ReaperHeal"/>
+    </CActorModel>
+    <CActorUnit id="SquadStetmann" parent="GenericUnitStandard" unitName="SquadStetmann">
+        <On Terms="Abil.BonesHeal.SourceChannelStart" Send="$Spell PlayForever"/>
+        <On Terms="Abil.BonesHeal.SourceChannelStop" Send="AnimClear Spell"/>
+        <On Terms="Behavior.OutOfCombatEnergyRegen.On" Send="AnimBracketStart Regen Cover,Start Cover Cover,End"/>
+        <On Terms="Behavior.OutOfCombatEnergyRegen.Off" Send="AnimBracketStop Regen"/>
+        <On Terms="UnitMovementUpdate.SquadStetmann.Walk" Send="AnimBracketStop Regen"/>
+        <Model value="MedicStetmann"/>
+        <DeathArray index="Normal" SoundLink="Stetmann_Death"/>
+        <DeathArray index="Blast" ModelLink="MedicDeath"/>
+        <DeathArray index="Fire" ModelLink="MedicStetmannDeathFire"/>
+        <PortraitModel value="StetmannMedicPortrait"/>
+        <WalkAnimMoveSpeed value="2.25"/>
+        <BarOffset value="60"/>
+        <BarWidth value="50"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-stetmann.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\ui-heroicon-stetmann.dds"/>
+        <HighlightTooltip value="Unit/Name/Stetmann"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
+        <SoundArray index="Ready" value="Stetmann_Ready"/>
+        <SoundArray index="Help" value="Stetmann_Help"/>
+        <SoundArray index="What" value="Stetmann_What"/>
+        <SoundArray index="Yes" value="Stetmann_Yes"/>
+        <SoundArray index="Attack" value="Stetmann_Attack"/>
+        <SoundArray index="Pissed" value="Stetmann_Pissed"/>
+        <UnitBorderNormalColor value="150,150,150"/>
+        <UnitBorderSubgroupColor value="255,255,255"/>
+        <UnitIcon value="Assets\Textures\BTN-Unit-Terran-MedicStetmann.dds"/>
+        <UnitKillRank Text="UnitKillRank/Stetmann"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-stetmann.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorUnit id="SquadSwannFlamingBetty" parent="TerranBuilding" unitName="SquadSwannFlamingBetty">
+        <Aliases value="_UnitMedium"/>
+        <On Terms="ActorCreation" Send="Create Swann_FlamingBettyReleaseImpact"/>
+        <Model value="FlamingBetty"/>
+        <CreepHeightClass value="Tiny"/>
+        <BuildModel value="FlamingBetty"/>
+        <DeathArray index="Normal" ModelLink="TerranBuildingDeath" SoundLink="Swann_FlamingBettyExplode"/>
+        <PlacementModel value="FlamingBettyPlacement"/>
+        <PortraitModel value="AdjutantPortrait"/>
+        <BarOffset value="75"/>
+        <BarWidth value="85"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-flameturret.dds"/>
+        </GroupIcon>
+        <GroupSoundArray index="What" value="AutoTurretGroupWhat"/>
+        <GroupSoundArray index="Yes" value="AutoTurretGroupYes"/>
+        <GroupSoundArray index="Attack" value="AutoTurretGroupAttack"/>
+        <GroupSoundArray index="Board" value="AutoTurretGroupBoard"/>
+        <HeroIcon value="Assets\Textures\btn-building-terran-autoturret.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-buildingarmor.dds"/>
+        <SoundArray index="Birth" value="AutoTurret_Birth"/>
+        <SoundArray index="Ready" value="AutoTurret_Ready"/>
+        <SoundArray index="Help" value="AutoTurretHelp"/>
+        <SoundArray index="What" value="AutoTurret_What"/>
+        <SoundArray index="Yes" value="AutoTurretYes"/>
+        <SoundArray index="Attack" value="AutoTurretAttack"/>
+        <SoundArray index="Pissed" value="AutoTurretPissed"/>
+        <SoundArray index="Movement" value="AutoTurretMovement"/>
+        <SoundArray index="Turning" value="AutoTurretTurning"/>
+        <SoundArray index="Board" value="AutoTurretBoard"/>
+        <SoundArray index="Click" value="AutoTurretClick"/>
+        <SoundArray index="ClickError" value="AutoTurretClickError"/>
+        <SoundArray index="Highlight" value="AutoTurretHighlight"/>
+        <UnitIcon value="Assets\Textures\btn-building-terran-autoturret.dds"/>
+        <UnitKillRank Text="UnitKillRank/FlamingBetty"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-flameturret.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="SquadSwannFlamingBettyAttack" parent="GenericAttackBase">
+        <On Terms="Effect.SquadSwannFlamingBettyFlameThrowerSet.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.SquadSwannFlamingBettyFlameThrowerDamage.Start; At Caster; FromEffectTreeDescendant" Send="ActionDamage"/>
+        <LaunchAttachQuery Methods="Weapon"/>
+        <LaunchAssets Model="DutchTurretAttackLaunch" Sound="Swann_TurretAttackLaunch"/>
+        <ImpactMap index="None" Sound="Swann_FlamingBettyAttackImpact"/>
+    </CActorAction>
+    <CActorModel id="SquadSwannFlamingBettyImpactModelFlames" parent="ModelAnimationStyleOneShot">
+        <Terms value="Cap 1"/>
+        <On Terms="Effect.SquadSwannFlamingBettyFlameThrowerDamage.Start; At Target" Send="Create"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachRandomDamage"/>
+        <Model value="ImpactModelFlames"/>
+    </CActorModel>
+    <!--betty turret -->
+    <CActorTurret id="SquadSwannFlamingBettyTurret">
+        <On Terms="TurretEnable.SquadSwannFlamingBettyTurret" Send="Create"/>
+    </CActorTurret>
+    <CActorUnit id="SquadSwann" parent="GenericUnitBase" unitName="SquadSwann">
+        <Aliases value="_UnitSmall"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="Effect.SquadSwannConcussiveGrenadeCreatePersistent.Start; At Caster" Send="AnimPlay AttackRight Attack,Right"/>
+        <On Terms="WeaponStart.SquadSwannFist.AttackStart" Send="AnimBracketStart AttackCover Attack,Cover"/>
+        <On Terms="WeaponStart.SquadSwannFist.AttackStart; AnimPlaying AttackCover Cover,00" Send="TimerSet 0.400000 MeleeAttackLaunch"/>
+        <On Terms="WeaponStart.SquadSwannFist.AttackStart; AnimPlaying AttackCover Cover,01" Send="TimerSet 0.100000 MeleeAttackLaunch"/>
+        <On Terms="WeaponStop.SquadSwannFist.AttackStop" Send="AnimBracketStop AttackCover"/>
+        <On Terms="TimerExpired; TimerName MeleeAttackLaunch" Send="Create Swann_MeleeAttackLaunch"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <On Terms="Abil.SquadSwannPlaceTurret.SourceCastStart" Send="$Spell 0 -1.000000 -1.000000 1.000000 AsDuration"/>
+        <Model value="Swann"/>
+        <BuildModel value="Swann"/>
+        <DeathArray index="Normal" ModelLink="MarauderDeath" SoundLink="Swann_Explode"/>
+        <DeathArray index="Eviscerate" ModelLink="MarauderDeathEviscerate"/>
+        <DeathArray index="Fire" ModelLink="DutchDeathFire" SoundLink="Uni_DeathFXFire"/>
+        <PlacementModel value="Swann"/>
+        <PortraitModel value="SwannMarauderPortrait"/>
+        <WalkAnimMoveSpeed value="2.25"/>
+        <AbilSoundArray AbilCmd="SquadSwannPlaceTurret,Execute" Sound="Swann_PlaceTurretVO"/>
+        <BarOffset value="60"/>
+        <BarWidth value="50"/>
+        <ErrorArray Error="CantSeeBuildLocation" Sound="e_cmdBuildTechRequirementsNotMet_Terr"/>
+        <ErrorArray Error="CantBuildLocationInvalid" Sound="e_cmdBuildTechRequirementsNotMet_Terr"/>
+        <ErrorArray Error="CantFindPlacementLocation" Sound="e_cmdBuildTechRequirementsNotMet_Terr"/>
+        <ErrorArray Error="CantBuildOnThat" Sound="e_cmdBuildTechRequirementsNotMet_Terr"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Marauder-Swann.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\ui-heroicon-swann.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
+        <SoundArray index="Ready" value="Swann_Ready"/>
+        <SoundArray index="Help" value="Swann_Help"/>
+        <SoundArray index="What" value="Swann_What"/>
+        <SoundArray index="Yes" value="Swann_Yes"/>
+        <SoundArray index="Attack" value="Swann_Attack"/>
+        <SoundArray index="Pissed" value="Swann_Pissed"/>
+        <UnitBorderNormalColor value="150,150,150"/>
+        <UnitBorderSubgroupColor value="255,255,255"/>
+        <UnitIcon value="Assets\Textures\BTN-Unit-Terran-MarauderSwann.dds"/>
+        <UnitKillRank Text="UnitKillRank/Swann"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Marauder-Swann.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="SquadSwannAttackGrenade" parent="GenericAttack" effectImpact="SquadSwannConcussiveGrenadeDamage" effectLaunch="SquadSwannConcussiveGrenadeLaunchMissile">
+        <LaunchSiteOps Ops="SOpAttachHarness SOpForwardImpactGuide"/>
+        <LaunchAttachQuery Methods="AMFilterWeaponRight"/>
+        <LaunchAssets Sound="SwannAttackLaunch"/>
+        <Missile value="SquadSwannAttackMissile"/>
+        <ImpactAttachQuery Methods="AMFilterTarget AMProximityAll"/>
+        <ImpactMap index="None" Model="DutchAttackImpact" Sound="SwannAttackImpact"/>
+        <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
+    </CActorAction>
+    <CActorMissile id="SquadSwannAttackMissile" parent="GenericAttackMissile" unitName="SquadSwannConcussiveGrenadeMissile">
+        <Model value="SwannWeapon"/>
+    </CActorMissile>
+    <CActorAction id="SquadDutchMeleeAttack" parent="GenericAttack" effectAttack="SquadSwannMeleePersistent">
+        <ImpactMap index="None" Sound="Swann_AttackImpactMelee"/>
+        <ShieldFlashType value="Header"/>
+    </CActorAction>
+    <CActorSimple id="SquadHeroIncap">
+        <On Terms="Behavior.SquadIncapacitated.On" Send="Create"/>
+        <On Terms="Behavior.SquadIncapacitated.On" Target="_Unit" Send="AnimGroupApply Unpowered Unpowered,Start Unpowered,End"/>
+        <On Terms="Behavior.SquadIncapacitated.On" Target="_Unit" Send="UIStatusFlagSet Incapacitated 1"/>
+        <On Terms="Behavior.IncapStandUp.On" Target="_Unit" Send="AnimGroupRemove Unpowered"/>
+        <On Terms="Behavior.IncapStandUp.Off" Target="_Unit" Send="UIStatusFlagSet"/>
+        <On Terms="Behavior.IncapStandUp.Off" Target="_Unit" Send="AnimClear Unpowered"/>
+        <On Terms="Behavior.IncapStandUp.Off" Send="Destroy"/>
+    </CActorSimple>
+    <CActorModel id="SquadCarryTerrazineNode" parent="ModelAnimationStyleContinuousUNIT">
+        <On Terms="Behavior.SquadCarryTerrazineNode.On" Send="Create"/>
+        <On Terms="Behavior.SquadCarryTerrazineNode.Off" Send="AnimBracketStop BSD"/>
+        <HostSiteOps Ops="SOpAttachHardPoint"/>
+        <Model value="TerrazineCanister"/>
     </CActorModel>
     <CActorSound id="SquadMedivacSpiltShellAttackLaunchSound" parent="SoundOneShot">
         <Flags index="SuppressCreationErrors" value="1"/>
@@ -393,6 +756,83 @@
         <On Terms="ActorCreation" Send="Create WidowMineAttackLaunch"/>
         <Model value="TornadoMissileWeapon"/>
     </CActorMissile>
+    <CActorUnit id="SquadTychus" parent="GenericUnitStandard" unitName="SquadTychus">
+        <Aliases value="_UnitSmall"/>
+        <On Terms="Abil.BonesTossGrenade.SourceCastStart" Send="$Spell 0 -1.000000 -1.000000 2.000000 AsTimeScale"/>
+        <On Terms="ActorCreation" Send="TextureSelectById Decal_Campaign_Tychus_01"/>
+        <Model value="TychusCommando"/>
+        <ModelFlags index="SuppressPlayerDecals" value="1"/>
+        <BuildModel value="TychusCommando"/>
+        <DeathArray index="Normal" ModelLink="TychusCommando" SoundLink="Tychus_Explode"/>
+        <DeathArray index="Fire" ModelLink="TychusCommandoDeathFire" SoundLink="Uni_DeathFXFire"/>
+        <PlacementModel value="TychusCommando"/>
+        <PortraitModel value="TychusPortrait"/>
+        <StandAnimTurnTime value="5"/>
+        <WalkAnimMoveSpeed value="2.25"/>
+        <AbilSoundArray AbilCmd="SquadTossGrenade,Execute" Sound="Tychus_TossGrenadeVO"/>
+        <BarOffset value="50"/>
+        <BarWidth value="50"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-marine-tychus.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\ui-heroicon-tychus.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
+        <SoundArray index="Birth" value="Tychus_Birth"/>
+        <SoundArray index="Ready" value="Tychus_Ready"/>
+        <SoundArray index="Help" value="Tychus_Help"/>
+        <SoundArray index="What" value="Tychus_What"/>
+        <SoundArray index="Yes" value="Tychus_Yes"/>
+        <SoundArray index="Attack" value="Tychus_Attack"/>
+        <SoundArray index="Pissed" value="Tychus_Pissed"/>
+        <SoundArray index="Movement" value="Tychus_Movement"/>
+        <SoundArray index="Turning" value="Tychus_Turning"/>
+        <SoundArray index="Board" value="Tychus_Board"/>
+        <UnitBorderNormalColor value="150,150,150"/>
+        <UnitBorderSubgroupColor value="255,255,255"/>
+        <UnitIcon value="Assets\Textures\BTN-Unit-Terran-MarineTychus.dds"/>
+        <UnitKillRank Text="UnitKillRank/Tychus"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-marine-tychus.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="SquadTychusAttack" parent="GenericAttack" effectAttack="SquadTychusAttackDamage">
+        <LaunchAssets Model="TychusCommandoAttackLaunch" Sound="Raven_AutoTurretAttackLaunch"/>
+        <ImpactMap index="None" Model="TychusCommandoAttackImpact"/>
+    </CActorAction>
+    <CActorRegionCircle id="SquadTychusGrenadeDoodadKiller">
+        <On Terms="Effect.TossGrenadeDamage2.Start; At Effect" Send="Create"/>
+        <On Terms="ActorCreation" Send="QueryRegion ::Self DoodadKillQuery AgainstCenter"/>
+        <On Terms="Effect.TossGrenadeDamage2.Start; At Effect" Send="Destroy"/>
+        <Radius value="2.000000"/>
+    </CActorRegionCircle>
+    <CActorModel id="SquadTychusGrenadeInHand" parent="ModelAddition">
+        <Inherits index="BaseModelScale" value="0"/>
+        <Inherits index="Scale" value="0"/>
+        <On Terms="Effect.SquadTossGrenadeDelay.Start" Target="::Creator" Send="Create"/>
+        <On Terms="Effect.SquadTossGrenadeDelay.Stop" Send="Destroy"/>
+        <HostSiteOps Ops="SOpAttachWeapon01"/>
+        <Model value="TychusTossGrenade"/>
+    </CActorModel>
+    <CActorSound id="SquadTychusStimPack" parent="SoundOneShot">
+        <On Terms="Effect.SquadTossGrenadeDelay.Start" Send="Create"/>
+        <Sound value="Marine_StimPack"/>
+    </CActorSound>
+    <CActorAction id="SquadTychusTossGrenade" parent="GenericAttack" effectImpact="TossGrenadeDamage2" effectLaunch="SquadTossGrenadeLaunchMissile">
+        <LaunchAttachQuery Methods="Weapon 1"/>
+        <ImpactMap index="None" Model="TychusTossGrenadeImpact" Sound="TychusTossGrenadeImpact"/>
+    </CActorAction>
+    <CActorMissile id="SquadTychusTossGrenadeMissile" parent="GenericAttackMissile" unitName="SquadTossGrenade">
+        <Model value="TychusGrenadeWeapon"/>
+    </CActorMissile>
+    <CActorSound id="SquadTychusDeath" parent="SoundOneShot">
+        <On Terms="UnitDeath.TychusChaingun; PassChance 100.000000" Send="Create"/>
+        <On Terms="UnitDeath.SquadTychus; PassChance 100.000000" Send="Create"/>
+        <Sound value="Tychus_Death"/>
+    </CActorSound>
+    <CActorSound id="SquadTychusTossGrenadeLaunch" parent="SoundOneShot">
+        <On Terms="Effect.SquadTossGrenadeDelay.Stop" Send="Create"/>
+        <Sound value="Tychus_TossGrenadeLaunch"/>
+    </CActorSound>
     <CActorModel id="YellowNuclearEarthquakeImpact" parent="ModelAnimationStyleContinuous">
         <Inherits index="BaseModelScale" value="1"/>
         <Inherits index="Scale" value="1"/>

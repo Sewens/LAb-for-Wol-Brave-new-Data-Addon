@@ -1,5 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CWeaponLegacy id="SquadOdinCannon">
+        <EditorCategories value="Race:Terran"/>
+        <Options index="OnlyFireWhileInAttackOrder" value="0"/>
+        <Options index="OnlyFireAtAttackOrderTarget" value="0"/>
+        <Options index="LinkedCooldown" value="0"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel0.dds"/>
+        <DisplayEffect value="SquadOdinHandGunDamage"/>
+        <DisplayAttackCount value="2"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AcquireFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AcquirePrioritization value="ByAngle"/>
+        <MinScanRange value="7.5"/>
+        <Range value="7"/>
+        <Period value="1.23"/>
+        <DamagePoint value="0.831"/>
+        <Backswing value="0.25"/>
+        <Effect value="SquadOdinHandGunPersistent"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="SquadOdinAntiAir">
+        <EditorCategories value="Race:Terran"/>
+        <Options index="OnlyFireWhileInAttackOrder" value="0"/>
+        <Options index="OnlyFireAtAttackOrderTarget" value="0"/>
+        <Options index="ContinuousScan" value="1"/>
+        <Options index="LinkedCooldown" value="0"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel0.dds"/>
+        <DisplayEffect value="SquadOdinAADamage"/>
+        <DisplayAttackCount value="4"/>
+        <TargetFilters value="Air,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AcquireFilters value="Air,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AcquirePrioritization value="ByAngle"/>
+        <MinScanRange value="10.5"/>
+        <Range value="10"/>
+        <Arc value="5.625"/>
+        <Period value="2.5"/>
+        <Effect value="SquadOdinAAPersistent"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="SquadStetmannUltraHealGun">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-tychus-medic-twinbeam.dds"/>
+        <DisplayEffect value="SquadStetmannUltraHealGunHealonTime"/>
+        <DisplayAttackCount value="50"/>
+        <ChaseFilters value="Biological;-"/>
+        <AcquireFilters value="Biological;-"/>
+        <AcquireTargetSorts RequestCount="1">
+            <SortArray value="TSAlliancePassive"/>
+            <SortArray value="SquadTSMedicHealStack"/>
+            <SortArray value="TSDistance"/>
+            <SortArray value="TSLifeFraction"/>
+        </AcquireTargetSorts>
+        <Range value="6"/>
+        <Effect value="SquadStetmannUltraHealGunSearch"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="SquadSwannFlamingBettyFlamethrower">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel0.dds"/>
+        <DisplayEffect value="SquadSwannFlamingBettyFlameThrowerDamage"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="6"/>
+        <Marker>
+            <MatchFlags index="Id" value="1"/>
+        </Marker>
+        <Period value="2"/>
+        <Backswing value="1"/>
+        <Effect value="SquadSwannFlamingBettyFlameThrowerSet"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="SquadSwannConcussiveGrenade">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-ability-terran-punishergrenade-color.dds"/>
+        <DisplayEffect value="SquadSwannConcussiveGrenadeDamage"/>
+        <DisplayAttackCount value="1"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <MinimumRange value="0.6"/>
+        <Period value="1.2"/>
+        <DamagePoint value="0"/>
+        <Backswing value="0"/>
+        <Effect value="SquadSwannConcussiveGrenadeCreatePersistent"/>
+    </CWeaponLegacy>
     <CWeaponLegacy id="RavengeSeekerMissile">
         <EditorCategories value="Race:Terran"/>
         <Icon value="Assets\Textures\btn-ability-terran-huntermissile-color.dds"/>
@@ -914,5 +991,29 @@
         <Backswing value="0.867"/>
         <Effect value="SquadCaptainToshZAssassinRifleDamage"/>
         <RandomDelayMin value="-0.063"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="SquadSweetTalker">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel0.dds"/>
+        <DisplayEffect value="SquadTychusAttackDamage"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Period value="0.2"/>
+        <Effect value="SquadTychusAttackDamage"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="SquadSwannFist">
+        <EditorCategories value="Race:Zerg"/>
+        <Options index="Hidden" value="1"/>
+        <Options index="Melee" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel0.dds"/>
+        <DisplayEffect value="SquadSwannConcussiveGrenadeDamage"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="0.5"/>
+        <Marker Link="Weapon/SquadSwannConcussiveGrenade"/>
+        <Cost>
+            <Cooldown Link="Weapon/SquadSwannConcussiveGrenade"/>
+        </Cost>
+        <Period value="1.2"/>
+        <DamagePoint value="0.2"/>
+        <Effect value="SquadSwannMeleePersistent"/>
     </CWeaponLegacy>
 </Catalog>

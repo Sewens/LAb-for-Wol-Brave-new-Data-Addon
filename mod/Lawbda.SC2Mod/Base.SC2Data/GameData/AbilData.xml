@@ -70,6 +70,92 @@
         <Flags index="Transient" value="1"/>
         <PointsPerLevel value="1"/>
     </CAbilLearn>
+    <CAbilEffectTarget id="SquadOdinAnnihilate">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadOdinAnnihilateInitialCreatePersistent"/>
+        <Cost>
+            <Cooldown TimeUse="15"/>
+        </Cost>
+        <Range value="500"/>
+        <Arc value="90"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <CursorEffect value="NovaOdinAnnihilateSearch"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadOdinAnnihilate">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadOdinBarrage">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadOdinBarragePersistent"/>
+        <Cost>
+            <Cooldown TimeUse="30"/>
+        </Cost>
+        <Range value="11"/>
+        <CastIntroTime value="2"/>
+        <FinishTime value="2"/>
+        <CancelableArray index="Cast" value="1"/>
+        <CancelableArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <ValidatedArray index="Channel" value="0"/>
+        <CursorEffect value="SquadOdinBarrageSearchArea"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadOdinBarrage"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadOdinDashAttack">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadOdinDashAttackSet"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Flags index="TransientPreferred" value="1"/>
+        <Cost>
+            <Cooldown Location="Unit" TimeUse="10"/>
+        </Cost>
+        <Range value="500"/>
+        <Arc value="360"/>
+        <PrepTime value="0.01"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <CursorEffect value="OdinCoopDashAttackDummySearch"/>
+        <AINotifyEffect value="SquadOdinDashAttackSet"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadOdinDashAttack"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadSwannPlaceTurret">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadSwannPlaceTurretCreateUnit"/>
+        <Cost>
+            <Cooldown TimeUse="44"/>
+        </Cost>
+        <Range value="4"/>
+        <CastIntroTime value="0.625"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadSwannPlaceFlamingBetty"/>
+        <PlaceUnit value="SquadSwannFlamingBetty"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadTossGrenade">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadTossGrenadeDelay"/>
+        <Cost>
+            <Cooldown TimeUse="20"/>
+        </Cost>
+        <Range value="7"/>
+        <CastOutroTime value="0.6875"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <CursorEffect value="BonesTossGrenadeDamage"/>
+        <AINotifyEffect value="TossGrenade"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadTossShredderGrenade"/>
+    </CAbilEffectTarget>
+    <CAbilEffectInstant id="SquadCancelTerrazineHarvest">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadCancelTerrazineHarvestSet"/>
+        <AINotifyEffect value=""/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Cancel" Requirements="HarvestingTerrazine"/>
+    </CAbilEffectInstant>
     <CAbilEffectTarget id="GlobalNuclearStrikeBlack">
         <TechPlayer value="Owner"/>
         <Alignment value="Negative"/>
@@ -3895,11 +3981,10 @@
         <InfoArray index="Ammo1" Time="30" Count="5" Unit="Nuke">
             <Resource index="Minerals" value="350"/>
             <Resource index="Vespene" value="75"/>
-            <Charge Link="Abil/##id##"/>
+            <Charge Link="Abil/##id##" Location="Unit"/>
             <Cooldown Link="Abil/##id##"/>
             <Button DefaultButtonFace="NucolorWarheadWhite"/>
             <Flags index="AutoBuild" value="1"/>
-            <Flags index="AutoBuildOn" value="1"/>
         </InfoArray>
         <CalldownEffect value="WhiteNuclear"/>
     </CAbilArmMagazine>
@@ -3911,7 +3996,7 @@
         <InfoArray index="Ammo1" Time="100" Count="5" Unit="Nuke">
             <Resource index="Minerals" value="300"/>
             <Resource index="Vespene" value="150"/>
-            <Charge Link="Abil/##id##"/>
+            <Charge Link="Abil/##id##" Location="Unit"/>
             <Cooldown Link="Abil/##id##"/>
             <Button DefaultButtonFace="NucolorWarheadBlack"/>
             <Flags index="AutoBuild" value="1"/>
@@ -3926,11 +4011,10 @@
         <InfoArray index="Ammo1" Time="75" Count="5" Unit="Nuke">
             <Resource index="Minerals" value="200"/>
             <Resource index="Vespene" value="150"/>
-            <Charge Link="Abil/##id##"/>
+            <Charge Link="Abil/##id##" Location="Unit"/>
             <Cooldown Link="Abil/##id##"/>
             <Button DefaultButtonFace="NucolorWarheadYellow"/>
             <Flags index="AutoBuild" value="1"/>
-            <Flags index="AutoBuildOn" value="1"/>
         </InfoArray>
         <CalldownEffect value="YellowNuclear"/>
     </CAbilArmMagazine>
@@ -3947,12 +4031,12 @@
                 <CountStart value="1"/>
                 <CountUse value="1"/>
                 <Link value="Abil/##id##"/>
+                <Location value="Unit"/>
                 <TimeUse value="10"/>
             </Charge>
             <Cooldown Link="Abil/##id##" Location="Unit"/>
             <Button DefaultButtonFace="NucolorWarheadRed"/>
             <Flags index="AutoBuild" value="1"/>
-            <Flags index="AutoBuildOn" value="1"/>
         </InfoArray>
         <CalldownEffect value="RedNuclear"/>
         <MaxCount value="25"/>
@@ -3965,11 +4049,10 @@
         <InfoArray index="Ammo1" Time="45" Count="5" Unit="Nuke">
             <Resource index="Minerals" value="250"/>
             <Resource index="Vespene" value="125"/>
-            <Charge Link="Abil/##id##"/>
+            <Charge Link="Abil/##id##" Location="Unit"/>
             <Cooldown Link="Abil/##id##"/>
             <Button DefaultButtonFace="NucolorWarheadGreen"/>
             <Flags index="AutoBuild" value="1"/>
-            <Flags index="AutoBuildOn" value="1"/>
         </InfoArray>
         <CalldownEffect value="GreenNuclear"/>
     </CAbilArmMagazine>
@@ -3981,11 +4064,10 @@
         <InfoArray index="Ammo1" Time="75" Count="5" Unit="Nuke">
             <Resource index="Minerals" value="200"/>
             <Resource index="Vespene" value="150"/>
-            <Charge Link="Abil/##id##"/>
+            <Charge Link="Abil/##id##" Location="Unit"/>
             <Cooldown Link="Abil/##id##"/>
             <Button DefaultButtonFace="NucolorWarheadBlue"/>
             <Flags index="AutoBuild" value="1"/>
-            <Flags index="AutoBuildOn" value="1"/>
         </InfoArray>
         <CalldownEffect value="BlueNuclear"/>
     </CAbilArmMagazine>
@@ -4045,7 +4127,7 @@
         <InfoArray index="Ammo1" Time="60" Count="5" Unit="Nuke">
             <Resource index="Minerals" value="100"/>
             <Resource index="Vespene" value="100"/>
-            <Charge Link="Abil/##id##"/>
+            <Charge Link="Abil/##id##" Location="Unit"/>
             <Cooldown Link="Abil/##id##"/>
             <Button DefaultButtonFace="NucolorWarheadVanilla"/>
             <Flags index="AutoBuild" value="1"/>

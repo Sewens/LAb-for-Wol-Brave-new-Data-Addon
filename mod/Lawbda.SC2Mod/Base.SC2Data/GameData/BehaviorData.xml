@@ -1,5 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorBuff id="SquadOdinPsiStrikeDamaged">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadOdinDashAttackWalkSpeed">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Duration value="1"/>
+        <Period value="0.0625"/>
+        <PeriodicEffect value="SquadOdinDashAttackTargetSearch"/>
+        <FinalEffect value="SquadOdinDashAttackWalkStopSet"/>
+        <Modification MoveSpeedMultiplier="7">
+            <StateFlags index="SuppressCollision" value="1"/>
+            <StateFlags index="Uncommandable" value="1"/>
+        </Modification>
+        <DamageResponse ModifyFraction="0" ModifyMinimumDamage="1">
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadOdinPrecursorUnitKnockback">
+        <InfoFlags index="Hidden" value="1"/>
+        <Duration value="0.5"/>
+        <FinalEffect value="SquadOdinDashAttackSuicideRemove"/>
+        <Modification>
+            <ModifyFlags index="DisableAbils" value="1"/>
+            <ModifyFlags index="SuppressMoving" value="1"/>
+            <ModifyFlags index="SuppressTurning" value="1"/>
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="SuppressCollision" value="1"/>
+            <StateFlags index="NoDraw" value="1"/>
+            <StateFlags index="Uncommandable" value="1"/>
+            <StateFlags index="Unselectable" value="1"/>
+            <StateFlags index="Untargetable" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadStetmannUltraHealGun">
+        <InfoIcon value="Assets\Textures\btn-ability-terran-advancedhealingai.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Enemy" value="1"/>
+        <BuffFlags index="Channeled" value="1"/>
+        <MaxStackCount value="8"/>
+        <MaxStackCountPerCaster value="1"/>
+        <Period value="0.0625"/>
+        <PeriodCount value="50"/>
+        <PeriodicEffect value="SquadStetmannUltraHealGunSwitch"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadStetmannOutOfCombatEnergyRegen">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="StetmannOutOfCombat"/>
+        <DisableValidatorArray value="StetmannHasntHealedRecently"/>
+        <DisableValidatorArray value="NotMaxEnergyOrNotMaxHP"/>
+        <Modification>
+            <VitalRegenArray index="Life" value="9"/>
+            <VitalRegenArray index="Energy" value="15"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadStetmannOutOfCombatEnergyRegenDummy">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadTurretTimedLife">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <Duration value="45"/>
+        <ExpireEffect value="SquadSwannKill"/>
+        <Modification>
+            <StateFlags index="Summoned" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadTychusHailOfLeadDummy">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadHeroDeathPrevention">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DamageResponse Fatal="1" Handled="SquadApplyIncapBehavior" ModifyFraction="0">
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadIncapacitatedStandUp">
+        <Alignment value="Negative"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-behavior-incapacitated.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="1.5"/>
+        <ExpireEffect value="SquadIncapHeal"/>
+        <Modification>
+            <ModifyFlags index="DisableAbils" value="1"/>
+            <ModifyFlags index="SuppressMoving" value="1"/>
+            <ModifyFlags index="SuppressTurning" value="1"/>
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="SuppressAttack" value="1"/>
+            <StateFlags index="SuppressPassenger" value="1"/>
+            <StateFlags index="SuppressLifeRegen" value="1"/>
+            <StateFlags index="SuppressEnergyRegen" value="1"/>
+            <BehaviorLinkDisableArray value="SquadHailOfLeadDummy"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadIncapacitated">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-behavior-incapacitated.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <Duration value="20"/>
+        <Period value="18.5"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffect value="SquadApplyIncapStandUpTimer"/>
+        <ExpireEffect value="SquadIncapHeal"/>
+        <Modification>
+            <ModifyFlags index="DisableAbils" value="1"/>
+            <ModifyFlags index="SuppressMoving" value="1"/>
+            <ModifyFlags index="SuppressTurning" value="1"/>
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="SuppressAttack" value="1"/>
+            <StateFlags index="SuppressCollision" value="1"/>
+            <StateFlags index="SuppressPassenger" value="1"/>
+            <StateFlags index="SuppressLifeRegen" value="1"/>
+            <StateFlags index="SuppressEnergyRegen" value="1"/>
+            <BehaviorLinkDisableArray value="SquadHailOfLeadDummy"/>
+            <BehaviorLinkDisableArray value="RaynorRadarDummy"/>
+            <BehaviorLinkDisableArray value="OutOfCombatEnergyRegenDummy"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadCarryTerrazineNode">
+        <InfoFlags index="Hidden" value="1"/>
+        <Modification>
+            <StateFlags index="SuppressPassenger" value="1"/>
+            <AbilClassDisableArray index="CAbilBuild" value="1"/>
+            <AbilClassDisableArray index="CAbilEffectTarget" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadHarvestingTerrazine">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Modification>
+            <ModifyFlags index="DisableAbils" value="1"/>
+            <AbilLinkEnableArray value="SquadCancelTerrazineHarvest"/>
+            <AbilLinkEnableArray value="SquadSCVGather"/>
+        </Modification>
+    </CBehaviorBuff>
     <CBehaviorBuff id="SquadMedivacSpiltShellEnable">
         <BehaviorFlags index="EnabledWhileDead" value="1"/>
         <InfoFlags index="Hidden" value="1"/>
