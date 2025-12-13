@@ -1,5 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorBuff id="SquadTychusJumpScare">
+        <InfoIcon value="Assets\Textures\btn-ability-zerg-dehaka-intimidatingroar.dds"/>
+        <BehaviorCategories index="Stun" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="2.5"/>
+        <Modification>
+            <ModifyFlags index="Reveal" value="1"/>
+            <ModifyFlags index="Detected" value="1"/>
+            <StateFlags index="Stun" value="1"/>
+            <StateFlags index="SuppressAttack" value="1"/>
+            <DamageTakenFraction index="Spell" value="1.2"/>
+            <DamageTakenFraction index="Melee" value="1.2"/>
+            <DamageTakenFraction index="Ranged" value="1.2"/>
+            <DamageTakenFraction index="Splash" value="1.2"/>
+            <DamageTakenFraction index="NoProc" value="1.2"/>
+            <AbilClassDisableArray index="CAbilAttack" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadTychusHitMeBabyOneMoreTime">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-upgrade-nova-equipment-ui-ghostvisor.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DamageResponse Handled="SquadTychusHMBBOMTBuffApply" ModifyFraction="0.99" TargetFilters="Visible;Enemy,Missile,Dead,Invulnerable">
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadTychusHMBBOMTBuff">
+        <InfoIcon value="Assets\Textures\btn-unit-terran-tychuscoop-revive.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <BuffFlags index="RefreshStack" value="1"/>
+        <MaxStackCount value="100"/>
+        <Duration value="5"/>
+        <Modification>
+            <DamageDealtFraction index="Spell" value="0.1"/>
+            <DamageDealtFraction index="Melee" value="0.1"/>
+            <DamageDealtFraction index="Ranged" value="0.1"/>
+            <DamageDealtFraction index="Splash" value="0.1"/>
+            <DamageDealtFraction index="NoProc" value="0.1"/>
+            <DamageTakenFraction index="Spell" value="0.99"/>
+            <DamageTakenFraction index="Melee" value="0.99"/>
+            <DamageTakenFraction index="Ranged" value="0.99"/>
+            <DamageTakenFraction index="Splash" value="0.99"/>
+            <DamageTakenFraction index="NoProc" value="0.99"/>
+        </Modification>
+    </CBehaviorBuff>
     <CBehaviorBuff id="SquadSwannFrostBettyPoisonGas">
         <Alignment value="Negative"/>
         <InfoFlags index="Hidden" value="1"/>
