@@ -200,6 +200,7 @@ Abil/Name/SquadStarportLand=Squad Starport Land
 Abil/Name/SquadStarportLiftOff=Squad Starport Lift Off
 Abil/Name/SquadStarportTrain=Squad Starport Train
 Abil/Name/SquadStarshipMagazine=Squad Starship Magazine
+Abil/Name/SquadStetmannHealDamageGrenade=Squad Stetmann Heal Damage Grenade
 Abil/Name/SquadStimpack=Squad Stimpack
 Abil/Name/SquadStimpackRedirect=Squad Stimpack Redirect
 Abil/Name/SquadStopRedirect=Squad Stop Redirect
@@ -402,6 +403,7 @@ Behavior/Name/SquadSiegeTankMortarLauncherSwitch=Squad Siege Tank Mortar Launche
 Behavior/Name/SquadSpectreGiftVoodooMindControl=Squad Spectre Gift Voodoo Mind Control
 Behavior/Name/SquadSpectreUltrasonicPulsestun=Squad Spectre Ultrasonic Pulse stun
 Behavior/Name/SquadSquadSight=Squad Squad Sight
+Behavior/Name/SquadStetmannHealDamageGrenade=Squad Stetmann Heal Damage Grenade
 Behavior/Name/SquadStetmannUltraHealGun=Squad Stetmann Ultra Heal Gun
 Behavior/Name/SquadStimpack=Squad Stimpack
 Behavior/Name/SquadStormBoltStunned=Squad Storm Bolt Stunned
@@ -557,6 +559,7 @@ Button/Name/BulletTime=Bullet Time
 Button/Name/CommandCenterUpgrade=Command Center Upgrade
 Button/Name/DefenderCoreSentinelMissiles=Defender Core Sentinel Missiles
 Button/Name/DeploySquadSpiderMine=Deploy Squad Spider Mine
+Button/Name/DisbandSquad=Disband Squad
 Button/Name/ExcavatorBehemothProtocal=Excavator Behemoth Protocal
 Button/Name/ExcavatorGather=Excavator Gather
 Button/Name/ExcavatorHarvestDropPoint=Excavator Harvest Drop Point
@@ -823,7 +826,9 @@ Button/Name/SquadSpectrePsionicLash=Squad Spectre Psionic Lash
 Button/Name/SquadSpectreUltrasonicPulse=Squad Spectre Ultrasonic Pulse
 Button/Name/SquadSpiderMineTeleport=Squad Spider Mine Teleport
 Button/Name/SquadSquadSight=Squad Squad Sight
+Button/Name/SquadStetmannHealDamageGrenade=Squad Stetmann Heal Damage Grenade
 Button/Name/SquadStetmannSelfixArmor=Squad Stetmann Selfix Armor
+Button/Name/SquadStetmannUltraDualInjectors=Squad Stetmann Ultra Dual Injectors
 Button/Name/SquadStimpack=Squad Stimpack
 Button/Name/SquadStimpackRedirect=Squad Stimpack Redirect
 Button/Name/SquadStopRedirect=Squad Stop Redirect
@@ -998,6 +1003,7 @@ Button/Tooltip/DefenderCoreArchor=Robotic mine. Launches missiles at nearby enem
 Button/Tooltip/DefenderCoreArchorBurrowed=Robotic mine. Launches missiles at nearby enemy units while burrowed. Attacks deal splash damage in a small area around the target. <n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/DefenderCoreSentinelMissiles=Attacks by launching missiles at enemy ground and air units that get too close. Missiles deal <d ref="Effect,WidowMineExplodeDirect,Amount"/> (+35 vs. shields) damage to their primary target, and <d ref="Effect,WidowMineExplodeSplash,Amount"/> (+<d ref="Effect,WidowMineExplodeSplashShields,VitalBonus[Shields]"/> vs. shields) splash damage to units nearby.<n/><n/><c val="#ColorAttackInfo">Cooldown: <d ref="Abil,WidowMineAttack,Cost[0].Cooldown[0].TimeUse[0]"/> seconds.</c>
 Button/Tooltip/DeploySquadSpiderMine=Spider Mines pursue enemy units that come in range, and detonate for heavy area damage. Buried Spider Mines can only be seen by enemy Detectors.
+Button/Tooltip/DisbandSquad=<s val="_LawbdaBaseTooltip">Disband team into individual units. Captain and squad members will keep there status.</s>
 Button/Tooltip/ExcavatorBehemothProtocal=Captain Excavator immune for almost every debuff behavior and crash everything when movement speed above 7.
 Button/Tooltip/ExcavatorGather=Orders MULE to gather minerals from a selected Mineral Field.
 Button/Tooltip/ExtendableInfantryMagazine=Upgrade infantry squad magazine size from 4 to 8.<n/>"Sewen judge, Sewen Bless."
@@ -1014,11 +1020,11 @@ Button/Tooltip/KraithMarineModel=An immense Pack Leader who charges at foes. Can
 Button/Tooltip/LawbdaCore=Generates electromagnetic pulses that damage Protoss shields.
 Button/Tooltip/LootGasTextTier12=<IMG path="Assets\Textures\climax-impact01.dds" height="96" width="96"/>
 Button/Tooltip/LootGasTextTier2=<s val="Kicker_Gas">+50 </s><IMG path="Assets\Textures\icon-gas-terran.dds" height="28" width="28"/>
-Button/Tooltip/LootResourceTextTier1=<s val="Kicker_Minerals">+<d ref="Effect,LootonDealDamageTier1,Resources[Minerals]"/></s><IMG path="Assets\Textures\icon-mineral.dds" height="28" width="28"/><n/><s val="Kicker_Gas">+<d ref="Effect,LootonDealDamageTier1,Resources[Vespene]"/><IMG path="Assets\Textures\icon-gas-terran.dds" height="28" width="28"/></s>
-Button/Tooltip/LootResourceTextTier2=<s val="Kicker_Minerals">+<d ref="Effect,LootonDealDamageTier2,Resources[Minerals]"/></s><IMG path="Assets\Textures\icon-mineral.dds" height="28" width="28"/><n/><s val="Kicker_Gas">+<d ref="Effect,LootonDealDamageTier2,Resources[Vespene]"/><IMG path="Assets\Textures\icon-gas-terran.dds" height="28" width="28"/></s>
-Button/Tooltip/LootResourceTextTier3=<s val="Kicker_Minerals">+<d ref="Effect,LootonDealDamageTier3,Resources[Minerals]"/></s><IMG path="Assets\Textures\icon-mineral.dds" height="28" width="28"/><n/><s val="Kicker_Gas">+<d ref="Effect,LootonDealDamageTier3,Resources[Vespene]"/><IMG path="Assets\Textures\icon-gas-terran.dds" height="28" width="28"/></s>
-Button/Tooltip/LootResourceTextTier4=<s val="Kicker_Minerals">+<d ref="Effect,LootonDealDamageTier4,Resources[Minerals]"/></s><IMG path="Assets\Textures\icon-mineral.dds" height="28" width="28"/><n/><s val="Kicker_Gas">+<d ref="Effect,LootonDealDamageTier4,Resources[Vespene]"/><IMG path="Assets\Textures\icon-gas-terran.dds" height="28" width="28"/></s>
-Button/Tooltip/LootResourceTextTier5=<s val="Kicker_Minerals">+<d ref="Effect,LootonDealDamageTier5,Resources[Minerals]"/></s><IMG path="Assets\Textures\icon-mineral.dds" height="28" width="28"/><n/><s val="Kicker_Gas">+<d ref="Effect,LootonDealDamageTier5,Resources[Vespene]"/><IMG path="Assets\Textures\icon-gas-terran.dds" height="28" width="28"/></s>
+Button/Tooltip/LootResourceTextTier1=<s val="Kicker_Minerals">+<d ref="Effect,LootonDealDamageTier1,Resources[Minerals]"/></s><IMG path="Assets\Textures\icon-mineral.dds" height="28" width="28"/><n/><s val="Kicker_Gas">+<d ref="Effect,LootonDealDamageTier1,Resources[Vespene]"/></s><IMG path="Assets\Textures\icon-gas-terran.dds" height="28" width="28"/>
+Button/Tooltip/LootResourceTextTier2=<s val="Kicker_Minerals">+<d ref="Effect,LootonDealDamageTier2,Resources[Minerals]"/></s><IMG path="Assets\Textures\icon-mineral.dds" height="28" width="28"/><n/><s val="Kicker_Gas">+<d ref="Effect,LootonDealDamageTier2,Resources[Vespene]"/></s><IMG path="Assets\Textures\icon-gas-terran.dds" height="28" width="28"/>
+Button/Tooltip/LootResourceTextTier3=<s val="Kicker_Minerals">+<d ref="Effect,LootonDealDamageTier3,Resources[Minerals]"/></s><IMG path="Assets\Textures\icon-mineral.dds" height="28" width="28"/><n/><s val="Kicker_Gas">+<d ref="Effect,LootonDealDamageTier3,Resources[Vespene]"/></s><IMG path="Assets\Textures\icon-gas-terran.dds" height="28" width="28"/>
+Button/Tooltip/LootResourceTextTier4=<s val="Kicker_Minerals">+<d ref="Effect,LootonDealDamageTier4,Resources[Minerals]"/></s><IMG path="Assets\Textures\icon-mineral.dds" height="28" width="28"/><n/><s val="Kicker_Gas">+<d ref="Effect,LootonDealDamageTier4,Resources[Vespene]"/></s><IMG path="Assets\Textures\icon-gas-terran.dds" height="28" width="28"/>
+Button/Tooltip/LootResourceTextTier5=<s val="Kicker_Minerals">+<d ref="Effect,LootonDealDamageTier5,Resources[Minerals]"/></s><IMG path="Assets\Textures\icon-mineral.dds" height="28" width="28"/><n/><s val="Kicker_Gas">+<d ref="Effect,LootonDealDamageTier5,Resources[Vespene]"/></s><IMG path="Assets\Textures\icon-gas-terran.dds" height="28" width="28"/>
 Button/Tooltip/Medic2=Support trooper. Heals nearby biological units.
 Button/Tooltip/MediumEnergyandHugeRegen=<s val="_LawbdaBaseTooltip">Give captain <s val="_LawbdaHighLightTin">+<d ref="Behavior,EnergyMediumMaxandLargeRegeneration,Modification.VitalMaxAdditiveMultiplierArray[Energy]"precision="2"/> max energy</s> and <s val="_LawbdaHighLightTin">+<d ref="Behavior,EnergyMediumMaxandLargeRegeneration,Modification.VitalRegenArray[Energy]" precision="2"/></s> energy regeneration rate bonus.</s>
 Button/Tooltip/MediumLifeandRegen=<s val="_LawbdaBaseTooltip">Give captain <s val="_LawbdaHighLightGreen">+<d ref="Behavior,UnitMediumAddMaxLife,Modification.VitalMaxArray[Life]"/> max life</s>,<s val="_LawbdaHighLightGreen">+<d ref="Behavior,UnitMediumAddMaxLife,Modification.VitalMaxFractionArray[Life]" precision="2"/>max life</s> and <s val="_LawbdaHighLightGreen">+<d ref="Behavior,UnitMediumAddMaxLife,Modification.VitalRegenArray[Life]" precision="2"/></s> life regeneration rate bonus.</s>
@@ -1262,7 +1268,9 @@ Button/Tooltip/SquadSquadSight=Increases the non-melee attack range of all nearb
 Button/Tooltip/SquadStarport=Air-unit production facility. <n/><n/><c val="ffff8a">Enables:</c><n/>- Liberators
 Button/Tooltip/SquadStarportFlying=Starport must land to start unit production.
 Button/Tooltip/SquadStetmann=Stetmann can heal his squad-mates at lightning speed. <n/><n/><c val="#ColorAttackInfo">Has no attack.</c><n/>
+Button/Tooltip/SquadStetmannHealDamageGrenade=Stuns and disables the <c val="FFE303">Detection</c> of enemy ground and air units in the target area for <d ref="Behavior,FlashBangGrenade,Duration"/> seconds.</n></n><c val ="#ColorAttackInfo">Massive units and friendly units are immune.</c>
 Button/Tooltip/SquadStetmannSelfixArmor=Stetmann will regenerate his life and energy rapidly if he has not recently performed healing or taken damage.
+Button/Tooltip/SquadStetmannUltraDualInjectors=Captain Freeman offer +<d ref="Behavior,SquadShooterAuraBuff,Modification.RangedWeaponRange"/> range for non-melee weapons in <d ref="Effect,SquadShooterAuraSearch,AreaArray[0].Radius"/>  raiuds.
 Button/Tooltip/SquadStimpack=Marine takes 10 damage. Fires and moves 50% faster for 15 seconds.
 Button/Tooltip/SquadStimpackRedirect=Orders Marines inside of the Bunker to use Stimpacks. They will take damage and have increased attack speed as normal.
 Button/Tooltip/SquadStructureAttack=Targets and attacks the target unit until it is destroyed or moves out of range.
@@ -1557,9 +1565,9 @@ Effect/Name/MarauderFrostArmorDamage=Marauder Frost Armor Damage
 Effect/Name/MarauderFrostAromrSlowApply=Marauder Frost Aromr Slow Apply
 Effect/Name/MarineBuffRedirectPack=Marine Buff Redirect Pack
 Effect/Name/MedicBuffRedirectPack=Medic Buff Redirect Pack
-Effect/Name/MedicFlashBangGrenadeApplyBehavior=Medic FlashBangGrenade ApplyBehavior
-Effect/Name/MedicFlashBangGrenadeDamage=Medic FlashBangGrenade Damage
-Effect/Name/MedicFlashBangGrenadeLaunchMissile=Medic FlashBangGrenade LaunchMissile
+Effect/Name/MedicFlashBangGrenadeApplyBehavior=Medic FlashBang Grenade ApplyBehavior
+Effect/Name/MedicFlashBangGrenadeDamage=Medic FlashBang Grenade Damage
+Effect/Name/MedicFlashBangGrenadeLaunchMissile=Medic FlashBang Grenade Launch Missile
 Effect/Name/MedicFlashBangGrenadeSearch=Medic FlashBang Grenade Search
 Effect/Name/MorphBackGround=Morph Back Ground
 Effect/Name/MorphBunkerHiveMindEmulator=Morph Bunker Hive Mind Emulator
@@ -2410,6 +2418,15 @@ Effect/Name/SquadSpiderSilkDamage=Squad Spider Silk Damage
 Effect/Name/SquadSquadHallucinationTargetKill=Squad Squad Hallucination Target Kill
 Effect/Name/SquadSquadSightAB=Squad Squad Sight AB
 Effect/Name/SquadSquadSightSearch=Squad Squad Sight Search
+Effect/Name/SquadStetmannHealDamageGrenadeDamageonTime=Squad Stetmann Heal Damage Grenade Damage on Time
+Effect/Name/SquadStetmannHealDamageGrenadeHDOTSearch=Squad Stetmann Heal Damage Grenade HDOT Search
+Effect/Name/SquadStetmannHealDamageGrenadeHealonTime=Squad Stetmann Heal Damage Grenade Heal on Time
+Effect/Name/SquadStetmannHealDamageGrenadeLaunchMissile=Squad Stetmann Heal Damage Grenade Launch Missile
+Effect/Name/SquadStetmannHealDamageGrenadePersistent=Squad Stetmann Heal Damage Grenade Persistent
+Effect/Name/SquadStetmannHealDamageGrenadeSet=Squad Stetmann Heal Damage Grenade Set
+Effect/Name/SquadStetmannHealDamageGrenadeStunAB=Squad Stetmann Heal Damage Grenade Stun AB
+Effect/Name/SquadStetmannHealDamageGrenadeStunSearch=Squad Stetmann Heal Damage Grenade Stun Search
+Effect/Name/SquadStetmannHealDamageGrenadeSwitch=Squad Stetmann Heal Damage Grenade Switch
 Effect/Name/SquadStetmannUltraHealGunApply=Squad Stetmann Ultra Heal Gun Apply
 Effect/Name/SquadStetmannUltraHealGunDamageonTime=Squad Stetmann Ultra Heal Gun Damage on Time
 Effect/Name/SquadStetmannUltraHealGunHealonTime=Squad Stetmann Ultra Heal Gun Heal on Time
@@ -2763,7 +2780,7 @@ RequirementNode/Tooltip/PoweredByStarport=Powered by Tech Lab
 RequirementNode/Tooltip/PoweredByTechlab=Powered by Tech Lab
 Reward/Name/AddSquad=AddSquad
 Reward/Name/Decal_Terran_0062_012=Enband
-Reward/Name/Disband=DisbandSquad
+Reward/Name/DisbandSquad=Disband Squad
 Reward/Name/NotDisbandSquad=Not Disband Squad
 SelfCastCommand=SelfCastCommand
 SimpleDisplay/SquadHealAttack=<s val="@@@SimpleCommandRow">%hotkey</c> then</s> <IMG path="Assets\Textures\tutorialmouseleftbuttondown.dds" alignment="absolutemiddle"/> <s val="@@@SimpleCommandRow">ground to Auto-attack</s>
@@ -2924,6 +2941,7 @@ Unit/Name/SquadSpiderMineBurrowed=Squad Spider Mine Burrowed
 Unit/Name/SquadStarport=Squad Starport
 Unit/Name/SquadStarportFlying=Squad Starport Flying
 Unit/Name/SquadStetmann=Squad Stetmann
+Unit/Name/SquadStetmannHealDamageGrenade=Squad Stetmann Heal Damage Grenade
 Unit/Name/SquadStetmannUltraHealGunMissile=Squad Stetmann Ultra Heal Gun Missile
 Unit/Name/SquadStormBoltMissile=Squad Storm Bolt Missile
 Unit/Name/SquadStukovInfestedDiamondbackBileStreamSprayMissile=Squad Stukov Infested Diamondback Bile Stream Spray Missile
@@ -3143,6 +3161,7 @@ Weapon/Name/SquadSpecterAGR14GaussRifle=Squad Specter AGR-14 Gauss Rifle
 Weapon/Name/SquadSpiderMinesSuicide=Squad Spider Mines Suicide
 Weapon/Name/SquadSpiderSilk=Squad Spider Silk
 Weapon/Name/SquadStetmannUltraHealGun=Squad Stetmann Ultra Heal Gun
+Weapon/Name/SquadStetmannUltraHealGunTwo=Squad Stetmann Ultra Heal Gun Two
 Weapon/Name/SquadSuperGaryStetmannGun=Squad Super Gary Stetmann Gun
 Weapon/Name/SquadSupplyDepotChannelingSpines=Squad Supply Depot Channeling Spines
 Weapon/Name/SquadSwannConcussiveGrenade=Squad Swann Concussive Grenade
@@ -3166,3 +3185,4 @@ Weapon/Name/SquadWraithG=Squad Wraith G
 Weapon/Tip/SquadMedicHealGun=Most advanced Heal Gun, can both heal alias and damage enemy.
 Weapon/Tip/SquadMedicHealGunTwo=Most advanced Heal Gun, can both heal alias and damage enemy.
 Weapon/Tip/SquadStetmannUltraHealGun=Most advanced Heal Gun, can both heal alias and damage enemy.
+Weapon/Tip/SquadStetmannUltraHealGunTwo=Most advanced Heal Gun, can both heal alias and damage enemy.

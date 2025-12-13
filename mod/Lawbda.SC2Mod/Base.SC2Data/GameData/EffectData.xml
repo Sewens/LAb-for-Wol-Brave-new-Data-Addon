@@ -30,6 +30,35 @@
     <CEffectEnumArea default="1" id="SquadAbilSearchRadiusExt" parent="SquadAbilSearch">
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
+    <CEffectApplyBehavior id="SquadStetmannHealDamageGrenadeStunAB">
+        <ValidatorArray index="0" value="NotFrenzied"/>
+        <ValidatorArray value="TargetIsNotUnstoppable"/>
+        <ValidatorArray value="NotStructureorIsStructureandNotDetector"/>
+        <ValidatorArray value="IsNotHerculesCombined"/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadStetmannHealDamageGrenade"/>
+    </CEffectApplyBehavior>
+    <CEffectLaunchMissile id="SquadStetmannHealDamageGrenadeLaunchMissile">
+        <ValidatorArray index="0" value="HasVision"/>
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <ImpactOffset value="0,0,0.1"/>
+        <ImpactEffect value="SquadStetmannHealDamageGrenadeStunSearch"/>
+        <AmmoUnit value="SquadStetmannHealDamageGrenade"/>
+    </CEffectLaunchMissile>
+    <CEffectCreatePersistent id="SquadStetmannHealDamageGrenadePersistent">
+        <EditorCategories value="Race:Terran"/>
+        <PeriodCount value="50"/>
+        <PeriodicEffectArray value="SquadStetmannHealDamageGrenadeHDOTSearch"/>
+        <PeriodicPeriodArray value="0.125"/>
+        <RevealRadius value="3"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="SquadStetmannHealDamageGrenadeStunSearch">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <SearchFilters value="-;Self,Player,Ally,Neutral,Massive,Missile,Destructible,Item,Stasis,Dead,Hidden,Invulnerable,Unstoppable"/>
+        <AreaArray Radius="3" Effect="SquadStetmannHealDamageGrenadeStunAB"/>
+    </CEffectEnumArea>
     <CEffectDamage id="SquadOdinBarrageDamage">
         <EditorCategories value="Race:Terran"/>
         <ResponseFlags index="Acquire" value="1"/>
@@ -271,6 +300,18 @@
         <BehaviorLink value="UnitKnockback"/>
         <Count value="1"/>
     </CEffectRemoveBehavior>
+    <CEffectSet id="SquadStetmannHealDamageGrenadeSet">
+        <EditorCategories value=""/>
+        <EffectArray value="SquadStetmannHealDamageGrenadePersistent"/>
+        <EffectArray value="SquadStetmannHealDamageGrenadeStunAB"/>
+        <TargetLocationType value="UnitOrPoint"/>
+    </CEffectSet>
+    <CEffectEnumArea id="SquadStetmannHealDamageGrenadeHDOTSearch">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <SearchFilters value="Ground;Self,Massive,Missile,Destructible,Item,Stasis,Dead,Hidden,Invulnerable,Unstoppable"/>
+        <AreaArray Radius="3" Effect="SquadStetmannHealDamageGrenadeSwitch"/>
+    </CEffectEnumArea>
     <CEffectApplyBehavior id="SquadStetmannUltraHealGunApply">
         <EditorCategories value="Race:Terran"/>
         <Behavior value="SquadStetmannUltraHealGun"/>
@@ -289,10 +330,30 @@
         <SearchFlags index="CallForHelp" value="1"/>
         <SearchFlags index="OffsetAreaByAngle" value="1"/>
     </CEffectDamage>
+    <CEffectDamage id="SquadStetmannHealDamageGrenadeDamageonTime">
+        <EditorCategories value="Race:Terran"/>
+        <AINotifyFlags index="HelpFriend" value="1"/>
+        <CanBeBlocked value="1"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Visibility value="Visible"/>
+        <Flags index="Notification" value="1"/>
+        <Type value="Fire"/>
+        <Amount value="5"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="OffsetAreaByAngle" value="1"/>
+    </CEffectDamage>
     <CEffectModifyUnit id="SquadStetmannUltraHealGunHealonTime">
         <EditorCategories value="Race:Terran"/>
         <VitalArray index="Life">
             <Change value="1"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectModifyUnit id="SquadStetmannHealDamageGrenadeHealonTime">
+        <EditorCategories value="Race:Terran"/>
+        <VitalArray index="Life">
+            <Change value="5"/>
         </VitalArray>
     </CEffectModifyUnit>
     <CEffectLaunchMissile id="SquadStetmannUltraHealGunLaunchMissile">
@@ -315,6 +376,11 @@
         <EditorCategories value="Race:Terran"/>
         <CaseArray Validator="SquadMedicHealGunHealTarget" Effect="SquadStetmannUltraHealGunHealonTime"/>
         <CaseArray Validator="TargetisEnemy" Effect="SquadStetmannUltraHealGunDamageonTime"/>
+    </CEffectSwitch>
+    <CEffectSwitch id="SquadStetmannHealDamageGrenadeSwitch">
+        <EditorCategories value="Race:Terran"/>
+        <CaseArray Validator="TargetisEnemy" Effect="SquadStetmannHealDamageGrenadeDamageonTime"/>
+        <CaseDefault value="SquadStetmannHealDamageGrenadeHealonTime"/>
     </CEffectSwitch>
     <CEffectCreatePersistent id="SquadSwannFlamingBettyFlameThrowerCreatePersistent">
         <EditorCategories value="Race:Terran"/>

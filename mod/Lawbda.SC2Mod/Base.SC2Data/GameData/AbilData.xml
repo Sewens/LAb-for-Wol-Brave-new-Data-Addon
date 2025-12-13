@@ -70,6 +70,21 @@
         <Flags index="Transient" value="1"/>
         <PointsPerLevel value="1"/>
     </CAbilLearn>
+    <CAbilEffectTarget id="SquadStetmannHealDamageGrenade">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Effect index="0" value="SquadStetmannHealDamageGrenadeSet"/>
+        <Cost>
+            <Vital index="Energy" value="75"/>
+            <Cooldown TimeUse="5"/>
+        </Cost>
+        <Range value="7"/>
+        <Arc value="9.9975"/>
+        <PrepTime value="0.1"/>
+        <UninterruptibleArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <CursorEffect value="SquadStetmannHealDamageGrenadeStunSearch"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadStetmannHealDamageGrenade"/>
+    </CAbilEffectTarget>
     <CAbilEffectTarget id="SquadOdinAnnihilate">
         <EditorCategories value="AbilityorEffectType:Units"/>
         <Effect index="0" value="SquadOdinAnnihilateInitialCreatePersistent"/>
@@ -4147,7 +4162,7 @@
         <UseMarkerArray index="Approach" value="0"/>
         <UseMarkerArray index="Cast" value="0"/>
         <UseMarkerArray index="Channel" value="0"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="Disband"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="DisbandSquad"/>
         <InterruptCost>
             <Cooldown TimeUse="30"/>
         </InterruptCost>
