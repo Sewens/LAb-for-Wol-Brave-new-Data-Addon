@@ -215,6 +215,58 @@
         <HeightOffset value="1.500000"/>
         <Text value="Button/Tooltip/##id##"/>
     </CActorText>
+    <CActorEventMacro id="CalldownNukeAnim">
+        <!--copy from ghost anim maybe do not function while host actor model dont have the spell anim-->
+        <!--black nuke-->
+        <On Terms="Abil.NuclearStrikeBlack.SourceCastStart" Send="AnimPlay SpellA Spell,A"/>
+        <On Terms="Abil.NuclearStrikeBlack.SourceCastStop" Send="AnimClear SpellA"/>
+        <On Terms="Abil.NuclearStrikeBlack.SourceChannelStart" Send="AnimPlay SpellB Spell,B PlayForever"/>
+        <On Terms="Abil.NuclearStrikeBlack.SourceChannelStop" Send="AnimClear SpellB"/>
+        <On Terms="Abil.NuclearStrikeBlack.SourceFinishStart" Send="AnimPlay SpellC Spell,C"/>
+        <On Terms="Abil.NuclearStrikeBlack.SourceFinishStop" Send="AnimClear SpellC"/>
+        <!--blue nuke-->
+        <On Terms="Abil.NuclearStrikeBlue.SourceCastStart" Send="AnimPlay SpellA Spell,A"/>
+        <On Terms="Abil.NuclearStrikeBlue.SourceCastStop" Send="AnimClear SpellA"/>
+        <On Terms="Abil.NuclearStrikeBlue.SourceChannelStart" Send="AnimPlay SpellB Spell,B PlayForever"/>
+        <On Terms="Abil.NuclearStrikeBlue.SourceChannelStop" Send="AnimClear SpellB"/>
+        <On Terms="Abil.NuclearStrikeBlue.SourceFinishStart" Send="AnimPlay SpellC Spell,C"/>
+        <On Terms="Abil.NuclearStrikeBlue.SourceFinishStop" Send="AnimClear SpellC"/>
+        <!--white nuke-->
+        <On Terms="Abil.NuclearStrikeWhite.SourceCastStart" Send="AnimPlay SpellA Spell,A"/>
+        <On Terms="Abil.NuclearStrikeWhite.SourceCastStop" Send="AnimClear SpellA"/>
+        <On Terms="Abil.NuclearStrikeWhite.SourceChannelStart" Send="AnimPlay SpellB Spell,B PlayForever"/>
+        <On Terms="Abil.NuclearStrikeWhite.SourceChannelStop" Send="AnimClear SpellB"/>
+        <On Terms="Abil.NuclearStrikeWhite.SourceFinishStart" Send="AnimPlay SpellC Spell,C"/>
+        <On Terms="Abil.NuclearStrikeWhite.SourceFinishStop" Send="AnimClear SpellC"/>
+        <!--yellow nuke-->
+        <On Terms="Abil.NuclearStrikeYellow.SourceCastStart" Send="AnimPlay SpellA Spell,A"/>
+        <On Terms="Abil.NuclearStrikeYellow.SourceCastStop" Send="AnimClear SpellA"/>
+        <On Terms="Abil.NuclearStrikeYellow.SourceChannelStart" Send="AnimPlay SpellB Spell,B PlayForever"/>
+        <On Terms="Abil.NuclearStrikeYellow.SourceChannelStop" Send="AnimClear SpellB"/>
+        <On Terms="Abil.NuclearStrikeYellow.SourceFinishStart" Send="AnimPlay SpellC Spell,C"/>
+        <On Terms="Abil.NuclearStrikeYellow.SourceFinishStop" Send="AnimClear SpellC"/>
+        <!--green nuke-->
+        <On Terms="Abil.NuclearStrikeGreen.SourceCastStart" Send="AnimPlay SpellA Spell,A"/>
+        <On Terms="Abil.NuclearStrikeGreen.SourceCastStop" Send="AnimClear SpellA"/>
+        <On Terms="Abil.NuclearStrikeGreen.SourceChannelStart" Send="AnimPlay SpellB Spell,B PlayForever"/>
+        <On Terms="Abil.NuclearStrikeGreen.SourceChannelStop" Send="AnimClear SpellB"/>
+        <On Terms="Abil.NuclearStrikeGreen.SourceFinishStart" Send="AnimPlay SpellC Spell,C"/>
+        <On Terms="Abil.NuclearStrikeGreen.SourceFinishStop" Send="AnimClear SpellC"/>
+        <!--vanilla nuke-->
+        <On Terms="Abil.NuclearStrikeVanilla.SourceCastStart" Send="AnimPlay SpellA Spell,A"/>
+        <On Terms="Abil.NuclearStrikeVanilla.SourceCastStop" Send="AnimClear SpellA"/>
+        <On Terms="Abil.NuclearStrikeVanilla.SourceChannelStart" Send="AnimPlay SpellB Spell,B PlayForever"/>
+        <On Terms="Abil.NuclearStrikeVanilla.SourceChannelStop" Send="AnimClear SpellB"/>
+        <On Terms="Abil.NuclearStrikeVanilla.SourceFinishStart" Send="AnimPlay SpellC Spell,C"/>
+        <On Terms="Abil.NuclearStrikeVanilla.SourceFinishStop" Send="AnimClear SpellC"/>
+        <!--red nuke-->
+        <On Terms="Abil.NuclearStrikeRed.SourceCastStart" Send="AnimPlay SpellA Spell,A"/>
+        <On Terms="Abil.NuclearStrikeRed.SourceCastStop" Send="AnimClear SpellA"/>
+        <On Terms="Abil.NuclearStrikeRed.SourceChannelStart" Send="AnimPlay SpellB Spell,B PlayForever"/>
+        <On Terms="Abil.NuclearStrikeRed.SourceChannelStop" Send="AnimClear SpellB"/>
+        <On Terms="Abil.NuclearStrikeRed.SourceFinishStart" Send="AnimPlay SpellC Spell,C"/>
+        <On Terms="Abil.NuclearStrikeRed.SourceFinishStop" Send="AnimClear SpellC"/>
+    </CActorEventMacro>
     <CActorModel id="SquadTychusJumpScareImpact" parent="ModelAdditionStatic">
         <Aliases index="0" removed="1"/>
         <Inherits index="BaseModelScale" value="0"/>
@@ -896,7 +948,7 @@
     </CActorMissile>
     <CActorUnit id="SquadTychus" parent="GenericUnitStandard" unitName="SquadTychus">
         <Aliases value="_UnitSmall"/>
-        <On Terms="Abil.SquadTossGrenade.SourceCastStart" Send="$Spell 0 -1.000000 -1.000000 2.000000 AsTimeScale"/>
+        <On Terms="Abil.SquadTychusTossGrenade.SourceCastStart" Send="$Spell 0 -1.000000 -1.000000 2.000000 AsTimeScale"/>
         <On Terms="ActorCreation" Send="TextureSelectById Decal_Campaign_Tychus_01"/>
         <Model value="TychusCommando"/>
         <ModelFlags index="SuppressPlayerDecals" value="1"/>
@@ -907,7 +959,7 @@
         <PortraitModel value="TychusPortrait"/>
         <StandAnimTurnTime value="5"/>
         <WalkAnimMoveSpeed value="2.25"/>
-        <AbilSoundArray AbilCmd="SquadTossGrenade,Execute" Sound="Tychus_TossGrenadeVO"/>
+        <AbilSoundArray AbilCmd="SquadTychusTossGrenade,255" Sound="Tychus_TossGrenadeVO"/>
         <BarOffset value="50"/>
         <BarWidth value="50"/>
         <GroupIcon>
@@ -2044,7 +2096,7 @@
         <HostSiteOps Ops="SOpShadow"/>
         <Model value="BlackNukeCollateralFire"/>
     </CActorModel>
-    <CActorSplat id="YellowNuclearCursorSplat" parent="TerranCursorSplat" abil="NuclearStrikeYelllow">
+    <CActorSplat id="YellowNuclearCursorSplat" parent="TerranCursorSplat" abil="NuclearStrikeYellow">
         <On Terms="ActorCreation" Send="SetTintColor 255,255,255"/>
         <Model value="YelllowNukeCursorSplat"/>
     </CActorSplat>
@@ -3135,9 +3187,9 @@
         <HostSiteOps Ops="SOpAttachOrigin"/>
         <Model value="ConsumptionLaunchModel"/>
     </CActorModel>
-    <CActorList id="SquadCaptainToshHeroDetectorList">
-        <On Terms="Behavior.SquadCaptainToshDetectorRadar.On" Send="Create"/>
-        <On Terms="Behavior.SquadCaptainToshDetectorRadar.Off" Send="Destroy"/>
+    <CActorList id="SquadHeroDetectorList">
+        <On Terms="Behavior.SquadHeroDetectorRadar.On" Send="Create"/>
+        <On Terms="Behavior.SquadHeroDetectorRadar.Off" Send="Destroy"/>
         <On Terms="Signal.*.AddMe" Send="RefSetFromMsg ::actor.DetectorToAdd ::Sender"/>
         <On Terms="Signal.*.AddMe" Send="ListAdd ::actor.DetectorToAdd"/>
         <On Terms="Signal.*.AddMe; Selected" Target="::actor.DetectorToAdd" Send="SetVisibility 1"/>
@@ -3146,25 +3198,25 @@
         <On Terms="SelectionLocalUpdate.*.Start" Target="::Contents" Send="SetVisibility 1"/>
         <On Terms="SelectionLocalUpdate.*.Stop" Target="::Contents" Send="SetVisibility"/>
     </CActorList>
-    <CActorModel id="HeroDetectorRadarModel_Detector102" parent="ModelAnimationStyleContinuous">
+    <CActorModel id="DetectorRadarModelDetector10" parent="ModelAnimationStyleContinuous">
         <Terms value="Cap 1"/>
-        <On Terms="Effect.SquadCaptainToshDetectorRadarDetected.Start; At Target; ValidateUnit HasDetector10" Send="Create"/>
-        <On Terms="Effect.SquadCaptainToshDetectorRadarDetected.Start" Send="RefSetFromRequest ::actor.TargetList HeroDetectorList Implicit Find"/>
-        <On Terms="Behavior.HeroDetectorRadarDetected.Off" Send="Destroy"/>
+        <On Terms="Effect.SquadHeroDetectorRadarDetected.Start; At Target; ValidateUnit HasDetector10" Send="Create"/>
+        <On Terms="Effect.SquadHeroDetectorRadarDetected.Start" Send="RefSetFromRequest ::actor.TargetList SquadHeroDetectorList Implicit Find"/>
+        <On Terms="Behavior.SquadHeroDetectorRadarDetected.Off" Send="Destroy"/>
         <On Terms="ActorCreation" Send="SetVisibility"/>
-        <On Terms="Behavior.HeroDetectorRadarDetected.On" Target="::actor.TargetList" Send="Signal AddMe"/>
+        <On Terms="Behavior.SquadHeroDetectorRadarDetected.On" Target="::actor.TargetList" Send="Signal AddMe"/>
         <On Terms="ActorDestruction" Target="::actor.TargetList" Send="Signal RemoveMe"/>
         <Host Subject="_Unit"/>
         <HostSiteOps Ops="SOpAttachOverhead"/>
         <Model value="HeroDetectorRadarModel"/>
     </CActorModel>
-    <CActorModel id="HeroDetectorRadarModel_Detector112" parent="ModelAnimationStyleContinuous">
+    <CActorModel id="DetectorRadarModelDetector11" parent="ModelAnimationStyleContinuous">
         <Terms value="Cap 1"/>
-        <On Terms="Effect.SquadCaptainToshDetectorRadarDetected.Start; At Target; ValidateUnit HasDetector11" Send="Create"/>
-        <On Terms="Effect.SquadCaptainToshDetectorRadarDetected.Start" Send="RefSetFromRequest ::actor.TargetList HeroDetectorList Implicit Find"/>
-        <On Terms="Behavior.HeroDetectorRadarDetected.Off" Send="Destroy"/>
+        <On Terms="Effect.SquadHeroDetectorRadarDetected.Start; At Target; ValidateUnit HasDetector11" Send="Create"/>
+        <On Terms="Effect.SquadHeroDetectorRadarDetected.Start" Send="RefSetFromRequest ::actor.TargetList SquadHeroDetectorList Implicit Find"/>
+        <On Terms="Behavior.SquadHeroDetectorRadarDetected.Off" Send="Destroy"/>
         <On Terms="ActorCreation" Send="SetVisibility"/>
-        <On Terms="Behavior.HeroDetectorRadarDetected.On" Target="::actor.TargetList" Send="Signal AddMe"/>
+        <On Terms="Behavior.SquadHeroDetectorRadarDetected.On" Target="::actor.TargetList" Send="Signal AddMe"/>
         <On Terms="ActorDestruction" Target="::actor.TargetList" Send="Signal RemoveMe"/>
         <Host Subject="_Unit"/>
         <HostSiteOps Ops="SOpAttachOverhead"/>
@@ -3232,70 +3284,70 @@
         <Model value="FrenzyModel"/>
         <Scale value="2.000000"/>
     </CActorModel>
-    <CActorModel id="HeroDetectorRadarModel_Detector122" parent="ModelAnimationStyleContinuous">
+    <CActorModel id="DetectorRadarModelDetector12" parent="ModelAnimationStyleContinuous">
         <Terms value="Cap 1"/>
-        <On Terms="Effect.SquadCaptainToshDetectorRadarDetected.Start; At Target; ValidateUnit HasDetector12" Send="Create"/>
-        <On Terms="Effect.SquadCaptainToshDetectorRadarDetected.Start" Send="RefSetFromRequest ::actor.TargetList HeroDetectorList Implicit Find"/>
-        <On Terms="Behavior.HeroDetectorRadarDetected.Off" Send="Destroy"/>
+        <On Terms="Effect.SquadHeroDetectorRadarDetected.Start; At Target; ValidateUnit HasDetector12" Send="Create"/>
+        <On Terms="Effect.SquadHeroDetectorRadarDetected.Start" Send="RefSetFromRequest ::actor.TargetList SquadHeroDetectorList Implicit Find"/>
+        <On Terms="Behavior.SquadHeroDetectorRadarDetected.Off" Send="Destroy"/>
         <On Terms="ActorCreation" Send="SetVisibility"/>
-        <On Terms="Behavior.HeroDetectorRadarDetected.On" Target="::actor.TargetList" Send="Signal AddMe"/>
+        <On Terms="Behavior.SquadHeroDetectorRadarDetected.On" Target="::actor.TargetList" Send="Signal AddMe"/>
         <On Terms="ActorDestruction" Target="::actor.TargetList" Send="Signal RemoveMe"/>
         <Host Subject="_Unit"/>
         <HostSiteOps Ops="SOpAttachOverhead"/>
         <Model value="HeroDetectorRadarModel"/>
     </CActorModel>
-    <CActorModel id="HeroDetectorRadarModel_Detector82" parent="ModelAnimationStyleContinuous">
+    <CActorModel id="DetectorRadarModelDetector8" parent="ModelAnimationStyleContinuous">
         <Terms value="Cap 1"/>
-        <On Terms="Effect.SquadCaptainToshDetectorRadarDetected.Start; At Target; ValidateUnit HasDetector8" Send="Create"/>
-        <On Terms="Effect.SquadCaptainToshDetectorRadarDetected.Start" Send="RefSetFromRequest ::actor.TargetList HeroDetectorList Implicit Find"/>
-        <On Terms="Behavior.HeroDetectorRadarDetected.Off" Send="Destroy"/>
+        <On Terms="Effect.SquadHeroDetectorRadarDetected.Start; At Target; ValidateUnit HasDetector8" Send="Create"/>
+        <On Terms="Effect.SquadHeroDetectorRadarDetected.Start" Send="RefSetFromRequest ::actor.TargetList SquadHeroDetectorList Implicit Find"/>
+        <On Terms="Behavior.SquadHeroDetectorRadarDetected.Off" Send="Destroy"/>
         <On Terms="ActorCreation" Send="SetVisibility"/>
-        <On Terms="Behavior.HeroDetectorRadarDetected.On" Target="::actor.TargetList" Send="Signal AddMe"/>
+        <On Terms="Behavior.SquadHeroDetectorRadarDetected.On" Target="::actor.TargetList" Send="Signal AddMe"/>
         <On Terms="ActorDestruction" Target="::actor.TargetList" Send="Signal RemoveMe"/>
         <Host Subject="_Unit"/>
         <HostSiteOps Ops="SOpAttachOverhead"/>
         <Model value="HeroDetectorRadarModel"/>
     </CActorModel>
-    <CActorRange id="HeroDetectorRadarRange_Detector102">
+    <CActorRange id="DetectorRadarRangeDetector10">
         <Terms value="Cap 1"/>
-        <On Terms="Effect.SquadCaptainToshDetectorRadarDetected.Start; At Target; ValidateUnit HasDetector10" Send="Create"/>
-        <On Terms="Effect.SquadCaptainToshDetectorRadarDetected.Start" Send="RefSetFromRequest ::actor.TargetList HeroDetectorList Implicit Find"/>
-        <On Terms="Behavior.HeroDetectorRadarDetected.Off" Send="Destroy"/>
+        <On Terms="Effect.SquadHeroDetectorRadarDetected.Start; At Target; ValidateUnit HasDetector10" Send="Create"/>
+        <On Terms="Effect.SquadHeroDetectorRadarDetected.Start" Send="RefSetFromRequest ::actor.TargetList SquadHeroDetectorList Implicit Find"/>
+        <On Terms="Behavior.SquadHeroDetectorRadarDetected.Off" Send="Destroy"/>
         <On Terms="ActorCreation" Send="SetVisibility"/>
-        <On Terms="Behavior.HeroDetectorRadarDetected.On" Target="::actor.TargetList" Send="Signal AddMe"/>
+        <On Terms="Behavior.SquadHeroDetectorRadarDetected.On" Target="::actor.TargetList" Send="Signal AddMe"/>
         <On Terms="ActorDestruction" Target="::actor.TargetList" Send="Signal RemoveMe"/>
         <Behavior value="Detector10"/>
         <IconArcLength value="3.000000"/>
     </CActorRange>
-    <CActorRange id="HeroDetectorRadarRange_Detector112">
+    <CActorRange id="DetectorRadarRangeDetector11">
         <Terms value="Cap 1"/>
-        <On Terms="Effect.SquadCaptainToshDetectorRadarDetected.Start; At Target; ValidateUnit HasDetector11" Send="Create"/>
-        <On Terms="Effect.SquadCaptainToshDetectorRadarDetected.Start" Send="RefSetFromRequest ::actor.TargetList HeroDetectorList Implicit Find"/>
-        <On Terms="Behavior.HeroDetectorRadarDetected.Off" Send="Destroy"/>
+        <On Terms="Effect.SquadHeroDetectorRadarDetected.Start; At Target; ValidateUnit HasDetector11" Send="Create"/>
+        <On Terms="Effect.SquadHeroDetectorRadarDetected.Start" Send="RefSetFromRequest ::actor.TargetList SquadHeroDetectorList Implicit Find"/>
+        <On Terms="Behavior.SquadHeroDetectorRadarDetected.Off" Send="Destroy"/>
         <On Terms="ActorCreation" Send="SetVisibility"/>
-        <On Terms="Behavior.HeroDetectorRadarDetected.On" Target="::actor.TargetList" Send="Signal AddMe"/>
+        <On Terms="Behavior.SquadHeroDetectorRadarDetected.On" Target="::actor.TargetList" Send="Signal AddMe"/>
         <On Terms="ActorDestruction" Target="::actor.TargetList" Send="Signal RemoveMe"/>
         <Behavior value="Detector11"/>
         <IconArcLength value="3.000000"/>
     </CActorRange>
-    <CActorRange id="HeroDetectorRadarRange_Detector122">
+    <CActorRange id="DetectorRadarRangeDetector12">
         <Terms value="Cap 1"/>
-        <On Terms="Effect.SquadCaptainToshDetectorRadarDetected.Start; At Target; ValidateUnit HasDetector12" Send="Create"/>
-        <On Terms="Effect.SquadCaptainToshDetectorRadarDetected.Start" Send="RefSetFromRequest ::actor.TargetList HeroDetectorList Implicit Find"/>
-        <On Terms="Behavior.HeroDetectorRadarDetected.Off" Send="Destroy"/>
+        <On Terms="Effect.SquadHeroDetectorRadarDetected.Start; At Target; ValidateUnit HasDetector12" Send="Create"/>
+        <On Terms="Effect.SquadHeroDetectorRadarDetected.Start" Send="RefSetFromRequest ::actor.TargetList SquadHeroDetectorList Implicit Find"/>
+        <On Terms="Behavior.SquadHeroDetectorRadarDetected.Off" Send="Destroy"/>
         <On Terms="ActorCreation" Send="SetVisibility"/>
-        <On Terms="Behavior.HeroDetectorRadarDetected.On" Target="::actor.TargetList" Send="Signal AddMe"/>
+        <On Terms="Behavior.SquadHeroDetectorRadarDetected.On" Target="::actor.TargetList" Send="Signal AddMe"/>
         <On Terms="ActorDestruction" Target="::actor.TargetList" Send="Signal RemoveMe"/>
         <Behavior value="Detector12"/>
         <IconArcLength value="3.000000"/>
     </CActorRange>
-    <CActorRange id="HeroDetectorRadarRange_Detector82">
+    <CActorRange id="DetectorRadarRangeDetector8">
         <Terms value="Cap 1"/>
-        <On Terms="Effect.SquadCaptainToshDetectorRadarDetected.Start; At Target; ValidateUnit HasDetector8" Send="Create"/>
-        <On Terms="Effect.SquadCaptainToshDetectorRadarDetected.Start" Send="RefSetFromRequest ::actor.TargetList HeroDetectorList Implicit Find"/>
-        <On Terms="Behavior.HeroDetectorRadarDetected.Off" Send="Destroy"/>
+        <On Terms="Effect.SquadHeroDetectorRadarDetected.Start; At Target; ValidateUnit HasDetector8" Send="Create"/>
+        <On Terms="Effect.SquadHeroDetectorRadarDetected.Start" Send="RefSetFromRequest ::actor.TargetList SquadHeroDetectorList Implicit Find"/>
+        <On Terms="Behavior.SquadHeroDetectorRadarDetected.Off" Send="Destroy"/>
         <On Terms="ActorCreation" Send="SetVisibility"/>
-        <On Terms="Behavior.HeroDetectorRadarDetected.On" Target="::actor.TargetList" Send="Signal AddMe"/>
+        <On Terms="Behavior.SquadHeroDetectorRadarDetected.On" Target="::actor.TargetList" Send="Signal AddMe"/>
         <On Terms="ActorDestruction" Target="::actor.TargetList" Send="Signal RemoveMe"/>
         <Behavior value="Detector8"/>
         <IconArcLength value="3.000000"/>
@@ -3399,6 +3451,7 @@
     </CActorLookAt>
     <CActorUnit id="SquadCaptainNova" parent="GenericUnitStandard" unitName="CaptainNova">
         <Macros value="UnloadDropAnim"/>
+        <Macros value="CalldownNukeAnim"/>
         <On Terms="ActorCreation" Send="Create SquadCaptainNovaLookAt"/>
         <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
         <On Terms="WeaponStart.SquadCaptainNovaCanisterRifle.AttackStart" Send="AnimPlay Attack Attack 0 -1.000000 -1.000000 1.000000 AsTimeScale"/>
@@ -4776,22 +4829,20 @@
     </CActorMissile>
     <CActorUnit id="SquadCaptainTosh" parent="GenericUnitBase" unitName="SquadCaptainTosh">
         <Aliases value="_UnitSmall"/>
-        <On Terms="Abil.HeroNuclearStrike.SourceCastStart" Send="AnimBracketStart Spell Work,Start Work Work,End"/>
-        <On Terms="Abil.HeroNuclearStrike.SourceFinishStart" Send="AnimBracketStop Spell"/>
-        <On Terms="Abil.HeroNuclearStrike.SourceCancel" Send="AnimBracketStop Spell"/>
+        <Macros value="CalldownNukeAnim"/>
+        <!-- basic anim -->
         <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Work"/>
         <On Terms="WeaponStart.*.AttackStart" Send="AnimBracketStart Attack Attack"/>
         <On Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
         <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Work"/>
-        <On Terms="Abil.nuke.SourceCastStart" Send="AnimBracketStart Nuke Work,Start Work Work,End"/>
-        <On Terms="Abil.nuke.SourceChannelStop" Send="AnimBracketStop Nuke"/>
+        <!-- spell anim -->
         <On Terms="Abil.RogueRogueBombTosh.SourceCastStart" Send="AnimPlay SpellA Spell,A"/>
         <On Terms="Abil.KillerPhantasmHydralisk.SourceCastStart" Send="$Spell"/>
         <On Terms="Abil.KillerPhantasmUltralisk.SourceCastStart" Send="$Spell"/>
         <On Terms="Abil.KillerPhantasmZergling.SourceCastStart" Send="$Spell"/>
         <On Terms="Abil.MindBlast.SourceCastStart" Send="$Spell,B NonLooping"/>
-        <On Terms="Abil.Consumption.SourceCastStart" Send="$Spell"/>
-        <On Terms="Abil.Consumption.SourceCastStart" Send="Create ConsumptionSound"/>
+        <On Terms="Abil.SquadToshConsumption.SourceCastStart" Send="$Spell"/>
+        <On Terms="Abil.SquadToshConsumption.SourceCastStart" Send="Create ConsumptionSound"/>
         <On Terms="Abil.ToshShadowClones.SourceCastStart" Send="$Spell"/>
         <Model value="Tosh"/>
         <BuildModel value="ToshTeleportIn"/>
@@ -10434,12 +10485,23 @@
         <Macros value="UnloadDropAnim"/>
         <Macros value="PhysicsDeathsSwarmGround"/>
         <Macros value="PhysicsDeathsVoidGround"/>
-        <On Terms="Abil.TacNukeStrike.SourceCastStart" Send="AnimPlay SpellA Spell,A"/>
-        <On Terms="Abil.TacNukeStrike.SourceCastStop" Send="AnimClear SpellA"/>
-        <On Terms="Abil.TacNukeStrike.SourceChannelStart" Send="AnimPlay SpellB Spell,B PlayForever"/>
-        <On Terms="Abil.TacNukeStrike.SourceChannelStop" Send="AnimClear SpellB"/>
-        <On Terms="Abil.TacNukeStrike.SourceFinishStart" Send="AnimPlay SpellC Spell,C"/>
-        <On Terms="Abil.TacNukeStrike.SourceFinishStop" Send="AnimClear SpellC"/>
+        <!-- call down nuke anim-->
+        <Macros value="CalldownNukeAnim"/>
+        <!--basic anim-->
+        <On Terms="UnitMovementUpdate.*.Walk; AnimPlaying SpellC" Send="AnimClear SpellC"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="WeaponStart.*.AttackStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart Attack Attack,Superior"/>
+        <On Terms="WeaponStart.*.AttackStart; WeaponTargetElevation LE -20.000000" Send="AnimBracketStart Attack Attack,Inferior"/>
+        <On Terms="WeaponStart.*.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create Ghost_Land"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit IsCelestialBurning" Send="DeathCustomize Variation1"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit IsCelestialBurning" Send="DeathCustomize RagdollFire"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit HaveVoidShade" Send="DeathCustomize Shadow"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
+        <!--ability anim-->
+        <On Terms="Abil.SquadGhostEMP.SourceCastStart" Send="AnimPlay SpellC Spell,C 0 0.000000 0.300000"/>
         <On Terms="Abil.SquadGhostSnipe.SourceCastStart" Send="AnimBaselineStop"/>
         <On Terms="Abil.SquadGhostSnipe.SourceCastStart" Send="AnimPlay SpellA Spell,A"/>
         <On Terms="Abil.SquadGhostSnipe.SourceCastStop" Send="AnimClear SpellA"/>
@@ -10447,9 +10509,15 @@
         <On Terms="Abil.SquadGhostSnipe.SourceChannelStart" Send="AnimPlay SpellB Spell,B PlayForever"/>
         <On Terms="Abil.SquadGhostSnipe.SourceChannelStop" Send="AnimClear SpellB"/>
         <On Terms="Abil.SquadGhostSnipe.SourceFinishStart" Send="AnimPlay SpellC Spell,C"/>
-        <On Terms="UnitMovementUpdate.*.Walk; AnimPlaying SpellC" Send="AnimClear SpellC"/>
-        <On Terms="Abil.EMP.SourceCastStart" Send="AnimPlay SpellC Spell,C 0 0.000000 0.300000"/>
-        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="Abil.SquadGhostTripleSnipe.SourceCastStart" Send="AnimBaselineStop"/>
+        <On Terms="Abil.SquadGhostTripleSnipe.SourceCastStart" Send="AnimBaselineStop"/>
+        <On Terms="Abil.SquadGhostTripleSnipe.SourceCastStart" Send="AnimPlay SpellA Spell,A"/>
+        <On Terms="Abil.SquadGhostTripleSnipe.SourceCastStop" Send="AnimClear SpellA"/>
+        <On Terms="Abil.SquadGhostTripleSnipe.SourceCastStop" Send="AnimBaselineStart"/>
+        <On Terms="Abil.SquadGhostTripleSnipe.SourceChannelStart" Send="AnimPlay SpellB Spell,B PlayForever"/>
+        <On Terms="Abil.SquadGhostTripleSnipe.SourceChannelStop" Send="AnimClear SpellB"/>
+        <On Terms="Abil.SquadGhostTripleSnipe.SourceFinishStart" Send="AnimPlay SpellC Spell,C"/>
+        <!--
         <On Terms="Behavior.GhostHoldFireB.On" Send="AnimGroupApply Cover"/>
         <On Terms="Behavior.GhostHoldFireB.On" Send="AnimPlay MorphStart Cover,Start"/>
         <On Terms="Behavior.GhostHoldFireB.On" Send="AnimClear MorphEnd"/>
@@ -10458,27 +10526,10 @@
         <On Terms="Behavior.GhostHoldFireB.Off" Send="AnimClear MorphStart"/>
         <On Terms="Behavior.GhostHoldFireB.Off" Send="AnimGroupRemove Cover"/>
         <On Terms="Behavior.GhostHoldFireB.Off" Send="Create Ghost_WeaponsFree_Sound"/>
-        <On Terms="WeaponStart.*.AttackStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart Attack Attack,Superior"/>
-        <On Terms="WeaponStart.*.AttackStart; WeaponTargetElevation LE -20.000000" Send="AnimBracketStart Attack Attack,Inferior"/>
-        <On Terms="WeaponStart.*.AttackStart" Send="AnimBracketStart Attack Attack"/>
-        <On Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
-        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
         <On Terms="AbilMorph.*.Start; MorphTo GhostAlternate" Send="Destroy"/>
-        <On Terms="UnitHeightUpdate.*.Land" Send="Create Ghost_Land"/>
-        <On Terms="Abil.PenetratingShot.SourceCastStart" Send="AnimBaselineStop"/>
-        <On Terms="Abil.PenetratingShot.SourceCastStart" Send="AnimBaselineStop"/>
-        <On Terms="Abil.PenetratingShot.SourceCastStart" Send="AnimPlay SpellA Spell,A"/>
-        <On Terms="Abil.PenetratingShot.SourceCastStop" Send="AnimClear SpellA"/>
-        <On Terms="Abil.PenetratingShot.SourceCastStop" Send="AnimBaselineStart"/>
-        <On Terms="Abil.PenetratingShot.SourceChannelStart" Send="AnimPlay SpellB Spell,B PlayForever"/>
-        <On Terms="Abil.PenetratingShot.SourceChannelStop" Send="AnimClear SpellB"/>
-        <On Terms="Abil.PenetratingShot.SourceFinishStart" Send="AnimPlay SpellC Spell,C"/>
         <On Terms="Signal.*.PenetratingShotGuideCreate" Send="Create PenetratingShotVisualQuad"/>
         <On Terms="Signal.*.PenetratingShotGuideDestroy" Target="PenetratingShotVisualQuad" Send="Destroy"/>
-        <On Terms="UnitDeathCustomize; ValidateUnit IsCelestialBurning" Send="DeathCustomize Variation1"/>
-        <On Terms="UnitDeathCustomize; ValidateUnit IsCelestialBurning" Send="DeathCustomize RagdollFire"/>
-        <On Terms="UnitDeathCustomize; ValidateUnit HaveVoidShade" Send="DeathCustomize Shadow"/>
-        <On Terms="UnitDeathCustomize; ValidateUnit HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
+-->
         <Model value="Ghost_Umojan"/>
         <AnimBlendTime value="-0.800000"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
@@ -11431,36 +11482,30 @@
         <Aliases value="_UnitSmall"/>
         <Macros value="UnloadDropAnim"/>
         <Macros value="MagazineSmallScale"/>
-        <!--
-        <On Terms="Abil.SpectreNuke.SourceCastStart" Send="AnimPlay SpellA Spell,A"/>
-        <On Terms="Abil.SpectreNuke.SourceCastStop" Send="AnimClear SpellA"/>
-        <On Terms="Abil.SpectreNuke.SourceChannelStart" Send="AnimPlay SpellB Spell,B PlayForever"/>
-        <On Terms="Abil.SpectreNuke.SourceChannelStop" Send="AnimClear SpellB"/>
-        <On Terms="Abil.SpectreNuke.SourceFinishStart" Send="AnimPlay SpellC Spell,C"/>
-        <On Terms="Abil.SpectreNuke.SourceFinishStop" Send="AnimClear SpellC"/>
--->
+        <Macros value="CalldownNukeAnim"/>
         <On Terms="Abil.SquadSpectreObliterate.SourcePrepStart" Send="AnimPlay Charge Spell"/>
         <On Terms="Abil.SquadSpectreObliterate.SourcePrepStart" Send="AnimSetTimeScale Charge 0.150000"/>
         <On Terms="Abil.SquadSpectreObliterate.SourcePrepStop" Send="AnimClear Charge"/>
         <On Terms="Abil.SquadSpectreUltrasonicPulse.SourceCastStart" Send="AnimPlay Attack Attack 0 0.000000"/>
         <On Terms="Abil.SquadSpectreUltrasonicPulse.SourceCastStart" Send="AnimSetTimeScale Attack 2.500000"/>
+        <On Terms="UnitPortrait.*.Configure; ValidateUnit IsCloaked" Target="::PortraitGameSelf" Send="AnimBracketStart Visor Morph,Start Morph,Stand Morph,End Instant"/>
+        <On Terms="UnitPortrait.*.Configure; ValidateUnit NotCloaked" Target="::PortraitGameSelf" Send="AnimBracketStop Visor Instant"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create Ghost_Land"/>
+        <!--
+        <On Terms="Behavior.SpectreCloaking.On" Target="::PortraitGameSelf" Send="AnimBracketStart Visor Morph,Start Morph,Stand Morph,End"/>
+        <On Terms="Behavior.SpectreCloaking.Off" Target="::PortraitGameSelf" Send="AnimBracketStop Visor"/>
+        <On Terms="Behavior.SpectreCloakingFree.On" Target="::PortraitGameSelf" Send="AnimBracketStart Visor Morph,Start Morph,Stand Morph,End"/>
+        <On Terms="Behavior.SpectreCloakingFree.Off" Target="::PortraitGameSelf" Send="AnimBracketStop Visor"/>
+        
         <On Terms="Behavior.SpectreHoldFireB.On" Send="AnimGroupApply Cover"/>
         <On Terms="Behavior.SpectreHoldFireB.On" Send="AnimPlay MorphStart Cover,Start"/>
         <On Terms="Behavior.SpectreHoldFireB.On" Send="AnimClear MorphEnd"/>
         <On Terms="Behavior.SpectreHoldFireB.Off" Send="AnimPlay MorphEnd Cover,End"/>
         <On Terms="Behavior.SpectreHoldFireB.Off" Send="AnimClear MorphStart"/>
         <On Terms="Behavior.SpectreHoldFireB.Off" Send="AnimGroupRemove Cover"/>
-        <On Terms="UnitPortrait.*.Configure; ValidateUnit IsCloaked" Target="::PortraitGameSelf" Send="AnimBracketStart Visor Morph,Start Morph,Stand Morph,End Instant"/>
-        <On Terms="UnitPortrait.*.Configure; ValidateUnit NotCloaked" Target="::PortraitGameSelf" Send="AnimBracketStop Visor Instant"/>
-        <On Terms="Behavior.SpectreCloaking.On" Target="::PortraitGameSelf" Send="AnimBracketStart Visor Morph,Start Morph,Stand Morph,End"/>
-        <On Terms="Behavior.SpectreCloaking.Off" Target="::PortraitGameSelf" Send="AnimBracketStop Visor"/>
-        <On Terms="Behavior.SpectreCloakingFree.On" Target="::PortraitGameSelf" Send="AnimBracketStart Visor Morph,Start Morph,Stand Morph,End"/>
-        <On Terms="Behavior.SpectreCloakingFree.Off" Target="::PortraitGameSelf" Send="AnimBracketStop Visor"/>
-        <On Terms="UnitHeightUpdate.*.Land" Send="Create Ghost_Land"/>
-        <!--
         <On Terms="Abil.UltrasonicPulseEnhanced.SourcePrepStart" Send="AnimPlay Prep Stand,Work"/>
         <On Terms="Abil.UltrasonicPulseEnhanced.SourceCastStart" Send="AnimPlay Spell Attack 0 0.000000 -1.000000 2.500000 AsTimeScale"/>
--->
+        -->
         <Model value="Spectre"/>
         <AnimBlendTime value="-0.800000"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
