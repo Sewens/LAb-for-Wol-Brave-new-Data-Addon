@@ -30,6 +30,64 @@
     <CEffectEnumArea default="1" id="SquadAbilSearchRadiusExt" parent="SquadAbilSearch">
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
+    <CEffectDamage id="SquadZeratulPhaseMineBlastDamage">
+        <EditorCategories value="Race:Protoss"/>
+        <Amount value="15"/>
+        <AreaArray Radius="1.5" Fraction="1"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Air,Visible;Missile,Stasis,Dead,Invulnerable"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="SquadZeratulPhaseMineBlastLaunchMissile">
+        <EditorCategories value="Race:Protoss"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <ImpactEffect value="SquadZeratulPhaseMineBlastPersistent"/>
+        <AmmoUnit value="SquadZeratulPhaseMineBlastWeapon"/>
+        <ImpactRange value="4.5"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="SquadZeratulPhaseMineBlastLaunchMissileSecondary">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactLocation Effect="PhaseMineBlastLaunchMissile"/>
+        <ImpactEffect value="SquadZeratulPhaseMineBlastDamage"/>
+        <AmmoUnit value="PhaseMineBlastSecondaryWeapon"/>
+        <ImpactRange value="0.25"/>
+    </CEffectLaunchMissile>
+    <CEffectCreatePersistent id="SquadZeratulPhaseMineBlastPersistent">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="SourceUnit"/>
+        <PeriodCount value="10"/>
+        <PeriodicEffectArray value="SquadZeratulPhaseMineBlastLaunchMissileSecondary"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectApplyBehavior id="SquadZeratulVoidArmorAB">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="SquadZeratulVoidArmor"/>
+    </CEffectApplyBehavior>
+    <CEffectModifyUnit id="SquadZeratulVoidArmorMiniboost">
+        <EditorCategories value="Race:Protoss"/>
+        <VitalArray index="Shields">
+            <Change value="0.5"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectEnumArea id="SquadZeratulVoidArmorSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <SearchFilters value="-;Neutral,Enemy,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="8" Effect="SquadZeratulVoidArmorSet"/>
+    </CEffectEnumArea>
+    <CEffectSet id="SquadZeratulVoidArmorSet">
+        <EffectArray value="SquadZeratulVoidArmorMiniboost"/>
+        <EffectArray value="SquadZeratulVoidArmorAB"/>
+    </CEffectSet>
+    <CEffectDamage id="SquadZeratulMasterWarpBladeDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <AttributeBonus index="Armored" value="25"/>
+        <Amount value="45"/>
+        <Death value="Eviscerate"/>
+    </CEffectDamage>
+    <CEffectDamage id="SquadZeratulShadowBladeDamage">
+        <EditorCategories value=""/>
+        <ImpactLocation Value="TargetUnit"/>
+        <Amount value="500"/>
+    </CEffectDamage>
     <CEffectCreateUnit id="SquadTychusJumpScare">
         <ValidatorArray value="ChargeMinTriggerDistance"/>
         <ValidatorArray value="HasVision"/>
@@ -9314,4 +9372,37 @@
         <ExpireDelay value="0.5"/>
         <FinalEffect value="GreenNuclearSpawnBroodling6"/>
     </CEffectCreatePersistent>
+    <CEffectTeleport id="SquadZeratulBlinkTeleport">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <ClearQueuedOrders value="0"/>
+        <PlacementAround Value="CasterUnit"/>
+        <PlacementRange value="8"/>
+        <Range value="8"/>
+        <TargetLocation Value="TargetPoint"/>
+        <TeleportFlags index="TestCliff" value="1"/>
+    </CEffectTeleport>
+    <CEffectCreatePersistent id="SquadZeratulVoidPrisonPersistent">
+        <InitialEffect value="SquadZeratulVoidPrisonSet"/>
+        <PeriodCount value="80"/>
+        <PeriodicEffectArray value="SquadZeratulVoidPrisonSet"/>
+        <PeriodicPeriodArray value="0.125"/>
+    </CEffectCreatePersistent>
+    <CEffectApplyBehavior id="SquadZeratulVoidPrisonApplyBehavior">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="SquadZeratulVoidPrison"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumArea id="SquadZeratulVoidPrisonMissileSearch">
+        <SearchFilters value="Missile;Player,Ally,Neutral,Mechanical,Item,Stasis,Dead,Invulnerable"/>
+        <AreaArray Radius="5" Effect="Kill"/>
+    </CEffectEnumArea>
+    <CEffectEnumArea id="SquadZeratulVoidPrisonSearch">
+        <SearchFilters value="-;Player,Ally,Neutral,Mechanical,Heroic,Missile,Item,Stasis,Dead,Invulnerable"/>
+        <AreaArray Radius="5" Effect="SquadZeratulVoidPrisonApplyBehavior"/>
+    </CEffectEnumArea>
+    <CEffectSet id="SquadZeratulVoidPrisonSet">
+        <EditorCategories value=""/>
+        <EffectArray value="SquadZeratulVoidPrisonMissileSearch"/>
+        <EffectArray value="SquadZeratulVoidPrisonSearch"/>
+    </CEffectSet>
 </Catalog>

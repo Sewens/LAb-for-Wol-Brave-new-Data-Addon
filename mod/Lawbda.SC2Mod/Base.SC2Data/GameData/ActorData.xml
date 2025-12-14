@@ -267,6 +267,83 @@
         <On Terms="Abil.NuclearStrikeRed.SourceFinishStart" Send="AnimPlay SpellC Spell,C"/>
         <On Terms="Abil.NuclearStrikeRed.SourceFinishStop" Send="AnimClear SpellC"/>
     </CActorEventMacro>
+    <CActorAction id="SquadZeratulPhaseMineBlast" parent="GenericAttack" effectImpact="SquadZeratulPhaseMineBlastPersistent" effectLaunch="SquadZeratulPhaseMineBlastLaunchMissile">
+        <LaunchAssets Sound="Zeratul_PhaseMineLaunch"/>
+    </CActorAction>
+    <CActorModel id="SquadZeratulPhaseMineBlastImpactModel" parent="ModelAnimationStyleOneShotNoOrphan">
+        <Terms value="Cap 1"/>
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <Model value="GenericAttackModel"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorMissile id="SquadZeratulPhaseMineBlastMissile" parent="GenericAttackMissile" unitName="SquadZeratulPhaseMineBlastWeapon">
+        <Model value="PhaseMineBlastWeapon"/>
+        <On Terms="ActorDestruction" Send="Create VoidSeekerPhaseMineBlastSecondaryLaunchSite"/>
+        <On Terms="ActorDestruction" Send="RefSet ::global.launchMIRV ::LastCreated"/>
+    </CActorMissile>
+    <CActorRange id="SquadZeratulPhaseMineBlastRange" parent="RangeAbil" abil="SquadZeratulVoidSpheres"/>
+    <CActorAction id="SquadZeratulPhaseMineBlastSecondary" parent="GenericAttack" effectImpact="SquadZeratulPhaseMineBlastDamage" effectLaunch="SquadZeratulPhaseMineBlastLaunchMissileSecondary">
+        <LaunchSiteOps Ops=""/>
+        <LaunchSite value=""/>
+        <LaunchSiteFallback value="PhaseMineBlastSecondaryLaunchSiteGetter"/>
+        <ImpactMap index="None" Model="PhaseMineBlastSecondaryImpact"/>
+        <ImpactModel value="PhaseMineBlastImpactModel"/>
+    </CActorAction>
+    <CActorMissile id="SquadZeratulPhaseMineBlastSecondaryMissile" parent="GenericAttackMissile" unitName="SquadZeratulPhaseMineBlastSecondaryWeapon">
+        <Model value="PhaseMineBlastSecondaryWeapon"/>
+    </CActorMissile>
+    <CActorSound id="SquadZeratulPhaseMineBlastSplit" parent="SoundOneShot">
+        <On Terms="Effect.SquadZeratulPhaseMineBlastPersistent.Start; At Target" Send="Create"/>
+        <Sound value="PhaseMineBlastSplit"/>
+    </CActorSound>
+    <CActorSound id="SquadZeratulPhaseMineBlastImpactSound" parent="SoundOneShot">
+        <Terms value="Cap 1"/>
+        <On Terms="Effect.SquadZeratulPhaseMineBlastDamage.Start" Send="Create"/>
+        <Sound value="Zeratul_PhaseMineImpact"/>
+    </CActorSound>
+    <CActorModel id="SquadZeratulVoidArmor">
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.600000 DelayAnim"/>
+        <On Terms="ActorCreation" Send="StatusSet FailSafe 1"/>
+        <On Terms="TimerExpired; TimerName DelayAnim" Send="AnimBracketStart BSD Birth Stand Death"/>
+        <On Terms="TimerExpired; TimerName DelayAnim" Send="StatusSet FailSafe 0"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="AnimBracketState.*.AfterClosing; !AnimBracketExitReason ModelSwap; AnimName BSD" Send="Destroy"/>
+        <On Terms="Behavior.SquadZeratulVoidArmor.On" Send="Create"/>
+        <On Terms="Behavior.SquadZeratulVoidArmor.Off; IsStatus FailSafe 1" Send="Destroy"/>
+        <On Terms="Behavior.SquadZeratulVoidArmor.Off; IsStatus FailSafe 0" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation" Send="Create PrologueVoidArmorStartSound"/>
+        <On Terms="Behavior.SquadZeratulVoidArmor.Off" Send="Create PrologueVoidArmorEndSound"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="PrologueVoidArmor"/>
+        <AutoScaleFactor value="1.000000"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorModel id="SquadZeratulVoidArmorLaunch" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.SquadZeratulVoidArmorSearch.Start" Send="Create"/>
+        <On Terms="ActorCreation" Send="Create PrologueVoidArmorLaunchSound"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter SOp2DRotation" HoldPosition="1" HoldRotation="1"/>
+        <Model value="PrologueVoidArmorLaunch"/>
+    </CActorModel>
+    <CActorAction id="SquadZeratulAttack" parent="GenericAttack" effectAttack="SquadZeratulMasterWarpBladeDamage">
+        <LaunchAssets Sound="Zeratul_AttackLaunch"/>
+        <ImpactMap index="None" Sound="Zeratul_AttackImpact"/>
+        <ShieldFlashType value="Header"/>
+    </CActorAction>
+    <CActorSound id="SquadZeratulShadowBladeAttackSound" parent="SoundOneShot">
+        <EditorCategories value=""/>
+        <On Terms="Effect.SquadZeratulShadowBladeDamage.Start" Send="Create"/>
+        <Sound value="ShadowBladeImpact"/>
+    </CActorSound>
+    <CActorSound id="SquadZeratulShadowBladeImpactSound" parent="SoundOneShot">
+        <EditorCategories value=""/>
+        <On Terms="Effect.SquadZeratulShadowBladeDamage.Start" Send="Create"/>
+        <Sound value="ShadowBladeExplosion"/>
+    </CActorSound>
     <CActorModel id="SquadTychusJumpScareImpact" parent="ModelAdditionStatic">
         <Aliases index="0" removed="1"/>
         <Inherits index="BaseModelScale" value="0"/>
@@ -3474,6 +3551,14 @@
         <PortraitActor value="SquadCaptainNovaPortrait"/>
         <PortraitModel value="SquadCaptainNovaPortrait"/>
         <!--AbilSoundArray AbilCmd="VultureSpiderMines,Execute" Sound="Vulture_SpiderMinePlace"/-->
+        <SoundArray index="Birth" value="Nova_Birth"/>
+        <SoundArray index="Ready" value="HeroNovaMP1_Ready"/>
+        <SoundArray index="Help" value="HeroNovaMP1_Help"/>
+        <SoundArray index="What" value="HeroNovaMP1_What"/>
+        <SoundArray index="Yes" value="HeroNovaMP1_Yes"/>
+        <SoundArray index="Attack" value="HeroNovaMP1_Attack"/>
+        <SoundArray index="Pissed" value="HeroNovaMP1_Pissed"/>
+        <SoundArray index="Movement" value="SquadCaptainNovaMoveStart"/>
         <BarOffset value="80"/>
         <BarWidth value="102"/>
         <CustomUnitStatusFrame value="HotS_UnitStatus/KerriganHeroUnitStatusFrameTemplate"/>
@@ -3484,7 +3569,6 @@
         <HighlightTooltip value="Unit/Name/SquadCaptainNova"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
         <NameOffset value="40"/>
-        <SoundArray index="Movement" value="SquadCaptainNovaMoveStart"/>
         <StatusBarOn index="Custom" value="1"/>
         <UnitFlags index="SuppressDefaultStatusBar" value="1"/>
         <UnitIcon value="Assets\Textures\btn-unit-terran-vulture.dds"/>
@@ -13110,4 +13194,85 @@
         <Host Subject="_ImpactGuide" Scope="Target" Effect="SquadViperAbductYoinkStartCreatePlaceholder"/>
         <HostSiteOps Ops="SOp180"/>
     </CActorSite>
+    <CActorModel id="SquadZeratulBlinkIn" parent="ModelAnimationStyleOneShotNoOrphan">
+        <On Terms="Effect.SquadZeratulBlinkTeleport.Stop; At Source" Send="Create"/>
+        <On Terms="ActorCreation" Send="RefSet ::scope.Impact ::Self"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOrigin SOpForwardScopeLaunch"/>
+        <Model value="ZeratulBlinkIn"/>
+    </CActorModel>
+    <CActorModel id="SquadZeratulBlinkOut" parent="ModelAnimationStyleOneShotNoOrphan">
+        <On Terms="Effect.SquadZeratulBlinkTeleport.Start; At Source" Send="Create"/>
+        <On Terms="ActorCreation" Send="RefSet ::scope.Launch ::Self"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary SOpForwardZeratulAiur01"/>
+        <Model value="ZeratulBlinkOut"/>
+    </CActorModel>
+    <CActorUnit id="SquadZeratul" parent="GenericUnitStandard" unitName="SquadZeratul">
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create Zealot_Land"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create Templar_LandSweetener"/>
+        <On Terms="Abil.SquadZeratulVoidPrison.SourceCastStart" Send="AnimPlay Spell Stand,Work,Start NonLooping 0.125000 0.125000 0.500000 AsDuration"/>
+        <On Terms="Abil.SquadZeratulBlink.SourceCastStart" Send="ModelSuddenMotionStart"/>
+        <On Terms="Abil.SquadZeratulBlink.SourceCastStart" Send="AnimPlay Spell Attack,03 NonLooping"/>
+        <On Terms="Abil.SquadZeratulBlink.SourceFinish" Send="ModelSuddenMotionStop"/>
+        <On Terms="Abil.SquadZeratulShadowBlade.SourceCastStart" Send="$Spell 0 -1.000000 -1.000000 1.200000 AsDuration"/>
+        <On Terms="Abil.SquadZeratulShadowBlade.SourceCastStart" Target="_Unit" Send="Create TemporalFieldImpactModel"/>
+        <On Terms="Abil.SquadZeratulShadowBlade.SourceCastStart" Send="Create ShadowBladeWeaponAttach"/>
+        <On Terms="Abil.SquadZeratulShadowBlade.SourceFinishStop" Target="TemporalFieldImpactModel" Send="Destroy"/>
+        <On Terms="Abil.SquadZeratulShadowBlade.SourceFinishStop" Target="ShadowBladeWeaponAttach" Send="Destroy"/>
+        <On Terms="WeaponStart.SquadZeratulVoidSphere.AttackStart" Send="AnimPlay Spell Attack,01 NonLooping"/>
+        <On Terms="Abil.SquadZeratulVoidPrison.SourceCastStart" Send="AnimPlay Spell Stand,Work,Start 0 -1.000000 -1.000000 0.250000 AsDuration"/>
+        <On Terms="UnitMovementUpdate.*.Walk" Send="AnimClear Spell"/>
+        <Model value="ZeratulVoidAiur01"/>
+        <BuildModel value="DarkTemplarWarpIn"/>
+        <DeathArray index="Normal" ModelLink="ZeratulDeath" SoundLink="Zeratul_DeathFX" VoiceLink="Zeratul_Death"/>
+        <PlacementModel value="ZeratulVoidAiur01"/>
+        <PortraitModel value="ZeratulPortrait"/>
+        <WalkAnimMoveSpeed value="3"/>
+        <BarOffset value="50"/>
+        <BarWidth value="42"/>
+        <CustomUnitStatusFrame value="HotS_UnitStatus/KerriganHeroUnitStatusFrameTemplate"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-Zeratul.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\ui-heroicon-zeratul.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <StatusBarOn index="Custom" value="1"/>
+        <UnitFlags index="SuppressDefaultStatusBar" value="1"/>
+        <SoundArray index="Birth" value="Zeratul_Birth"/>
+        <SoundArray index="Ready" value="ZeratulVoid_Ready"/>
+        <SoundArray index="Help" value="ZeratulVoid_Help"/>
+        <SoundArray index="What" value="ZeratulVoid_What"/>
+        <SoundArray index="Yes" value="ZeratulVoid_Yes"/>
+        <SoundArray index="Attack" value="ZeratulVoid_Attack"/>
+        <SoundArray index="Pissed" value="ZeratulVoid_Pissed"/>
+        <SoundArray index="Movement" value="Zeratul_Movement"/>
+        <UnitBorderNormalColor value="150,150,150"/>
+        <UnitBorderSubgroupColor value="255,255,255"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-zeratul.dds"/>
+        <UnitKillRank Text="UnitKillRank/Zeratul"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-Zeratul.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-Zeratul-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Zeratul-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Zeratul-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorModel id="SquadZeratulVoidPrison" parent="ModelAnimationStyleContinuous">
+        <On Terms="ActorCreation" Send="AnimBracketStart GL_BSD GLbirth GLstand GLdeath"/>
+        <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
+        <On Terms="Effect.SquadZeratulVoidPrisonPersistent.Start" Send="Create"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart $BSD"/>
+        <On Terms="Effect.SquadZeratulVoidPrisonPersistent.Stop" Send="AnimBracketStop BSD"/>
+        <Model value="ZeratulVoidPrisonAiur01"/>
+    </CActorModel>
+    <CActorSplat id="SquadZeratulVoidPrisonCursor" parent="ProtossCursorSplat" abil="SquadZeratulVoidPrison"/>
+    <CActorRange id="SquadZeratulVoidPrisonRange" parent="RangeAbil" abil="SquadZeratulVoidPrison"/>
+    <CActorSound id="SquadZeratulVoidPrisonSoundLoop" parent="SoundContinuous">
+        <On Terms="Effect.SquadZeratulVoidPrisonPersistent.Start" Send="Create"/>
+        <On Terms="Effect.SquadZeratulVoidPrisonPersistent.Stop" Send="Destroy"/>
+        <Sound value="Mothership_TimeWarpLoop"/>
+    </CActorSound>
 </Catalog>

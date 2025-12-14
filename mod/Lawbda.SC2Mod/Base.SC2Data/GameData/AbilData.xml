@@ -70,6 +70,43 @@
         <Flags index="Transient" value="1"/>
         <PointsPerLevel value="1"/>
     </CAbilLearn>
+    <CAbilEffectTarget id="SquadZeratulVoidSpheres">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadZeratulPhaseMineBlastLaunchMissile"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="20"/>
+        </Cost>
+        <TargetFilters value="Ground,Visible;Player,Ally,Neutral,Missile,Stasis,Invulnerable"/>
+        <Range value="4.5"/>
+        <FinishTime value="1.5"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadZeratulThrowVoidSpheres"/>
+    </CAbilEffectTarget>
+    <CAbilEffectInstant id="SquadZeratulVoidArmor">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadZeratulVoidArmorSearch"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Charge Link="Abil/PrologueZeratulVoidArmor"/>
+            <Cooldown Link="Abil/PrologueZeratulVoidArmor" TimeUse="20"/>
+        </Cost>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadZeratulVoidArmor"/>
+    </CAbilEffectInstant>
+    <CAbilEffectTarget id="SquadZeratulShadowBlade">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadZeratulShadowBladeDamage"/>
+        <Cost>
+            <Cooldown TimeUse="10"/>
+        </Cost>
+        <TargetFilters value="Ground,Visible;Self,Player,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="0"/>
+        <FinishTime value="0.513"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadZeratulShadowBlade"/>
+    </CAbilEffectTarget>
     <CAbilAugment id="SquadTychusJumpScare">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadTychusJumpScare"/>
@@ -4972,4 +5009,31 @@
         <AINotifyEffect value="FaceEmbrace"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadViperAbduct"/>
     </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadZeratulBlink">
+        <AbilSetId value="Blnk"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadZeratulBlinkTeleport"/>
+        <Flags index="BestUnit" value="0"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Cost>
+            <Cooldown TimeUse="8"/>
+        </Cost>
+        <Range value="500"/>
+        <Arc value="360"/>
+        <AINotifyEffect value="SquadZeratulBlinkTeleport"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadZeratulBlink">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectTarget>
+    <CAbilEffectInstant id="SquadZeratulVoidPrison">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadZeratulVoidPrisonPersistent"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="15"/>
+        </Cost>
+        <CursorEffect value="SquadZeratulVoidPrisonSearch"/>
+        <AINotifyEffect value="SquadZeratulVoidPrisonPersistent"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadZeratulVoidPrison"/>
+    </CAbilEffectInstant>
 </Catalog>

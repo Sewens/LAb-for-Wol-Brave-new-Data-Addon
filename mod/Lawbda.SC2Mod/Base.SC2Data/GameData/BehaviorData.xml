@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorBuff id="SquadZeratulVoidArmor">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-gravitonbeam.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="ShieldGZero"/>
+        <Duration value="10"/>
+        <Modification>
+            <VitalMaxArray index="Shields" value="100"/>
+        </Modification>
+    </CBehaviorBuff>
     <CBehaviorBuff id="SquadTychusJumpScare">
         <InfoIcon value="Assets\Textures\btn-ability-zerg-dehaka-intimidatingroar.dds"/>
         <BehaviorCategories index="Stun" value="1"/>
@@ -3938,5 +3948,16 @@
     <CBehaviorBuff id="SquadViperAbductYoinkWait">
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadZeratulVoidPrison">
+        <BehaviorCategories index="Slow" value="1"/>
+        <TimeScaleSource Value="Global"/>
+        <Duration value="0.25"/>
+        <Modification TimeScale="0.01">
+            <ModifyFlags index="DisableAbils" value="1"/>
+            <ModifyFlags index="SuppressTurning" value="1"/>
+            <StateFlags index="Stun" value="1"/>
+            <BehaviorCategoriesDisable index="Cloak" value="1"/>
+        </Modification>
     </CBehaviorBuff>
 </Catalog>
