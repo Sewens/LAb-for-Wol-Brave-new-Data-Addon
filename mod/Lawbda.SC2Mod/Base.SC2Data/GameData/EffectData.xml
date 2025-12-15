@@ -30,6 +30,167 @@
     <CEffectEnumArea default="1" id="SquadAbilSearchRadiusExt" parent="SquadAbilSearch">
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
+    <CEffectApplyBehavior id="SquadToshPsiShieldConfusionApply">
+        <ValidatorArray index="0" value="NotFrenzied"/>
+        <ValidatorArray value="NotWarpPrism"/>
+        <ValidatorArray value="NotOverlord"/>
+        <ValidatorArray value="NotMedivac"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="SquadToshPsiShieldConfusion"/>
+    </CEffectApplyBehavior>
+    <CEffectIssueOrder id="SquadToshPsiShieldConfusionAttack">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Source"/>
+        <Abil value="attack"/>
+        <Target Value="TargetUnit"/>
+    </CEffectIssueOrder>
+    <CEffectEnumArea id="SquadToshPsiShieldConfusionAttackSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="-;Self,Player,Ally,Neutral,Heroic,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <TargetSorts>
+            <SortArray value="TSRandom"/>
+            <SortArray value="TSConfused"/>
+        </TargetSorts>
+        <AreaArray MaxCount="1" Radius="4" Effect="SquadToshPsiShieldConfusionAttack"/>
+    </CEffectEnumArea>
+    <CEffectIssueOrder id="SquadToshPsiShieldConfusionEnd">
+        <EditorCategories value="Race:Protoss"/>
+        <Abil value="stop"/>
+    </CEffectIssueOrder>
+    <CEffectSet id="SquadToshPsiShieldConfusionEndSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="SquadToshPsiShieldConfusionEnd"/>
+        <EffectArray value="SquadIssueAIOrderSuicide"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="SquadConfusionInitialApplyBehavior">
+        <EditorCategories value=""/>
+        <Behavior value="SquadConfusionInitial"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadConfusionApply">
+        <ValidatorArray index="0" value="NotFrenzied"/>
+        <ValidatorArray value="NotWarpPrism"/>
+        <ValidatorArray value="NotOverlord"/>
+        <ValidatorArray value="NotMedivac"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="SquadConfusion"/>
+    </CEffectApplyBehavior>
+    <CEffectIssueOrder id="SquadConfusionAttack">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Source"/>
+        <Abil value="attack"/>
+        <Target Value="TargetUnit"/>
+    </CEffectIssueOrder>
+    <CEffectEnumArea id="SquadConfusionAttackSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="-;Self,Player,Ally,Neutral,Heroic,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <TargetSorts>
+            <SortArray value="TSRandom"/>
+            <SortArray value="TSConfused"/>
+        </TargetSorts>
+        <AreaArray MaxCount="1" Radius="4" Effect="SquadConfusionAttack"/>
+    </CEffectEnumArea>
+    <CEffectIssueOrder id="SquadConfusionEnd">
+        <EditorCategories value="Race:Protoss"/>
+        <Abil value="stop"/>
+    </CEffectIssueOrder>
+    <CEffectSet id="SquadConfusionEndSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="SquadConfusionEnd"/>
+        <EffectArray value="SquadIssueAIOrderSuicide"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="SquadToshPsiShieldConfusionInitialApplyBehavior">
+        <EditorCategories value=""/>
+        <Behavior value="SquadToshPsiShieldConfusionInitial"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumArea id="SquadConfusionSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <SearchFilters value="-;Self,Player,Ally,Neutral,Structure,Heroic,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="2" Effect="SquadConfusionApply"/>
+    </CEffectEnumArea>
+    <CEffectIssueOrder id="SquadConfusionStopInitial">
+        <EditorCategories value="Race:Protoss"/>
+        <Abil value="stop"/>
+    </CEffectIssueOrder>
+    <CEffectIssueOrder id="SquadToshPsiShieldConfusionStopInitial">
+        <EditorCategories value="Race:Protoss"/>
+        <Abil value="stop"/>
+    </CEffectIssueOrder>
+    <CEffectSet id="SquadConfusionStopInitialSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="SquadConfusionStopInitial"/>
+        <EffectArray value="SquadConfusionAttackSearch"/>
+        <EffectArray value="SquadConfusionInitialApplyBehavior"/>
+    </CEffectSet>
+    <CEffectSet id="SquadToshPsiShieldConfusionStopInitialSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="SquadToshPsiShieldConfusionStopInitial"/>
+        <EffectArray value="SquadToshPsiShieldConfusionAttackSearch"/>
+        <EffectArray value="SquadToshPsiShieldConfusionInitialApplyBehavior"/>
+    </CEffectSet>
+    <CEffectModifyUnit id="SquadIssueAIOrderSuicide">
+        <EditorCategories value="Race:Protoss"/>
+    </CEffectModifyUnit>
+    <CEffectCreateUnit id="SquadToshProtossBlastCreateUnit">
+        <ValidatorArray value="Walkable"/>
+        <EditorCategories value=""/>
+        <WhichLocation Value="TargetPoint"/>
+        <CreateFlags index="Placement" value="0"/>
+        <SpawnEffect value="SquadToshProtossBlastSpawnSet"/>
+        <SpawnUnit value="SquadProtossBlastZealot"/>
+        <SpawnRange value="3"/>
+    </CEffectCreateUnit>
+    <CEffectCreatePersistent id="SquadToshProtossBlastInitialDelay">
+        <EditorCategories value=""/>
+        <InitialDelay value="0.75"/>
+        <ExpireEffect value="SquadToshProtossBlastCreateUnit"/>
+    </CEffectCreatePersistent>
+    <CEffectApplyBehavior id="SquadToshProtossBlastSpawnAB">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadToshProtossBlastSpawn"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="SquadToshProtossBlastSpawnDamage">
+        <EditorCategories value="Race:Protoss"/>
+        <Amount value="40"/>
+    </CEffectDamage>
+    <CEffectApplyBehavior id="SquadToshProtossBlastSpawnDelayAB">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadToshProtossBlastSpawnDelay"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="SquadToshProtossBlastSpawnFinalSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="SquadToshProtossBlastSpawnPrecursorRB"/>
+        <EffectArray value="SquadToshProtossBlastTimedLifeAB"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="SquadToshProtossBlastSpawnMakePrecursorAB">
+        <Behavior value="SquadToshProtossBlastPrecursor"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="SquadToshProtossBlastSpawnPrecursorRB">
+        <BehaviorLink value="SquadToshProtossBlastPrecursor"/>
+    </CEffectRemoveBehavior>
+    <CEffectEnumArea id="SquadToshProtossBlastSpawnSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <LaunchLocation Value="TargetPoint"/>
+        <SearchFilters value="-;Self,Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="2" Effect="SquadToshProtossBlastSpawnDamage"/>
+        <SearchFlags index="ExtendByUnitRadius" value="1"/>
+    </CEffectEnumArea>
+    <CEffectSet id="SquadToshProtossBlastSpawnSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="SquadToshProtossBlastSpawnMakePrecursorAB"/>
+        <EffectArray value="SquadToshProtossBlastSpawnDelayAB"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="SquadToshProtossBlastTimedLifeAB">
+        <Behavior value="SquadToshProtossBlastTimedLife"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadToshProtossBlastTimedLifeExpire">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Source"/>
+    </CEffectApplyBehavior>
     <CEffectDamage id="SquadFenixChampionDamage" parent="DU_WEAP">
         <EditorCategories value="Race:Protoss"/>
         <Amount value="40"/>

@@ -1,5 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorBuff id="SquadConfusion">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-confusion.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="10"/>
+        <Period value="1"/>
+        <InitialEffect value="SquadConfusionStopInitialSet"/>
+        <PeriodicEffect value="SquadConfusionAttackSearch"/>
+        <ExpireEffect value="SquadConfusionEndSet"/>
+        <Modification>
+            <StateFlags index="Passive" value="1"/>
+            <StateFlags index="IgnorePlayerAlliedFlags" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadToshPsiShieldConfusion">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-confusion.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="10"/>
+        <Period value="1"/>
+        <InitialEffect value="SquadToshPsiShieldConfusionStopInitialSet"/>
+        <PeriodicEffect value="SquadToshPsiShieldConfusionAttackSearch"/>
+        <ExpireEffect value="SquadToshPsiShieldConfusionEndSet"/>
+        <Modification>
+            <StateFlags index="Passive" value="1"/>
+            <StateFlags index="IgnorePlayerAlliedFlags" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadConfusionInitial">
+        <Alignment value="Negative"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="0.0625"/>
+        <FinalEffect value="SquadConfusionAttackSearch"/>
+        <Modification>
+            <StateFlags index="Passive" value="1"/>
+            <AbilClassDisableArray index="CAbilAttack" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadToshPsiShieldConfusionInitial">
+        <Alignment value="Negative"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="0.0625"/>
+        <FinalEffect value="SquadToshPsiShieldConfusionAttackSearch"/>
+        <Modification>
+            <StateFlags index="Passive" value="1"/>
+            <AbilClassDisableArray index="CAbilAttack" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadToshProtossBlastSpawn">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Duration value="0.66"/>
+        <InitialEffect value="SquadToshProtossBlastSpawnSearch"/>
+        <ExpireEffect value="SquadToshProtossBlastSpawnFinalSet"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadToshProtossBlastSpawnDelay">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Duration value="0.83"/>
+        <ExpireEffect value="SquadToshProtossBlastSpawnAB"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadToshProtossBlastPrecursor">
+        <InfoFlags index="Hidden" value="1"/>
+        <Modification MoveSpeedMultiplier="0.01">
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="Unselectable" value="1"/>
+            <StateFlags index="Untargetable" value="1"/>
+            <AbilClassDisableArray index="CAbilAttack" value="1"/>
+            <AbilLinkDisableArray value="FenixCharge"/>
+            <AbilLinkDisableArray value="FenixWhirlwind"/>
+            <AbilLinkDisableArray value="VoidShieldCapacitor"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadToshProtossBlastTimedLife">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <DisplayDuration index="Enemy" value="1"/>
+        <Duration value="15"/>
+        <ExpireEffect value="SquadToshProtossBlastTimedLifeExpire"/>
+        <Modification>
+            <StateFlags index="HideWaypoints" value="1"/>
+            <StateFlags index="SuppressFidgeting" value="1"/>
+            <StateFlags index="SuppressFoodUsed" value="1"/>
+            <StateFlags index="SuppressArmySelect" value="1"/>
+            <StateFlags index="Uncommandable" value="1"/>
+        </Modification>
+        <DamageResponse Fatal="1" Handled="SquadToshProtossBlastTimedLifeExpire" ModifyFraction="0">
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadToshProtossBlastTimedLifeExpire">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="2.9"/>
+        <FinalEffect value="SuicideRemoveNoShield"/>
+        <Modification>
+            <ModifyFlags index="SuppressMoving" value="1"/>
+            <ModifyFlags index="SuppressTurning" value="1"/>
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="SuppressAttack" value="1"/>
+            <StateFlags index="SuppressCollision" value="1"/>
+            <StateFlags index="Unselectable" value="1"/>
+            <StateFlags index="Untargetable" value="1"/>
+            <AbilClassDisableArray index="CAbilAttack" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
     <CBehaviorBuff id="SquadFenixSOAChargeStun">
         <Alignment value="Negative"/>
         <InfoFlags index="Hidden" value="1"/>
@@ -2038,7 +2146,7 @@
         <Modification>
             <VitalMaxArray index="Shields" value="300"/>
         </Modification>
-        <DamageResponse ModifyMinimumDamage="1"/>
+        <DamageResponse Handled="SquadToshPsiShieldConfusionApply" ModifyMinimumDamage="1"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="SquadToshPsiShieldDummy">
         <InfoFlags index="Hidden" value="1"/>

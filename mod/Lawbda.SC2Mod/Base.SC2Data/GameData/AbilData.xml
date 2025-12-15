@@ -70,6 +70,30 @@
         <Flags index="Transient" value="1"/>
         <PointsPerLevel value="1"/>
     </CAbilLearn>
+    <CAbilEffectTarget id="SquadConfusion">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadConfusionSearch"/>
+        <Cost>
+            <Vital index="Energy" value="75"/>
+            <Cooldown TimeUse="2"/>
+        </Cost>
+        <Range value="9"/>
+        <CursorEffect value="SquadConfusionSearch"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadConfusion"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadToshProtossBlast">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadToshProtossBlastInitialDelay"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+            <Cooldown TimeUse="15"/>
+        </Cost>
+        <Range value="7"/>
+        <Arc value="360"/>
+        <CursorEffect value="SquadToshProtossBlastSpawnSearch"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadToshProtossBlast"/>
+    </CAbilEffectTarget>
     <CAbilEffectInstant id="SquadFenixWhirlwind">
         <EditorCategories value="AbilityorEffectType:Units"/>
         <Flags index="AutoCast" value="1"/>
@@ -1214,7 +1238,7 @@
         <Cost>
             <Cooldown TimeUse="10"/>
         </Cost>
-        <TargetFilters value="Biological;Self,Neutral,Enemy,Structure,Missile,Uncommandable,Stasis,Dead,Hidden,Hallucination,Invulnerable"/>
+        <TargetFilters value="Biological;Self,Structure,Missile,Uncommandable,Stasis,Dead,Hidden,Hallucination,Invulnerable"/>
         <Range value="4"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadToshConsumption"/>
     </CAbilEffectTarget>
@@ -1968,7 +1992,7 @@
         <Arc value="360"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadSpawnMarineCorpse"/>
     </CAbilEffectTarget>
-    <CAbilEffectInstant id="SquadToshPsiShield">
+    <CAbilEffectInstant id="SquadToshPsiConfusionShield">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Effect index="0" value="SquadToshPsiShieldSet"/>
         <Flags index="AllowMovement" value="1"/>
@@ -1978,7 +2002,7 @@
             <Cooldown TimeUse="20"/>
         </Cost>
         <AINotifyEffect value=""/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="SquadToshPsiShield" State="Restricted"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadToshPsiConfusionShield" State="Restricted"/>
     </CAbilEffectInstant>
     <CAbilEffectInstant id="SwitchScannerBlack">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
