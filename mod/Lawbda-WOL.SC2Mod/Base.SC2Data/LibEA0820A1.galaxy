@@ -74,7 +74,7 @@ bool libEA0820A1_gt_Init00ReplaceUnit_Func (bool testConds, bool runActions) {
             libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadMissileTurret", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
         }
         else if (auto0E6DA1A2_val == "Bunker") {
-            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadBunker", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadBunkerVanilla", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
         }
         else if (auto0E6DA1A2_val == "SensorTower") {
             libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadSensorTower", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
@@ -187,6 +187,30 @@ bool libEA0820A1_gt_Init00ReplaceUnit_Func (bool testConds, bool runActions) {
         else if (auto0E6DA1A2_val == "RaynorCommando") {
             libNtve_gf_ReplaceUnit(lv_unitForReplaced, "CaptainFreeman", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
         }
+        else if (auto0E6DA1A2_val == "NovaHero") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadNova", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "Stetmann") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadStetmann", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "Swann") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadSwann", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "TychusCommando") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadTychus", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "TychusChaingun") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadTychus", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "Odin") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadOdin", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "Tosh") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadTosh", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto0E6DA1A2_val == "Zeratul") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadZeratul", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
         else {
         }
     }
@@ -198,50 +222,8 @@ void libEA0820A1_gt_Init00ReplaceUnit_Init () {
     libEA0820A1_gt_Init00ReplaceUnit = TriggerCreate("libEA0820A1_gt_Init00ReplaceUnit_Func");
 }
 
-//--------------------------------------------------------------------------------------------------
-// Trigger: OnPlayer1GetUnit
-//--------------------------------------------------------------------------------------------------
-bool libEA0820A1_gt_OnPlayer1GetUnit_Func (bool testConds, bool runActions) {
-    // Automatic Variable Declarations
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    TriggerExecute(libEA0820A1_gt_Init00ReplaceUnit, true, true);
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void libEA0820A1_gt_OnPlayer1GetUnit_Init () {
-    libEA0820A1_gt_OnPlayer1GetUnit = TriggerCreate("libEA0820A1_gt_OnPlayer1GetUnit_Func");
-    TriggerAddEventUnitChangeOwner(libEA0820A1_gt_OnPlayer1GetUnit, null);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Trigger: OnPlayer1GetUnit 2
-//--------------------------------------------------------------------------------------------------
-bool libEA0820A1_gt_OnPlayer1Birth_Func (bool testConds, bool runActions) {
-    // Automatic Variable Declarations
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    TriggerExecute(libEA0820A1_gt_Init00ReplaceUnit, true, true);
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void libEA0820A1_gt_OnPlayer1Birth_Init () {
-    libEA0820A1_gt_OnPlayer1Birth = TriggerCreate("libEA0820A1_gt_OnPlayer1Birth_Func");
-    TriggerAddEventUnitCreated(libEA0820A1_gt_OnPlayer1Birth, null, null, null);
-}
-
 void libEA0820A1_InitTriggers () {
     libEA0820A1_gt_Init00ReplaceUnit_Init();
-    libEA0820A1_gt_OnPlayer1GetUnit_Init();
-    libEA0820A1_gt_OnPlayer1Birth_Init();
 }
 
 //--------------------------------------------------------------------------------------------------
