@@ -30,6 +30,59 @@
     <CEffectEnumArea default="1" id="SquadAbilSearchRadiusExt" parent="SquadAbilSearch">
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
+    <CEffectUseCalldown id="SquadNovaSpiderMineCalldown">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetPoint"/>
+        <CalldownCount value="1"/>
+        <CalldownEffect value="SquadNovaSpiderMineTeleport"/>
+    </CEffectUseCalldown>
+    <CEffectTeleport id="SquadNovaSpiderMineTeleport">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Source"/>
+        <SourceLocation Value="SourceUnit"/>
+        <TargetLocation Value="TargetPoint"/>
+    </CEffectTeleport>
+    <CEffectDamage id="SquadNovaTripleSnipeDamage" parent="DU_WEAP">
+        <ImpactLocation Value="TargetUnit"/>
+        <ArmorReduction value="0"/>
+        <Kind value="Spell"/>
+        <Amount value="120"/>
+        <Death value="Silentkill"/>
+    </CEffectDamage>
+    <CEffectSet id="SquadNovaTripleSnipeSet">
+        <EffectArray value="SquadNovaTripleSnipeDamage"/>
+        <EffectArray value="SquadNovaTripleSnipeTripleTapDelayCP"/>
+    </CEffectSet>
+    <CEffectDamage id="SquadNovaTripleSnipeTripleTapDamage" parent="DU_WEAP">
+        <Marker Link="Effect/Snipe_BlackOpsDamage"/>
+        <ArmorReduction value="0"/>
+        <Kind value="Spell"/>
+        <Amount value="45"/>
+        <Death value="Silentkill"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="SquadNovaTripleSnipeTripleTapDelayCP">
+        <EditorCategories value="Race:Terran"/>
+        <PeriodCount value="2"/>
+        <PeriodicEffectArray value="SquadNovaTripleSnipeTripleTapSwitch"/>
+        <PeriodicPeriodArray value="0.125"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="SquadNovaTripleSnipeTripleTapSearch">
+        <EditorCategories value="Race:Terran"/>
+        <SearchFilters value="-;Self,Player,Ally,Neutral,Structure,Missile,Stasis,Dead,Invulnerable"/>
+        <AreaArray MaxCount="1" Radius="3" Effect="SquadNovaTripleSnipeTripleTapDamage"/>
+        <MaxCount value="1"/>
+    </CEffectEnumArea>
+    <CEffectEnumArea id="SquadNovaTripleSnipeSearchNoPrimary">
+        <EditorCategories value="Race:Terran"/>
+        <ExcludeArray Effect="SquadSnipeBlackOpsSet" Value="Target"/>
+        <SearchFilters value="-;Self,Player,Ally,Neutral,Structure,Missile,Stasis,Dead,Invulnerable"/>
+        <AreaArray MaxCount="1" Radius="3" Effect="SquadNovaTripleSnipeTripleTapDamage"/>
+        <MaxCount value="1"/>
+    </CEffectEnumArea>
+    <CEffectSwitch id="SquadNovaTripleSnipeTripleTapSwitch">
+        <CaseArray Validator="GhostBlackOpsTripleTapEnemyCheck" Effect="SquadNovaTripleSnipeSearchNoPrimary"/>
+        <CaseDefault value="SquadNovaTripleSnipeTripleTapSearch"/>
+    </CEffectSwitch>
     <CEffectApplyBehavior id="SquadToshPsiShieldConfusionApply">
         <ValidatorArray index="0" value="NotFrenzied"/>
         <ValidatorArray value="NotWarpPrism"/>
@@ -3112,7 +3165,6 @@
         <Death value="Silentkill"/>
     </CEffectDamage>
     <CEffectSwitch id="SquadSnipeBlackOpsTripleTapSwitch">
-        <ValidatorArray value="HaveGhostBlackOpsTripleTap"/>
         <CaseArray Validator="GhostBlackOpsTripleTapEnemyCheck" Effect="SquadSnipeBlackOpsTripleTapSearchNoPrimary"/>
         <CaseDefault value="SquadSnipeBlackOpsTripleTapSearch"/>
     </CEffectSwitch>
@@ -3143,17 +3195,17 @@
     <CEffectApplyBehavior id="SquadHeroDetectorRadarDetected">
         <EditorCategories value="Race:Terran"/>
     </CEffectApplyBehavior>
-    <CEffectSet id="SquadCaptainNovaCanisterRifle">
+    <CEffectSet id="SquadNovaCanisterRifle">
         <EditorCategories value="Race:Terran"/>
-        <EffectArray value="SquadCaptainNovaCanisterRifleDamage"/>
+        <EffectArray value="SquadNovaCanisterRifleDamage"/>
         <EffectArray value="NovaVultureAnimationControllerEnableAB2"/>
     </CEffectSet>
-    <CEffectDamage id="SquadCaptainNovaCanisterRifleDamage" parent="DU_WEAP">
+    <CEffectDamage id="SquadNovaCanisterRifleDamage" parent="DU_WEAP">
         <EditorCategories value="Race:Terran"/>
         <Kind value="Ranged"/>
         <Amount value="30"/>
     </CEffectDamage>
-    <CEffectDamage id="SquadCaptainNovaCanisterRifleSnipe" parent="DU_WEAP">
+    <CEffectDamage id="SquadNovaCanisterRifleSnipe" parent="DU_WEAP">
         <EditorCategories value="Race:Terran"/>
         <ImpactLocation Value="TargetUnit"/>
         <ArmorReduction value="0"/>
@@ -3161,19 +3213,19 @@
         <Amount value="125"/>
         <Death value="Silentkill"/>
     </CEffectDamage>
-    <CEffectSet id="SquadCaptainNovaCanisterRifleSnipePrep">
-        <EffectArray value="SquadCaptainNovaCanisterRifleSnipePrepTurretLook"/>
-        <EffectArray value="SquadCaptainNovaCanisterRifleSnipePrepTurretLookClear"/>
+    <CEffectSet id="SquadNovaCanisterRifleSnipePrep">
+        <EffectArray value="SquadNovaCanisterRifleSnipePrepTurretLook"/>
+        <EffectArray value="SquadNovaCanisterRifleSnipePrepTurretLookClear"/>
     </CEffectSet>
-    <CEffectModifyUnit id="SquadCaptainNovaCanisterRifleSnipePrepTurretLook">
+    <CEffectModifyUnit id="SquadNovaCanisterRifleSnipePrepTurretLook">
         <ImpactUnit Value="Caster"/>
-        <ModifyTurret Turret="SquadCaptainNovaRotateTurret">
+        <ModifyTurret Turret="SquadNovaRotateTurret">
             <Target Value="TargetUnit"/>
         </ModifyTurret>
     </CEffectModifyUnit>
-    <CEffectModifyUnit id="SquadCaptainNovaCanisterRifleSnipePrepTurretLookClear">
+    <CEffectModifyUnit id="SquadNovaCanisterRifleSnipePrepTurretLookClear">
         <ImpactUnit Value="Caster"/>
-        <ModifyTurret Action="ClearTarget" Turret="SquadCaptainNovaRotateTurret">
+        <ModifyTurret Action="ClearTarget" Turret="SquadNovaRotateTurret">
             <Target Value="TargetUnit"/>
         </ModifyTurret>
     </CEffectModifyUnit>

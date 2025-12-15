@@ -82,6 +82,47 @@
         <CursorEffect value="SquadConfusionSearch"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadConfusion"/>
     </CAbilEffectTarget>
+    <CAbilEffectTarget id="SquadNovaTripleSnipe">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadNovaTripleSnipeSet"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Cost>
+            <Cooldown Location="Unit" TimeUse="30"/>
+        </Cost>
+        <TargetFilters value="Biological,Visible;Self,Player,Ally,Neutral,Structure,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
+        <TargetSorts RequestCount="1">
+            <SortArray value="TSLifeLargestFirst"/>
+            <SortArray value="TSDistance"/>
+        </TargetSorts>
+        <Range value="10"/>
+        <AutoCastFilters value="Biological,Visible;Self,Player,Ally,Neutral,Structure,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
+        <AutoCastRange value="10"/>
+        <CastIntroTime value="0.5"/>
+        <AINotifyEffect value="Snipe"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadNovaTripleSnipe"/>
+    </CAbilEffectTarget>
+    <CAbilQueue id="SquadNovaSpiderMineQueue">
+        <EditorCategories value="Race:Neutral,AbilityorEffectType:Structures"/>
+        <QueueSize value="3"/>
+        <Flags index="Passive" value="1"/>
+    </CAbilQueue>
+    <CAbilArmMagazine id="SquadNovaSpiderMineMagazine">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Leash value="20"/>
+        <InfoArray index="Ammo1" Time="8" CountStart="5" Manage="Recall" Unit="SquadSpiderMine">
+            <Resource index="Minerals" value="25"/>
+            <Charge Link="Abil/##id##" Location="Unit"/>
+            <Cooldown Link="Abil/##id##"/>
+            <Button DefaultButtonFace="NovaSpiderMineMagazine"/>
+            <Flags index="AutoBuild" value="1"/>
+            <Flags index="AutoBuildOn" value="1"/>
+            <Flags index="LeashRetarget" value="1"/>
+        </InfoArray>
+        <CalldownEffect value="SquadNovaSpiderMineCalldown"/>
+        <MaxCount value="5"/>
+    </CAbilArmMagazine>
     <CAbilEffectTarget id="SquadToshProtossBlast">
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
         <Effect index="0" value="SquadToshProtossBlastInitialDelay"/>
@@ -121,6 +162,15 @@
         <AINotifyEffect value="SquadWhirlwind"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadWhirlwind"/>
     </CAbilEffectInstant>
+    <CAbilEffectTarget id="SquadNoveDeploySpiderMine">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadNovaSpiderMineCalldown"/>
+        <Placeholder value="SquadSpiderMineBurrowed"/>
+        <Range value="3"/>
+        <CalldownEffect value="SquadNovaSpiderMineCalldown"/>
+        <EffectRange index="0" value="0,3"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadNovaDeploySquadSpiderMine"/>
+    </CAbilEffectTarget>
     <CAbilEffectTarget id="SquadZeratulVoidSpheres">
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
         <Effect index="0" value="SquadZeratulPhaseMineBlastLaunchMissile"/>
@@ -1242,10 +1292,10 @@
         <Range value="4"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadToshConsumption"/>
     </CAbilEffectTarget>
-    <CAbilEffectTarget id="SquadCaptainNovaSnipe">
+    <CAbilEffectTarget id="SquadNovaSnipe">
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
-        <PrepEffect value="SquadCaptainNovaCanisterRifleSnipePrep"/>
-        <Effect index="0" value="SquadCaptainNovaCanisterRifleSnipe"/>
+        <PrepEffect value="SquadNovaCanisterRifleSnipePrep"/>
+        <Effect index="0" value="SquadNovaCanisterRifleSnipe"/>
         <Cost>
             <Vital index="Energy" value="25"/>
         </Cost>
@@ -1253,8 +1303,8 @@
         <Range value="10"/>
         <Arc value="360"/>
         <CastIntroTime value="0.5"/>
-        <AINotifyEffect value="SquadCaptainNovaCanisterRifleSnipe"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="SquadCaptainNovaSnipe"/>
+        <AINotifyEffect value="SquadNovaCanisterRifleSnipe"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadNovaSnipe"/>
     </CAbilEffectTarget>
     <CAbilEffectTarget id="SquadCorpseExplosion">
         <Alignment value="Negative"/>
@@ -4397,7 +4447,7 @@
         <AutoCastRange value="10"/>
         <CastIntroTime value="0.5"/>
         <AINotifyEffect value="Snipe"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="SquadGhostTripleSnipe" Requirements="HaveGhostTripleSnipe"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadNovaTripleSnipe" Requirements="HaveGhostTripleSnipe"/>
     </CAbilEffectTarget>
     <CAbilArmMagazine id="SquadInfantry">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
