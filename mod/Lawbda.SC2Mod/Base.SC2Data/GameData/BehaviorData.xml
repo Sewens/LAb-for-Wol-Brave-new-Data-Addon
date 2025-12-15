@@ -1,5 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorBuff id="SquadFenixSOAChargeStun">
+        <Alignment value="Negative"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-thunderouscharge.dds"/>
+        <BehaviorCategories index="Stun" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="5"/>
+        <Modification>
+            <StateFlags index="Stun" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadFenixWhirlwind">
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-whirlwindfenix.dds"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Duration value="3"/>
+        <Period value="0.5"/>
+        <PeriodicEffect value="SquadFenixWhirlwindSearch"/>
+        <Modification>
+            <StateFlags index="SuppressCollision" value="1"/>
+            <WeaponEnableArray value="FenixChampionWhirlwind"/>
+            <WeaponDisableArray value="FenixChampion"/>
+            <WeaponDisableArray value="FenixWeapon"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorPowerUser id="PowerUserWarpable2">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-building-protoss-pylon.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <PowerLink value="PowerSource"/>
+        <PlacementMinPowerLevel value="1"/>
+        <Flags index="KillIfUnpowered" value="1"/>
+        <PoweredWhileUnderConstruction value="1"/>
+        <PowerStageArray/>
+    </CBehaviorPowerUser>
     <CBehaviorBuff id="SquadZeratulVoidArmor">
         <Alignment value="Positive"/>
         <InfoIcon value="Assets\Textures\btn-ability-protoss-gravitonbeam.dds"/>
@@ -295,6 +329,20 @@
         <Modification>
             <WeaponEnableArray value="SquadMedivacMortarLauncher"/>
             <WeaponDisableArray value="SquadMedivacSpiltShell"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadWhirlwind">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="CasterNotStunned"/>
+        <Duration value="3"/>
+        <Period value="0.5"/>
+        <PeriodicEffect value="SquadWhirlwindBehaviorSet"/>
+        <FinalEffect value="SquadWhirlwindCancelMove"/>
+        <Modification>
+            <StateFlags index="SuppressCollision" value="1"/>
+            <WeaponArray Link="VoidZealotWhirlwindFakeWeapon"/>
+            <WeaponDisableArray value="PsiBlades"/>
         </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="YellowNuclearEarthquake">
@@ -1981,7 +2029,7 @@
         <Flags index="HideUnpoweredText" value="1"/>
         <PoweredWhileUnderConstruction value="1"/>
     </CBehaviorPowerUser>
-    <CBehaviorBuff id="SquadCaptainToshPsiShield">
+    <CBehaviorBuff id="SquadToshPsiShield">
         <Alignment value="Positive"/>
         <InfoIcon value="Assets\Textures\btn-ability-terran-defensivematrix.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -1992,7 +2040,7 @@
         </Modification>
         <DamageResponse ModifyMinimumDamage="1"/>
     </CBehaviorBuff>
-    <CBehaviorBuff id="SquadCaptainToshPsiShieldDummy">
+    <CBehaviorBuff id="SquadToshPsiShieldDummy">
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Modification>

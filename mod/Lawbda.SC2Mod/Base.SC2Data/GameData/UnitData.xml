@@ -1,5 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CUnit id="SquadFenix">
+        <DeathTime value="-1"/>
+        <DeathRevealRadius value="3"/>
+        <Race value="Prot"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="Unstoppable" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Locust" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Massive" value="1"/>
+        <Attributes index="Heroic" value="1"/>
+        <LifeStart value="300"/>
+        <LifeMax value="300"/>
+        <LifeArmor value="3"/>
+        <LifeArmorName value="Unit/LifeArmorName/ProtossPlating"/>
+        <ShieldsStart value="500"/>
+        <ShieldsMax value="500"/>
+        <ShieldArmor value="3"/>
+        <ShieldRegenDelay value="10"/>
+        <ShieldRegenRate value="2"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/ProtossPlasmaShields"/>
+        <Speed value="3"/>
+        <Acceleration value="1000"/>
+        <Sight value="10"/>
+        <CostCategory value="Army"/>
+        <RepairTime value="55"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="SquadFenixThunderousCharge"/>
+        <AbilArray Link="SquadFenixWhirlwind"/>
+        <AbilArray Link="SquadFenixVoidShieldCapacitor"/>
+        <WeaponArray Link="SquadFenixPurifierBlades"/>
+        <WeaponArray Link="SquadFenixWhirlwind"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="SquadFenixThunderousCharge" Type="AbilCmd" AbilCmd="SquadFenixThunderousCharge,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="SquadFenixShieldCapacitor" Type="AbilCmd" AbilCmd="SquadFenixVoidShieldCapacitor,Execute" Row="2" Column="2"/>
+            <LayoutButtons Face="SquadFenixWhirlwind" Type="AbilCmd" AbilCmd="SquadFenixWhirlwind,Execute" Row="2" Column="1"/>
+        </CardLayouts>
+        <Radius value="0.75"/>
+        <SeparationRadius value="0.625"/>
+        <InnerRadius value="0.5"/>
+        <CargoSize value="2"/>
+        <SubgroupPriority value="55"/>
+        <MinimapRadius value="0.625"/>
+        <EditorCategories value="ObjectType:Hero,ObjectFamily:Campaign"/>
+        <GlossaryCategory value="Unit/Category/ProtossStory"/>
+        <GlossaryPriority value="50"/>
+        <HotkeyCategory value="Unit/Category/ProtossStory"/>
+    </CUnit>
     <CUnit id="SquadSwannFrostBetty">
         <DeathRevealRadius value="3"/>
         <Facing value="29.9926"/>
@@ -107,7 +169,7 @@
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
             <LayoutButtons Face="SquadOdinBarrage" Type="AbilCmd" AbilCmd="SquadOdinBarrage,Execute" Row="2" Column="1"/>
             <LayoutButtons Face="OdinGainsBarrageLocked" Type="Passive" Requirements="NovaLevel11" Row="2" Column="1"/>
-            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="SquadOdinBarrage,255" Row="2" Column="4"/>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="SquadOdinBarrage,Cancel" Row="2" Column="4"/>
             <LayoutButtons Face="SquadOdinAnnihilate" Type="AbilCmd" AbilCmd="SquadOdinAnnihilate,Execute" Row="2" Column="0"/>
             <LayoutButtons Face="SquadOdinDashAttack" Type="AbilCmd" AbilCmd="SquadOdinDashAttack,Execute" Row="2" Column="2"/>
             <LayoutButtons Face="DisbandSquad" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="4"/>
@@ -954,6 +1016,9 @@
         <AbilArray Link="stop"/>
         <AbilArray Link="move"/>
         <AbilArray Link="SquadCaptainNovaSnipe"/>
+        <AbilArray Link="DisbandSquad"/>
+        <AbilArray Link="SquadInfantry"/>
+        <AbilArray Link="QueueMagazine"/>
         <BehaviorArray Link="HeroLevelUpTo10"/>
         <TurretArray value="SquadCaptainNovaRotateTurret"/>
         <WeaponArray Link="SquadCaptainNovaCanisterRifle" Turret="SquadCaptainNovaRotateTurret"/>
@@ -964,6 +1029,7 @@
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
             <LayoutButtons Face="SquadCaptainNovaSnipe" Type="AbilCmd" AbilCmd="SquadCaptainNovaSnipe,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="DisbandSquad" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="4"/>
         </CardLayouts>
         <SeparationRadius value="0.375"/>
         <InnerRadius value="1"/>
@@ -3250,11 +3316,11 @@
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
             <LayoutButtons Face="MothershipCoreAttack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="DisbandSquad" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="4"/>
-            <LayoutButtons Face="ExcavatorHarvestDropPoint" Type="AbilCmd" AbilCmd="ExcavatorGatherModeSwitch,255" Row="1" Column="1"/>
+            <LayoutButtons Face="ExcavatorHarvestDropPoint" Type="AbilCmd" AbilCmd="ExcavatorGatherModeSwitch,On" Row="1" Column="1"/>
             <LayoutButtons Face="ExcavatorHarvestDropPoint" Type="Passive" Row="1" Column="1"/>
             <LayoutButtons Face="ExcavatorGather" Type="AbilCmd" AbilCmd="SquadExcavatorGather,Gather" Row="1" Column="0"/>
             <LayoutButtons Face="ReturnCargo" Type="AbilCmd" AbilCmd="SquadExcavatorGather,Return" Row="1" Column="0"/>
-            <LayoutButtons Face="ExcavatorBehemothProtocal" Type="AbilCmd" AbilCmd="ExcavatorGatherModeSwitch,255" Row="1" Column="2"/>
+            <LayoutButtons Face="ExcavatorBehemothProtocal" Type="AbilCmd" AbilCmd="ExcavatorGatherModeSwitch,Off" Row="1" Column="2"/>
             <LayoutButtons Face="ExcavatorBehemothProtocal" Type="Passive" Row="1" Column="2"/>
             <LayoutButtons Face="BehemothIgniteAfterburners" Type="AbilCmd" AbilCmd="BehemothAfterburner,Execute" Row="2" Column="0"/>
             <LayoutButtons Face="ScavageStructure" Type="Passive" Behavior="ExcavatorRecycleStructureCauseDropPickup" Row="2" Column="3"/>
@@ -4619,7 +4685,7 @@
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="AcquireMove" Type="AbilCmd" AbilCmd="move,AcquireMove" Row="0" Column="4"/>
             <LayoutButtons Face="LootMarsaraHound" Type="Passive" Row="1" Column="0"/>
-            <LayoutButtons Face="DisbandSquad" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="3"/>
+            <LayoutButtons Face="DisbandSquad" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="4"/>
         </CardLayouts>
         <Radius value="1"/>
         <SeparationRadius value="1"/>
@@ -7416,7 +7482,7 @@
         <Mover value="TornadoMissileWeapon"/>
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
     </CUnit>
-    <CUnit id="SquadCaptainTosh">
+    <CUnit id="SquadTosh">
         <DeathRevealRadius value="3"/>
         <Race value="Terr"/>
         <Mob value="Campaign"/>
@@ -7437,7 +7503,7 @@
         <EnergyStart value="75"/>
         <EnergyMax value="250"/>
         <EnergyRegenRate value="0.5625"/>
-        <ShieldArmorName value="Unit/ShieldArmorName/SquadCaptainToshShields"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/SquadToshShields"/>
         <Speed value="3"/>
         <Acceleration value="1000"/>
         <LateralAcceleration value="46.0625"/>
@@ -7453,17 +7519,21 @@
         <AbilArray Link="attack"/>
         <AbilArray Link="SquadToshConsumption"/>
         <AbilArray Link="SquadToshPsiShield"/>
+        <AbilArray Link="QueueMagazine"/>
+        <AbilArray Link="SquadInfantry"/>
+        <AbilArray Link="DisbandSquad"/>
         <BehaviorArray Link="SquadHeroDetectorRadar"/>
         <BehaviorArray Link="HeroLevelUpTo10"/>
-        <WeaponArray Link="SquadCaptainToshZGaussRifle"/>
+        <WeaponArray Link="SquadToshZGaussRifle"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
             <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
-            <LayoutButtons Face="SquadCaptainToshPsiShield" Type="AbilCmd" AbilCmd="SquadToshPsiShield,255" Row="2" Column="1"/>
-            <LayoutButtons Face="SquadCaptainToshConsumption" Type="AbilCmd" AbilCmd="SquadToshConsumption,255" Row="2" Column="2"/>
+            <LayoutButtons Face="SquadToshPsiShield" Type="AbilCmd" AbilCmd="SquadToshPsiShield,255" Row="2" Column="1"/>
+            <LayoutButtons Face="SquadToshConsumption" Type="AbilCmd" AbilCmd="SquadToshConsumption,255" Row="2" Column="2"/>
+            <LayoutButtons Face="DisbandSquad" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="4"/>
         </CardLayouts>
         <Radius value="0.375"/>
         <SeparationRadius value="0.375"/>
@@ -7574,7 +7644,7 @@
             <ChanceArray index="Turn" value="33"/>
         </Fidget>
     </CUnit>
-    <CUnit id="SquadTossGrenade" parent="MISSILE">
+    <CUnit id="SquadTychusTossGrenadeMissile" parent="MISSILE">
         <Race value="Terr"/>
         <Mover value="TossGrenade"/>
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
@@ -7618,6 +7688,8 @@
         <AbilArray Link="SquadInfantry"/>
         <AbilArray Link="DisbandSquad"/>
         <AbilArray Link="SquadSwannPlaceFrostBetty"/>
+        <AbilArray Link="SquadInfantry"/>
+        <AbilArray Link="QueueMagazine"/>
         <BehaviorArray Link="SquadHeroDeathPrevention"/>
         <BehaviorArray Link="HeroLevelUpTo10"/>
         <WeaponArray Link="SquadSwannConcussiveGrenade"/>
@@ -7631,6 +7703,7 @@
             <LayoutButtons Face="SquadSwannPlaceFlamingBetty" Type="AbilCmd" AbilCmd="SquadSwannPlaceFlamingBetty,Execute" Row="2" Column="0"/>
             <LayoutButtons Face="SquadSwannPlaceFrostBetty" Type="AbilCmd" AbilCmd="SquadSwannPlaceFrostBetty,Execute" Row="2" Column="1"/>
             <LayoutButtons Face="SquadSwannMyPreciousPlating" Type="Passive" Row="2" Column="2"/>
+            <LayoutButtons Face="DisbandSquad" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="4"/>
         </CardLayouts>
         <InnerRadius value="0.5"/>
         <CargoSize value="2"/>
@@ -7685,6 +7758,7 @@
         <AbilArray Link="SquadInfantry"/>
         <AbilArray Link="QueueMagazine"/>
         <AbilArray Link="SquadStetmannHealDamageGrenade"/>
+        <AbilArray Link="DisbandSquad"/>
         <BehaviorArray Link="SquadHeroDeathPrevention"/>
         <BehaviorArray Link="SquadStetmannOutOfCombatEnergyRegen"/>
         <BehaviorArray Link="SquadStetmannOutOfCombatEnergyRegenDummy"/>
@@ -7699,7 +7773,7 @@
             <LayoutButtons Face="AcquireMove" Type="AbilCmd" AbilCmd="move,AcquireMove" Row="0" Column="4"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
             <LayoutButtons Face="SquadStetmannSelfixArmor" Type="Passive" Behavior="SquadStetmannOutOfCombatEnergyRegenDummy" Row="2" Column="2"/>
-            <LayoutButtons Face="DisbandSquad" Row="1" Column="4"/>
+            <LayoutButtons Face="DisbandSquad" Type="AbilCmd" AbilCmd="DisbandSquad,255" Row="1" Column="4"/>
             <LayoutButtons Face="SquadStetmannHealDamageGrenade" Type="AbilCmd" AbilCmd="SquadStetmannHealDamageGrenade,Execute" Row="2" Column="0"/>
             <LayoutButtons Face="SquadStetmannUltraDualInjectors" Type="Passive" Row="2" Column="1"/>
         </CardLayouts>
@@ -7761,6 +7835,7 @@
         <AbilArray Link="SquadZeratulShadowBlade"/>
         <AbilArray Link="SquadZeratulVoidArmor"/>
         <AbilArray Link="SquadZeratulVoidPrison"/>
+        <AbilArray Link="DisbandSquad"/>
         <BehaviorArray Link="SquadCloakandDetectorRadar"/>
         <BehaviorArray Link="SquadHeroDetectorRadar"/>
         <WeaponArray Link="SquadZeratulMasterWarpBlade"/>
@@ -7775,6 +7850,7 @@
             <LayoutButtons Face="SquadZeratulShadowBlade" Type="AbilCmd" AbilCmd="SquadZeratulShadowBlade,Execute" Row="2" Column="3"/>
             <LayoutButtons Face="SquadZeratulVoidArmor" Type="AbilCmd" AbilCmd="SquadZeratulVoidArmor,Execute" Row="2" Column="2"/>
             <LayoutButtons Face="SquadZeratulVoidPrison" Type="AbilCmd" AbilCmd="SquadZeratulVoidPrison,Execute" Row="2" Column="1"/>
+            <LayoutButtons Face="DisbandSquad" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="4"/>
         </CardLayouts>
         <CargoSize value="2"/>
         <ScoreMake value="1000"/>
@@ -7802,5 +7878,85 @@
         <Mover value="PhaseMineBlastSecondary"/>
         <Height value="1.5"/>
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
+    <CUnit id="SquadProtossBlastZealot">
+        <DeathRevealRadius value="3"/>
+        <ReviveType value="Zealot"/>
+        <Race value="Prot"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Locust" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Light" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <LifeStart value="100"/>
+        <LifeMax value="100"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/ProtossArmor"/>
+        <ShieldsStart value="50"/>
+        <ShieldsMax value="50"/>
+        <ShieldRegenDelay value="10"/>
+        <ShieldRegenRate value="2"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/ProtossPlasmaShields"/>
+        <Speed value="2.75"/>
+        <Acceleration value="1000"/>
+        <LateralAcceleration value="46.0625"/>
+        <StationaryTurningRate value="999.8437"/>
+        <TurningRate value="999.8437"/>
+        <Sight value="9"/>
+        <Food value="-2"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="100"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="20"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="SquadToshProtossBlastZealotWhirlwind"/>
+        <WeaponArray Link="SquadProtossBlastZealotSolariteReaper"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="SquadWhirlwind" Type="AbilCmd" AbilCmd="SquadToshProtossBlastZealotWhirlwind,Execute" Row="2" Column="0"/>
+        </CardLayouts>
+        <SeparationRadius value="0.375"/>
+        <InnerRadius value="0.375"/>
+        <CargoSize value="2"/>
+        <ScoreMake value="100"/>
+        <ScoreKill value="100"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="5"/>
+        <MinimapRadius value="0.375"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
+        <TacticalAI value="Zealot"/>
+        <GlossaryCategory value="Unit/Category/ProtossUnits"/>
+        <GlossaryPriority value="20"/>
+        <GlossaryStrongArray value="Marauder"/>
+        <GlossaryStrongArray value="Zergling"/>
+        <GlossaryStrongArray value="Immortal"/>
+        <GlossaryWeakArray value="Hellion"/>
+        <GlossaryWeakArray value="Roach"/>
+        <GlossaryWeakArray value="Colossus"/>
+        <HotkeyCategory value="Unit/Category/ProtossStory"/>
+        <AIEvaluateAlias value="Zealot"/>
+        <Fidget>
+            <ChanceArray index="Anim" value="20"/>
+            <ChanceArray index="Idle" value="70"/>
+            <ChanceArray index="Turn" value="10"/>
+        </Fidget>
+        <ReviveInfoBase>
+            <Charge Link="Zealot/Revive"/>
+            <Cooldown Link="Zealot/Revive"/>
+        </ReviveInfoBase>
     </CUnit>
 </Catalog>

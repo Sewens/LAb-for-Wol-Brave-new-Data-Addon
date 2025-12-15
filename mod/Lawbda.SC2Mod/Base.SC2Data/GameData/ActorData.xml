@@ -267,6 +267,123 @@
         <On Terms="Abil.NuclearStrikeRed.SourceFinishStart" Send="AnimPlay SpellC Spell,C"/>
         <On Terms="Abil.NuclearStrikeRed.SourceFinishStop" Send="AnimClear SpellC"/>
     </CActorEventMacro>
+    <CActorUnit id="SquadFenix" parent="GenericUnitBase" unitName="SquadFenix">
+        <Aliases value="_MissileHybrids"/>
+        <Aliases value="_UnitMedium"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="WeaponStart.FenixWeapon.AttackStart; IsStatus WeaponBypass 0" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.FenixWeapon.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <On Terms="Behavior.FenixSOACharging.On" Send="AnimPlay SpellA Spell,A PlayForever"/>
+        <On Terms="Behavior.FenixSOACharging.On" Send="StatusSet WeaponBypass 1"/>
+        <On Terms="Effect.FenixSOAChargeStunSearch.Start" Send="AnimPlay SpellAEnd Spell,A,End"/>
+        <On Terms="Effect.FenixSOAChargeStunSearch.Start" Send="AnimClear SpellA"/>
+        <On Terms="Behavior.FenixSOACharging.Off" Send="AnimClear SpellA"/>
+        <On Terms="Behavior.FenixSOACharging.Off" Send="StatusSet WeaponBypass 0"/>
+        <On Terms="Behavior.FenixWhirlwind.On" Send="AnimPlay SpellB Spell,B PlayForever"/>
+        <On Terms="Behavior.FenixWhirlwind.Off" Send="AnimClear SpellB"/>
+        <On Terms="Behavior.FenixWhirlwind.On" Send="StatusSet WeaponBypass 1"/>
+        <On Terms="Behavior.FenixWhirlwind.Off" Send="StatusSet WeaponBypass 0"/>
+        <On Terms="UnitMovementUpdate.*.Walk" Send="AnimClear SpellAEnd"/>
+        <On Terms="ModelEvent; ModelEventName FenixBirthImpact" Send="Create FenixBirthImpact"/>
+        <Model value="FenixChampion"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="FenixChampionWarpIn"/>
+        <DeathArray index="Normal" ModelLink="Fenix_Death" SoundLink=""/>
+        <DeathCustoms ModelLink="ProtossLargeUnitDeathLow" Name="AntiGravProtoss"/>
+        <PlacementModel value="FenixChampion"/>
+        <PortraitActor value="FenixEx2Portrait"/>
+        <PortraitModel value="FenixEx2Portrait"/>
+        <WalkAnimMoveSpeed value="2.25"/>
+        <BarOffset value="80"/>
+        <BarWidth value="90"/>
+        <CustomUnitStatusFrame value="LotV_UnitStatus/HeroUnitEnergyStatusFrameTemplate"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\btn-unit-protoss-fenix.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-fenix.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SoundArray index="Ready" value="Fenix_Ready"/>
+        <SoundArray index="Help" value="Fenix_Help"/>
+        <SoundArray index="What" value="Fenix_What"/>
+        <SoundArray index="Yes" value="Fenix_Yes"/>
+        <SoundArray index="Attack" value="Fenix_Attack"/>
+        <SoundArray index="Pissed" value="Fenix_Pissed"/>
+        <SoundArray index="Movement" value="Fenix_MoveStart"/>
+        <StatusBarOn index="Custom" value="1"/>
+        <UnitFlags index="SuppressDefaultStatusBar" value="1"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-fenix.dds"/>
+        <UnitKillRank Text="UnitKillRank/Fenix"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-protoss-fenix.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\wireframe-protoss-fenix-shield01.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-fenix-shield02.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-fenix-shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorAction id="SquadFenixAttack" parent="GenericAttack" effectAttack="SquadFenixChampionDamage">
+        <LaunchAssets Sound="Fenix_CleaveAttackLaunch"/>
+        <ImpactMap index="None" Model="FenixChampionAttackImpact" Sound="Fenix_CleaveAttackImpact"/>
+        <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
+        <ShieldFlashType value="Header"/>
+    </CActorAction>
+    <CActorModel id="SquadFenixChargeImpactModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.FenixChargeTargetImpactSearch.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.SquadFenixSOAChargeStunSearch.Start; At Caster" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter" HoldPosition="1" HoldRotation="1"/>
+        <Model value="FenixChargeImpactModel"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorModel id="SquadFenixChargeStunModel" parent="ModelAnimationStyleContinuous">
+        <On Terms="ActorCreation" Send="AnimBracketStart GL_BSD GLbirth GLstand GLdeath"/>
+        <On Terms="Behavior.FenixChargeStun.On" Send="Create"/>
+        <On Terms="Behavior.FenixChargeStun.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="Behavior.SquadFenixSOAChargeStun.On" Send="Create"/>
+        <On Terms="Behavior.SquadFenixSOAChargeStun.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Model value="FenixChargeStunModel"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorAction id="SquadFenixSOAAttack" parent="GenericAttack" effectAttack="SquadFenixSOAWeaponDamage">
+        <LaunchAssets Sound="Fenix_CleaveAttackLaunch"/>
+        <ImpactMap index="None" Sound="Fenix_CleaveAttackImpact"/>
+        <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
+        <ShieldFlashType value="Header"/>
+    </CActorAction>
+    <CActorAction id="SquadFenixWhirlwindAttack" parent="GenericAttack" effectAttack="SquadFenixWhirlwindDamage">
+        <ImpactMap index="None" Model="FenixWhirlwindImpact" Sound="Zealot_AttackImpact"/>
+    </CActorAction>
+    <CActorSound id="SquadFenixWhirlwindLoop" parent="SoundContinuous">
+        <On Terms="Behavior.SquadFenixWhirlwind.On" Send="Create"/>
+        <On Terms="Behavior.SquadFenixWhirlwind.Off" Send="Destroy"/>
+        <On Terms="Behavior.FenixSOAWhirlwind.On" Send="Create"/>
+        <On Terms="Behavior.FenixSOAWhirlwind.Off" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <Sound value="FenixWhirlwindLoop"/>
+    </CActorSound>
+    <CActorModel id="SquadFenixWhirlwindModel" parent="ModelAnimationStyleContinuous">
+        <On Terms="Behavior.SquadFenixWhirlwind.On" Send="Create"/>
+        <On Terms="Behavior.SquadFenixWhirlwind.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="Behavior.FenixSOAWhirlwind.On" Send="Create"/>
+        <On Terms="Behavior.FenixSOAWhirlwind.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="FenixWhirlwindModel"/>
+    </CActorModel>
+    <CActorModelMaterial id="SquadFenixGlazeShield" parent="GlazeParent">
+        <Remove Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death"/>
+        <On Terms="Effect.SquadFenixVoidShieldCapacitor.Start; At Caster" Send="Create"/>
+        <On Terms="ActorCreation" Send="ModelMaterialApplyTo ::Main"/>
+        <On Terms="ActorCreation" Send="$Birth"/>
+        <On Terms="AnimDone; AnimName Birth" Send="ModelMaterialRemoveFrom ::Main"/>
+        <On Terms="AnimDone; AnimName Birth" Send="Destroy"/>
+        <Model value="GlazeFenixShield"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModelMaterial>
     <CActorAction id="SquadZeratulPhaseMineBlast" parent="GenericAttack" effectImpact="SquadZeratulPhaseMineBlastPersistent" effectLaunch="SquadZeratulPhaseMineBlastLaunchMissile">
         <LaunchAssets Sound="Zeratul_PhaseMineLaunch"/>
     </CActorAction>
@@ -344,6 +461,28 @@
         <On Terms="Effect.SquadZeratulShadowBladeDamage.Start" Send="Create"/>
         <Sound value="ShadowBladeExplosion"/>
     </CActorSound>
+    <CActorSound id="SquadZeratulShadowBladeCastSound" parent="SoundOneShot">
+        <EditorCategories value=""/>
+        <On Terms="Abil.SquadZeratulShadowBlade.TargetCastStart" Send="Create"/>
+        <Sound value="ShadowBladeCast"/>
+    </CActorSound>
+    <CActorModel id="SquadZeratulShadowBladeCastEffect" parent="ModelAnimationStyleOneShot">
+        <On Terms="Abil.SquadZeratulShadowBlade.SourceCastStart" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+    </CActorModel>
+    <CActorModel id="SquadZeratulShadowBladeExplosion" parent="ModelAnimationStyleOneShot">
+        <On Terms="ActorCreation" Send="SetTintColor {21,162,64 3.000000}"/>
+        <On Terms="Abil.SquadZeratulShadowBlade.TargetCastStart" Send="Create"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorModel id="SquadZeratulShadowBladeWeaponAttach" parent="ModelAnimationStyleContinuous">
+        <On Terms="ActorCreation" Send="SetTintColor {21,162,64 3.000000}"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachWeapon"/>
+        <Model value="MindSiphonWeapon"/>
+    </CActorModel>
     <CActorModel id="SquadTychusJumpScareImpact" parent="ModelAdditionStatic">
         <Aliases index="0" removed="1"/>
         <Inherits index="BaseModelScale" value="0"/>
@@ -1091,7 +1230,7 @@
         <LaunchAttachQuery Methods="Weapon 1"/>
         <ImpactMap index="None" Model="TychusTossGrenadeImpact" Sound="TychusTossGrenadeImpact"/>
     </CActorAction>
-    <CActorMissile id="SquadTychusTossGrenadeMissile" parent="GenericAttackMissile" unitName="SquadTossGrenade">
+    <CActorMissile id="SquadTychusTossGrenadeMissile" parent="GenericAttackMissile" unitName="SquadTychusTossGrenadeMissile">
         <Model value="TychusGrenadeWeapon"/>
     </CActorMissile>
     <CActorSound id="SquadTychusDeath" parent="SoundOneShot">
@@ -1107,6 +1246,31 @@
         <On Terms="Effect.SquadTychusJumpScareSearch.Start; At Effect" Send="Create"/>
         <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
     </CActorSquib>
+    <CActorAction id="SquadWhirlwindAttack" parent="GenericAttack" effectAttack="SquadWhirlwindDamage">
+        <ImpactMap index="None" Model="VoidZealotWhirlwindImpact" Sound="Zealot_AttackImpact"/>
+    </CActorAction>
+    <CActorModel id="SquadWhirlwindSearchModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.SquadWhirlwindSearch.Start" Send="Create"/>
+        <On Terms="AnimDone; AnimName Birth" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="Create VoidZealotWhirlwindLaunchSound"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter SOpForwardNorth"/>
+        <Model value="VoidZealotWhirlwindSearchModel"/>
+    </CActorModel>
+    <CActorModel id="SquadFenixVoidShieldCapacitor">
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <On Terms="Effect.SquadFenixVoidShieldCapacitor.Start" Send="Create"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth {} Death ContentPlayOnce"/>
+        <On Terms="ActorCreation" Send="Create VoidShieldCapacitorOnSound"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter SOpForwardNorth"/>
+        <Model value="VoidShieldCapacitor"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
     <CActorModel id="YellowNuclearEarthquakeImpact" parent="ModelAnimationStyleContinuous">
         <Inherits index="BaseModelScale" value="1"/>
         <Inherits index="Scale" value="1"/>
@@ -3247,19 +3411,19 @@
         <On Terms="ActorCreation" Send="SetCastShadows"/>
         <ModelFlags index="AllowHitTest" value="0"/>
     </CActorModel>
-    <CActorModel id="SquadCaptainToshConsumptionImpactModel" parent="ModelAnimationStyleOneShot">
+    <CActorModel id="SquadToshConsumptionImpactModel" parent="ModelAnimationStyleOneShot">
         <On Terms="ActorCreation" Send="SetTintColor 255,0,0"/>
-        <On Terms="Effect.SquadCaptainToshConsumptionDamage.Start" Send="Create"/>
+        <On Terms="Effect.SquadToshConsumptionDamage.Start" Send="Create"/>
         <Model value="ConsumptionImpactModel"/>
     </CActorModel>
-    <CActorSound id="SquadCaptainToshConsumptionImpactSound" parent="SoundOneShot">
-        <On Terms="Effect.SquadCaptainToshConsumptionDamage.Start" Send="Create"/>
+    <CActorSound id="SquadToshConsumptionImpactSound" parent="SoundOneShot">
+        <On Terms="Effect.SquadToshConsumptionDamage.Start" Send="Create"/>
         <On Terms="Effect.InfestorConsumption.Start" Send="Create"/>
         <Sound value="Tosh_ConsumptionImpact"/>
     </CActorSound>
-    <CActorModel id="SquadCaptainToshConsumptionLaunchModel" parent="ModelAnimationStyleOneShot">
+    <CActorModel id="SquadToshConsumptionLaunchModel" parent="ModelAnimationStyleOneShot">
         <On Terms="ActorCreation" Send="SetTintColor 255,0,150"/>
-        <On Terms="Effect.SquadCaptainToshConsumptionDamage.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.SquadToshConsumptionDamage.Start; At Caster" Send="Create"/>
         <Host Subject="_Unit"/>
         <HostSiteOps Ops="SOpAttachOrigin"/>
         <Model value="ConsumptionLaunchModel"/>
@@ -4911,7 +5075,7 @@
     <CActorMissile id="SquadTornadoMissileDummyAttackMissile" parent="GenericAttackMissile" unitName="SquadTornadoMissileDummy">
         <Model value="TornadoMissileDummyWeapon"/>
     </CActorMissile>
-    <CActorUnit id="SquadCaptainTosh" parent="GenericUnitBase" unitName="SquadCaptainTosh">
+    <CActorUnit id="SquadTosh" parent="GenericUnitBase" unitName="SquadTosh">
         <Aliases value="_UnitSmall"/>
         <Macros value="CalldownNukeAnim"/>
         <!-- basic anim -->
@@ -4951,32 +5115,32 @@
         <UnitBorderNormalColor value="150,150,150"/>
         <UnitBorderSubgroupColor value="255,255,255"/>
         <UnitIcon value="Assets\Textures\BTN-Unit-Terran-Tosh.dds"/>
-        <UnitKillRank Text="UnitKillRank/SquadCaptainTosh"/>
+        <UnitKillRank Text="UnitKillRank/SquadTosh"/>
         <Wireframe>
             <Image value="Assets\Textures\Wireframe-Terran-Tosh.dds"/>
         </Wireframe>
     </CActorUnit>
-    <CActorAction id="SquadCaptainToshAttack" parent="GenericAttack" effectAttack="SquadCaptainToshZAssassinRifleDamage">
+    <CActorAction id="SquadToshAttack" parent="GenericAttack" effectAttack="SquadCaptainToshZAssassinRifleDamage">
         <LaunchAssets Model="ToshAttackLaunch" Sound="Tosh_AttackLaunch"/>
         <ContainerAssets Sound="Tosh_AttackLaunch"/>
         <ImpactMap index="None" Model="ToshAttackImpact" Sound="Tosh_AttackImpact"/>
     </CActorAction>
-    <CActorModel id="SquadCaptainToshPsiShield" parent="ModelAnimationStyleContinuous">
-        <On Terms="Behavior.SquadCaptainToshPsiShield.On" Send="Create"/>
+    <CActorModel id="SquadToshPsiShield" parent="ModelAnimationStyleContinuous">
+        <On Terms="Behavior.SquadToshPsiShield.On" Send="Create"/>
         <On Terms="ActorCreation" Send="AnimBracketStart $BSD"/>
         <On Terms="ActorCreation" Send="SetOpacity 0.500000"/>
-        <On Terms="Behavior.SquadCaptainToshPsiShield.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="Behavior.SquadToshPsiShield.Off" Send="AnimBracketStop BSD"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachCenter"/>
         <Model value="VoodooShield"/>
     </CActorModel>
-    <CActorSound id="SquadCaptainToshPsiShieldBirth" parent="SoundOneShot">
-        <On Terms="Behavior.SquadCaptainToshPsiShield.On" Send="Create"/>
-        <On Terms="Behavior.SquadCaptainToshPsiShield.Off" Send="Destroy"/>
+    <CActorSound id="SquadToshPsiShieldBirth" parent="SoundOneShot">
+        <On Terms="Behavior.SquadToshPsiShield.On" Send="Create"/>
+        <On Terms="Behavior.SquadToshPsiShield.Off" Send="Destroy"/>
         <Sound value="Tosh_PsiShieldBirth"/>
     </CActorSound>
-    <CActorSound id="SquadCaptainToshPsiShieldDeath" parent="SoundOneShot">
-        <On Terms="Behavior.SquadCaptainToshPsiShield.Off" Send="Create"/>
+    <CActorSound id="SquadToshPsiShieldDeath" parent="SoundOneShot">
+        <On Terms="Behavior.SquadToshPsiShield.Off" Send="Create"/>
         <Sound value="Tosh_PsiShieldDeath"/>
     </CActorSound>
     <CActorSound id="SquadBansheeConsumeCastSound" parent="SoundOneShot">
@@ -13217,9 +13381,9 @@
         <On Terms="Abil.SquadZeratulBlink.SourceFinish" Send="ModelSuddenMotionStop"/>
         <On Terms="Abil.SquadZeratulShadowBlade.SourceCastStart" Send="$Spell 0 -1.000000 -1.000000 1.200000 AsDuration"/>
         <On Terms="Abil.SquadZeratulShadowBlade.SourceCastStart" Target="_Unit" Send="Create TemporalFieldImpactModel"/>
-        <On Terms="Abil.SquadZeratulShadowBlade.SourceCastStart" Send="Create ShadowBladeWeaponAttach"/>
+        <On Terms="Abil.SquadZeratulShadowBlade.SourceCastStart" Send="Create SquadZeratulShadowBladeWeaponAttach"/>
         <On Terms="Abil.SquadZeratulShadowBlade.SourceFinishStop" Target="TemporalFieldImpactModel" Send="Destroy"/>
-        <On Terms="Abil.SquadZeratulShadowBlade.SourceFinishStop" Target="ShadowBladeWeaponAttach" Send="Destroy"/>
+        <On Terms="Abil.SquadZeratulShadowBlade.SourceFinishStop" Target="SquadZeratulShadowBladeWeaponAttach" Send="Destroy"/>
         <On Terms="WeaponStart.SquadZeratulVoidSphere.AttackStart" Send="AnimPlay Spell Attack,01 NonLooping"/>
         <On Terms="Abil.SquadZeratulVoidPrison.SourceCastStart" Send="AnimPlay Spell Stand,Work,Start 0 -1.000000 -1.000000 0.250000 AsDuration"/>
         <On Terms="UnitMovementUpdate.*.Walk" Send="AnimClear Spell"/>
@@ -13236,7 +13400,7 @@
             <Image value="Assets\Textures\Wireframe-Protoss-Zeratul.dds"/>
         </GroupIcon>
         <HeroIcon value="Assets\Textures\ui-heroicon-zeratul.dds"/>
-        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
         <StatusBarOn index="Custom" value="1"/>
         <UnitFlags index="SuppressDefaultStatusBar" value="1"/>
         <SoundArray index="Birth" value="Zeratul_Birth"/>
@@ -13259,6 +13423,7 @@
             <Image value="Assets\Textures\Wireframe-Protoss-Zeratul-Shield02.dds"/>
             <Image value="Assets\Textures\Wireframe-Protoss-Zeratul-Shield03.dds"/>
         </WireframeShield>
+        <ShieldArmorIcon value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
     </CActorUnit>
     <CActorModel id="SquadZeratulVoidPrison" parent="ModelAnimationStyleContinuous">
         <On Terms="ActorCreation" Send="AnimBracketStart GL_BSD GLbirth GLstand GLdeath"/>
@@ -13274,5 +13439,67 @@
         <On Terms="Effect.SquadZeratulVoidPrisonPersistent.Start" Send="Create"/>
         <On Terms="Effect.SquadZeratulVoidPrisonPersistent.Stop" Send="Destroy"/>
         <Sound value="Mothership_TimeWarpLoop"/>
+    </CActorSound>
+    <CActorUnit id="SquadProtossBlastZealot" parent="GenericUnitStandard" unitName="SquadProtossBlastZealot">
+        <Aliases value="_UnitSmall"/>
+        <Macros value="ChargingAnim"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <On Terms="Behavior.Charging.On" Send="ModelSuddenMotionStart"/>
+        <On Terms="Behavior.Charging.Off" Send="ModelSuddenMotionStop"/>
+        <On Terms="Behavior.SquadWhirlwind.On" Send="HostSiteOpsSet ::Host ZealotWhirlwindRotator"/>
+        <On Terms="Effect.SquadWhirlwindSearch.Start" Send="AnimPlay Attack Attack,03"/>
+        <On Terms="Behavior.SquadWhirlwind.Off" Send="HostSiteOpsSet ::Host"/>
+        <On Terms="Behavior.SquadWhirlwind.Off" Send="AnimClear Attack"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create Zealot_Land"/>
+        <Model value="ZealotAiur"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="ZealotAiurWarpIn"/>
+        <DeathArray index="Normal" ModelLink="ZealotAiurDeath" SoundLink="Zealot_DeathFX"/>
+        <DeathCustoms ModelLink="HallucinationDeath" SoundLink="Sentry_HallucinationDeathSmall" Name="Hallucination"/>
+        <PlacementModel value="ZealotAiurPlacement"/>
+        <PlacementSound value="Protoss_BuildingPlacementSmall"/>
+        <PortraitModel value="ZealotAiurPortrait"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="0.600000"/>
+            <RangeDown value="0.600000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleMedium"/>
+        </TerrainSquibs>
+        <WalkAnimMoveSpeed value="2.25"/>
+        <BarOffset value="45"/>
+        <BarWidth value="42"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\wireframe-protoss-zealotelite.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-zealot-aiur.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SoundArray index="Birth" value="Zealot_Birth"/>
+        <SoundArray index="Ready" value="Zealot_Ready"/>
+        <SoundArray index="Help" value="Zealot_Help"/>
+        <SoundArray index="What" value="ZealotVoid_What"/>
+        <SoundArray index="Yes" value="Zealot_Yes"/>
+        <SoundArray index="Attack" value="Zealot_Attack"/>
+        <SoundArray index="Pissed" value="Zealot_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-zealot-aiur.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-protoss-zealot-aiur.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\wireframe-protoss-zealot-aiur-shield01.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-zealot-aiur-shield02.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-zealot-aiur-shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorAction id="SquadProtossBlastZealotAttack" parent="GenericAttack" effectAttack="SquadProtossBlastZealotWeapon">
+        <LaunchAttachQuery Methods="AMFilterWeaponLeft"/>
+        <LaunchAssets Sound="ZealotAiur_AttackLaunch"/>
+        <ImpactMap index="None" Sound="ZealotAiur_AttackImpact"/>
+        <ShieldFlashType value="Header"/>
+    </CActorAction>
+    <CActorSound id="SquadProtossBlastZealotDeath" parent="SoundOneShot">
+        <On Terms="UnitDeathCustomize.SquadProtossBlastZealot; ValidateUnit IsNotHallucination; PassChance 25.000000" Send="Create"/>
+        <Sound value="Zealot_Death"/>
     </CActorSound>
 </Catalog>

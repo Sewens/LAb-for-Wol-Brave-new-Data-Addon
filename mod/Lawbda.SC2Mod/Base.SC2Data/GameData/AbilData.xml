@@ -70,6 +70,33 @@
         <Flags index="Transient" value="1"/>
         <PointsPerLevel value="1"/>
     </CAbilLearn>
+    <CAbilEffectInstant id="SquadFenixWhirlwind">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="20"/>
+        </Cost>
+        <TargetFilters value="-;Ally,Neutral,Enemy"/>
+        <AutoCastRange value="1.5"/>
+        <AutoCastValidatorArray value="FenixSOAWhirlwindCheck"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="FenixWhirlwind"/>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="SquadToshProtossBlastZealotWhirlwind">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadWhirlwindSet"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="TransientPreferred" value="1"/>
+        <Cost/>
+        <AutoCastRange value="1.5"/>
+        <AutoCastValidatorArray value="VoidZealotWhirlwindCheck"/>
+        <CastOutroTime value="1.2"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <AINotifyEffect value="SquadWhirlwind"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadWhirlwind"/>
+    </CAbilEffectInstant>
     <CAbilEffectTarget id="SquadZeratulVoidSpheres">
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
         <Effect index="0" value="SquadZeratulPhaseMineBlastLaunchMissile"/>
@@ -1183,13 +1210,13 @@
     <CAbilEffectTarget id="SquadToshConsumption">
         <Alignment value="Positive"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Effect index="0" value="SquadCaptainToshConsumptionDamage"/>
+        <Effect index="0" value="SquadToshConsumptionDamage"/>
         <Cost>
             <Cooldown TimeUse="10"/>
         </Cost>
         <TargetFilters value="Biological;Self,Neutral,Enemy,Structure,Missile,Uncommandable,Stasis,Dead,Hidden,Hallucination,Invulnerable"/>
         <Range value="4"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="SquadCaptainToshConsumption"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadToshConsumption"/>
     </CAbilEffectTarget>
     <CAbilEffectTarget id="SquadCaptainNovaSnipe">
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
@@ -1943,7 +1970,7 @@
     </CAbilEffectTarget>
     <CAbilEffectInstant id="SquadToshPsiShield">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Effect index="0" value="SquadCaptainToshPsiShieldSet"/>
+        <Effect index="0" value="SquadToshPsiShieldSet"/>
         <Flags index="AllowMovement" value="1"/>
         <Flags index="Transient" value="1"/>
         <Cost>
@@ -1951,7 +1978,7 @@
             <Cooldown TimeUse="20"/>
         </Cost>
         <AINotifyEffect value=""/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="SquadCaptainToshPsiShield" State="Restricted"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadToshPsiShield" State="Restricted"/>
     </CAbilEffectInstant>
     <CAbilEffectInstant id="SwitchScannerBlack">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -1986,6 +2013,46 @@
         <AutoCastRange value="10"/>
         <CancelableArray index="Channel" value="1"/>
     </CAbilEffectTarget>
+    <CAbilEffectInstant id="SquadWhirlwind">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadWhirlwindSet"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="TransientPreferred" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="10"/>
+        </Cost>
+        <AutoCastRange value="1.5"/>
+        <AutoCastValidatorArray value="VoidZealotWhirlwindCheck"/>
+        <CastOutroTime value="1.2"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadWhirlwind"/>
+    </CAbilEffectInstant>
+    <CAbilAugment id="SquadFenixThunderousCharge">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="FenixSOACharge"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <AbilCmd value="attack,Execute"/>
+        <Cost>
+            <Cooldown Link="ThunderousChargeThunderousCharge2ThunderousChargeSquadFenixThunderousCharge" Location="Unit" TimeUse="5"/>
+        </Cost>
+        <Effect value="FenixSOACharge"/>
+        <AutoCastFilters value="Ground,Visible;Player,Ally,Missile,Hidden,Invulnerable"/>
+        <AutoCastValidatorArray value="CasterNotHoldingPosition"/>
+    </CAbilAugment>
+    <CAbilEffectInstant id="SquadFenixVoidShieldCapacitor">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Protoss"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="45"/>
+        </Cost>
+        <AutoCastRange value="1"/>
+        <AutoCastValidatorArray value="CasterShieldsLT1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="VoidShieldCapacitor"/>
+    </CAbilEffectInstant>
     <CAbilEffectTarget id="YellowScannerSweep">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Flags index="RequireTargetVision" value="0"/>
