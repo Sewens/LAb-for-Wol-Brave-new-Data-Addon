@@ -7,6 +7,7 @@
 //==================================================================================================
 include "TriggerLibs/NativeLib"
 include "TriggerLibs/LibertyLib"
+include "LibEA0820A1"
 include "LibCamp"
 include "LibWoLC"
 include "LibWCMI"
@@ -18,6 +19,7 @@ include "LibWCUI"
 void InitLibs () {
     libNtve_InitLib();
     libLbty_InitLib();
+    libEA0820A1_InitLib();
     libCamp_InitLib();
     libWoLC_InitLib();
     libWCMI_InitLib();
@@ -213,8 +215,6 @@ void InitGlobals () {
 void gf__3ForcePopEgg (unit lp_poppedEgg);
 void gf__3AIQueenPopEggs (region lp_region, int lp_int);
 void gf__3EggSpawnedMobs (unit lp_poppedEgg);
-void gf_UpdateCommandCard ();
-void gf_ReplaceButton (string lp_target, string lp_source);
 void gf_ActivateAI (unit lp_activatedunit);
 void gf_SpawnNydusWorm (region lp_region, int lp_packs, int lp_countPerPacks, string lp_type, fixed lp_delay);
 void gf_CreateUnburrowingUnits (int lp_qty, string lp_type, point lp_loc);
@@ -226,6 +226,7 @@ void gf_CinematicDeployNukeWrapper (unit lp_unit);
 //--------------------------------------------------------------------------------------------------
 // Trigger Variables
 //--------------------------------------------------------------------------------------------------
+trigger gt_OnPlayer1GetUnit;
 trigger gt_Initialization;
 trigger gt_Init01Technology;
 trigger gt_Init02Players;
@@ -377,7 +378,6 @@ trigger gt__4UltraliskUnburrow;
 trigger gt__4Ambush2;
 trigger gt__4Extraction;
 trigger gt__4UnitExtractionController;
-trigger gt_SelectionChanged;
 trigger gt_AIThink;
 trigger gt_InfestorCooldown;
 trigger gt_NydusSpawningTrigger;
@@ -552,57 +552,6 @@ void gf__3EggSpawnedMobs (unit lp_poppedEgg) {
     }
 }
 
-void gf_UpdateCommandCard () {
-    // Variable Declarations
-    int lv_i;
-
-    // Automatic Variable Declarations
-    // Variable Initialization
-    lv_i = 1;
-
-    // Implementation
-    if ((UnitIsSelected(gv_tHEONERAYNOR, gv_p1_USER) == true) && (TechTreeAbilityIsAllowed(gv_p1_USER, AbilityCommand("RaynorSnipe", 0)) == true)) {
-        CatalogLinkReplace(1, c_gameCatalogAbil, ("TValerian02aHeroCommonAbil" + IntToString(gv_p1_USER)), "RaynorSnipe");
-        gf_ReplaceButton((("TValerian02aHeroCommonAbil" + IntToString(lv_i))), "RaynorSnipe");
-        lv_i += 1;
-    }
-
-    if ((UnitIsSelected(gv_tHEONETYCHUS, gv_p1_USER) == true) && (TechTreeAbilityIsAllowed(gv_p1_USER, AbilityCommand("BonesTossGrenade", 0)) == true)) {
-        CatalogLinkReplace(gv_p1_USER, c_gameCatalogAbil, ("TValerian02aHeroCommonAbil" + IntToString(lv_i)), "BonesTossGrenade");
-        gf_ReplaceButton((("TValerian02aHeroCommonAbil" + IntToString(lv_i))), "TossGrenadeTychus");
-        lv_i += 1;
-    }
-
-    if ((UnitIsSelected(gv_tHEONESWANN, gv_p1_USER) == true) && (TechTreeAbilityIsAllowed(gv_p1_USER, AbilityCommand("DutchPlaceTurret", 0)) == true)) {
-        CatalogLinkReplace(gv_p1_USER, c_gameCatalogAbil, ("TValerian02aHeroCommonAbil" + IntToString(lv_i)), "DutchPlaceTurret");
-        gf_ReplaceButton((("TValerian02aHeroCommonAbil" + IntToString(lv_i))), "DutchPlaceTurret");
-        lv_i += 1;
-    }
-
-    if ((UnitIsSelected(gv_tHEONESTETMAN, gv_p1_USER) == true)) {
-        CatalogLinkReplace(gv_p1_USER, c_gameCatalogAbil, ("TValerian02aHeroCommonAbil" + IntToString(lv_i)), "BonesHeal");
-        gf_ReplaceButton((("TValerian02aHeroCommonAbil" + IntToString(lv_i))), "BonesHeal");
-        lv_i += 1;
-    }
-
-    while ((lv_i <= 4)) {
-        CatalogLinkReplace(gv_p1_USER, c_gameCatalogAbil, ("TValerian02aHeroCommonAbil" + IntToString(lv_i)), ("TValerian02aHeroCommonAbil" + IntToString(lv_i)));
-        gf_ReplaceButton((("TValerian02aHeroCommonAbil" + IntToString(lv_i))), (("TValerian02aHeroCommonAbil" + IntToString(lv_i))));
-        lv_i += 1;
-    }
-}
-
-void gf_ReplaceButton (string lp_target, string lp_source) {
-    // Automatic Variable Declarations
-    // Implementation
-    CatalogFieldValueSet(c_gameCatalogButton, lp_target, "Name", gv_p1_USER, CatalogFieldValueGet(c_gameCatalogButton, lp_source, "Name", gv_p1_USER));
-    CatalogFieldValueSet(c_gameCatalogButton, lp_target, "Icon", gv_p1_USER, CatalogFieldValueGet(c_gameCatalogButton, lp_source, "Icon", gv_p1_USER));
-    CatalogFieldValueSet(c_gameCatalogButton, lp_target, "AlertIcon", gv_p1_USER, CatalogFieldValueGet(c_gameCatalogButton, lp_source, "AlertIcon", gv_p1_USER));
-    CatalogFieldValueSet(c_gameCatalogButton, lp_target, "Tooltip", gv_p1_USER, CatalogFieldValueGet(c_gameCatalogButton, lp_source, "Tooltip", gv_p1_USER));
-    CatalogFieldValueSet(c_gameCatalogButton, lp_target, "AlertTooltip", gv_p1_USER, CatalogFieldValueGet(c_gameCatalogButton, lp_source, "AlertTooltip", gv_p1_USER));
-    CatalogFieldValueSet(c_gameCatalogButton, lp_target, "Hotkey", gv_p1_USER, CatalogFieldValueGet(c_gameCatalogButton, lp_source, "Hotkey", gv_p1_USER));
-}
-
 void gf_ActivateAI (unit lp_activatedunit) {
     // Variable Declarations
     point lv_rallypoint;
@@ -734,6 +683,26 @@ void gf_CinematicDeployNukeWrapper (unit lp_unit) {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: OnPlayer1GetUnit
+//--------------------------------------------------------------------------------------------------
+bool gt_OnPlayer1GetUnit_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerExecute(libEA0820A1_gt_Init00ReplaceUnit, true, true);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_OnPlayer1GetUnit_Init () {
+    gt_OnPlayer1GetUnit = TriggerCreate("gt_OnPlayer1GetUnit_Func");
+    TriggerAddEventUnitChangeOwner(gt_OnPlayer1GetUnit, null);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: Initialization
 //--------------------------------------------------------------------------------------------------
 bool gt_Initialization_Func (bool testConds, bool runActions) {
@@ -750,6 +719,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init04Music, true, true);
     TriggerExecute(gt_Init05Environment, true, true);
     TriggerExecute(gt_Init06Difficulties, true, true);
+    TriggerExecute(libEA0820A1_gt_Init00ReplaceUnit, true, true);
     TriggerExecute(gt_Init07Help, true, true);
     libWoLC_gf_RegisterFootageRecording(gt_BriefingQ);
     TriggerExecute(gt__1IntroSequence, true, false);
@@ -1732,7 +1702,6 @@ bool gt__1TeachSnipeQ_Func (bool testConds, bool runActions) {
         libNtve_gf_ShareVisionofUnit(auto3A0E8422_var, true, gv_p1_USER);
     }
     TechTreeAbilityAllow(gv_p1_USER, AbilityCommand("RaynorSnipe", 0), true);
-    gf_UpdateCommandCard();
     UISetButtonHighlighted(PlayerGroupAll(), AbilityCommand("RaynorSnipe", 0), true);
     TransmissionClear(gv_interruptableTransmission);
     TriggerStop(gt__1OpeningDialogueQ);
@@ -2035,7 +2004,6 @@ bool gt__1TeachNadesQ_Func (bool testConds, bool runActions) {
 
     }
     TechTreeAbilityAllow(gv_p1_USER, AbilityCommand("BonesTossGrenade", 0), true);
-    gf_UpdateCommandCard();
     UISetButtonHighlighted(PlayerGroupAll(), AbilityCommand("BonesTossGrenade", 0), true);
     TriggerQueueEnter();
     libNtve_gf_AttachModelToUnit(gv_tHEONETYCHUS, "TalkIcon", "Origin");
@@ -2367,7 +2335,6 @@ bool gt__1TeachBettyQ_Func (bool testConds, bool runActions) {
     TriggerEnable(gt__1TeachBettyViaCast, true);
     UISetButtonHighlighted(PlayerGroupAll(), AbilityCommand("DutchPlaceTurret", 0), true);
     TechTreeAbilityAllow(gv_p1_USER, AbilityCommand("DutchPlaceTurret", 0), true);
-    gf_UpdateCommandCard();
     TriggerQueueEnter();
     libNtve_gf_AttachModelToUnit(gv_tHEONESWANN, "TalkIcon", "Origin");
     gv__1TalkFXActor = libNtve_gf_ActorLastCreated();
@@ -8263,27 +8230,6 @@ void gt__4UnitExtractionController_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
-// Trigger: Selection Changed
-//--------------------------------------------------------------------------------------------------
-bool gt_SelectionChanged_Func (bool testConds, bool runActions) {
-    // Automatic Variable Declarations
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    gf_UpdateCommandCard();
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void gt_SelectionChanged_Init () {
-    gt_SelectionChanged = TriggerCreate("gt_SelectionChanged_Func");
-    TriggerAddEventUnitSelected(gt_SelectionChanged, null, gv_p1_USER, true);
-    TriggerAddEventUnitSelected(gt_SelectionChanged, null, gv_p1_USER, false);
-}
-
-//--------------------------------------------------------------------------------------------------
 // Trigger: AI Think
 //--------------------------------------------------------------------------------------------------
 bool gt_AIThink_Func (bool testConds, bool runActions) {
@@ -8665,31 +8611,31 @@ bool gt_HeroIncapacitated_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    if ((UnitHasBehavior(gv_tHEONERAYNOR, "Incapacitated") == true) && (UnitGroupHasUnit(gv_incappedHeroes, gv_tHEONERAYNOR) == false)) {
+    if ((UnitHasBehavior(gv_tHEONERAYNOR, "SquadIncapacitated") == true) && (UnitGroupHasUnit(gv_incappedHeroes, gv_tHEONERAYNOR) == false)) {
         UnitGroupAdd(gv_incappedHeroes, gv_tHEONERAYNOR);
         gv_achievementHeroIncapCounter += 1;
         TriggerExecute(gt_IncapacitationTipQ, true, false);
     }
 
-    if ((UnitHasBehavior(gv_tHEONESTETMAN, "Incapacitated") == true) && (UnitGroupHasUnit(gv_incappedHeroes, gv_tHEONESTETMAN) == false)) {
+    if ((UnitHasBehavior(gv_tHEONESTETMAN, "SquadIncapacitated") == true) && (UnitGroupHasUnit(gv_incappedHeroes, gv_tHEONESTETMAN) == false)) {
         UnitGroupAdd(gv_incappedHeroes, gv_tHEONESTETMAN);
         gv_achievementHeroIncapCounter += 1;
         TriggerExecute(gt_IncapacitationTipQ, true, false);
     }
 
-    if ((UnitHasBehavior(gv_tHEONESWANN, "Incapacitated") == true) && (UnitGroupHasUnit(gv_incappedHeroes, gv_tHEONESWANN) == false)) {
+    if ((UnitHasBehavior(gv_tHEONESWANN, "SquadIncapacitated") == true) && (UnitGroupHasUnit(gv_incappedHeroes, gv_tHEONESWANN) == false)) {
         UnitGroupAdd(gv_incappedHeroes, gv_tHEONESWANN);
         gv_achievementHeroIncapCounter += 1;
         TriggerExecute(gt_IncapacitationTipQ, true, false);
     }
 
-    if ((UnitHasBehavior(gv_tHEONETYCHUS, "Incapacitated") == true) && (UnitGroupHasUnit(gv_incappedHeroes, gv_tHEONETYCHUS) == false)) {
+    if ((UnitHasBehavior(gv_tHEONETYCHUS, "SquadIncapacitated") == true) && (UnitGroupHasUnit(gv_incappedHeroes, gv_tHEONETYCHUS) == false)) {
         UnitGroupAdd(gv_incappedHeroes, gv_tHEONETYCHUS);
         gv_achievementHeroIncapCounter += 1;
         TriggerExecute(gt_IncapacitationTipQ, true, false);
     }
 
-    if ((UnitHasBehavior(gv_tHEONERAYNOR, "Incapacitated") == true) && (UnitHasBehavior(gv_tHEONETYCHUS, "Incapacitated") == true) && (UnitHasBehavior(gv_tHEONESWANN, "Incapacitated") == true) && (UnitHasBehavior(gv_tHEONESTETMAN, "Incapacitated") == true)) {
+    if ((UnitHasBehavior(gv_tHEONERAYNOR, "SquadIncapacitated") == true) && (UnitHasBehavior(gv_tHEONETYCHUS, "SquadIncapacitated") == true) && (UnitHasBehavior(gv_tHEONESWANN, "SquadIncapacitated") == true) && (UnitHasBehavior(gv_tHEONESTETMAN, "SquadIncapacitated") == true)) {
         TriggerEnable(TriggerGetCurrent(), false);
         TriggerEnable(gt_RecoverIncappedHeroes, false);
         libNtve_gf_PauseUnit(gv_tHEONERAYNOR, true);
@@ -8729,7 +8675,7 @@ bool gt_RecoverIncappedHeroes_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    if ((UnitHasBehavior(gv_tHEONERAYNOR, "Incapacitated") == true) && (UnitHasBehavior(gv_tHEONERAYNOR, "IncapStandUp") == false)) {
+    if ((UnitHasBehavior(gv_tHEONERAYNOR, "SquadIncapacitated") == true) && (UnitHasBehavior(gv_tHEONERAYNOR, "SquadIncapacitatedStandUp") == false)) {
         if ((UnitGroupCount(UnitGroup(null, gv_p1_USER, RegionCircle(UnitGetPosition(gv_tHEONERAYNOR), gv_incapRescueRadius), UnitFilter(0, 0, (1 << c_targetFilterStructure) | (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32)) | (1 << (c_targetFilterInvulnerable - 32))), 0), c_unitCountAlive) == 0)) {
             libNtve_gf_PauseUnit(gv_tHEONERAYNOR, true);
         }
@@ -8738,11 +8684,11 @@ bool gt_RecoverIncappedHeroes_Func (bool testConds, bool runActions) {
         }
     }
 
-    if ((UnitHasBehavior(gv_tHEONERAYNOR, "Incapacitated") == false) && (UnitHasBehavior(gv_tHEONERAYNOR, "IncapStandUp") == false) && (UnitGroupHasUnit(gv_incappedHeroes, gv_tHEONERAYNOR) == true)) {
+    if ((UnitHasBehavior(gv_tHEONERAYNOR, "SquadIncapacitated") == false) && (UnitHasBehavior(gv_tHEONERAYNOR, "SquadIncapacitatedStandUp") == false) && (UnitGroupHasUnit(gv_incappedHeroes, gv_tHEONERAYNOR) == true)) {
         UnitGroupRemove(gv_incappedHeroes, gv_tHEONERAYNOR);
     }
 
-    if ((UnitHasBehavior(gv_tHEONESTETMAN, "Incapacitated") == true) && (UnitHasBehavior(gv_tHEONESTETMAN, "IncapStandUp") == false)) {
+    if ((UnitHasBehavior(gv_tHEONESTETMAN, "SquadIncapacitated") == true) && (UnitHasBehavior(gv_tHEONESTETMAN, "SquadIncapacitatedStandUp") == false)) {
         if ((UnitGroupCount(UnitGroup(null, gv_p1_USER, RegionCircle(UnitGetPosition(gv_tHEONESTETMAN), gv_incapRescueRadius), UnitFilter(0, 0, (1 << c_targetFilterStructure) | (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32)) | (1 << (c_targetFilterInvulnerable - 32))), 0), c_unitCountAlive) == 0)) {
             libNtve_gf_PauseUnit(gv_tHEONESTETMAN, true);
         }
@@ -8751,11 +8697,11 @@ bool gt_RecoverIncappedHeroes_Func (bool testConds, bool runActions) {
         }
     }
 
-    if ((UnitHasBehavior(gv_tHEONESTETMAN, "Incapacitated") == false) && (UnitHasBehavior(gv_tHEONESTETMAN, "IncapStandUp") == false) && (UnitGroupHasUnit(gv_incappedHeroes, gv_tHEONESTETMAN) == true)) {
+    if ((UnitHasBehavior(gv_tHEONESTETMAN, "SquadIncapacitated") == false) && (UnitHasBehavior(gv_tHEONESTETMAN, "SquadIncapacitatedStandUp") == false) && (UnitGroupHasUnit(gv_incappedHeroes, gv_tHEONESTETMAN) == true)) {
         UnitGroupRemove(gv_incappedHeroes, gv_tHEONESTETMAN);
     }
 
-    if ((UnitHasBehavior(gv_tHEONESWANN, "Incapacitated") == true) && (UnitHasBehavior(gv_tHEONESWANN, "IncapStandUp") == false)) {
+    if ((UnitHasBehavior(gv_tHEONESWANN, "SquadIncapacitated") == true) && (UnitHasBehavior(gv_tHEONESWANN, "SquadIncapacitatedStandUp") == false)) {
         if ((UnitGroupCount(UnitGroup(null, gv_p1_USER, RegionCircle(UnitGetPosition(gv_tHEONESWANN), gv_incapRescueRadius), UnitFilter(0, 0, (1 << c_targetFilterStructure) | (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32)) | (1 << (c_targetFilterInvulnerable - 32))), 0), c_unitCountAlive) == 0)) {
             libNtve_gf_PauseUnit(gv_tHEONESWANN, true);
         }
@@ -8764,11 +8710,11 @@ bool gt_RecoverIncappedHeroes_Func (bool testConds, bool runActions) {
         }
     }
 
-    if ((UnitHasBehavior(gv_tHEONESWANN, "Incapacitated") == false) && (UnitHasBehavior(gv_tHEONESWANN, "IncapStandUp") == false) && (UnitGroupHasUnit(gv_incappedHeroes, gv_tHEONESWANN) == true)) {
+    if ((UnitHasBehavior(gv_tHEONESWANN, "SquadIncapacitated") == false) && (UnitHasBehavior(gv_tHEONESWANN, "SquadIncapacitatedStandUp") == false) && (UnitGroupHasUnit(gv_incappedHeroes, gv_tHEONESWANN) == true)) {
         UnitGroupRemove(gv_incappedHeroes, gv_tHEONESWANN);
     }
 
-    if ((UnitHasBehavior(gv_tHEONETYCHUS, "Incapacitated") == true) && (UnitHasBehavior(gv_tHEONETYCHUS, "IncapStandUp") == false)) {
+    if ((UnitHasBehavior(gv_tHEONETYCHUS, "SquadIncapacitated") == true) && (UnitHasBehavior(gv_tHEONETYCHUS, "SquadIncapacitatedStandUp") == false)) {
         if ((UnitGroupCount(UnitGroup(null, gv_p1_USER, RegionCircle(UnitGetPosition(gv_tHEONETYCHUS), gv_incapRescueRadius), UnitFilter(0, 0, (1 << c_targetFilterStructure) | (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32)) | (1 << (c_targetFilterInvulnerable - 32))), 0), c_unitCountAlive) == 0)) {
             libNtve_gf_PauseUnit(gv_tHEONETYCHUS, true);
         }
@@ -8777,7 +8723,7 @@ bool gt_RecoverIncappedHeroes_Func (bool testConds, bool runActions) {
         }
     }
 
-    if ((UnitHasBehavior(gv_tHEONETYCHUS, "Incapacitated") == false) && (UnitHasBehavior(gv_tHEONETYCHUS, "IncapStandUp") == false) && (UnitGroupHasUnit(gv_incappedHeroes, gv_tHEONETYCHUS) == true)) {
+    if ((UnitHasBehavior(gv_tHEONETYCHUS, "SquadIncapacitated") == false) && (UnitHasBehavior(gv_tHEONETYCHUS, "SquadIncapacitatedStandUp") == false) && (UnitGroupHasUnit(gv_incappedHeroes, gv_tHEONETYCHUS) == true)) {
         UnitGroupRemove(gv_incappedHeroes, gv_tHEONETYCHUS);
     }
 
@@ -12688,6 +12634,7 @@ void gt_BriefingScene04_Init () {
 // Trigger Initialization
 //--------------------------------------------------------------------------------------------------
 void InitTriggers () {
+    gt_OnPlayer1GetUnit_Init();
     gt_Initialization_Init();
     gt_Init01Technology_Init();
     gt_Init02Players_Init();
@@ -12839,7 +12786,6 @@ void InitTriggers () {
     gt__4Ambush2_Init();
     gt__4Extraction_Init();
     gt__4UnitExtractionController_Init();
-    gt_SelectionChanged_Init();
     gt_AIThink_Init();
     gt_InfestorCooldown_Init();
     gt_NydusSpawningTrigger_Init();
