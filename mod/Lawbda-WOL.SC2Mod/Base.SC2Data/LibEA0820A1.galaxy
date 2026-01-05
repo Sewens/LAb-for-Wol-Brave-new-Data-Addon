@@ -10,6 +10,82 @@ void libEA0820A1_InitLibraries () {
     libNtve_InitVariables();
 }
 
+// Variable Initialization
+bool libEA0820A1_InitVariables_completed = false;
+
+void libEA0820A1_InitVariables () {
+    int init_i;
+    int init_j;
+
+    if (libEA0820A1_InitVariables_completed) {
+        return;
+    }
+
+    libEA0820A1_InitVariables_completed = true;
+
+    for (init_i = 0; init_i <= 4; init_i += 1) {
+        for (init_j = 0; init_j <= 2; init_j += 1) {
+            libEA0820A1_gv_cU_GPCmdButtonArrows[init_i][init_j] = c_invalidDialogControlId;
+        }
+    }
+    for (init_i = 0; init_i <= 2; init_i += 1) {
+        libEA0820A1_gv_cU_GPCutscene[init_i] = c_invalidDialogControlId;
+    }
+    for (init_i = 0; init_i <= 4; init_i += 1) {
+        for (init_j = 0; init_j <= 2; init_j += 1) {
+            libEA0820A1_gv_cU_GPCmdButtons[init_i][init_j] = c_invalidDialogControlId;
+        }
+    }
+    for (init_i = 0; init_i <= 2; init_i += 1) {
+        libEA0820A1_gv_cU_GPPanelHolder[init_i] = c_invalidDialogControlId;
+    }
+    for (init_i = 0; init_i <= 2; init_i += 1) {
+        libEA0820A1_gv_cU_GPPanel[init_i] = c_invalidDialogControlId;
+    }
+    for (init_i = 0; init_i <= 2; init_i += 1) {
+        libEA0820A1_gv_cU_GPCmdPanel[init_i] = c_invalidDialogControlId;
+    }
+    for (init_i = 0; init_i <= 2; init_i += 1) {
+        libEA0820A1_gv_cU_GPCutsceneFilter[init_i] = "";
+    }
+}
+
+// Functions
+void libEA0820A1_gf_CU_GPInitRayor (int lp_player) {
+    // Variable Declarations
+    int lv_buttonIndex;
+    int lv_lastFrame;
+
+    // Automatic Variable Declarations
+    const int auto91828230_ae = 2;
+    const int auto91828230_ai = 1;
+
+    // Variable Initialization
+    lv_lastFrame = c_invalidDialogControlId;
+
+    // Implementation
+    DialogControlCreateInPanelFromTemplate(libEA0820A1_gv_cU_GPPanelHolder[0], c_triggerControlTypePanel, "Coop_GlobalCastingTemplates/TerranCasterPanelTemplate");
+    libEA0820A1_gv_cU_GPPanel[lp_player] = DialogControlLastCreated();
+    DialogControlHookup(libEA0820A1_gv_cU_GPPanel[lp_player], c_triggerControlTypeCutscene, "TerranCommandCutscene");
+    libEA0820A1_gv_cU_GPCutscene[lp_player] = DialogControlLastCreated();
+    DialogControlHookup(libEA0820A1_gv_cU_GPPanel[lp_player], c_triggerControlTypePanel, "ButtonHolder");
+    lv_lastFrame = DialogControlLastCreated();
+    DialogControlCreateInPanelFromTemplate(lv_lastFrame, c_triggerControlTypeCommandPanel, "Coop_GlobalCastingTemplates/RaynorGlobalCommandPanelTemplate");
+    libEA0820A1_gv_cU_GPCmdPanel[lp_player] = DialogControlLastCreated();
+    lv_buttonIndex = 1;
+    for ( ; ( (auto91828230_ai >= 0 && lv_buttonIndex <= auto91828230_ae) || (auto91828230_ai < 0 && lv_buttonIndex >= auto91828230_ae) ) ; lv_buttonIndex += auto91828230_ai ) {
+        DialogControlHookup(libEA0820A1_gv_cU_GPCmdPanel[lp_player], c_triggerControlTypeButton, libNtve_gf_ConvertStringToUILayoutFrameName(("CommandButton0" + IntToString((lv_buttonIndex - 1)))));
+        libEA0820A1_gv_cU_GPCmdButtons[lv_buttonIndex][lp_player] = DialogControlLastCreated();
+        DialogControlHookup(libEA0820A1_gv_cU_GPPanel[lp_player], c_triggerControlTypePanel, libNtve_gf_ConvertStringToUILayoutFrameName(("AbilityArrow0" + IntToString((lv_buttonIndex - 1)))));
+        libEA0820A1_gv_cU_GPCmdButtonArrows[lv_buttonIndex][lp_player] = DialogControlLastCreated();
+        DialogControlSetPositionRelative(libEA0820A1_gv_cU_GPCmdButtonArrows[lv_buttonIndex][lp_player], PlayerGroupSingle(lp_player), c_anchorTop, libEA0820A1_gv_cU_GPCmdButtons[lv_buttonIndex][lp_player], c_anchorBottom, 0, 15);
+    }
+    DialogControlSetVisible(libEA0820A1_gv_cU_GPPanel[lp_player], PlayerGroupAll(), true);
+    libNtve_gf_SetDialogItemCutscene(libEA0820A1_gv_cU_GPCutscene[lp_player], "ui_terrancastingpanel.sc2cutscene", PlayerGroupAll());
+    CutscenePlay(CutsceneGetTriggerControl(libEA0820A1_gv_cU_GPCutscene[lp_player]));
+    libEA0820A1_gv_cU_GPCutsceneFilter[lp_player] = "TwoButtons";
+}
+
 // Triggers
 //--------------------------------------------------------------------------------------------------
 // Trigger: Init 00 ReplaceUnit
@@ -239,6 +315,7 @@ void libEA0820A1_InitLib () {
     libEA0820A1_InitLib_completed = true;
 
     libEA0820A1_InitLibraries();
+    libEA0820A1_InitVariables();
     libEA0820A1_InitTriggers();
 }
 
