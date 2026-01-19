@@ -7,7 +7,11 @@
 //==================================================================================================
 include "TriggerLibs/NativeLib"
 include "TriggerLibs/LibertyLib"
-include "TriggerLibs/CampaignLib"
+include "LibEA0820A1"
+include "LibCamp"
+include "LibWoLC"
+include "LibWCMI"
+include "LibWCUI"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -15,7 +19,11 @@ include "TriggerLibs/CampaignLib"
 void InitLibs () {
     libNtve_InitLib();
     libLbty_InitLib();
+    libEA0820A1_InitLib();
     libCamp_InitLib();
+    libWoLC_InitLib();
+    libWCMI_InitLib();
+    libWCUI_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -202,6 +210,7 @@ void gf_CreateCompleteTrain (int lp_pathIndex, int lp_numberOfCars);
 //--------------------------------------------------------------------------------------------------
 // Trigger Variables
 //--------------------------------------------------------------------------------------------------
+trigger gt_OnPlayer1GetUnit;
 trigger gt_Initialization;
 trigger gt_Init01Technology;
 trigger gt_Init02Players;
@@ -468,12 +477,12 @@ bool auto_gf_RescueDiamondback_TriggerFunc (bool testConds, bool runActions) {
     gv_diamondbacksUsed += 1;
     TriggerExecute(gt_ObjectiveLocateDiscover, true, true);
     if ((gv_diamondbacksFound <= gv_totalDiamondbacks)) {
-        ObjectiveSetName(gv_objective_Locate, (StringExternal("Param/Value/9669A7DF") + IntToText(gv_diamondbacksFound) + StringExternal("Param/Value/EE97202B") + IntToText(gv_totalDiamondbacks) + StringExternal("Param/Value/24F80960")));
+        libWCMI_gf_SetMissionObjectiveProgress("THorner01_2", gv_diamondbacksFound);
     }
 
     if ((gv_diamondbacksFound == gv_totalDiamondbacks)) {
         TriggerExecute(gt_ObjectiveLocateComplete, true, false);
-        Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+        Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
         TriggerExecute(gt_DiamondbacksRescuedQ, true, false);
     }
 
@@ -602,6 +611,26 @@ void gf_CreateCompleteTrain (int lp_pathIndex, int lp_numberOfCars) {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: OnPlayer1GetUnit
+//--------------------------------------------------------------------------------------------------
+bool gt_OnPlayer1GetUnit_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerExecute(libEA0820A1_gt_Init00ReplaceUnit, true, true);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_OnPlayer1GetUnit_Init () {
+    gt_OnPlayer1GetUnit = TriggerCreate("gt_OnPlayer1GetUnit_Func");
+    TriggerAddEventUnitChangeOwner(gt_OnPlayer1GetUnit, null);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: Initialization
 //--------------------------------------------------------------------------------------------------
 bool gt_Initialization_Func (bool testConds, bool runActions) {
@@ -611,7 +640,8 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_LoadCampaignData(libCamp_ge_MapID_MapTHorner01);
+    libWoLC_gf_ULoadCampaignData("THorner01");
+    TriggerExecute(libEA0820A1_gt_Init00ReplaceUnit, true, true);
     TriggerExecute(gt_Init01Technology, true, true);
     TriggerExecute(gt_Init02Players, true, true);
     TriggerExecute(gt_Init03Units, true, true);
@@ -619,8 +649,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init05Environment, true, true);
     TriggerExecute(gt_Init06Difficulty, true, true);
     TriggerExecute(gt_Init07Help, true, true);
-    libCamp_gf_RegisterFootageRecording(gt_BriefingQ);
-    libCamp_gf_PurchaseStorymodeTech();
+    libWoLC_gf_RegisterFootageRecording(gt_BriefingQ);
     TriggerExecute(gt_IntroSequence, true, false);
     return true;
 }
@@ -641,8 +670,7 @@ bool gt_Init01Technology_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_SetTechRestrictionsCallback(TriggerGetCurrent());
-    libCamp_gf_EnableCampaignTechUnit(true, libCamp_ge_StoryTechGroup_StoryTechGroupVehiclesDiamondback, gv_pLAYER_01_USER);
+    libWoLC_gf_EnableCampaignTechUnit(true, "Diamondback", gv_pLAYER_01_USER);
     return true;
 }
 
@@ -702,6 +730,7 @@ bool gt_Init02Players_Func (bool testConds, bool runActions) {
     PlayerModifyPropertyInt(gv_pLAYER_04_DOMINION, c_playerPropMinerals, c_playerPropOperSetTo, 5000);
     PlayerModifyPropertyInt(gv_pLAYER_04_DOMINION, c_playerPropVespene, c_playerPropOperSetTo, 5000);
     PlayerSetState(gv_pLAYER_05_ABANDONEDVEHICLES, c_playerStateDisplayInLeaderPanel, false);
+    libWCMI_gf_WM_DetectionUpgradesApply();
     return true;
 }
 
@@ -737,6 +766,7 @@ bool gt_Init03Units_Func (bool testConds, bool runActions) {
     }
 
     libNtve_gf_PreloadUnit("TarsonisEngineFast", false);
+    libWCMI_gf_HandleMercCompound(UnitFromId(2132));
     gv_defilerSkeletonsNeeded = UnitGroupCount(UnitGroup("DefilerBoneSample", gv_pLAYER_07_DEFILERBONESAMPLE, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive);
     TriggerExecute(gt_TrainPathInitialization, true, false);
     TriggerExecute(gt_TrainInitialization, true, false);
@@ -857,13 +887,6 @@ bool gt_Init06Difficulty_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    if ((PlayerDifficulty(gv_pLAYER_01_USER) == 1)) {
-        PlayerModifyPropertyInt(gv_pLAYER_02_DOMINION, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_pLAYER_03_DOMINION, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_pLAYER_04_DOMINION, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_pLAYER_06_TRAIN, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-    }
-
     auto41632373_var = 0;
     for ( ; auto41632373_var <= auto41632373_ae; auto41632373_var += 1 ) {
         gv_trainMinerals[1][auto41632373_var] = 3;
@@ -881,7 +904,7 @@ bool gt_Init06Difficulty_Func (bool testConds, bool runActions) {
         gv_trainMinerals[auto878A5EEC_var][7] = 7;
     }
     gv_trainGas = 3;
-    gv_trainsNeeded = libNtve_gf_DifficultyValueInt(8, 8, 8, 8);
+    gv_trainsNeeded = CatalogFieldValueGetAsInt(c_gameCatalogObjective, "THorner01_1", "RequiredCount", gv_pLAYER_01_USER);
     gv_trainWaveWait = libNtve_gf_DifficultyValueFixed(180.0, 180.0, 180.0, 150.0);
     gv_stackKillerNumRespawn = 1;
     gv_stackKillerSize = libNtve_gf_DifficultyValueInt(8, 12, 16, 14);
@@ -974,6 +997,8 @@ bool gt_IntroSequence_Func (bool testConds, bool runActions) {
     VisRevealArea(gv_pLAYER_01_USER, RegionFromId(78), 0.1, false);
     Wait(0.1, c_timeGame);
     UnitSelect(UnitFromId(311), gv_pLAYER_01_USER, true);
+    libWCMI_gf_SetWorkerRallyPointforNexus2(UnitFromId(311));
+    libWCMI_gf_StartingWorkersAutoHarvest(RegionFromId(4), RegionFromId(5));
     UIAlertUnit("Trigger", gv_pLAYER_01_USER, StringExternal("Param/Value/8B16EC05"), null, UnitFromId(311));
     libNtve_gf_CinematicMode(false, PlayerGroupAll(), 1.5);
     libNtve_gf_GlobalCinematicSetting(false);
@@ -1932,7 +1957,7 @@ bool gt_SpawnTrains_Func (bool testConds, bool runActions) {
                 if (((lv_trainCarType == "TarsonisEngine") || (lv_trainCarType == "TarsonisEngineFast"))) {
                     gf_ActivatePingforTrainCar(UnitLastCreated());
                     gv_trainBossBarIndex = lv_trainsToSpawn[lv_i];
-                    libNtve_gf_SetBossBarBoss(1, gv_trainList[gv_trainBossBarIndex].lv_trainCars[1], true);
+                    libWCUI_gf_SetSingularBossBarBossVoidCampaign(gv_trainList[gv_trainBossBarIndex].lv_trainCars[1], true);
                     gv_trainToBeEscorted = lv_trainsToSpawn[lv_i];
                     TriggerExecute(gt_SpawnEscorts, true, false);
                 }
@@ -2173,9 +2198,9 @@ bool gt_TrainTimerWindow_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    TimerWindowCreate(gv_nextTrainTimer, StringExternal("Param/Value/BC9464C5"), true, false);
+    libWCUI_gf_TimerWindowCreate(gv_nextTrainTimer, StringExternal("Param/Value/DBB7CEBB"), true, false);
     TimerWindowSetFormat(TimerWindowLastCreated(), StringToText("<mintotal/>:<sec2/>"));
-    TimerWindowSetColor(TimerWindowLastCreated(), c_timerWindowColorTime, Color(0.00, 100.00, 0.00), 0.0);
+    libWCUI_gf_SetTimerWindowDangerThreshold(0.0);
     gv_nextTrainWindow = TimerWindowLastCreated();
     while (true) {
         Wait(1.0, c_timeGame);
@@ -2203,21 +2228,20 @@ bool gt_TrainBossBar_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libNtve_gf_DisplayBossBar(1, "Assets\\Textures\\btn-unit-terran-dominiontrain.dds", StringExternal("Param/Value/4BBDDE07"), 100, PlayerGroupAll());
-    libNtve_gf_SetBossBarRace(1, libNtve_ge_BossBarRace_Terran, true);
-    libNtve_gf_ShowHideBossBar(false, 1);
+    libWCUI_gf_DisplaySingularBossBarVoidCampaign("Assets\\Textures\\btn-unit-terran-dominiontrain.dds", StringExternal("Param/Value/BDFE1425"), 100);
+    libWCUI_gf_ShowHideSingularBossBarVoidCampaign(false);
     while (true) {
         Wait(1.0, c_timeGame);
         if ((gv_gameOver == true)) {
-            libNtve_gf_ShowHideBossBar(false, 1);
+            libWCUI_gf_ShowHideSingularBossBarVoidCampaign(false);
             return true;
         }
 
         if ((UnitIsAlive(gv_trainList[gv_trainBossBarIndex].lv_trainCars[1]) == true) && (gv_inCinematic == false)) {
-            libNtve_gf_ShowHideBossBar(true, 1);
+            TimerWindowShow(gv_nextTrainWindow, PlayerGroupAll(), false);
         }
         else {
-            libNtve_gf_ShowHideBossBar(false, 1);
+            TimerWindowShow(gv_nextTrainWindow, PlayerGroupAll(), true);
         }
     }
     return true;
@@ -2316,7 +2340,7 @@ bool gt_TrainDeathQ_Func (bool testConds, bool runActions) {
     }
     gv_trainList[lv_trainIndex].lv_trainAlive = false;
     gv_trainsDestroyed += 1;
-    ObjectiveSetName(gv_objective_TheGreatTrainRobbery, (StringExternal("Param/Value/C68C5019") + IntToText(gv_trainsDestroyed) + StringExternal("Param/Value/C9C430E9") + IntToText(gv_trainsNeeded) + StringExternal("Param/Value/B2141726")));
+    libWCMI_gf_SetMissionObjectiveProgress("THorner01_1", gv_trainsDestroyed);
     TriggerExecute(gt_KillFirstTrainQ, true, false);
     if ((gv_trainsDestroyed == gv_trainsNeeded)) {
         TriggerExecute(gt_VictoryAllTrainsDead, true, false);
@@ -2391,26 +2415,9 @@ bool gt_TrainDespawn_Func (bool testConds, bool runActions) {
         }
 
     }
-    if ((UnitGetType(EventUnit()) == "Caboose") && (gv_inCinematic == false) && (libNtve_gf_DifficultyValueInt(1, 1, 1, 0) == 1)) {
+    if ((UnitGetType(EventUnit()) == "Caboose") && (gv_inCinematic == false)) {
         gv_trainsMissed += 1;
-        ObjectiveSetName(gv_objective_DontMissTrains, (StringExternal("Param/Value/A499F4E7") + IntToText(gv_trainsMissed) + StringExternal("Param/Value/AE512F3B")));
-        if ((gv_trainsMissed == 1)) {
-            TriggerExecute(gt_Train1MissedQ, true, false);
-        }
-
-        if ((gv_trainsMissed == 2)) {
-            TriggerExecute(gt_Train2MissedQ, true, false);
-        }
-
-        if ((gv_trainsMissed == 3)) {
-            TriggerExecute(gt_DefeatTooManyTrainsMissed, true, false);
-        }
-
-    }
-
-    if ((UnitGetType(EventUnit()) == "Caboose") && (gv_inCinematic == false) && (libNtve_gf_DifficultyValueInt(0, 0, 0, 1) == 1)) {
-        gv_trainsMissed += 1;
-        ObjectiveSetName(gv_objective_DontMissTrains, (StringExternal("Param/Value/896026F8") + IntToText(gv_trainsMissed) + StringExternal("Param/Value/0A165E94")));
+        libWCMI_gf_SetMissionObjectiveProgress("THorner01_3", gv_trainsMissed);
         if ((gv_trainsMissed == 1)) {
             TriggerExecute(gt_Train1MissedQ, true, false);
         }
@@ -2436,10 +2443,10 @@ bool gt_TrainDespawn_Func (bool testConds, bool runActions) {
 
         if ((lv_trainIndex == gv_trainBossBarIndex)) {
             if ((UnitIsAlive(gv_trainList[gv_trainBossBarIndex].lv_trainCars[1]) == true)) {
-                libNtve_gf_SetBossBarBoss(1, gv_trainList[gv_trainBossBarIndex].lv_trainCars[1], true);
+                libWCUI_gf_SetSingularBossBarBossVoidCampaign(gv_trainList[gv_trainBossBarIndex].lv_trainCars[1], true);
             }
             else {
-                libNtve_gf_ShowHideBossBar(false, 1);
+                libWCUI_gf_ShowHideSingularBossBarVoidCampaign(false);
             }
         }
 
@@ -4138,10 +4145,7 @@ bool gt_CampaignTipsQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
     libCamp_gf_CreateStorymodeTips();
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -4168,15 +4172,7 @@ bool gt_DefilerSkeletonsTipQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueEnter();
-    if ((gv_gameOver == true)) {
-        return true;
-    }
-
     libCamp_gf_CreateTipFromConversationState("StoryTips|Horner01_DefilerBones", libNtve_ge_TipType_NormalTip, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -4203,15 +4199,7 @@ bool gt_FireontheMoveTipQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueEnter();
-    if ((gv_gameOver == true)) {
-        return true;
-    }
-
     libCamp_gf_CreateTipFromConversationState("StoryTips|Horner01_FireOnMove", libNtve_ge_TipType_NormalTip, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -4233,16 +4221,8 @@ bool gt_DiamondbackTipQ_Func (bool testConds, bool runActions) {
     while (true) {
         Wait(1.0, c_timeGame);
         if ((UnitGroupCount(UnitGroup("Diamondback", gv_pLAYER_01_USER, RegionEntireMap(), UnitFilter(0, 0, 0, (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) > 0)) {
-            Wait(2.0, c_timeReal);
-            TriggerQueueEnter();
-            if ((gv_gameOver == true)) {
-                return true;
-            }
-
             libCamp_gf_CreateTipFromConversationState("StoryTips|Horner01_Diamonback", libNtve_ge_TipType_NewUnit, PlayerGroupAll());
-            Wait(libCamp_gv_campaignHintDelay, c_timeReal);
             return true;
-            TriggerQueueExit();
         }
 
     }
@@ -4580,7 +4560,7 @@ bool gt_PatrolWavesTop_Func (bool testConds, bool runActions) {
         }
         if ((libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1) && (gv_achievementMaraudersKilled == 0)) {
             gv_achievementMaraudersKilled = 1;
-            AchievementAward(gv_pLAYER_01_USER, "THorner01_2");
+            libWoLC_gf_CampaignAwardAchievement("THorner01_2");
         }
 
         gv_patrolWaveSpawnedTop = false;
@@ -4665,7 +4645,7 @@ bool gt_PatrolWavesBottom_Func (bool testConds, bool runActions) {
         }
         if ((libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1) && (gv_achievementMaraudersKilled == 0)) {
             gv_achievementMaraudersKilled = 1;
-            AchievementAward(gv_pLAYER_01_USER, "THorner01_2");
+            libWoLC_gf_CampaignAwardAchievement("THorner01_2");
         }
 
         gv_patrolWaveSpawnedBottom = false;
@@ -4735,7 +4715,7 @@ bool gt_PatrolWavesSingle_Func (bool testConds, bool runActions) {
         }
         if ((libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1) && (gv_achievementMaraudersKilled == 0)) {
             gv_achievementMaraudersKilled = 1;
-            AchievementAward(gv_pLAYER_01_USER, "THorner01_2");
+            libWoLC_gf_CampaignAwardAchievement("THorner01_2");
         }
 
         gv_patrolWaveSpawnedSingle = false;
@@ -5020,7 +5000,7 @@ bool gt_VictoryAllTrainsDead_Func (bool testConds, bool runActions) {
     Wait(2.0, c_timeReal);
     TriggerQueueClear(c_triggerQueueRetain);
     TriggerExecute(gt_ObjectiveTheGreatTrainRobberyComplete, true, true);
-    libCamp_gf_RunMissionVictorySequence(gt_VictoryQ);
+    libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
     return true;
 }
 
@@ -5040,15 +5020,15 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     }
 
     if ((ObjectiveGetState(gv_objective_TheGreatTrainRobbery) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_objective_Locate) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_objective_DefilerSkeletons) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_objective_DontMissTrains) == c_objectiveStateCompleted)) {
-        AchievementAward(gv_pLAYER_01_USER, "THorner01_1");
+        libWoLC_gf_CampaignAwardAchievement("THorner01_1");
     }
 
     if ((libNtve_gf_DifficultyValueInt(0, 0, 1, 1) == 1) && (gv_trainsMissed == 0)) {
-        AchievementAward(gv_pLAYER_01_USER, "THorner01_3");
+        libWoLC_gf_CampaignAwardAchievement("THorner01_3");
     }
 
     if ((libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1) && (gv_sCVTrained == false)) {
-        AchievementAward(gv_pLAYER_01_USER, "Anniversary_THorner01");
+        libWoLC_gf_CampaignAwardAchievement("Anniversary_THorner01");
         TriggerDebugOutput(1, StringExternal("Param/Value/5EC8C131"), false);
     }
 
@@ -5063,8 +5043,7 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/749C150F"), (IntToText(gv_diamondbacksFound) + StringExternal("Param/Value/DFF54E59") + IntToText(gv_totalDiamondbacks)));
     VictoryPanelAddCustomStatisticLine(StringToText(""), StringToText(""));
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/54B8AE56"), (IntToText(gv_defilerSkeletonsFound) + StringExternal("Param/Value/6B17C547") + IntToText(gv_defilerSkeletonsNeeded)));
-    VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/D38D6E18"), IntToText(gv_defilerSkeletonsFound));
-    libCamp_gf_EndCampaignMission(gv_pLAYER_01_USER, c_gameOverVictory);
+    libWCMI_gf_EndCampaignMission(gv_pLAYER_01_USER, c_gameOverVictory);
     return true;
 }
 
@@ -5103,7 +5082,7 @@ bool gt_DefeatBaseDead_Func (bool testConds, bool runActions) {
     TriggerQueueClear(c_triggerQueueRemove);
     Wait(2.0, c_timeReal);
     libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/478ADE12"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_Defeat, true, false);
     return true;
 }
@@ -5137,7 +5116,7 @@ bool gt_DefeatTooManyTrainsMissed_Func (bool testConds, bool runActions) {
     Wait(2.0, c_timeReal);
     TriggerExecute(gt_ObjectiveDontMissTrainsFailed, true, false);
     libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/91D58B95"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_Defeat, true, false);
     return true;
 }
@@ -5157,7 +5136,7 @@ bool gt_Defeat_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_EndCampaignMission(gv_pLAYER_01_USER, c_gameOverDefeat);
+    libWCMI_gf_EndCampaignMission(gv_pLAYER_01_USER, c_gameOverDefeat);
     return true;
 }
 
@@ -5184,7 +5163,7 @@ bool gt_VictoryCheat_Func (bool testConds, bool runActions) {
     }
 
     gv_gameOver = true;
-    libCamp_gf_RunMissionVictorySequence(gt_Victory);
+    libWCMI_gf_RunMissionVictorySequence(gt_Victory);
     return true;
 }
 
@@ -5240,13 +5219,10 @@ bool gt_ObjectiveTheGreatTrainRobberyCreateQ_Func (bool testConds, bool runActio
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate((StringExternal("Param/Value/64161632") + IntToText(gv_trainsDestroyed) + StringExternal("Param/Value/34DAEE79") + IntToText(gv_trainsNeeded) + StringExternal("Param/Value/C646D92B")), StringExternal("Param/Value/119F32A8"), c_objectiveStateActive, true);
+    libWCMI_gf_CreateObjectiveCampaign("THorner01_1");
     gv_objective_TheGreatTrainRobbery = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_THorner01Objective1, ObjectiveLastCreated(), StringExternal("Param/Value/0FADFAEB"));
     TriggerExecute(gt_ObjectiveDontMissTrainsCreate, true, false);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -5274,10 +5250,9 @@ bool gt_ObjectiveTheGreatTrainRobberyComplete_Func (bool testConds, bool runActi
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveTheGreatTrainRobberyCreateQ, true, false);
-    ObjectiveSetState(gv_objective_TheGreatTrainRobbery, c_objectiveStateCompleted);
+    libWCMI_gf_ZS_SetMissionObjectiveState("THorner01_1", libWoLC_ge_MissionObjectiveState_Completed);
     TriggerExecute(gt_ObjectiveDontMissTrainsComplete, true, false);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    BoardShowAll(false, PlayerGroupAll());
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -5304,18 +5279,9 @@ bool gt_ObjectiveDontMissTrainsCreate_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    if ((libNtve_gf_DifficultyValueInt(1, 1, 1, 0) == 1)) {
-        ObjectiveCreate((StringExternal("Param/Value/3E57C24F") + IntToText(gv_trainsMissed) + StringExternal("Param/Value/BA2A32B4")), StringExternal("Param/Value/E0AD56FA"), c_objectiveStateActive, true);
-        libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_THorner01Objective3, ObjectiveLastCreated(), StringExternal("Param/Value/256CC246"));
-    }
-    else {
-        ObjectiveCreate((StringExternal("Param/Value/63DC7731") + IntToText(gv_trainsMissed) + StringExternal("Param/Value/A3B95560")), StringExternal("Param/Value/1061A0FF"), c_objectiveStateActive, true);
-        libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_THorner01Objective3, ObjectiveLastCreated(), StringExternal("Param/Value/7A1A9FCF"));
-    }
+    libWCMI_gf_CreateObjectiveCampaign("THorner01_3");
     gv_objective_DontMissTrains = ObjectiveLastCreated();
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeGame);
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeGame);
     return true;
 }
 
@@ -5343,7 +5309,7 @@ bool gt_ObjectiveDontMissTrainsComplete_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveDontMissTrainsCreate, true, false);
-    ObjectiveSetState(gv_objective_DontMissTrains, c_objectiveStateCompleted);
+    libWCMI_gf_ZS_SetMissionObjectiveState("THorner01_3", libWoLC_ge_MissionObjectiveState_Completed);
     return true;
 }
 
@@ -5371,7 +5337,7 @@ bool gt_ObjectiveDontMissTrainsFailed_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveDontMissTrainsCreate, true, false);
-    ObjectiveSetState(gv_objective_DontMissTrains, c_objectiveStateFailed);
+    libWCMI_gf_ZS_SetMissionObjectiveState("THorner01_3", libWoLC_ge_MissionObjectiveState_Failed);
     return true;
 }
 
@@ -5398,12 +5364,9 @@ bool gt_ObjectiveLocateCreateQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate((StringExternal("Param/Value/3A5F61B2") + IntToText(gv_diamondbacksFound) + StringExternal("Param/Value/7B6819D5") + IntToText(gv_totalDiamondbacks) + StringExternal("Param/Value/FA2AF1A7")), StringExternal("Param/Value/EF484F1C"), c_objectiveStateActive, false);
+    libWCMI_gf_CreateObjectiveCampaign("THorner01_2");
     gv_objective_Locate = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_THorner01Objective2, ObjectiveLastCreated(), StringExternal("Param/Value/217E769A"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeGame);
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeGame);
     return true;
 }
 
@@ -5431,7 +5394,6 @@ bool gt_ObjectiveLocateDiscover_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveLocateCreateQ, true, false);
-    ObjectiveSetState(gv_objective_Locate, c_objectiveStateActive);
     return true;
 }
 
@@ -5460,6 +5422,7 @@ bool gt_ObjectiveLocateComplete_Func (bool testConds, bool runActions) {
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveLocateCreateQ, true, false);
     ObjectiveSetState(gv_objective_Locate, c_objectiveStateCompleted);
+    libWCMI_gf_ZS_SetMissionObjectiveState("THorner01_2", libWoLC_ge_MissionObjectiveState_Completed);
     return true;
 }
 
@@ -5486,12 +5449,9 @@ bool gt_ObjectiveDefilerSkeletonsCreate_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate((StringExternal("Param/Value/3CEE170B") + IntToText(gv_defilerSkeletonsFound) + StringExternal("Param/Value/D3D4BBC6") + IntToText(gv_defilerSkeletonsNeeded) + StringExternal("Param/Value/39CA4198")), StringExternal("Param/Value/C2BBE6CB"), c_objectiveStateActive, false);
+    libWCMI_gf_CreateObjectiveCampaign("THorner01_4");
     gv_objective_DefilerSkeletons = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_THorner01Objective32, ObjectiveLastCreated(), StringExternal("Param/Value/B9692C6A"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeGame);
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeGame);
     return true;
 }
 
@@ -5519,10 +5479,10 @@ bool gt_ObjectiveDefilerSkeletonsUpdate_Func (bool testConds, bool runActions) {
 
     TriggerExecute(gt_ObjectiveDefilerSkeletonsCreate, true, false);
     gv_defilerSkeletonsFound += 1;
-    ObjectiveSetName(gv_objective_DefilerSkeletons, (StringExternal("Param/Value/8FF82C14") + IntToText(gv_defilerSkeletonsFound) + StringExternal("Param/Value/0B14E42D") + IntToText(gv_defilerSkeletonsNeeded) + StringExternal("Param/Value/54370C34")));
+    libWCMI_gf_SetMissionObjectiveProgress("THorner01_4", gv_defilerSkeletonsFound);
     if ((gv_defilerSkeletonsFound == gv_defilerSkeletonsNeeded)) {
         TriggerEnable(TriggerGetCurrent(), false);
-        ObjectiveSetState(gv_objective_DefilerSkeletons, c_objectiveStateCompleted);
+        libWCMI_gf_ZS_SetMissionObjectiveState("THorner01_4", libWoLC_ge_MissionObjectiveState_Completed);
     }
 
     TriggerExecute(gt_DefilerSkeletonsTipQ, true, false);
@@ -5556,7 +5516,7 @@ bool gt_DefilerSkeletonFinding_Func (bool testConds, bool runActions) {
     }
 
     TriggerExecute(gt_ObjectiveDefilerSkeletonsUpdate, true, false);
-    libCamp_gf_DisplayResearchPointsGiventoPlayer(libCamp_ge_StoryResearchObject_ResearchObjectFindDefilerBoneSamples, EventUnit(), gv_pLAYER_01_USER);
+    libWCMI_gf_DisplayMissionObjectiveRewardFloatingText(UnitGetPosition(EventUnit()), "THorner01_4");
     UnitKill(EventUnit());
     return true;
 }
@@ -6029,6 +5989,7 @@ void gt_VictoryCleanup_Init () {
 // Trigger Initialization
 //--------------------------------------------------------------------------------------------------
 void InitTriggers () {
+    gt_OnPlayer1GetUnit_Init();
     gt_Initialization_Init();
     gt_Init01Technology_Init();
     gt_Init02Players_Init();

@@ -7,7 +7,11 @@
 //==================================================================================================
 include "TriggerLibs/NativeLib"
 include "TriggerLibs/LibertyLib"
-include "TriggerLibs/CampaignLib"
+include "LibEA0820A1"
+include "LibCamp"
+include "LibWoLC"
+include "LibWCMI"
+include "LibWCUI"
 
 //--------------------------------------------------------------------------------------------------
 // Library: Helper Functions
@@ -57,7 +61,11 @@ void lib1_InitLib () {
 void InitLibs () {
     libNtve_InitLib();
     libLbty_InitLib();
+    libEA0820A1_InitLib();
     libCamp_InitLib();
+    libWoLC_InitLib();
+    libWCMI_InitLib();
+    libWCUI_InitLib();
     lib1_InitLib();
 }
 
@@ -268,6 +276,7 @@ trigger gt_TransmissionRebelMarines03RescuedQ;
 trigger gt_Transmission10MinuteWarningQ;
 trigger gt_Transmission5MinuteWarningQ;
 trigger gt_TransmissionLastMinuteQ;
+trigger gt_ShowTipsQ;
 trigger gt_TipStoryModeQ;
 trigger gt_TipBunkerQ;
 trigger gt_TipReactorQ;
@@ -276,6 +285,7 @@ trigger gt_TipMissileTurretQ;
 trigger gt_TipRepairQ;
 trigger gt_AchievementHatcheriesDestroyed;
 trigger gt_VictoryHoldOutCompleted;
+trigger gt_VictoryZergDestroyed;
 trigger gt_Victory;
 trigger gt_DefeatBaseDead;
 trigger gt_Defeat;
@@ -472,7 +482,8 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_LoadCampaignData(libCamp_ge_MapID_MapTRaynor03);
+    libWoLC_gf_ULoadCampaignData("TRaynor03");
+    TriggerExecute(libEA0820A1_gt_Init00ReplaceUnit, true, true);
     TriggerExecute(gt_Init01Technology, true, true);
     TriggerExecute(gt_Init02Players, true, true);
     TriggerExecute(gt_Init03Units, true, true);
@@ -480,8 +491,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init05Environment, true, true);
     TriggerExecute(gt_Init06Difficulties, true, true);
     TriggerExecute(gt_Init07Help, true, true);
-    libCamp_gf_RegisterFootageRecording(gt_BriefingQ);
-    libCamp_gf_PurchaseStorymodeTech();
+    libWoLC_gf_RegisterFootageRecording(gt_BriefingQ);
     TriggerExecute(gt_IntroSequence, true, false);
     return true;
 }
@@ -505,17 +515,13 @@ bool gt_Init01Technology_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_SetTechRestrictionsCallback(TriggerGetCurrent());
-    libCamp_gf_EnableCampaignTechUnit(true, libCamp_ge_StoryTechGroup_StoryTechGroupxxxReactor, gv_pLAYER01_USER);
+    libWoLC_gf_EnableCampaignTechUnit(true, "Bunker", gv_pLAYER01_USER);
     if ((libNtve_gf_DifficultyValueInt(1, 0, 0, 0) == 1)) {
         TechTreeAbilityAllow(gv_pLAYER01_USER, AbilityCommand("TerranBuild", 4), false);
-        TechTreeAbilityAllow(gv_pLAYER01_USER, AbilityCommand("TerranBuild", 5), false);
     }
     else {
-        TechTreeAbilityAllow(gv_pLAYER01_USER, AbilityCommand("TerranBuild", 5), true);
+        libWoLC_gf_EnableCampaignTechUnit(true, "MissileTurret", gv_pLAYER01_USER);
     }
-    TechTreeAbilityAllow(gv_pLAYER01_USER, AbilityCommand("TerranBuild", 6), true);
-    TechTreeAbilityAllow(gv_pLAYER01_USER, AbilityCommand("BarracksReactorMorph", 0), true);
     auto27D6E41E_g = gv_zergPlayers;
     auto27D6E41E_var = -1;
     while (true) {
@@ -596,6 +602,7 @@ bool gt_Init02Players_Func (bool testConds, bool runActions) {
     PlayerSetState(gv_pLAYER07_HYPERION, c_playerStateDisplayInLeaderPanel, false);
     PlayerSetState(gv_pLAYER08_TAUREN, c_playerStateDisplayInLeaderPanel, false);
     PlayerSetState(gv_pLAYER09_COLONISTS, c_playerStateDisplayInLeaderPanel, false);
+    libWCMI_gf_WM_DetectionUpgradesApply();
     return true;
 }
 
@@ -762,13 +769,6 @@ bool gt_Init06Difficulties_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    if ((PlayerDifficulty(gv_pLAYER01_USER) == 1)) {
-        PlayerModifyPropertyInt(gv_pLAYER02_ZERG, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_pLAYER03_ZERG, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_pLAYER04_ZERG, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_pLAYER05_ZERG_NOAI, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-    }
-
     auto85721D3B_g = gv_zergPlayers;
     auto85721D3B_var = -1;
     while (true) {
@@ -839,6 +839,8 @@ bool gt_IntroSequence_Func (bool testConds, bool runActions) {
     CinematicFade(false, 0.0, c_fadeStyleNormal, ColorWithAlpha(0.00, 0.00, 0.00, 0.00), 0.0, false);
     libNtve_gf_CinematicMode(true, PlayerGroupAll(), 0.0);
     libNtve_gf_GlobalCinematicSetting(true);
+    libWCMI_gf_SetWorkerRallyPointforNexus2(UnitFromId(23));
+    libWCMI_gf_StartingWorkersAutoHarvest(RegionFromId(13), null);
     UIAlertPoint("Trigger", gv_pLAYER01_USER, StringExternal("Param/Value/04D269FC"), null, UnitGetPosition(UnitFromId(23)));
     autoEBA866A8_g = UnitGroup(null, gv_pLAYER06_REBELS, RegionPlayableMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     autoEBA866A8_u = UnitGroupCount(autoEBA866A8_g, c_unitCountAll);
@@ -853,7 +855,7 @@ bool gt_IntroSequence_Func (bool testConds, bool runActions) {
     libNtve_gf_GlobalCinematicSetting(false);
     libNtve_gf_SwooshCamera(gv_pLAYER01_USER, ((CameraInfoGetValue(CameraInfoDefault(), c_cameraValueDistance)) + 8.0), CameraInfoGetValue(CameraInfoDefault(), c_cameraValueDistance), CameraInfoGetTarget(CameraInfoFromId(598)), 1.5);
     CinematicFade(true, 1.5, c_fadeStyleNormal, ColorWithAlpha(0.00, 0.00, 0.00, 0.00), 0.0, true);
-    libCamp_gf_ChangeAmbience("Ambience_TRaynor03Rain");
+    SoundtrackPlay(PlayerGroupAll(), c_soundtrackCategoryAmbience, "Ambience_TRaynor03Rain", c_soundtrackCueAny, c_soundtrackIndexAny, false);
     TriggerExecute(gt_StartGame, true, false);
     return true;
 }
@@ -886,17 +888,7 @@ bool gt_StartGame_Func (bool testConds, bool runActions) {
     Wait(3.0, c_timeReal);
     CreepSetSpeed(c_creepSpeedGrowth, 100.0);
     Wait(3.0, c_timeGame);
-    TriggerExecute(gt_TipBunkerQ, true, false);
-    Wait(10.0, c_timeGame);
-    TriggerExecute(gt_TipReactorQ, true, false);
-    if ((libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1)) {
-        Wait(10.0, c_timeGame);
-        TriggerExecute(gt_TipEngineeringBayQ, true, false);
-        Wait(10.0, c_timeGame);
-        TriggerExecute(gt_TipMissileTurretQ, true, false);
-    }
-
-    TriggerExecute(gt_TipStoryModeQ, true, false);
+    TriggerExecute(gt_ShowTipsQ, true, false);
     return true;
 }
 
@@ -1447,7 +1439,7 @@ bool gt_TransitiontoDawn_Func (bool testConds, bool runActions) {
     SoundtrackPlay(PlayerGroupAll(), c_soundtrackCategoryMusic, "TRaynor03MusicMain3", c_soundtrackCueAny, c_soundtrackIndexAny, false);
     Wait(30.0, c_timeGame);
     libNtve_gf_PlayAnimationOnDoodadsInRegion(RegionPlayableMap(), "RainEmitterMedium", c_animNameDefault, "Death", c_animFlagPlayForever, c_animTimeDefault);
-    libCamp_gf_ChangeAmbience("Ambience_MarSara");
+    SoundtrackPlay(PlayerGroupAll(), c_soundtrackCategoryAmbience, "Ambience_MarSara", c_soundtrackCueAny, c_soundtrackIndexAny, false);
     Wait(30.0, c_timeGame);
     libNtve_gf_SendActorMessageToGameRegion(RegionEntireMap(), "Signal LightPowerDown");
     return true;
@@ -1530,7 +1522,7 @@ bool gt_TaurenOuthouseLaunch_Func (bool testConds, bool runActions) {
         TextTagSetVelocity(TextTagLastCreated(), 0.5, 90.0);
         TextTagSetTime(TextTagLastCreated(), c_textTagTimeDuration, 2.0);
         Wait(2.5, c_timeGame);
-        libCamp_gf_SetStoryState(libCamp_ge_StoryStateID_StoryStateTaurenOutHouseActivated, 1);
+        libWoLC_gf_SetStoryStateBoolean("TaurenOutHouseActivated", true);
         SoundPlay(SoundLink("TUISecret", -1), PlayerGroupAll(), 100.0, 0.0);
         TextTagCreate(StringExternal("Param/Value/F6B6EFD6"), 24, UnitGetPosition(UnitFromId(1167)), 1.0, true, false, PlayerGroupAll());
         TextTagSetVelocity(TextTagLastCreated(), 0.5, 90.0);
@@ -2165,7 +2157,7 @@ bool gt_RebelMarines01Rescued_Func (bool testConds, bool runActions) {
             return false;
         }
 
-        if (!((UnitGroupCount(UnitGroup(null, gv_pLAYER01_USER, RegionFromId(72), UnitFilter(0, 0, (1 << c_targetFilterAir) | (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) > 0))) {
+        if (!((UnitGroupCount(UnitGroup(null, gv_pLAYER01_USER, RegionFromId(72), UnitFilter(0, 0, (1 << c_targetFilterAir) | (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 1), c_unitCountAlive) > 0))) {
             return false;
         }
     }
@@ -2182,7 +2174,7 @@ bool gt_RebelMarines01Rescued_Func (bool testConds, bool runActions) {
     PingDestroy(gv_rebelMarinesPing1);
     UnitKill(gv_rebelMarinesBeacon01);
     TriggerExecute(gt_ObjectiveRescueCreateQ, true, false);
-    ObjectiveSetName(gv_objectiveRescue, (StringExternal("Param/Value/28341DB3") + IntToText(gv_rebelFightersRescued) + StringExternal("Param/Value/5A139B4F") + StringExternal("Param/Value/88CFB03A")));
+    libWCMI_gf_SetMissionObjectiveProgress("TRaynor03_2", gv_rebelFightersRescued);
     TriggerExecute(gt_TransmissionRebelMarines01RescuedQ, true, false);
     if ((gv_rebelFightersRescued == 3)) {
         TriggerExecute(gt_ObjectiveRescueComplete, true, false);
@@ -2213,7 +2205,7 @@ bool gt_RebelMarines02Rescued_Func (bool testConds, bool runActions) {
             return false;
         }
 
-        if (!((UnitGroupCount(UnitGroup(null, gv_pLAYER01_USER, RegionFromId(3), UnitFilter(0, 0, (1 << c_targetFilterAir) | (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) > 0))) {
+        if (!((UnitGroupCount(UnitGroup(null, gv_pLAYER01_USER, RegionFromId(3), UnitFilter(0, 0, (1 << c_targetFilterAir) | (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 1), c_unitCountAlive) > 0))) {
             return false;
         }
     }
@@ -2230,7 +2222,7 @@ bool gt_RebelMarines02Rescued_Func (bool testConds, bool runActions) {
     PingDestroy(gv_rebelMarinesPing2);
     UnitKill(gv_rebelMarinesBeacon02);
     TriggerExecute(gt_ObjectiveRescueCreateQ, true, false);
-    ObjectiveSetName(gv_objectiveRescue, (StringExternal("Param/Value/66738ACE") + IntToText(gv_rebelFightersRescued) + StringExternal("Param/Value/DBBC8F23") + StringExternal("Param/Value/85B6A1D8")));
+    libWCMI_gf_SetMissionObjectiveProgress("TRaynor03_2", gv_rebelFightersRescued);
     TriggerExecute(gt_TransmissionRebelMarines02RescuedQ, true, false);
     if ((gv_rebelFightersRescued == 3)) {
         TriggerExecute(gt_ObjectiveRescueComplete, true, false);
@@ -2261,7 +2253,7 @@ bool gt_RebelMarines03Rescued_Func (bool testConds, bool runActions) {
             return false;
         }
 
-        if (!((UnitGroupCount(UnitGroup(null, gv_pLAYER01_USER, RegionFromId(71), UnitFilter(0, 0, (1 << c_targetFilterAir) | (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) > 0))) {
+        if (!((UnitGroupCount(UnitGroup(null, gv_pLAYER01_USER, RegionFromId(71), UnitFilter(0, 0, (1 << c_targetFilterAir) | (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 1), c_unitCountAlive) > 0))) {
             return false;
         }
     }
@@ -2278,7 +2270,7 @@ bool gt_RebelMarines03Rescued_Func (bool testConds, bool runActions) {
     PingDestroy(gv_rebelMarinesPing3);
     UnitKill(gv_rebelMarinesBeacon03);
     TriggerExecute(gt_ObjectiveRescueCreateQ, true, false);
-    ObjectiveSetName(gv_objectiveRescue, (StringExternal("Param/Value/7B12E251") + IntToText(gv_rebelFightersRescued) + StringExternal("Param/Value/F88EB373") + StringExternal("Param/Value/DE63FD4D")));
+    libWCMI_gf_SetMissionObjectiveProgress("TRaynor03_2", gv_rebelFightersRescued);
     TriggerExecute(gt_TransmissionRebelMarines03RescuedQ, true, false);
     if ((gv_rebelFightersRescued == 3)) {
         TriggerExecute(gt_ObjectiveRescueComplete, true, false);
@@ -2442,10 +2434,10 @@ bool gt_StartTimers_Func (bool testConds, bool runActions) {
     TimerStart(gv_fiveMinuteWarning, ((gv_sURVIVETIME - 5.0) * 60.0), false, c_timeGame);
     TimerStart(gv_twoMinuteWarning, ((gv_sURVIVETIME - 2.0) * 60.0), false, c_timeGame);
     TimerStart(gv_oneMinuteWarning, ((gv_sURVIVETIME - 1.0) * 60.0), false, c_timeGame);
-    TimerWindowCreate(gv_evacuationTimer, StringExternal("Param/Value/4B8241F4"), true, false);
+    libWCUI_gf_TimerWindowCreate(gv_evacuationTimer, StringExternal("Param/Value/705A7CB8"), true, false);
     gv_evacuationTimerWindow = TimerWindowLastCreated();
     TimerWindowSetFormat(gv_evacuationTimerWindow, StringToText("<min2/>:<sec2/>"));
-    TimerWindowSetColor(gv_evacuationTimerWindow, c_timerWindowColorTime, Color(0.00, 100.00, 0.00), 0.0);
+    libWCUI_gf_SetTimerWindowDangerThreshold(0.0);
     return true;
 }
 
@@ -2537,7 +2529,10 @@ bool gt_StartFirstZergWaveSpecial_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_AlertFirstZergWave, true, false);
     MinimapPing(PlayerGroupAll(), PointFromId(509), 6.0, Color(100.00, 0.00, 0.00));
     UIAlertPoint("Trigger", gv_pLAYER01_USER, StringExternal("Param/Value/F29197A1"), null, PointFromId(509));
-    CameraPan(gv_pLAYER01_USER, PointFromId(326), 1.5, -1, 20, false);
+    if ((libNtve_gf_DifficultyValueInt(1, 1, 0, 0) == 1)) {
+        CameraPan(gv_pLAYER01_USER, PointFromId(326), 1.5, -1, 20, false);
+    }
+
     gf_FirstZergWaveAttackP03(2, 2.0, "Zergling");
     Wait(2.0, c_timeAI);
     gf_FirstZergWaveAttackP03(2, 1.0, "Zergling");
@@ -3899,6 +3894,32 @@ void gt_TransmissionLastMinuteQ_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: Show Tips Q
+//--------------------------------------------------------------------------------------------------
+bool gt_ShowTipsQ_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerExecute(gt_TipBunkerQ, true, false);
+    TriggerExecute(gt_TipReactorQ, true, false);
+    if ((libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1)) {
+        TriggerExecute(gt_TipEngineeringBayQ, true, false);
+        TriggerExecute(gt_TipMissileTurretQ, true, false);
+    }
+
+    TriggerExecute(gt_TipStoryModeQ, true, false);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ShowTipsQ_Init () {
+    gt_ShowTipsQ = TriggerCreate("gt_ShowTipsQ_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: Tip Story Mode Q
 //--------------------------------------------------------------------------------------------------
 bool gt_TipStoryModeQ_Func (bool testConds, bool runActions) {
@@ -3920,9 +3941,7 @@ bool gt_TipStoryModeQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
     libCamp_gf_CreateStorymodeTips();
-    TriggerQueueExit();
     return true;
 }
 
@@ -3957,16 +3976,12 @@ bool gt_TipBunkerQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
     libCamp_gf_CreateTipFromConversationState("StoryTips|Raynor03_Bunker", libNtve_ge_TipType_NewStructure, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
     if ((libNtve_gf_DifficultyValueInt(1, 1, 0, 0) == 1)) {
         TriggerExecute(gt_CreateBunkerPingsandTooltips, true, false);
         TriggerEnable(gt_ShowBunkerTextTags, true);
-        Wait(libCamp_gv_campaignHintDelay, c_timeReal);
     }
 
-    TriggerQueueExit();
     return true;
 }
 
@@ -4001,10 +4016,7 @@ bool gt_TipReactorQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
     libCamp_gf_CreateTipFromConversationState("StoryTips|Raynor03_Reactor", libNtve_ge_TipType_NewStructure, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -4039,10 +4051,7 @@ bool gt_TipEngineeringBayQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
     libCamp_gf_CreateTipFromConversationState("StoryTips|Raynor03_EngineeringBay", libNtve_ge_TipType_NewStructure, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -4077,10 +4086,7 @@ bool gt_TipMissileTurretQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
     libCamp_gf_CreateTipFromConversationState("StoryTips|Raynor03_MissileTurret", libNtve_ge_TipType_NewStructure, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -4155,7 +4161,6 @@ bool gt_TipRepairQ_Func (bool testConds, bool runActions) {
             UIAlertPoint("Trigger", gv_pLAYER01_USER, StringExternal("Param/Value/6C722AC4"), null, PointWithOffset(lv_damagedPoint, 0.0, 4.0));
             MinimapPing(PlayerGroupAll(), PointWithOffset(lv_damagedPoint, 0.0, 4.0), 6.0, Color(0.00, 100.00, 0.00));
             libCamp_gf_CreateTipFromConversationState("StoryTips|Raynor03_Repair", libNtve_ge_TipType_NewAbility, PlayerGroupAll());
-            Wait(libCamp_gv_campaignHintDelay, c_timeReal);
             TriggerQueueExit();
             break;
         }
@@ -4187,10 +4192,6 @@ bool gt_AchievementHatcheriesDestroyed_Func (bool testConds, bool runActions) {
         if (!((gv_inCinematic == false))) {
             return false;
         }
-
-        if (!((UnitGetType(EventUnit()) == "Hatchery"))) {
-            return false;
-        }
     }
 
     // Actions
@@ -4201,11 +4202,11 @@ bool gt_AchievementHatcheriesDestroyed_Func (bool testConds, bool runActions) {
     gv_hatcheriesDestroyed += 1;
     if ((gv_hatcheriesDestroyed >= 4) && (libNtve_gf_DifficultyValueInt(0, 0, 1, 1) == 1) && (gv_hatcheryAchievementUnlocked == false)) {
         gv_hatcheryAchievementUnlocked = true;
-        AchievementAward(gv_pLAYER01_USER, "TRaynor03_3");
+        libWoLC_gf_CampaignAwardAchievement("TRaynor03_3");
     }
 
     if ((gv_hatcheriesDestroyed >= 8) && (libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1)) {
-        AchievementAward(gv_pLAYER01_USER, "Anniversary_TRaynor03");
+        libWoLC_gf_CampaignAwardAchievement("Anniversary_TRaynor03");
         TriggerDebugOutput(1, StringExternal("Param/Value/609220D0"), false);
     }
 
@@ -4215,7 +4216,14 @@ bool gt_AchievementHatcheriesDestroyed_Func (bool testConds, bool runActions) {
 //--------------------------------------------------------------------------------------------------
 void gt_AchievementHatcheriesDestroyed_Init () {
     gt_AchievementHatcheriesDestroyed = TriggerCreate("gt_AchievementHatcheriesDestroyed_Func");
-    TriggerAddEventUnitDied(gt_AchievementHatcheriesDestroyed, null);
+    TriggerAddEventUnitDied(gt_AchievementHatcheriesDestroyed, UnitRefFromUnit(UnitFromId(122)));
+    TriggerAddEventUnitDied(gt_AchievementHatcheriesDestroyed, UnitRefFromUnit(UnitFromId(88)));
+    TriggerAddEventUnitDied(gt_AchievementHatcheriesDestroyed, UnitRefFromUnit(UnitFromId(259)));
+    TriggerAddEventUnitDied(gt_AchievementHatcheriesDestroyed, UnitRefFromUnit(UnitFromId(198)));
+    TriggerAddEventUnitDied(gt_AchievementHatcheriesDestroyed, UnitRefFromUnit(UnitFromId(93)));
+    TriggerAddEventUnitDied(gt_AchievementHatcheriesDestroyed, UnitRefFromUnit(UnitFromId(57)));
+    TriggerAddEventUnitDied(gt_AchievementHatcheriesDestroyed, UnitRefFromUnit(UnitFromId(164)));
+    TriggerAddEventUnitDied(gt_AchievementHatcheriesDestroyed, UnitRefFromUnit(UnitFromId(119)));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -4251,7 +4259,7 @@ bool gt_VictoryHoldOutCompleted_Func (bool testConds, bool runActions) {
         libNtve_gf_ChangeUnitDamage(auto78DDF86E_var, libNtve_ge_UnitDamageTakenDealt_Damage_Take, libNtve_ge_UnitDamageChangeOption_No);
     }
     TriggerExecute(gt_ObjectiveHoldOutComplete, true, true);
-    libCamp_gf_RunMissionVictorySequence(gt_VictoryQ);
+    libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
     return true;
 }
 
@@ -4259,6 +4267,65 @@ bool gt_VictoryHoldOutCompleted_Func (bool testConds, bool runActions) {
 void gt_VictoryHoldOutCompleted_Init () {
     gt_VictoryHoldOutCompleted = TriggerCreate("gt_VictoryHoldOutCompleted_Func");
     TriggerAddEventTimer(gt_VictoryHoldOutCompleted, gv_evacuationTimer);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Victory Zerg Destroyed
+//--------------------------------------------------------------------------------------------------
+bool gt_VictoryZergDestroyed_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    unitgroup auto65EC39C7_g;
+    int auto65EC39C7_u;
+    unit auto65EC39C7_var;
+
+    // Conditions
+    if (testConds) {
+        if (!((gv_gameOver == false))) {
+            return false;
+        }
+
+        if (!((UnitGroupCount(UnitGroup(null, gv_pLAYER02_ZERG, null, UnitFilter((1 << c_targetFilterPreventDefeat), 0, 0, (1 << (c_targetFilterHidden - 32))), 1), c_unitCountAlive) == 0))) {
+            return false;
+        }
+
+        if (!((UnitGroupCount(UnitGroup(null, gv_pLAYER03_ZERG, null, UnitFilter((1 << c_targetFilterPreventDefeat), 0, 0, (1 << (c_targetFilterHidden - 32))), 1), c_unitCountAlive) == 0))) {
+            return false;
+        }
+
+        if (!((UnitGroupCount(UnitGroup(null, gv_pLAYER04_ZERG, null, UnitFilter((1 << c_targetFilterPreventDefeat), 0, 0, (1 << (c_targetFilterHidden - 32))), 1), c_unitCountAlive) == 0))) {
+            return false;
+        }
+
+        if (!((UnitGroupCount(UnitGroup(null, gv_pLAYER05_ZERG_NOAI, null, UnitFilter((1 << c_targetFilterPreventDefeat), 0, 0, (1 << (c_targetFilterHidden - 32))), 1), c_unitCountAlive) == 0))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    gv_structuresLostAndSalvaged = (PlayerScoreValueGetAsInt(gv_pLAYER01_USER, "StructuresLostCount") + PlayerScoreValueGetAsInt(gv_pLAYER01_USER, "StructuresFriendlyFireCount") + PlayerScoreValueGetAsInt(gv_pLAYER01_USER, "StructuresSalvagedCount"));
+    gv_gameOver = true;
+    auto65EC39C7_g = UnitGroup(null, gv_pLAYER01_USER, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+    auto65EC39C7_u = UnitGroupCount(auto65EC39C7_g, c_unitCountAll);
+    for (;; auto65EC39C7_u -= 1) {
+        auto65EC39C7_var = UnitGroupUnitFromEnd(auto65EC39C7_g, auto65EC39C7_u);
+        if (auto65EC39C7_var == null) { break; }
+        UnitBehaviorRemove(auto65EC39C7_var, "TerranBuildingBurnDown", 1);
+        libNtve_gf_ChangeUnitDamage(auto65EC39C7_var, libNtve_ge_UnitDamageTakenDealt_Damage_Take, libNtve_ge_UnitDamageChangeOption_No);
+    }
+    TriggerExecute(gt_ObjectiveHoldOutComplete, true, true);
+    libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_VictoryZergDestroyed_Init () {
+    gt_VictoryZergDestroyed = TriggerCreate("gt_VictoryZergDestroyed_Func");
+    TriggerAddEventTimePeriodic(gt_VictoryZergDestroyed, 1.0, c_timeGame);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -4272,11 +4339,11 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     }
 
     if ((ObjectiveGetState(gv_objectiveHoldOut) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_objectiveRescue) == c_objectiveStateCompleted)) {
-        AchievementAward(gv_pLAYER01_USER, "TRaynor03_1");
+        libWoLC_gf_CampaignAwardAchievement("TRaynor03_1");
     }
 
     if ((libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1) && (gv_structuresLostAndSalvaged == 0)) {
-        AchievementAward(gv_pLAYER01_USER, "TRaynor03_2");
+        libWoLC_gf_CampaignAwardAchievement("TRaynor03_2");
     }
 
     VictoryPanelAddAchievement("TRaynor03_1");
@@ -4289,7 +4356,7 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/24D71291"), IntToText(gv_structuresLostAndSalvaged));
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/7243E536"), (IntToText(gv_hatcheriesDestroyed) + StringExternal("Param/Value/CAF01B4A")));
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/AA88D3B3"), (IntToText(gv_rebelFightersRescued) + StringExternal("Param/Value/92440993")));
-    libCamp_gf_EndCampaignMission(gv_pLAYER01_USER, c_gameOverVictory);
+    libWCMI_gf_EndCampaignMission(gv_pLAYER01_USER, c_gameOverVictory);
     return true;
 }
 
@@ -4325,7 +4392,7 @@ bool gt_DefeatBaseDead_Func (bool testConds, bool runActions) {
     TriggerQueueClear(c_triggerQueueRemove);
     Wait(2.0, c_timeReal);
     libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/C27EDDD5"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_Defeat, true, false);
     return true;
 }
@@ -4346,7 +4413,7 @@ bool gt_Defeat_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_EndCampaignMission(gv_pLAYER01_USER, c_gameOverDefeat);
+    libWCMI_gf_EndCampaignMission(gv_pLAYER01_USER, c_gameOverDefeat);
     return true;
 }
 
@@ -4373,7 +4440,7 @@ bool gt_VictoryCheat_Func (bool testConds, bool runActions) {
     }
 
     gv_gameOver = true;
-    libCamp_gf_RunMissionVictorySequence(gt_Victory);
+    libWCMI_gf_RunMissionVictorySequence(gt_Victory);
     return true;
 }
 
@@ -4429,13 +4496,10 @@ bool gt_ObjectiveHoldOutCreateQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate(StringExternal("Param/Value/58ACACB4"), StringExternal("Param/Value/E68CA25F"), c_objectiveStateActive, true);
+    libWCMI_gf_CreateObjectiveCampaign("TRaynor03_1");
     gv_objectiveHoldOut = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_TRaynor03Objective1, ObjectiveLastCreated(), StringExternal("Param/Value/F4091673"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_StartTimers, true, false);
-    TriggerQueueExit();
     return true;
 }
 
@@ -4463,8 +4527,8 @@ bool gt_ObjectiveHoldOutComplete_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveHoldOutCreateQ, true, false);
-    ObjectiveSetState(gv_objectiveHoldOut, c_objectiveStateCompleted);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    libWCMI_gf_ZS_SetMissionObjectiveState("TRaynor03_1", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -4491,12 +4555,9 @@ bool gt_ObjectiveRescueCreateQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate((StringExternal("Param/Value/F805BF8E") + IntToText(gv_rebelFightersRescued) + StringExternal("Param/Value/E7E8684A") + StringExternal("Param/Value/62BDD509")), StringExternal("Param/Value/A1EE5B7F"), c_objectiveStateActive, false);
+    libWCMI_gf_CreateObjectiveCampaign("TRaynor03_2");
     gv_objectiveRescue = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_TRaynor03Objective2, ObjectiveLastCreated(), StringExternal("Param/Value/DD79C5B5"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -4524,8 +4585,8 @@ bool gt_ObjectiveRescueComplete_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveRescueCreateQ, true, false);
-    ObjectiveSetState(gv_objectiveRescue, c_objectiveStateCompleted);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    libWCMI_gf_ZS_SetMissionObjectiveState("TRaynor03_2", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -4561,7 +4622,7 @@ bool gt_ObjectiveRescueFailed_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveRescueCreateQ, true, false);
-    ObjectiveSetState(gv_objectiveRescue, c_objectiveStateFailed);
+    libWCMI_gf_ZS_SetMissionObjectiveState("TRaynor03_2", libWoLC_ge_MissionObjectiveState_Failed);
     return true;
 }
 
@@ -5926,6 +5987,7 @@ void InitTriggers () {
     gt_Transmission10MinuteWarningQ_Init();
     gt_Transmission5MinuteWarningQ_Init();
     gt_TransmissionLastMinuteQ_Init();
+    gt_ShowTipsQ_Init();
     gt_TipStoryModeQ_Init();
     gt_TipBunkerQ_Init();
     gt_TipReactorQ_Init();
@@ -5934,6 +5996,7 @@ void InitTriggers () {
     gt_TipRepairQ_Init();
     gt_AchievementHatcheriesDestroyed_Init();
     gt_VictoryHoldOutCompleted_Init();
+    gt_VictoryZergDestroyed_Init();
     gt_Victory_Init();
     gt_DefeatBaseDead_Init();
     gt_Defeat_Init();

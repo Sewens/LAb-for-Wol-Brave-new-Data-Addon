@@ -162,6 +162,7 @@ Abil/Name/SquadMuleliskGather=Squad Mulelisk Gather
 Abil/Name/SquadMuleliskRepair=Squad Mulelisk Repair
 Abil/Name/SquadNanoRepair=Squad Nano Repair
 Abil/Name/SquadNeuralParasite=Squad Neural Parasite
+Abil/Name/SquadNovaDomination=Squad Nova Domination
 Abil/Name/SquadNovaSnipe=Squad Nova Snipe
 Abil/Name/SquadNovaSpiderMineMagazine=Squad Nova Spider Mine Magazine
 Abil/Name/SquadNovaSpiderMineQueue=Squad Nova Spider Mine Queue
@@ -410,6 +411,7 @@ Behavior/Name/SquadMedivacRepairDroneRecall=Squad Medivac Repair Drone Recall
 Behavior/Name/SquadMissileTurretHellstormSwitch=Squad Missile Turret Hellstorm Switch
 Behavior/Name/SquadNeuralParasite=Squad Neural Parasite
 Behavior/Name/SquadNovaDefensiveDroneNullified=Squad Nova Defensive Drone Nullified
+Behavior/Name/SquadNovaDomination=Squad Nova Domination
 Behavior/Name/SquadNydusKnockbackMPKnockback=Squad Nydus Knockback MP Knockback
 Behavior/Name/SquadNydusKnockbackStun=Squad Nydus Knockback Stun
 Behavior/Name/SquadPsiDisruption=Squad Psi Disruption
@@ -457,6 +459,7 @@ Behavior/Name/UnitHugeAddMaxLife=Unit Huge Add Max Life
 Behavior/Name/UnitMediumAddMaxLife=Unit Medium Add Max Life
 Behavior/Name/UnitSmallAddMaxLife=Unit Small Add Max Life
 Behavior/Name/VampireOrb=Vampire Orb
+Behavior/Name/VanillaScannerTargetLock=Vanilla Scanner Target Lock
 Behavior/Name/VoodooOrb=Voodoo Orb
 Behavior/Name/VultureVanillaMode=Vulture Vanilla Mode
 Behavior/Name/WhiteNuclearIce=White Nuclear Ice
@@ -524,6 +527,7 @@ Behavior/Tooltip/StimpackMarauder2=This unit moves and attacks more quickly whil
 Behavior/Tooltip/TestAttributeStack=<c val="F0F50A"></c>Current Attribute Stack: </c><d ref="$BehaviorStackCount:TestAttributeStack$"/>
 Behavior/Tooltip/UnitSmallAddMaxLife=<c val="F0F50A"></c>Current Magazine unit: </c><d ref="$BehaviorStackCount:Unit Small Add Max Life$"/>
 Behavior/Tooltip/VampireOrb=Leach life on damage dealt 5%.
+Behavior/Tooltip/VanillaScannerTargetLock=This unit is taking increased damage.
 Behavior/Tooltip/VoodooOrb=Temporary control target unit for 0.5s.
 Behavior/Tooltip/YellowNuclearEarthquake=Target is under the effects of Psionic Storm and will take massive damage while in this area of effect.
 Behavior/Tooltip/YellowScannerChronoBeam=This unit has increased movement and attack speeds.
@@ -804,6 +808,7 @@ Button/Name/SquadMuleliskGather=Squad Mulelisk Gather
 Button/Name/SquadNanoEnergyCharge=Squad Nano Energy Charge
 Button/Name/SquadNeuralParasite=Squad Neural Parasite
 Button/Name/SquadNovaDeploySquadSpiderMine=Squad Nova Deploy Squad Spider Mine
+Button/Name/SquadNovaDomination=Squad Nova Domination
 Button/Name/SquadNovaSnipe=Squad Nova Snipe
 Button/Name/SquadNovaTripleSnipe=Squad Nova Triple Snipe
 Button/Name/SquadOdinAnnihilate=Squad Odin Annihilate
@@ -1053,8 +1058,9 @@ Button/Tooltip/ConcussiveGrenade2=Units hit by the Marauder are temporarily slow
 Button/Tooltip/DefenderCoreArchor=Robotic mine. Launches missiles at nearby enemy units while burrowed. Attacks deal splash damage in a small area around the target. <n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/DefenderCoreArchorBurrowed=Robotic mine. Launches missiles at nearby enemy units while burrowed. Attacks deal splash damage in a small area around the target. <n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/DefenderCoreSentinelMissiles=Attacks by launching missiles at enemy ground and air units that get too close. Missiles deal <d ref="Effect,WidowMineExplodeDirect,Amount"/> (+35 vs. shields) damage to their primary target, and <d ref="Effect,WidowMineExplodeSplash,Amount"/> (+<d ref="Effect,WidowMineExplodeSplashShields,VitalBonus[Shields]"/> vs. shields) splash damage to units nearby.<n/><n/><c val="#ColorAttackInfo">Cooldown: <d ref="Abil,WidowMineAttack,Cost[0].Cooldown[0].TimeUse[0]"/> seconds.</c>
-Button/Tooltip/DeploySquadSpiderMine=Spider Mines pursue enemy units that come in range, and detonate for heavy area damage. Buried Spider Mines can only be seen by enemy Detectors.
+Button/Tooltip/DeploySquadSpiderMine=<s val="_LawbdaBaseTooltip">Spider Mines pursue enemy units that come in range, and detonate for heavy area damage. Buried Spider Mines can only be seen by enemy Detectors.</s>
 Button/Tooltip/DisbandSquad=<s val="_LawbdaBaseTooltip">Disband team into individual units. Captain and squad members will keep there status.</s>
+Button/Tooltip/Enband=<s val="_LawbdaBaseTooltip">Join target unit as team members, different infantry can offer captain with bonus gifts.</s>
 Button/Tooltip/ExcavatorBehemothProtocal=Captain Excavator immune for almost every debuff behavior and crash everything when movement speed above 7.
 Button/Tooltip/ExcavatorGather=Orders MULE to gather minerals from a selected Mineral Field.
 Button/Tooltip/ExtendableInfantryMagazine=Upgrade infantry squad magazine size from 4 to 8.<n/>"Sewen judge, Sewen Bless."
@@ -1079,7 +1085,7 @@ Button/Tooltip/LootResourceTextTier5=<s val="Kicker_Minerals">+<d ref="Effect,Lo
 Button/Tooltip/Medic2=Support trooper. Heals nearby biological units.
 Button/Tooltip/MediumEnergyandHugeRegen=<s val="_LawbdaBaseTooltip">Give captain <s val="_LawbdaHighLightTin">+<d ref="Behavior,EnergyMediumMaxandLargeRegeneration,Modification.VitalMaxAdditiveMultiplierArray[Energy]"precision="2"/> max energy</s> and <s val="_LawbdaHighLightTin">+<d ref="Behavior,EnergyMediumMaxandLargeRegeneration,Modification.VitalRegenArray[Energy]" precision="2"/></s> energy regeneration rate bonus.</s>
 Button/Tooltip/MediumLifeandRegen=<s val="_LawbdaBaseTooltip">Give captain <s val="_LawbdaHighLightGreen">+<d ref="Behavior,UnitMediumAddMaxLife,Modification.VitalMaxArray[Life]"/> max life</s>,<s val="_LawbdaHighLightGreen">+<d ref="Behavior,UnitMediumAddMaxLife,Modification.VitalMaxFractionArray[Life]" precision="2"/>max life</s> and <s val="_LawbdaHighLightGreen">+<d ref="Behavior,UnitMediumAddMaxLife,Modification.VitalRegenArray[Life]" precision="2"/></s> life regeneration rate bonus.</s>
-Button/Tooltip/MexicoProtocal=History on old terran public shown that boarder control always A hard problem.<n/>Now scientist showing a brave new technology based on Protoss Revenant.<n/>Allowing us building walls, building Great Walls to protect us from the outsider.
+Button/Tooltip/MexicoProtocal=We must build walls, the great wall.
 Button/Tooltip/Minecraft=Spider mine will hold different behaviors on different magazine unit in squad.
 Button/Tooltip/NucolorMagicBook=The Medivac can heal two targets at once.
 Button/Tooltip/NucolorStrikeBlack=Arms the Silo with a Tactical Nuke.<n/><n/>Nukes take <d time="20"/> to land, but they deal up to 300 (+200 vs. structures) damage in a large radius.<n/><n/>Use a Ghost to designate the target.
@@ -1096,14 +1102,16 @@ Button/Tooltip/NucolorWarheadRed=Arms the Silo with a Tactical Nuke.<n/><n/>Nuke
 Button/Tooltip/NucolorWarheadVanilla=Arms the Silo with a Tactical Nuke.<n/><n/>Nukes take <d time="20"/> to land, but they deal up to 300 (+200 vs. structures) damage in a large radius.<n/><n/>Use a Ghost to designate the target.
 Button/Tooltip/NucolorWarheadWhite=Arms the Silo with a Tactical Nuke.<n/><n/>Nukes take <d time="20"/> to land, but they deal up to 300 (+200 vs. structures) damage in a large radius.<n/><n/>Use a Ghost to designate the target.
 Button/Tooltip/NucolorWarheadYellow=Arms the Silo with a Tactical Nuke.<n/><n/>Nukes take <d time="20"/> to land, but they deal up to 300 (+200 vs. structures) damage in a large radius.<n/><n/>Use a Ghost to designate the target.
-Button/Tooltip/PvZEmulator=From the eternal war between Protoss and Zerg we learn, dangerous from unknown always the most effective way for our enemies.<n/>Supply depot now can super cloak while lowered, and, attack from the enemy below in small radius.
-Button/Tooltip/ScannerSweepAlpha=Reveals an area of the map, detecting cloaked and burrowed units. Lasts <d time="12"/>.
-Button/Tooltip/ScannerSweepBlack=Draw power from the Void, suppress almost every positive behavior on enemy, use this ability means you are drive into the dark side of Terran.<n/>"Darksider Is."<n/>
-Button/Tooltip/ScannerSweepBlue=Reveals an area of the map, detecting cloaked and burrowed units. Lasts <d time="12"/>.
-Button/Tooltip/ScannerSweepGreen=Reveals an area of the map, detecting cloaked and burrowed units. Lasts <d time="12"/>.
+Button/Tooltip/PvZEmulator=<s val="_LawbdaBaseTooltip">From the eternal war between Protoss and Zerg we learn, dangerous from unknown always the most effective way for our enemies.<n/>Supply depot now can super cloak while lowered, and, attack from the enemy below in small radius.</s>
+Button/Tooltip/ScannerSweepAlpha=<s val="_LawbdaBaseTooltip">Reveals an area of the map, detecting cloaked and burrowed units. <n/>Alpha scanner also make alias units invisible while ability continue.<n/>Lasts <d ref="Effect,AlphaScannerSweep,ExpireDelay"/>s.</s>
+Button/Tooltip/ScannerSweepBlack=<s val="_LawbdaBaseTooltip">Draw power from the Void, suppress almost every positive behavior on enemy, use this ability means you are drive into the dark side of Terran.<n/>With darkness power, every enemies in area will lose their bonus behavior. Lasts <d ref="Effect,BlackScannerSweep,ExpireDelay"/>s.<n/>"Darksider Is."</s>
+Button/Tooltip/ScannerSweepBlue=<s val="_LawbdaBaseTooltip">Reveals an area of the map, detecting cloaked and burrowed units. <n/>Cause shield damage <d ref="Effect,BlueScannerSheildDamage,ShieldBonus"/>/s in 5 seconds, also remove their energy <d ref="Effect,BlueScannerSweepEnergyDamage,VitalArray[Energy].Change"/>/s.<n/>Scanner lasts <d ref="Effect,BlueScannerSweep,ExpireDelay"/>s.</s>
+Button/Tooltip/ScannerSweepGreen=<s val="_LawbdaBaseTooltip">Reveals an area of the map, detecting cloaked and burrowed units.<n/>Give slightly max vital bonus  for alias units in target area, add <d ref="Effect,GreenScannerIncreaseMaxLife,VitalArray[Life].Change"/> and <d ref="Effect,GreenScannerIncreaseMaxLife,VitalArray[Shields].Change"/> shields. Also add life leach on damage dealt.<n/>Scanner lasts <d ref="Effect,GreenScannerSweep,ExpireDelay"/>s, bonus lasts<d ref="Behavior,GreenScannerHeal,Duration"/>s.</s>
 Button/Tooltip/ScannerSweepLockPassive=Unlock Colorful Scanner Sweep in Fusion Core.
-Button/Tooltip/ScannerSweepRed=Reveals an area of the map, detecting cloaked and burrowed units. Lasts <d time="12"/>.
-Button/Tooltip/ScannerSweepVanilla=Reveals an area of the map, detecting cloaked and burrowed units. Lasts <d time="12"/>.
+Button/Tooltip/ScannerSweepRed=<s val="_LawbdaBaseTooltip">Reveals an area of the map, detecting cloaked and burrowed units.<n/>Cause damage on enemy, for <d ref="Effect,RedScannerFireDamage,Amount"/>/s damage bonus on bio-units for <d ref="Effect,RedScannerFireDamage,AttributeBonus[Biological]"/>/s and <d ref="Effect,RedScannerFireDamage,AttributeBonus[Light]"/>/s for light-units in <d ref="Behavior,RedScannerFireDOT,Duration"/>s.<n/>Scanner lasts <d ref="Effect,RedScannerSweep,ExpireDelay"/>s.</s>
+Button/Tooltip/ScannerSweepVanilla=<s val="_LawbdaBaseTooltip">Reveals an area of the map, detecting cloaked and burrowed units.<n/>Lock <d ref="Effect,VanillaScannerSearhVictim,MaxCount"/> enemy units, targeted units will take extra <d ref="Behavior,VanillaScannerTargetLock,Modification.DamageTakenFraction[Melee]*100"/>% damage.<n/>Scanner lasts <d ref="Effect,VanillaScannerSweep,ExpireDelay"/>.</s>
+Button/Tooltip/ScannerSweepYellow=<s val="_LawbdaBaseTooltip">Reveals an area of the map, detecting cloaked and burrowed units.<n/>Give time scale bonus for all alias units for <d ref="Behavior,YellowScannerChronoBeam,Modification.AdditiveAttackSpeedFactor*100"/>%, chrono beam bonus last<d ref="Behavior,YellowScannerChronoBeam,Duration"/>s.<n/>Scanner lasts <d ref="Effect,YellowScannerSweep,ExpireDelay"/>s.</s>
+Button/Tooltip/SensorTowerMiniWorld=<s val="_LawbdaBaseTooltip">Slow down target enemy's time scale in nearby radius <d ref="Effect,SensorTowerMiniWorldSearchArea,AreaArray[0].Radius"/> for <d ref="Behavior,SensorTowerMiniWorld,Modification.TimeScale*100"/>%, duration <d ref="Behavior,SensorTowerMiniWorld,Duration"/>s.<n/>Ability search nearby radius on <d ref="Effect,SensorTowerMiniWorldSearchTarget,AreaArray[0].Radius"/>.</s>
 Button/Tooltip/SmallLifeandRegen=<s val="_LawbdaBaseTooltip">Give captain <s val="_LawbdaHighLightGreen">+<d ref="Behavior,UnitSmallAddMaxLife,Modification.VitalMaxArray[Life]"/> max life</s>,<s val="_LawbdaHighLightGreen">+<d ref="Behavior,UnitSmallAddMaxLife,Modification.VitalMaxFractionArray[Life]" precision="2"/>max life</s> and <s val="_LawbdaHighLightGreen">+<d ref="Behavior,UnitSmallAddMaxLife,Modification.VitalRegenArray[Life]" precision="2"/></s> life regeneration rate bonus.</s>
 Button/Tooltip/SpikeArmor=Damage caused by Spine Lash increased to 30.
 Button/Tooltip/SquadAddonTacticalJump=After <d time="6"/>, warps to the target location. Battlecruiser is invulnerable while warping.<n/><n/><c val="#ColorAttackInfo">Does not require vision.</c>
@@ -1114,7 +1122,7 @@ Button/Tooltip/SquadAutomatedMineralTextKicker4=<s val="Kicker_Minerals">+4 </s>
 Button/Tooltip/SquadAutomatedRefineries=Refineries do not require workers
 Button/Tooltip/SquadAutomatedVespenseTextKicker42=<s val="Kicker_Refinery">+4 </s><IMG path="Assets\Textures\icon-gas-terran.dds" height="28" width="28"/>
 Button/Tooltip/SquadBanshee=Tactical-strike aircraft.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
-Button/Tooltip/SquadBansheeConsume=Latches onto the target structure, dealing <d ref="-1 * (Effect,ViperConsumeStructureModifyTarget,VitalArray[0].Change * Effect,ViperConsumeStructureCreatePersistent,PeriodCount)"/> damage and restoring <d ref="(Effect,ViperConsumeStructureModifyCaster,VitalArray[2].Change / Behavior,TimeScaleConversionBehavior,Duration)" precision="1"/> energy to the Viper every second.<n/><n/><c val="#ColorAttackInfo">Cannot target allied or enemy structures.</c>
+Button/Tooltip/SquadBansheeConsume=<s val="_LawbdaBaseTooltip">Channeling onto the target structure, dealing <d ref="-Effect,SquadBansheeConsumeStructureModifyTarget,VitalArray[Life].Change"/> damage on target structure and regenerate <d ref="Effect,SquadBansheeConsumeStructureModifyCaster,VitalArray[Energy].Change" precision="2"/> energy every <d ref="Effect,SquadBansheeConsumeStructureCreatePersistent,PeriodicPeriodArray[0]"/>s, ability lasts <d ref="Effect,SquadBansheeConsumeStructureCreatePersistent,PeriodCount"/>s.<n/>Disable all abilities of target structure.</s>
 Button/Tooltip/SquadBansheeResearchCloakingField=Enables <c val="ffff8a">Banshees</c> to use the Cloak ability. Cloak renders the <c val="ffff8a">Banshee</c> invisible to enemies unless the unit is revealed by detectors or effects.
 Button/Tooltip/SquadBansheeShockwaveMissileBattery=Banshee attack fires multiple missile bursts in a straight line.
 Button/Tooltip/SquadBarracks=Infantry-production facility.<n/><n/><c val="ffff8a">Enables:</c><n/>- Marines<n/>- Reapers<n/>- Bunkers from SCVs
@@ -1128,7 +1136,7 @@ Button/Tooltip/SquadBattlecrusierUltraCapaciters=Wraith starts with 100 addition
 Button/Tooltip/SquadBuildWarHound=Anti-vehicle mech. Haywire missiles do bonus damage to mechanical units. <n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/SquadBulletTime=Freezes all enemies in time for <d ref="Behavior,SOATimeFreeze,Duration"/> seconds.
 Button/Tooltip/SquadBunkerHiveMindEmulator=Defensive structure. Able to protect up to <d ref="Abil,BunkerTransport,TotalCargoSpace"/> infantry unit slots. Units inside the Bunker have +1 range to their attacks. Bunkers can be salvaged.
-Button/Tooltip/SquadBunkerInstantInjustis=Artanis warps units into the battlefield almost instantly.
+Button/Tooltip/SquadBunkerInstantInjustis=<s val="_LawbdaBaseTooltip">Launch units in bunker on target location with drop pod almost instantly.<n/>Inspired by mysterial protoss warp technology.</s><n/><s val="_LawbdaUnitStyle">"Death from above!"</s>
 Button/Tooltip/SquadBunkerLoad=Loads infantry into Bunker.
 Button/Tooltip/SquadBunkerPerdition=Defensive structure. Able to protect up to <d ref="Abil,BunkerTransport,TotalCargoSpace"/> infantry unit slots. Units inside the Bunker have +1 range to their attacks. Bunkers can be salvaged.
 Button/Tooltip/SquadBunkerPsiDisrupter=Defensive structure. Able to protect up to <d ref="Abil,BunkerTransport,TotalCargoSpace"/> infantry unit slots. Units inside the Bunker have +1 range to their attacks. Bunkers can be salvaged.
@@ -1253,6 +1261,7 @@ Button/Tooltip/SquadMuleliskGather=Orders MULE to gather minerals from a selecte
 Button/Tooltip/SquadNanoEnergyCharge=Charges a friendly unit.<n/><n/><c val="f078ff">Heals 3 energy per 1 energy.</c>
 Button/Tooltip/SquadNeuralParasite=Target unit is controlled by the Infestor until one of them dies or the Infestor relinquishes control. The Infestor cannot take any other action while controlling an enemy unit.<n/><n/><c val="#ColorAttackInfo">Can target ground units.</c><n/><c val="ffff8a">Channeled ability</c>
 Button/Tooltip/SquadNovaDeploySquadSpiderMine=Spider Mines pursue enemy units that come in range, and detonate for heavy area damage. Buried Spider Mines can only be seen by enemy Detectors.
+Button/Tooltip/SquadNovaDomination=Takes control of the target unit. Domination lasts until the controlled unit is destroyed or Nova releases it.
 Button/Tooltip/SquadNovaTripleSnipe=A careful shot, dealing <d ref="Effect,SnipeDamage,Amount"/> (<d ref="Effect,SnipeDamage,Amount + Effect,SnipeDamage,AttributeBonus[5]"/> vs. Psionic) damage. Ignores armor.<n/><n/><c val="#ColorAttackInfo">Can only target biological units.</c>
 Button/Tooltip/SquadOrbitalCommandFlying=Primary structure. Must land to receive resources, produce units, or use abilities.
 Button/Tooltip/SquadOrbitalCommandUnit=Primary structure. Used to train SCVs and receive gathered resources. Can use the Scanner Sweep and Calldown: Extra Supplies abilities.
@@ -1698,6 +1707,7 @@ Effect/Name/RedNuclearFlameThrowerFireDOTApply=Red Nuclear Flame Thrower Fire DO
 Effect/Name/RedNuclearFlameThrowerPeriodicDamage=Red Nuclear Flame Thrower Periodic Damage
 Effect/Name/RedNuclearInitialPersistent=Red Nuclear Initial Persistent
 Effect/Name/RedNuclearSearhVictim=Red Nuclear Searh Victim
+Effect/Name/RedScannerFireDamage=Red Scanner Fire Damage
 Effect/Name/RedScannerFlameThrower=Red Scanner Flame Thrower
 Effect/Name/RedScannerSearhVictim=Red Scanner Searh Victim
 Effect/Name/RedScannerSweep=Red Scanner Sweep
@@ -1738,7 +1748,8 @@ Effect/Name/ScannerSweepVanillaMP=Scanner Sweep Vanilla MP
 Effect/Name/ScannerSweepYellowMP=Scanner Sweep Yellow MP
 Effect/Name/ScienceVesselGhostConditioningBuffApply=Science Vessel Ghost Conditioning Buff Apply
 Effect/Name/SensorTowerMiniWorldApply=Sensor Tower Mini World Apply
-Effect/Name/SensorTowerMiniWorldSearch=Sensor Tower Mini World Search
+Effect/Name/SensorTowerMiniWorldSearchArea=Sensor Tower Mini World Search Area
+Effect/Name/SensorTowerMiniWorldSearchTarget=Sensor Tower Mini World Search Target
 Effect/Name/SoulOrbApply=Soul Orb Apply
 Effect/Name/SoulOrbRemove=Soul Orb Remove
 Effect/Name/SpectreBuffRedirectPack=Spectre Buff Redirect Pack
@@ -2299,6 +2310,15 @@ Effect/Name/SquadNovaDefensiveDroneReflectSearch=Squad Nova Defensive Drone Refl
 Effect/Name/SquadNovaDefensiveDroneRemoveEnergy=Squad Nova Defensive Drone Remove Energy
 Effect/Name/SquadNovaDefensiveDroneSearch=Squad Nova Defensive Drone Search
 Effect/Name/SquadNovaDefensiveDroneSearchImpactSet=Squad Nova Defensive Drone Search Impact Set
+Effect/Name/SquadNovaDominationApplyBehavior=Squad Nova Domination Apply Behavior
+Effect/Name/SquadNovaDominationApplyNovaBehavior=Squad Nova Domination Apply Nova Behavior
+Effect/Name/SquadNovaDominationApplySet=Squad Nova Domination Apply Set
+Effect/Name/SquadNovaDominationDeathTBSearchArea=Squad Nova Domination Death TB Search Area
+Effect/Name/SquadNovaDominationDeathTransferBehavior=Squad Nova Domination Death Transfer Behavior
+Effect/Name/SquadNovaDominationPersistent=Squad Nova Domination Persistent
+Effect/Name/SquadNovaDominationRemoveBehavior=Squad Nova Domination Remove Behavior
+Effect/Name/SquadNovaDominationRemoveNovaBehavior=Squad Nova Domination Remove Nova Behavior
+Effect/Name/SquadNovaDominationRemoveSet=Squad Nova Domination Remove Set
 Effect/Name/SquadNovaSpiderMineCalldown=Squad Nova Spider Mine Calldown
 Effect/Name/SquadNovaSpiderMineTeleport=Squad Nova Spider Mine Teleport
 Effect/Name/SquadNovaTripleSnipeDamage=Squad Nova Triple Snipe Damage
@@ -2857,6 +2877,7 @@ Effect/Name/VanillaNuclearSmallNukeDropDelayCP=Vanilla Nuclear Small Nuke Drop D
 Effect/Name/VanillaNuclearSmallNukeRandomPersistent=Vanilla Nuclear Small Nuke Random Persistent
 Effect/Name/VanillaScannerSearhVictim=Vanilla Scanner Searh Victim
 Effect/Name/VanillaScannerSweep=Vanilla Scanner Sweep
+Effect/Name/VanillaScannerTargetLockAB=Vanilla Scanner Target Lock AB
 Effect/Name/VoodooOrbApply=Voodoo Orb Apply
 Effect/Name/VoodooOrbRemove=Voodoo Orb Remove
 Effect/Name/WarHound=Squad War Hound Melee

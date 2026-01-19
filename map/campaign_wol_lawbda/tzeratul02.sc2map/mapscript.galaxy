@@ -7,7 +7,9 @@
 //==================================================================================================
 include "TriggerLibs/NativeLib"
 include "TriggerLibs/LibertyLib"
-include "TriggerLibs/CampaignLib"
+include "LibCamp"
+include "LibWoLC"
+include "LibWCMI"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -16,6 +18,8 @@ void InitLibs () {
     libNtve_InitLib();
     libLbty_InitLib();
     libCamp_InitLib();
+    libWoLC_InitLib();
+    libWCMI_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -477,7 +481,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_LoadCampaignData(libCamp_ge_MapID_MapTZeratul02);
+    libWoLC_gf_ULoadCampaignData("TZeratul02");
     TriggerExecute(gt_Init01Technology, true, true);
     TriggerExecute(gt_Init02Players, true, true);
     TriggerExecute(gt_Init03Units, true, true);
@@ -485,8 +489,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init05Environment, true, true);
     TriggerExecute(gt_Init06Difficulties, true, true);
     TriggerExecute(gt_Init07Help, true, true);
-    libCamp_gf_RegisterFootageRecording(gt_BriefingQ);
-    libCamp_gf_PurchaseStorymodeTech();
+    libWoLC_gf_RegisterFootageRecording(gt_BriefingQ);
     TriggerExecute(gt_IntroQ, true, false);
     return true;
 }
@@ -507,25 +510,21 @@ bool gt_Init01Technology_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_SetTechRestrictionsCallback(TriggerGetCurrent());
-    TechTreeUpgradeAddLevel(gv_p1_USER, "BlinkTech", 1);
-    TechTreeUpgradeAddLevel(gv_p1_USER, "PsiStormTech", 1);
-    TechTreeUpgradeAddLevel(gv_p1_USER, "Charge", 1);
     TechTreeAbilityAllow(gv_p1_USER, AbilityCommand("CyberneticsCoreResearch", 6), false);
     TechTreeAbilityAllow(gv_p1_USER, AbilityCommand("CyberneticsCoreResearch", 6), false);
     TechTreeAbilityAllow(gv_p1_USER, AbilityCommand("UpgradeToWarpGate", 0), false);
-    TechTreeAbilityAllow(gv_p1_USER, AbilityCommand("CyberneticsCoreResearch", 3), false);
-    TechTreeAbilityAllow(gv_p1_USER, AbilityCommand("CyberneticsCoreResearch", 4), false);
-    TechTreeAbilityAllow(gv_p1_USER, AbilityCommand("CyberneticsCoreResearch", 5), false);
-    TechTreeAbilityAllow(gv_p1_USER, AbilityCommand("CyberneticsCoreResearch", 0), false);
-    TechTreeAbilityAllow(gv_p1_USER, AbilityCommand("CyberneticsCoreResearch", 1), false);
-    TechTreeAbilityAllow(gv_p1_USER, AbilityCommand("CyberneticsCoreResearch", 2), false);
-    TechTreeUpgradeAddLevel(gv_p2_PROTOSS_STALKER, "DarkProtoss", 1);
-    TechTreeUpgradeAddLevel(gv_p3_PROTOSS_ENEMY, "DarkProtoss", 1);
-    TechTreeUpgradeAddLevel(gv_p4_PROTOSS_ENEMY, "DarkProtoss", 1);
-    TechTreeUpgradeAddLevel(gv_p6_PROTOSS_ENEMY, "DarkProtoss", 1);
-    TechTreeAbilityAllow(gv_p1_USER, AbilityCommand("ProtossBuild", 13), false);
-    TechTreeAbilityAllow(gv_p1_USER, AbilityCommand("ProtossBuild", 12), false);
+    TechTreeUnitAllow(gv_p1_USER, "Zealot", true);
+    TechTreeUnitAllow(gv_p1_USER, "Stalker", true);
+    TechTreeAbilityAllow(gv_p1_USER, AbilityCommand("Blink", 0), true);
+    TechTreeUnitAllow(gv_p1_USER, "Sentry", true);
+    TechTreeUpgradeAddLevel(gv_p1_USER, "VoidSentryShieldRepair", 1);
+    TechTreeAbilityAllow(gv_p1_USER, AbilityCommand("VoidSentryShieldRepair", 0), true);
+    TechTreeAbilityAllow(gv_p1_USER, AbilityCommand("ForceField", 0), true);
+    TechTreeUnitAllow(gv_p1_USER, "Archon", true);
+    TechTreeAbilityAllow(gv_p1_USER, AbilityCommand("ForgeResearch", 6), true);
+    TechTreeAbilityAllow(gv_p1_USER, AbilityCommand("ForgeResearch", 0), true);
+    TechTreeAbilityAllow(gv_p1_USER, AbilityCommand("ForgeResearch", 3), true);
+    TechTreeAbilityAllow(gv_p1_USER, AbilityCommand("ProtossBuild", 24), false);
     return true;
 }
 
@@ -538,7 +537,16 @@ void gt_Init01Technology_Init () {
 // Trigger: Init 02 Players
 //--------------------------------------------------------------------------------------------------
 bool gt_Init02Players_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    playergroup lv_protossGroup;
+
     // Automatic Variable Declarations
+    playergroup auto48467CD3_g;
+    int auto48467CD3_var;
+
+    // Variable Initialization
+    lv_protossGroup = PlayerGroupEmpty();
+
     // Actions
     if (!runActions) {
         return true;
@@ -587,10 +595,51 @@ bool gt_Init02Players_Func (bool testConds, bool runActions) {
     PlayerSetState(gv_p5_ABANDONED_STRUCTURES, c_playerStateShowScore, false);
     PlayerSetState(gv_p7_NEUTRAL, c_playerStateShowScore, false);
     PlayerSetState(gv_p8_PRISON_STRUCTURE, c_playerStateShowScore, false);
-    PlayerSetColorIndex(gv_p2_PROTOSS_STALKER, 7, true);
-    PlayerSetColorIndex(gv_p3_PROTOSS_ENEMY, 7, true);
-    PlayerSetColorIndex(gv_p4_PROTOSS_ENEMY, 7, true);
-    PlayerSetColorIndex(gv_p6_PROTOSS_ENEMY, 7, true);
+    PlayerGroupAdd(lv_protossGroup, gv_p2_PROTOSS_STALKER);
+    PlayerGroupAdd(lv_protossGroup, gv_p3_PROTOSS_ENEMY);
+    PlayerGroupAdd(lv_protossGroup, gv_p4_PROTOSS_ENEMY);
+    PlayerGroupAdd(lv_protossGroup, gv_p6_PROTOSS_ENEMY);
+    auto48467CD3_g = lv_protossGroup;
+    auto48467CD3_var = -1;
+    while (true) {
+        auto48467CD3_var = PlayerGroupNextPlayer(auto48467CD3_g, auto48467CD3_var);
+        if (auto48467CD3_var < 0) { break; }
+        PlayerSetColorIndex(auto48467CD3_var, 7, true);
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto48467CD3_var, "NexusIhanrii", true);
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto48467CD3_var, "WarpPrismIhanrii", true);
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto48467CD3_var, "AssimilatorIhanrii", true);
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto48467CD3_var, "PylonIhanrii", true);
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto48467CD3_var, "GatewayIhanrii", true);
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto48467CD3_var, "VoidRayIhanrii", true);
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto48467CD3_var, "TempestIhanrii", true);
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto48467CD3_var, "StalkerIhanrii", true);
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto48467CD3_var, "SentryIhanrii", true);
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto48467CD3_var, "ProbeIhanrii", true);
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto48467CD3_var, "PhoenixIhanrii", true);
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto48467CD3_var, "ForgeIhanrii", true);
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto48467CD3_var, "PhotonCannonIhanrii", true);
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto48467CD3_var, "ShieldBatteryIhanrii", true);
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto48467CD3_var, "CyberneticsCoreIhanrii", true);
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto48467CD3_var, "RoboticsFacilityIhanrii", true);
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto48467CD3_var, "RoboticsBayIhanrii", true);
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto48467CD3_var, "TwilightCouncilIhanrii", true);
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto48467CD3_var, "StargateIhanrii", true);
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto48467CD3_var, "DarkShrineIhanrii", true);
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto48467CD3_var, "TemplarArchiveIhanrii", true);
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto48467CD3_var, "FleetBeaconIhanrii", true);
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto48467CD3_var, "AdeptIhanrii", true);
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto48467CD3_var, "MothershipIhanrii", true);
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto48467CD3_var, "ObserverIhanrii", true);
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto48467CD3_var, "CarrierIhanrii", true);
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto48467CD3_var, "ColossusIhanrii", true);
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto48467CD3_var, "DarkTemplarIhanrii", true);
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto48467CD3_var, "DisruptorIhanrii", true);
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto48467CD3_var, "ZealotIhanrii", true);
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto48467CD3_var, "OracleIhanrii", true);
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto48467CD3_var, "HighTemplarIhanrii", true);
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto48467CD3_var, "ImmortalIhanrii", true);
+    }
+    libWCMI_gf_WM_DetectionUpgradesApply();
     return true;
 }
 
@@ -714,13 +763,6 @@ bool gt_Init06Difficulties_Func (bool testConds, bool runActions) {
     // Actions
     if (!runActions) {
         return true;
-    }
-
-    if ((PlayerDifficulty(gv_p1_USER) == 1)) {
-        PlayerModifyPropertyInt(gv_p3_PROTOSS_ENEMY, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p4_PROTOSS_ENEMY, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p6_PROTOSS_ENEMY, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p10_HYBRID_MANIFESTATIONS, c_playerPropHandicap, c_playerPropOperSetTo, 50);
     }
 
     gf_SetMaxLife(UnitFromId(8), libNtve_gf_DifficultyValueFixed(500.0, 750.0, 1000.0, 1250.0));
@@ -2723,7 +2765,6 @@ bool gt_GatewayPlace01_Func (bool testConds, bool runActions) {
         }
     }
 
-    Wait(libCamp_gv_campaignHintDelay, c_timeGame);
     return true;
 }
 
@@ -2764,7 +2805,6 @@ bool gt_PylonPlaceStartQ_Func (bool testConds, bool runActions) {
     Wait(2.0, c_timeReal);
     libCamp_gf_CreateTipFromConversationState("StoryTips|Zeratul02_Pylons", libNtve_ge_TipType_NewStructure, PlayerGroupAll());
     TimerStart(gv_timerTip, 120.0, false, c_timeAI);
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
     TriggerQueueExit();
     return true;
 }
@@ -3041,7 +3081,7 @@ bool gt_TemplarArchivesPowered_Func (bool testConds, bool runActions) {
         gv_pylonPlayerCreatedHighTemplar = EventUnitProgressUnit();
         libNtve_gf_RescueUnit(UnitFromId(43), gv_p1_USER, true);
         PingDestroy(gv_pingTemplarArchives);
-        libCamp_gf_DisplayResearchPointsGiventoPlayer(libCamp_ge_StoryResearchObject_ResearchObjectPowertheAbandonedStructure, UnitFromId(43), gv_p1_USER);
+        libWCMI_gf_DisplayMissionObjectiveRewardFloatingText(UnitGetPosition(UnitFromId(43)), "TZeratul02_3");
         TriggerExecute(gt_ObjectivePowerupSecondaryUpdate, true, false);
         Wait(2.0, c_timeGame);
         TriggerExecute(gt_DialogueTemplarArchivesQ, true, false);
@@ -3085,7 +3125,7 @@ bool gt_RoboticsFacilityPowered_Func (bool testConds, bool runActions) {
         libNtve_gf_RescueUnit(UnitFromId(563), gv_p1_USER, true);
         TechTreeUnitAllow(gv_p1_USER, "Immortal", true);
         PingDestroy(gv_pingTwilightCouncil);
-        libCamp_gf_DisplayResearchPointsGiventoPlayer(libCamp_ge_StoryResearchObject_ResearchObjectPowertheAbandonedStructure, UnitFromId(563), gv_p1_USER);
+        libWCMI_gf_DisplayMissionObjectiveRewardFloatingText(UnitGetPosition(UnitFromId(563)), "TZeratul02_3");
         TriggerExecute(gt_ObjectivePowerupSecondaryUpdate, true, false);
         Wait(2.0, c_timeGame);
         TriggerExecute(gt_DialogueRoboticsFacilityQ, true, false);
@@ -3127,7 +3167,7 @@ bool gt_DarkShrinePowered_Func (bool testConds, bool runActions) {
         gv_pylonPlayerCreatedDT = EventUnitProgressUnit();
         libNtve_gf_RescueUnit(UnitFromId(179), gv_p1_USER, true);
         PingDestroy(gv_pingDarkShrine);
-        libCamp_gf_DisplayResearchPointsGiventoPlayer(libCamp_ge_StoryResearchObject_ResearchObjectPowertheAbandonedStructure, UnitFromId(179), gv_p1_USER);
+        libWCMI_gf_DisplayMissionObjectiveRewardFloatingText(UnitGetPosition(UnitFromId(179)), "TZeratul02_3");
         TriggerExecute(gt_ObjectivePowerupSecondaryUpdate, true, false);
         Wait(2.0, c_timeGame);
         TriggerExecute(gt_DialogueDarkShrineQ, true, false);
@@ -3502,15 +3542,7 @@ bool gt_NewUnitImmortalTipQ_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    Wait(1.0, c_timeReal);
-    TriggerQueueEnter();
-    if ((gv_gameOver == true)) {
-        return true;
-    }
-
     libCamp_gf_CreateTipFromConversationState("StoryTips|Zeratul02_Immortals", libNtve_ge_TipType_NewUnit, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -3529,16 +3561,8 @@ bool gt_NewUnitDarkTemplarTipQ_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    Wait(1.0, c_timeReal);
-    TriggerQueueEnter();
-    if ((gv_gameOver == true)) {
-        return true;
-    }
-
     libCamp_gf_CreateTipFromConversationState("StoryTips|Zeratul02_DarkTemplar", libNtve_ge_TipType_NewUnit, PlayerGroupAll());
     TechTreeUnitAllow(gv_p1_USER, "DarkTemplar", true);
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -3557,16 +3581,9 @@ bool gt_NewUnitHighTemplarTipQ_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    Wait(1.0, c_timeReal);
-    TriggerQueueEnter();
-    if ((gv_gameOver == true)) {
-        return true;
-    }
-
     libCamp_gf_CreateTipFromConversationState("StoryTips|Zeratul02_HighTemplar", libNtve_ge_TipType_NewUnit, PlayerGroupAll());
     TechTreeUnitAllow(gv_p1_USER, "HighTemplar", true);
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
+    TechTreeUnitAllow(gv_p1_USER, "Archon", true);
     return true;
 }
 
@@ -3596,14 +3613,7 @@ bool gt_PylonPlaceTipiftoomuchtimegoesbyQ_Func (bool testConds, bool runActions)
         return true;
     }
 
-    TriggerQueueEnter();
-    if ((gv_gameOver == true)) {
-        return true;
-    }
-
     libCamp_gf_CreateTipFromConversationState("StoryTips|Zeratul02_WarpIn", libNtve_ge_TipType_NewAbility, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -3623,14 +3633,7 @@ bool gt_TipGatewayQ_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    TriggerQueueEnter();
-    if ((gv_gameOver == true)) {
-        return true;
-    }
-
     libCamp_gf_CreateTipFromConversationState("StoryTips|Zeratul02_Gateway", libNtve_ge_TipType_NewStructure, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -3657,10 +3660,7 @@ bool gt_StorymodeTipsQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
     libCamp_gf_CreateStorymodeTips();
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -4255,9 +4255,6 @@ bool gt_DialogueDarkShrineQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    while (!((gf_PlayerIsInCombat(gv_p1_USER) == false))) {
-        Wait(1.0, c_timeGame);
-    }
     TriggerExecute(gt_DarkTemplarAttackers, true, false);
     TriggerExecute(gt_NewUnitDarkTemplarTipQ, true, false);
     libNtve_gf_CreateUnitsAtPoint2(1, "DarkTemplar", 0, gv_p7_NEUTRAL, PointFromId(193));
@@ -4321,9 +4318,6 @@ bool gt_DialogueRoboticsFacilityQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    while (!((gf_PlayerIsInCombat(gv_p1_USER) == false))) {
-        Wait(1.0, c_timeGame);
-    }
     TriggerExecute(gt_NewUnitImmortalTipQ, true, false);
     VisRevealArea(gv_p7_NEUTRAL, RegionFromId(5), 10.0, false);
     Wait(0.2, c_timeGame);
@@ -4384,9 +4378,6 @@ bool gt_DialogueTemplarArchivesQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    while (!((gf_PlayerIsInCombat(gv_p1_USER) == false))) {
-        Wait(1.0, c_timeGame);
-    }
     TriggerExecute(gt_NewUnitHighTemplarTipQ, true, false);
     VisRevealArea(gv_p7_NEUTRAL, RegionFromId(8), 10.0, false);
     Wait(0.2, c_timeGame);
@@ -5161,7 +5152,7 @@ bool gt_DarkTemplarKillsofenemyunits_Func (bool testConds, bool runActions) {
     }
 
     gv_darkTemplarKills = (gv_darkTemplarKills + 1);
-    AchievementTermQuantitySet(gv_p1_USER, "Anniversary_TZeratul02", gv_darkTemplarKills);
+    libWoLC_gf_SetAchievementTermQuantityCampaign("Anniversary_TZeratul02", gv_darkTemplarKills);
     TextExpressionSetToken("Param/Expression/634B8128", "A", IntToText(gv_darkTemplarKills));
     TriggerDebugOutput(1, TextExpressionAssemble("Param/Expression/634B8128"), false);
     return true;
@@ -5262,7 +5253,7 @@ bool gt_AchievementAllProtossDeadNormal_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    AchievementAward(gv_p1_USER, "TZeratul02_2");
+    libWoLC_gf_CampaignAwardAchievement("TZeratul02_2");
     return true;
 }
 
@@ -5303,7 +5294,7 @@ bool gt_DefeatBaseDead_Func (bool testConds, bool runActions) {
     TriggerQueueClear(c_triggerQueueRemove);
     Wait(2.0, c_timeReal);
     libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/34E4C5F5"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_Defeat, true, false);
     return true;
 }
@@ -5384,7 +5375,7 @@ bool gt_VictoryPrisonObjectiveComplete_Func (bool testConds, bool runActions) {
     TriggerStop(gt_P6LeftBaseAttackWaves);
     TriggerExecute(gt_ObjectiveDestroyPrisonsComplete, true, false);
     Wait(2.0, c_timeGame);
-    libCamp_gf_RunMissionVictorySequence(gt_VictoryQ);
+    libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
     return true;
 }
 
@@ -5407,11 +5398,11 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     TriggerQueueClear(c_triggerQueueRemove);
     UnitPauseAll(true);
     if ((ObjectiveGetState(gv_objectiveDestroyPrisons) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_objectivePowerBase) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_objectivePowerSecondaryBase) == c_objectiveStateCompleted)) {
-        AchievementAward(gv_p1_USER, "TZeratul02_1");
+        libWoLC_gf_CampaignAwardAchievement("TZeratul02_1");
     }
 
     if ((libNtve_gf_DifficultyValueInt(0, 0, 1, 1) == 1) && (TimerGetRemaining(gv_achievementHardTimer) != 0.0)) {
-        AchievementAward(gv_p1_USER, "TZeratul02_3");
+        libWoLC_gf_CampaignAwardAchievement("TZeratul02_3");
     }
 
     VictoryPanelAddAchievement("TZeratul02_1");
@@ -5424,9 +5415,7 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/2704744A"), IntToText(gv_hybridWavesTracking));
     VictoryPanelAddCustomStatisticLine(StringToText(""), StringToText(""));
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/D46EC28D"), (IntToText(gv_obejctivePowerSecondaryBaseUpdate) + StringExternal("Param/Value/1BBFCC0E") + IntToText(gv_obejctivePowerSecondaryBaseTotal)));
-    VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/54855580"), IntToText(gv_obejctivePowerSecondaryBaseUpdate));
-    VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/82BCFB17"), StringExternal("Param/Value/F2B82ED1"));
-    libCamp_gf_EndCampaignMission(gv_p1_USER, c_gameOverVictory);
+    libWCMI_gf_EndCampaignMission(gv_p1_USER, c_gameOverVictory);
     return true;
 }
 
@@ -5458,7 +5447,7 @@ bool gt_Defeat_Func (bool testConds, bool runActions) {
         if (auto74B2EFCB_var == null) { break; }
         libNtve_gf_PauseUnit(auto74B2EFCB_var, true);
     }
-    libCamp_gf_EndCampaignMission(gv_p1_USER, c_gameOverDefeat);
+    libWCMI_gf_EndCampaignMission(gv_p1_USER, c_gameOverDefeat);
     return true;
 }
 
@@ -5485,7 +5474,7 @@ bool gt_VictoryCheat_Func (bool testConds, bool runActions) {
     }
 
     gv_gameOver = true;
-    libCamp_gf_RunMissionVictorySequence(gt_Victory);
+    libWCMI_gf_RunMissionVictorySequence(gt_Victory);
     return true;
 }
 
@@ -5541,13 +5530,10 @@ bool gt_ObjectivePowerBaseCreateQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate((StringExternal("Param/Value/4D585342") + IntToText(gv_obejctivePowerBaseUpdate) + StringExternal("Param/Value/A3B269F3") + IntToText(gv_obejctivePowerBaseTotal) + StringExternal("Param/Value/65D0FFDA")), StringExternal("Param/Value/A20EA9E8"), c_objectiveStateActive, true);
+    libWCMI_gf_CreateObjectiveCampaign("TZeratul02_1");
     gv_objectivePowerBase = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_TZeratul02Objective1, ObjectiveLastCreated(), StringExternal("Param/Value/F78FFBD4"));
     TriggerExecute(gt_PylonPlaceStartQ, true, false);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -5576,6 +5562,7 @@ bool gt_ObjectivePowerBaseComplete_Func (bool testConds, bool runActions) {
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectivePowerBaseCreateQ, true, false);
     ObjectiveSetState(gv_objectivePowerBase, c_objectiveStateCompleted);
+    libWCMI_gf_ZS_SetMissionObjectiveState("TZeratul02_1", libWoLC_ge_MissionObjectiveState_Completed);
     return true;
 }
 
@@ -5607,7 +5594,7 @@ bool gt_ObjectivePowerupBaseUpdate_Func (bool testConds, bool runActions) {
 
     TriggerExecute(gt_ObjectivePowerBaseCreateQ, true, false);
     gv_obejctivePowerBaseUpdate += 1;
-    ObjectiveSetName(gv_objectivePowerBase, (StringExternal("Param/Value/B6424D18") + IntToText(gv_obejctivePowerBaseUpdate) + StringExternal("Param/Value/4A781515") + (IntToText(gv_obejctivePowerBaseTotal)) + StringExternal("Param/Value/DE65E9D6")));
+    libWCMI_gf_SetMissionObjectiveProgress("TZeratul02_1", gv_obejctivePowerBaseUpdate);
     if ((gv_obejctivePowerBaseUpdate == gv_obejctivePowerBaseTotal)) {
         TriggerEnable(TriggerGetCurrent(), false);
         TriggerExecute(gt_ObjectivePowerBaseComplete, true, false);
@@ -5639,14 +5626,8 @@ bool gt_ObjectiveDestroyPrisonsCreateQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    if ((gv_gameOver == true)) {
-        return true;
-    }
-
-    ObjectiveCreate((StringExternal("Param/Value/661F07D9") + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectDestroythePreserverPrisons, libCamp_ge_StoryResearchObjectiveTextStyle_Multipart, 3, 0)), StringExternal("Param/Value/BF6654F6"), c_objectiveStateActive, true);
+    libWCMI_gf_CreateObjectiveCampaign("TZeratul02_2");
     gv_objectiveDestroyPrisons = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_TZeratul02Objective2, ObjectiveLastCreated(), StringExternal("Param/Value/FC23C1AF"));
     TriggerExecute(gt_ObjectiveDestroyPrisonsCreateQ, true, false);
     Wait(3.0, c_timeReal);
     if ((UnitIsAlive(UnitFromId(8)) == true)) {
@@ -5670,8 +5651,7 @@ bool gt_ObjectiveDestroyPrisonsCreateQ_Func (bool testConds, bool runActions) {
     VisRevealArea(gv_p1_USER, RegionCircle(PointWithOffset(PointFromId(651), 0.0, 0.0), 6.0), 1.0, false);
     VisRevealArea(gv_p1_USER, RegionCircle(PointWithOffset(PointFromId(656), 0.0, 0.0), 6.0), 1.0, false);
     VisRevealArea(gv_p1_USER, RegionCircle(PointWithOffset(PointFromId(659), 0.0, 0.0), 6.0), 1.0, false);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -5699,8 +5679,7 @@ bool gt_ObjectiveDestroyPrisonsComplete_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveDestroyPrisonsCreateQ, true, false);
-    ObjectiveSetState(gv_objectiveDestroyPrisons, c_objectiveStateCompleted);
-    ObjectiveSetName(gv_objectiveDestroyPrisons, (StringExternal("Param/Value/86EE82A2") + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectDestroythePreserverPrisons, libCamp_ge_StoryResearchObjectiveTextStyle_Multipart, 3, gv_objectivesAllPrisonsDestroyedUpdate)));
+    libWCMI_gf_ZS_SetMissionObjectiveState("TZeratul02_2", libWoLC_ge_MissionObjectiveState_Completed);
     return true;
 }
 
@@ -5732,7 +5711,7 @@ bool gt_ObjectivePrisonsDestroyedUpdate_Func (bool testConds, bool runActions) {
 
     TriggerExecute(gt_ObjectiveDestroyPrisonsCreateQ, true, false);
     gv_objectivesAllPrisonsDestroyedUpdate += 1;
-    ObjectiveSetName(gv_objectiveDestroyPrisons, (StringExternal("Param/Value/8DD3AF59") + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectDestroythePreserverPrisons, libCamp_ge_StoryResearchObjectiveTextStyle_Multipart, 3, gv_objectivesAllPrisonsDestroyedUpdate) + StringExternal("Param/Value/1745A93B")));
+    libWCMI_gf_SetMissionObjectiveProgress("TZeratul02_2", gv_objectivesAllPrisonsDestroyedUpdate);
     if ((gv_objectivesAllPrisonsDestroyedUpdate == gv_obejctivePrisonsTotal)) {
         TriggerEnable(TriggerGetCurrent(), false);
         libNtve_gf_KillModel(gv_actorHybridDeathEffect);
@@ -5776,7 +5755,6 @@ bool gt_Prison01Destroyed_Func (bool testConds, bool runActions) {
     libNtve_gf_MakeUnitInvulnerable(gv_archTemplar01, true);
     PingDestroy(gv_pingPrison01);
     UnitSetScale(gv_archTemplar01, 120.0, 120.0, 120.0);
-    libCamp_gf_DisplayResearchPointsGiventoPlayer(libCamp_ge_StoryResearchObject_ResearchObjectDestroythePreserverPrisons, gv_archTemplar01, gv_p1_USER);
     return true;
 }
 
@@ -5811,7 +5789,6 @@ bool gt_Prison02Destroyed_Func (bool testConds, bool runActions) {
     libNtve_gf_MakeUnitInvulnerable(gv_archTemplar02, true);
     PingDestroy(gv_pingPrison02);
     UnitSetScale(gv_archTemplar02, 120.0, 120.0, 120.0);
-    libCamp_gf_DisplayResearchPointsGiventoPlayer(libCamp_ge_StoryResearchObject_ResearchObjectDestroythePreserverPrisons, gv_archTemplar02, gv_p1_USER);
     return true;
 }
 
@@ -5846,7 +5823,6 @@ bool gt_Prison03Destroyed_Func (bool testConds, bool runActions) {
     libNtve_gf_MakeUnitInvulnerable(gv_archTemplar03, true);
     PingDestroy(gv_pingPrison03);
     UnitSetScale(gv_archTemplar03, 120.0, 120.0, 120.0);
-    libCamp_gf_DisplayResearchPointsGiventoPlayer(libCamp_ge_StoryResearchObject_ResearchObjectDestroythePreserverPrisons, gv_archTemplar03, gv_p1_USER);
     return true;
 }
 
@@ -5874,14 +5850,10 @@ bool gt_ObjectivePowerSecondaryCreateQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate((StringExternal("Param/Value/44C85259") + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectPowertheAbandonedStructure, libCamp_ge_StoryResearchObjectiveTextStyle_Multipart, 3, 0) + StringExternal("Param/Value/0E94037E")), StringExternal("Param/Value/F974BE83"), c_objectiveStateActive, false);
+    libWCMI_gf_CreateObjectiveCampaign("TZeratul02_3");
     gv_objectivePowerSecondaryBase = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_TZeratul02Objective1, ObjectiveLastCreated(), StringExternal("Param/Value/79D9949C"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_ObjectivePings, true, false);
-    ObjectiveSetName(gv_objectivePowerSecondaryBase, (StringExternal("Param/Value/E8580788") + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectPowertheAbandonedStructure, libCamp_ge_StoryResearchObjectiveTextStyle_Multipart, 3, gv_obejctivePowerSecondaryBaseUpdate) + StringExternal("Param/Value/63A96D60")));
-    TriggerQueueExit();
     return true;
 }
 
@@ -5909,8 +5881,7 @@ bool gt_ObjectivePowerSecondaryComplete_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectivePowerSecondaryCreateQ, true, false);
-    ObjectiveSetState(gv_objectivePowerSecondaryBase, c_objectiveStateCompleted);
-    ObjectiveSetName(gv_objectivePowerSecondaryBase, (StringExternal("Param/Value/CB6A9AC1") + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectPowertheAbandonedStructure, libCamp_ge_StoryResearchObjectiveTextStyle_Multipart, 3, gv_obejctivePowerSecondaryBaseUpdate)));
+    libWCMI_gf_ZS_SetMissionObjectiveState("TZeratul02_3", libWoLC_ge_MissionObjectiveState_Completed);
     return true;
 }
 
@@ -6001,7 +5972,7 @@ bool gt_ObjectivePowerupSecondaryUpdate_Func (bool testConds, bool runActions) {
 
     TriggerExecute(gt_ObjectivePowerSecondaryCreateQ, true, false);
     gv_obejctivePowerSecondaryBaseUpdate += 1;
-    ObjectiveSetName(gv_objectivePowerSecondaryBase, (StringExternal("Param/Value/2711B490") + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectPowertheAbandonedStructure, libCamp_ge_StoryResearchObjectiveTextStyle_Multipart, 3, gv_obejctivePowerSecondaryBaseUpdate) + StringExternal("Param/Value/30616D3B")));
+    libWCMI_gf_SetMissionObjectiveProgress("TZeratul02_3", gv_obejctivePowerSecondaryBaseUpdate);
     if ((gv_obejctivePowerSecondaryBaseUpdate == gv_obejctivePowerSecondaryBaseTotal)) {
         TriggerEnable(TriggerGetCurrent(), false);
         TriggerExecute(gt_ObjectivePowerSecondaryComplete, true, false);
@@ -6336,6 +6307,8 @@ bool gt_IntroCleanup_Func (bool testConds, bool runActions) {
     TriggerEnable(gt_IntroCinematicNexus, false);
     PlayerModifyPropertyInt(gv_p1_USER, c_playerPropMinerals, c_playerPropOperSetTo, gv_startingMinerals);
     PlayerModifyPropertyInt(gv_p1_USER, c_playerPropVespene, c_playerPropOperSetTo, gv_startingGas);
+    libWCMI_gf_StartingWorkersAutoHarvest(RegionFromId(3), null);
+    libWCMI_gf_SetWorkerRallyPointsPlayersNexuses(gv_p1_USER);
     if ((gv_introCinematicCompleted == true)) {
         lv_fadeDuration = 1.5;
     }

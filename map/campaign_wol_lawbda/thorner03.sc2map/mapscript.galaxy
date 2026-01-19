@@ -7,7 +7,11 @@
 //==================================================================================================
 include "TriggerLibs/NativeLib"
 include "TriggerLibs/LibertyLib"
-include "TriggerLibs/CampaignLib"
+include "LibEA0820A1"
+include "LibCamp"
+include "LibWoLC"
+include "LibWCMI"
+include "LibWCUI"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -15,7 +19,11 @@ include "TriggerLibs/CampaignLib"
 void InitLibs () {
     libNtve_InitLib();
     libLbty_InitLib();
+    libEA0820A1_InitLib();
     libCamp_InitLib();
+    libWoLC_InitLib();
+    libWCMI_InitLib();
+    libWCUI_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -43,7 +51,6 @@ unitgroup gv_warehouse1Bullies;
 bool gv_initialOrderGiven;
 unitgroup gv_warehouseDominion;
 int gv_odinPing;
-int gv_odinBossBar;
 int gv_odinAIPlayerTarget;
 bool gv_odinRepairedOnAdvanced;
 fixed gv_odinCurrentHealth;
@@ -62,6 +69,7 @@ bool gv_odinDoneWithP05;
 bool gv_baseDestroyedP06;
 int gv_barrageIncrement;
 int gv_yamatoTransmission;
+fixed gv_odinDamageDealt;
 bool gv_achievementOdinHealthBelow30Percent;
 fixed gv_odinLowestHealth;
 fixed gv_sCVHealingPerformedOnOdin;
@@ -93,7 +101,7 @@ void InitGlobals () {
     gv_objectiveTychusMustSurvive = c_invalidObjectiveId;
     gv_objectiveDestroyDominionBases = c_invalidObjectiveId;
     gv_objectiveOdinMustSurvive = c_invalidObjectiveId;
-    gv_objectiveDestroyDominionBasesQuota = 5;
+    gv_objectiveDestroyDominionBasesQuota = CatalogFieldValueGetAsInt(c_gameCatalogObjective, "THorner03_3", "RequiredCount", c_playerAny);
     gv_objectiveDestroytheLoki = c_invalidObjectiveId;
     gv_objectiveDevourerSamples = c_invalidObjectiveId;
     gv_midGameActors = UnitGroupEmpty();
@@ -103,12 +111,12 @@ void InitGlobals () {
 //--------------------------------------------------------------------------------------------------
 // Global Function Declarations
 //--------------------------------------------------------------------------------------------------
-void gf_ResearchForAllDominion (int lp_qty, string lp_upgrade);
 void gf_AddWaypointToExpansion (int lp_p);
 
 //--------------------------------------------------------------------------------------------------
 // Trigger Variables
 //--------------------------------------------------------------------------------------------------
+trigger gt_OnPlayer1GetUnit;
 trigger gt_Initialization;
 trigger gt_Init01Technology;
 trigger gt_Init02Players;
@@ -205,6 +213,7 @@ trigger gt_NewUnitWraithTipQ;
 trigger gt_NewAbilityCloakTipQ;
 trigger gt_AchievementOdinHealthBelow30Hard;
 trigger gt_OdinHealthRepaired;
+trigger gt_OdinDamageDealt;
 trigger gt_VictoryDestroyAllBasesComplete;
 trigger gt_Victory;
 trigger gt_DefeatBaseDead;
@@ -214,13 +223,11 @@ trigger gt_VictoryCheat;
 trigger gt_DefeatCheat;
 trigger gt_ObjectiveStealtheOdinCreateQ;
 trigger gt_ObjectiveStealtheOdinComplete;
-trigger gt_ObjectiveStealtheOdinFailedTychus;
 trigger gt_ObjectiveDestroyDominionBasesCreateQ;
 trigger gt_ObjectiveDestroyDominionBasesComplete;
 trigger gt_ObjectiveDestroyDominionBasesUpdate;
-trigger gt_ObjectiveDestroytheLokiCreateHidden;
+trigger gt_ObjectiveDestroytheLokiCreate;
 trigger gt_ObjectiveDestroytheLokiComplete;
-trigger gt_ObjectiveDestroytheLokiFailed;
 trigger gt_ObjectiveDevourerSamplesCreateQ;
 trigger gt_ObjectiveDevourerSampleUpdate;
 trigger gt_ObjectiveCerebrateSamplesComplete;
@@ -250,29 +257,10 @@ trigger gt_VictoryCleanup;
 //--------------------------------------------------------------------------------------------------
 // Global Functions
 //--------------------------------------------------------------------------------------------------
-void gf_ResearchForAllDominion (int lp_qty, string lp_upgrade) {
-    // Variable Declarations
-    int lv_p;
-
-    // Automatic Variable Declarations
-    playergroup auto8FDB1822_g;
-
-    // Variable Initialization
-
-    // Implementation
-    auto8FDB1822_g = gv_dominionEnemyGroup;
-    lv_p = -1;
-    while (true) {
-        lv_p = PlayerGroupNextPlayer(auto8FDB1822_g, lv_p);
-        if (lv_p < 0) { break; }
-        libCamp_gf_ResearchAIUpgrade(lp_qty, lp_upgrade, lv_p);
-    }
-}
-
 void gf_AddWaypointToExpansion (int lp_p) {
     // Automatic Variable Declarations
     // Implementation
-    if (((UnitGroupCount(UnitGroup("CommandCenter", gv_p01_USER, RegionFromId(31), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) >= 1) || (UnitGroupCount(UnitGroup("CommandCenterFlying", gv_p01_USER, RegionFromId(31), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) >= 1) || (UnitGroupCount(UnitGroup("OrbitalCommand", gv_p01_USER, RegionFromId(31), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) >= 1) || (UnitGroupCount(UnitGroup("OrbitalCommandFlying", gv_p01_USER, RegionFromId(31), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) >= 1) || (UnitGroupCount(UnitGroup("PlanetaryFortress", gv_p01_USER, RegionFromId(31), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) >= 1))) {
+    if ((UnitGroupCount(UnitGroup(null, gv_p01_USER, RegionFromId(31), UnitFilter((1 << c_targetFilterPreventReveal), 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 1), c_unitCountAlive) > 0)) {
         if ((lp_p == gv_p05_DOMINION_FACTORY)) {
             AIAttackWaveAddWaypoint(lp_p, PointFromId(211), false);
         }
@@ -280,6 +268,26 @@ void gf_AddWaypointToExpansion (int lp_p) {
         AIAttackWaveAddWaypoint(lp_p, PointFromId(206), false);
     }
 
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: OnPlayer1GetUnit
+//--------------------------------------------------------------------------------------------------
+bool gt_OnPlayer1GetUnit_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerExecute(libEA0820A1_gt_Init00ReplaceUnit, true, true);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_OnPlayer1GetUnit_Init () {
+    gt_OnPlayer1GetUnit = TriggerCreate("gt_OnPlayer1GetUnit_Func");
+    TriggerAddEventUnitChangeOwner(gt_OnPlayer1GetUnit, null);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -292,7 +300,8 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_LoadCampaignData(libCamp_ge_MapID_MapTHorner03);
+    libWoLC_gf_ULoadCampaignData("THorner03");
+    TriggerExecute(libEA0820A1_gt_Init00ReplaceUnit, true, true);
     TriggerExecute(gt_Init01Technology, true, true);
     TriggerExecute(gt_Init02Players, true, true);
     TriggerExecute(gt_Init03Units, true, true);
@@ -300,8 +309,8 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init05Environment, true, true);
     TriggerExecute(gt_Init06Difficulty, true, true);
     TriggerExecute(gt_Init07Help, true, true);
-    libCamp_gf_RegisterFootageRecording(gt_BriefingQ);
-    libCamp_gf_PurchaseStorymodeTech();
+    gv_raynorsRaidingForce = UnitGroup(null, gv_p01_USER, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+    libWoLC_gf_RegisterFootageRecording(gt_BriefingQ);
     TriggerExecute(gt_IntroSequence, true, false);
     return true;
 }
@@ -322,11 +331,7 @@ bool gt_Init01Technology_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_SetTechRestrictionsCallback(TriggerGetCurrent());
     UnitAbilityEnable(UnitFromId(2), "OdinBarrage", false);
-    TechTreeUpgradeAddLevel(gv_p01_USER, "WraithCloak", 1);
-    TechTreeAbilityAllow(gv_p01_USER, AbilityCommand("WraithCloak", 0), true);
-    TechTreeAbilityAllow(gv_p01_USER, AbilityCommand("WraithCloak", 1), true);
     return true;
 }
 
@@ -396,6 +401,7 @@ bool gt_Init02Players_Func (bool testConds, bool runActions) {
         PlayerModifyPropertyInt(auto317FADF5_var, c_playerPropMinerals, c_playerPropOperSetTo, 5000);
         PlayerModifyPropertyInt(auto317FADF5_var, c_playerPropVespene, c_playerPropOperSetTo, 5000);
     }
+    libWCMI_gf_WM_DetectionUpgradesApply();
     return true;
 }
 
@@ -427,6 +433,7 @@ bool gt_Init03Units_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    libWCMI_gf_HandleMercCompound(UnitFromId(2109));
     autoD9E2A2C7_g = UnitGroup("DevourerTissueSampleTube", c_playerAny, RegionPlayableMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     autoD9E2A2C7_u = UnitGroupCount(autoD9E2A2C7_g, c_unitCountAll);
     for (;; autoD9E2A2C7_u -= 1) {
@@ -571,28 +578,10 @@ bool gt_Init06Difficulty_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    if ((libNtve_gf_DifficultyValueInt(1, 1, 0, 0) == 1)) {
-        UnitSetPropertyFixed(UnitFromId(1014), c_unitPropLifeMax, 200.0);
-        UnitSetPropertyFixed(UnitFromId(1006), c_unitPropLifeMax, 200.0);
-    }
-
-    if ((libNtve_gf_DifficultyValueInt(0, 0, 1, 0) == 1)) {
-        UnitSetPropertyFixed(UnitFromId(1014), c_unitPropLifeMax, 250.0);
-        UnitSetPropertyFixed(UnitFromId(1006), c_unitPropLifeMax, 250.0);
-    }
-
+    UnitSetPropertyFixed(UnitFromId(1014), c_unitPropLifeMax, libNtve_gf_DifficultyValueInt(200, 200, 250, 350));
+    UnitSetPropertyFixed(UnitFromId(1006), c_unitPropLifeMax, libNtve_gf_DifficultyValueInt(200, 200, 250, 350));
     UnitSetPropertyFixed(UnitFromId(1014), c_unitPropLifePercent, 100.0);
     UnitSetPropertyFixed(UnitFromId(1006), c_unitPropLifePercent, 100.0);
-    if ((libNtve_gf_DifficultyValueInt(1, 0, 0, 0) == 1)) {
-        PlayerModifyPropertyInt(gv_p03_DOMINION_WAREHOUSE, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p04_DOMINION_INFANTRY_A, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p05_DOMINION_FACTORY, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p06_DOMINION_STARPORT_A, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p07_DOMINION_STARPORT_B, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p08_DOMINION_INFANTRY_B, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p10_DOMINION_LOKI, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-    }
-
     autoA1DF5919_val = PlayerDifficulty(gv_p01_USER);
     if (autoA1DF5919_val == 1) {
         UnitSetPropertyFixed(UnitFromId(835), c_unitPropLifeMax, 1000.0);
@@ -760,8 +749,6 @@ bool gt_IntroSequence_Func (bool testConds, bool runActions) {
     libNtve_gf_GlobalCinematicSetting(false);
     libNtve_gf_SwooshCamera(gv_p01_USER, ((CameraInfoGetValue(CameraInfoDefault(), c_cameraValueDistance)) + 8.0), CameraInfoGetValue(CameraInfoDefault(), c_cameraValueDistance), PointFromId(966), 1.5);
     CinematicFade(true, 1.5, c_fadeStyleNormal, ColorWithAlpha(0.00, 0.00, 0.00, 0.00), 0.0, true);
-    PlayerPauseAllCooldowns(gv_p01_USER, true);
-    PlayerPauseAllCharges(gv_p01_USER, true);
     UIAlertPoint("Trigger", gv_p01_USER, StringExternal("Param/Value/9E4D978B"), null, PointFromId(966));
     TriggerExecute(gt_StartGameWarehouse, true, false);
     return true;
@@ -790,8 +777,6 @@ bool gt_StartGameWarehouse_Func (bool testConds, bool runActions) {
         SoundPlayOnUnit(SoundLink("THorner03BriefingTychus00019", -1), PlayerGroupAll(), UnitFromId(4), 0.0, 100.0, 0.0);
     }
 
-    Wait(1.0, c_timeReal);
-    TriggerExecute(gt_ObjectiveDestroytheLokiCreateHidden, true, false);
     Wait(1.0, c_timeReal);
     TriggerExecute(gt_ObjectiveDevourerSamplesCreateQ, true, false);
     return true;
@@ -1102,7 +1087,7 @@ bool gt_DefeatTychusDead_Func (bool testConds, bool runActions) {
     TriggerQueueClear(c_triggerQueueRemove);
     Wait(2.0, c_timeReal);
     libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/22D9DD50"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_Defeat, true, false);
     return true;
 }
@@ -1140,7 +1125,7 @@ bool gt_DefeatEscortingUnitsDead_Func (bool testConds, bool runActions) {
     TriggerQueueClear(c_triggerQueueRemove);
     Wait(2.0, c_timeReal);
     libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/A96CEBFB"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_Defeat, true, false);
     return true;
 }
@@ -1218,8 +1203,6 @@ bool gt_StartGameEscort_Func (bool testConds, bool runActions) {
     UnitSetCustomValue(UnitFromId(2), 1, UnitGetPropertyFixed(UnitFromId(2), c_unitPropLifeMax, c_unitPropNormal));
     UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeResourcePanel, true);
     UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeSupply, true);
-    PlayerPauseAllCooldowns(gv_p01_USER, false);
-    PlayerPauseAllCharges(gv_p01_USER, false);
     gv_odinAIPlayerTarget = gv_p04_DOMINION_INFANTRY_A;
     TriggerExecute(gt_CreateOdinBossBar, true, false);
     PingCreate(PlayerGroupSingle(gv_p01_USER), "PingSimple", UnitGetPosition(UnitFromId(2)), ColorWithAlpha(0.00, 100.00, 0.00, 0.00), 0.0);
@@ -1228,13 +1211,13 @@ bool gt_StartGameEscort_Func (bool testConds, bool runActions) {
     gv_odinPing = PingLastCreated();
     Wait(3.0, c_timeReal);
     AISetUnitForceMover(gv_odin, true);
-    ObjectiveSetState(gv_objectiveStealTheOdin, c_objectiveStateHidden);
-    ObjectiveSetState(gv_objectiveTychusMustSurvive, c_objectiveStateHidden);
+    libWCMI_gf_HideObjectiveCampaign("THorner03_1");
+    libWCMI_gf_HideObjectiveCampaign("THorner03_2");
     Wait(0.25, c_timeReal);
     TriggerExecute(gt_ObjectiveDestroyDominionBasesCreateQ, true, true);
     Wait(1.0, c_timeGame);
-    ObjectiveShow(gv_objectiveDestroytheLoki, PlayerGroupAll(), true);
-    Wait(29.0, c_timeGame);
+    TriggerExecute(gt_ObjectiveDestroytheLokiCreate, true, false);
+    Wait(30.0, c_timeGame);
     TriggerExecute(gt_BattlecruiserSpawnAttackOdin, true, false);
     Wait(30.0, c_timeGame);
     TriggerExecute(gt_CampaignTipsQ, true, false);
@@ -1263,14 +1246,8 @@ bool gt_CreateOdinBossBar_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libNtve_gf_DisplayBossBar(1, "Assets\\Textures\\btn-unit-terran-thor.dds", StringExternal("Param/Value/F6112D1D"), 100, PlayerGroupAll());
-    gv_odinBossBar = 1;
-    libNtve_gf_SetBossBarRace(gv_odinBossBar, libNtve_ge_BossBarRace_Terran, true);
-    libNtve_gf_SetBossBarMaximumValue(gv_odinBossBar, FixedToInt(gv_odinCurrentHealth), true);
-    libNtve_gf_SetBossBarCurrentValue(gv_odinBossBar, FixedToInt(UnitGetPropertyFixed(gv_odin, c_unitPropLife, c_unitPropCurrent)), true);
-    libNtve_gf_SetBossBarBoss(gv_odinBossBar, UnitFromId(2), true);
-    libNtve_gf_MoveBossBar(gv_odinBossBar, c_anchorTop, 0, 50);
-    libNtve_gf_ShowHideBossBar(true, gv_odinBossBar);
+    libWCUI_gf_DisplaySingularBossBarVoidCampaign("Assets\\Textures\\btn-unit-terran-odin.dds", StringExternal("Param/Value/AE2492EA"), 100);
+    libWCUI_gf_SetSingularBossBarBossVoidCampaign(UnitFromId(2), true);
     TriggerEnable(gt_OdinLowHealthWarning, true);
     return true;
 }
@@ -1535,7 +1512,7 @@ bool gt_WraithIntro_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     Wait(15.0, c_timeGame);
-    libCamp_gf_EnableCampaignTechUnit(true, libCamp_ge_StoryTechGroup_StoryTechGroupStarshipsWrath, gv_p01_USER);
+    libWoLC_gf_EnableCampaignTechUnit(true, "Wraith", gv_p01_USER);
     libCamp_gf_CreateNewStructureTips();
     libNtve_gf_PauseUnit(UnitFromId(292), false);
     libNtve_gf_PauseUnit(UnitFromId(8), false);
@@ -1559,13 +1536,13 @@ bool gt_WraithIntro_Func (bool testConds, bool runActions) {
     CameraPan(gv_p01_USER, PointFromId(52), 1.0, -1, 10, false);
     Wait(1.0, c_timeGame);
     CameraLockInput(gv_p01_USER, false);
-    UnitCreate(1, "StarportFlying", 0, gv_p01_USER, PointFromId(75), 315.0);
+    UnitCreate(1, "SquadStarportFlying", 0, gv_p01_USER, PointFromId(75), 315.0);
     lv_starport = UnitLastCreated();
     UnitSetPropertyFixed(lv_starport, c_unitPropHeight, 10.0);
     SoundPlay(SoundLink("Ghost_DropPodImpact", -1), PlayerGroupAll(), 100.0, 0.0);
     UnitSetHeight(lv_starport, 3.25, 2.0);
     Wait(2.0, c_timeGame);
-    UnitIssueOrder(lv_starport, OrderTargetingPoint(AbilityCommand("StarportLand", 0), PointFromId(75)), c_orderQueueReplace);
+    UnitIssueOrder(lv_starport, OrderTargetingPoint(AbilityCommand("SquadStarportLand", 0), PointFromId(75)), c_orderQueueReplace);
     libNtve_gf_MakeUnitInvulnerable(lv_starport, false);
     libNtve_gf_MakeUnitUncommandable(lv_starport, false);
     Wait(65.0, c_timeGame);
@@ -1619,7 +1596,6 @@ bool gt_AfterWraithIntroQ_Func (bool testConds, bool runActions) {
     Wait(15.0, c_timeGame);
     TriggerQueueEnter();
     libCamp_gf_CreateTipFromConversationState("StoryTips|Horner03_EscortingOdin", libNtve_ge_TipType_NormalTip, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeGame);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
     libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
     // Transmission - SoundLink("THorner03Tychus00037", 0)
@@ -1749,10 +1725,7 @@ bool gt_WraithGetsClosetoDetectorQ_Func (bool testConds, bool runActions) {
         gv_tippedDetectorPing = libNtve_gf_ActorLastCreated();
         gv_tippedDetectorUnit = lv_nearbyDetector;
         TriggerExecute(gt_KillDetectorSpottedPing, true, false);
-        TriggerQueueEnter();
         libCamp_gf_CreateTipFromConversationState("StoryTips|Horner03_Detection", libNtve_ge_TipType_NormalTip, PlayerGroupAll());
-        Wait(libCamp_gv_campaignHintDelay, c_timeGame);
-        TriggerQueueExit();
     }
 
     return true;
@@ -1868,9 +1841,11 @@ bool gt_LokiDestroyed_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
+    libWCMI_gf_DisplayMissionObjectiveRewardFloatingText(UnitGetPosition(EventUnit()), "THorner03_5");
     TriggerExecute(gt_ObjectiveDestroytheLokiComplete, true, false);
+    UserDataSetInt("StoryStates", "LokiKilled", "Value", 1, 1);
     if ((libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1)) {
-        AchievementAward(gv_p01_USER, "THorner03_2");
+        libWoLC_gf_CampaignAwardAchievement("THorner03_2");
     }
 
     return true;
@@ -4253,10 +4228,7 @@ bool gt_RepairOdinTipQ_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    TriggerQueueEnter();
     libCamp_gf_CreateTipFromConversationState("StoryTips|Horner03_OdinRepair", libNtve_ge_TipType_NormalTip, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -4286,11 +4258,8 @@ bool gt_NewUnitWraithTipQ_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    TriggerQueueEnter();
     libCamp_gf_CreateTipFromConversationState("StoryTips|Horner03_Wraith", libNtve_ge_TipType_NewUnit, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
     TriggerExecute(gt_NewAbilityCloakTipQ, true, false);
-    TriggerQueueExit();
     return true;
 }
 
@@ -4321,10 +4290,7 @@ bool gt_NewAbilityCloakTipQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
     libCamp_gf_CreateTipFromConversationState("StoryTips|Horner03_Cloak", libNtve_ge_TipType_NewAbility, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -4420,6 +4386,37 @@ void gt_OdinHealthRepaired_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: Odin Damage Dealt
+//--------------------------------------------------------------------------------------------------
+bool gt_OdinDamageDealt_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((gv_odin != null))) {
+            return false;
+        }
+
+        if (!((EventUnitDamageSourceUnit() == gv_odin))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    gv_odinDamageDealt += EventUnitDamageAmount();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_OdinDamageDealt_Init () {
+    gt_OdinDamageDealt = TriggerCreate("gt_OdinDamageDealt_Func");
+    TriggerAddEventUnitDamaged(gt_OdinDamageDealt, null, c_unitDamageTypeAny, c_unitDamageEither, null);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: Victory Destroy All Bases Complete
 //--------------------------------------------------------------------------------------------------
 bool gt_VictoryDestroyAllBasesComplete_Func (bool testConds, bool runActions) {
@@ -4440,9 +4437,9 @@ bool gt_VictoryDestroyAllBasesComplete_Func (bool testConds, bool runActions) {
     gv_gameOver = true;
     libNtve_gf_MakeUnitInvulnerable(UnitFromId(2), true);
     Wait(5.0, c_timeGame);
-    libNtve_gf_ShowHideBossBar(false, gv_odinBossBar);
+    libWCUI_gf_ShowHideSingularBossBarVoidCampaign(false);
     TriggerExecute(gt_ObjectiveDestroyDominionBasesComplete, true, true);
-    libCamp_gf_RunMissionVictorySequence(gt_VictoryQ);
+    libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
     return true;
 }
 
@@ -4462,17 +4459,17 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     }
 
     if ((ObjectiveGetState(gv_objectiveDestroyDominionBases) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_objectiveDestroytheLoki) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_objectiveDevourerSamples) == c_objectiveStateCompleted)) {
-        AchievementAward(gv_p01_USER, "THorner03_1");
+        libWoLC_gf_CampaignAwardAchievement("THorner03_1");
     }
 
     if ((libNtve_gf_DifficultyValueInt(0, 0, 1, 1) == 1) && (gv_achievementOdinHealthBelow30Percent == false)) {
-        AchievementAward(gv_p01_USER, "THorner03_3");
+        libWoLC_gf_CampaignAwardAchievement("THorner03_3");
     }
 
     TextExpressionSetToken("Param/Expression/D027731D", "A", FixedToText(gv_sCVHealingPerformedOnOdin, c_fixedPrecisionAny));
     TriggerDebugOutput(1, TextExpressionAssemble("Param/Expression/D027731D"), false);
     if ((libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1) && (gv_sCVHealingPerformedOnOdin < 5001.0)) {
-        AchievementAward(gv_p01_USER, "Anniversary_THorner03");
+        libWoLC_gf_CampaignAwardAchievement("Anniversary_THorner03");
         TriggerDebugOutput(1, StringExternal("Param/Value/9C67BB40"), false);
     }
 
@@ -4483,12 +4480,12 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     VictoryPanelAddTrackedStatistic("UnitsTotalCount");
     VictoryPanelAddTrackedStatistic("UnitsLostCount");
     VictoryPanelAddCustomStatisticLine(StringToText(""), StringToText(""));
+    VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/F8C2090B"), FixedToText(gv_odinDamageDealt, 0));
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/6247E812"), IntToText(libNtve_gf_UnitGetPropertyKills(gv_odin, c_unitPropCurrent)));
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/4001BD40"), FixedToText(gv_sCVHealingPerformedOnOdin, 0));
     VictoryPanelAddCustomStatisticLine(StringToText(""), StringToText(""));
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/9B53DC56"), (IntToText(gv_devourerSamplesFound) + StringExternal("Param/Value/07A3982F") + StringExternal("Param/Value/3B4E4D40")));
-    VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/EB0F053F"), IntToText(gv_devourerSamplesFound));
-    libCamp_gf_EndCampaignMission(gv_p01_USER, c_gameOverVictory);
+    libWCMI_gf_EndCampaignMission(gv_p01_USER, c_gameOverVictory);
     return true;
 }
 
@@ -4520,13 +4517,13 @@ bool gt_DefeatBaseDead_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     gv_gameOver = true;
-    libNtve_gf_ShowHideBossBar(false, gv_odinBossBar);
+    libWCUI_gf_ShowHideSingularBossBarVoidCampaign(false);
     TriggerEnable(gt_OdinLowHealthWarning, false);
     TriggerQueuePause(true);
     TriggerQueueClear(c_triggerQueueRemove);
     Wait(2.0, c_timeReal);
     libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/4B6C8309"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_Defeat, true, false);
     return true;
 }
@@ -4560,13 +4557,13 @@ bool gt_DefeatOdinDead_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     gv_gameOver = true;
-    libNtve_gf_ShowHideBossBar(false, gv_odinBossBar);
+    libWCUI_gf_ShowHideSingularBossBarVoidCampaign(false);
     TriggerEnable(gt_OdinLowHealthWarning, false);
     TriggerQueuePause(true);
     TriggerQueueClear(c_triggerQueueRemove);
     Wait(2.0, c_timeReal);
     libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/8D543226"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_Defeat, true, false);
     return true;
 }
@@ -4587,7 +4584,7 @@ bool gt_Defeat_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_EndCampaignMission(gv_p01_USER, c_gameOverDefeat);
+    libWCMI_gf_EndCampaignMission(gv_p01_USER, c_gameOverDefeat);
     return true;
 }
 
@@ -4614,7 +4611,7 @@ bool gt_VictoryCheat_Func (bool testConds, bool runActions) {
     }
 
     gv_gameOver = true;
-    libCamp_gf_RunMissionVictorySequence(gt_Victory);
+    libWCMI_gf_RunMissionVictorySequence(gt_Victory);
     return true;
 }
 
@@ -4670,18 +4667,12 @@ bool gt_ObjectiveStealtheOdinCreateQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate(StringExternal("Param/Value/85BC6DAF"), StringExternal("Param/Value/4DF1D7BC"), c_objectiveStateActive, true);
+    libWCMI_gf_CreateObjectiveCampaign("THorner03_1");
     gv_objectiveStealTheOdin = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_THorner03Objective1, ObjectiveLastCreated(), StringExternal("Param/Value/67435239"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
-    TriggerQueueEnter();
-    ObjectiveCreate(StringExternal("Param/Value/83B223A5"), StringExternal("Param/Value/11837275"), c_objectiveStateActive, true);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
+    libWCMI_gf_CreateObjectiveCampaign("THorner03_2");
     gv_objectiveTychusMustSurvive = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_THorner03Objective2, ObjectiveLastCreated(), StringExternal("Param/Value/A2EBB206"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -4709,36 +4700,15 @@ bool gt_ObjectiveStealtheOdinComplete_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveStealtheOdinCreateQ, true, false);
-    ObjectiveSetState(gv_objectiveStealTheOdin, c_objectiveStateCompleted);
-    ObjectiveSetState(gv_objectiveTychusMustSurvive, c_objectiveStateCompleted);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    libWCMI_gf_ZS_SetMissionObjectiveState("THorner03_1", libWoLC_ge_MissionObjectiveState_Completed);
+    libWCMI_gf_ZS_SetMissionObjectiveState("THorner03_2", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 void gt_ObjectiveStealtheOdinComplete_Init () {
     gt_ObjectiveStealtheOdinComplete = TriggerCreate("gt_ObjectiveStealtheOdinComplete_Func");
-}
-
-//--------------------------------------------------------------------------------------------------
-// Trigger: Objective Steal the Odin Failed - Tychus
-//--------------------------------------------------------------------------------------------------
-bool gt_ObjectiveStealtheOdinFailedTychus_Func (bool testConds, bool runActions) {
-    // Automatic Variable Declarations
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    TriggerEnable(TriggerGetCurrent(), false);
-    TriggerExecute(gt_ObjectiveStealtheOdinCreateQ, true, false);
-    ObjectiveSetState(gv_objectiveTychusMustSurvive, c_objectiveStateFailed);
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void gt_ObjectiveStealtheOdinFailedTychus_Init () {
-    gt_ObjectiveStealtheOdinFailedTychus = TriggerCreate("gt_ObjectiveStealtheOdinFailedTychus_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -4759,15 +4729,12 @@ bool gt_ObjectiveDestroyDominionBasesCreateQ_Func (bool testConds, bool runActio
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate(StringExternal("Param/Value/B6A1D7EC"), StringExternal("Param/Value/35A07756"), c_objectiveStateActive, true);
+    libWCMI_gf_CreateObjectiveCampaign("THorner03_3");
     gv_objectiveDestroyDominionBases = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_THorner03Objective3, ObjectiveLastCreated(), StringExternal("Param/Value/1AAF573D"));
-    ObjectiveCreate(StringExternal("Param/Value/9A3A5393"), StringExternal("Param/Value/4F1324DA"), c_objectiveStateActive, true);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
+    libWCMI_gf_CreateObjectiveCampaign("THorner03_4");
     gv_objectiveOdinMustSurvive = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_THorner03Objective4, ObjectiveLastCreated(), StringExternal("Param/Value/FD0C270E"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -4795,9 +4762,9 @@ bool gt_ObjectiveDestroyDominionBasesComplete_Func (bool testConds, bool runActi
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveDestroyDominionBasesCreateQ, true, false);
-    ObjectiveSetState(gv_objectiveDestroyDominionBases, c_objectiveStateCompleted);
-    ObjectiveSetState(gv_objectiveOdinMustSurvive, c_objectiveStateCompleted);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    libWCMI_gf_ZS_SetMissionObjectiveState("THorner03_3", libWoLC_ge_MissionObjectiveState_Completed);
+    libWCMI_gf_ZS_SetMissionObjectiveState("THorner03_4", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -4818,12 +4785,12 @@ bool gt_ObjectiveDestroyDominionBasesUpdate_Func (bool testConds, bool runAction
 
     TriggerExecute(gt_ObjectiveDestroyDominionBasesCreateQ, true, false);
     gv_objectiveDestroyDominionBasesCurrent = (gv_objectiveDestroyDominionBasesCurrent + 1);
-    ObjectiveSetName(gv_objectiveDestroyDominionBases, (StringExternal("Param/Value/EA3B8510") + IntToText(gv_objectiveDestroyDominionBasesCurrent) + StringExternal("Param/Value/189A67E4") + IntToText(gv_objectiveDestroyDominionBasesQuota) + StringExternal("Param/Value/46DDFDA9")));
+    libWCMI_gf_SetMissionObjectiveProgress("THorner03_3", gv_objectiveDestroyDominionBasesCurrent);
     if ((gv_objectiveDestroyDominionBasesCurrent == gv_objectiveDestroyDominionBasesQuota)) {
         TriggerExecute(gt_VictoryDestroyAllBasesComplete, true, false);
     }
     else {
-        Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+        Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     }
     return true;
 }
@@ -4834,9 +4801,9 @@ void gt_ObjectiveDestroyDominionBasesUpdate_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
-// Trigger: Objective Destroy the Loki Create Hidden
+// Trigger: Objective Destroy the Loki Create
 //--------------------------------------------------------------------------------------------------
-bool gt_ObjectiveDestroytheLokiCreateHidden_Func (bool testConds, bool runActions) {
+bool gt_ObjectiveDestroytheLokiCreate_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
     // Conditions
     if (testConds) {
@@ -4851,16 +4818,15 @@ bool gt_ObjectiveDestroytheLokiCreateHidden_Func (bool testConds, bool runAction
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    ObjectiveCreate(StringExternal("Param/Value/932ED8C2"), StringExternal("Param/Value/16ADA481"), c_objectiveStateHidden, false);
+    libWCMI_gf_CreateObjectiveCampaign("THorner03_5");
     gv_objectiveDestroytheLoki = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_THorner03Objective5, ObjectiveLastCreated(), StringExternal("Param/Value/94E1BA17"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-void gt_ObjectiveDestroytheLokiCreateHidden_Init () {
-    gt_ObjectiveDestroytheLokiCreateHidden = TriggerCreate("gt_ObjectiveDestroytheLokiCreateHidden_Func");
+void gt_ObjectiveDestroytheLokiCreate_Init () {
+    gt_ObjectiveDestroytheLokiCreate = TriggerCreate("gt_ObjectiveDestroytheLokiCreate_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -4881,36 +4847,15 @@ bool gt_ObjectiveDestroytheLokiComplete_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerExecute(gt_ObjectiveDestroytheLokiCreateHidden, true, false);
-    ObjectiveSetState(gv_objectiveDestroytheLoki, c_objectiveStateCompleted);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    TriggerExecute(gt_ObjectiveDestroytheLokiCreate, true, false);
+    libWCMI_gf_ZS_SetMissionObjectiveState("THorner03_5", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 void gt_ObjectiveDestroytheLokiComplete_Init () {
     gt_ObjectiveDestroytheLokiComplete = TriggerCreate("gt_ObjectiveDestroytheLokiComplete_Func");
-}
-
-//--------------------------------------------------------------------------------------------------
-// Trigger: Objective Destroy the Loki Failed
-//--------------------------------------------------------------------------------------------------
-bool gt_ObjectiveDestroytheLokiFailed_Func (bool testConds, bool runActions) {
-    // Automatic Variable Declarations
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    TriggerEnable(TriggerGetCurrent(), false);
-    TriggerExecute(gt_ObjectiveDestroytheLokiCreateHidden, true, false);
-    ObjectiveSetState(gv_objectiveDestroytheLoki, c_objectiveStateFailed);
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void gt_ObjectiveDestroytheLokiFailed_Init () {
-    gt_ObjectiveDestroytheLokiFailed = TriggerCreate("gt_ObjectiveDestroytheLokiFailed_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -4931,12 +4876,9 @@ bool gt_ObjectiveDevourerSamplesCreateQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate((StringExternal("Param/Value/15C1693C") + IntToText(gv_devourerSamplesFound) + StringExternal("Param/Value/FAD28B57") + IntToText(gv_devourerSamplesTotal) + StringExternal("Param/Value/9AE22435")), StringExternal("Param/Value/9337876A"), c_objectiveStateActive, false);
+    libWCMI_gf_CreateObjectiveCampaign("THorner03_6");
     gv_objectiveDevourerSamples = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_THorner03Objective6, ObjectiveLastCreated(), StringExternal("Param/Value/2504059C"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -4965,9 +4907,9 @@ bool gt_ObjectiveDevourerSampleUpdate_Func (bool testConds, bool runActions) {
     gv_devourerSamplesFound += 1;
     TriggerExecute(gt_ObjectiveDevourerSamplesCreateQ, true, false);
     UIAlertPoint("Trigger", gv_p01_USER, StringExternal("Param/Value/FAEB47D8"), null, UnitGetPosition(EventUnit()));
-    libCamp_gf_DisplayResearchPointsGiventoPlayer(libCamp_ge_StoryResearchObject_ResearchObjectFindDevourerTissueSamples, EventUnit(), gv_p01_USER);
+    libWCMI_gf_DisplayMissionObjectiveRewardFloatingText(UnitGetPosition(EventUnit()), "THorner03_6");
     UnitKill(EventUnit());
-    ObjectiveSetName(gv_objectiveDevourerSamples, (StringExternal("Param/Value/D44C9615") + IntToText(gv_devourerSamplesFound) + StringExternal("Param/Value/16047064") + IntToText(gv_devourerSamplesTotal) + StringExternal("Param/Value/3CBF51DD")));
+    libWCMI_gf_SetMissionObjectiveProgress("THorner03_6", gv_devourerSamplesFound);
     if ((gv_devourerSamplesFound == gv_devourerSamplesTotal)) {
         TriggerExecute(gt_ObjectiveCerebrateSamplesComplete, true, true);
     }
@@ -5001,8 +4943,8 @@ bool gt_ObjectiveCerebrateSamplesComplete_Func (bool testConds, bool runActions)
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveDevourerSamplesCreateQ, true, false);
-    ObjectiveSetState(gv_objectiveDevourerSamples, c_objectiveStateCompleted);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeGame);
+    libWCMI_gf_ZS_SetMissionObjectiveState("THorner03_6", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeGame);
     return true;
 }
 
@@ -5692,6 +5634,8 @@ bool gt_MidCleanup_Func (bool testConds, bool runActions) {
     libNtve_gf_PauseUnit(UnitFromId(739), true);
     TriggerExecute(gt_StartAI, true, false);
     Wait(0.5, c_timeReal);
+    libWCMI_gf_SetWorkerRallyPointforNexus2(UnitFromId(73));
+    libWCMI_gf_StartingWorkersAutoHarvest(RegionFromId(25), RegionFromId(29));
     CameraApplyInfo(gv_p01_USER, CameraInfoDefault(), 0.0, -1, 10, false);
     GameTimeOfDayPause(false);
     PlayerSetState(gv_p01_USER, c_playerStateXPGain, true);
@@ -5935,6 +5879,7 @@ void gt_VictoryCleanup_Init () {
 // Trigger Initialization
 //--------------------------------------------------------------------------------------------------
 void InitTriggers () {
+    gt_OnPlayer1GetUnit_Init();
     gt_Initialization_Init();
     gt_Init01Technology_Init();
     gt_Init02Players_Init();
@@ -6031,6 +5976,7 @@ void InitTriggers () {
     gt_NewAbilityCloakTipQ_Init();
     gt_AchievementOdinHealthBelow30Hard_Init();
     gt_OdinHealthRepaired_Init();
+    gt_OdinDamageDealt_Init();
     gt_VictoryDestroyAllBasesComplete_Init();
     gt_Victory_Init();
     gt_DefeatBaseDead_Init();
@@ -6040,13 +5986,11 @@ void InitTriggers () {
     gt_DefeatCheat_Init();
     gt_ObjectiveStealtheOdinCreateQ_Init();
     gt_ObjectiveStealtheOdinComplete_Init();
-    gt_ObjectiveStealtheOdinFailedTychus_Init();
     gt_ObjectiveDestroyDominionBasesCreateQ_Init();
     gt_ObjectiveDestroyDominionBasesComplete_Init();
     gt_ObjectiveDestroyDominionBasesUpdate_Init();
-    gt_ObjectiveDestroytheLokiCreateHidden_Init();
+    gt_ObjectiveDestroytheLokiCreate_Init();
     gt_ObjectiveDestroytheLokiComplete_Init();
-    gt_ObjectiveDestroytheLokiFailed_Init();
     gt_ObjectiveDevourerSamplesCreateQ_Init();
     gt_ObjectiveDevourerSampleUpdate_Init();
     gt_ObjectiveCerebrateSamplesComplete_Init();

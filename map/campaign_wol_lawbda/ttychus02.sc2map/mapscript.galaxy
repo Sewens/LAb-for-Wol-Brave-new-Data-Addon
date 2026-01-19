@@ -7,7 +7,10 @@
 //==================================================================================================
 include "TriggerLibs/NativeLib"
 include "TriggerLibs/LibertyLib"
-include "TriggerLibs/CampaignLib"
+include "LibCamp"
+include "LibWoLC"
+include "LibWCMI"
+include "LibWCUI"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -16,6 +19,9 @@ void InitLibs () {
     libNtve_InitLib();
     libLbty_InitLib();
     libCamp_InitLib();
+    libWoLC_InitLib();
+    libWCMI_InitLib();
+    libWCUI_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -242,6 +248,7 @@ trigger gt_Defeat;
 trigger gt_VictoryCheat;
 trigger gt_DefeatCheat;
 trigger gt_PrimaryObjectiveExploreCreate;
+trigger gt_PrimaryObjectiveExploreHide;
 trigger gt_PrimaryObjectiveExploreDiscovered;
 trigger gt_PrimaryObjectiveExploreCompleted;
 trigger gt_PrimaryObjectiveOpenShrineCreate;
@@ -379,7 +386,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_LoadCampaignData(libCamp_ge_MapID_MapTTychus02);
+    libWoLC_gf_ULoadCampaignData("TTychus02");
     TriggerExecute(gt_Init01Technology, true, false);
     TriggerExecute(gt_Init02Players, true, true);
     TriggerExecute(gt_Init03Units, true, true);
@@ -387,8 +394,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init05Environment, true, true);
     TriggerExecute(gt_Init06Difficulty, true, true);
     TriggerExecute(gt_Init07Help, true, true);
-    libCamp_gf_RegisterFootageRecording(gt_BriefingQ);
-    libCamp_gf_PurchaseStorymodeTech();
+    libWoLC_gf_RegisterFootageRecording(gt_BriefingQ);
     TriggerExecute(gt_IntroSequence, true, false);
     return true;
 }
@@ -409,10 +415,8 @@ bool gt_Init01Technology_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_SetTechRestrictionsCallback(TriggerGetCurrent());
     TechTreeUpgradeAddLevel(gv_p6_PROTOSSAir, "WarpGateResearch", 1);
-    TechTreeUpgradeAddLevel(gv_p1_USER, "SiegeTech", 1);
-    libCamp_gf_EnableCampaignTechUnit(true, libCamp_ge_StoryTechGroup_StoryTechGroupVehiclesSiegeTank, gv_p1_USER);
+    libWoLC_gf_EnableCampaignTechUnit(true, "SiegeTank", gv_p1_USER);
     return true;
 }
 
@@ -452,6 +456,7 @@ bool gt_Init02Players_Func (bool testConds, bool runActions) {
     libNtve_gf_SetAlliance(gv_p7_ABANDONED_BASE, gv_p1_USER, libNtve_ge_AllianceSetting_Neutral);
     libNtve_gf_SetAlliance(gv_p7_ABANDONED_BASE, gv_p6_PROTOSSAir, libNtve_ge_AllianceSetting_Neutral);
     libNtve_gf_SetAlliance(gv_p7_ABANDONED_BASE, gv_p8_ANCIENT_TEMPLE, libNtve_ge_AllianceSetting_Enemy);
+    libNtve_gf_SetAllianceAspectForPlayerGroup(gv_protossPlayerGroup, c_allianceIdPower, true);
     auto09E5D80C_g = gv_protossPlayerGroup;
     auto09E5D80C_var = -1;
     while (true) {
@@ -459,6 +464,7 @@ bool gt_Init02Players_Func (bool testConds, bool runActions) {
         if (auto09E5D80C_var < 0) { break; }
         libNtve_gf_SetAlliance(gv_p8_ANCIENT_TEMPLE, auto09E5D80C_var, libNtve_ge_AllianceSetting_Neutral);
         PlayerSetColorIndex(auto09E5D80C_var, 3, true);
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto09E5D80C_var, "TaldarimCampaignSkin", true);
     }
     PlayerModifyPropertyInt(gv_p1_USER, c_playerPropMinerals, c_playerPropOperSetTo, 500);
     PlayerModifyPropertyInt(gv_p1_USER, c_playerPropVespene, c_playerPropOperSetTo, 300);
@@ -472,6 +478,7 @@ bool gt_Init02Players_Func (bool testConds, bool runActions) {
     PlayerModifyPropertyInt(gv_p5_NW_PROTOSSLeft, c_playerPropVespene, c_playerPropOperSetTo, 5000);
     PlayerModifyPropertyInt(gv_p6_PROTOSSAir, c_playerPropMinerals, c_playerPropOperSetTo, 5000);
     PlayerModifyPropertyInt(gv_p6_PROTOSSAir, c_playerPropVespene, c_playerPropOperSetTo, 5000);
+    libWCMI_gf_WM_DetectionUpgradesApply();
     return true;
 }
 
@@ -531,6 +538,7 @@ bool gt_Init03Units_Func (bool testConds, bool runActions) {
     libNtve_gf_ShowHideUnit(gv_superWarpGateP6, false);
     libNtve_gf_PauseUnit(gv_tHEONEDRILL, true);
     UnitSetInfoText(gv_tHEONEDRILL, StringToText(""), StringExternal("Param/Value/408B5421"), StringToText(""));
+    libWCMI_gf_HandleMercCompound(UnitFromId(581));
     auto2980A265_g = UnitGroup("XelNagaShrineXil", c_playerAny, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     auto2980A265_u = UnitGroupCount(auto2980A265_g, c_unitCountAll);
     for (;; auto2980A265_u -= 1) {
@@ -627,14 +635,6 @@ bool gt_Init06Difficulty_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    if ((libNtve_gf_DifficultyValueInt(1, 0, 0, 0) == 1)) {
-        PlayerModifyPropertyInt(gv_p2_NE_PROTOSSMiddle, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p3_WARPEDINPROTOSS, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p4_SE_PROTOSSRight, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p5_NW_PROTOSSLeft, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p6_PROTOSSAir, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-    }
-
     gv_phasePrismSpawnRate = libNtve_gf_DifficultyValueFixed(40.0, 30.0, 25.0, 20.0);
     gv_phasePrismWaveSize[1] = libNtve_gf_DifficultyValueInt(1, 1, 2, 2);
     gv_phasePrismWaveSize[2] = libNtve_gf_DifficultyValueInt(1, 2, 2, 3);
@@ -704,8 +704,6 @@ bool gt_IntroSequence_Func (bool testConds, bool runActions) {
     libNtve_gf_GlobalCinematicSetting(false);
     libNtve_gf_SwooshCamera(gv_p1_USER, ((CameraInfoGetValue(CameraInfoDefault(), c_cameraValueDistance)) + 8.0), CameraInfoGetValue(CameraInfoDefault(), c_cameraValueDistance), PlayerStartLocation(gv_p1_USER), 1.5);
     CinematicFade(true, 1.5, c_fadeStyleNormal, ColorWithAlpha(0.00, 0.00, 0.00, 0.00), 0.0, true);
-    GamePauseAllCharges(true);
-    GamePauseAllCooldowns(true);
     TriggerExecute(gt_StartGameTacticalPhase, true, false);
     return true;
 }
@@ -1111,7 +1109,6 @@ bool gt_SiegeTankTipQ_Func (bool testConds, bool runActions) {
     libCamp_gf_SendTransmissionCampaign(null, SoundLink("TTychus02Swann00006", -1), c_transmissionDurationAdd, 0.0, true);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Game);
     libCamp_gf_CreateTipFromConversationState("StoryTips|Tychus02_SiegeTanks", libNtve_ge_TipType_NewUnit, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
     TriggerQueueExit();
     return true;
 }
@@ -1387,8 +1384,7 @@ bool gt_StartGameDefensePhase_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    GamePauseAllCharges(false);
-    GamePauseAllCooldowns(false);
+    Kit_UIHeroPanel_SetHeroUnit(0, gv_tHEONEDRILL, "Assets\\Textures\\ui_wol_laserdrill_hero_icon.dds");
     auto8992C0F7_g = gv_protossPlayerGroup;
     auto8992C0F7_var = -1;
     while (true) {
@@ -1481,9 +1477,8 @@ bool gt_WeneedTanksandBunkersQ15s_Func (bool testConds, bool runActions) {
     // Transmission - SoundLink("TTychus02Raynor00009", 0)
     libCamp_gf_SendTransmissionCampaign(null, SoundLink("TTychus02Raynor00009", -1), c_transmissionDurationAdd, 0.0, true);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Game);
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignHintDelay, c_timeReal);
     libCamp_gf_CreateTipFromConversationState("StoryTips|Tychus02_DefenseStrat", libNtve_ge_TipType_NormalTip, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
     TriggerQueueExit();
     return true;
 }
@@ -1600,9 +1595,8 @@ bool gt_UseLaserDrillQ360s_Func (bool testConds, bool runActions) {
     libCamp_gf_SendTransmissionCampaign(null, SoundLink("TTychus02Raynor00016", -1), c_transmissionDurationAdd, 0.0, true);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Game);
     UIAlertUnit("Trigger", gv_p1_USER, StringToText(""), null, UnitFromId(409));
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignHintDelay, c_timeReal);
     libCamp_gf_CreateTipFromConversationState("StoryTips|Tychus02_LaserDrillControl", libNtve_ge_TipType_NormalTip, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
     TriggerQueueExit();
     return true;
 }
@@ -1813,14 +1807,8 @@ bool gt_CreateTempleDoorBossBar_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libNtve_gf_DisplayBossBar(1, "Assets\\Textures\\btn-tips-relicshrine.dds", StringExternal("Param/Value/7AE87D2E"), 100, PlayerGroupAll());
-    gv_templeDoorBossBar = 1;
-    libNtve_gf_SetBossBarMaximumValue(gv_templeDoorBossBar, FixedToInt(UnitGetPropertyFixed(gv_tHEONEDRILL, c_unitPropLife, c_unitPropNormal)), true);
-    libNtve_gf_SetBossBarCurrentValue(gv_templeDoorBossBar, FixedToInt(UnitGetPropertyFixed(gv_tHEONEDOOR, c_unitPropLife, c_unitPropCurrent)), true);
-    libNtve_gf_SetBossBarBoss(gv_templeDoorBossBar, UnitFromId(125), true);
-    libNtve_gf_MoveBossBar(gv_templeDoorBossBar, c_anchorTop, 0, 50);
-    libNtve_gf_SetBossBarRace(gv_templeDoorBossBar, libNtve_ge_BossBarRace_Protoss, true);
-    libNtve_gf_ShowHideBossBar(true, gv_templeDoorBossBar);
+    libWCUI_gf_DisplaySingularBossBarVoidCampaign("Assets\\Textures\\btn-tips-relicshrine.dds", StringExternal("Param/Value/03AF8230"), 100);
+    libWCUI_gf_SetSingularBossBarBossVoidCampaign(UnitFromId(125), true);
     return true;
 }
 
@@ -2006,9 +1994,8 @@ bool gt_DrillisrepairabletipQ_Func (bool testConds, bool runActions) {
     // Transmission - SoundLink("TTychus02Raynor00011", 0)
     libCamp_gf_SendTransmissionCampaign(null, SoundLink("TTychus02Raynor00011", -1), c_transmissionDurationAdd, 0.0, true);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Game);
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignHintDelay, c_timeReal);
     libCamp_gf_CreateTipFromConversationState("StoryTips|Tychus02_LaserDrillRepair", libNtve_ge_TipType_NormalTip, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
     TriggerQueueExit();
     return true;
 }
@@ -3055,9 +3042,8 @@ bool gt_IncomingPrismAttack01Q_Func (bool testConds, bool runActions) {
     // Transmission - SoundLink("TTychus02Raynor00030", 0)
     libCamp_gf_SendTransmissionCampaign(null, SoundLink("TTychus02Raynor00030", -1), c_transmissionDurationAdd, 0.0, true);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Game);
-    Wait(libCamp_gv_campaignHintDelay, c_timeGame);
+    Wait(libWCMI_gv_campaignHintDelay, c_timeGame);
     libCamp_gf_CreateTipFromConversationState("StoryTips|Tychus02_LaserDrillAA", libNtve_ge_TipType_NormalTip, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeGame);
     TriggerQueueExit();
     return true;
 }
@@ -4243,7 +4229,7 @@ bool gt_AchievementLaserDrill20Kills_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    AchievementAward(gv_p1_USER, "TTychus02_2");
+    libWoLC_gf_CampaignAwardAchievement("TTychus02_2");
     return true;
 }
 
@@ -4285,7 +4271,7 @@ bool gt_Achievement50ProtossStructuresDestroyed_Func (bool testConds, bool runAc
     gv_statProtossStructureKills += 1;
     if ((gv_statProtossStructureKills >= 50)) {
         TriggerEnable(TriggerGetCurrent(), false);
-        AchievementAward(gv_p1_USER, "TTychus02_3");
+        libWoLC_gf_CampaignAwardAchievement("TTychus02_3");
     }
 
     return true;
@@ -4328,7 +4314,7 @@ bool gt_VictoryDestroyDoor_Func (bool testConds, bool runActions) {
 
     libNtve_gf_ChangeUnitDamage(gv_tHEONEDRILL, libNtve_ge_UnitDamageTakenDealt_Damage_Take, libNtve_ge_UnitDamageChangeOption_No);
     libNtve_gf_PlayAnimation(libNtve_gf_MainActorofUnit(EventUnit()), c_animNameDefault, "Stand D End", c_animFlagPlayForever | c_animFlagNonLooping, c_animTimeDefault);
-    libNtve_gf_ShowHideBossBar(false, gv_templeDoorBossBar);
+    libWCUI_gf_ShowHideSingularBossBarVoidCampaign(false);
     TriggerStop(gt_AIEndSuicide);
     gv_gameOver = true;
     TriggerExecute(gt_DetermineRemainingProtoss, true, false);
@@ -4353,7 +4339,7 @@ bool gt_VictoryDestroyDoor_Func (bool testConds, bool runActions) {
     libNtve_gf_PauseUnit(gv_tHEONEDRILL, true);
     libNtve_gf_MakeUnitInvulnerable(gv_tHEONEDRILL, true);
     TriggerExecute(gt_PrimaryObjectiveOpenShrineCompleted, true, true);
-    libCamp_gf_RunMissionVictorySequence(gt_VictoryQ);
+    libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
     return true;
 }
 
@@ -4415,7 +4401,7 @@ bool gt_VictoryDestroyProtoss_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    libNtve_gf_ShowHideBossBar(false, gv_templeDoorBossBar);
+    libWCUI_gf_ShowHideSingularBossBarVoidCampaign(false);
     gv_gameOver = true;
     TriggerExecute(gt_DetermineRemainingProtoss, true, false);
     autoB29F918D_g = gv_protossPlayerGroup;
@@ -4438,7 +4424,7 @@ bool gt_VictoryDestroyProtoss_Func (bool testConds, bool runActions) {
     libNtve_gf_MakeUnitInvulnerable(gv_tHEONEDRILL, true);
     TriggerExecute(gt_VictoryDestroyProtossDialogueQ, true, true);
     TriggerExecute(gt_PrimaryObjectiveOpenShrineCompleted, true, true);
-    libCamp_gf_RunMissionVictorySequence(gt_VictoryQ);
+    libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
     return true;
 }
 
@@ -4484,11 +4470,11 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     }
 
     if ((ObjectiveGetState(gv_primaryObjectiveMeltOpenTemple) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_primaryObjectiveLaserDrillMustSurvive) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_bonusObjectiveCollectRelics) == c_objectiveStateCompleted)) {
-        AchievementAward(gv_p1_USER, "TTychus02_1");
+        libWoLC_gf_CampaignAwardAchievement("TTychus02_1");
     }
 
     if ((libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1) && (gv_anniversaryStatLaserKillsTracking <= 0)) {
-        AchievementAward(gv_p1_USER, "Anniversary_TTychus02");
+        libWoLC_gf_CampaignAwardAchievement("Anniversary_TTychus02");
         TriggerDebugOutput(1, StringExternal("Param/Value/47D5A648"), false);
     }
 
@@ -4505,8 +4491,7 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/392B4F4E"), IntToText(gv_statProtossRemaining));
     VictoryPanelAddCustomStatisticLine(StringToText(""), StringToText(""));
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/41184483"), (IntToText(gv_bonusObjectiveCollectRelicsFound) + StringExternal("Param/Value/E3F06CBF") + IntToText(gv_bonusObjectiveCollectRelicsNeeded)));
-    VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/DEB3929B"), IntToText(gv_bonusObjectiveCollectRelicsFound));
-    libCamp_gf_EndCampaignMission(gv_p1_USER, c_gameOverVictory);
+    libWCMI_gf_EndCampaignMission(gv_p1_USER, c_gameOverVictory);
     return true;
 }
 
@@ -4546,7 +4531,7 @@ bool gt_DefeatTacticalTroopsDestroyed_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_PrimaryObjectiveExploreCreate, true, false);
     Wait(2.0, c_timeReal);
     libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/9474CC9B"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_Defeat, true, false);
     return true;
 }
@@ -4584,7 +4569,7 @@ bool gt_DefeatLaserDrillDestroyed_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_PrimaryObjectiveOpenShrineCreate, true, false);
     Wait(2.0, c_timeReal);
     libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/E0A24292"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_Defeat, true, false);
     return true;
 }
@@ -4605,7 +4590,7 @@ bool gt_Defeat_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_EndCampaignMission(gv_p1_USER, c_gameOverDefeat);
+    libWCMI_gf_EndCampaignMission(gv_p1_USER, c_gameOverDefeat);
     return true;
 }
 
@@ -4632,7 +4617,7 @@ bool gt_VictoryCheat_Func (bool testConds, bool runActions) {
     }
 
     gv_gameOver = true;
-    libCamp_gf_RunMissionVictorySequence(gt_Victory);
+    libWCMI_gf_RunMissionVictorySequence(gt_Victory);
     return true;
 }
 
@@ -4688,15 +4673,42 @@ bool gt_PrimaryObjectiveExploreCreate_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    ObjectiveCreate(StringExternal("Param/Value/9F7E8FE1"), StringExternal("Param/Value/A0CD3338"), c_objectiveStateActive, true);
+    libWCMI_gf_CreateObjectiveCampaign("TTychus02_1");
     gv_primaryObjectiveExplorePreviousExpedition = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_TTychus02Objective1, ObjectiveLastCreated(), StringExternal("Param/Value/404193A5"));
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 void gt_PrimaryObjectiveExploreCreate_Init () {
     gt_PrimaryObjectiveExploreCreate = TriggerCreate("gt_PrimaryObjectiveExploreCreate_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Primary Objective Explore Hide
+//--------------------------------------------------------------------------------------------------
+bool gt_PrimaryObjectiveExploreHide_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerExecute(gt_PrimaryObjectiveExploreCreate, true, false);
+    libWCMI_gf_HideObjectiveCampaign("TTychus02_1");
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_PrimaryObjectiveExploreHide_Init () {
+    gt_PrimaryObjectiveExploreHide = TriggerCreate("gt_PrimaryObjectiveExploreHide_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -4745,7 +4757,7 @@ bool gt_PrimaryObjectiveExploreCompleted_Func (bool testConds, bool runActions) 
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_PrimaryObjectiveExploreCreate, true, false);
-    ObjectiveSetState(gv_primaryObjectiveExplorePreviousExpedition, c_objectiveStateCompleted);
+    libWCMI_gf_ZS_SetMissionObjectiveState("TTychus02_1", libWoLC_ge_MissionObjectiveState_Completed);
     return true;
 }
 
@@ -4772,13 +4784,11 @@ bool gt_PrimaryObjectiveOpenShrineCreate_Func (bool testConds, bool runActions) 
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    ObjectiveCreate(StringExternal("Param/Value/BEB494E2"), StringExternal("Param/Value/5881BE00"), c_objectiveStateActive, true);
+    libWCMI_gf_CreateObjectiveCampaign("TTychus02_2");
     gv_primaryObjectiveMeltOpenTemple = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_TTychus02Objective2, ObjectiveLastCreated(), StringExternal("Param/Value/0478497B"));
-    Wait(2.0, c_timeGame);
-    ObjectiveCreate(StringExternal("Param/Value/3EC50D05"), StringExternal("Param/Value/BD1F81D5"), c_objectiveStateActive, true);
+    libWCMI_gf_CreateObjectiveCampaign("TTychus02_3");
     gv_primaryObjectiveLaserDrillMustSurvive = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_TTychus02Objective3, ObjectiveLastCreated(), StringExternal("Param/Value/47DB3148"));
+    Wait(2.0, c_timeGame);
     return true;
 }
 
@@ -4834,8 +4844,8 @@ bool gt_PrimaryObjectiveOpenShrineCompleted_Func (bool testConds, bool runAction
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_PrimaryObjectiveOpenShrineCreate, true, false);
-    ObjectiveSetState(gv_primaryObjectiveMeltOpenTemple, c_objectiveStateCompleted);
-    ObjectiveSetState(gv_primaryObjectiveLaserDrillMustSurvive, c_objectiveStateCompleted);
+    libWCMI_gf_ZS_SetMissionObjectiveState("TTychus02_2", libWoLC_ge_MissionObjectiveState_Completed);
+    libWCMI_gf_ZS_SetMissionObjectiveState("TTychus02_3", libWoLC_ge_MissionObjectiveState_Completed);
     return true;
 }
 
@@ -4862,14 +4872,10 @@ bool gt_ObjectiveRelicsCreateQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate((StringExternal("Param/Value/CE389A84") + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectFindProtossRelics, libCamp_ge_StoryResearchObjectiveTextStyle_Multipart, gv_bonusObjectiveCollectRelicsNeeded, gv_bonusObjectiveCollectRelicsFound)), StringExternal("Param/Value/54858326"), c_objectiveStateActive, false);
+    libWCMI_gf_CreateObjectiveCampaign("TTychus02_4");
     gv_bonusObjectiveCollectRelics = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_TTychus02Objective32, ObjectiveLastCreated(), StringExternal("Param/Value/AAB93443"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     libCamp_gf_CreateTipFromConversationState("StoryTips|Tychus02_RelicShrines", libNtve_ge_TipType_NormalTip, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -4898,9 +4904,9 @@ bool gt_ObjectiveRelicsUpdate_Func (bool testConds, bool runActions) {
     UIAlertPoint("Trigger", gv_p1_USER, StringExternal("Param/Value/177B7A17"), null, UnitGetPosition(EventUnit()));
     gv_bonusObjectiveCollectRelicsFound += 1;
     TriggerExecute(gt_ObjectiveRelicsCreateQ, true, false);
-    libCamp_gf_DisplayResearchPointsGiventoPlayer(libCamp_ge_StoryResearchObject_ResearchObjectFindProtossRelics, EventUnit(), gv_p1_USER);
+    libWCMI_gf_DisplayMissionObjectiveRewardFloatingText(UnitGetPosition(EventUnit()), "TTychus02_4");
     UnitKill(EventUnit());
-    ObjectiveSetName(gv_bonusObjectiveCollectRelics, (StringExternal("Param/Value/D8039732") + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectFindProtossRelics, libCamp_ge_StoryResearchObjectiveTextStyle_Multipart, gv_bonusObjectiveCollectRelicsNeeded, gv_bonusObjectiveCollectRelicsFound)));
+    libWCMI_gf_SetMissionObjectiveProgress("TTychus02_4", gv_bonusObjectiveCollectRelicsFound);
     if ((gv_bonusObjectiveCollectRelicsFound == gv_bonusObjectiveCollectRelicsNeeded)) {
         TriggerExecute(gt_ObjectiveRelicsComplete, true, false);
     }
@@ -4933,8 +4939,7 @@ bool gt_ObjectiveRelicsComplete_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveRelicsCreateQ, true, false);
-    ObjectiveSetName(gv_bonusObjectiveCollectRelics, (StringExternal("Param/Value/51D38407") + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectFindProtossRelics, libCamp_ge_StoryResearchObjectiveTextStyle_Multipart, gv_bonusObjectiveCollectRelicsNeeded, gv_bonusObjectiveCollectRelicsFound)));
-    ObjectiveSetState(gv_bonusObjectiveCollectRelics, c_objectiveStateCompleted);
+    libWCMI_gf_ZS_SetMissionObjectiveState("TTychus02_4", libWoLC_ge_MissionObjectiveState_Completed);
     return true;
 }
 
@@ -5422,6 +5427,8 @@ bool gt_MidCleanup_Func (bool testConds, bool runActions) {
     }
     libNtve_gf_RescueUnit(UnitFromId(44), gv_p1_USER, true);
     UnitSetPropertyFixed(UnitFromId(508), c_unitPropEnergy, 50.0);
+    libWCMI_gf_SetWorkerRallyPointforNexus2(UnitFromId(508));
+    libWCMI_gf_StartingWorkersAutoHarvest(RegionFromId(23), RegionFromId(22));
     GameTimeOfDayPause(false);
     GameSetBackground(c_backgroundFixed, null, 100.0);
     PlayerSetState(gv_p1_USER, c_playerStateXPGain, true);
@@ -5433,6 +5440,7 @@ bool gt_MidCleanup_Func (bool testConds, bool runActions) {
     VisRevealArea(gv_p1_USER, RegionFromId(13), 0.1, false);
     VisRevealArea(gv_p1_USER, RegionFromId(14), 0.1, false);
     SoundtrackPlay(PlayerGroupAll(), c_soundtrackCategoryMusic, "TTychus02MusicMain", c_soundtrackCueAny, c_soundtrackIndexAny, true);
+    TriggerExecute(gt_PrimaryObjectiveExploreHide, true, false);
     if ((gv_midCinematicCompleted == true)) {
         lv_fadeDuration = 1.5;
     }
@@ -6024,6 +6032,7 @@ void InitTriggers () {
     gt_VictoryCheat_Init();
     gt_DefeatCheat_Init();
     gt_PrimaryObjectiveExploreCreate_Init();
+    gt_PrimaryObjectiveExploreHide_Init();
     gt_PrimaryObjectiveExploreDiscovered_Init();
     gt_PrimaryObjectiveExploreCompleted_Init();
     gt_PrimaryObjectiveOpenShrineCreate_Init();

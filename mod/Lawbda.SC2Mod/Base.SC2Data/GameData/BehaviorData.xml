@@ -1,5 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorBuff id="VanillaScannerTargetLock">
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-targetlock.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <MaxStackCount value="3"/>
+        <Modification>
+            <DamageTakenFraction index="Spell" value="0.3"/>
+            <DamageTakenFraction index="Melee" value="0.3"/>
+            <DamageTakenFraction index="Ranged" value="0.3"/>
+            <DamageTakenFraction index="Splash" value="0.3"/>
+            <DamageTakenFraction index="NoProc" value="0.3"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadNovaDominationAlreadyDominating">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="SquadNovaDomination">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\BTN-Ability-terran-domination.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <Player Value="Caster"/>
+        <Modification>
+            <DeathResponse Chance="1" Effect="SquadNovaDominationDeathTBSearchArea"/>
+        </Modification>
+    </CBehaviorBuff>
     <CBehaviorBuff id="SquadConfusion">
         <Alignment value="Negative"/>
         <InfoIcon value="Assets\Textures\btn-ability-protoss-confusion.dds"/>
@@ -3449,7 +3475,7 @@
         <MaxStackCountPerCaster value="99"/>
         <Duration value="5"/>
         <Period value="1"/>
-        <PeriodicEffect value="BlackScannerVoidDamage"/>
+        <PeriodicEffect value="RedScannerFireDamage"/>
         <DeathType value="Fire"/>
         <DamageResponse TargetFilters="-;Player,Ally,Neutral"/>
     </CBehaviorBuff>

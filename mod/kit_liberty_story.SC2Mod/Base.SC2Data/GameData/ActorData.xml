@@ -342,6 +342,13 @@
         <AbilSoundArray index="0" AbilCmd="WreckingCrewAssaultMode,Execute"/>
     </CActorUnit>
     <!-- Battlecruiser Merc Animations -->
+    <CActorUnit id="Battlecruiser">
+        <On Terms="WeaponStart.BattlecruiserWeaponSwitch.AttackStart; WeaponTargetElevation GT -20.000000" Target="_BattlecruiserTurretATA" Send="LookAtEngage Continue"/>
+        <On Terms="WeaponStart.BattlecruiserWeaponSwitch.AttackStart; WeaponTargetElevation LE -20.000000" Target="_BattlecruiserTurretATS" Send="LookAtEngage Continue"/>
+        <On Terms="WeaponStop.BattlecruiserWeaponSwitch.AttackStop" Target="_BattlecruiserTurretATA" Send="LookAtDisengage"/>
+        <On Terms="WeaponStop.BattlecruiserWeaponSwitch.AttackStop" Target="_BattlecruiserTurretATS" Send="LookAtDisengage"/>
+        <TerrainSquibs index="0" RangeDown="5.150000"/>
+    </CActorUnit>
     <CActorUnit id="DukesRevenge">
         <On Terms="Abil.Yamato.SourcePrepStart" Send="AnimBracketStart Spell Morph,A Spell Morph,B 0 1.000000 AsTimeScale"/>
         <On Terms="Abil.Yamato.SourcePrepStop" Send="AnimBracketStop Spell"/>

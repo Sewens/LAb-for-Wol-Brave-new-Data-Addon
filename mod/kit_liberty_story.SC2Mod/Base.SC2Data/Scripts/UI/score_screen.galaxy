@@ -135,9 +135,9 @@ static void Update(string race) {
     }
 
     if (current_map == "TZeratul04") {
-        libNtve_gf_SetDialogItemText(victory_text_label, StringToText("GLORIOUS END!"), PlayerGroupAll());
+        libNtve_gf_SetDialogItemText(victory_text_label, StringToText("光荣谢幕！"), PlayerGroupAll());
     } else {
-        libNtve_gf_SetDialogItemText(victory_text_label, StringToText("VICTORY!"), PlayerGroupAll());
+        libNtve_gf_SetDialogItemText(victory_text_label, StringToText("胜利!"), PlayerGroupAll());
     }
 
     libNtve_gf_SetDialogItemText(mission_name_label, mission_text, PlayerGroupAll());
@@ -165,9 +165,9 @@ static void Update(string race) {
     }
 
     if (libWoLC_gv_wCX_IsSimulation) {
-        libNtve_gf_SetDialogItemTooltip(continue_button, StringToText("<h/>Continue to the Archives."), PlayerGroupAll());
+        libNtve_gf_SetDialogItemTooltip(continue_button, StringToText("<h/>前往档案馆"), PlayerGroupAll());
     } else if ((current_planet != "MarSara") && (current_planet != "Char")) {
-        libNtve_gf_SetDialogItemTooltip(continue_button, StringToText("<h/>Continue to the Hyperion."), PlayerGroupAll());
+        libNtve_gf_SetDialogItemTooltip(continue_button, StringToText("<h/>前往休伯利安号"), PlayerGroupAll());
     }
 
     Kit_PopulateDifficultyPulldown(restart_difficulty_pulldown);

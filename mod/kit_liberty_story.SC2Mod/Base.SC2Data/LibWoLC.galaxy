@@ -3861,6 +3861,7 @@ void libWoLC_gf_WC_ResetArmyTech () {
     // Variable Initialization
 
     // Implementation
+    libWoLC_gf_WC_ArmyUpgradeResetAll();
     auto7517AB57_ae = CatalogEntryCount(c_gameCatalogArmyCategory);
     auto7517AB57_ai = 1;
     while (auto7517AB57_ai <= auto7517AB57_ae) {
@@ -4141,16 +4142,22 @@ void libWoLC_gf_WC_LoadPerksFromBank (bank lp_bank, string lp_section) {
 }
 
 void libWoLC_gf_EnableDisableLabResearch (bool lp_enableDisable, string lp_research) {
+    // Automatic Variable Declarations
+    // Implementation
+    libWoLC_gf_EnableDisableLabResearchForPlayer(lp_enableDisable, lp_research, 1);
+}
+
+void libWoLC_gf_EnableDisableLabResearchForPlayer (bool lp_enableDisable, string lp_research, int lp_player) {
     // Variable Declarations
     int lv_indexTech;
     bool lv_allowDisallow;
     int lv_upgradeLevel;
 
     // Automatic Variable Declarations
-    int auto4087A5D1_ae;
-    const int auto4087A5D1_ai = 1;
-    int auto788D5897_ae;
-    const int auto788D5897_ai = 1;
+    int auto5D72C4A7_ae;
+    const int auto5D72C4A7_ai = 1;
+    int autoDF893832_ae;
+    const int autoDF893832_ai = 1;
 
     // Variable Initialization
     lv_allowDisallow = true;
@@ -4164,24 +4171,24 @@ void libWoLC_gf_EnableDisableLabResearch (bool lp_enableDisable, string lp_resea
         lv_allowDisallow = false;
         lv_upgradeLevel = 0;
     }
-    auto4087A5D1_ae = UserDataFieldValueCount("CampaignPerk", "AbilityCommand");
+    auto5D72C4A7_ae = UserDataFieldValueCount("CampaignPerk", "AbilityCommand");
     lv_indexTech = 1;
-    for ( ; ( (auto4087A5D1_ai >= 0 && lv_indexTech <= auto4087A5D1_ae) || (auto4087A5D1_ai < 0 && lv_indexTech >= auto4087A5D1_ae) ) ; lv_indexTech += auto4087A5D1_ai ) {
+    for ( ; ( (auto5D72C4A7_ai >= 0 && lv_indexTech <= auto5D72C4A7_ae) || (auto5D72C4A7_ai < 0 && lv_indexTech >= auto5D72C4A7_ae) ) ; lv_indexTech += auto5D72C4A7_ai ) {
         if ((UserDataGetAbilCmd("CampaignPerk", lp_research, "AbilityCommand", lv_indexTech) != null)) {
-            TechTreeAbilityAllow(1, UserDataGetAbilCmd("CampaignPerk", lp_research, "AbilityCommand", lv_indexTech), lv_allowDisallow);
+            TechTreeAbilityAllow(lp_player, UserDataGetAbilCmd("CampaignPerk", lp_research, "AbilityCommand", lv_indexTech), lv_allowDisallow);
         }
 
     }
-    auto788D5897_ae = UserDataFieldValueCount("CampaignPerk", "Upgrade");
+    autoDF893832_ae = UserDataFieldValueCount("CampaignPerk", "Upgrade");
     lv_indexTech = 1;
-    for ( ; ( (auto788D5897_ai >= 0 && lv_indexTech <= auto788D5897_ae) || (auto788D5897_ai < 0 && lv_indexTech >= auto788D5897_ae) ) ; lv_indexTech += auto788D5897_ai ) {
+    for ( ; ( (autoDF893832_ai >= 0 && lv_indexTech <= autoDF893832_ae) || (autoDF893832_ai < 0 && lv_indexTech >= autoDF893832_ae) ) ; lv_indexTech += autoDF893832_ai ) {
         if ((UserDataGetUpgrade("CampaignPerk", lp_research, "Upgrade", lv_indexTech) != null)) {
-            libNtve_gf_SetUpgradeLevelForPlayer(1, UserDataGetUpgrade("CampaignPerk", lp_research, "Upgrade", lv_indexTech), lv_upgradeLevel);
+            libNtve_gf_SetUpgradeLevelForPlayer(lp_player, UserDataGetUpgrade("CampaignPerk", lp_research, "Upgrade", lv_indexTech), lv_upgradeLevel);
         }
 
     }
     if ((UserDataGetGameLink("CampaignPerk", lp_research, "ArmyCategory", 1) != null)) {
-        libWoLC_gf_EnableCampaignTechUnit(lp_enableDisable, libWoLC_gf_WC_TechUnitOfArmyCategory(UserDataGetGameLink("CampaignPerk", lp_research, "ArmyCategory", 1)), 1);
+        libWoLC_gf_EnableCampaignTechUnit(lp_enableDisable, libWoLC_gf_WC_TechUnitOfArmyCategory(UserDataGetGameLink("CampaignPerk", lp_research, "ArmyCategory", 1)), lp_player);
     }
 
 }
@@ -4204,6 +4211,29 @@ void libWoLC_gf_EnableDisableLabChosenResearch (bool lp_enableDisable) {
         auto66E3F101_ai = auto66E3F101_ai+1;
         if ((libWoLC_gf_WC_PerkStateCheck(lv_indexPerk, libWoLC_ge_WC_PerkState_Active) == true)) {
             libWoLC_gf_EnableDisableLabResearch(lp_enableDisable, lv_indexPerk);
+        }
+
+    }
+}
+
+void libWoLC_gf_EnableDisableLabChosenResearchForPlayer (bool lp_enableDisable, int lp_player) {
+    // Variable Declarations
+    string lv_indexPerk;
+
+    // Automatic Variable Declarations
+    int autoD9F7885C_ai;
+    int autoD9F7885C_ae;
+
+    // Variable Initialization
+
+    // Implementation
+    autoD9F7885C_ai = 1;
+    autoD9F7885C_ae = UserDataInstanceCount("CampaignPerk")+1;
+    while (autoD9F7885C_ai < autoD9F7885C_ae) {
+        lv_indexPerk = UserDataInstance("CampaignPerk", autoD9F7885C_ai);
+        autoD9F7885C_ai = autoD9F7885C_ai+1;
+        if ((libWoLC_gf_WC_PerkStateCheck(lv_indexPerk, libWoLC_ge_WC_PerkState_Active) == true)) {
+            libWoLC_gf_EnableDisableLabResearchForPlayer(lp_enableDisable, lv_indexPerk, lp_player);
         }
 
     }
@@ -5420,12 +5450,13 @@ void libWoLC_gf_PS_SaveAllTransitionData (bool lp_nextIsSimulation, bool lp_next
     }
     libWoLC_gf_WC_SaveTransitionVars(libWoLC_gv_wC_CampaignBank, null, lp_nextIsSimulation, lp_nextIsVictoryPlayAgain, lp_resultFromDefeat, libWoLC_gv_wCX_IsSimulation, libWoLC_gv_wCX_IsVictoryPlayAgain);
     libWoLC_gf_WC_SaveCampaignBank();
+    libWoLC_gf_WC_SaveCampaignBank2();
 }
 
 void libWoLC_gf_PS_LoadAllTransitionData (string lp_map) {
     // Automatic Variable Declarations
     // Implementation
-    if ((libWoLC_gf_WC_CampaignBankExists() == false)) {
+    if ((((lp_map == "TStory01") && (libWoLC_gf_WC_CampaignLegacyBankExists() == false)) || (libWoLC_gf_WC_CampaignBankExists() == false))) {
         TriggerDebugOutput(1, StringExternal("Param/Value/lib_WoLC_253EB9C4"), false);
         libWoLC_gf_ResetCampaignData();
         libWoLC_gf_WC_SetCampaignDifficulty(PlayerDifficulty(1));
@@ -5433,6 +5464,7 @@ void libWoLC_gf_PS_LoadAllTransitionData (string lp_map) {
     }
 
     TriggerDebugOutput(1, StringExternal("Param/Value/lib_WoLC_6670EA63"), false);
+    libWoLC_gf_WC_OpenCampaignLegacyBank();
     libWoLC_gf_WC_OpenCampaignBank();
     libWoLC_gf_WC_LoadTransitionVars(libWoLC_gv_wC_CampaignBank, null);
     libWoLC_gf_TS_UpdateStoryStates();
@@ -6151,10 +6183,32 @@ void libWoLC_gf_WC_OpenCampaignBank () {
     libWoLC_gv_wC_CampaignBank = BankLastCreated();
 }
 
+void libWoLC_gf_WC_OpenCampaignLegacyBank () {
+    // Automatic Variable Declarations
+    // Implementation
+    if ((libWoLC_gv_wC_CampaignBank2 != null)) {
+        return ;
+    }
+
+    BankLoad(libWoLC_gv_wC_CampaignWoLBankNameLegacy, 1);
+    libWoLC_gv_wC_CampaignBank2 = BankLastCreated();
+}
+
 bool libWoLC_gf_WC_CampaignBankExists () {
     // Automatic Variable Declarations
     // Implementation
     if ((BankExists(libWoLC_gv_wC_CampaignWoLBankName, 1) == true)) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool libWoLC_gf_WC_CampaignLegacyBankExists () {
+    // Automatic Variable Declarations
+    // Implementation
+    if ((BankExists(libWoLC_gv_wC_CampaignWoLBankNameLegacy, 1) == true)) {
         return true;
     }
     else {
@@ -6170,6 +6224,16 @@ void libWoLC_gf_WC_SaveCampaignBank () {
     }
 
     BankSave(libWoLC_gv_wC_CampaignBank);
+}
+
+void libWoLC_gf_WC_SaveCampaignBank2 () {
+    // Automatic Variable Declarations
+    // Implementation
+    if ((libWoLC_gv_wC_CampaignBank2 == null)) {
+        return ;
+    }
+
+    BankSave(libWoLC_gv_wC_CampaignBank2);
 }
 
 bool libWoLC_gf_WC_MissionSectionExists (string lp_mission) {
@@ -7571,6 +7635,26 @@ void libWoLC_gt_WC_TrackLoadingComplete_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: WC_TrackLoadingFromSave
+//--------------------------------------------------------------------------------------------------
+bool libWoLC_gt_WC_TrackLoadingFromSave_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libWoLC_gv_wC_LoadingComplete2 = true;
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libWoLC_gt_WC_TrackLoadingFromSave_Init () {
+    libWoLC_gt_WC_TrackLoadingFromSave = TriggerCreate("libWoLC_gt_WC_TrackLoadingFromSave_Func");
+    TriggerAddEventLoadGameDone(libWoLC_gt_WC_TrackLoadingFromSave);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: WC_ArchivesBankLoadSyncComplete
 //--------------------------------------------------------------------------------------------------
 bool libWoLC_gt_WC_ArchivesBankLoadSyncComplete_Func (bool testConds, bool runActions) {
@@ -7711,6 +7795,7 @@ bool libWoLC_gt_WC_StatUnitCreated_Func (bool testConds, bool runActions) {
 //--------------------------------------------------------------------------------------------------
 void libWoLC_gt_WC_StatUnitCreated_Init () {
     libWoLC_gt_WC_StatUnitCreated = TriggerCreate("libWoLC_gt_WC_StatUnitCreated_Func");
+    TriggerEnable(libWoLC_gt_WC_StatUnitCreated, false);
     TriggerAddEventUnitCreated(libWoLC_gt_WC_StatUnitCreated, null, null, null);
 }
 
@@ -7775,6 +7860,7 @@ bool libWoLC_gt_WC_StatDamageTaken_Func (bool testConds, bool runActions) {
 //--------------------------------------------------------------------------------------------------
 void libWoLC_gt_WC_StatDamageTaken_Init () {
     libWoLC_gt_WC_StatDamageTaken = TriggerCreate("libWoLC_gt_WC_StatDamageTaken_Func");
+    TriggerEnable(libWoLC_gt_WC_StatDamageTaken, false);
     TriggerAddEventUnitDamaged(libWoLC_gt_WC_StatDamageTaken, null, c_unitDamageTypeAny, c_unitDamageEither, null);
 }
 
@@ -7816,6 +7902,7 @@ bool libWoLC_gt_WC_StatDamageHealed_Func (bool testConds, bool runActions) {
 //--------------------------------------------------------------------------------------------------
 void libWoLC_gt_WC_StatDamageHealed_Init () {
     libWoLC_gt_WC_StatDamageHealed = TriggerCreate("libWoLC_gt_WC_StatDamageHealed_Func");
+    TriggerEnable(libWoLC_gt_WC_StatDamageHealed, false);
     TriggerAddEventUnitHealed(libWoLC_gt_WC_StatDamageHealed, null, c_unitVitalAny, null);
 }
 
@@ -7873,6 +7960,7 @@ bool libWoLC_gt_WC_StatUnitDies_Func (bool testConds, bool runActions) {
 //--------------------------------------------------------------------------------------------------
 void libWoLC_gt_WC_StatUnitDies_Init () {
     libWoLC_gt_WC_StatUnitDies = TriggerCreate("libWoLC_gt_WC_StatUnitDies_Func");
+    TriggerEnable(libWoLC_gt_WC_StatUnitDies, false);
     TriggerAddEventUnitDied(libWoLC_gt_WC_StatUnitDies, null);
 }
 
@@ -7903,6 +7991,7 @@ bool libWoLC_gt_WC_StatAbilityUsed_Func (bool testConds, bool runActions) {
 //--------------------------------------------------------------------------------------------------
 void libWoLC_gt_WC_StatAbilityUsed_Init () {
     libWoLC_gt_WC_StatAbilityUsed = TriggerCreate("libWoLC_gt_WC_StatAbilityUsed_Func");
+    TriggerEnable(libWoLC_gt_WC_StatAbilityUsed, false);
     TriggerAddEventUnitAbility(libWoLC_gt_WC_StatAbilityUsed, null, null, c_unitAbilStageComplete, false);
 }
 
@@ -7918,6 +8007,7 @@ void libWoLC_InitTriggers () {
     libWoLC_gt_WC_CinematicDetectSkipping_Init();
     libWoLC_gt_WC_SceneSkipped_Init();
     libWoLC_gt_WC_TrackLoadingComplete_Init();
+    libWoLC_gt_WC_TrackLoadingFromSave_Init();
     libWoLC_gt_WC_ArchivesBankLoadSyncComplete_Init();
     libWoLC_gt_WC_ArchivesBankSaveSyncComplete_Init();
     libWoLC_gt_WC_ArchivesHandleMissionLoad_Init();

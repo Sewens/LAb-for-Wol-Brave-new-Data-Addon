@@ -7,7 +7,11 @@
 //==================================================================================================
 include "TriggerLibs/NativeLib"
 include "TriggerLibs/LibertyLib"
-include "TriggerLibs/CampaignLib"
+include "LibEA0820A1"
+include "LibCamp"
+include "LibWoLC"
+include "LibWCMI"
+include "LibWCUI"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -15,7 +19,11 @@ include "TriggerLibs/CampaignLib"
 void InitLibs () {
     libNtve_InitLib();
     libLbty_InitLib();
+    libEA0820A1_InitLib();
     libCamp_InitLib();
+    libWoLC_InitLib();
+    libWCMI_InitLib();
+    libWCUI_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -77,7 +85,6 @@ bool gv_nexusBeingDestroyed;
 int gv_purifierPing;
 fixed gv_powerUpTimeProgress;
 int gv_purifierProgressCounter;
-int gv_purifierBossBar;
 point gv_purifierMainTarget;
 unitgroup gv_terrorFleetGroup;
 int gv_terrorFleetPing;
@@ -254,16 +261,15 @@ trigger gt_VictoryCheat;
 trigger gt_DefeatCheat;
 trigger gt_ObjectiveDestroyNexusCreateQ;
 trigger gt_ObjectiveDestroyNexusComplete;
-trigger gt_ObjectiveDestroyNexusFailed;
 trigger gt_ObjectiveDestroyPurifierCreateQ;
 trigger gt_ObjectiveDestroyPurifierComplete;
-trigger gt_ObjectiveDestroyFirstFleetCreateHidden;
+trigger gt_ObjectiveDestroyFirstFleetCreate;
 trigger gt_ObjectiveDestroyFirstFleetComplete;
 trigger gt_ObjectiveDestroyFirstFleetFailed;
-trigger gt_ObjectiveDestroySecondFleetCreateHidden;
+trigger gt_ObjectiveDestroySecondFleetCreate;
 trigger gt_ObjectiveDestroySecondFleetComplete;
 trigger gt_ObjectiveDestroySecondFleetFailed;
-trigger gt_ObjectiveDestroyThirdFleetCreateHidden;
+trigger gt_ObjectiveDestroyThirdFleetCreate;
 trigger gt_ObjectiveDestroyThirdFleetComplete;
 trigger gt_ObjectiveDestroyThirdFleetFailed;
 trigger gt_BriefingQ;
@@ -302,7 +308,7 @@ void gf_TerrorFleetrepeatingmove (unitgroup lp_fLEET, region lp_tARGET) {
     while (true) {
         lv_fleetSize = UnitGroupCount(lp_fLEET, c_unitCountAlive);
         if ((UnitGroupCount(lp_fLEET, c_unitCountAlive) > 0) && (UnitGroupCount(UnitGroupFilterRegion(lp_fLEET, lp_tARGET, 0), c_unitCountAlive) != lv_fleetSize)) {
-            UnitGroupIssueOrder(lp_fLEET, OrderTargetingPoint(AbilityCommand("move", 0), RegionGetCenter(lp_tARGET)), c_orderQueueAddToEnd);
+            UnitGroupIssueOrder(lp_fLEET, OrderTargetingPoint(AbilityCommand("attack", 0), RegionGetCenter(lp_tARGET)), c_orderQueueAddToEnd);
             Wait(30.0, c_timeGame);
         }
         else {
@@ -445,8 +451,9 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_LoadCampaignData(libCamp_ge_MapID_MapTHanson03A);
+    libWoLC_gf_ULoadCampaignData("THanson03A");
     TriggerExecute(gt_InitializePaths, true, true);
+    TriggerExecute(libEA0820A1_gt_Init00ReplaceUnit, true, true);
     TriggerExecute(gt_Init01Technology, true, true);
     TriggerExecute(gt_Init02Players, true, true);
     TriggerExecute(gt_Init03Units, true, true);
@@ -454,9 +461,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init05Environment, true, true);
     TriggerExecute(gt_Init06Difficulties, true, true);
     TriggerExecute(gt_Init07Help, true, true);
-    libCamp_gf_RegisterFootageRecording(gt_BriefingQ);
-    libCamp_gf_PurchaseStorymodeTech();
-    UIAlertPoint("Trigger", gv_pLAYER01_USER, StringToText(""), null, PointFromId(15));
+    libWoLC_gf_RegisterFootageRecording(gt_BriefingQ);
     TriggerExecute(gt_IntroSequence, true, false);
     return true;
 }
@@ -477,8 +482,7 @@ bool gt_Init01Technology_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_SetTechRestrictionsCallback(TriggerGetCurrent());
-    libCamp_gf_EnableCampaignTechUnit(true, libCamp_ge_StoryTechGroup_StoryTechGroupStarshipsViking, gv_pLAYER01_USER);
+    libWoLC_gf_EnableCampaignTechUnit(true, "VikingFighter", gv_pLAYER01_USER);
     TechTreeAbilityAllow(gv_pLAYER06_TERRORFLEET, AbilityCommand("GravitonBeam", 0), true);
     return true;
 }
@@ -530,6 +534,7 @@ bool gt_Init02Players_Func (bool testConds, bool runActions) {
     PlayerSetState(gv_pLAYER05_COLONISTSTRUCTURES, c_playerStateDisplayInLeaderPanel, false);
     PlayerSetState(gv_pLAYER06_TERRORFLEET, c_playerStateDisplayInLeaderPanel, false);
     PlayerSetState(gv_pLAYER07_RESOURCES, c_playerStateDisplayInLeaderPanel, false);
+    libWCMI_gf_WM_DetectionUpgradesApply();
     return true;
 }
 
@@ -606,6 +611,7 @@ bool gt_Init03Units_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    libWCMI_gf_HandleMercCompound(UnitFromId(3266));
     gv_superWarpGateP02 = UnitFromId(170);
     gv_superWarpGateP04 = UnitFromId(1077);
     gv_purifier = UnitFromId(765);
@@ -844,12 +850,6 @@ bool gt_Init06Difficulties_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    if ((PlayerDifficulty(gv_pLAYER01_USER) == 1)) {
-        PlayerModifyPropertyInt(gv_pLAYER02_PROTOSS, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_pLAYER04_PURIFIER, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_pLAYER06_TERRORFLEET, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-    }
-
     gv_pOWER_UP_TIME = libNtve_gf_DifficultyValueFixed(90.0, 90.0, 60.0, 45.0);
     gv_pURIFIER_MAX_LIFE = libNtve_gf_DifficultyValueFixed(4000.0, 6000.0, 7000.0, 8000.0);
     UnitSetPropertyFixed(gv_purifier, c_unitPropLifeMax, gv_pURIFIER_MAX_LIFE);
@@ -939,6 +939,9 @@ bool gt_IntroSequence_Func (bool testConds, bool runActions) {
     libNtve_gf_GlobalCinematicSetting(true);
     TriggerExecute(gt_StartAI, true, false);
     Wait(0.1, c_timeReal);
+    UIAlertPoint("Trigger", gv_pLAYER01_USER, StringToText(""), null, PointFromId(15));
+    libWCMI_gf_SetWorkerRallyPointforNexus2(UnitFromId(14));
+    libWCMI_gf_StartingWorkersAutoHarvest(RegionFromId(46), RegionFromId(45));
     libNtve_gf_CinematicMode(false, PlayerGroupAll(), 1.5);
     libNtve_gf_GlobalCinematicSetting(false);
     libNtve_gf_SwooshCamera(gv_pLAYER01_USER, ((CameraInfoGetValue(CameraInfoDefault(), c_cameraValueDistance)) + 8.0), CameraInfoGetValue(CameraInfoDefault(), c_cameraValueDistance), PlayerStartLocation(gv_pLAYER01_USER), 1.5);
@@ -969,15 +972,12 @@ bool gt_StartGame_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_TransmissionProtossNexusQ, true, false);
     Wait(1.0, c_timeGame);
     TriggerExecute(gt_CreateNexusPings, true, false);
-    TriggerExecute(gt_ObjectiveDestroyFirstFleetCreateHidden, true, false);
-    TriggerExecute(gt_ObjectiveDestroySecondFleetCreateHidden, true, false);
-    TriggerExecute(gt_ObjectiveDestroyThirdFleetCreateHidden, true, false);
     Wait(10.0, c_timeGame);
     TriggerExecute(gt_NewUnitVikingTipQ, true, false);
+    TriggerExecute(gt_CampaignTipsQ, true, false);
     Wait(10.0, c_timeGame);
     TriggerExecute(gt_TransmissionHelpColonistsQ, true, false);
     Wait(10.0, c_timeGame);
-    TriggerExecute(gt_CampaignTipsQ, true, false);
     Wait(60.0, c_timeGame);
     TriggerExecute(gt_PURIFIERIntro, true, false);
     return true;
@@ -1117,14 +1117,14 @@ bool gt_NexusDestroyed_Func (bool testConds, bool runActions) {
     gv_nexusBeingDestroyed = true;
     gv_nexusDestroyed += 1;
     TriggerExecute(gt_ObjectiveDestroyNexusCreateQ, true, false);
-    ObjectiveSetName(gv_primaryObjectiveDestroyProtossNexus, (StringExternal("Param/Value/7CA551C6") + IntToText(gv_nexusDestroyed) + StringExternal("Param/Value/079AD687")));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    libWCMI_gf_SetMissionObjectiveProgress("THanson03A_1", gv_nexusDestroyed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     SoundtrackPlay(PlayerGroupAll(), c_soundtrackCategoryMusic, "THanson03AMusicEventB", c_soundtrackCueAny, c_soundtrackIndexAny, false);
     if ((gv_nexusDestroyed == 3)) {
         TriggerExecute(gt_ObjectiveDestroyNexusComplete, true, false);
-        Wait(libCamp_gv_campaignObjectiveDelay, c_timeGame);
+        Wait(libWCMI_gv_campaignObjectiveDelay, c_timeGame);
         TriggerExecute(gt_ObjectiveDestroyPurifierCreateQ, true, false);
-        libNtve_gf_ShowHideBossBar(true, gv_purifierBossBar);
+        libWCUI_gf_ShowHideSingularBossBarVoidCampaign(true);
         UnitBehaviorRemove(gv_purifier, "InvulnerabilityShield", 1);
         libNtve_gf_MakeUnitInvulnerable(gv_purifier, false);
         UnitSetPropertyFixed(gv_purifier, c_unitPropShields, 1000.0);
@@ -1203,13 +1203,9 @@ bool gt_CreatePurifierBossBar_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libNtve_gf_DisplayBossBar(1, "Assets\\Textures\\btn-unit-protoss-mothership.dds", StringExternal("Param/Value/8B755AF6"), FixedToInt(UnitGetPropertyFixed(gv_purifier, c_unitPropLifeMax, c_unitPropCurrent)), PlayerGroupAll());
-    gv_purifierBossBar = 1;
-    libNtve_gf_SetBossBarRace(gv_purifierBossBar, libNtve_ge_BossBarRace_Protoss, true);
-    libNtve_gf_SetBossBarMaximumValue(gv_purifierBossBar, FixedToInt(UnitGetPropertyFixed(gv_purifier, c_unitPropLifeMax, c_unitPropCurrent)), true);
-    libNtve_gf_SetBossBarCurrentValue(gv_purifierBossBar, FixedToInt(UnitGetPropertyFixed(gv_purifier, c_unitPropLife, c_unitPropCurrent)), true);
-    libNtve_gf_MoveBossBar(gv_purifierBossBar, c_anchorTop, 0, 50);
-    libNtve_gf_ShowHideBossBar(false, gv_purifierBossBar);
+    libWCUI_gf_DisplaySingularBossBarVoidCampaign("Assets\\Textures\\btn-unit-protoss-mothership.dds", StringExternal("Param/Value/77335DA6"), FixedToInt(UnitGetPropertyFixed(gv_purifier, c_unitPropLifeMax, c_unitPropCurrent)));
+    libWCUI_gf_SetSingularBossBarCurrentValueVoidCampaign(FixedToInt(UnitGetPropertyFixed(gv_purifier, c_unitPropLife, c_unitPropCurrent)), true);
+    libWCUI_gf_ShowHideSingularBossBarVoidCampaign(false);
     return true;
 }
 
@@ -1235,7 +1231,7 @@ bool gt_UpdatePurifierBossBar_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libNtve_gf_SetBossBarCurrentValue(gv_purifierBossBar, FixedToInt(UnitGetPropertyFixed(gv_purifier, c_unitPropLife, c_unitPropCurrent)), true);
+    libWCUI_gf_SetSingularBossBarCurrentValueVoidCampaign(FixedToInt(UnitGetPropertyFixed(gv_purifier, c_unitPropLife, c_unitPropCurrent)), true);
     return true;
 }
 
@@ -2037,7 +2033,7 @@ bool gt_SendBetaBaseTerrorFleet_Func (bool testConds, bool runActions) {
     }
 
     if ((UnitGroupCount(gv_terrorFleetGroup, c_unitCountAlive) != 0)) {
-        ObjectiveShow(gv_bonusObjectiveDestroyFirstTerrorFleet, PlayerGroupAll(), true);
+        TriggerExecute(gt_ObjectiveDestroyFirstFleetCreate, true, false);
         TriggerEnable(gt_TerrorFleetBetaBaseBehavior, true);
         TriggerExecute(gt_TransmissionFirstTerrorFleetWarningQ, true, false);
         PingCreate(PlayerGroupSingle(gv_pLAYER01_USER), "PingWarning", libNtve_gf_CenterOfUnitGroup(gv_terrorFleetGroup), ColorWithAlpha(100.00, 0.00, 0.00, 0.00), 0.0);
@@ -2134,7 +2130,7 @@ bool gt_SendGammaBaseTerrorFleet_Func (bool testConds, bool runActions) {
     }
 
     if ((UnitGroupCount(gv_terrorFleetGroup, c_unitCountAlive) != 0)) {
-        ObjectiveShow(gv_bonusObjectiveDestroySecondTerrorFleet, PlayerGroupAll(), true);
+        TriggerExecute(gt_ObjectiveDestroySecondFleetCreate, true, false);
         TriggerEnable(gt_TerrorFleetGammaBaseBehavior, true);
         TriggerExecute(gt_TransmissionSecondTerrorFleetWarningQ, true, false);
         PingCreate(PlayerGroupSingle(gv_pLAYER01_USER), "PingWarning", libNtve_gf_CenterOfUnitGroup(gv_terrorFleetGroup), ColorWithAlpha(100.00, 0.00, 0.00, 0.00), 0.0);
@@ -2229,7 +2225,7 @@ bool gt_SendOmegaBaseTerrorFleet_Func (bool testConds, bool runActions) {
     }
 
     if ((UnitGroupCount(gv_terrorFleetGroup, c_unitCountAlive) != 0)) {
-        ObjectiveShow(gv_bonusObjectiveDestroyThirdTerrorFleet, PlayerGroupAll(), true);
+        TriggerExecute(gt_ObjectiveDestroyThirdFleetCreate, true, false);
         TriggerEnable(gt_TerrorFleetOmegaBaseBehavior, true);
         TriggerExecute(gt_TransmissionThirdTerrorFleetWarningQ, true, false);
         PingCreate(PlayerGroupSingle(gv_pLAYER01_USER), "PingWarning", libNtve_gf_CenterOfUnitGroup(gv_terrorFleetGroup), ColorWithAlpha(100.00, 0.00, 0.00, 0.00), 0.0);
@@ -5103,9 +5099,7 @@ bool gt_CampaignTipsQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
     libCamp_gf_CreateStorymodeTips();
-    TriggerQueueExit();
     return true;
 }
 
@@ -5125,10 +5119,7 @@ bool gt_NewUnitVikingTipQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
     libCamp_gf_CreateTipFromConversationState("StoryTips|Hanson03_Viking", libNtve_ge_TipType_NewUnit, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -5159,10 +5150,7 @@ bool gt_NewEnemyPurifierTipQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
     libCamp_gf_CreateTipFromConversationState("StoryTips|Hanson03a_Purifier", libNtve_ge_TipType_NormalTip, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -5198,7 +5186,7 @@ bool gt_VikingKillsofEnemyUnits_Func (bool testConds, bool runActions) {
 
     gv_vikingKills += 1;
     if ((libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1)) {
-        AchievementTermQuantitySet(gv_pLAYER01_USER, "Anniversary_THanson03A", gv_vikingKills);
+        libWoLC_gf_SetAchievementTermQuantityCampaign("Anniversary_THanson03A", gv_vikingKills);
         TextExpressionSetToken("Param/Expression/90D448AA", "A", IntToText(gv_vikingKills));
         TriggerDebugOutput(1, TextExpressionAssemble("Param/Expression/90D448AA"), false);
     }
@@ -5266,12 +5254,12 @@ bool gt_VictoryPurifierDestroyed_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     gv_gameOver = true;
-    libNtve_gf_ShowHideBossBar(false, gv_purifierBossBar);
+    libWCUI_gf_ShowHideSingularBossBarVoidCampaign(false);
     libNtve_gf_ChangeUnitDamage(UnitFromId(2722), libNtve_ge_UnitDamageTakenDealt_Damage_Take, libNtve_ge_UnitDamageChangeOption_No);
     libNtve_gf_ChangeUnitDamage(UnitFromId(1678), libNtve_ge_UnitDamageTakenDealt_Damage_Take, libNtve_ge_UnitDamageChangeOption_No);
     libNtve_gf_ChangeUnitDamage(UnitFromId(1594), libNtve_ge_UnitDamageTakenDealt_Damage_Take, libNtve_ge_UnitDamageChangeOption_No);
     TriggerExecute(gt_ObjectiveDestroyPurifierComplete, true, true);
-    libCamp_gf_RunMissionVictorySequence(gt_VictoryQ);
+    libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
     return true;
 }
 
@@ -5292,15 +5280,15 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     }
 
     if ((ObjectiveGetState(gv_primaryObjectiveDestroyProtossNexus) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_primaryObjectiveDestroyPurifier) == c_objectiveStateCompleted) && ((ObjectiveGetState(gv_bonusObjectiveDestroyFirstTerrorFleet) == c_objectiveStateHidden) || (ObjectiveGetState(gv_bonusObjectiveDestroyFirstTerrorFleet) == c_objectiveStateCompleted)) && ((ObjectiveGetState(gv_bonusObjectiveDestroySecondTerrorFleet) == c_objectiveStateHidden) || (ObjectiveGetState(gv_bonusObjectiveDestroySecondTerrorFleet) == c_objectiveStateCompleted)) && ((ObjectiveGetState(gv_bonusObjectiveDestroyThirdTerrorFleet) == c_objectiveStateHidden) || (ObjectiveGetState(gv_bonusObjectiveDestroyThirdTerrorFleet) == c_objectiveStateCompleted))) {
-        AchievementAward(gv_pLAYER01_USER, "THanson03A_1");
+        libWoLC_gf_CampaignAwardAchievement("THanson03A_1");
     }
 
     if ((gv_colonyOutpostsSaved >= 3) && (libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1)) {
-        AchievementAward(gv_pLAYER01_USER, "THanson03A_2");
+        libWoLC_gf_CampaignAwardAchievement("THanson03A_2");
     }
 
     if ((gv_colonyOutpostsSaved >= 2) && (libNtve_gf_DifficultyValueInt(0, 0, 1, 1) == 1)) {
-        AchievementAward(gv_pLAYER01_USER, "THanson03A_3");
+        libWoLC_gf_CampaignAwardAchievement("THanson03A_3");
     }
 
     VictoryPanelAddAchievement("THanson03A_1");
@@ -5312,9 +5300,7 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     VictoryPanelAddCustomStatisticLine(StringToText(""), StringToText(""));
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/0DCEB36D"), IntToText(gv_colonyOutpostsSaved));
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/E7158F77"), IntToText(gv_purifierKills));
-    VictoryPanelAddCustomStatisticLine(StringToText(""), StringToText(""));
-    VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/6504EE32"), StringExternal("Param/Value/9C48DABD"));
-    libCamp_gf_EndCampaignMission(gv_pLAYER01_USER, c_gameOverVictory);
+    libWCMI_gf_EndCampaignMission(gv_pLAYER01_USER, c_gameOverVictory);
     return true;
 }
 
@@ -5350,7 +5336,7 @@ bool gt_DefeatBaseDead_Func (bool testConds, bool runActions) {
     TriggerQueueClear(c_triggerQueueRemove);
     Wait(2.0, c_timeReal);
     libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/BDE64F5B"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_Defeat, true, false);
     return true;
 }
@@ -5384,7 +5370,7 @@ bool gt_DefeatColoniesDestroyed_Func (bool testConds, bool runActions) {
     TriggerQueueClear(c_triggerQueueRemove);
     Wait(2.0, c_timeReal);
     libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/4C1A0ABA"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_Defeat, true, false);
     return true;
 }
@@ -5404,7 +5390,7 @@ bool gt_Defeat_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_EndCampaignMission(gv_pLAYER01_USER, c_gameOverDefeat);
+    libWCMI_gf_EndCampaignMission(gv_pLAYER01_USER, c_gameOverDefeat);
     return true;
 }
 
@@ -5431,7 +5417,7 @@ bool gt_VictoryCheat_Func (bool testConds, bool runActions) {
     }
 
     gv_gameOver = true;
-    libCamp_gf_RunMissionVictorySequence(gt_Victory);
+    libWCMI_gf_RunMissionVictorySequence(gt_Victory);
     return true;
 }
 
@@ -5487,12 +5473,9 @@ bool gt_ObjectiveDestroyNexusCreateQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate(StringExternal("Param/Value/AD2F9FE8"), StringExternal("Param/Value/A1645D39"), c_objectiveStateActive, true);
+    libWCMI_gf_CreateObjectiveCampaign("THanson03A_1");
     gv_primaryObjectiveDestroyProtossNexus = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_THanson03AObjective1, ObjectiveLastCreated(), StringExternal("Param/Value/E20ACD09"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -5520,41 +5503,14 @@ bool gt_ObjectiveDestroyNexusComplete_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveDestroyNexusCreateQ, true, false);
-    ObjectiveSetState(gv_primaryObjectiveDestroyProtossNexus, c_objectiveStateCompleted);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    libWCMI_gf_ZS_SetMissionObjectiveState("THanson03A_1", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 void gt_ObjectiveDestroyNexusComplete_Init () {
     gt_ObjectiveDestroyNexusComplete = TriggerCreate("gt_ObjectiveDestroyNexusComplete_Func");
-}
-
-//--------------------------------------------------------------------------------------------------
-// Trigger: Objective Destroy Nexus Failed
-//--------------------------------------------------------------------------------------------------
-bool gt_ObjectiveDestroyNexusFailed_Func (bool testConds, bool runActions) {
-    // Automatic Variable Declarations
-    // Conditions
-    if (testConds) {
-        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
-            return false;
-        }
-    }
-
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    TriggerEnable(TriggerGetCurrent(), false);
-    TriggerExecute(gt_ObjectiveDestroyNexusCreateQ, true, false);
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void gt_ObjectiveDestroyNexusFailed_Init () {
-    gt_ObjectiveDestroyNexusFailed = TriggerCreate("gt_ObjectiveDestroyNexusFailed_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -5575,12 +5531,9 @@ bool gt_ObjectiveDestroyPurifierCreateQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate(StringExternal("Param/Value/D5ED231C"), StringExternal("Param/Value/3BF6C822"), c_objectiveStateActive, true);
+    libWCMI_gf_CreateObjectiveCampaign("THanson03A_2");
     gv_primaryObjectiveDestroyPurifier = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_THanson03AObjective2, ObjectiveLastCreated(), StringExternal("Param/Value/F92933A7"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -5609,8 +5562,8 @@ bool gt_ObjectiveDestroyPurifierComplete_Func (bool testConds, bool runActions) 
     TriggerEnable(TriggerGetCurrent(), false);
     PingDestroy(gv_purifierPing);
     TriggerExecute(gt_ObjectiveDestroyPurifierCreateQ, true, false);
-    ObjectiveSetState(gv_primaryObjectiveDestroyPurifier, c_objectiveStateCompleted);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    libWCMI_gf_ZS_SetMissionObjectiveState("THanson03A_2", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -5620,9 +5573,9 @@ void gt_ObjectiveDestroyPurifierComplete_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
-// Trigger: Objective Destroy First Fleet Create Hidden
+// Trigger: Objective Destroy First Fleet Create
 //--------------------------------------------------------------------------------------------------
-bool gt_ObjectiveDestroyFirstFleetCreateHidden_Func (bool testConds, bool runActions) {
+bool gt_ObjectiveDestroyFirstFleetCreate_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
     // Conditions
     if (testConds) {
@@ -5637,16 +5590,15 @@ bool gt_ObjectiveDestroyFirstFleetCreateHidden_Func (bool testConds, bool runAct
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    ObjectiveCreate(StringExternal("Param/Value/523C2823"), StringExternal("Param/Value/35629878"), c_objectiveStateHidden, false);
+    libWCMI_gf_CreateObjectiveCampaign("THanson03A_3");
     gv_bonusObjectiveDestroyFirstTerrorFleet = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_THanson03AObjective3, ObjectiveLastCreated(), StringExternal("Param/Value/501EA7FB"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-void gt_ObjectiveDestroyFirstFleetCreateHidden_Init () {
-    gt_ObjectiveDestroyFirstFleetCreateHidden = TriggerCreate("gt_ObjectiveDestroyFirstFleetCreateHidden_Func");
+void gt_ObjectiveDestroyFirstFleetCreate_Init () {
+    gt_ObjectiveDestroyFirstFleetCreate = TriggerCreate("gt_ObjectiveDestroyFirstFleetCreate_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -5667,9 +5619,9 @@ bool gt_ObjectiveDestroyFirstFleetComplete_Func (bool testConds, bool runActions
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    ObjectiveShow(gv_bonusObjectiveDestroyFirstTerrorFleet, PlayerGroupAll(), true);
-    ObjectiveSetState(gv_bonusObjectiveDestroyFirstTerrorFleet, c_objectiveStateCompleted);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    TriggerExecute(gt_ObjectiveDestroyFirstFleetCreate, true, false);
+    libWCMI_gf_ZS_SetMissionObjectiveState("THanson03A_3", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -5700,8 +5652,8 @@ bool gt_ObjectiveDestroyFirstFleetFailed_Func (bool testConds, bool runActions) 
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    ObjectiveShow(gv_bonusObjectiveDestroyFirstTerrorFleet, PlayerGroupAll(), true);
-    ObjectiveSetState(gv_bonusObjectiveDestroyFirstTerrorFleet, c_objectiveStateFailed);
+    TriggerExecute(gt_ObjectiveDestroyFirstFleetCreate, true, false);
+    libWCMI_gf_ZS_SetMissionObjectiveState("THanson03A_3", libWoLC_ge_MissionObjectiveState_Failed);
     return true;
 }
 
@@ -5711,9 +5663,9 @@ void gt_ObjectiveDestroyFirstFleetFailed_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
-// Trigger: Objective Destroy Second Fleet Create Hidden
+// Trigger: Objective Destroy Second Fleet Create
 //--------------------------------------------------------------------------------------------------
-bool gt_ObjectiveDestroySecondFleetCreateHidden_Func (bool testConds, bool runActions) {
+bool gt_ObjectiveDestroySecondFleetCreate_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
     // Conditions
     if (testConds) {
@@ -5728,16 +5680,15 @@ bool gt_ObjectiveDestroySecondFleetCreateHidden_Func (bool testConds, bool runAc
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    ObjectiveCreate(StringExternal("Param/Value/8BE98668"), StringExternal("Param/Value/27A32384"), c_objectiveStateHidden, false);
+    libWCMI_gf_CreateObjectiveCampaign("THanson03A_4");
     gv_bonusObjectiveDestroySecondTerrorFleet = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_THanson03AObjective4, ObjectiveLastCreated(), StringExternal("Param/Value/FDF11DB0"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-void gt_ObjectiveDestroySecondFleetCreateHidden_Init () {
-    gt_ObjectiveDestroySecondFleetCreateHidden = TriggerCreate("gt_ObjectiveDestroySecondFleetCreateHidden_Func");
+void gt_ObjectiveDestroySecondFleetCreate_Init () {
+    gt_ObjectiveDestroySecondFleetCreate = TriggerCreate("gt_ObjectiveDestroySecondFleetCreate_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -5758,9 +5709,9 @@ bool gt_ObjectiveDestroySecondFleetComplete_Func (bool testConds, bool runAction
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    ObjectiveShow(gv_bonusObjectiveDestroySecondTerrorFleet, PlayerGroupAll(), true);
-    ObjectiveSetState(gv_bonusObjectiveDestroySecondTerrorFleet, c_objectiveStateCompleted);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    TriggerExecute(gt_ObjectiveDestroySecondFleetCreate, true, false);
+    libWCMI_gf_ZS_SetMissionObjectiveState("THanson03A_4", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -5791,8 +5742,8 @@ bool gt_ObjectiveDestroySecondFleetFailed_Func (bool testConds, bool runActions)
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    ObjectiveShow(gv_bonusObjectiveDestroySecondTerrorFleet, PlayerGroupAll(), true);
-    ObjectiveSetState(gv_bonusObjectiveDestroySecondTerrorFleet, c_objectiveStateFailed);
+    TriggerExecute(gt_ObjectiveDestroySecondFleetCreate, true, false);
+    libWCMI_gf_ZS_SetMissionObjectiveState("THanson03A_4", libWoLC_ge_MissionObjectiveState_Failed);
     return true;
 }
 
@@ -5802,9 +5753,9 @@ void gt_ObjectiveDestroySecondFleetFailed_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
-// Trigger: Objective Destroy Third Fleet Create Hidden
+// Trigger: Objective Destroy Third Fleet Create
 //--------------------------------------------------------------------------------------------------
-bool gt_ObjectiveDestroyThirdFleetCreateHidden_Func (bool testConds, bool runActions) {
+bool gt_ObjectiveDestroyThirdFleetCreate_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
     // Conditions
     if (testConds) {
@@ -5819,16 +5770,15 @@ bool gt_ObjectiveDestroyThirdFleetCreateHidden_Func (bool testConds, bool runAct
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    ObjectiveCreate(StringExternal("Param/Value/E5B125BB"), StringExternal("Param/Value/3794325E"), c_objectiveStateHidden, false);
+    libWCMI_gf_CreateObjectiveCampaign("THanson03A_5");
     gv_bonusObjectiveDestroyThirdTerrorFleet = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_THanson03AObjective5, ObjectiveLastCreated(), StringExternal("Param/Value/DC5A680F"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-void gt_ObjectiveDestroyThirdFleetCreateHidden_Init () {
-    gt_ObjectiveDestroyThirdFleetCreateHidden = TriggerCreate("gt_ObjectiveDestroyThirdFleetCreateHidden_Func");
+void gt_ObjectiveDestroyThirdFleetCreate_Init () {
+    gt_ObjectiveDestroyThirdFleetCreate = TriggerCreate("gt_ObjectiveDestroyThirdFleetCreate_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -5849,9 +5799,9 @@ bool gt_ObjectiveDestroyThirdFleetComplete_Func (bool testConds, bool runActions
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    ObjectiveShow(gv_bonusObjectiveDestroyThirdTerrorFleet, PlayerGroupAll(), true);
-    ObjectiveSetState(gv_bonusObjectiveDestroyThirdTerrorFleet, c_objectiveStateCompleted);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    TriggerExecute(gt_ObjectiveDestroyThirdFleetComplete, true, false);
+    libWCMI_gf_ZS_SetMissionObjectiveState("THanson03A_5", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -5882,8 +5832,8 @@ bool gt_ObjectiveDestroyThirdFleetFailed_Func (bool testConds, bool runActions) 
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    ObjectiveShow(gv_bonusObjectiveDestroyThirdTerrorFleet, PlayerGroupAll(), true);
-    ObjectiveSetState(gv_bonusObjectiveDestroyThirdTerrorFleet, c_objectiveStateFailed);
+    TriggerExecute(gt_ObjectiveDestroyThirdFleetComplete, true, false);
+    libWCMI_gf_ZS_SetMissionObjectiveState("THanson03A_5", libWoLC_ge_MissionObjectiveState_Failed);
     return true;
 }
 
@@ -6933,16 +6883,15 @@ void InitTriggers () {
     gt_DefeatCheat_Init();
     gt_ObjectiveDestroyNexusCreateQ_Init();
     gt_ObjectiveDestroyNexusComplete_Init();
-    gt_ObjectiveDestroyNexusFailed_Init();
     gt_ObjectiveDestroyPurifierCreateQ_Init();
     gt_ObjectiveDestroyPurifierComplete_Init();
-    gt_ObjectiveDestroyFirstFleetCreateHidden_Init();
+    gt_ObjectiveDestroyFirstFleetCreate_Init();
     gt_ObjectiveDestroyFirstFleetComplete_Init();
     gt_ObjectiveDestroyFirstFleetFailed_Init();
-    gt_ObjectiveDestroySecondFleetCreateHidden_Init();
+    gt_ObjectiveDestroySecondFleetCreate_Init();
     gt_ObjectiveDestroySecondFleetComplete_Init();
     gt_ObjectiveDestroySecondFleetFailed_Init();
-    gt_ObjectiveDestroyThirdFleetCreateHidden_Init();
+    gt_ObjectiveDestroyThirdFleetCreate_Init();
     gt_ObjectiveDestroyThirdFleetComplete_Init();
     gt_ObjectiveDestroyThirdFleetFailed_Init();
     gt_BriefingQ_Init();

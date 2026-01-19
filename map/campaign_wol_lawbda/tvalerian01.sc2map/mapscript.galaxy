@@ -7,7 +7,10 @@
 //==================================================================================================
 include "TriggerLibs/NativeLib"
 include "TriggerLibs/LibertyLib"
-include "TriggerLibs/CampaignLib"
+include "LibCamp"
+include "LibWoLC"
+include "LibWCMI"
+include "LibWCUI"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -16,6 +19,9 @@ void InitLibs () {
     libNtve_InitLib();
     libLbty_InitLib();
     libCamp_InitLib();
+    libWoLC_InitLib();
+    libWCMI_InitLib();
+    libWCUI_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -79,6 +85,7 @@ bool gv_drop01Done;
 playergroup gv_zergPlayers;
 fixed gv_nydusWormMaximumHP;
 int gv_dropPodFirstPing;
+int gv_dropPodsRemaining;
 timer gv_dropPodTimer;
 unitgroup gv_gankGroupDrop01;
 unitgroup gv_gankGroupDrop02;
@@ -122,8 +129,7 @@ fixed gv_bDPDeltaWait;
 unit gv_bDPDroppedBuilding;
 point gv_bDPLandingPoint;
 int gv_bDPDropType;
-int gv_leaderBoardDrops;
-int gv_dropPodsRemaining;
+int gv_dropTimerWindow;
 int gv_achievementDropPodForcesRescued;
 bool gv_achievementNonMercCombatUnitTrained;
 int gv_statStructuresRescued;
@@ -142,7 +148,7 @@ string gv_tempNydusType;
 fixed gv_nydusSpawnDelay;
 bool gv_stopFallingDebrisAndStuctures;
 int gv_obejctiveTroopsSupplyTotal;
-fixed gv_existingSupplyUpdate;
+int gv_existingSupplyUpdate;
 int gv_troopSupply;
 unitgroup gv_sCVGroup;
 bool gv_objectiveTroopsCompleted;
@@ -193,6 +199,7 @@ void InitGlobals () {
     int init_j;
 
     gv_zergPlayers = PlayerGroupEmpty();
+    gv_dropPodsRemaining = 9;
     gv_dropPodTimer = TimerCreate();
     gv_gankGroupDrop01 = UnitGroupEmpty();
     gv_gankGroupDrop02 = UnitGroupEmpty();
@@ -215,16 +222,15 @@ void InitGlobals () {
             gv_rescuableUnitGroup[init_i][init_j] = UnitGroupEmpty();
         }
     }
-    gv_leaderBoardDrops = c_boardNone;
-    gv_dropPodsRemaining = 9;
+    gv_dropTimerWindow = c_timerWindowNone;
     gv_zergRushGroup01 = UnitGroupEmpty();
     gv_zergRushGroup02 = UnitGroupEmpty();
     gv_zergRushGroup03 = UnitGroupEmpty();
     gv_nydusSpawnDelay = 18.0;
-    gv_obejctiveTroopsSupplyTotal = 100;
+    gv_obejctiveTroopsSupplyTotal = CatalogFieldValueGetAsInt(c_gameCatalogObjective, "TValerian01_1", "RequiredCount", c_playerAny);
     gv_troopSupply = c_invalidObjectiveId;
     gv_sCVGroup = UnitGroupEmpty();
-    gv_obejctiveNydusWormsTotal = 3;
+    gv_obejctiveNydusWormsTotal = CatalogFieldValueGetAsInt(c_gameCatalogObjective, "TValerian01_2", "RequiredCount", c_playerAny);
     gv_objectiveNydusWorms = c_invalidObjectiveId;
     for (init_i = 0; init_i <= 4; init_i += 1) {
         gv_briefingSlaughterAreas[init_i].lv_zergGroup = UnitGroupEmpty();
@@ -338,7 +344,8 @@ trigger gt_InfestationPitDies;
 trigger gt_StorymodeTipsQ;
 trigger gt_DominionTroopsTipQ;
 trigger gt_DominionSuppliesTipQ;
-trigger gt_LeaderboardCreate;
+trigger gt_DropTimerWindowCreate;
+trigger gt_DropTimerWindowHide;
 trigger gt_ZergStartAttack;
 trigger gt_ZergAmbientAttackBothSidesNew;
 trigger gt_MoveArea02;
@@ -382,13 +389,11 @@ trigger gt_ZergNorthSmallExtraGuys;
 trigger gt_ZergSouthExtraGuys;
 trigger gt_ObjectiveTroopSupplyCreateQ;
 trigger gt_ObjectiveTroopSupplyComplete;
-trigger gt_ObjectiveTroopSupplyFailed;
 trigger gt_ObjectiveFoodSupply;
 trigger gt_ObjectiveTroopSupplyUpdate;
-trigger gt_ObjectiveNydusWormsCreateHidden;
+trigger gt_ObjectiveNydusWormsCreate;
 trigger gt_ObjectiveNydusWormsUpdate;
 trigger gt_ObjectiveNydusWormsComplete;
-trigger gt_ObjectiveNydusWormsFailed;
 trigger gt_Nydus01Dies;
 trigger gt_Nydus02Dies;
 trigger gt_Nydus03Dies;
@@ -773,7 +778,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_LoadCampaignData(libCamp_ge_MapID_MapTValerian01);
+    libWoLC_gf_ULoadCampaignData("TValerian01");
     TriggerExecute(gt_Init01Technology, true, true);
     TriggerExecute(gt_Init02Players, true, true);
     TriggerExecute(gt_Init03Units, true, true);
@@ -782,8 +787,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init06Difficulties, true, true);
     TriggerExecute(gt_Init07Help, true, true);
     TriggerExecute(gt_Init08Variables, true, true);
-    libCamp_gf_RegisterFootageRecording(gt_BriefingQ);
-    libCamp_gf_PurchaseStorymodeTech();
+    libWoLC_gf_RegisterFootageRecording(gt_BriefingQ);
     TriggerExecute(gt_IntroSequence, true, false);
     return true;
 }
@@ -804,7 +808,7 @@ bool gt_Init01Technology_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_SetTechRestrictionsCallback(TriggerGetCurrent());
+    TechTreeUpgradeAddLevel(gv_p01_USER, "Kit@DisableBuildSupplyDepot", 1);
     TechTreeUpgradeAddLevel(gv_p02_ZERG_PURPLE_NE, "hydraliskspeed", 1);
     TechTreeUpgradeAddLevel(gv_p02_ZERG_PURPLE_NE, "hydraliskspeed", 1);
     TechTreeUpgradeAddLevel(gv_p05_ZERG_ORANGE_NW, "hydraliskspeed", 1);
@@ -917,6 +921,7 @@ bool gt_Init02Players_Func (bool testConds, bool runActions) {
     PlayerSetColorIndex(gv_p07_ZERG_PINK, 4, true);
     PlayerSetColorIndex(gv_p10_ZERG_WHITEHIVE, 4, true);
     PlayerSetColorIndex(gv_p11_ZERG_YELLOWSPORECANNON, 4, true);
+    libWCMI_gf_WM_DetectionUpgradesApply();
     return true;
 }
 
@@ -969,6 +974,7 @@ bool gt_Init03Units_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    libWCMI_gf_HandleMercCompound(UnitFromId(692));
     auto23D7A4A6_g = UnitGroup("InfestedCC", gv_p10_ZERG_WHITEHIVE, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     auto23D7A4A6_u = UnitGroupCount(auto23D7A4A6_g, c_unitCountAll);
     for (;; auto23D7A4A6_u -= 1) {
@@ -1185,16 +1191,6 @@ bool gt_Init06Difficulties_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    if ((libNtve_gf_DifficultyValueInt(55, 0, 0, 0) == 55)) {
-        PlayerModifyPropertyInt(gv_p02_ZERG_PURPLE_NE, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p05_ZERG_ORANGE_NW, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p06_ZERG_GREEN_SW, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p07_ZERG_PINK, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p07_ZERG_PINK, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p08_RESCUABLE, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p10_ZERG_WHITEHIVE, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-    }
-
     gf_AddUpgradetoZergPlayers(libNtve_gf_DifficultyValueInt(0, 0, 1, 1), "ZergMeleeWeaponsLevel1");
     gf_AddUpgradetoZergPlayers(libNtve_gf_DifficultyValueInt(0, 0, 1, 1), "ZergMissileWeaponsLevel1");
     gf_AddUpgradetoZergPlayers(libNtve_gf_DifficultyValueInt(0, 0, 1, 1), "ZergFlyerWeaponsLevel1");
@@ -1323,6 +1319,8 @@ bool gt_IntroSequence_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_StartUpgradesAdv, true, false);
     TriggerExecute(gt_StartUpgradesExp, true, false);
     Wait(0.2, c_timeGame);
+    libWCMI_gf_StartingWorkersAutoHarvest(RegionFromId(29), null);
+    libWCMI_gf_SetWorkerRallyPointforNexus2(UnitFromId(11));
     UIAlertPoint("Trigger", gv_p01_USER, StringExternal("Param/Value/D729169D"), null, UnitGetPosition(UnitFromId(11)));
     libNtve_gf_CinematicMode(false, PlayerGroupAll(), 1.5);
     libNtve_gf_GlobalCinematicSetting(false);
@@ -1356,7 +1354,6 @@ bool gt_StartGame_Func (bool testConds, bool runActions) {
     TriggerEnable(gt_ZergAmbientAttackBothSidesNew, true);
     TriggerExecute(gt_ZergStartAttack, true, false);
     TriggerExecute(gt_DropPodallPodSpawnsQ, true, false);
-    TriggerExecute(gt_ObjectiveNydusWormsCreateHidden, true, false);
     Wait(15.0, c_timeGame);
     TriggerExecute(gt_DialogueKeepMeUpdatedIfWeCanReachQ, true, false);
     Wait(30.0, c_timeGame);
@@ -1521,7 +1518,7 @@ bool gt_LeaderboardInitiate_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerExecute(gt_LeaderboardCreate, true, false);
+    TriggerExecute(gt_DropTimerWindowCreate, true, false);
     Wait(2.0, c_timeGame);
     TriggerExecute(gt_DominionTroopsTipQ, true, false);
     return true;
@@ -1550,41 +1547,42 @@ bool gt_DropPodallPodSpawnsQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    Wait(167.0, c_timeGame);
-    TimerStart(gv_dropPodTimer, c_timerDurationInfinite, false, c_timeGame);
+    TimerStart(gv_dropPodTimer, 167.0, false, c_timeGame);
+    libNtve_gf_WaitForTimer(gv_dropPodTimer, 0.0, false);
+    TimerStart(gv_dropPodTimer, 115.0, false, c_timeGame);
     gf_PrepareRescuableDrop(3, "Marauder");
     gf_PrepareRescuableDrop(2, "Marine");
     gv_dropPodsRemaining = (gv_dropPodsRemaining - 1);
     TriggerExecute(gt_Gank_Drop02Marauder, true, false);
     TriggerExecute(gt_DialogueSirIveDetectedaDropPodInYourVicinityQ, true, false);
     gf_CreateRescuable(ge_RescuableRegion_A, 1, 0.0);
-    libNtve_gf_WaitForTimer(gv_dropPodTimer, 115.0, true);
-    TimerStart(gv_dropPodTimer, c_timerDurationInfinite, false, c_timeGame);
+    libNtve_gf_WaitForTimer(gv_dropPodTimer, 0.0, false);
+    TimerStart(gv_dropPodTimer, 150.0, false, c_timeGame);
     TriggerExecute(gt_RescueFactorySpawnQ, true, false);
     TriggerExecute(gt_DialogueSendingCoordinatesToANearbyDroppodQ, true, false);
     gf_CreateRescuable(ge_RescuableRegion_B, 1, 0.0);
-    libNtve_gf_WaitForTimer(gv_dropPodTimer, 150.0, true);
-    TimerStart(gv_dropPodTimer, c_timerDurationInfinite, false, c_timeGame);
+    libNtve_gf_WaitForTimer(gv_dropPodTimer, 0.0, false);
+    TimerStart(gv_dropPodTimer, 120.0, false, c_timeGame);
     gf_PrepareRescuableDrop(2, "SiegeTank");
     gf_PrepareRescuableDrop(4, "Marine");
     gv_dropPodsRemaining = (gv_dropPodsRemaining - 1);
     TriggerExecute(gt_Gank_Drop04Tanks, true, false);
     TriggerExecute(gt_DialogueSirAnotherDropPodIsComingDownQ, true, false);
     gf_CreateRescuable(ge_RescuableRegion_C, 1, 0.0);
-    libNtve_gf_WaitForTimer(gv_dropPodTimer, 120.0, true);
-    TimerStart(gv_dropPodTimer, c_timerDurationInfinite, false, c_timeGame);
+    libNtve_gf_WaitForTimer(gv_dropPodTimer, 0.0, false);
+    TimerStart(gv_dropPodTimer, 150.0, false, c_timeGame);
     TriggerExecute(gt_RescueStarportSpawnQ, true, false);
     TriggerExecute(gt_DialogueSirAnotherDropPodHasArrivedNearYourPerimeterQ, true, false);
-    libNtve_gf_WaitForTimer(gv_dropPodTimer, 150.0, true);
-    TimerStart(gv_dropPodTimer, c_timerDurationInfinite, false, c_timeGame);
+    libNtve_gf_WaitForTimer(gv_dropPodTimer, 0.0, false);
+    TimerStart(gv_dropPodTimer, 120.0, false, c_timeGame);
     gf_PrepareRescuableDrop(4, "Goliath");
     gf_PrepareRescuableDrop(4, "Marine");
     gv_dropPodsRemaining = (gv_dropPodsRemaining - 1);
     TriggerExecute(gt_Gank_Drop06Goliaths, true, false);
     TriggerExecute(gt_DialogueYouveGotAnotherDropPodLandingNearByQ, true, false);
     gf_CreateRescuable(ge_RescuableRegion_B, 1, 0.0);
-    libNtve_gf_WaitForTimer(gv_dropPodTimer, 120.0, true);
-    TimerStart(gv_dropPodTimer, c_timerDurationInfinite, false, c_timeGame);
+    libNtve_gf_WaitForTimer(gv_dropPodTimer, 0.0, false);
+    TimerStart(gv_dropPodTimer, 150.0, false, c_timeGame);
     gf_PrepareRescuableDrop(3, "Banshee");
     gf_PrepareRescuableDrop(3, "Hellion");
     gv_dropPodsRemaining = (gv_dropPodsRemaining - 1);
@@ -1596,7 +1594,8 @@ bool gt_DropPodallPodSpawnsQ_Func (bool testConds, bool runActions) {
     gv_dropPodsRemaining = (gv_dropPodsRemaining - 1);
     TriggerExecute(gt_Gank_Drop08SplitViking, true, false);
     gf_CreateRescuable(ge_RescuableRegion_B, 2, 0.0);
-    libNtve_gf_WaitForTimer(gv_dropPodTimer, 150.0, true);
+    libNtve_gf_WaitForTimer(gv_dropPodTimer, 0.0, false);
+    TriggerExecute(gt_DropTimerWindowHide, true, false);
     TimerStart(gv_dropPodTimer, c_timerDurationInfinite, false, c_timeGame);
     gf_PrepareRescuableDrop(8, "Marine");
     gf_PrepareRescuableDrop(1, "Thor");
@@ -3560,8 +3559,6 @@ bool gt_DialogueCommanderTheLastOfTheDominionDropPodsQ_Func (bool testConds, boo
     // Transmission - SoundLink("TValerian01Raynor00050", -1)
     libCamp_gf_SendTransmissionCampaign(null, SoundLink("TValerian01Raynor00050", 0), c_transmissionDurationAdd, 0.0, true);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Game);
-    SoundPlay(SoundLink("UI_TechConsole_Select", 0), PlayerGroupAll(), 100.0, 0.0);
-    BoardDestroy(gv_leaderBoardDrops);
     TriggerExecute(gt_DialogueSirWShouldMobilizeEverythingWeGotQ, true, false);
     TriggerQueueExit();
     return true;
@@ -3989,10 +3986,7 @@ bool gt_StorymodeTipsQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
     libCamp_gf_CreateStorymodeTips();
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -4023,10 +4017,7 @@ bool gt_DominionTroopsTipQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
     libCamp_gf_CreateTipFromConversationState("StoryTips|Valerian01_DominionTroops", libNtve_ge_TipType_NormalTip, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -4057,10 +4048,7 @@ bool gt_DominionSuppliesTipQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
     libCamp_gf_CreateTipFromConversationState("StoryTips|Valerian01_DominionSupplies", libNtve_ge_TipType_NormalTip, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -4070,31 +4058,44 @@ void gt_DominionSuppliesTipQ_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
-// Trigger: Leaderboard Create
+// Trigger: Drop Timer Window Create
 //--------------------------------------------------------------------------------------------------
-bool gt_LeaderboardCreate_Func (bool testConds, bool runActions) {
+bool gt_DropTimerWindowCreate_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
     // Actions
     if (!runActions) {
         return true;
     }
 
-    SoundPlay(SoundLink("UI_TechConsole_Select", 0), PlayerGroupAll(), 100.0, 0.0);
-    BoardCreate(1, 1, StringToText(""), Color(0.00, 0.00, 100.00));
-    BoardMinimizeShow(BoardLastCreated(), PlayerGroupAll(), false);
-    gv_leaderBoardDrops = BoardLastCreated();
-    BoardSetState(gv_leaderBoardDrops, PlayerGroupAll(), c_boardStateShowHeader, false);
-    BoardSetState(gv_leaderBoardDrops, PlayerGroupAll(), c_boardStateShowTitle, false);
-    while (true) {
-        BoardItemSetText(gv_leaderBoardDrops, 1, 1, (StringExternal("Param/Value/61E67D35") + IntToText(gv_dropPodsRemaining)));
-        Wait(1.0, c_timeGame);
-    }
+    libWCUI_gf_SetTimerWindowDangerThreshold(0.0);
+    libWCUI_gf_TimerWindowCreate(gv_dropPodTimer, StringExternal("Param/Value/713BDED3"), true, false);
+    TimerWindowSetFormat(TimerWindowLastCreated(), StringToText("<min2/>:<sec2/>"));
+    gv_dropTimerWindow = TimerWindowLastCreated();
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-void gt_LeaderboardCreate_Init () {
-    gt_LeaderboardCreate = TriggerCreate("gt_LeaderboardCreate_Func");
+void gt_DropTimerWindowCreate_Init () {
+    gt_DropTimerWindowCreate = TriggerCreate("gt_DropTimerWindowCreate_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Drop Timer Window Hide
+//--------------------------------------------------------------------------------------------------
+bool gt_DropTimerWindowHide_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TimerWindowShow(gv_dropTimerWindow, PlayerGroupAll(), false);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_DropTimerWindowHide_Init () {
+    gt_DropTimerWindowHide = TriggerCreate("gt_DropTimerWindowHide_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -4259,7 +4260,7 @@ bool gt_AchievementKillallSporeCannons_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    AchievementAward(gv_p01_USER, "TValerian01_2");
+    libWoLC_gf_CampaignAwardAchievement("TValerian01_2");
     return true;
 }
 
@@ -4362,7 +4363,7 @@ bool gt_AchievementRescuealldroppods_Func (bool testConds, bool runActions) {
     }
 
     if ((libNtve_gf_DifficultyValueInt(0, 0, 1, 1) == 1) && (gv_statDropPodsRescued >= 10)) {
-        AchievementAward(gv_p01_USER, "TValerian01_3");
+        libWoLC_gf_CampaignAwardAchievement("TValerian01_3");
     }
 
     return true;
@@ -4398,7 +4399,7 @@ bool gt_VictoryPrimaryObjectiveCompleted_Func (bool testConds, bool runActions) 
     gv_gameOver = true;
     TriggerExecute(gt_ObjectiveNydusWormsComplete, true, false);
     Wait(2.0, c_timeReal);
-    libCamp_gf_RunMissionVictorySequence(gt_VictoryQ);
+    libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
     return true;
 }
 
@@ -4418,11 +4419,11 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     }
 
     if ((ObjectiveGetState(gv_troopSupply) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_objectiveNydusWorms) == c_objectiveStateCompleted)) {
-        AchievementAward(gv_p01_USER, "TValerian01_1");
+        libWoLC_gf_CampaignAwardAchievement("TValerian01_1");
     }
 
     if ((libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1) && (gv_achievementNonMercCombatUnitTrained == false)) {
-        AchievementAward(gv_p01_USER, "Anniversary_TValerian01");
+        libWoLC_gf_CampaignAwardAchievement("Anniversary_TValerian01");
         TriggerDebugOutput(1, StringExternal("Param/Value/738BEE7D"), false);
     }
 
@@ -4437,7 +4438,7 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/E6C3018A"), IntToText(gv_statStructuresRescued));
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/331EC825"), (IntToText(gv_statSporeCannonsDestroyed) + StringExternal("Param/Value/36030FF4") + IntToText(6)));
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/39F17C81"), (IntToText(gv_statDropPodsRescued) + StringExternal("Param/Value/EFD8E7F6") + IntToText(10)));
-    libCamp_gf_EndCampaignMission(gv_p01_USER, c_gameOverVictory);
+    libWCMI_gf_EndCampaignMission(gv_p01_USER, c_gameOverVictory);
     return true;
 }
 
@@ -4477,7 +4478,7 @@ bool gt_DefeatAllTroopsDead_Func (bool testConds, bool runActions) {
     TriggerQueueClear(c_triggerQueueRemove);
     Wait(2.0, c_timeReal);
     libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/46963DA5"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_Defeat, true, false);
     return true;
 }
@@ -4498,7 +4499,7 @@ bool gt_Defeat_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_EndCampaignMission(gv_p01_USER, c_gameOverDefeat);
+    libWCMI_gf_EndCampaignMission(gv_p01_USER, c_gameOverDefeat);
     return true;
 }
 
@@ -4525,7 +4526,7 @@ bool gt_VictoryCheat_Func (bool testConds, bool runActions) {
     }
 
     gv_gameOver = true;
-    libCamp_gf_RunMissionVictorySequence(gt_Victory);
+    libWCMI_gf_RunMissionVictorySequence(gt_Victory);
     return true;
 }
 
@@ -6126,12 +6127,9 @@ bool gt_ObjectiveTroopSupplyCreateQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate((StringExternal("Param/Value/CCBA874B") + FixedToText(gv_existingSupplyUpdate, 0) + StringExternal("Param/Value/D2C29749") + IntToText(gv_obejctiveTroopsSupplyTotal) + StringExternal("Param/Value/FFF89351")), StringExternal("Param/Value/ACD3FC1A"), c_objectiveStateActive, true);
+    libWCMI_gf_CreateObjectiveCampaign("TValerian01_1");
     gv_troopSupply = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_TValerian01Objective2, gv_troopSupply, StringExternal("Param/Value/099D9D4B"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -6160,8 +6158,8 @@ bool gt_ObjectiveTroopSupplyComplete_Func (bool testConds, bool runActions) {
     TriggerEnable(TriggerGetCurrent(), false);
     gv_objectiveTroopsCompleted = true;
     TriggerExecute(gt_ObjectiveTroopSupplyCreateQ, true, false);
-    ObjectiveSetState(gv_troopSupply, c_objectiveStateCompleted);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    libWCMI_gf_ZS_SetMissionObjectiveState("TValerian01_1", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     libCamp_gf_CreateMissionAutosavePoint(StringExternal("Param/Value/FF1C27F9"));
     Wait(2.0, c_timeGame);
     TriggerExecute(gt_MidQ, true, false);
@@ -6174,40 +6172,13 @@ void gt_ObjectiveTroopSupplyComplete_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
-// Trigger: ObjectiveTroopSupplyFailed
-//--------------------------------------------------------------------------------------------------
-bool gt_ObjectiveTroopSupplyFailed_Func (bool testConds, bool runActions) {
-    // Automatic Variable Declarations
-    // Conditions
-    if (testConds) {
-        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
-            return false;
-        }
-    }
-
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    TriggerEnable(TriggerGetCurrent(), false);
-    TriggerExecute(gt_ObjectiveTroopSupplyCreateQ, true, false);
-    ObjectiveSetState(gv_troopSupply, c_objectiveStateFailed);
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void gt_ObjectiveTroopSupplyFailed_Init () {
-    gt_ObjectiveTroopSupplyFailed = TriggerCreate("gt_ObjectiveTroopSupplyFailed_Func");
-}
-
-//--------------------------------------------------------------------------------------------------
 // Trigger: ObjectiveFoodSupply
 //--------------------------------------------------------------------------------------------------
 bool gt_ObjectiveFoodSupply_Func (bool testConds, bool runActions) {
     // Variable Declarations
     unit lv_allUnits;
     unit lv_cargoUnits;
+    fixed lv_supply;
 
     // Automatic Variable Declarations
     unitgroup auto26EB6079_g;
@@ -6229,21 +6200,21 @@ bool gt_ObjectiveFoodSupply_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    gv_existingSupplyUpdate = 0;
     auto26EB6079_g = UnitGroup(null, gv_p01_USER, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     auto26EB6079_u = UnitGroupCount(auto26EB6079_g, c_unitCountAll);
     for (;; auto26EB6079_u -= 1) {
         lv_allUnits = UnitGroupUnitFromEnd(auto26EB6079_g, auto26EB6079_u);
         if (lv_allUnits == null) { break; }
-        gv_existingSupplyUpdate += UnitGetPropertyFixed(lv_allUnits, c_unitPropSuppliesUsed, c_unitPropCurrent);
+        lv_supply += UnitGetPropertyFixed(lv_allUnits, c_unitPropSuppliesUsed, c_unitPropCurrent);
         auto09A7124F_g = UnitCargoGroup(lv_allUnits);
         auto09A7124F_u = UnitGroupCount(auto09A7124F_g, c_unitCountAll);
         for (;; auto09A7124F_u -= 1) {
             lv_cargoUnits = UnitGroupUnitFromEnd(auto09A7124F_g, auto09A7124F_u);
             if (lv_cargoUnits == null) { break; }
-            gv_existingSupplyUpdate += UnitGetPropertyFixed(lv_cargoUnits, c_unitPropSuppliesUsed, c_unitPropCurrent);
+            lv_supply += UnitGetPropertyFixed(lv_cargoUnits, c_unitPropSuppliesUsed, c_unitPropCurrent);
         }
     }
+    gv_existingSupplyUpdate = FloorI(lv_supply);
     TriggerExecute(gt_ObjectiveTroopSupplyUpdate, true, false);
     return true;
 }
@@ -6276,12 +6247,11 @@ bool gt_ObjectiveTroopSupplyUpdate_Func (bool testConds, bool runActions) {
     }
 
     TriggerExecute(gt_ObjectiveTroopSupplyCreateQ, true, false);
-    ObjectiveSetName(gv_troopSupply, (StringExternal("Param/Value/35A51023") + FixedToText(gv_existingSupplyUpdate, 0) + StringExternal("Param/Value/931B73B1") + (IntToText(gv_obejctiveTroopsSupplyTotal)) + StringExternal("Param/Value/A31AC52F")));
-    if ((gv_existingSupplyUpdate >= IntToFixed(gv_obejctiveTroopsSupplyTotal))) {
+    libWCMI_gf_SetMissionObjectiveProgress("TValerian01_1", libNtve_gf_ArithmeticIntClamp(gv_existingSupplyUpdate, 0, gv_obejctiveTroopsSupplyTotal));
+    if ((gv_existingSupplyUpdate >= gv_obejctiveTroopsSupplyTotal)) {
         TriggerEnable(TriggerGetCurrent(), false);
         TriggerEnable(gt_ObjectiveFoodSupply, false);
         TriggerExecute(gt_ObjectiveTroopSupplyComplete, true, false);
-        ObjectiveSetName(gv_troopSupply, (StringExternal("Param/Value/CF493A94") + FixedToText(100.0, 0) + StringExternal("Param/Value/93880367") + (IntToText(gv_obejctiveTroopsSupplyTotal)) + StringExternal("Param/Value/A3A377F1")));
     }
 
     return true;
@@ -6293,9 +6263,9 @@ void gt_ObjectiveTroopSupplyUpdate_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
-// Trigger: ObjectiveNydusWorms Create Hidden
+// Trigger: ObjectiveNydusWorms Create
 //--------------------------------------------------------------------------------------------------
-bool gt_ObjectiveNydusWormsCreateHidden_Func (bool testConds, bool runActions) {
+bool gt_ObjectiveNydusWormsCreate_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
     // Conditions
     if (testConds) {
@@ -6310,16 +6280,15 @@ bool gt_ObjectiveNydusWormsCreateHidden_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    ObjectiveCreate((StringExternal("Param/Value/C304BF9D") + IntToText(gv_obejctiveNydusWormsUpdate) + StringExternal("Param/Value/2DF13558") + IntToText(gv_obejctiveNydusWormsTotal) + StringExternal("Param/Value/F9F69467")), StringExternal("Param/Value/C5E5B9B1"), c_objectiveStateHidden, true);
+    libWCMI_gf_CreateObjectiveCampaign("TValerian01_2");
     gv_objectiveNydusWorms = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_TValerian01Objective1, ObjectiveLastCreated(), StringExternal("Param/Value/F35D34B8"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-void gt_ObjectiveNydusWormsCreateHidden_Init () {
-    gt_ObjectiveNydusWormsCreateHidden = TriggerCreate("gt_ObjectiveNydusWormsCreateHidden_Func");
+void gt_ObjectiveNydusWormsCreate_Init () {
+    gt_ObjectiveNydusWormsCreate = TriggerCreate("gt_ObjectiveNydusWormsCreate_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -6339,16 +6308,14 @@ bool gt_ObjectiveNydusWormsUpdate_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    TriggerExecute(gt_ObjectiveNydusWormsCreateHidden, true, false);
+    TriggerExecute(gt_ObjectiveNydusWormsCreate, true, false);
     gv_obejctiveNydusWormsUpdate += 1;
-    ObjectiveSetName(gv_objectiveNydusWorms, (StringExternal("Param/Value/2FB3E0A4") + IntToText(gv_obejctiveNydusWormsUpdate) + StringExternal("Param/Value/482E305A") + (IntToText(gv_obejctiveNydusWormsTotal)) + StringExternal("Param/Value/5D117C8B")));
+    libWCMI_gf_SetMissionObjectiveProgress("TValerian01_2", gv_obejctiveNydusWormsUpdate);
     if ((gv_obejctiveNydusWormsUpdate == gv_obejctiveNydusWormsTotal)) {
         TriggerEnable(TriggerGetCurrent(), false);
         TriggerExecute(gt_ObjectiveNydusWormsComplete, true, false);
     }
-    else {
-        Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    }
+
     return true;
 }
 
@@ -6375,9 +6342,9 @@ bool gt_ObjectiveNydusWormsComplete_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerExecute(gt_ObjectiveNydusWormsCreateHidden, true, false);
-    ObjectiveSetState(gv_objectiveNydusWorms, c_objectiveStateCompleted);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    TriggerExecute(gt_ObjectiveNydusWormsCreate, true, false);
+    libWCMI_gf_ZS_SetMissionObjectiveState("TValerian01_2", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_VictoryPrimaryObjectiveCompleted, true, false);
     return true;
 }
@@ -6385,34 +6352,6 @@ bool gt_ObjectiveNydusWormsComplete_Func (bool testConds, bool runActions) {
 //--------------------------------------------------------------------------------------------------
 void gt_ObjectiveNydusWormsComplete_Init () {
     gt_ObjectiveNydusWormsComplete = TriggerCreate("gt_ObjectiveNydusWormsComplete_Func");
-}
-
-//--------------------------------------------------------------------------------------------------
-// Trigger: ObjectiveNydusWorms Failed
-//--------------------------------------------------------------------------------------------------
-bool gt_ObjectiveNydusWormsFailed_Func (bool testConds, bool runActions) {
-    // Automatic Variable Declarations
-    // Conditions
-    if (testConds) {
-        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
-            return false;
-        }
-    }
-
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    TriggerEnable(TriggerGetCurrent(), false);
-    TriggerExecute(gt_ObjectiveNydusWormsCreateHidden, true, false);
-    ObjectiveSetState(gv_objectiveNydusWorms, c_objectiveStateFailed);
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void gt_ObjectiveNydusWormsFailed_Init () {
-    gt_ObjectiveNydusWormsFailed = TriggerCreate("gt_ObjectiveNydusWormsFailed_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -7986,7 +7925,7 @@ bool gt_MidCleanup_Func (bool testConds, bool runActions) {
     CinematicFade(true, lv_fadeDuration, c_fadeStyleNormal, ColorWithAlpha(0.00, 0.00, 0.00, 0.00), 0.0, true);
     gv_inCinematic = false;
     gv_midCinematicCompleted = true;
-    ObjectiveShow(gv_objectiveNydusWorms, PlayerGroupAll(), true);
+    TriggerExecute(gt_ObjectiveNydusWormsCreate, true, false);
     TriggerExecute(gt_DialogueSirWShouldMobilizeEverythingWeGotQ, true, false);
     autoBB380C33_g = gv_bunkerGroup01;
     autoBB380C33_u = UnitGroupCount(autoBB380C33_g, c_unitCountAll);
@@ -8621,7 +8560,8 @@ void InitTriggers () {
     gt_StorymodeTipsQ_Init();
     gt_DominionTroopsTipQ_Init();
     gt_DominionSuppliesTipQ_Init();
-    gt_LeaderboardCreate_Init();
+    gt_DropTimerWindowCreate_Init();
+    gt_DropTimerWindowHide_Init();
     gt_ZergStartAttack_Init();
     gt_ZergAmbientAttackBothSidesNew_Init();
     gt_MoveArea02_Init();
@@ -8665,13 +8605,11 @@ void InitTriggers () {
     gt_ZergSouthExtraGuys_Init();
     gt_ObjectiveTroopSupplyCreateQ_Init();
     gt_ObjectiveTroopSupplyComplete_Init();
-    gt_ObjectiveTroopSupplyFailed_Init();
     gt_ObjectiveFoodSupply_Init();
     gt_ObjectiveTroopSupplyUpdate_Init();
-    gt_ObjectiveNydusWormsCreateHidden_Init();
+    gt_ObjectiveNydusWormsCreate_Init();
     gt_ObjectiveNydusWormsUpdate_Init();
     gt_ObjectiveNydusWormsComplete_Init();
-    gt_ObjectiveNydusWormsFailed_Init();
     gt_Nydus01Dies_Init();
     gt_Nydus02Dies_Init();
     gt_Nydus03Dies_Init();

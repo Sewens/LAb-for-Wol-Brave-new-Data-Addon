@@ -7,7 +7,10 @@
 //==================================================================================================
 include "TriggerLibs/NativeLib"
 include "TriggerLibs/LibertyLib"
-include "TriggerLibs/CampaignLib"
+include "LibCamp"
+include "LibWoLC"
+include "LibWCMI"
+include "LibWCUI"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -16,6 +19,9 @@ void InitLibs () {
     libNtve_InitLib();
     libLbty_InitLib();
     libCamp_InitLib();
+    libWoLC_InitLib();
+    libWCMI_InitLib();
+    libWCUI_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -75,10 +81,8 @@ int gv_holoboardsDestroyed;
 int gv_dominionMarinesKilled;
 int gv_dominionMarinesTotal;
 int gv_objectiveMainPing;
-int gv_objectiveDestroyLogisticalHQ;
 actor gv_actorObjectiveMain;
 int gv_objectiveRaynorMustLIVE;
-int gv_objectiveDestroyDominionHoloboards;
 int gv_objectiveTaskDestroyDominionHoloboardsProgress;
 int gv_objectiveTaskDestroyDominionHoloboardsTotal;
 actor gv_introActorBase01;
@@ -135,9 +139,7 @@ void InitGlobals () {
     gv_holoboardTransmission04 = c_invalidTransmissionId;
     gv_holoboardTransmission05 = c_invalidTransmissionId;
     gv_holoboardTransmission06 = c_invalidTransmissionId;
-    gv_objectiveDestroyLogisticalHQ = c_invalidObjectiveId;
     gv_objectiveRaynorMustLIVE = c_invalidObjectiveId;
-    gv_objectiveDestroyDominionHoloboards = c_invalidObjectiveId;
     gv_objectiveTaskDestroyDominionHoloboardsTotal = 6;
     gv_raynorsMarines = UnitGroupEmpty();
     gv_introUnitCargoStart = UnitGroupEmpty();
@@ -233,6 +235,7 @@ trigger gt_PlayHoloboard04Q;
 trigger gt_PlayHoloboard05Q;
 trigger gt_PlayHoloboard06Q;
 trigger gt_HoloboardStopSounds;
+trigger gt_ShowTipsQ;
 trigger gt_TipStoryModeQ;
 trigger gt_TipThisisnotaherogameQ;
 trigger gt_TipUnitNewUnitMarinesQ;
@@ -312,7 +315,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_LoadCampaignData(libCamp_ge_MapID_MapTRaynor01);
+    libWoLC_gf_ULoadCampaignData("TRaynor01");
     TriggerExecute(gt_Init01Technology, true, true);
     TriggerExecute(gt_Init02Players, true, true);
     TriggerExecute(gt_Init03Units, true, true);
@@ -320,8 +323,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init05Environment, true, true);
     TriggerExecute(gt_Init06Difficulties, true, true);
     TriggerExecute(gt_Init07Help, true, true);
-    libCamp_gf_RegisterFootageRecording(gt_BriefingQ);
-    libCamp_gf_PurchaseStorymodeTech();
+    libWoLC_gf_RegisterFootageRecording(gt_BriefingQ);
     TriggerExecute(gt_IntroQ, true, false);
     return true;
 }
@@ -337,12 +339,6 @@ void gt_Initialization_Init () {
 //--------------------------------------------------------------------------------------------------
 bool gt_Init01Technology_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    libCamp_gf_SetTechRestrictionsCallback(TriggerGetCurrent());
     return true;
 }
 
@@ -376,6 +372,7 @@ bool gt_Init02Players_Func (bool testConds, bool runActions) {
     PlayerSetState(gv_p4_ACTORS_BLUE, c_playerStateFidgetingEnabled, false);
     PlayerSetState(gv_p3_RIKSVILLE_YELLOW, c_playerStateDisplayInLeaderPanel, false);
     PlayerSetState(gv_p4_ACTORS_BLUE, c_playerStateDisplayInLeaderPanel, false);
+    libWCMI_gf_WM_DetectionUpgradesApply();
     return true;
 }
 
@@ -624,10 +621,6 @@ bool gt_Init06Difficulties_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    if ((PlayerDifficulty(gv_p1_USER) == 1)) {
-        PlayerModifyPropertyInt(gv_p2_DOMINION_RED, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-    }
-
     TechTreeUpgradeAddLevel(gv_p2_DOMINION_RED, "TerranInfantryWeaponsLevel1", libNtve_gf_DifficultyValueInt(0, 0, 0, 1));
     TechTreeUpgradeAddLevel(gv_p2_DOMINION_RED, "TerranInfantryArmorsLevel1", libNtve_gf_DifficultyValueInt(0, 0, 1, 1));
     return true;
@@ -648,9 +641,12 @@ bool gt_Init07Help_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_CreateCampaignTutorial(StringExternal("Param/Value/90B8B4D1"), StringExternal("Param/Value/900E35DD"), "Assets\\Textures\\btn-command-attack.dds", "Assets\\Textures\\video_tutorial_combat.ogv");
-    libCamp_gf_CreateCampaignTutorial(StringExternal("Param/Value/E32DC4BA"), StringExternal("Param/Value/FF5D68B7"), "Assets\\Textures\\ui_tutorial_cameraicon.dds", "Assets\\Textures\\video_tutorial_camera_control.ogv");
-    libCamp_gf_CreateCampaignTutorial(StringExternal("Param/Value/A9737948"), StringExternal("Param/Value/5601198E"), "Assets\\Textures\\btn-command-move.dds", "Assets\\Textures\\video_tutorial_movement.ogv");
+    if ((libNtve_gf_DifficultyValueInt(1, 0, 0, 0) == 1)) {
+        HelpPanelAddTutorial(PlayerGroupAll(), StringExternal("Param/Value/BB1AB915"), StringExternal("Param/Value/E260695A"), "Assets\\Textures\\btn-command-attack.dds", "Assets\\Textures\\video_tutorial_combat.ogv", true);
+        HelpPanelAddTutorial(PlayerGroupAll(), StringExternal("Param/Value/7002A934"), StringExternal("Param/Value/31A4BD15"), "Assets\\Textures\\ui_tutorial_cameraicon.dds", "Assets\\Textures\\video_tutorial_camera_control.ogv", true);
+        HelpPanelAddTutorial(PlayerGroupAll(), StringExternal("Param/Value/30D9A5B7"), StringExternal("Param/Value/0D758AF2"), "Assets\\Textures\\btn-command-move.dds", "Assets\\Textures\\video_tutorial_movement.ogv", true);
+    }
+
     HelpPanelEnableTechTreeButton(PlayerGroupAll(), false);
     libCamp_gf_AddUnitTypeToUnitHelpPanel("Marine", false, gv_p1_USER);
     libCamp_gf_AddUnitTypeToUnitHelpPanel("VikingFighter", false, gv_p1_USER);
@@ -677,15 +673,14 @@ bool gt_StartGame_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    Kit_UIHeroPanel_SetHeroUnit(0, gv_raynor, "Assets\\Textures\\btn-hero-raynor.dds");
     UIAlertPoint("Trigger", gv_p1_USER, StringExternal("Param/Value/B544795D"), null, PointFromId(505));
     TriggerEnable(gt_UnitMovementCheck, true);
     TriggerExecute(gt_ObjectiveDestroyLogisticalHQCreateQ, true, true);
     TriggerExecute(gt_ObjectiveRaynorMustSurviveCreateQ, true, true);
     TriggerExecute(gt_TutorialReviewQ, true, true);
     TriggerExecute(gt_OpeningLineQ, true, true);
-    TriggerExecute(gt_TipUnitNewUnitMarinesQ, true, true);
-    TriggerExecute(gt_TipThisisnotaherogameQ, true, true);
-    TriggerExecute(gt_TipStoryModeQ, true, true);
+    TriggerExecute(gt_ShowTipsQ, true, true);
     return true;
 }
 
@@ -1805,15 +1800,15 @@ bool gt_RiksvilleTownSquareDropPods_Func (bool testConds, bool runActions) {
     }
 
     Wait(0.1, c_timeGame);
-    libNtve_gf_CreateUnitsWithDefaultFacing(3, "Marine", 0, gv_p1_USER, PointFromId(58));
+    libNtve_gf_CreateUnitsWithDefaultFacing(3, "SquadMarine", 0, gv_p1_USER, PointFromId(58));
     libNtve_gf_AddUnitGroupToUnitGroup(UnitLastCreatedGroup(), gv_dropGroup);
     libCamp_gf_CreateDropPod(libCamp_ge_DropPodRace_Terran, PointFromId(113), gv_dropGroup, false);
     Wait(0.2, c_timeGame);
-    libNtve_gf_CreateUnitsWithDefaultFacing(3, "Marine", 0, gv_p1_USER, PointFromId(89));
+    libNtve_gf_CreateUnitsWithDefaultFacing(3, "SquadMarine", 0, gv_p1_USER, PointFromId(89));
     libNtve_gf_AddUnitGroupToUnitGroup(UnitLastCreatedGroup(), gv_dropGroup);
     libCamp_gf_CreateDropPod(libCamp_ge_DropPodRace_Terran, PointFromId(1671), UnitLastCreatedGroup(), false);
     Wait(0.3, c_timeGame);
-    libNtve_gf_CreateUnitsWithDefaultFacing(3, "Marine", 0, gv_p1_USER, PointFromId(106));
+    libNtve_gf_CreateUnitsWithDefaultFacing(3, "SquadMedic", 0, gv_p1_USER, PointFromId(106));
     libNtve_gf_AddUnitGroupToUnitGroup(UnitLastCreatedGroup(), gv_dropGroup);
     if (((PlayerDifficulty(1) == 1) == true)) {
         auto36165784_g = gv_dropGroup;
@@ -3858,6 +3853,27 @@ void gt_HoloboardStopSounds_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: Show Tips Q
+//--------------------------------------------------------------------------------------------------
+bool gt_ShowTipsQ_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerExecute(gt_TipUnitNewUnitMarinesQ, true, true);
+    TriggerExecute(gt_TipThisisnotaherogameQ, true, true);
+    TriggerExecute(gt_TipStoryModeQ, true, true);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ShowTipsQ_Init () {
+    gt_ShowTipsQ = TriggerCreate("gt_ShowTipsQ_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: Tip Story Mode Q
 //--------------------------------------------------------------------------------------------------
 bool gt_TipStoryModeQ_Func (bool testConds, bool runActions) {
@@ -3914,7 +3930,6 @@ bool gt_TipThisisnotaherogameQ_Func (bool testConds, bool runActions) {
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerQueueEnter();
     libCamp_gf_CreateTipFromConversationState("StoryTips|Raynor01_UniqueUnits", libNtve_ge_TipType_NormalTip, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
     TriggerQueueExit();
     return true;
 }
@@ -3948,7 +3963,6 @@ bool gt_TipUnitNewUnitMarinesQ_Func (bool testConds, bool runActions) {
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerQueueEnter();
     libCamp_gf_CreateTipFromConversationState("StoryTips|Raynor01_Marines", libNtve_ge_TipType_NewUnit, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
     TriggerQueueExit();
     return true;
 }
@@ -3982,7 +3996,6 @@ bool gt_TipTutorialVideosQ_Func (bool testConds, bool runActions) {
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerQueueEnter();
     HelpPanelAddTip(PlayerGroupAll(), libNtve_gf_FormatTipTitle(StringExternal("Param/Value/47389DBA"), libNtve_ge_TipType_NormalTip), StringExternal("Param/Value/A4DB4B84"), StringExternal("Param/Value/327C19BC"), "Assets\\Textures\\btn-tips-tutorial.dds");
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
     TriggerQueueExit();
     return true;
 }
@@ -4011,7 +4024,7 @@ bool gt_StatHoloboardsDestroyed_Func (bool testConds, bool runActions) {
 
     gv_holoboardsDestroyed += 1;
     if ((libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1) && (GameGetMissionTime() < 181.0) && (gv_holoboardsDestroyed >= 6)) {
-        AchievementAward(gv_p1_USER, "Anniversary_TRaynor01");
+        libWoLC_gf_CampaignAwardAchievement("Anniversary_TRaynor01");
         TriggerDebugOutput(1, StringExternal("Param/Value/53FE3F9F"), false);
     }
 
@@ -4085,7 +4098,7 @@ bool gt_Achievement5RaynorKillsNormal_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    AchievementAward(gv_p1_USER, "TRaynor01_2");
+    libWoLC_gf_CampaignAwardAchievement("TRaynor01_2");
     return true;
 }
 
@@ -4119,7 +4132,7 @@ bool gt_VictoryTowerDestroyed_Func (bool testConds, bool runActions) {
     Wait(2.0, c_timeReal);
     TriggerExecute(gt_ObjectiveDestroyLogisticalHQComplete, true, false);
     TriggerExecute(gt_ObjectiveRaynorSurviveComplete, true, true);
-    libCamp_gf_RunMissionVictorySequence(gt_VictoryQ);
+    libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
     return true;
 }
 
@@ -4144,12 +4157,12 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    if ((ObjectiveGetState(gv_objectiveDestroyLogisticalHQ) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_objectiveDestroyDominionHoloboards) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_objectiveRaynorMustLIVE) == c_objectiveStateCompleted)) {
-        AchievementAward(gv_p1_USER, "TRaynor01_1");
+    if ((libWoLC_gf_MissionObjectiveStateCheck("TRaynor01_1", libWoLC_ge_MissionObjectiveState_Completed) == true) && (libWoLC_gf_MissionObjectiveStateCheck("TRaynor01_3", libWoLC_ge_MissionObjectiveState_Completed) == true) && (libWoLC_gf_MissionObjectiveStateCheck("TRaynor01_2", libWoLC_ge_MissionObjectiveState_Completed) == true)) {
+        libWoLC_gf_CampaignAwardAchievement("TRaynor01_1");
     }
 
     if ((libNtve_gf_DifficultyValueInt(0, 0, 1, 1) == 1) && (UnitGroupCount(UnitGroup(null, gv_p2_DOMINION_RED, RegionPlayableMap(), UnitFilter(0, 0, (1 << c_targetFilterStructure) | (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) == 0)) {
-        AchievementAward(gv_p1_USER, "TRaynor01_3");
+        libWoLC_gf_CampaignAwardAchievement("TRaynor01_3");
     }
 
     lv_civvies = (UnitGroupCount(UnitGroup("Civilian", c_playerAny, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) + UnitGroupCount(UnitGroup("CivilianFemale", c_playerAny, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive));
@@ -4159,12 +4172,12 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     VictoryPanelAddAchievement("TRaynor01_2");
     VictoryPanelAddAchievement("TRaynor01_3");
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/305C1261"), (IntToText(gv_dominionMarinesKilled) + StringExternal("Param/Value/21A5288A") + IntToText(gv_dominionMarinesTotal)));
-    VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/2B86A39F"), (IntToText(lv_civvies) + StringExternal("Param/Value/72BD619E") + IntToText(gv_riksvillePopulation)));
+    VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/E609FF5F"), (IntToText(libNtve_gf_UnitGetPropertyKills(gv_raynor, c_unitPropCurrent))));
     VictoryPanelAddTrackedStatistic("UnitsLostCount");
     VictoryPanelAddCustomStatisticLine(StringToText(""), StringToText(""));
+    VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/2B86A39F"), (IntToText(lv_civvies) + StringExternal("Param/Value/72BD619E") + IntToText(gv_riksvillePopulation)));
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/37CFD1A9"), (IntToText(gv_holoboardsDestroyed) + StringExternal("Param/Value/01D82F01") + IntToText(gv_objectiveTaskDestroyDominionHoloboardsTotal)));
-    VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/E609FF5F"), (IntToText(libNtve_gf_UnitGetPropertyKills(gv_raynor, c_unitPropCurrent))));
-    libCamp_gf_EndCampaignMission(gv_p1_USER, c_gameOverVictory);
+    libWCMI_gf_EndCampaignMission(gv_p1_USER, c_gameOverVictory);
     return true;
 }
 
@@ -4200,7 +4213,7 @@ bool gt_DefeatUnitsDead_Func (bool testConds, bool runActions) {
     TriggerQueueClear(c_triggerQueueRemove);
     Wait(2.0, c_timeReal);
     libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/D32D77D7"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_Defeat, true, false);
     return true;
 }
@@ -4239,7 +4252,7 @@ bool gt_DefeatRaynorDead_Func (bool testConds, bool runActions) {
     TriggerQueueClear(c_triggerQueueRemove);
     Wait(2.0, c_timeReal);
     libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/F2DA38B3"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_Defeat, true, false);
     return true;
 }
@@ -4261,7 +4274,7 @@ bool gt_Defeat_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_EndCampaignMission(gv_p1_USER, c_gameOverDefeat);
+    libWCMI_gf_EndCampaignMission(gv_p1_USER, c_gameOverDefeat);
     return true;
 }
 
@@ -4288,7 +4301,7 @@ bool gt_VictoryCheat_Func (bool testConds, bool runActions) {
     }
 
     gv_gameOver = true;
-    libCamp_gf_RunMissionVictorySequence(gt_Victory);
+    libWCMI_gf_RunMissionVictorySequence(gt_Victory);
     return true;
 }
 
@@ -4344,19 +4357,14 @@ bool gt_ObjectiveDestroyLogisticalHQCreateQ_Func (bool testConds, bool runAction
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate(StringExternal("Param/Value/803351AA"), StringExternal("Param/Value/35F6BD78"), c_objectiveStateActive, true);
-    gv_objectiveDestroyLogisticalHQ = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_TRaynor01Objective1, ObjectiveLastCreated(), StringExternal("Param/Value/00F2558F"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeGame);
-    libNtve_gf_CreatePingFacingAngle(PlayerGroupAll(), "PingObjective", UnitGetPosition(UnitFromId(158)), ColorWithAlpha(0.00, 100.00, 0.00, 0.00), 0.0, 270.0);
+    libWCMI_gf_CreateObjectiveCampaign("TRaynor01_1");
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeGame);
+    libWCMI_gf_CreateObjectivePing(true, UnitGetPosition(UnitFromId(158)), StringExternal("Param/Value/D48CB537"));
     gv_objectiveMainPing = PingLastCreated();
-    PingSetTooltip(gv_objectiveMainPing, StringExternal("Param/Value/0496DEDF"));
     gv_actorObjectiveMain = libNtve_gf_AttachModelToUnit(UnitFromId(158), "BriefingUnitSelectLargeRed", "Ref_Center");
     VisRevealArea(gv_p1_USER, RegionFromId(36), 3.0, false);
     UIAlertPoint("Trigger", gv_p1_USER, StringExternal("Param/Value/C24BF20E"), null, UnitGetPosition(UnitFromId(158)));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeGame);
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeGame);
     return true;
 }
 
@@ -4386,8 +4394,8 @@ bool gt_ObjectiveDestroyLogisticalHQComplete_Func (bool testConds, bool runActio
     TriggerExecute(gt_ObjectiveDestroyLogisticalHQCreateQ, true, false);
     PingDestroy(gv_objectiveMainPing);
     libNtve_gf_KillModel(gv_actorObjectiveMain);
-    ObjectiveSetState(gv_objectiveDestroyLogisticalHQ, c_objectiveStateCompleted);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeGame);
+    libWCMI_gf_ZS_SetMissionObjectiveState("TRaynor01_1", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeGame);
     return true;
 }
 
@@ -4414,12 +4422,8 @@ bool gt_ObjectiveRaynorMustSurviveCreateQ_Func (bool testConds, bool runActions)
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate(StringExternal("Param/Value/36E48EA7"), StringExternal("Param/Value/410310C4"), c_objectiveStateActive, true);
-    gv_objectiveRaynorMustLIVE = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_TRaynor01Objective2, ObjectiveLastCreated(), StringExternal("Param/Value/42D182FA"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeGame);
-    TriggerQueueExit();
+    libWCMI_gf_CreateObjectiveCampaign("TRaynor01_2");
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeGame);
     return true;
 }
 
@@ -4447,8 +4451,8 @@ bool gt_ObjectiveRaynorSurviveComplete_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveRaynorMustSurviveCreateQ, true, false);
-    ObjectiveSetState(gv_objectiveRaynorMustLIVE, c_objectiveStateCompleted);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeGame);
+    libWCMI_gf_ZS_SetMissionObjectiveState("TRaynor01_2", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeGame);
     return true;
 }
 
@@ -4475,10 +4479,8 @@ bool gt_ObjectiveDestroyDominionHoloboardsCreate_Func (bool testConds, bool runA
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    ObjectiveCreate(StringExternal("Param/Value/67FC761F"), StringExternal("Param/Value/9E29DE5C"), c_objectiveStateActive, false);
-    gv_objectiveDestroyDominionHoloboards = ObjectiveLastCreated();
-    ObjectiveSetName(gv_objectiveDestroyDominionHoloboards, (StringExternal("Param/Value/ECF1145A") + IntToText(gv_objectiveTaskDestroyDominionHoloboardsProgress) + StringExternal("Param/Value/011154B4") + IntToText(gv_objectiveTaskDestroyDominionHoloboardsTotal) + StringExternal("Param/Value/05E1A1EB")));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeGame);
+    libWCMI_gf_CreateObjectiveCampaign("TRaynor01_3");
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeGame);
     return true;
 }
 
@@ -4506,7 +4508,7 @@ bool gt_ObjectiveDestroyDominionHoloboardsComplete_Func (bool testConds, bool ru
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveDestroyDominionHoloboardsCreate, true, false);
-    ObjectiveSetState(gv_objectiveDestroyDominionHoloboards, c_objectiveStateCompleted);
+    libWCMI_gf_ZS_SetMissionObjectiveState("TRaynor01_3", libWoLC_ge_MissionObjectiveState_Completed);
     return true;
 }
 
@@ -4542,7 +4544,7 @@ bool gt_ObjectiveDestroyDominionHoloboardsUpdate_Func (bool testConds, bool runA
 
     TriggerExecute(gt_ObjectiveDestroyDominionHoloboardsCreate, true, false);
     gv_objectiveTaskDestroyDominionHoloboardsProgress += 1;
-    ObjectiveSetName(gv_objectiveDestroyDominionHoloboards, (StringExternal("Param/Value/BE465878") + IntToText(gv_objectiveTaskDestroyDominionHoloboardsProgress) + StringExternal("Param/Value/914BC647") + IntToText(gv_objectiveTaskDestroyDominionHoloboardsTotal) + StringExternal("Param/Value/13F1BF87")));
+    libWCMI_gf_SetMissionObjectiveProgress("TRaynor01_3", gv_objectiveTaskDestroyDominionHoloboardsProgress);
     if ((gv_objectiveTaskDestroyDominionHoloboardsProgress == gv_objectiveTaskDestroyDominionHoloboardsTotal)) {
         TriggerEnable(TriggerGetCurrent(), false);
         TriggerExecute(gt_ObjectiveDestroyDominionHoloboardsComplete, true, false);
@@ -4942,10 +4944,12 @@ bool gt_IntroCinematic_Func (bool testConds, bool runActions) {
     gv_introDropship = UnitLastCreated();
     UnitSetState(UnitLastCreated(), c_unitStateTargetable, false);
     libNtve_gf_MakeUnitUncommandable(UnitLastCreated(), true);
-    UnitCargoCreate(gv_introDropship, "Raynor01", 1);
+    UnitCargoCreate(gv_introDropship, "CaptainFreeman", 1);
     gv_raynor = UnitCargoLastCreated();
     UnitGroupAdd(gv_introUnitCargoStart, UnitCargoLastCreated());
-    UnitCargoCreate(gv_introDropship, "Marine", 5);
+    UnitCargoCreate(gv_introDropship, "SquadMarine", 3);
+    libNtve_gf_AddUnitGroupToUnitGroup(UnitCargoLastCreatedGroup(), gv_introUnitCargoStart);
+    UnitCargoCreate(gv_introDropship, "SquadMedic", 2);
     libNtve_gf_AddUnitGroupToUnitGroup(UnitCargoLastCreatedGroup(), gv_introUnitCargoStart);
     if (((PlayerDifficulty(1) == 1) == true)) {
         auto51E1AAFD_g = gv_introUnitCargoStart;
@@ -5121,18 +5125,18 @@ bool gt_IntroCleanupEscape_Func (bool testConds, bool runActions) {
         libNtve_gf_ShowHideUnit(auto6FCA8D42_var, true);
     }
     UnitPauseAll(false);
-    libNtve_gf_CreateUnitsAtPoint2(1, "Raynor01", 0, gv_p1_USER, PointFromId(505));
+    libNtve_gf_CreateUnitsAtPoint2(1, "CaptainFreeman", 0, gv_p1_USER, PointFromId(505));
     gv_raynor = UnitLastCreated();
     UnitGroupAdd(gv_raynorsMarines, UnitLastCreated());
-    libNtve_gf_CreateUnitsAtPoint2(1, "Marine", 0, gv_p1_USER, PointFromId(415));
+    libNtve_gf_CreateUnitsAtPoint2(1, "SquadMarine", 0, gv_p1_USER, PointFromId(415));
     UnitGroupAdd(gv_raynorsMarines, UnitLastCreated());
-    libNtve_gf_CreateUnitsAtPoint2(1, "Marine", 0, gv_p1_USER, PointFromId(581));
+    libNtve_gf_CreateUnitsAtPoint2(1, "SquadMarine", 0, gv_p1_USER, PointFromId(581));
     UnitGroupAdd(gv_raynorsMarines, UnitLastCreated());
-    libNtve_gf_CreateUnitsAtPoint2(1, "Marine", 0, gv_p1_USER, PointFromId(737));
+    libNtve_gf_CreateUnitsAtPoint2(1, "SquadMarine", 0, gv_p1_USER, PointFromId(737));
     UnitGroupAdd(gv_raynorsMarines, UnitLastCreated());
-    libNtve_gf_CreateUnitsAtPoint2(1, "Marine", 0, gv_p1_USER, PointFromId(885));
+    libNtve_gf_CreateUnitsAtPoint2(1, "SquadMedic", 0, gv_p1_USER, PointFromId(885));
     UnitGroupAdd(gv_raynorsMarines, UnitLastCreated());
-    libNtve_gf_CreateUnitsAtPoint2(1, "Marine", 0, gv_p1_USER, PointFromId(1020));
+    libNtve_gf_CreateUnitsAtPoint2(1, "SquadMedic", 0, gv_p1_USER, PointFromId(1020));
     UnitGroupAdd(gv_raynorsMarines, UnitLastCreated());
     if (((PlayerDifficulty(1) == 1) == true)) {
         auto0729A66F_g = gv_raynorsMarines;
@@ -6041,6 +6045,7 @@ void InitTriggers () {
     gt_PlayHoloboard05Q_Init();
     gt_PlayHoloboard06Q_Init();
     gt_HoloboardStopSounds_Init();
+    gt_ShowTipsQ_Init();
     gt_TipStoryModeQ_Init();
     gt_TipThisisnotaherogameQ_Init();
     gt_TipUnitNewUnitMarinesQ_Init();

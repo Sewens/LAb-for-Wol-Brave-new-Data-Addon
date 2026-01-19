@@ -64,7 +64,8 @@ void libWCMI_InitVariables () {
     libWCMI_gv_wM_SendTransmissionCampaignPortrait = c_invalidPortraitId;
     libWCMI_gv_wM_SendTransmissionCampaignPlayingTick = 3;
     libWCMI_gv_wM_SendTransmissionCampaignChatBubbleOn = true;
-    libWCMI_gv_wM_DamageStat_EncounterTimer = TimerCreate();
+    libWCMI_gv_wM_DamageStat_TimerEncounter = TimerCreate();
+    libWCMI_gv_wM_DamageStat_TimerUI = TimerCreate();
     libWCMI_gv_wM_DropPod_TP_Units = UnitGroupEmpty();
     libWCMI_gv_wM_UpgradeTextTag = c_textTagNone;
 }
@@ -255,11 +256,30 @@ void libWCMI_gf_WM_CinematicModeInternal (bool lp_onOff, fixed lp_duration) {
 }
 
 void libWCMI_gf_ApplyCellularReactor (string lp_unit, int lp_player) {
+    // Variable Declarations
+    fixed lv_energyCurrent;
+    fixed lv_energyMax;
+
     // Automatic Variable Declarations
+    unitgroup auto892F699B_g;
+    int auto892F699B_u;
+    unit auto892F699B_var;
+
+    // Variable Initialization
+
     // Implementation
     if ((lp_unit != null) && (UnitTypeGetProperty(lp_unit, c_unitPropEnergyMax) > 0.0) && (UnitTypeTestAttribute(lp_unit, c_unitAttributeStructure) == false)) {
         CatalogFieldValueModify(c_gameCatalogUnit, lp_unit, "EnergyMax", lp_player, "100", c_upgradeOperationAdd);
         CatalogFieldValueModify(c_gameCatalogUnit, lp_unit, "EnergyStart", lp_player, "100", c_upgradeOperationAdd);
+        auto892F699B_g = UnitGroup(lp_unit, lp_player, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+        auto892F699B_u = UnitGroupCount(auto892F699B_g, c_unitCountAll);
+        for (;; auto892F699B_u -= 1) {
+            auto892F699B_var = UnitGroupUnitFromEnd(auto892F699B_g, auto892F699B_u);
+            if (auto892F699B_var == null) { break; }
+            lv_energyCurrent = UnitGetPropertyFixed(auto892F699B_var, c_unitPropEnergy, c_unitPropCurrent);
+            lv_energyMax = UnitGetPropertyFixed(auto892F699B_var, c_unitPropEnergyMax, c_unitPropCurrent);
+            UnitSetPropertyFixed(auto892F699B_var, c_unitPropEnergy, libNtve_gf_ArithmeticRealClamp((lv_energyCurrent + 100.0), 0.0, lv_energyMax));
+        }
     }
 
 }
@@ -1551,12 +1571,6 @@ void libWCMI_gf_SendTransmissionCampaignPlaceHolder (unit lp_unit, string lp_mod
     libWCMI_gf_WM_SendTransmissionCampaignInternal(true, lv_actualUnit, lv_actualModel, lv_sound, lp_speaker, (StringExternal("Param/Value/lib_WCMI_19071613") + lp_message), c_transmissionDurationSet, lp_duration, lp_waitUntilDone, lp_keepPortraitVisible, lp_cueSoundOption, lv_portraitActor);
 }
 
-string libWCMI_gf_WM_DamageStat_LeaderAlias (string lp_unitType) {
-    // Automatic Variable Declarations
-    // Implementation
-    return (CatalogFieldValueGet(c_gameCatalogUnit, lp_unitType, "LeaderAlias", c_playerAny));
-}
-
 void libWCMI_gf_WM_DamageStat_SortEncounter () {
     // Variable Declarations
     int lv_i;
@@ -1597,6 +1611,12 @@ bool libWCMI_gf_WM_DamageStat_ShouldDisplayEncounter () {
     // Automatic Variable Declarations
     // Implementation
     return true;
+}
+
+string libWCMI_gf_WM_DamageStat_LeaderAlias (string lp_unitType) {
+    // Automatic Variable Declarations
+    // Implementation
+    return (CatalogFieldValueGet(c_gameCatalogUnit, lp_unitType, "LeaderAlias", c_playerAny));
 }
 
 fixed libWCMI_gf_TotalDamageDealtbyUnitType (string lp_unit) {
@@ -3134,6 +3154,429 @@ bool libWCMI_gt_WM_CinematicModeOff_Func (bool testConds, bool runActions) {
 void libWCMI_gt_WM_CinematicModeOff_Init () {
     libWCMI_gt_WM_CinematicModeOff = TriggerCreate("libWCMI_gt_WM_CinematicModeOff_Func");
     TriggerAddEventGeneric(libWCMI_gt_WM_CinematicModeOff, "CinematicModeOff");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Diamondback Attack
+//--------------------------------------------------------------------------------------------------
+bool libWCMI_gt_DiamondbackAttack_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    order lv_order;
+    unit lv_caster;
+    unit lv_target;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+    lv_order = EventUnitOrder();
+    lv_caster = EventUnit();
+    lv_target = OrderGetTargetUnit(lv_order);
+
+    // Conditions
+    if (testConds) {
+        if (!((UnitIsAlive(lv_target) == true))) {
+            return false;
+        }
+
+        if (!((OrderGetFlag(lv_order, c_cmdUser) == true))) {
+            return false;
+        }
+
+        if (!((OrderGetFlag(lv_order, c_cmdQueued) == false))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    UnitCreateEffectUnit(lv_caster, "DiamondbackAttackTrackerUnitSet", lv_target);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libWCMI_gt_DiamondbackAttack_Init () {
+    libWCMI_gt_DiamondbackAttack = TriggerCreate("libWCMI_gt_DiamondbackAttack_Func");
+    TriggerAddEventUnitOrder(libWCMI_gt_DiamondbackAttack, null, AbilityCommand("DiamondbackAttack", 0));
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Diamondback Attack Scan
+//--------------------------------------------------------------------------------------------------
+bool libWCMI_gt_DiamondbackAttackScan_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    order lv_order;
+    unit lv_caster;
+    unit lv_target;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+    lv_order = EventUnitOrder();
+    lv_caster = EventUnit();
+    lv_target = OrderGetTargetUnit(lv_order);
+
+    // Conditions
+    if (testConds) {
+        if (!((UnitIsAlive(lv_target) == false))) {
+            return false;
+        }
+
+        if (!((OrderGetFlag(lv_order, c_cmdUser) == true))) {
+            return false;
+        }
+
+        if (!((OrderGetFlag(lv_order, c_cmdQueued) == false))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    UnitCreateEffectUnit(lv_caster, "DiamondbackAttackTrackerDP", lv_caster);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libWCMI_gt_DiamondbackAttackScan_Init () {
+    libWCMI_gt_DiamondbackAttackScan = TriggerCreate("libWCMI_gt_DiamondbackAttackScan_Func");
+    TriggerAddEventUnitOrder(libWCMI_gt_DiamondbackAttackScan, null, AbilityCommand("DiamondbackAttack", 0));
+    TriggerAddEventUnitOrder(libWCMI_gt_DiamondbackAttackScan, null, AbilityCommand("DiamondbackMove", 1));
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Diamondback Attack Stop
+//--------------------------------------------------------------------------------------------------
+bool libWCMI_gt_DiamondbackAttackStop_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    order lv_order;
+    unit lv_caster;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+    lv_order = EventUnitOrder();
+    lv_caster = EventUnit();
+
+    // Conditions
+    if (testConds) {
+        if (!((OrderGetFlag(lv_order, c_cmdUser) == true))) {
+            return false;
+        }
+
+        if (!((OrderGetFlag(lv_order, c_cmdQueued) == false))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    UnitCreateEffectUnit(lv_caster, "DiamondbackAttackTrackerDP", lv_caster);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libWCMI_gt_DiamondbackAttackStop_Init () {
+    libWCMI_gt_DiamondbackAttackStop = TriggerCreate("libWCMI_gt_DiamondbackAttackStop_Func");
+    TriggerAddEventUnitOrder(libWCMI_gt_DiamondbackAttackStop, null, AbilityCommand("DiamondbackStop", 0));
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Diamondback Attack Chase Interrupted
+//--------------------------------------------------------------------------------------------------
+bool libWCMI_gt_DiamondbackAttackChaseInterrupted_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    order lv_order;
+    unit lv_caster;
+    unit lv_target;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+    lv_order = EventUnitOrder();
+    lv_caster = EventUnit();
+    lv_target = OrderGetTargetUnit(lv_order);
+
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetType(lv_caster) == "Diamondback"))) {
+            return false;
+        }
+
+        if (!((UnitHasBehavior2(lv_caster, "DiamondbackChasing") == true))) {
+            return false;
+        }
+
+        if (!(((OrderGetAbilityCommand(lv_order) != AbilityCommand("DiamondbackAttack", 0)) || (UnitIsAlive(lv_target) == false)))) {
+            return false;
+        }
+
+        if (!((OrderGetFlag(lv_order, c_cmdUser) == true))) {
+            return false;
+        }
+
+        if (!((OrderGetFlag(lv_order, c_cmdQueued) == false))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    UnitCreateEffectUnit(lv_caster, "DiamondbackChasingRB", lv_caster);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libWCMI_gt_DiamondbackAttackChaseInterrupted_Init () {
+    libWCMI_gt_DiamondbackAttackChaseInterrupted = TriggerCreate("libWCMI_gt_DiamondbackAttackChaseInterrupted_Func");
+    TriggerAddEventUnitOrder(libWCMI_gt_DiamondbackAttackChaseInterrupted, null, AbilityCommand("DiamondbackAttack", 0));
+    TriggerAddEventUnitOrder(libWCMI_gt_DiamondbackAttackChaseInterrupted, null, AbilityCommand("DiamondbackAttack", 1));
+    TriggerAddEventUnitOrder(libWCMI_gt_DiamondbackAttackChaseInterrupted, null, AbilityCommand("DiamondbackAttack", 2));
+    TriggerAddEventUnitOrder(libWCMI_gt_DiamondbackAttackChaseInterrupted, null, AbilityCommand("DiamondbackMove", 0));
+    TriggerAddEventUnitOrder(libWCMI_gt_DiamondbackAttackChaseInterrupted, null, AbilityCommand("DiamondbackMove", 1));
+    TriggerAddEventUnitOrder(libWCMI_gt_DiamondbackAttackChaseInterrupted, null, AbilityCommand("DiamondbackMove", 2));
+    TriggerAddEventUnitOrder(libWCMI_gt_DiamondbackAttackChaseInterrupted, null, AbilityCommand("DiamondbackMove", 3));
+    TriggerAddEventUnitOrder(libWCMI_gt_DiamondbackAttackChaseInterrupted, null, AbilityCommand("DiamondbackMove", 4));
+    TriggerAddEventUnitOrder(libWCMI_gt_DiamondbackAttackChaseInterrupted, null, AbilityCommand("DiamondbackStop", 0));
+    TriggerAddEventUnitOrder(libWCMI_gt_DiamondbackAttackChaseInterrupted, null, AbilityCommand("DiamondbackStop", 1));
+    TriggerAddEventUnitOrder(libWCMI_gt_DiamondbackAttackChaseInterrupted, null, AbilityCommand("DiamondbackStop", 2));
+    TriggerAddEventUnitOrder(libWCMI_gt_DiamondbackAttackChaseInterrupted, null, AbilityCommand("DiamondbackStop", 3));
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Battlecruiser Attack
+//--------------------------------------------------------------------------------------------------
+bool libWCMI_gt_BattlecruiserAttack_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    order lv_order;
+    unit lv_caster;
+    unit lv_target;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+    lv_order = EventUnitOrder();
+    lv_caster = EventUnit();
+    lv_target = OrderGetTargetUnit(lv_order);
+
+    // Conditions
+    if (testConds) {
+        if (!((UnitIsAlive(lv_target) == true))) {
+            return false;
+        }
+
+        if (!((OrderGetFlag(lv_order, c_cmdUser) == true))) {
+            return false;
+        }
+
+        if (!((OrderGetFlag(lv_order, c_cmdQueued) == false))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    UnitCreateEffectUnit(lv_caster, "BattlecruiserAttackTrackerUnitSet", lv_target);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libWCMI_gt_BattlecruiserAttack_Init () {
+    libWCMI_gt_BattlecruiserAttack = TriggerCreate("libWCMI_gt_BattlecruiserAttack_Func");
+    TriggerAddEventUnitOrder(libWCMI_gt_BattlecruiserAttack, null, AbilityCommand("BattlecruiserAttack", 0));
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Battlecruiser Attack Scan
+//--------------------------------------------------------------------------------------------------
+bool libWCMI_gt_BattlecruiserAttackScan_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    order lv_order;
+    unit lv_caster;
+    unit lv_target;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+    lv_order = EventUnitOrder();
+    lv_caster = EventUnit();
+    lv_target = OrderGetTargetUnit(lv_order);
+
+    // Conditions
+    if (testConds) {
+        if (!((UnitIsAlive(lv_target) == false))) {
+            return false;
+        }
+
+        if (!((OrderGetFlag(lv_order, c_cmdUser) == true))) {
+            return false;
+        }
+
+        if (!((OrderGetFlag(lv_order, c_cmdQueued) == false))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    UnitCreateEffectUnit(lv_caster, "BattlecruiserAttackTrackerDP", lv_caster);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libWCMI_gt_BattlecruiserAttackScan_Init () {
+    libWCMI_gt_BattlecruiserAttackScan = TriggerCreate("libWCMI_gt_BattlecruiserAttackScan_Func");
+    TriggerAddEventUnitOrder(libWCMI_gt_BattlecruiserAttackScan, null, AbilityCommand("BattlecruiserAttack", 0));
+    TriggerAddEventUnitOrder(libWCMI_gt_BattlecruiserAttackScan, null, AbilityCommand("BattlecruiserMove", 1));
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Battlecruiser Attack Stop
+//--------------------------------------------------------------------------------------------------
+bool libWCMI_gt_BattlecruiserAttackStop_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    order lv_order;
+    unit lv_caster;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+    lv_order = EventUnitOrder();
+    lv_caster = EventUnit();
+
+    // Conditions
+    if (testConds) {
+        if (!((OrderGetFlag(lv_order, c_cmdUser) == true))) {
+            return false;
+        }
+
+        if (!((OrderGetFlag(lv_order, c_cmdQueued) == false))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    UnitCreateEffectUnit(lv_caster, "BattlecruiserAttackTrackerDP", lv_caster);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libWCMI_gt_BattlecruiserAttackStop_Init () {
+    libWCMI_gt_BattlecruiserAttackStop = TriggerCreate("libWCMI_gt_BattlecruiserAttackStop_Func");
+    TriggerAddEventUnitOrder(libWCMI_gt_BattlecruiserAttackStop, null, AbilityCommand("BattlecruiserStop", 0));
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Battlecruiser Attack Ability Used
+//--------------------------------------------------------------------------------------------------
+bool libWCMI_gt_BattlecruiserAttackAbilityUsed_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    unit lv_caster;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+    lv_caster = EventUnit();
+
+    // Conditions
+    if (testConds) {
+        if (!(((UnitGetType(lv_caster) == "Battlecruiser") || (UnitGetType(lv_caster) == "DukesRevenge")))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    UnitCreateEffectUnit(lv_caster, "BattlecruiserAttackTrackerDP", lv_caster);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libWCMI_gt_BattlecruiserAttackAbilityUsed_Init () {
+    libWCMI_gt_BattlecruiserAttackAbilityUsed = TriggerCreate("libWCMI_gt_BattlecruiserAttackAbilityUsed_Func");
+    TriggerAddEventUnitAbility(libWCMI_gt_BattlecruiserAttackAbilityUsed, null, AbilityCommand("Hyperjump", 0), c_unitAbilStageExecute, false);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Battlecruiser Attack Chase Interrupted
+//--------------------------------------------------------------------------------------------------
+bool libWCMI_gt_BattlecruiserAttackChaseInterrupted_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    order lv_order;
+    unit lv_caster;
+    unit lv_target;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+    lv_order = EventUnitOrder();
+    lv_caster = EventUnit();
+    lv_target = OrderGetTargetUnit(lv_order);
+
+    // Conditions
+    if (testConds) {
+        if (!((UnitHasBehavior2(lv_caster, "BattlecruiserChasing") == true))) {
+            return false;
+        }
+
+        if (!(((UnitGetType(lv_caster) == "Battlecruiser") || (UnitGetType(lv_caster) == "DukesRevenge")))) {
+            return false;
+        }
+
+        if (!(((OrderGetAbilityCommand(lv_order) != AbilityCommand("BattlecruiserAttack", 0)) || (UnitIsAlive(lv_target) == false)))) {
+            return false;
+        }
+
+        if (!((OrderGetFlag(lv_order, c_cmdUser) == true))) {
+            return false;
+        }
+
+        if (!((OrderGetFlag(lv_order, c_cmdQueued) == false))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    UnitCreateEffectUnit(lv_caster, "BattlecruiserChasingRB", lv_caster);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libWCMI_gt_BattlecruiserAttackChaseInterrupted_Init () {
+    libWCMI_gt_BattlecruiserAttackChaseInterrupted = TriggerCreate("libWCMI_gt_BattlecruiserAttackChaseInterrupted_Func");
+    TriggerAddEventUnitOrder(libWCMI_gt_BattlecruiserAttackChaseInterrupted, null, AbilityCommand("BattlecruiserAttack", 0));
+    TriggerAddEventUnitOrder(libWCMI_gt_BattlecruiserAttackChaseInterrupted, null, AbilityCommand("BattlecruiserAttack", 1));
+    TriggerAddEventUnitOrder(libWCMI_gt_BattlecruiserAttackChaseInterrupted, null, AbilityCommand("BattlecruiserAttack", 2));
+    TriggerAddEventUnitOrder(libWCMI_gt_BattlecruiserAttackChaseInterrupted, null, AbilityCommand("BattlecruiserMove", 0));
+    TriggerAddEventUnitOrder(libWCMI_gt_BattlecruiserAttackChaseInterrupted, null, AbilityCommand("BattlecruiserMove", 1));
+    TriggerAddEventUnitOrder(libWCMI_gt_BattlecruiserAttackChaseInterrupted, null, AbilityCommand("BattlecruiserMove", 2));
+    TriggerAddEventUnitOrder(libWCMI_gt_BattlecruiserAttackChaseInterrupted, null, AbilityCommand("BattlecruiserMove", 3));
+    TriggerAddEventUnitOrder(libWCMI_gt_BattlecruiserAttackChaseInterrupted, null, AbilityCommand("BattlecruiserMove", 4));
+    TriggerAddEventUnitOrder(libWCMI_gt_BattlecruiserAttackChaseInterrupted, null, AbilityCommand("BattlecruiserStop", 0));
+    TriggerAddEventUnitOrder(libWCMI_gt_BattlecruiserAttackChaseInterrupted, null, AbilityCommand("BattlecruiserStop", 1));
+    TriggerAddEventUnitOrder(libWCMI_gt_BattlecruiserAttackChaseInterrupted, null, AbilityCommand("BattlecruiserStop", 2));
+    TriggerAddEventUnitOrder(libWCMI_gt_BattlecruiserAttackChaseInterrupted, null, AbilityCommand("BattlecruiserStop", 3));
+    TriggerAddEventUnitOrder(libWCMI_gt_BattlecruiserAttackChaseInterrupted, null, AbilityCommand("Yamato", 0));
+    TriggerAddEventUnitOrder(libWCMI_gt_BattlecruiserAttackChaseInterrupted, null, AbilityCommand("Hyperjump", 0));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -5540,7 +5983,11 @@ bool libWCMI_gt_WM_DamageStat_UnitTakesDamage_Func (bool testConds, bool runActi
     }
 
     lv_sourceType = libWCMI_gf_WM_DamageStat_LeaderAlias(UnitGetType(lv_source));
-    TimerStart(libWCMI_gv_wM_DamageStat_EncounterTimer, 5.0, false, c_timeGame);
+    TimerStart(libWCMI_gv_wM_DamageStat_TimerEncounter, 5.0, false, c_timeGame);
+    if ((TimerGetRemaining(libWCMI_gv_wM_DamageStat_TimerUI) <= 0.0)) {
+        TimerStart(libWCMI_gv_wM_DamageStat_TimerUI, 0.2, false, c_timeReal);
+    }
+
     TriggerEnable(libWCMI_gt_WM_DamageStat_EncounterSortPeriodic, true);
     autoF984ED6A_var = 1;
     for ( ; autoF984ED6A_var <= autoF984ED6A_ae; autoF984ED6A_var += 1 ) {
@@ -5554,11 +6001,6 @@ bool libWCMI_gt_WM_DamageStat_UnitTakesDamage_Func (bool testConds, bool runActi
             libWCMI_gv_wM_DamageStat_Encounter[autoF984ED6A_var].lv_unitType = lv_sourceType;
             libWCMI_gv_wM_DamageStat_Encounter[autoF984ED6A_var].lv_damage += EventUnitDamageAmount();
             lv_encounterModified = true;
-            if ((libWCMI_gf_WM_DamageStat_ShouldDisplayEncounter() == true)) {
-                Kit_DamageStat_Update(libWCMI_gv_wM_DamageStat_Encounter);
-                Kit_DamageStat_ShowHide(true);
-            }
-
         }
 
         if ((lv_totalModified == true) && (lv_encounterModified == true)) {
@@ -5601,7 +6043,28 @@ bool libWCMI_gt_WM_DamageStat_EncounterTimerExpires_Func (bool testConds, bool r
 //--------------------------------------------------------------------------------------------------
 void libWCMI_gt_WM_DamageStat_EncounterTimerExpires_Init () {
     libWCMI_gt_WM_DamageStat_EncounterTimerExpires = TriggerCreate("libWCMI_gt_WM_DamageStat_EncounterTimerExpires_Func");
-    TriggerAddEventTimer(libWCMI_gt_WM_DamageStat_EncounterTimerExpires, libWCMI_gv_wM_DamageStat_EncounterTimer);
+    TriggerAddEventTimer(libWCMI_gt_WM_DamageStat_EncounterTimerExpires, libWCMI_gv_wM_DamageStat_TimerEncounter);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: WM_DamageStat_UITimerExpires
+//--------------------------------------------------------------------------------------------------
+bool libWCMI_gt_WM_DamageStat_UITimerExpires_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    Kit_DamageStat_Update(libWCMI_gv_wM_DamageStat_Encounter);
+    Kit_DamageStat_ShowHide(true);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libWCMI_gt_WM_DamageStat_UITimerExpires_Init () {
+    libWCMI_gt_WM_DamageStat_UITimerExpires = TriggerCreate("libWCMI_gt_WM_DamageStat_UITimerExpires_Func");
+    TriggerAddEventTimer(libWCMI_gt_WM_DamageStat_UITimerExpires, libWCMI_gv_wM_DamageStat_TimerUI);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -5875,6 +6338,15 @@ void libWCMI_gt_VoidPingSound_Init () {
 void libWCMI_InitTriggers () {
     libWCMI_gt_WM_CinematicModeOn_Init();
     libWCMI_gt_WM_CinematicModeOff_Init();
+    libWCMI_gt_DiamondbackAttack_Init();
+    libWCMI_gt_DiamondbackAttackScan_Init();
+    libWCMI_gt_DiamondbackAttackStop_Init();
+    libWCMI_gt_DiamondbackAttackChaseInterrupted_Init();
+    libWCMI_gt_BattlecruiserAttack_Init();
+    libWCMI_gt_BattlecruiserAttackScan_Init();
+    libWCMI_gt_BattlecruiserAttackStop_Init();
+    libWCMI_gt_BattlecruiserAttackAbilityUsed_Init();
+    libWCMI_gt_BattlecruiserAttackChaseInterrupted_Init();
     libWCMI_gt_UltraCapacitors_Init();
     libWCMI_gt_VanadiumPlating_Init();
     libWCMI_gt_CellularReactor_Init();
@@ -5925,6 +6397,7 @@ void libWCMI_InitTriggers () {
     libWCMI_gt_WM_SendTransmissionCampaignTick_Init();
     libWCMI_gt_WM_DamageStat_UnitTakesDamage_Init();
     libWCMI_gt_WM_DamageStat_EncounterTimerExpires_Init();
+    libWCMI_gt_WM_DamageStat_UITimerExpires_Init();
     libWCMI_gt_WM_DamageStat_EncounterSortPeriodic_Init();
     libWCMI_gt_WM_DropPod_Zerg_DontWait_Init();
     libWCMI_gt_WM_DropPod_Terran_DontWait_Init();

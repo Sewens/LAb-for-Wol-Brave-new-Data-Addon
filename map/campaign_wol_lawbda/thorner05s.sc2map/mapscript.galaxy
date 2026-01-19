@@ -7,7 +7,11 @@
 //==================================================================================================
 include "TriggerLibs/NativeLib"
 include "TriggerLibs/LibertyLib"
-include "TriggerLibs/CampaignLib"
+include "LibEA0820A1"
+include "LibCamp"
+include "LibWoLC"
+include "LibWCMI"
+include "LibWCUI"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -15,7 +19,11 @@ include "TriggerLibs/CampaignLib"
 void InitLibs () {
     libNtve_InitLib();
     libLbty_InitLib();
+    libEA0820A1_InitLib();
     libCamp_InitLib();
+    libWoLC_InitLib();
+    libWCMI_InitLib();
+    libWCUI_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -611,8 +619,6 @@ trigger gt_ResearchObjectiveBrutaliskCreateQ;
 trigger gt_ResearchObjectiveBrutaliskUpdateQ;
 trigger gt_ObjectiveProtossRelicsCreateQ;
 trigger gt_ObjectiveProtossRelicsUpdate;
-trigger gt_ObjectiveProtossRelicsComplete;
-trigger gt_ObjectiveProtossRelicsFailed;
 trigger gt_CreateProtossRelicsObjects;
 trigger gt_ObjectiveProtossRelicsUpdateSecondHalf;
 trigger gt_ObjectiveProtossRelicsCompleteSecondHalf;
@@ -676,7 +682,8 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_LoadCampaignData(libCamp_ge_MapID_MapTHorner05S);
+    libWoLC_gf_ULoadCampaignData("THorner05S");
+    TriggerExecute(libEA0820A1_gt_Init00ReplaceUnit, true, true);
     TriggerExecute(gt_Init01Technology, true, true);
     TriggerExecute(gt_Init02Players, true, true);
     TriggerExecute(gt_Init03Units, true, true);
@@ -684,8 +691,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init05Environment, true, true);
     TriggerExecute(gt_Init06Difficulties, true, true);
     TriggerExecute(gt_Init07Help, true, true);
-    libCamp_gf_RegisterFootageRecording(gt_BriefingQ);
-    libCamp_gf_PurchaseStorymodeTech();
+    libWoLC_gf_RegisterFootageRecording(gt_BriefingQ);
     TriggerExecute(gt_IntroQ, true, false);
     return true;
 }
@@ -701,12 +707,6 @@ void gt_Initialization_Init () {
 //--------------------------------------------------------------------------------------------------
 bool gt_Init01Technology_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    libCamp_gf_SetTechRestrictionsCallback(TriggerGetCurrent());
     return true;
 }
 
@@ -752,6 +752,7 @@ bool gt_Init02Players_Func (bool testConds, bool runActions) {
     PlayerSetState(gv_p07_NEUTRAL, c_playerStateShowScore, false);
     UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeSupply, false);
     UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeResourcePanel, false);
+    libWCMI_gf_WM_DetectionUpgradesApply();
     return true;
 }
 
@@ -962,7 +963,7 @@ bool gt_Init03Units_Func (bool testConds, bool runActions) {
         libNtve_gf_PauseUnit(auto33CC760C_var, true);
     }
     gv_outhouse = ActorFromDoodad(DoodadFromId(1509));
-    if ((libCamp_gf_StoryState(libCamp_ge_StoryStateID_StoryStateTaurenOutHouseActivated) == 0)) {
+    if ((libWoLC_gf_StoryState("TaurenOutHouseActivated") == false)) {
         ActorSend(gv_outhouse, "Destroy");
     }
 
@@ -1040,12 +1041,6 @@ bool gt_Init06Difficulties_Func (bool testConds, bool runActions) {
     // Actions
     if (!runActions) {
         return true;
-    }
-
-    if ((libNtve_gf_DifficultyValueInt(1, 0, 0, 0) == 1)) {
-        PlayerModifyPropertyInt(gv_p02_DOMINION, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p05_ZERG_LAB_SPECIMENS, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p06_PROTOSS_LAB_SPECIMENS, c_playerPropHandicap, c_playerPropOperSetTo, 50);
     }
 
     if ((libNtve_gf_DifficultyValueInt(0, 0, 1, 1) == 1)) {
@@ -1165,12 +1160,10 @@ bool gt_StartGame_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    Kit_UIHeroPanel_SetHeroUnit(0, gv_raynor, "Assets\\Textures\\btn-hero-raynor.dds");
     Wait(4.0, c_timeReal);
-    TriggerExecute(gt_ObjectiveInvestigateCreate, true, false);
-    TriggerExecute(gt_ObjectiveRaynorCreateQ, true, false);
-    TriggerExecute(gt_ObjectiveProtossRelicsCreateQ, true, false);
-    TriggerExecute(gt_ObjectiveFusionReactorCreateQ, true, false);
-    TriggerExecute(gt_ObjectiveEscapeCreateQ, true, false);
+    TriggerExecute(gt_ObjectiveInvestigateCreate, true, true);
+    TriggerExecute(gt_ObjectiveRaynorCreateQ, true, true);
     TriggerExecute(gt_TipStorymodeQ, true, false);
     return true;
 }
@@ -3136,7 +3129,7 @@ bool gt_Computer01ButtonsHacked_Func (bool testConds, bool runActions) {
             return false;
         }
 
-        if (!((gv_computer01DialogueDone == true))) {
+        if (!(((libNtve_gf_DifficultyValueInt(1, 1, 0, 0) == 1) && (gv_computer01DialogueDone == true)))) {
             return false;
         }
     }
@@ -4819,15 +4812,12 @@ bool gt_Computer04CameraActivated_Func (bool testConds, bool runActions) {
     GameSetLighting("THorner05SSecurityCam", 0.0);
     UIAlertClear(gv_p01_USER);
     CameraLockInput(gv_p01_USER, true);
-    CameraApplyInfo(gv_p01_USER, CameraInfoFromId(1197), 0.0, -1, 10, true);
-    CameraApplyInfo(gv_p01_USER, CameraInfoFromId(1198), 8.0, -1, 10, true);
+    CameraApplyInfo(gv_p01_USER, CameraInfoFromId(363), 0.0, -1, 10, true);
     libNtve_gf_HideScreenButton(false, gv_computer04SecurityCam);
     TriggerExecute(gt_DialogueRaynorComputer4OhyeahQ1, true, false);
     TriggerExecute(gt_DialogueRaynorComputer4OhyeahQ2, true, false);
-    Wait(7.0, c_timeGame);
     VisRevealerCreate(gv_p01_USER, RegionFromId(143));
     gv_revealerWarbotBay = VisRevealerLastCreated();
-    CameraApplyInfo(gv_p01_USER, CameraInfoFromId(363), 0.0, -1, 10, true);
     libNtve_gf_DisplayScreenButton(gv_computer04Back, StringExternal("Param/Value/304679E2"), gv_buttonSizeWidth, gv_buttonSizeHeight, c_anchorRight, 0, gv_buttonBackPositionHeight, gt_Computer04Back);
     gv_buttonComputer04Back = libNtve_gf_ScreenButtonDialog(gv_computer04Back);
     libNtve_gf_DisplayScreenButton(gv_computer04AddMissile, StringExternal("Param/Value/0CA5CD4B"), gv_buttonSizeWidth, gv_buttonSizeHeight, c_anchorRight, 0, gv_button1stPositionHeight, gt_Computer04AddMissile);
@@ -5447,17 +5437,17 @@ bool gt_Computer05ReinforcementChosen_Func (bool testConds, bool runActions) {
     UnitSetState(gv_dropshipComputer05, c_unitStateTargetable, false);
     UnitSetState(gv_dropshipComputer05, c_unitStateSelectable, false);
     if ((gv_computer05Marines == true)) {
-        UnitCargoCreate(gv_dropshipComputer05, "Marine", 8);
+        UnitCargoCreate(gv_dropshipComputer05, "SquadMarine", 8);
     }
     else if ((gv_computer05Marauder == true)) {
-        UnitCargoCreate(gv_dropshipComputer05, "Marauder", 3);
+        UnitCargoCreate(gv_dropshipComputer05, "SquadMarauder", 3);
     }
     else if ((gv_computer05Firebat == true)) {
-        UnitCargoCreate(gv_dropshipComputer05, "Firebat", 4);
+        UnitCargoCreate(gv_dropshipComputer05, "SquadFirebat", 4);
     }
     else if ((gv_computer05Medic == true)) {
-        UnitCargoCreate(gv_dropshipComputer05, "Marine", 3);
-        UnitCargoCreate(gv_dropshipComputer05, "Medic", 3);
+        UnitCargoCreate(gv_dropshipComputer05, "SquadMarine", 3);
+        UnitCargoCreate(gv_dropshipComputer05, "SquadMedic", 3);
     }
     UnitIssueOrder(gv_dropshipComputer05, OrderTargetingPoint(AbilityCommand("SpecOpsDropshipTransport", 2), PointFromId(240)), c_orderQueueReplace);
     TriggerExecute(gt_Computer05PanonDropship, true, false);
@@ -6449,10 +6439,7 @@ bool gt_TipGrenadeQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
     libCamp_gf_CreateTipFromConversationState("StoryTips|Horner05_Grenade", libNtve_ge_TipType_NewAbility, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -6479,10 +6466,7 @@ bool gt_TipPlasmaGunQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
     libCamp_gf_CreateTipFromConversationState("StoryTips|Horner05_Plasma", libNtve_ge_TipType_NewAbility, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -6509,10 +6493,7 @@ bool gt_TipChronoRiftQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
     libCamp_gf_CreateTipFromConversationState("StoryTips|Horner05_ChronoDevice", libNtve_ge_TipType_NewAbility, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -6547,10 +6528,7 @@ bool gt_TipComputerQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
     libCamp_gf_CreateTipFromConversationState("StoryTips|Horner05_ComputerTerminals", libNtve_ge_TipType_NormalTip, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -6570,9 +6548,7 @@ bool gt_TipStorymodeQ_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    TriggerQueueEnter();
     libCamp_gf_CreateStorymodeTips();
-    TriggerQueueExit();
     return true;
 }
 
@@ -7389,8 +7365,7 @@ bool gt_DialoguePowerCoreObjQ_Func (bool testConds, bool runActions) {
         libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Game);
     }
 
-    ObjectiveDestroy(gv_objectiveInvestigate);
-    ObjectiveShow(gv_objectiveFusionReactor, PlayerGroupAll(), true);
+    TriggerExecute(gt_ObjectiveFusionReactorCreateQ, true, false);
     TriggerExecute(gt_ObjectiveFusionReactorPing, true, false);
     TriggerQueueExit();
     return true;
@@ -8013,7 +7988,7 @@ bool gt_AchievmentWeaponpickups_Func (bool testConds, bool runActions) {
     }
 
     if ((libNtve_gf_DifficultyValueInt(0, 0, 1, 1) == 1) && (gv_achievementPickUpsRemaining == 0)) {
-        AchievementAward(gv_p01_USER, "THorner05_2");
+        libWoLC_gf_CampaignAwardAchievement("THorner05_2");
     }
 
     return true;
@@ -8143,7 +8118,7 @@ bool gt_AchievementRaynorWeaponKills_Func (bool testConds, bool runActions) {
     }
 
     gv_achievementWeaponKillls += 1;
-    AchievementTermQuantitySet(gv_p01_USER, "Anniversary_THorner05S", gv_achievementWeaponKillls);
+    libWoLC_gf_SetAchievementTermQuantityCampaign("Anniversary_THorner05S", gv_achievementWeaponKillls);
     TextExpressionSetToken("Param/Expression/898DF7CE", "A", IntToText(gv_achievementWeaponKillls));
     TriggerDebugOutput(1, TextExpressionAssemble("Param/Expression/898DF7CE"), false);
     return true;
@@ -8171,10 +8146,7 @@ bool gt_StartGameEscape_Func (bool testConds, bool runActions) {
     UnitSetTeamColorIndex(gv_hercules, 1);
     UnitSetState(gv_hercules, c_unitStateTargetable, false);
     libNtve_gf_ChangeUnitDamage(gv_hercules, libNtve_ge_UnitDamageTakenDealt_Damage_Take, libNtve_ge_UnitDamageChangeOption_No);
-    ObjectiveShow(gv_objectiveEscape, PlayerGroupAll(), true);
-    ObjectiveShow(gv_objectiveRaynorSurvive, PlayerGroupAll(), true);
-    Wait(0.2, c_timeGame);
-    ObjectiveShow(gv_objectiveRaynorSurvive, PlayerGroupAll(), true);
+    TriggerExecute(gt_ObjectiveEscapeCreateQ, true, true);
     PingCreate(PlayerGroupAll(), "PingObjective", PointFromId(1808), ColorWithAlpha(0.00, 100.00, 0.00, 0.00), 0.0);
     gv_pingHercules = PingLastCreated();
     PingSetTooltip(gv_pingHercules, StringExternal("Param/Value/D8282D88"));
@@ -8266,10 +8238,7 @@ bool gt_TipRubbleEscapeQ_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    TriggerQueueEnter();
     libCamp_gf_CreateTipFromConversationState("StoryTips|Horner05_Rubble", libNtve_ge_TipType_NormalTip, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -10231,7 +10200,7 @@ bool gt_VictoryEscape_Func (bool testConds, bool runActions) {
     gv_gameOver = true;
     TriggerExecute(gt_ObjectiveEscapeComplete, true, true);
     TriggerExecute(gt_ObjectiveRaynorComplete, true, true);
-    libCamp_gf_RunMissionVictorySequence(gt_VictoryQ);
+    libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
     return true;
 }
 
@@ -10251,7 +10220,7 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     }
 
     if ((ObjectiveGetState(gv_objectiveFusionReactor) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_objectiveEscape) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_objectiveProtossRelics) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_researchObjectiveBrutalisk) == c_objectiveStateCompleted)) {
-        AchievementAward(gv_p01_USER, "THorner05_1");
+        libWoLC_gf_CampaignAwardAchievement("THorner05_1");
     }
 
     VictoryPanelAddAchievement("THorner05_1");
@@ -10270,11 +10239,8 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     else {
         VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/679B78A0"), StringExternal("Param/Value/5D283B44"));
     }
-    VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/0725AA97"), IntToText(gv_brutaliskResearchGranted));
-    VictoryPanelAddCustomStatisticLine(StringToText(""), StringToText(""));
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/30CE4193"), (IntToText(gv_obejctiveProtossRelics) + StringExternal("Param/Value/E38056A1") + IntToText(gv_obejctiveProtossRelicsTotalSecondHalf)));
-    VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/336600A8"), IntToText(gv_obejctiveProtossRelics));
-    libCamp_gf_EndCampaignMission(gv_p01_USER, c_gameOverVictory);
+    libWCMI_gf_EndCampaignMission(gv_p01_USER, c_gameOverVictory);
     return true;
 }
 
@@ -10310,7 +10276,7 @@ bool gt_DefeatRaynorDiesObjectiveFailed_Func (bool testConds, bool runActions) {
     TriggerQueueClear(c_triggerQueueRemove);
     Wait(2.0, c_timeReal);
     libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/C8D9919C"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_Defeat, true, false);
     return true;
 }
@@ -10331,7 +10297,7 @@ bool gt_Defeat_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_EndCampaignMission(gv_p01_USER, c_gameOverDefeat);
+    libWCMI_gf_EndCampaignMission(gv_p01_USER, c_gameOverDefeat);
     return true;
 }
 
@@ -10358,7 +10324,7 @@ bool gt_VictoryCheat_Func (bool testConds, bool runActions) {
     }
 
     gv_gameOver = true;
-    libCamp_gf_RunMissionVictorySequence(gt_Victory);
+    libWCMI_gf_RunMissionVictorySequence(gt_Victory);
     return true;
 }
 
@@ -10414,14 +10380,10 @@ bool gt_ObjectiveInvestigateCreate_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    ObjectiveCreate(StringExternal("Param/Value/7F3E9E69"), StringExternal("Param/Value/45CD0F73"), c_objectiveStateActive, true);
+    libWCMI_gf_CreateObjectiveCampaign("THorner05_1");
+    ObjectiveSetPriority(ObjectiveLastCreated(), 3);
     gv_objectiveInvestigate = ObjectiveLastCreated();
-    ObjectiveCreate(StringExternal("Param/Value/C8F06BE4"), StringExternal("Param/Value/25108B5E"), c_objectiveStateHidden, true);
-    gv_objectiveFusionReactor = ObjectiveLastCreated();
-    ObjectiveCreate(StringExternal("Param/Value/9067AA1F"), StringExternal("Param/Value/D20106AB"), c_objectiveStateHidden, true);
-    gv_objectiveEscape = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_THorner05Objective2, gv_objectiveInvestigate, StringExternal("Param/Value/62441C9A"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -10449,8 +10411,8 @@ bool gt_ObjectiveInvestigateComplete_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveInvestigateCreate, true, false);
-    ObjectiveSetState(gv_objectiveInvestigate, c_objectiveStateCompleted);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    libWCMI_gf_ZS_SetMissionObjectiveState("THorner05_1", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -10478,7 +10440,7 @@ bool gt_ObjectiveInvestigateFailed_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveInvestigateCreate, true, false);
-    ObjectiveSetState(gv_objectiveInvestigate, c_objectiveStateFailed);
+    libWCMI_gf_ZS_SetMissionObjectiveState("THorner05_1", libWoLC_ge_MissionObjectiveState_Failed);
     return true;
 }
 
@@ -10505,10 +10467,10 @@ bool gt_ObjectiveFusionReactorCreateQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_THorner05Objective2, gv_objectiveFusionReactor, StringExternal("Param/Value/F7927309"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
+    libWCMI_gf_CreateObjectiveCampaign("THorner05_2");
+    ObjectiveSetPriority(ObjectiveLastCreated(), 2);
+    gv_objectiveFusionReactor = ObjectiveLastCreated();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -10536,8 +10498,8 @@ bool gt_ObjectiveFusionReactorComplete_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveFusionReactorCreateQ, true, false);
-    ObjectiveSetState(gv_objectiveFusionReactor, c_objectiveStateCompleted);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    libWCMI_gf_ZS_SetMissionObjectiveState("THorner05_2", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -10565,7 +10527,7 @@ bool gt_ObjectiveFusionReactorFailed_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveFusionReactorCreateQ, true, false);
-    ObjectiveSetState(gv_objectiveFusionReactor, c_objectiveStateFailed);
+    libWCMI_gf_ZS_SetMissionObjectiveState("THorner05_2", libWoLC_ge_MissionObjectiveState_Failed);
     return true;
 }
 
@@ -10623,12 +10585,10 @@ bool gt_ObjectiveRaynorCreateQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate(StringExternal("Param/Value/FF4B30F8"), StringExternal("Param/Value/3AA81C0C"), c_objectiveStateActive, true);
+    libWCMI_gf_CreateObjectiveCampaign("THorner05_3");
+    ObjectiveSetPriority(ObjectiveLastCreated(), 0);
     gv_objectiveRaynorSurvive = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_THorner05Objective3, ObjectiveLastCreated(), StringExternal("Param/Value/0BFAB47A"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -10656,8 +10616,8 @@ bool gt_ObjectiveRaynorComplete_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveRaynorCreateQ, true, false);
-    ObjectiveSetState(gv_objectiveRaynorSurvive, c_objectiveStateCompleted);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    libWCMI_gf_ZS_SetMissionObjectiveState("THorner05_3", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -10684,7 +10644,10 @@ bool gt_ObjectiveEscapeCreateQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_THorner05Objective4, gv_objectiveEscape, StringExternal("Param/Value/2B2188EF"));
+    libWCMI_gf_CreateObjectiveCampaign("THorner05_4");
+    ObjectiveSetPriority(ObjectiveLastCreated(), 1);
+    gv_objectiveEscape = ObjectiveLastCreated();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -10712,8 +10675,8 @@ bool gt_ObjectiveEscapeComplete_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveEscapeCreateQ, true, false);
-    ObjectiveSetState(gv_objectiveEscape, c_objectiveStateCompleted);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    libWCMI_gf_ZS_SetMissionObjectiveState("THorner05_4", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -10741,7 +10704,7 @@ bool gt_ObjectiveEscapeFailed_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveEscapeCreateQ, true, false);
-    ObjectiveSetState(gv_objectiveEscape, c_objectiveStateFailed);
+    libWCMI_gf_ZS_SetMissionObjectiveState("THorner05_4", libWoLC_ge_MissionObjectiveState_Failed);
     return true;
 }
 
@@ -10768,12 +10731,9 @@ bool gt_ResearchObjectiveBrutaliskCreateQ_Func (bool testConds, bool runActions)
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate((StringExternal("Param/Value/91F3CB3D") + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectKilltheBrutalisk, libCamp_ge_StoryResearchObjectiveTextStyle_Lumpsum, 1, 0)), StringExternal("Param/Value/AF4A6014"), c_objectiveStateActive, false);
+    libWCMI_gf_CreateObjectiveCampaign("THorner05_5");
     gv_researchObjectiveBrutalisk = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_THorner05Objective5, ObjectiveLastCreated(), StringExternal("Param/Value/0E2AB04E"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -10812,22 +10772,16 @@ bool gt_ResearchObjectiveBrutaliskUpdateQ_Func (bool testConds, bool runActions)
     gv_brutaliskDead = true;
     gv_statBrutaliskKilled += 1;
     gv_brutaliskResearchGranted += 3;
-    libCamp_gf_DisplayResearchPointsGiventoPlayer(libCamp_ge_StoryResearchObject_ResearchObjectKilltheBrutalisk, EventUnit(), gv_p01_USER);
+    libWCMI_gf_DisplayMissionObjectiveRewardFloatingText(UnitGetPosition(EventUnit()), "THorner05_5");
     TriggerExecute(gt_ResearchObjectiveBrutaliskCreateQ, true, false);
-    if ((ObjectiveGetState(gv_researchObjectiveBrutalisk) != c_objectiveStateCompleted)) {
-        TriggerQueueEnter();
-        ObjectiveSetState(gv_researchObjectiveBrutalisk, c_objectiveStateCompleted);
-        ObjectiveSetName(gv_researchObjectiveBrutalisk, (StringExternal("Param/Value/F8BA0C74") + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectKilltheBrutalisk, libCamp_ge_StoryResearchObjectiveTextStyle_Lumpsum, 1, 1)));
-        Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-        TriggerQueueExit();
-    }
-
+    libWCMI_gf_ZS_SetMissionObjectiveState("THorner05_5", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     if ((libNtve_gf_KillingUnit() == gv_warbot) && (libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1) && (gv_brutaliskReleased == true)) {
-        AchievementAward(gv_p01_USER, "FeatOfStrength_THorner05S");
+        libWoLC_gf_CampaignAwardAchievement("FeatOfStrength_THorner05S");
     }
 
     if ((libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1) && (gv_achievementUnitLosttoBrutalisk == false) && (gv_brutaliskReleased == true)) {
-        AchievementAward(gv_p01_USER, "THorner05_3");
+        libWoLC_gf_CampaignAwardAchievement("THorner05_3");
     }
 
     return true;
@@ -10857,13 +10811,10 @@ bool gt_ObjectiveProtossRelicsCreateQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate((StringExternal("Param/Value/C2FF6FE6") + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectFindProtossRelics, libCamp_ge_StoryResearchObjectiveTextStyle_Multipart, gv_obejctiveProtossRelicsTotalFirstHalf, 0)), StringExternal("Param/Value/322A1BDF"), c_objectiveStateActive, false);
+    libWCMI_gf_CreateObjectiveCampaign("THorner05_6");
     gv_objectiveProtossRelics = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_THorner05Objective52, ObjectiveLastCreated(), StringExternal("Param/Value/EA5A26DE"));
     TriggerExecute(gt_CreateProtossRelicsObjects, true, false);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -10895,13 +10846,9 @@ bool gt_ObjectiveProtossRelicsUpdate_Func (bool testConds, bool runActions) {
 
     gv_obejctiveProtossRelics += 1;
     TriggerExecute(gt_ObjectiveProtossRelicsCreateQ, true, false);
-    libCamp_gf_DisplayResearchPointsGiventoPlayer(libCamp_ge_StoryResearchObject_ResearchObjectFindProtossRelics, EventUnit(), gv_p01_USER);
+    libWCMI_gf_DisplayMissionObjectiveRewardFloatingText(UnitGetPosition(EventUnit()), "THorner05_6");
     UnitKill(EventUnit());
-    ObjectiveSetName(gv_objectiveProtossRelics, (StringExternal("Param/Value/A43486E9") + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectFindProtossRelics, libCamp_ge_StoryResearchObjectiveTextStyle_Multipart, gv_obejctiveProtossRelicsTotalFirstHalf, gv_obejctiveProtossRelics)));
-    if ((gv_obejctiveProtossRelics == gv_obejctiveProtossRelicsTotalFirstHalf)) {
-        TriggerExecute(gt_ObjectiveProtossRelicsComplete, true, false);
-    }
-
+    libWCMI_gf_SetMissionObjectiveProgress("THorner05_6", gv_obejctiveProtossRelics);
     return true;
 }
 
@@ -10909,64 +10856,6 @@ bool gt_ObjectiveProtossRelicsUpdate_Func (bool testConds, bool runActions) {
 void gt_ObjectiveProtossRelicsUpdate_Init () {
     gt_ObjectiveProtossRelicsUpdate = TriggerCreate("gt_ObjectiveProtossRelicsUpdate_Func");
     TriggerAddEventUnitAbility(gt_ObjectiveProtossRelicsUpdate, null, AbilityCommand("Pickup", 0), c_unitAbilStageExecute, false);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Trigger: Objective Protoss Relics Complete
-//--------------------------------------------------------------------------------------------------
-bool gt_ObjectiveProtossRelicsComplete_Func (bool testConds, bool runActions) {
-    // Automatic Variable Declarations
-    // Conditions
-    if (testConds) {
-        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
-            return false;
-        }
-    }
-
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    TriggerEnable(TriggerGetCurrent(), false);
-    TriggerExecute(gt_ObjectiveProtossRelicsCreateQ, true, false);
-    ObjectiveSetState(gv_objectiveProtossRelics, c_objectiveStateCompleted);
-    ObjectiveSetName(gv_objectiveProtossRelics, (StringExternal("Param/Value/31655236") + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectFindProtossRelics, libCamp_ge_StoryResearchObjectiveTextStyle_Multipart, gv_obejctiveProtossRelicsTotalFirstHalf, gv_obejctiveProtossRelics)));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void gt_ObjectiveProtossRelicsComplete_Init () {
-    gt_ObjectiveProtossRelicsComplete = TriggerCreate("gt_ObjectiveProtossRelicsComplete_Func");
-}
-
-//--------------------------------------------------------------------------------------------------
-// Trigger: Objective Protoss Relics Failed
-//--------------------------------------------------------------------------------------------------
-bool gt_ObjectiveProtossRelicsFailed_Func (bool testConds, bool runActions) {
-    // Automatic Variable Declarations
-    // Conditions
-    if (testConds) {
-        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
-            return false;
-        }
-    }
-
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    TriggerEnable(TriggerGetCurrent(), false);
-    TriggerExecute(gt_ObjectiveProtossRelicsCreateQ, true, false);
-    ObjectiveSetState(gv_objectiveProtossRelics, c_objectiveStateFailed);
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void gt_ObjectiveProtossRelicsFailed_Init () {
-    gt_ObjectiveProtossRelicsFailed = TriggerCreate("gt_ObjectiveProtossRelicsFailed_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -11020,9 +10909,9 @@ bool gt_ObjectiveProtossRelicsUpdateSecondHalf_Func (bool testConds, bool runAct
 
     gv_obejctiveProtossRelics += 1;
     TriggerExecute(gt_ObjectiveProtossRelicsCreateQ, true, false);
-    libCamp_gf_DisplayResearchPointsGiventoPlayer(libCamp_ge_StoryResearchObject_ResearchObjectFindProtossRelics, EventUnit(), gv_p01_USER);
+    libWCMI_gf_DisplayMissionObjectiveRewardFloatingText(UnitGetPosition(EventUnit()), "THorner05_6");
     UnitKill(EventUnit());
-    ObjectiveSetName(gv_objectiveProtossRelics, (StringExternal("Param/Value/9F164517") + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectFindProtossRelics, libCamp_ge_StoryResearchObjectiveTextStyle_Multipart, gv_obejctiveProtossRelicsTotalSecondHalf, gv_obejctiveProtossRelics)));
+    libWCMI_gf_SetMissionObjectiveProgress("THorner05_6", gv_obejctiveProtossRelics);
     if ((gv_obejctiveProtossRelics == gv_obejctiveProtossRelicsTotalSecondHalf)) {
         TriggerExecute(gt_ObjectiveProtossRelicsCompleteSecondHalf, true, false);
     }
@@ -11059,9 +10948,8 @@ bool gt_ObjectiveProtossRelicsCompleteSecondHalf_Func (bool testConds, bool runA
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveProtossRelicsCreateQ, true, false);
-    ObjectiveSetState(gv_objectiveProtossRelics, c_objectiveStateCompleted);
-    ObjectiveSetName(gv_objectiveProtossRelics, (StringExternal("Param/Value/4A3E218A") + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectFindProtossRelics, libCamp_ge_StoryResearchObjectiveTextStyle_Multipart, gv_obejctiveProtossRelicsTotalSecondHalf, gv_obejctiveProtossRelics) + StringToText("")));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    libWCMI_gf_ZS_SetMissionObjectiveState("THorner05_6", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -12082,6 +11970,7 @@ bool gt_MidLab02Cleanup_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    libWCMI_gf_HideObjectiveCampaign("THorner05_1");
     auto62A25B1C_g = gv_midHiddenUnitGroupLab02;
     auto62A25B1C_u = UnitGroupCount(auto62A25B1C_g, c_unitCountAll);
     for (;; auto62A25B1C_u -= 1) {
@@ -12401,8 +12290,6 @@ bool gt_MidCleanup_Func (bool testConds, bool runActions) {
 
     gv_inSecondHalf = true;
     gv_protossRelicsSecondHalf = true;
-    ObjectiveSetName(gv_objectiveProtossRelics, (StringExternal("Param/Value/8E6D4431") + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectFindProtossRelics, libCamp_ge_StoryResearchObjectiveTextStyle_Multipart, gv_obejctiveProtossRelicsTotalSecondHalf, gv_obejctiveProtossRelics) + StringExternal("Param/Value/3BF968F3")));
-    ObjectiveSetState(gv_objectiveProtossRelics, c_objectiveStateActive);
     libNtve_gf_AddUnitGroupToUnitGroup(UnitGroup(null, gv_p01_USER, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32))), 0), gv_playerUnitGroup);
     Wait(0.2, c_timeGame);
     auto102181C2_g = gv_playerUnitGroup;
@@ -13112,8 +12999,6 @@ void InitTriggers () {
     gt_ResearchObjectiveBrutaliskUpdateQ_Init();
     gt_ObjectiveProtossRelicsCreateQ_Init();
     gt_ObjectiveProtossRelicsUpdate_Init();
-    gt_ObjectiveProtossRelicsComplete_Init();
-    gt_ObjectiveProtossRelicsFailed_Init();
     gt_CreateProtossRelicsObjects_Init();
     gt_ObjectiveProtossRelicsUpdateSecondHalf_Init();
     gt_ObjectiveProtossRelicsCompleteSecondHalf_Init();

@@ -267,6 +267,65 @@
         <On Terms="Abil.NuclearStrikeRed.SourceFinishStart" Send="AnimPlay SpellC Spell,C"/>
         <On Terms="Abil.NuclearStrikeRed.SourceFinishStop" Send="AnimClear SpellC"/>
     </CActorEventMacro>
+    <CActorModel id="VanillaScannerTargetLockAttachment" parent="ModelAnimationStyleContinuous">
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Behavior.VanillaScannerTargetLock.On; ValidateUnit TargetLockUnitRadiusSmall" Send="Create"/>
+        <On Terms="Behavior.VanillaScannerTargetLock.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter" HoldRotation="1"/>
+        <Model value="TargetLockAttachment"/>
+        <AutoScaleFactor value="0.700000"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorModel id="VanillaScannerTargetLockAttachmentLarge" parent="ModelAnimationStyleContinuous">
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Behavior.VanillaScannerTargetLock.On; ValidateUnit TargetLockUnitRadiusLarge" Send="Create"/>
+        <On Terms="Behavior.VanillaScannerTargetLock.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter" HoldRotation="1"/>
+        <Model value="TargetLockAttachmentLarge"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorSound id="VanillaScannerTargetLockPingActorSound" parent="SoundOneShot">
+        <On Terms="Behavior.VanillaScannerTargetLock.On; ValidateUnit TargetLockUnitRadiusLarge" Send="Create"/>
+        <Sound value="SentryMonitor_TargetLock_On"/>
+    </CActorSound>
+    <CActorBeamSimple id="SquadNovaDominationBeam" parent="BeamSimpleAnimationStyleContinuous">
+        <On Terms="Effect.SquadNovaDominationPersistent.Start" Send="Create"/>
+        <On Terms="Effect.SquadNovaDominationPersistent.Stop" Send="Destroy"/>
+        <Model value="DominationBeam"/>
+        <AutoScaleFactor value="0.600000"/>
+        <HostLaunch Subject="_Unit" Scope="Caster" Actor="Find"/>
+        <HostLaunchSiteOps Ops="SOpAttachHead"/>
+        <HostImpact Subject="_Unit" Scope="Target" Actor="Find"/>
+        <HostImpactSiteOps Ops="SOpAttachHead"/>
+    </CActorBeamSimple>
+    <CActorModel id="SquadNovaDominationImpact" parent="ModelAnimationStyleContinuous">
+        <On Terms="Behavior.SquadNovaDomination.On" Send="Create"/>
+        <On Terms="Behavior.SquadNovaDomination.Off" Send="Destroy"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="DominationImpact"/>
+        <AutoScaleFactor value="0.600000"/>
+    </CActorModel>
+    <CActorRange id="SquadNovaDominationRange" parent="RangeAbil" abil="SquadNovaDomination"/>
+    <CActorSound id="SquadNovaDominationSound" parent="SoundOneShot">
+        <On Terms="Effect.SquadNovaDominationPersistent.Start" Send="Create"/>
+        <Sound value="NovaDominationSound"/>
+    </CActorSound>
+    <CActorSound id="SquadNovaDominationEnd" parent="SoundOneShot">
+        <On Terms="Effect.SquadNovaDominationPersistent.Stop" Send="Create"/>
+        <Sound value="Nova_DominationEnd"/>
+    </CActorSound>
+    <CActorSound id="SquadNovaDominationLoop" parent="SoundContinuous">
+        <On Terms="Effect.SquadNovaDominationPersistent.Start" Send="Create"/>
+        <On Terms="Effect.SquadNovaDominationPersistent.Stop" Send="Destroy"/>
+        <Sound value="Nova_DominationLoop"/>
+    </CActorSound>
     <CActorModel id="SquadConfusionCastImpactModel" parent="ModelAnimationStyleOneShot">
         <On Terms="Effect.SquadConfusionSearch" Send="Create"/>
         <Model value="DarkArchonConfusionCastImpactModel"/>

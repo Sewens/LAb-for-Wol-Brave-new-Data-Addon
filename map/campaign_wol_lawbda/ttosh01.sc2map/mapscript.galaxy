@@ -7,7 +7,11 @@
 //==================================================================================================
 include "TriggerLibs/NativeLib"
 include "TriggerLibs/LibertyLib"
-include "TriggerLibs/CampaignLib"
+include "LibEA0820A1"
+include "LibCamp"
+include "LibWoLC"
+include "LibWCMI"
+include "LibWCUI"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -15,7 +19,11 @@ include "TriggerLibs/CampaignLib"
 void InitLibs () {
     libNtve_InitLib();
     libLbty_InitLib();
+    libEA0820A1_InitLib();
     libCamp_InitLib();
+    libWoLC_InitLib();
+    libWCMI_InitLib();
+    libWCUI_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -50,7 +58,6 @@ unitgroup gv_dirtyBanelingCrew;
 unitgroup[16] gv_critterGroups;
 region[16] gv_critterHavens;
 unitgroup gv_startingMineralFields;
-int gv_mineralBoard;
 int gv_toshMinersPing;
 bool gv_toshMinersRescued;
 int gv_brutaliskPing;
@@ -99,7 +106,6 @@ void InitGlobals () {
         gv_critterGroups[init_i] = UnitGroupEmpty();
     }
     gv_startingMineralFields = UnitGroupEmpty();
-    gv_mineralBoard = c_timerWindowNone;
     gv_toshMinersPing = c_invalidPingId;
     gv_brutaliskPing = c_invalidPingId;
     gv_sCVLossTimer = TimerCreate();
@@ -109,7 +115,7 @@ void InitGlobals () {
     gv_warning02Timer = TimerCreate();
     gv_lowGroundIsSafe = true;
     gv_firstWarning = true;
-    gv_objectiveMineralsQuota = libNtve_gf_DifficultyValueInt(7000, 8000, 8000, 8000);
+    gv_objectiveMineralsQuota = CatalogFieldValueGetAsInt(c_gameCatalogObjective, "TTosh01_1", "RequiredCount", 1);
     gv_objectiveCollect = c_invalidObjectiveId;
     gv_objectiveRescue = c_invalidObjectiveId;
     gv_researchObjectiveKilltheBrutalisk = c_invalidObjectiveId;
@@ -122,12 +128,17 @@ void InitGlobals () {
 //--------------------------------------------------------------------------------------------------
 // Global Function Declarations
 //--------------------------------------------------------------------------------------------------
+void gf_SCVSetTargetMinerals (unit lp_sCV, unit lp_minerals);
+unit gf_SCVGetTargetMinerals (unit lp_sCV);
+int gf_MineralsGetHarvestersCount (unit lp_minerals);
+void gf_MineralsUpdateStatusBar (unit lp_minerals);
 unitgroup gf_CrittersInRegion (region lp_area);
 void gf_ZerglingStampede (int lp_noOfZerglings, point lp_spawnPoint);
 
 //--------------------------------------------------------------------------------------------------
 // Trigger Variables
 //--------------------------------------------------------------------------------------------------
+trigger gt_OnPlayer1GetUnit;
 trigger gt_Initialization;
 trigger gt_Init01Technology;
 trigger gt_Init02Players;
@@ -136,6 +147,8 @@ trigger gt_Init04Music;
 trigger gt_Init05Environment;
 trigger gt_Init06Difficulties;
 trigger gt_Init07Help;
+trigger gt_SCVStartHarvest;
+trigger gt_SCVDies;
 trigger gt_IntroSequence;
 trigger gt_StartGame;
 trigger gt_StartHarvesting;
@@ -213,6 +226,7 @@ trigger gt_StorymodeTipsQ;
 trigger gt_AchievementAllReapersFound;
 trigger gt_FeatofStrengthDestroyAllZerg;
 trigger gt_VictoryCollectedQuota;
+trigger gt_VictoryZergDead;
 trigger gt_Victory;
 trigger gt_DefeatBaseDead;
 trigger gt_Defeat;
@@ -240,6 +254,70 @@ trigger gt_VictoryScene;
 //--------------------------------------------------------------------------------------------------
 // Global Functions
 //--------------------------------------------------------------------------------------------------
+void gf_SCVSetTargetMinerals (unit lp_sCV, unit lp_minerals) {
+    // Variable Declarations
+    unit lv_oldMinerals;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+    lv_oldMinerals = gf_SCVGetTargetMinerals(lp_sCV);
+
+    // Implementation
+    if ((lp_minerals == lv_oldMinerals)) {
+        return ;
+    }
+
+    if ((lv_oldMinerals != null) && (UnitIsValid(lv_oldMinerals) == true) && (UnitIsAlive(lv_oldMinerals) == true)) {
+        UnitSetCustomValue(lv_oldMinerals, 0, (FixedToInt(UnitGetCustomValue(lv_oldMinerals, 0)) - 1));
+        gf_MineralsUpdateStatusBar(lv_oldMinerals);
+    }
+
+    if ((lp_minerals != null) && (UnitIsValid(lp_minerals) == true) && (UnitIsAlive(lp_minerals) == true)) {
+        UnitSetCustomValue(lp_minerals, 0, (FixedToInt(UnitGetCustomValue(lp_minerals, 0)) + 1));
+        gf_MineralsUpdateStatusBar(lp_minerals);
+    }
+
+    DataTableSetUnit(true, ("TTosh01_SCV_" + IntToString(UnitGetTag(lp_sCV))), lp_minerals);
+}
+
+unit gf_SCVGetTargetMinerals (unit lp_sCV) {
+    // Automatic Variable Declarations
+    // Implementation
+    return DataTableGetUnit(true, ("TTosh01_SCV_" + IntToString(UnitGetTag(lp_sCV))));
+}
+
+int gf_MineralsGetHarvestersCount (unit lp_minerals) {
+    // Automatic Variable Declarations
+    // Implementation
+    return FixedToInt(UnitGetCustomValue(lp_minerals, 0));
+}
+
+void gf_MineralsUpdateStatusBar (unit lp_minerals) {
+    // Variable Declarations
+    int lv_count;
+    text lv_text;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+    lv_count = gf_MineralsGetHarvestersCount(lp_minerals);
+    lv_text = StringToText("");
+
+    // Implementation
+    if ((UnitGetType(lp_minerals) != "RichMineralField")) {
+        return ;
+    }
+
+    DialogControlHookupUnitStatus(c_triggerControlTypeLabel, "HarvestersLabel", lp_minerals);
+    if ((lv_count > 0)) {
+        TextExpressionSetToken("Param/Expression/01AF8D7C", "A", IntToText(lv_count));
+        TextExpressionSetToken("Param/Expression/01AF8D7C", "B", IntToText(UnitIdealWorkerCount(lp_minerals)));
+        libNtve_gf_SetDialogItemText(DialogControlLastCreated(), TextExpressionAssemble("Param/Expression/01AF8D7C"), PlayerGroupAll());
+    }
+    else {
+        libNtve_gf_SetDialogItemText(DialogControlLastCreated(), StringToText(""), PlayerGroupAll());
+    }
+}
+
 unitgroup gf_CrittersInRegion (region lp_area) {
     // Variable Declarations
     unit lv_u;
@@ -275,6 +353,26 @@ void gf_ZerglingStampede (int lp_noOfZerglings, point lp_spawnPoint) {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: OnPlayer1GetUnit
+//--------------------------------------------------------------------------------------------------
+bool gt_OnPlayer1GetUnit_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerExecute(libEA0820A1_gt_Init00ReplaceUnit, true, true);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_OnPlayer1GetUnit_Init () {
+    gt_OnPlayer1GetUnit = TriggerCreate("gt_OnPlayer1GetUnit_Func");
+    TriggerAddEventUnitChangeOwner(gt_OnPlayer1GetUnit, null);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: Initialization
 //--------------------------------------------------------------------------------------------------
 bool gt_Initialization_Func (bool testConds, bool runActions) {
@@ -284,7 +382,8 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_LoadCampaignData(libCamp_ge_MapID_MapTTosh01);
+    libWoLC_gf_ULoadCampaignData("TTosh01");
+    TriggerExecute(libEA0820A1_gt_Init00ReplaceUnit, true, true);
     TriggerExecute(gt_Init01Technology, true, true);
     TriggerExecute(gt_Init02Players, true, true);
     TriggerExecute(gt_Init03Units, true, true);
@@ -292,8 +391,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init05Environment, true, true);
     TriggerExecute(gt_Init06Difficulties, true, true);
     TriggerExecute(gt_Init07Help, true, true);
-    libCamp_gf_RegisterFootageRecording(gt_BriefingQ);
-    libCamp_gf_PurchaseStorymodeTech();
+    libWoLC_gf_RegisterFootageRecording(gt_BriefingQ);
     TriggerExecute(gt_IntroSequence, true, false);
     return true;
 }
@@ -309,13 +407,6 @@ void gt_Initialization_Init () {
 //--------------------------------------------------------------------------------------------------
 bool gt_Init01Technology_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    libCamp_gf_SetTechRestrictionsCallback(TriggerGetCurrent());
-    TechTreeAbilityAllow(gv_p01_USER, AbilityCommand("D8Charge", 0), true);
     return true;
 }
 
@@ -357,6 +448,7 @@ bool gt_Init02Players_Func (bool testConds, bool runActions) {
     PlayerModifyPropertyInt(gv_p04_ZERG, c_playerPropMinerals, c_playerPropOperSetTo, 5000);
     PlayerModifyPropertyInt(gv_p05_TOSH, c_playerPropMinerals, c_playerPropOperSetTo, 200);
     PlayerSetColorIndex(gv_p04_ZERG, 4, true);
+    libWCMI_gf_WM_DetectionUpgradesApply();
     return true;
 }
 
@@ -369,10 +461,6 @@ void gt_Init02Players_Init () {
 // Trigger: Init 03 Units
 //--------------------------------------------------------------------------------------------------
 bool gt_Init03Units_Func (bool testConds, bool runActions) {
-    // Variable Declarations
-    bool lv_playerHasMercTech;
-    int lv_merc;
-
     // Automatic Variable Declarations
     unitgroup auto14D8C9E8_g;
     int auto14D8C9E8_u;
@@ -387,9 +475,6 @@ bool gt_Init03Units_Func (bool testConds, bool runActions) {
     int autoC6E77A2C_u;
     unit autoC6E77A2C_var;
 
-    // Variable Initialization
-    lv_merc = libCamp_ge_StoryMercID_MercNone;
-
     // Actions
     if (!runActions) {
         return true;
@@ -401,7 +486,9 @@ bool gt_Init03Units_Func (bool testConds, bool runActions) {
     PreloadSound("LocalizedData\\Sounds\\TerranUnitVO\\Reaper\\Reaper_Pissed01.ogg", false);
     PreloadSound("LocalizedData\\Sounds\\TerranUnitVO\\Reaper\\Reaper_What02.ogg", false);
     PreloadSound("LocalizedData\\Sounds\\TerranUnitVO\\Reaper\\Reaper_What03.ogg", false);
+    libWCMI_gf_HandleMercCompound(UnitFromId(1302));
     gv_brutalisk = UnitFromId(407);
+    UnitBehaviorAdd(gv_brutalisk, "Detector8", gv_brutalisk, 1);
     gv_startingMineralFields = UnitGroup("RichMineralField", 0, RegionFromId(1), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     TriggerExecute(gt_CritterInit, true, false);
     libNtve_gf_PlayAnimationOnDoodadsInRegion(RegionEntireMap(), "CharAshWeather", c_animNameDefault, "Death", c_animFlagPlayForever, c_animTimeDefault);
@@ -483,7 +570,7 @@ bool gt_Init05Environment_Func (bool testConds, bool runActions) {
     VisExploreArea(gv_p01_USER, RegionFromId(20), true, false);
     GameTimeOfDaySet("08:00:00");
     GameTimeOfDayPause(true);
-    GameSetLighting("TTosh01Normal", 0.0);
+    GameSetLighting("Kit@TTosh01Normal", 0.0);
     libLbty_gf_AutoRevealRegion(RegionFromId(23), RegionFromId(23), gv_p01_USER);
     libLbty_gf_AutoRevealRegion(RegionFromId(25), RegionFromId(25), gv_p01_USER);
     libLbty_gf_AutoRevealRegion(RegionFromId(27), RegionFromId(27), gv_p01_USER);
@@ -508,8 +595,6 @@ void gt_Init05Environment_Init () {
 //--------------------------------------------------------------------------------------------------
 bool gt_Init06Difficulties_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
-    playergroup auto1A82A6A6_g;
-    int auto1A82A6A6_var;
     playergroup autoC02C0F37_g;
     int autoC02C0F37_var;
 
@@ -519,16 +604,6 @@ bool gt_Init06Difficulties_Func (bool testConds, bool runActions) {
     }
 
     gv_lavaInterval = libNtve_gf_DifficultyValueFixed(300.0, 300.0, 270.0, 240.0);
-    if ((libNtve_gf_DifficultyValueInt(1, 0, 0, 0) == 1)) {
-        auto1A82A6A6_g = gv_zergPlayers;
-        auto1A82A6A6_var = -1;
-        while (true) {
-            auto1A82A6A6_var = PlayerGroupNextPlayer(auto1A82A6A6_g, auto1A82A6A6_var);
-            if (auto1A82A6A6_var < 0) { break; }
-            PlayerModifyPropertyInt(auto1A82A6A6_var, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        }
-    }
-
     autoC02C0F37_g = gv_zergPlayers;
     autoC02C0F37_var = -1;
     while (true) {
@@ -592,6 +667,94 @@ void gt_Init07Help_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: SCV Start Harvest
+//--------------------------------------------------------------------------------------------------
+bool gt_SCVStartHarvest_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    unit lv_sCV;
+
+    // Automatic Variable Declarations
+    abilcmd auto62D527E5_val;
+
+    // Variable Initialization
+    lv_sCV = EventUnit();
+
+    // Conditions
+    if (testConds) {
+        if (!((EventPlayer() == gv_p01_USER))) {
+            return false;
+        }
+
+        if (!((UnitIsAlive(lv_sCV) == true))) {
+            return false;
+        }
+
+        if (!((UnitGetType(lv_sCV) == "SCV"))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    auto62D527E5_val = EventUnitAbility();
+    if (auto62D527E5_val == AbilityCommand("SCVHarvest", 0)) {
+        gf_SCVSetTargetMinerals(lv_sCV, EventUnitTargetUnit());
+    }
+    else if (auto62D527E5_val == AbilityCommand("SCVHarvest", 1)) {
+    }
+    else {
+        gf_SCVSetTargetMinerals(lv_sCV, null);
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_SCVStartHarvest_Init () {
+    gt_SCVStartHarvest = TriggerCreate("gt_SCVStartHarvest_Func");
+    TriggerAddEventUnitAbility(gt_SCVStartHarvest, null, null, c_unitAbilStageAll, false);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: SCV Dies
+//--------------------------------------------------------------------------------------------------
+bool gt_SCVDies_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    unit lv_sCV;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+    lv_sCV = EventUnit();
+
+    // Conditions
+    if (testConds) {
+        if (!((EventPlayer() == gv_p01_USER))) {
+            return false;
+        }
+
+        if (!((UnitGetType(lv_sCV) == "SCV"))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    gf_SCVSetTargetMinerals(lv_sCV, null);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_SCVDies_Init () {
+    gt_SCVDies = TriggerCreate("gt_SCVDies_Func");
+    TriggerAddEventUnitDied(gt_SCVDies, null);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: Intro Sequence
 //--------------------------------------------------------------------------------------------------
 bool gt_IntroSequence_Func (bool testConds, bool runActions) {
@@ -605,8 +768,8 @@ bool gt_IntroSequence_Func (bool testConds, bool runActions) {
     libNtve_gf_CinematicMode(true, PlayerGroupAll(), 0.0);
     libNtve_gf_GlobalCinematicSetting(true);
     TriggerExecute(gt_StartAI, true, false);
-    Wait(0.1, c_timeReal);
     TriggerExecute(gt_StartHarvesting, true, false);
+    Wait(0.1, c_timeReal);
     libNtve_gf_CinematicMode(false, PlayerGroupAll(), 1.5);
     libNtve_gf_GlobalCinematicSetting(false);
     libNtve_gf_SwooshCamera(gv_p01_USER, ((CameraInfoGetValue(CameraInfoDefault(), c_cameraValueDistance)) + 8.0), CameraInfoGetValue(CameraInfoDefault(), c_cameraValueDistance), PlayerStartLocation(gv_p01_USER), 1.5);
@@ -646,7 +809,6 @@ bool gt_StartGame_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_CreateLeaderboard, true, false);
     Wait(4.0, c_timeReal);
     TriggerExecute(gt_RichMineralTipQ, true, false);
-    Wait(8.0, c_timeReal);
     TriggerExecute(gt_StorymodeTipsQ, true, false);
     return true;
 }
@@ -677,6 +839,7 @@ bool gt_StartHarvesting_Func (bool testConds, bool runActions) {
     lv_mineralGroup = UnitGroup("RichMineralField", c_playerAny, RegionFromId(1), UnitFilter(0, 0, 0, 0), 0);
     lv_mineralHarvesters = UnitGroup("SCV", gv_p01_USER, RegionFromId(1), UnitFilter(0, 0, 0, 0), 0);
     UnitGroupIssueOrder(lv_mineralHarvesters, OrderTargetingUnitGroup(AbilityCommand("SCVHarvest", 0), lv_mineralGroup), c_orderQueueReplace);
+    UnitIssueOrder(UnitFromId(312), OrderTargetingUnit(null, UnitFromId(544)), c_orderQueueReplace);
     libLbty_gf_OrderWorkerstoGatherNearbyResources(RegionPlayableMap(), gv_p02_ZERG);
     libLbty_gf_OrderWorkerstoGatherNearbyResources(RegionPlayableMap(), gv_p04_ZERG);
     return true;
@@ -1328,18 +1491,8 @@ bool gt_CreateLeaderboard_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    BoardCreate(3, 1, StringToText(""), Color(0.00, 100.00, 0.00));
-    gv_mineralBoard = BoardLastCreated();
-    BoardSetState(gv_mineralBoard, PlayerGroupAll(), c_boardStateShowTitle, false);
-    BoardSetState(gv_mineralBoard, PlayerGroupAll(), c_boardStateShowHeader, false);
-    BoardSetGroupCount(gv_mineralBoard, 1);
-    BoardRowSetGroup(gv_mineralBoard, 1, 1);
-    BoardItemSetText(gv_mineralBoard, c_boardColGroups, 1, StringExternal("Param/Value/CE8A3BEC"));
-    BoardItemSetText(gv_mineralBoard, 1, 1, StringExternal("Param/Value/480399D2"));
-    BoardItemSetText(gv_mineralBoard, 2, 1, IntToText(PlayerGetPropertyInt(gv_p01_USER, c_playerPropMinerals)));
-    BoardItemSetText(gv_mineralBoard, 3, 1, (StringExternal("Param/Value/1ED6C969") + IntToText(gv_objectiveMineralsQuota)));
-    BoardItemSetIcon(gv_mineralBoard, 3, 1, "Assets\\Textures\\icon-highyieldmineral-terran.dds", false);
-    BoardMinimizeShow(gv_mineralBoard, PlayerGroupAll(), false);
+    libWCUI_gf_DisplayProgressBar(StringExternal("Param/Value/CCC2E21B"), 0, gv_objectiveMineralsQuota);
+    TriggerExecute(gt_UpdateLeaderboard, true, true);
     return true;
 }
 
@@ -1352,20 +1505,22 @@ void gt_CreateLeaderboard_Init () {
 // Trigger: Update Leaderboard
 //--------------------------------------------------------------------------------------------------
 bool gt_UpdateLeaderboard_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    int lv_minerals;
+
     // Automatic Variable Declarations
+    // Variable Initialization
+    lv_minerals = libNtve_gf_ArithmeticIntClamp(PlayerGetPropertyInt(gv_p01_USER, c_playerPropMinerals), 0, gv_objectiveMineralsQuota);
+
     // Actions
     if (!runActions) {
         return true;
     }
 
-    if ((PlayerGetPropertyInt(gv_p01_USER, c_playerPropMinerals) >= gv_objectiveMineralsQuota)) {
-        BoardItemSetText(gv_mineralBoard, 2, 1, IntToText(gv_objectiveMineralsQuota));
-        BoardItemSetText(gv_mineralBoard, 3, 1, (StringExternal("Param/Value/7290E156") + IntToText(gv_objectiveMineralsQuota)));
-    }
-    else {
-        BoardItemSetText(gv_mineralBoard, 2, 1, IntToText(PlayerGetPropertyInt(gv_p01_USER, c_playerPropMinerals)));
-        BoardItemSetText(gv_mineralBoard, 3, 1, (StringExternal("Param/Value/9E245720") + IntToText(gv_objectiveMineralsQuota)));
-    }
+    libWCUI_gf_SetProgressBarProgress(lv_minerals);
+    TextExpressionSetToken("Param/Expression/E5408000", "A", IntToText(lv_minerals));
+    TextExpressionSetToken("Param/Expression/E5408000", "B", IntToText(gv_objectiveMineralsQuota));
+    libWCUI_gf_SetProgressBarLabel(TextExpressionAssemble("Param/Expression/E5408000"));
     return true;
 }
 
@@ -2307,9 +2462,6 @@ bool gt_ReapersReinforcements01_Func (bool testConds, bool runActions) {
     unitgroup autoC03B76C5_g;
     int autoC03B76C5_u;
     unit autoC03B76C5_var;
-    unitgroup autoDB292AD8_g;
-    int autoDB292AD8_u;
-    unit autoDB292AD8_var;
 
     // Variable Initialization
     lv_playerGroup = UnitGroupEmpty();
@@ -2351,16 +2503,9 @@ bool gt_ReapersReinforcements01_Func (bool testConds, bool runActions) {
             if (autoC03B76C5_var == null) { break; }
             UnitGroupAdd(lv_reaperGroup, autoC03B76C5_var);
             libNtve_gf_ShareVisionofUnit(autoC03B76C5_var, true, gv_p01_USER);
-            UnitIssueOrder(autoC03B76C5_var, OrderTargetingPoint(AbilityCommand("attack", 0), PointFromId(1927)), c_orderQueueReplace);
-        }
-        Wait(2.5, c_timeGame);
-        autoDB292AD8_g = lv_reaperGroup;
-        autoDB292AD8_u = UnitGroupCount(autoDB292AD8_g, c_unitCountAll);
-        for (;; autoDB292AD8_u -= 1) {
-            autoDB292AD8_var = UnitGroupUnitFromEnd(autoDB292AD8_g, autoDB292AD8_u);
-            if (autoDB292AD8_var == null) { break; }
-            libNtve_gf_RescueUnit(autoDB292AD8_var, gv_p01_USER, true);
+            libNtve_gf_RescueUnit(autoC03B76C5_var, gv_p01_USER, true);
             gv_unitsRescued += 1;
+            UnitIssueOrder(autoC03B76C5_var, OrderTargetingPoint(AbilityCommand("attack", 0), PointFromId(1927)), c_orderQueueReplace);
         }
         TriggerExecute(gt_AchievementAllReapersFound, true, false);
     }
@@ -2386,9 +2531,6 @@ bool gt_ReapersReinforcements02_Func (bool testConds, bool runActions) {
     unitgroup auto20B79E52_g;
     int auto20B79E52_u;
     unit auto20B79E52_var;
-    unitgroup auto1D10E944_g;
-    int auto1D10E944_u;
-    unit auto1D10E944_var;
 
     // Variable Initialization
     lv_playerGroup = UnitGroupEmpty();
@@ -2430,16 +2572,9 @@ bool gt_ReapersReinforcements02_Func (bool testConds, bool runActions) {
             if (auto20B79E52_var == null) { break; }
             UnitGroupAdd(lv_reaperGroup, auto20B79E52_var);
             libNtve_gf_ShareVisionofUnit(auto20B79E52_var, true, gv_p01_USER);
-            UnitIssueOrder(auto20B79E52_var, OrderTargetingPoint(AbilityCommand("attack", 0), PointFromId(1925)), c_orderQueueReplace);
-        }
-        Wait(2.5, c_timeGame);
-        auto1D10E944_g = lv_reaperGroup;
-        auto1D10E944_u = UnitGroupCount(auto1D10E944_g, c_unitCountAll);
-        for (;; auto1D10E944_u -= 1) {
-            auto1D10E944_var = UnitGroupUnitFromEnd(auto1D10E944_g, auto1D10E944_u);
-            if (auto1D10E944_var == null) { break; }
-            libNtve_gf_RescueUnit(auto1D10E944_var, gv_p01_USER, true);
+            libNtve_gf_RescueUnit(auto20B79E52_var, gv_p01_USER, true);
             gv_unitsRescued += 1;
+            UnitIssueOrder(auto20B79E52_var, OrderTargetingPoint(AbilityCommand("attack", 0), PointFromId(1925)), c_orderQueueReplace);
         }
         TriggerExecute(gt_AchievementAllReapersFound, true, false);
     }
@@ -2465,9 +2600,6 @@ bool gt_ReapersReinforcements03_Func (bool testConds, bool runActions) {
     unitgroup autoE81781EA_g;
     int autoE81781EA_u;
     unit autoE81781EA_var;
-    unitgroup auto59045EC4_g;
-    int auto59045EC4_u;
-    unit auto59045EC4_var;
 
     // Variable Initialization
     lv_playerGroup = UnitGroupEmpty();
@@ -2509,16 +2641,9 @@ bool gt_ReapersReinforcements03_Func (bool testConds, bool runActions) {
             if (autoE81781EA_var == null) { break; }
             UnitGroupAdd(lv_reaperGroup, autoE81781EA_var);
             libNtve_gf_ShareVisionofUnit(autoE81781EA_var, true, gv_p01_USER);
-            UnitIssueOrder(autoE81781EA_var, OrderTargetingPoint(AbilityCommand("attack", 0), PointFromId(1912)), c_orderQueueReplace);
-        }
-        Wait(2.5, c_timeGame);
-        auto59045EC4_g = lv_reaperGroup;
-        auto59045EC4_u = UnitGroupCount(auto59045EC4_g, c_unitCountAll);
-        for (;; auto59045EC4_u -= 1) {
-            auto59045EC4_var = UnitGroupUnitFromEnd(auto59045EC4_g, auto59045EC4_u);
-            if (auto59045EC4_var == null) { break; }
-            libNtve_gf_RescueUnit(auto59045EC4_var, gv_p01_USER, true);
+            libNtve_gf_RescueUnit(autoE81781EA_var, gv_p01_USER, true);
             gv_unitsRescued += 1;
+            UnitIssueOrder(autoE81781EA_var, OrderTargetingPoint(AbilityCommand("attack", 0), PointFromId(1912)), c_orderQueueReplace);
         }
         TriggerExecute(gt_AchievementAllReapersFound, true, false);
     }
@@ -2544,9 +2669,6 @@ bool gt_ReapersReinforcements04_Func (bool testConds, bool runActions) {
     unitgroup autoFD3BFCD1_g;
     int autoFD3BFCD1_u;
     unit autoFD3BFCD1_var;
-    unitgroup autoFF38DCB0_g;
-    int autoFF38DCB0_u;
-    unit autoFF38DCB0_var;
 
     // Variable Initialization
     lv_playerGroup = UnitGroupEmpty();
@@ -2588,16 +2710,9 @@ bool gt_ReapersReinforcements04_Func (bool testConds, bool runActions) {
             if (autoFD3BFCD1_var == null) { break; }
             UnitGroupAdd(lv_reaperGroup, autoFD3BFCD1_var);
             libNtve_gf_ShareVisionofUnit(autoFD3BFCD1_var, true, gv_p01_USER);
-            UnitIssueOrder(autoFD3BFCD1_var, OrderTargetingPoint(AbilityCommand("attack", 0), PointFromId(1917)), c_orderQueueReplace);
-        }
-        Wait(2.5, c_timeGame);
-        autoFF38DCB0_g = lv_reaperGroup;
-        autoFF38DCB0_u = UnitGroupCount(autoFF38DCB0_g, c_unitCountAll);
-        for (;; autoFF38DCB0_u -= 1) {
-            autoFF38DCB0_var = UnitGroupUnitFromEnd(autoFF38DCB0_g, autoFF38DCB0_u);
-            if (autoFF38DCB0_var == null) { break; }
-            libNtve_gf_RescueUnit(autoFF38DCB0_var, gv_p01_USER, true);
+            libNtve_gf_RescueUnit(autoFD3BFCD1_var, gv_p01_USER, true);
             gv_unitsRescued += 1;
+            UnitIssueOrder(autoFD3BFCD1_var, OrderTargetingPoint(AbilityCommand("attack", 0), PointFromId(1917)), c_orderQueueReplace);
         }
         TriggerExecute(gt_AchievementAllReapersFound, true, false);
     }
@@ -2623,9 +2738,6 @@ bool gt_ReapersReinforcements05_Func (bool testConds, bool runActions) {
     unitgroup autoC926F1D5_g;
     int autoC926F1D5_u;
     unit autoC926F1D5_var;
-    unitgroup autoF7D09147_g;
-    int autoF7D09147_u;
-    unit autoF7D09147_var;
 
     // Variable Initialization
     lv_playerGroup = UnitGroupEmpty();
@@ -2667,16 +2779,9 @@ bool gt_ReapersReinforcements05_Func (bool testConds, bool runActions) {
             if (autoC926F1D5_var == null) { break; }
             UnitGroupAdd(lv_reaperGroup, autoC926F1D5_var);
             libNtve_gf_ShareVisionofUnit(autoC926F1D5_var, true, gv_p01_USER);
-            UnitIssueOrder(autoC926F1D5_var, OrderTargetingPoint(AbilityCommand("attack", 0), PointFromId(1926)), c_orderQueueReplace);
-        }
-        Wait(2.5, c_timeGame);
-        autoF7D09147_g = lv_reaperGroup;
-        autoF7D09147_u = UnitGroupCount(autoF7D09147_g, c_unitCountAll);
-        for (;; autoF7D09147_u -= 1) {
-            autoF7D09147_var = UnitGroupUnitFromEnd(autoF7D09147_g, autoF7D09147_u);
-            if (autoF7D09147_var == null) { break; }
-            libNtve_gf_RescueUnit(autoF7D09147_var, gv_p01_USER, true);
+            libNtve_gf_RescueUnit(autoC926F1D5_var, gv_p01_USER, true);
             gv_unitsRescued += 1;
+            UnitIssueOrder(autoC926F1D5_var, OrderTargetingPoint(AbilityCommand("attack", 0), PointFromId(1926)), c_orderQueueReplace);
         }
         TriggerExecute(gt_AchievementAllReapersFound, true, false);
     }
@@ -2733,10 +2838,11 @@ bool gt_LavaTimerCreate_Func (bool testConds, bool runActions) {
     }
 
     Wait(1.0, c_timeReal);
-    TimerWindowCreate(gv_lavaTimer, StringExternal("Param/Value/B68D184A"), true, false);
+    libWCUI_gf_TimerWindowCreate(gv_lavaTimer, StringExternal("Param/Value/6975BB27"), true, false);
     gv_lavaTimerWindow = TimerWindowLastCreated();
     TimerWindowSetFormat(gv_lavaTimerWindow, StringToText("<mintotal/>:<sec2/>"));
-    TimerWindowSetColor(gv_lavaTimerWindow, c_timerWindowColorTime, Color(0.00, 100.00, 0.00), 0.0);
+    TimerWindowSetAnchor(gv_lavaTimerWindow, c_anchorTopRight, 0, 116);
+    libWCUI_gf_SetTimerWindowDangerThreshold(15.0);
     TriggerExecute(gt_TransmissionIntroLavaTimerQ, true, false);
     return true;
 }
@@ -2788,7 +2894,7 @@ bool gt_CameraShakeWeak_Func (bool testConds, bool runActions) {
 
     CameraShakeStart(gv_p01_USER, c_cameraPositionTarget, c_cameraDirectionZ, 0.05, 2.0, 100.0, 3.0);
     WaterSetState("Template 1|Alternate Setting 1", 15.0, c_wtcLinear);
-    GameSetLighting("TTosh01Warning", 15.0);
+    GameSetLighting("Kit@TTosh01Warning", 15.0);
     Wait(2.0, c_timeGame);
     libNtve_gf_PlayAnimationOnDoodadsInRegion(RegionEntireMap(), "TTosh01FlameGeyser", "StandWork", "Stand Work", c_animFlagPlayForever, c_animTimeDefault);
     return true;
@@ -2869,7 +2975,7 @@ bool gt_LavaTurnsON_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_CameraShakeDuringLava, true, false);
     SoundPlay(SoundLink("TUILavaRising", -1), PlayerGroupAll(), 100.0, 0.0);
     WaterSetState("Template 1|Alternate Setting 2", 4.0, c_wtcLinear);
-    GameSetLighting("TTosh01Eruption", 4.0);
+    GameSetLighting("Kit@TTosh01Eruption", 4.0);
     libNtve_gf_ClearAnimationOnDoodadsInRegion(RegionEntireMap(), "TTosh01FlameGeyser", "StandWork");
     libNtve_gf_PlayAnimationOnDoodadsInRegion(RegionEntireMap(), "CharAshWeather", c_animNameDefault, "Stand", c_animFlagPlayForever, c_animTimeDefault);
     Wait(2.0, c_timeGame);
@@ -2911,7 +3017,7 @@ bool gt_LavaTurnsOFF_Func (bool testConds, bool runActions) {
     TriggerEnable(TriggerGetCurrent(), false);
     SoundPlay(SoundLink("TUILavaRising", -1), PlayerGroupAll(), 100.0, 0.0);
     WaterSetState("Template 1|[Default]", 10.0, c_wtcLinear);
-    GameSetLighting("TTosh01Normal", 10.0);
+    GameSetLighting("Kit@TTosh01Normal", 10.0);
     libNtve_gf_PlayAnimationOnDoodadsInRegion(RegionEntireMap(), "CharAshWeather", c_animNameDefault, "Death", c_animFlagPlayForever, c_animTimeDefault);
     Wait(2.0, c_timeGame);
     gv_lowGroundIsSafe = true;
@@ -3273,7 +3379,7 @@ bool gt_TransmissionReaperIntroQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    libCamp_gf_EnableCampaignTechUnit(true, libCamp_ge_StoryTechGroup_StoryTechGroupInfantryReaper, gv_p01_USER);
+    libWoLC_gf_EnableCampaignTechUnit(true, "Reaper", gv_p01_USER);
     autoB5E80A33_g = gv_toshReapers;
     autoB5E80A33_u = UnitGroupCount(autoB5E80A33_g, c_unitCountAll);
     for (;; autoB5E80A33_u -= 1) {
@@ -3531,7 +3637,7 @@ bool gt_TransmissionMineralNodeReveal1Q_Func (bool testConds, bool runActions) {
     // Transmission - SoundLink("TTosh01Tosh00046", -1)
     libCamp_gf_SendTransmissionCampaign(null, SoundLink("TTosh01Tosh00046", -1), c_transmissionDurationAdd, 0.0, true);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Game);
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignHintDelay, c_timeReal);
     TriggerExecute(gt_MineralNodeReveal1, true, false);
     TriggerQueueExit();
     return true;
@@ -3684,7 +3790,7 @@ bool gt_TransmissionMineralNodeReveal2Q_Func (bool testConds, bool runActions) {
     // Transmission - SoundLink("TTosh01Tosh00047", -1)
     libCamp_gf_SendTransmissionCampaign(null, SoundLink("TTosh01Tosh00047", -1), c_transmissionDurationAdd, 0.0, true);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Game);
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignHintDelay, c_timeReal);
     TriggerExecute(gt_MineralNodeReveal2, true, false);
     TriggerQueueExit();
     return true;
@@ -3837,7 +3943,7 @@ bool gt_TransmissionMineralNodeReveal3Q_Func (bool testConds, bool runActions) {
     // Transmission - SoundLink("TTosh01Tosh00048", -1)
     libCamp_gf_SendTransmissionCampaign(null, SoundLink("TTosh01Tosh00048", -1), c_transmissionDurationAdd, 0.0, true);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Game);
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignHintDelay, c_timeReal);
     TriggerExecute(gt_MineralNodeReveal3, true, false);
     TriggerQueueExit();
     return true;
@@ -4076,14 +4182,7 @@ bool gt_CommandCenterLiftOffTipQ_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    TriggerQueueEnter();
-    if ((gv_gameOver == true)) {
-        return true;
-    }
-
     libCamp_gf_CreateTipFromConversationState("StoryTips|Tosh01_Liftoff", libNtve_ge_TipType_NewAbility, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -4103,7 +4202,6 @@ bool gt_ReaperTip_Func (bool testConds, bool runActions) {
     }
 
     libCamp_gf_CreateTipFromConversationState("StoryTips|Tosh01_Reapers", libNtve_ge_TipType_NewUnit, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
     return true;
 }
 
@@ -4133,14 +4231,7 @@ bool gt_RichMineralTipQ_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    TriggerQueueEnter();
-    if ((gv_gameOver == true)) {
-        return true;
-    }
-
     libCamp_gf_CreateTipFromConversationState("StoryTips|Tosh01_RichMinerals", libNtve_ge_TipType_NormalTip, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -4170,14 +4261,7 @@ bool gt_ZergBrutaliskTipQ_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    TriggerQueueEnter();
-    if ((gv_gameOver == true)) {
-        return true;
-    }
-
     libCamp_gf_CreateTipFromConversationState("StoryTips|Tosh01_Brutalisk", libNtve_ge_TipType_NormalTip, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -4207,13 +4291,7 @@ bool gt_StorymodeTipsQ_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    TriggerQueueEnter();
-    if ((gv_gameOver == true)) {
-        return true;
-    }
-
     libCamp_gf_CreateStorymodeTips();
-    TriggerQueueExit();
     return true;
 }
 
@@ -4252,7 +4330,8 @@ bool gt_AchievementAllReapersFound_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    AchievementAward(gv_p01_USER, "TTosh01_3");
+    TriggerDebugOutput(1, StringExternal("Param/Value/1EEEE355"), false);
+    libWoLC_gf_CampaignAwardAchievement("TTosh01_3");
     return true;
 }
 
@@ -4280,11 +4359,11 @@ bool gt_FeatofStrengthDestroyAllZerg_Func (bool testConds, bool runActions) {
             return false;
         }
 
-        if (!((UnitGroupCount(UnitGroup(null, gv_p02_ZERG, RegionPlayableMap(), UnitFilter((1 << c_targetFilterPreventDefeat), 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) == 0))) {
+        if (!((UnitGroupCount(UnitGroup(null, gv_p02_ZERG, RegionPlayableMap(), UnitFilter((1 << c_targetFilterPreventDefeat), 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 1), c_unitCountAlive) == 0))) {
             return false;
         }
 
-        if (!((UnitGroupCount(UnitGroup(null, gv_p04_ZERG, RegionPlayableMap(), UnitFilter((1 << c_targetFilterPreventDefeat), 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) == 0))) {
+        if (!((UnitGroupCount(UnitGroup(null, gv_p04_ZERG, RegionPlayableMap(), UnitFilter((1 << c_targetFilterPreventDefeat), 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 1), c_unitCountAlive) == 0))) {
             return false;
         }
     }
@@ -4295,7 +4374,8 @@ bool gt_FeatofStrengthDestroyAllZerg_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    AchievementAward(gv_p01_USER, "FeatOfStrength_TTosh01");
+    TriggerDebugOutput(1, StringExternal("Param/Value/E3B2D36C"), false);
+    libWoLC_gf_CampaignAwardAchievement("FeatOfStrength_TTosh01");
     return true;
 }
 
@@ -4329,7 +4409,7 @@ bool gt_VictoryCollectedQuota_Func (bool testConds, bool runActions) {
     TriggerEnable(TriggerGetCurrent(), false);
     gv_gameOver = true;
     TriggerExecute(gt_ObjectiveCollectComplete, true, true);
-    libCamp_gf_RunMissionVictorySequence(gt_VictoryQ);
+    libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
     return true;
 }
 
@@ -4337,6 +4417,44 @@ bool gt_VictoryCollectedQuota_Func (bool testConds, bool runActions) {
 void gt_VictoryCollectedQuota_Init () {
     gt_VictoryCollectedQuota = TriggerCreate("gt_VictoryCollectedQuota_Func");
     TriggerAddEventPlayerPropChange(gt_VictoryCollectedQuota, gv_p01_USER, c_playerPropMinerals);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Victory Zerg Dead
+//--------------------------------------------------------------------------------------------------
+bool gt_VictoryZergDead_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((gv_gameOver == false))) {
+            return false;
+        }
+
+        if (!((UnitGroupCount(UnitGroup(null, gv_p02_ZERG, RegionPlayableMap(), UnitFilter((1 << c_targetFilterPreventDefeat), 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 1), c_unitCountAlive) == 0))) {
+            return false;
+        }
+
+        if (!((UnitGroupCount(UnitGroup(null, gv_p04_ZERG, RegionPlayableMap(), UnitFilter((1 << c_targetFilterPreventDefeat), 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 1), c_unitCountAlive) == 0))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    gv_gameOver = true;
+    TriggerExecute(gt_ObjectiveCollectComplete, true, true);
+    libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_VictoryZergDead_Init () {
+    gt_VictoryZergDead = TriggerCreate("gt_VictoryZergDead_Func");
+    TriggerAddEventTimePeriodic(gt_VictoryZergDead, 1.0, c_timeGame);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -4355,7 +4473,7 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     }
 
     if ((ObjectiveGetState(gv_objectiveCollect) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_objectiveRescue) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_researchObjectiveKilltheBrutalisk) == c_objectiveStateCompleted)) {
-        AchievementAward(gv_p01_USER, "TTosh01_1");
+        libWoLC_gf_CampaignAwardAchievement("TTosh01_1");
     }
 
     VictoryPanelAddAchievement("TTosh01_1");
@@ -4375,8 +4493,7 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     else {
         VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/E6D939CA"), StringExternal("Param/Value/2B58366B"));
     }
-    VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/2E368B64"), (IntToText((gv_brutaliskKilled * libCamp_gf_StoryResearchObjectReward(libCamp_ge_StoryResearchObject_ResearchObjectKilltheBrutalisk, libCamp_ge_StoryResearchCategory_ResearchCategoryZerg)))));
-    libCamp_gf_EndCampaignMission(gv_p01_USER, c_gameOverVictory);
+    libWCMI_gf_EndCampaignMission(gv_p01_USER, c_gameOverVictory);
     return true;
 }
 
@@ -4412,7 +4529,7 @@ bool gt_DefeatBaseDead_Func (bool testConds, bool runActions) {
     TriggerQueueClear(c_triggerQueueRemove);
     Wait(2.0, c_timeReal);
     libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/24E1C1CC"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_Defeat, true, false);
     return true;
 }
@@ -4433,7 +4550,7 @@ bool gt_Defeat_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_EndCampaignMission(gv_p01_USER, c_gameOverDefeat);
+    libWCMI_gf_EndCampaignMission(gv_p01_USER, c_gameOverDefeat);
     return true;
 }
 
@@ -4460,7 +4577,7 @@ bool gt_VictoryCheat_Func (bool testConds, bool runActions) {
     }
 
     gv_gameOver = true;
-    libCamp_gf_RunMissionVictorySequence(gt_Victory);
+    libWCMI_gf_RunMissionVictorySequence(gt_Victory);
     return true;
 }
 
@@ -4516,12 +4633,9 @@ bool gt_ObjectiveCollectCreateQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate((TextReplaceWord(StringExternal("Param/Value/D3C035F7"), StringExternal("Param/Value/8BAF666E"), IntToText(gv_objectiveMineralsQuota), c_stringReplaceAll, c_stringCase)), StringExternal("Param/Value/0022CD68"), c_objectiveStateActive, true);
+    libWCMI_gf_CreateObjectiveCampaign("TTosh01_1");
     gv_objectiveCollect = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_TTosh01Objective1, ObjectiveLastCreated(), (TextReplaceWord(StringExternal("Param/Value/21CBD08C"), StringExternal("Param/Value/9163F2DB"), IntToText(gv_objectiveMineralsQuota), c_stringReplaceAll, c_stringCase)));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -4549,8 +4663,8 @@ bool gt_ObjectiveCollectComplete_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveCollectCreateQ, true, false);
-    ObjectiveSetState(gv_objectiveCollect, c_objectiveStateCompleted);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    libWCMI_gf_ZS_SetMissionObjectiveState("TTosh01_1", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -4577,12 +4691,10 @@ bool gt_ObjectiveRescuePartyCreateQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate(StringExternal("Param/Value/F42E1CF8"), StringExternal("Param/Value/51C93208"), c_objectiveStateActive, false);
+    libWCMI_gf_CreateObjectiveCampaign("TTosh01_2");
     gv_objectiveRescue = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_TTosh01Objective2, ObjectiveLastCreated(), StringExternal("Param/Value/72448821"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
+    ObjectiveSetPriority(ObjectiveLastCreated(), 1);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -4610,7 +4722,7 @@ bool gt_ObjectiveRescuePartyComplete_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveRescuePartyCreateQ, true, true);
-    ObjectiveSetState(gv_objectiveRescue, c_objectiveStateCompleted);
+    libWCMI_gf_ZS_SetMissionObjectiveState("TTosh01_2", libWoLC_ge_MissionObjectiveState_Completed);
     Wait(5.0, c_timeReal);
     TriggerExecute(gt_CommandCenterLiftOffTipQ, true, false);
     return true;
@@ -4639,12 +4751,10 @@ bool gt_ResearchObjectiveKilltheBrutaliskCreateQ_Func (bool testConds, bool runA
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate((StringExternal("Param/Value/E070E0FC") + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectKilltheBrutalisk, libCamp_ge_StoryResearchObjectiveTextStyle_Lumpsum, 1, 0)), StringExternal("Param/Value/E8235891"), c_objectiveStateActive, false);
+    libWCMI_gf_CreateObjectiveCampaign("TTosh01_3");
     gv_researchObjectiveKilltheBrutalisk = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_TTosh01Objective3, ObjectiveLastCreated(), StringExternal("Param/Value/F6AF0A0A"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
+    ObjectiveSetPriority(ObjectiveLastCreated(), 0);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -4682,16 +4792,15 @@ bool gt_ResearchObjectiveKilltheBrutaliskUpdate_Func (bool testConds, bool runAc
     VisRevealArea(gv_p01_USER, RegionCircle(UnitGetPosition(EventUnit()), 5.0), 3.0, false);
     PingDestroy(gv_brutaliskPing);
     gv_brutaliskKilled = 1;
-    libCamp_gf_DisplayResearchPointsGiventoPlayer(libCamp_ge_StoryResearchObject_ResearchObjectKilltheBrutalisk, EventUnit(), gv_p01_USER);
+    libWCMI_gf_DisplayMissionObjectiveRewardFloatingText(UnitGetPosition(EventUnit()), "TTosh01_3");
     TriggerExecute(gt_ResearchObjectiveKilltheBrutaliskCreateQ, true, true);
-    ObjectiveSetState(gv_researchObjectiveKilltheBrutalisk, c_objectiveStateCompleted);
-    ObjectiveSetName(gv_researchObjectiveKilltheBrutalisk, (StringExternal("Param/Value/9C764397") + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectKilltheBrutalisk, libCamp_ge_StoryResearchObjectiveTextStyle_Lumpsum, 1, 1)));
+    libWCMI_gf_ZS_SetMissionObjectiveState("TTosh01_3", libWoLC_ge_MissionObjectiveState_Completed);
     if ((libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1) && (libNtve_gf_KillingPlayer() == gv_p03_LAVA)) {
-        AchievementAward(gv_p01_USER, "TTosh01_2");
+        libWoLC_gf_CampaignAwardAchievement("TTosh01_2");
     }
 
     if ((libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1) && (libNtve_gf_UnitGetPropertyKills(EventUnit(), c_unitPropCurrent) == 0)) {
-        AchievementAward(gv_p01_USER, "Anniversary_TTosh01");
+        libWoLC_gf_CampaignAwardAchievement("Anniversary_TTosh01");
         TriggerDebugOutput(1, StringExternal("Param/Value/6FAC3A22"), false);
     }
 
@@ -5033,7 +5142,7 @@ bool gt_VictorySetup_Func (bool testConds, bool runActions) {
     TriggerEnable(gt_LavaTurnsOFF, false);
     TriggerEnable(gt_LavaDamage, false);
     WaterSetState("Template 1|[Default]", 1.0, c_wtcLinear);
-    GameSetLighting("TTosh01Normal", 1.0);
+    GameSetLighting("Kit@TTosh01Normal", 1.0);
     gv_lowGroundIsSafe = true;
     libNtve_gf_CinematicMode(true, PlayerGroupAll(), 0.0);
     libNtve_gf_GlobalCinematicSetting(true);
@@ -5238,7 +5347,7 @@ bool gt_VictoryScene_Func (bool testConds, bool runActions) {
     libNtve_gf_AddUnitGroupToUnitGroup(UnitLastCreatedGroup(), gv_victoryZergling);
     UnitGroupIssueOrder(gv_victoryZergling, OrderTargetingPoint(AbilityCommand("attack", 0), PointFromId(216)), c_orderQueueReplace);
     WaterSetState("Template 1|Alternate Setting 2", 6.0, c_wtcLinear);
-    GameSetLighting("TTosh01Warning", 5.0);
+    GameSetLighting("Kit@TTosh01Warning", 5.0);
     SoundPlay(SoundLink("TUILavaRising", -1), PlayerGroupAll(), 100.0, 0.0);
     Wait(2.0, c_timeGame);
     libNtve_gf_UnitCreateFacingPoint(3, "Zergling", 0, gv_p02_ZERG, PointFromId(793), RegionGetCenter(RegionFromId(64)));
@@ -5268,6 +5377,7 @@ void gt_VictoryScene_Init () {
 // Trigger Initialization
 //--------------------------------------------------------------------------------------------------
 void InitTriggers () {
+    gt_OnPlayer1GetUnit_Init();
     gt_Initialization_Init();
     gt_Init01Technology_Init();
     gt_Init02Players_Init();
@@ -5276,6 +5386,8 @@ void InitTriggers () {
     gt_Init05Environment_Init();
     gt_Init06Difficulties_Init();
     gt_Init07Help_Init();
+    gt_SCVStartHarvest_Init();
+    gt_SCVDies_Init();
     gt_IntroSequence_Init();
     gt_StartGame_Init();
     gt_StartHarvesting_Init();
@@ -5353,6 +5465,7 @@ void InitTriggers () {
     gt_AchievementAllReapersFound_Init();
     gt_FeatofStrengthDestroyAllZerg_Init();
     gt_VictoryCollectedQuota_Init();
+    gt_VictoryZergDead_Init();
     gt_Victory_Init();
     gt_DefeatBaseDead_Init();
     gt_Defeat_Init();

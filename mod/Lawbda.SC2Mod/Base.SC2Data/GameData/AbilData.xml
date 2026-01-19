@@ -70,6 +70,20 @@
         <Flags index="Transient" value="1"/>
         <PointsPerLevel value="1"/>
     </CAbilLearn>
+    <CAbilEffectTarget id="SquadNovaDomination">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="SquadNovaDominationPersistent"/>
+        <Flags index="AbortOnAllianceChange" value="0"/>
+        <Cost>
+            <Vital index="Energy" value="75"/>
+        </Cost>
+        <TargetFilters value="Visible;Player,Ally,Neutral,Robotic,Structure,Missile,Stasis,Dead,Invulnerable"/>
+        <Range value="7"/>
+        <RangeSlop value="100"/>
+        <AINotifyEffect value="DominationApplySet"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SquadNovaDomination"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+    </CAbilEffectTarget>
     <CAbilEffectTarget id="SquadConfusion">
         <Alignment value="Negative"/>
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
@@ -1215,7 +1229,7 @@
     </CAbilEffectTarget>
     <CAbilEffectInstant id="SensorTowerMiniWorld">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Effect index="0" value="SensorTowerMiniWorldSearch"/>
+        <Effect index="0" value="SensorTowerMiniWorldSearchTarget"/>
         <Flags index="AutoCast" value="1"/>
         <Flags index="AutoCastOn" value="1"/>
         <Cost>

@@ -7,7 +7,10 @@
 //==================================================================================================
 include "TriggerLibs/NativeLib"
 include "TriggerLibs/LibertyLib"
-include "TriggerLibs/CampaignLib"
+include "LibEA0820A1"
+include "LibCamp"
+include "LibWoLC"
+include "LibWCMI"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -15,7 +18,10 @@ include "TriggerLibs/CampaignLib"
 void InitLibs () {
     libNtve_InitLib();
     libLbty_InitLib();
+    libEA0820A1_InitLib();
     libCamp_InitLib();
+    libWoLC_InitLib();
+    libWCMI_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -675,7 +681,7 @@ void gf_BuildVirophageAndWait (unit lp_drone, int lp_colonyIndex, fixed lp_timeo
 
     // Implementation
     TimerStart(lv_timeoutTimer, lp_timeout, false, c_timeGame);
-    UnitIssueOrder(lp_drone, OrderTargetingPoint(AbilityCommand("ZergBuild", 16), gv_infestationVirophageSpot[lp_colonyIndex]), c_orderQueueAddToEnd);
+    UnitIssueOrder(lp_drone, OrderTargetingPoint(AbilityCommand("ZergBuild", 17), gv_infestationVirophageSpot[lp_colonyIndex]), c_orderQueueAddToEnd);
     while (true) {
         if (((UnitIsAlive(lp_drone) == false) || (gv_infestationVirophageUnit[lp_colonyIndex] != null) || (TimerGetRemaining(lv_timeoutTimer) <= 0.0))) {
             return ;
@@ -861,7 +867,8 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_LoadCampaignData(libCamp_ge_MapID_MapTHanson03B);
+    libWoLC_gf_ULoadCampaignData("THanson03B");
+    TriggerExecute(libEA0820A1_gt_Init00ReplaceUnit, true, true);
     TriggerExecute(gt_Init01Technology, true, true);
     TriggerExecute(gt_Init02Players, true, true);
     TriggerExecute(gt_Init03Units, true, true);
@@ -869,8 +876,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init05Environment, true, true);
     TriggerExecute(gt_Init06Difficulties, true, true);
     TriggerExecute(gt_Init07Help, true, true);
-    libCamp_gf_RegisterFootageRecording(gt_BriefingQ);
-    libCamp_gf_PurchaseStorymodeTech();
+    libWoLC_gf_RegisterFootageRecording(gt_BriefingQ);
     TriggerExecute(gt_IntroQ, true, false);
     return true;
 }
@@ -896,8 +902,7 @@ bool gt_Init01Technology_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_SetTechRestrictionsCallback(TriggerGetCurrent());
-    libCamp_gf_EnableCampaignTechUnit(true, libCamp_ge_StoryTechGroup_StoryTechGroupStarshipsViking, gv_p01_USER);
+    libWoLC_gf_EnableCampaignTechUnit(true, "VikingFighter", gv_p01_USER);
     TechTreeUpgradeAddLevel(gv_p02_ZERG_EAST, "overlordtransport", 1);
     TechTreeUpgradeAddLevel(gv_p03_VIROPHAGE, "overlordtransport", 1);
     TechTreeUpgradeAddLevel(gv_p04_ZERG_NORTH, "overlordtransport", 1);
@@ -989,6 +994,7 @@ bool gt_Init02Players_Func (bool testConds, bool runActions) {
     PlayerSetState(gv_p05_COLONIST, c_playerStateDisplayInLeaderPanel, false);
     PlayerSetState(gv_p06_COLONIST, c_playerStateDisplayInLeaderPanel, false);
     PlayerSetState(gv_p07_ZERG_INFESTED, c_playerStateDisplayInLeaderPanel, false);
+    libWCMI_gf_WM_DetectionUpgradesApply();
     return true;
 }
 
@@ -1029,6 +1035,7 @@ bool gt_Init03Units_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    libWCMI_gf_HandleMercCompound(UnitFromId(1540));
     TriggerExecute(gt_InitEggData, true, false);
     TriggerExecute(gt_InitInfestationData, true, false);
     UnitSetPropertyFixed(UnitFromId(163), c_unitPropEnergy, 50.0);
@@ -1139,7 +1146,7 @@ bool gt_Init05Environment_Func (bool testConds, bool runActions) {
     libLbty_gf_AutoRevealRegion(RegionFromId(63), RegionFromId(8), gv_p01_USER);
     libLbty_gf_AutoRevealRegion(RegionFromId(62), RegionFromId(67), gv_p01_USER);
     CreepSetSpeed(c_creepSpeedDecay, 200.0);
-    libCamp_gf_ChangeAmbience("Ambience_Hanson03bRain");
+    SoundtrackPlay(PlayerGroupAll(), c_soundtrackCategoryAmbience, "Ambience_Hanson03bRain", c_soundtrackCueAny, c_soundtrackIndexAny, false);
     return true;
 }
 
@@ -1153,9 +1160,6 @@ void gt_Init05Environment_Init () {
 //--------------------------------------------------------------------------------------------------
 bool gt_Init06Difficulties_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
-    unitgroup auto98C81D62_g;
-    int auto98C81D62_u;
-    unit auto98C81D62_var;
     playergroup auto6A6E9979_g;
     int auto6A6E9979_var;
 
@@ -1164,33 +1168,20 @@ bool gt_Init06Difficulties_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    if ((PlayerDifficulty(gv_p01_USER) == 1)) {
-        PlayerModifyPropertyInt(gv_p02_ZERG_EAST, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p03_VIROPHAGE, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p04_ZERG_NORTH, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p07_ZERG_INFESTED, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p08_ZERG_SOUTH, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-    }
-
     TimerStart(gv_aberrationStartTimer, libNtve_gf_DifficultyValueFixed(600.0, 600.0, 500.0, 400.0), false, c_timeGame);
     gf_MakeEggsSpawn(ge_SpawnType_stAberration, 1, libNtve_gf_DifficultyValueFixed(240.0, 240.0, 150.0, 120.0), false);
     gf_MakeEggsSpawn(ge_SpawnType_stInfestedMarine, 1, libNtve_gf_DifficultyValueFixed(80.0, 80.0, 60.0, 50.0), true);
     gf_MakeEggsSpawn(ge_SpawnType_stInfestedColonist, 2, libNtve_gf_DifficultyValueFixed(20.0, 20.0, 15.0, 13.0), true);
     gv_aberrationLife = libNtve_gf_DifficultyValueFixed(250.0, 500.0, 700.0, 800.0);
     gv_virophageLife = libNtve_gf_DifficultyValueFixed(200.0, 400.0, 750.0, 1000.0);
-    auto98C81D62_g = UnitGroup("Virophage", c_playerAny, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32))), 0);
-    auto98C81D62_u = UnitGroupCount(auto98C81D62_g, c_unitCountAll);
-    for (;; auto98C81D62_u -= 1) {
-        auto98C81D62_var = UnitGroupUnitFromEnd(auto98C81D62_g, auto98C81D62_u);
-        if (auto98C81D62_var == null) { break; }
-        gf_SetUnitMaxLife(auto98C81D62_var, gv_virophageLife);
-    }
     TechTreeUpgradeAddLevel(gv_p07_ZERG_INFESTED, "overlordspeed", 1);
     auto6A6E9979_g = gv_zergPlayers;
     auto6A6E9979_var = -1;
     while (true) {
         auto6A6E9979_var = PlayerGroupNextPlayer(auto6A6E9979_g, auto6A6E9979_var);
         if (auto6A6E9979_var < 0) { break; }
+        libNtve_gf_CatalogFieldValueSetAsReal(c_gameCatalogUnit, "Virophage", "LifeStart", auto6A6E9979_var, gv_virophageLife);
+        libNtve_gf_CatalogFieldValueSetAsReal(c_gameCatalogUnit, "Virophage", "LifeMax", auto6A6E9979_var, gv_virophageLife);
         TechTreeUpgradeAddLevel(auto6A6E9979_var, "ZergFlyerArmorsLevel1", libNtve_gf_DifficultyValueInt(0, 0, 0, 1));
         TechTreeUpgradeAddLevel(auto6A6E9979_var, "ZergGroundArmorsLevel1", libNtve_gf_DifficultyValueInt(0, 0, 0, 1));
     }
@@ -1245,9 +1236,9 @@ bool gt_StartGame_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    libWCMI_gf_SetWorkerRallyPointforNexus2(UnitFromId(163));
+    libWCMI_gf_StartingWorkersAutoHarvest(RegionFromId(11), RegionFromId(12));
     UIAlertPoint("Trigger", gv_p01_USER, StringExternal("Param/Value/C5C06D21"), null, PointFromId(292));
-    PlayerPauseAllCharges(gv_p01_USER, false);
-    PlayerPauseAllCooldowns(gv_p01_USER, false);
     CreepSetSpeed(c_creepSpeedGrowth, 1000.0);
     TriggerEnable(gt_ColonistLoad, true);
     TriggerEnable(gt_ColonistUnload, true);
@@ -1261,13 +1252,10 @@ bool gt_StartGame_Func (bool testConds, bool runActions) {
     Wait(1.0, c_timeGame);
     TriggerExecute(gt_TransmissionMissionStartQ, true, true);
     TriggerExecute(gt_NewUnitVikingTipQ, true, false);
-    Wait(3.0, c_timeGame);
     TriggerExecute(gt_VirophageTipQ, true, false);
-    Wait(3.0, c_timeGame);
-    CreepSetSpeed(c_creepSpeedGrowth, 100.0);
-    TriggerQueueEnter();
     libCamp_gf_CreateStorymodeTips();
-    TriggerQueueExit();
+    Wait(6.0, c_timeGame);
+    CreepSetSpeed(c_creepSpeedGrowth, 100.0);
     return true;
 }
 
@@ -1745,7 +1733,6 @@ bool gt_ColonyCleansedQ_Func (bool testConds, bool runActions) {
                 gv_twoBaseWarningPlayed = true;
                 // Transmission - SoundLink("THanson03BHorner00027", -1)
                 libCamp_gf_SendTransmissionCampaign(null, SoundLink("THanson03BHorner00027", -1), c_transmissionDurationAdd, 0.0, true);
-                break;
             }
             else {
                 if ((gv_zergInfestationCounter != 0)) {
@@ -3414,7 +3401,7 @@ bool gt_VikingKillsofEnemyStructures_Func (bool testConds, bool runActions) {
 
     gv_vikingStructureKills += 1;
     if ((libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1)) {
-        AchievementTermQuantitySet(gv_p01_USER, "Anniversary_THanson03B", gv_vikingStructureKills);
+        libWoLC_gf_SetAchievementTermQuantityCampaign("Anniversary_THanson03B", gv_vikingStructureKills);
         TextExpressionSetToken("Param/Expression/C7A1FEC2", "A", IntToText(gv_vikingStructureKills));
         TriggerDebugOutput(1, TextExpressionAssemble("Param/Expression/C7A1FEC2"), false);
     }
@@ -3492,7 +3479,7 @@ bool gt_VictoryInfestationCleansedCompleted_Func (bool testConds, bool runAction
     TimerPause(gv_eggData[ge_SpawnType_stInfestedMarine].lv_timer, true);
     gv_gameOver = true;
     TriggerExecute(gt_ObjectiveDestroyInfestationComplete, true, true);
-    libCamp_gf_RunMissionVictorySequence(gt_VictoryQ);
+    libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
     return true;
 }
 
@@ -3543,15 +3530,15 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     }
 
     if ((ObjectiveGetState(gv_objectiveDestroyInfestation) == c_objectiveStateCompleted)) {
-        AchievementAward(gv_p01_USER, "THanson03B_1");
+        libWoLC_gf_CampaignAwardAchievement("THanson03B_1");
     }
 
     if ((gv_stat_ColoniesSaved >= 3) && (libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1)) {
-        AchievementAward(gv_p01_USER, "THanson03B_2");
+        libWoLC_gf_CampaignAwardAchievement("THanson03B_2");
     }
 
     if ((gv_stat_ColoniesSaved >= 5) && (libNtve_gf_DifficultyValueInt(0, 0, 1, 1) == 1)) {
-        AchievementAward(gv_p01_USER, "THanson03B_3");
+        libWoLC_gf_CampaignAwardAchievement("THanson03B_3");
     }
 
     VictoryPanelAddAchievement("THanson03B_1");
@@ -3563,9 +3550,7 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     VictoryPanelAddCustomStatisticLine(StringToText(""), StringToText(""));
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/058AC5A9"), IntToText(gv_stat_ColoniesSaved));
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/EEF6561F"), IntToText(gv_stat_VirophagesKilled));
-    VictoryPanelAddCustomStatisticLine(StringToText(""), StringToText(""));
-    VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/4E3E0110"), StringExternal("Param/Value/1E16B4C8"));
-    libCamp_gf_EndCampaignMission(gv_p01_USER, c_gameOverVictory);
+    libWCMI_gf_EndCampaignMission(gv_p01_USER, c_gameOverVictory);
     return true;
 }
 
@@ -3609,7 +3594,7 @@ bool gt_DefeatBaseDead_Func (bool testConds, bool runActions) {
     TriggerQueueClear(c_triggerQueueRemove);
     Wait(2.0, c_timeReal);
     libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/C087FD77"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_Defeat, true, false);
     return true;
 }
@@ -3630,7 +3615,7 @@ bool gt_Defeat_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_EndCampaignMission(gv_p01_USER, c_gameOverDefeat);
+    libWCMI_gf_EndCampaignMission(gv_p01_USER, c_gameOverDefeat);
     return true;
 }
 
@@ -3657,7 +3642,7 @@ bool gt_VictoryCheat_Func (bool testConds, bool runActions) {
     }
 
     gv_gameOver = true;
-    libCamp_gf_RunMissionVictorySequence(gt_Victory);
+    libWCMI_gf_RunMissionVictorySequence(gt_Victory);
     return true;
 }
 
@@ -3717,10 +3702,7 @@ bool gt_VirophageTipQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
     libCamp_gf_CreateTipFromConversationState("StoryTips|Hanson03b_Virophage", libNtve_ge_TipType_NormalTip, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeGame);
-    TriggerQueueExit();
     return true;
 }
 
@@ -3751,10 +3733,7 @@ bool gt_NewUnitVikingTipQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
     libCamp_gf_CreateTipFromConversationState("StoryTips|Hanson03_Viking", libNtve_ge_TipType_NewUnit, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeGame);
-    TriggerQueueExit();
     return true;
 }
 
@@ -3788,10 +3767,11 @@ bool gt_ObjectiveDestroyInfestationCreateQ_Func (bool testConds, bool runActions
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate((StringExternal("Param/Value/708B2E3E")), StringExternal("Param/Value/E1B705C0"), c_objectiveStateActive, true);
+    libWCMI_gf_CreateObjectiveCampaign("THanson03B_1");
+    TextExpressionSetToken("Param/Expression/93044F0E", "A", IntToText(gv_zergInfestationCounter));
+    libWCMI_gf_SetMissionObjectiveProgress2("THanson03B_1", TextExpressionAssemble("Param/Expression/93044F0E"));
     gv_objectiveDestroyInfestation = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_THanson03BObjective1, ObjectiveLastCreated(), StringExternal("Param/Value/F987298E"));
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     libNtve_gf_CreatePingFacingAngle(PlayerGroupAll(), "PingObjective", RegionGetCenter(RegionFromId(4)), ColorWithAlpha(0.00, 100.00, 0.00, 0.00), 0.0, 270.0);
     PingSetTooltip(PingLastCreated(), StringExternal("Param/Value/AFAADAC0"));
     gv_basePingNorth = PingLastCreated();
@@ -3811,9 +3791,6 @@ bool gt_ObjectiveDestroyInfestationCreateQ_Func (bool testConds, bool runActions
     libNtve_gf_CreatePingFacingAngle(PlayerGroupAll(), "PingObjective", RegionGetCenter(gv_infestationRegion[lv_initialInfestation]), ColorWithAlpha(0.00, 100.00, 0.00, 0.00), 0.0, 270.0);
     PingSetTooltip(PingLastCreated(), StringExternal("Param/Value/593A891E"));
     gv_infestationPings[lv_initialInfestation] = PingLastCreated();
-    PingSetVisible(gv_infestationPings[lv_initialInfestation], true);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -3832,7 +3809,8 @@ bool gt_ObjectiveDestroyInfestationUpdate_Func (bool testConds, bool runActions)
         return true;
     }
 
-    ObjectiveSetName(gv_objectiveDestroyInfestation, (StringExternal("Param/Value/0437D084") + IntToText(gv_zergInfestationCounter) + StringExternal("Param/Value/DBD58F80")));
+    TextExpressionSetToken("Param/Expression/EDD983B2", "A", IntToText(gv_zergInfestationCounter));
+    libWCMI_gf_SetMissionObjectiveProgress2("THanson03B_1", TextExpressionAssemble("Param/Expression/EDD983B2"));
     if ((gv_zergInfestationCounter == 0)) {
         TriggerExecute(gt_VictoryInfestationCleansedCompleted, true, false);
     }
@@ -3865,8 +3843,8 @@ bool gt_ObjectiveDestroyInfestationComplete_Func (bool testConds, bool runAction
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveDestroyInfestationCreateQ, true, false);
     TriggerExecute(gt_ObjectiveDestroyInfestationUpdate, true, true);
-    ObjectiveSetState(gv_objectiveDestroyInfestation, c_objectiveStateCompleted);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    libWCMI_gf_ZS_SetMissionObjectiveState("THanson03B_1", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -4682,8 +4660,6 @@ bool gt_IntroCleanup_Func (bool testConds, bool runActions) {
     TimerPause(gv_aberrationStartTimer, false);
     TimerPause(gv_eggData[ge_SpawnType_stInfestedColonist].lv_timer, false);
     TimerPause(gv_eggData[ge_SpawnType_stInfestedMarine].lv_timer, false);
-    PlayerPauseAllCharges(gv_p01_USER, true);
-    PlayerPauseAllCooldowns(gv_p01_USER, true);
     gv_inCinematic = false;
     TriggerExecute(gt_StartGame, true, false);
     return true;

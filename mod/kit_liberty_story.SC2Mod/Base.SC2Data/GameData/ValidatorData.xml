@@ -1,9 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CValidatorUnitCompareBehaviorCount id="Kit@CasterNotMarineStimmed">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="Stimpack"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="Kit@CasterNotMarauderStimmed">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="StimpackMarauder"/>
+    </CValidatorUnitCompareBehaviorCount>
     <CValidatorUnitOrderQueue id="Kit@LaserDrillNotAttacking">
         <AbilLink value="AttackAllowsInvulnerable"/>
         <Find value="0"/>
     </CValidatorUnitOrderQueue>
+    <!-- Diamondback -->
+    <CValidatorUnitCompareBehaviorCount id="AttackTrackedByDiamondback">
+        <Compare value="GT"/>
+        <Behavior value="DiamondbackAttackTracker"/>
+        <RequireCasterUnit Value="Caster"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="DiamondbackChasing">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GT"/>
+        <Behavior value="DiamondbackChasing"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitType id="NotSiegedTankMerc">
+        <Value value="SiegeBreakerSieged"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitCompareBehaviorCount id="TransientTrackedByDiamondback">
+        <Compare value="GT"/>
+        <Behavior value="DiamondbackTransientTracker"/>
+        <RequireCasterUnit Value="Caster"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="DiamondbackTrackingTarget">
+        <Type value="And"/>
+        <CombineArray value="CasterAndTargetNotDead"/>
+        <CombineArray value="WithinDiamondbackAttackRangeorChasing"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareAttackPriority id="ThreatensDiamondback" parent="ThreatensUnit" unitLink="Diamondback"/>
+    <CValidatorCombine id="WithinDiamondbackAttackRangeorChasing">
+        <CombineArray value="DiamondbackTargetWithinWeaponRange"/>
+        <CombineArray value="DiamondbackChasing"/>
+    </CValidatorCombine>
+    <CValidatorLocationCompareRange id="DiamondbackTargetWithinWeaponRange">
+        <Compare value="LE"/>
+        <Range value="7.5"/>
+        <WhichLocation Value="TargetUnit"/>
+    </CValidatorLocationCompareRange>
+    <!-- Merc Battlecruiser -->
+    <CValidatorLocationArc id="Kit@TargetIn90Arc">
+        <WhichLocation Value="CasterUnit"/>
+        <Arc value="270"/>
+        <Value Value="TargetUnit"/>
+    </CValidatorLocationArc>
+    <CValidatorLocationCompareRange id="Kit@TargetGTE2Range">
+        <WhichLocation Value="TargetUnit"/>
+        <Compare value="GE"/>
+        <Range value="2"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorCombine id="Kit@MercBattlecruiserUseCannonGround">
+        <CombineArray value="CasterIsStationary"/>
+        <CombineArray value="Kit@TargetGTE2Range"/>
+        <CombineArray value="Kit@TargetIn90Arc"/>
+        <CombineArray value="GroundUnitFilter"/>
+        <Type value="And"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="Kit@MercBattlecruiserUseCannonAir">
+        <CombineArray value="CasterIsStationary"/>
+        <CombineArray value="Kit@TargetGTE2Range"/>
+        <CombineArray value="Kit@TargetIn90Arc"/>
+        <CombineArray value="AirUnitFilter"/>
+        <Type value="And"/>
+    </CValidatorCombine>
+    <!-- Battlecruiser -->
+    <CValidatorUnitCompareBehaviorCount id="AttackTrackedByBattlecruiser">
+        <Compare value="GT"/>
+        <Behavior value="BattlecruiserAttackTracker"/>
+        <RequireCasterUnit Value="Caster"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="BattlecruiserChasing">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GT"/>
+        <Behavior value="BattlecruiserChasing"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="TransientTrackedByBattlecruiser">
+        <Compare value="GT"/>
+        <Behavior value="BattlecruiserTransientTracker"/>
+        <RequireCasterUnit Value="Caster"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="BattlecruiserTrackingTarget">
+        <Type value="And"/>
+        <CombineArray value="CasterAndTargetNotDead"/>
+        <CombineArray value="WithinBattlecruiserAttackRangeorChasing"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareAttackPriority id="ThreatensBattlecruiser" parent="ThreatensUnit" unitLink="Battlecruiser"/>
+    <CValidatorCombine id="WithinBattlecruiserAttackRangeorChasing">
+        <CombineArray value="BattlecruiserTargetWithinWeaponRange"/>
+        <CombineArray value="BattlecruiserChasing"/>
+    </CValidatorCombine>
+    <CValidatorLocationCompareRange id="BattlecruiserTargetWithinWeaponRange">
+        <Compare value="LE"/>
+        <Range value="6.5"/>
+        <WhichLocation Value="TargetUnit"/>
+    </CValidatorLocationCompareRange>
     <!-- Nexus Mass Recall -->
     <CValidatorUnitCompareBehaviorCount id="IsNotRecallingNexus">
         <Behavior value="NexusMassRecallWarpOut"/>

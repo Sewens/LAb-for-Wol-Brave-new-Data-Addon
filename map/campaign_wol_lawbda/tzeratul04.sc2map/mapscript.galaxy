@@ -7,7 +7,10 @@
 //==================================================================================================
 include "TriggerLibs/NativeLib"
 include "TriggerLibs/LibertyLib"
-include "TriggerLibs/CampaignLib"
+include "LibCamp"
+include "LibWoLC"
+include "LibWCMI"
+include "LibWCUI"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -16,6 +19,9 @@ void InitLibs () {
     libNtve_InitLib();
     libLbty_InitLib();
     libCamp_InitLib();
+    libWoLC_InitLib();
+    libWCMI_InitLib();
+    libWCUI_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -54,7 +60,7 @@ int gv_selendisKills;
 int gv_artanisKills;
 timer gv_protectArchiveTimer;
 int[11] gv_mineralFieldAmounts;
-int gv_leaderboard;
+int gv_endMissionButton;
 int gv_killCount;
 unitgroup gv_gGWavesUnitGroup;
 fixed gv_nydusSpawnDelay;
@@ -65,8 +71,6 @@ int gv_achievementTier1kills;
 int gv_achievementTier2kills;
 int gv_statAchievementTierLevel;
 int gv_statHeroKills;
-int gv_statArchiveResearchPoints;
-int gv_statZergResearchPoints;
 int gv_objectiveSurviveUntilYouDie;
 int gv_objectiveKillPrimary;
 int gv_objectiveProtectArchive;
@@ -94,7 +98,7 @@ void InitGlobals () {
     gv_superWarpGate_P10 = UnitFromId(637);
     gv_zeratul = UnitFromId(34);
     gv_protectArchiveTimer = TimerCreate();
-    gv_leaderboard = c_boardNone;
+    gv_endMissionButton = c_invalidDialogControlId;
     gv_gGWavesUnitGroup = UnitGroupEmpty();
     gv_nydusSpawnDelay = 2.0;
     gv_statAchievementTierLevel = 1;
@@ -109,6 +113,7 @@ void InitGlobals () {
 //--------------------------------------------------------------------------------------------------
 // Global Function Declarations
 //--------------------------------------------------------------------------------------------------
+void gf_DisplayEndMissionButton ();
 fixed gf_WaitSpecial (fixed lp_a, fixed lp_b);
 void gf_SpawnSuicidalAttackerGround (string lp_paraUnitType, int lp_paraPlayer);
 void gf_SpawnSuicidalAttackerAir (string lp_paraUnitType, int lp_paraPlayer);
@@ -127,6 +132,7 @@ trigger gt_Init04Music;
 trigger gt_Init05Environment;
 trigger gt_Init06Difficulties;
 trigger gt_Init07Help;
+trigger gt_EndMissionButtonClicked;
 trigger gt_IntroSequence;
 trigger gt_StartGameStage1;
 trigger gt_StartGameStage2;
@@ -231,6 +237,19 @@ trigger gt_VictoryHybridExplosion;
 //--------------------------------------------------------------------------------------------------
 // Global Functions
 //--------------------------------------------------------------------------------------------------
+void gf_DisplayEndMissionButton () {
+    // Automatic Variable Declarations
+    // Implementation
+    if ((gv_endMissionButton != c_invalidDialogControlId)) {
+        return ;
+    }
+
+    DialogControlHookupStandard(c_triggerControlTypeButton, "UIContainer/ConsoleUIContainer/Zeratul04EndMission");
+    gv_endMissionButton = DialogControlLastCreated();
+    DialogControlSetVisible(gv_endMissionButton, PlayerGroupAll(), true);
+    TriggerEnable(gt_EndMissionButtonClicked, true);
+}
+
 fixed gf_WaitSpecial (fixed lp_a, fixed lp_b) {
     // Automatic Variable Declarations
     // Implementation
@@ -321,7 +340,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_LoadCampaignData(libCamp_ge_MapID_MapTZeratul04);
+    libWoLC_gf_ULoadCampaignData("TZeratul04");
     TriggerExecute(gt_Init01Technology, true, true);
     TriggerExecute(gt_Init02Players, true, true);
     TriggerExecute(gt_Init03Units, true, true);
@@ -329,8 +348,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init05Environment, true, true);
     TriggerExecute(gt_Init06Difficulties, true, true);
     TriggerExecute(gt_Init07Help, true, true);
-    libCamp_gf_RegisterFootageRecording(gt_BriefingQ);
-    libCamp_gf_PurchaseStorymodeTech();
+    libWoLC_gf_RegisterFootageRecording(gt_BriefingQ);
     TriggerExecute(gt_IntroQ, true, false);
     return true;
 }
@@ -351,17 +369,23 @@ bool gt_Init01Technology_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_SetTechRestrictionsCallback(TriggerGetCurrent());
-    TechTreeUpgradeAddLevel(gv_p01_PLAYER, "Charge", 1);
-    TechTreeUpgradeAddLevel(gv_p01_PLAYER, "BlinkTech", 1);
-    TechTreeUpgradeAddLevel(gv_p01_PLAYER, "PsiStormTech", 1);
-    TechTreeUpgradeAddLevel(gv_p01_PLAYER, "HighTemplarKhaydarinAmulet", 1);
-    TechTreeUpgradeAddLevel(gv_p01_PLAYER, "ObserverGraviticBooster", 1);
-    TechTreeUpgradeAddLevel(gv_p01_PLAYER, "ExtendedThermalLance", 1);
-    TechTreeUpgradeAddLevel(gv_p01_PLAYER, "VoidRaySpeedUpgrade", 1);
-    TechTreeUpgradeAddLevel(gv_p01_PLAYER, "CarrierLaunchSpeedUpgrade", 1);
     TechTreeUpgradeAddLevel(gv_p01_PLAYER, "WarpGateResearch", 1);
     TechTreeAbilityAllow(gv_p01_PLAYER, AbilityCommand("UpgradeToWarpGate", 0), true);
+    TechTreeUnitAllow(gv_p01_PLAYER, "Zealot", true);
+    TechTreeUnitAllow(gv_p01_PLAYER, "HighTemplar", true);
+    TechTreeUnitAllow(gv_p01_PLAYER, "Archon", true);
+    TechTreeUnitAllow(gv_p01_PLAYER, "DarkTemplar", true);
+    TechTreeUnitAllow(gv_p01_PLAYER, "Stalker", true);
+    TechTreeAbilityAllow(gv_p01_PLAYER, AbilityCommand("Blink", 0), true);
+    TechTreeUnitAllow(gv_p01_PLAYER, "Sentry", true);
+    TechTreeUpgradeAddLevel(gv_p01_PLAYER, "VoidSentryShieldRepair", 1);
+    TechTreeAbilityAllow(gv_p01_PLAYER, AbilityCommand("VoidSentryShieldRepair", 0), true);
+    TechTreeAbilityAllow(gv_p01_PLAYER, AbilityCommand("ForceField", 0), true);
+    TechTreeUnitAllow(gv_p01_PLAYER, "Immortal", true);
+    TechTreeUnitAllow(gv_p01_PLAYER, "Observer", true);
+    TechTreeUnitAllow(gv_p01_PLAYER, "Colossus", true);
+    TechTreeUpgradeAddLevel(gv_p01_PLAYER, "ExtendedThermalLance", 1);
+    TechTreeAbilityAllow(gv_p01_PLAYER, AbilityCommand("ProtossBuild", 24), false);
     TechTreeAbilityAllow(gv_p01_PLAYER, AbilityCommand("ForgeResearch", 0), true);
     TechTreeAbilityAllow(gv_p01_PLAYER, AbilityCommand("ForgeResearch", 1), true);
     TechTreeAbilityAllow(gv_p01_PLAYER, AbilityCommand("ForgeResearch", 2), true);
@@ -383,6 +407,9 @@ bool gt_Init01Technology_Func (bool testConds, bool runActions) {
     TechTreeAbilityAllow(gv_p10_REINFORCEMENTPROTOSS, AbilityCommand("SuperWarpGateTrain", 7), true);
     TechTreeAbilityAllow(gv_p10_REINFORCEMENTPROTOSS, AbilityCommand("SuperWarpGateTrain", 8), true);
     TechTreeAbilityAllow(gv_p10_REINFORCEMENTPROTOSS, AbilityCommand("SuperWarpGateTrain", 6), true);
+    TechTreeUpgradeAddLevel(gv_p01_PLAYER, "VoidPhoenixGravitonCampaignVersion", 1);
+    TechTreeUpgradeAddLevel(gv_p01_PLAYER, "PhoenixRangeUpgrade", 1);
+    TechTreeUpgradeAddLevel(gv_p01_PLAYER, "VoidRaySpeedUpgrade", 1);
     return true;
 }
 
@@ -447,6 +474,7 @@ bool gt_Init02Players_Func (bool testConds, bool runActions) {
     PlayerSetColorIndex(gv_p05_ZERG_NE, 4, true);
     PlayerSetColorIndex(gv_p06_ZERG_SE, 4, true);
     PlayerSetColorIndex(gv_p07_FRENZIED_ZERG, 4, true);
+    libWCMI_gf_WM_DetectionUpgradesApply();
     return true;
 }
 
@@ -460,12 +488,12 @@ void gt_Init02Players_Init () {
 //--------------------------------------------------------------------------------------------------
 bool gt_Init03Units_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
+    unitgroup auto015A039D_g;
+    int auto015A039D_u;
+    unit auto015A039D_var;
     unitgroup autoDDCF4B99_g;
     int autoDDCF4B99_u;
     unit autoDDCF4B99_var;
-    unitgroup auto1409AA2F_g;
-    int auto1409AA2F_u;
-    unit auto1409AA2F_var;
     unitgroup auto9F375F4C_g;
     int auto9F375F4C_u;
     unit auto9F375F4C_var;
@@ -488,19 +516,19 @@ bool gt_Init03Units_Func (bool testConds, bool runActions) {
     libNtve_gf_MakeUnitInvulnerable(UnitFromId(716), false);
     UnitSetPropertyFixed(UnitFromId(716), c_unitPropLifeMax, 1500.0);
     UnitSetPropertyFixed(UnitFromId(716), c_unitPropLife, 1500.0);
+    auto015A039D_g = UnitGroup("Observer", c_playerAny, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+    auto015A039D_u = UnitGroupCount(auto015A039D_g, c_unitCountAll);
+    for (;; auto015A039D_u -= 1) {
+        auto015A039D_var = UnitGroupUnitFromEnd(auto015A039D_g, auto015A039D_u);
+        if (auto015A039D_var == null) { break; }
+        UnitIssueOrder(auto015A039D_var, Order(AbilityCommand("Kit@ObserverMorphtoObserverSiege", 0)), c_orderQueueReplace);
+    }
     autoDDCF4B99_g = UnitGroup("HighTemplar", c_playerAny, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     autoDDCF4B99_u = UnitGroupCount(autoDDCF4B99_g, c_unitCountAll);
     for (;; autoDDCF4B99_u -= 1) {
         autoDDCF4B99_var = UnitGroupUnitFromEnd(autoDDCF4B99_g, autoDDCF4B99_u);
         if (autoDDCF4B99_var == null) { break; }
         UnitSetPropertyFixed(autoDDCF4B99_var, c_unitPropEnergyPercent, 100.0);
-    }
-    auto1409AA2F_g = UnitGroup("Phoenix", c_playerAny, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
-    auto1409AA2F_u = UnitGroupCount(auto1409AA2F_g, c_unitCountAll);
-    for (;; auto1409AA2F_u -= 1) {
-        auto1409AA2F_var = UnitGroupUnitFromEnd(auto1409AA2F_g, auto1409AA2F_u);
-        if (auto1409AA2F_var == null) { break; }
-        UnitSetPropertyFixed(auto1409AA2F_var, c_unitPropEnergyPercent, 100.0);
     }
     auto9F375F4C_g = UnitGroup("MineralField", c_playerAny, RegionFromId(34), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     auto9F375F4C_u = UnitGroupCount(auto9F375F4C_g, c_unitCountAll);
@@ -595,13 +623,6 @@ bool gt_Init06Difficulties_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    if ((PlayerDifficulty(gv_p01_PLAYER) == 1)) {
-        PlayerModifyPropertyInt(gv_p04_ZERG_NW, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p05_ZERG_NE, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p06_ZERG_SE, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p07_FRENZIED_ZERG, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-    }
-
     gv_sTAGE_01_KILL_QUOTA = libNtve_gf_DifficultyValueInt(1500, 1500, 2000, 2500);
     gv_achievementTier1kills = (gv_sTAGE_01_KILL_QUOTA + 250);
     gv_achievementTier2kills = (gv_achievementTier1kills + 500);
@@ -691,6 +712,53 @@ void gt_Init07Help_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: End Mission Button Clicked
+//--------------------------------------------------------------------------------------------------
+bool gt_EndMissionButtonClicked_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    unitgroup auto947E29A0_g;
+    int auto947E29A0_u;
+    unit auto947E29A0_var;
+
+    // Conditions
+    if (testConds) {
+        if (!((gv_endMissionButton != c_invalidDialogControlId))) {
+            return false;
+        }
+
+        if (!((EventDialogControl() == gv_endMissionButton))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    DialogControlSetVisible(gv_endMissionButton, PlayerGroupAll(), false);
+    while ((UnitCount(null, gv_p01_PLAYER, RegionPlayableMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0) > 0)) {
+        auto947E29A0_g = UnitGroup(null, gv_p01_PLAYER, RegionPlayableMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+        auto947E29A0_u = UnitGroupCount(auto947E29A0_g, c_unitCountAll);
+        for (;; auto947E29A0_u -= 1) {
+            auto947E29A0_var = UnitGroupUnitFromEnd(auto947E29A0_g, auto947E29A0_u);
+            if (auto947E29A0_var == null) { break; }
+            UnitKill(auto947E29A0_var);
+            Wait(0.0625, c_timeGame);
+        }
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_EndMissionButtonClicked_Init () {
+    gt_EndMissionButtonClicked = TriggerCreate("gt_EndMissionButtonClicked_Func");
+    TriggerEnable(gt_EndMissionButtonClicked, false);
+    TriggerAddEventDialogControl(gt_EndMissionButtonClicked, c_playerAny, c_invalidDialogControlId, c_triggerControlEventTypeClick);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: Intro Sequence
 //--------------------------------------------------------------------------------------------------
 bool gt_IntroSequence_Func (bool testConds, bool runActions) {
@@ -758,6 +826,7 @@ bool gt_StartGameStage2_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    gf_DisplayEndMissionButton();
     TriggerExecute(gt_AttackWavesStage2P04NW, true, false);
     TriggerExecute(gt_AttackWavesStage2P05NE, true, false);
     TriggerExecute(gt_AttackWavesStage2P06SE, true, false);
@@ -781,13 +850,8 @@ bool gt_CreateLeaderboard_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    BoardCreate(1, 1, StringToText(""), Color(100.00, 100.00, 100.00));
-    gv_leaderboard = BoardLastCreated();
-    BoardSetState(gv_leaderboard, PlayerGroupAll(), c_boardStateShowHeader, true);
-    BoardSetState(gv_leaderboard, PlayerGroupAll(), c_boardStateShowTitle, false);
-    BoardItemSetText(gv_leaderboard, 1, c_boardRowHeader, StringExternal("Param/Value/48D05F48"));
-    BoardItemSetText(gv_leaderboard, 1, 1, IntToText(gv_killCount));
-    BoardMinimizeShow(gv_leaderboard, PlayerGroupAll(), false);
+    libWCUI_gf_DisplayCounterWindow(StringExternal("Param/Value/4CD5E272"));
+    libWCUI_gf_SetCounterWindowValue(gv_killCount);
     return true;
 }
 
@@ -862,18 +926,18 @@ bool gt_UpdateLeaderboardZergorHybridKilled_Func (bool testConds, bool runAction
         gv_statHeroKills += 1;
     }
 
-    BoardItemSetText(gv_leaderboard, 1, 1, IntToText(gv_killCount));
+    libWCUI_gf_SetCounterWindowValue(gv_killCount);
     if (((UnitGetType(EventUnit()) == "HybridDestroyer") || (UnitGetType(EventUnit()) == "HybridReaver"))) {
         gv_hybridSlain += 1;
     }
 
     if ((gv_killCount >= gv_achievementTier1kills) && (libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1)) {
-        AchievementAward(gv_p01_PLAYER, "TZeratul04_2");
+        libWoLC_gf_CampaignAwardAchievement("TZeratul04_2");
         gv_statAchievementTierLevel = 2;
     }
 
     if ((gv_killCount >= gv_achievementTier2kills) && (libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1)) {
-        AchievementAward(gv_p01_PLAYER, "TZeratul04_3");
+        libWoLC_gf_CampaignAwardAchievement("TZeratul04_3");
         gv_statAchievementTierLevel = 0;
     }
 
@@ -923,8 +987,6 @@ bool gt_PrimaryKillCountComplete_Func (bool testConds, bool runActions) {
     TriggerStop(gt_SwarmWaveC1P05NE);
     TriggerStop(gt_SwarmWaveC2P04NW);
     TriggerStop(gt_SwarmWaveC3P06SE);
-    gv_statZergResearchPoints = libCamp_gf_StoryResearchObjectReward(libCamp_ge_StoryResearchObject_ResearchObjectKill1500Zerg, libCamp_ge_StoryResearchCategory_ResearchCategoryZerg);
-    libCamp_gf_AddProgressToStoryResearch(libCamp_ge_StoryResearchObject_ResearchObjectKill1500Zerg, 1);
     TriggerExecute(gt_ObjectiveSurvivePrimaryComplete, true, true);
     TriggerExecute(gt_MidQ, true, false);
     return true;
@@ -1006,7 +1068,7 @@ bool gt_NewTech01PhoenixQ_Func (bool testConds, bool runActions) {
     UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 7), PointFromId(634)), c_orderQueueAddToEnd);
     UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 7), PointFromId(109)), c_orderQueueAddToEnd);
     UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 7), PointFromId(124)), c_orderQueueAddToEnd);
-    TechTreeAbilityAllow(gv_p01_PLAYER, AbilityCommand("StargateTrain", 0), true);
+    TechTreeUnitAllow(gv_p01_PLAYER, "Phoenix", true);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
     libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
     UIAlertPoint("Trigger", gv_p01_PLAYER, StringExternal("Param/Value/8403F3B6"), null, UnitGetPosition(UnitFromId(639)));
@@ -1021,7 +1083,6 @@ bool gt_NewTech01PhoenixQ_Func (bool testConds, bool runActions) {
     ActorSend(ActorFromDoodad(DoodadFromId(482)), "AnimGroupRemove Work");
     Wait(1.0, c_timeGame);
     libCamp_gf_CreateTipFromConversationState("StoryTips|Zeratul04_Phoenix", libNtve_ge_TipType_NewUnit, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
     TriggerQueueExit();
     return true;
 }
@@ -1068,7 +1129,7 @@ bool gt_NewTech02VoidRayQ_Func (bool testConds, bool runActions) {
     UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 0), PointFromId(672)), c_orderQueueReplace);
     UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 0), PointFromId(678)), c_orderQueueReplace);
     UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 0), PointFromId(677)), c_orderQueueReplace);
-    TechTreeAbilityAllow(gv_p01_PLAYER, AbilityCommand("StargateTrain", 4), true);
+    TechTreeUnitAllow(gv_p01_PLAYER, "VoidRay", true);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
     libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
     UIAlertPoint("Trigger", gv_p01_PLAYER, StringExternal("Param/Value/5DAFE246"), null, UnitGetPosition(UnitFromId(639)));
@@ -1083,7 +1144,6 @@ bool gt_NewTech02VoidRayQ_Func (bool testConds, bool runActions) {
     ActorSend(ActorFromDoodad(DoodadFromId(482)), "AnimGroupRemove Work");
     Wait(1.0, c_timeGame);
     libCamp_gf_CreateTipFromConversationState("StoryTips|Zeratul04_VoidRay", libNtve_ge_TipType_NewUnit, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
     TriggerQueueExit();
     return true;
 }
@@ -1131,7 +1191,7 @@ bool gt_NewTech03CarriersQ_Func (bool testConds, bool runActions) {
     UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 0), PointFromId(678)), c_orderQueueReplace);
     UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 2), PointFromId(681)), c_orderQueueReplace);
     UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 2), PointFromId(682)), c_orderQueueReplace);
-    TechTreeAbilityAllow(gv_p01_PLAYER, AbilityCommand("StargateTrain", 2), true);
+    TechTreeUnitAllow(gv_p01_PLAYER, "Carrier", true);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
     libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
     UIAlertPoint("Trigger", gv_p01_PLAYER, StringExternal("Param/Value/7D557C0A"), null, UnitGetPosition(UnitFromId(639)));
@@ -1148,7 +1208,6 @@ bool gt_NewTech03CarriersQ_Func (bool testConds, bool runActions) {
     ActorSend(ActorFromDoodad(DoodadFromId(482)), "AnimGroupRemove Work");
     Wait(1.0, c_timeGame);
     libCamp_gf_CreateTipFromConversationState("StoryTips|Zeratul04_Carrier", libNtve_ge_TipType_NewUnit, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
     TriggerQueueExit();
     return true;
 }
@@ -1210,7 +1269,6 @@ bool gt_NewTech04MothershipQ_Func (bool testConds, bool runActions) {
     ActorSend(ActorFromDoodad(DoodadFromId(482)), "AnimGroupRemove Work");
     Wait(1.0, c_timeGame);
     libCamp_gf_CreateTipFromConversationState("StoryTips|Zeratul04_Mothership", libNtve_ge_TipType_NewUnit, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
     TriggerQueueExit();
     return true;
 }
@@ -1247,10 +1305,6 @@ bool gt_ReinforcementBehavior_Func (bool testConds, bool runActions) {
 
     if ((UnitGetType(EventUnitProgressUnit()) == "Carrier")) {
         UnitMagazineArm(EventUnitProgressUnit(), AbilityCommand("CarrierHangar", 0), 4);
-    }
-
-    if ((UnitGetType(EventUnitProgressUnit()) == "Phoenix")) {
-        UnitSetPropertyFixed(EventUnitProgressUnit(), c_unitPropEnergyPercent, 100.0);
     }
 
     if ((UnitGetType(EventUnitProgressUnit()) == "Urun")) {
@@ -3275,13 +3329,6 @@ bool gt_AttackWavesEndGameAirKillers_Func (bool testConds, bool runActions) {
 
     TriggerExecute(gt_EndGameCreepTumorCorruption, true, false);
     TriggerExecute(gt_TransmissionHybridIncoming2Q, true, false);
-    if ((PlayerDifficulty(gv_p01_PLAYER) == 1)) {
-        PlayerModifyPropertyInt(gv_p04_ZERG_NW, c_playerPropHandicap, c_playerPropOperSetTo, 75);
-        PlayerModifyPropertyInt(gv_p05_ZERG_NE, c_playerPropHandicap, c_playerPropOperSetTo, 75);
-        PlayerModifyPropertyInt(gv_p06_ZERG_SE, c_playerPropHandicap, c_playerPropOperSetTo, 75);
-        PlayerModifyPropertyInt(gv_p07_FRENZIED_ZERG, c_playerPropHandicap, c_playerPropOperSetTo, 75);
-    }
-
     libNtve_gf_CreateUnitsAtPoint2(libNtve_gf_DifficultyValueInt(7, 7, 8, 11), "Mutalisk", 0, gv_p05_ZERG_NE, RegionRandomPoint(RegionFromId(2)));
     libNtve_gf_AddUnitGroupToUnitGroup(UnitLastCreatedGroup(), gv_gGWavesUnitGroup);
     AIAttackWaveUseGroup(gv_p05_ZERG_NE, UnitLastCreatedGroup());
@@ -3348,13 +3395,6 @@ bool gt_AttackWavesEndGameAirKillers_Func (bool testConds, bool runActions) {
     AIAttackWaveSend(gv_p04_ZERG_NW, 0, false);
     gv_statWavessent += 1;
     Wait(gf_WaitSpecial(40.0, 20.0), c_timeAI);
-    if ((PlayerDifficulty(gv_p01_PLAYER) == 1)) {
-        PlayerModifyPropertyInt(gv_p04_ZERG_NW, c_playerPropHandicap, c_playerPropOperSetTo, 100);
-        PlayerModifyPropertyInt(gv_p05_ZERG_NE, c_playerPropHandicap, c_playerPropOperSetTo, 100);
-        PlayerModifyPropertyInt(gv_p06_ZERG_SE, c_playerPropHandicap, c_playerPropOperSetTo, 100);
-        PlayerModifyPropertyInt(gv_p07_FRENZIED_ZERG, c_playerPropHandicap, c_playerPropOperSetTo, 100);
-    }
-
     while (true) {
         if ((UnitGroupCount(gv_gGWavesUnitGroup, c_unitCountAlive) <= 350)) {
             libNtve_gf_CreateUnitsAtPoint2(libNtve_gf_DifficultyValueInt(8, 8, 10, 12), "Mutalisk", 0, gv_p05_ZERG_NE, RegionRandomPoint(RegionFromId(2)));
@@ -4586,7 +4626,10 @@ bool gt_TransmissionTemplarsStoreKnowledgeQ_Func (bool testConds, bool runAction
     UnitIssueOrder(gv_superWarpGate_P08, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 3), PointFromId(845)), c_orderQueueReplace);
     UnitIssueOrder(gv_superWarpGate_P08, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 3), PointFromId(847)), c_orderQueueReplace);
     Wait(7.0, c_timeGame);
-    CameraPan(gv_p01_PLAYER, UnitGetPosition(UnitFromId(716)), 2.0, -1, 10, false);
+    if ((libNtve_gf_DifficultyValueInt(1, 0, 0, 0) == 1)) {
+        CameraPan(gv_p01_PLAYER, UnitGetPosition(UnitFromId(716)), 2.0, -1, 10, false);
+    }
+
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
     libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
     // Transmission - SoundLink("TZeratul04HighTemplar00034", -1)
@@ -5034,17 +5077,17 @@ bool gt_VictoryDefeatforPlayer_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     gv_gameOver = true;
-    ObjectiveSetState(gv_objectiveSurviveUntilYouDie, c_objectiveStateCompleted);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    libWCMI_gf_ZS_SetMissionObjectiveState("TZeratul04_2", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     if ((gv_killCount >= gv_sTAGE_01_KILL_QUOTA)) {
-        libCamp_gf_RunMissionVictorySequence(gt_VictoryQ);
+        libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
     }
     else {
         TriggerQueuePause(true);
         TriggerQueueClear(c_triggerQueueRemove);
         Wait(2.0, c_timeReal);
         libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/D472A25B"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-        Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+        Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
         TriggerExecute(gt_Defeat, true, false);
     }
     return true;
@@ -5074,7 +5117,7 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     }
 
     if ((ObjectiveGetState(gv_objectiveKillPrimary) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_objectiveProtectArchive) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_objectiveSurviveUntilYouDie) == c_objectiveStateCompleted)) {
-        AchievementAward(gv_p01_PLAYER, "TZeratul04_1");
+        libWoLC_gf_CampaignAwardAchievement("TZeratul04_1");
     }
 
     VictoryPanelAddAchievement("TZeratul04_1");
@@ -5087,7 +5130,7 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/F2044A9B"), IntToText(gv_hybridSlain));
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/2B398FDF"), IntToText(gv_statHeroKills));
     if ((gv_stargateUnitBuilt == false) && (libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1)) {
-        AchievementAward(gv_p01_PLAYER, "Anniversary_TZeratul04");
+        libWoLC_gf_CampaignAwardAchievement("Anniversary_TZeratul04");
         TriggerDebugOutput(1, StringExternal("Param/Value/1E4D88F9"), false);
     }
 
@@ -5108,10 +5151,7 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
         }
     }
 
-    VictoryPanelAddCustomStatisticLine(StringToText(""), StringToText(""));
-    VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/5B12EC7A"), IntToText(gv_statArchiveResearchPoints));
-    VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/BD109A4D"), IntToText(gv_statZergResearchPoints));
-    libCamp_gf_EndCampaignMission(gv_p01_PLAYER, c_gameOverVictory);
+    libWCMI_gf_EndCampaignMission(gv_p01_PLAYER, c_gameOverVictory);
     return true;
 }
 
@@ -5130,7 +5170,7 @@ bool gt_Defeat_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_EndCampaignMission(gv_p01_PLAYER, c_gameOverDefeat);
+    libWCMI_gf_EndCampaignMission(gv_p01_PLAYER, c_gameOverDefeat);
     return true;
 }
 
@@ -5157,7 +5197,7 @@ bool gt_VictoryCheat_Func (bool testConds, bool runActions) {
     }
 
     gv_gameOver = true;
-    libCamp_gf_RunMissionVictorySequence(gt_Victory);
+    libWCMI_gf_RunMissionVictorySequence(gt_Victory);
     return true;
 }
 
@@ -5213,14 +5253,12 @@ bool gt_ObjectiveSurviveCreateQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate((TextReplaceWord(StringExternal("Param/Value/F6F153EE"), StringExternal("Param/Value/E46C4938"), IntToText(gv_sTAGE_01_KILL_QUOTA), c_stringReplaceAll, c_stringCase) + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectKill1500Zerg, libCamp_ge_StoryResearchObjectiveTextStyle_Lumpsum, 1, 0)), StringExternal("Param/Value/1F2F72F6"), c_objectiveStateActive, true);
+    libWCMI_gf_CreateObjectiveCampaign("TZeratul04_1");
+    libWCMI_gf_SetMissionObjectiveProgress2("TZeratul04_1", IntToText(gv_sTAGE_01_KILL_QUOTA));
     gv_objectiveKillPrimary = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_TZeratul04Objective1, ObjectiveLastCreated(), StringExternal("Param/Value/09C0A593"));
-    ObjectiveCreate(StringExternal("Param/Value/D6B7F35F"), StringExternal("Param/Value/97923284"), c_objectiveStateActive, true);
+    libWCMI_gf_CreateObjectiveCampaign("TZeratul04_2");
     gv_objectiveSurviveUntilYouDie = ObjectiveLastCreated();
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -5248,9 +5286,8 @@ bool gt_ObjectiveSurvivePrimaryComplete_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveSurviveCreateQ, true, false);
-    ObjectiveSetState(gv_objectiveKillPrimary, c_objectiveStateCompleted);
-    ObjectiveSetName(gv_objectiveKillPrimary, (TextReplaceWord(StringExternal("Param/Value/93FAEACE"), StringExternal("Param/Value/5FE97FBF"), IntToText(gv_sTAGE_01_KILL_QUOTA), c_stringReplaceAll, c_stringCase) + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectKill1500Zerg, libCamp_ge_StoryResearchObjectiveTextStyle_Lumpsum, 1, 1)));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    libWCMI_gf_ZS_SetMissionObjectiveState("TZeratul04_1", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -5277,13 +5314,10 @@ bool gt_ObjectiveProtectArchiveCreateQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate((StringExternal("Param/Value/7BC07007") + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectProtecttheArchive, libCamp_ge_StoryResearchObjectiveTextStyle_Lumpsum, 1, 0)), StringExternal("Param/Value/E45D7291"), c_objectiveStateActive, false);
+    libWCMI_gf_CreateObjectiveCampaign("TZeratul04_3");
     gv_objectiveProtectArchive = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_TZeratul04Objective3, ObjectiveLastCreated(), StringExternal("Param/Value/691FF230"));
     Wait(4.0, c_timeReal);
     TriggerEnable(gt_ObjectiveProtectArchiveUpdate, true);
-    TriggerQueueExit();
     return true;
 }
 
@@ -5323,7 +5357,8 @@ bool gt_ObjectiveProtectArchiveUpdate_Func (bool testConds, bool runActions) {
     }
 
     lv_tIMER = FixedToInt(TimerGetRemaining(gv_protectArchiveTimer));
-    ObjectiveSetName(gv_objectiveProtectArchive, (StringExternal("Param/Value/0A3D9279") + libCamp_gf_FormatTimeCampaign(lv_tIMER) + StringExternal("Param/Value/3BC7D8C2") + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectProtecttheArchive, libCamp_ge_StoryResearchObjectiveTextStyle_Lumpsum, 1, 0)));
+    TextExpressionSetToken("Param/Expression/12942C3D", "A", libWoLC_gf_FormatTimeCampaign(lv_tIMER));
+    libWCMI_gf_SetMissionObjectiveProgress2("TZeratul04_3", TextExpressionAssemble("Param/Expression/12942C3D"));
     return true;
 }
 
@@ -5361,18 +5396,17 @@ bool gt_ObjectiveProtectArchiveComplete_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     if ((UnitIsAlive(UnitFromId(716)) == true)) {
-        gv_statArchiveResearchPoints = libCamp_gf_StoryResearchObjectReward(libCamp_ge_StoryResearchObject_ResearchObjectProtecttheArchive, libCamp_ge_StoryResearchCategory_ResearchCategoryProtoss);
         libNtve_gf_MakeUnitInvulnerable(UnitFromId(716), true);
         libNtve_gf_PlayAnimation(libNtve_gf_MainActorofUnit(UnitFromId(716)), c_animNameDefault, "Stand Work Start", c_animFlagPlayForever | c_animFlagNonLooping, c_animTimeDefault);
-        libCamp_gf_DisplayResearchPointsGiventoPlayer(libCamp_ge_StoryResearchObject_ResearchObjectProtecttheArchive, UnitFromId(716), gv_p01_PLAYER);
+        libWCMI_gf_DisplayMissionObjectiveRewardFloatingText(UnitGetPosition(UnitFromId(716)), "TZeratul04_3");
     }
 
     TriggerEnable(gt_ObjectiveProtectArchiveUpdate, false);
     TriggerEnable(gt_ObjectiveProtectArchiveFailed, false);
     TriggerExecute(gt_ObjectiveProtectArchiveCreateQ, true, false);
-    ObjectiveSetName(gv_objectiveProtectArchive, (StringExternal("Param/Value/BE65AF3D") + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectProtecttheArchive, libCamp_ge_StoryResearchObjectiveTextStyle_Lumpsum, 1, 1)));
-    ObjectiveSetState(gv_objectiveProtectArchive, c_objectiveStateCompleted);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    libWCMI_gf_SetMissionObjectiveProgress2("TZeratul04_3", StringToText(""));
+    libWCMI_gf_ZS_SetMissionObjectiveState("TZeratul04_3", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -5415,10 +5449,11 @@ bool gt_ObjectiveProtectArchiveFailed_Func (bool testConds, bool runActions) {
     gv_reinforcementAutoMove = false;
     TimerPause(gv_protectArchiveTimer, true);
     TriggerEnable(gt_ObjectiveProtectArchiveUpdate, false);
+    TriggerEnable(gt_ObjectiveProtectArchiveComplete, false);
     TriggerExecute(gt_ObjectiveProtectArchiveCreateQ, true, false);
-    ObjectiveSetName(gv_objectiveProtectArchive, (StringExternal("Param/Value/00B96633") + StringExternal("Param/Value/6A188D0E") + StringExternal("Param/Value/D1FBA455") + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectProtecttheArchive, libCamp_ge_StoryResearchObjectiveTextStyle_Lumpsum, 1, 0)));
-    ObjectiveSetState(gv_objectiveProtectArchive, c_objectiveStateFailed);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    libWCMI_gf_SetMissionObjectiveProgress2("TZeratul04_3", StringToText(""));
+    libWCMI_gf_ZS_SetMissionObjectiveState("TZeratul04_3", libWoLC_ge_MissionObjectiveState_Failed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -6017,6 +6052,7 @@ bool gt_IntroSetup_Func (bool testConds, bool runActions) {
         libNtve_gf_PauseUnit(auto78F9B2D4_var, false);
     }
     libLbty_gf_OrderWorkerstoGatherNearbyResources(RegionEntireMap(), gv_p01_PLAYER);
+    libWCMI_gf_SetWorkerRallyPointsPlayersNexuses(gv_p01_PLAYER);
     return true;
 }
 
@@ -6833,6 +6869,7 @@ void InitTriggers () {
     gt_Init05Environment_Init();
     gt_Init06Difficulties_Init();
     gt_Init07Help_Init();
+    gt_EndMissionButtonClicked_Init();
     gt_IntroSequence_Init();
     gt_StartGameStage1_Init();
     gt_StartGameStage2_Init();

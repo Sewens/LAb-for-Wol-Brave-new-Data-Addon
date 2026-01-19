@@ -7,7 +7,9 @@
 //==================================================================================================
 include "TriggerLibs/NativeLib"
 include "TriggerLibs/LibertyLib"
-include "TriggerLibs/CampaignLib"
+include "LibCamp"
+include "LibWoLC"
+include "LibWCMI"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -16,6 +18,8 @@ void InitLibs () {
     libNtve_InitLib();
     libLbty_InitLib();
     libCamp_InitLib();
+    libWoLC_InitLib();
+    libWCMI_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -267,7 +271,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_LoadCampaignData(libCamp_ge_MapID_MapTTychus01);
+    libWoLC_gf_ULoadCampaignData("TTychus01");
     TriggerExecute(gt_Init01Technology, true, true);
     TriggerExecute(gt_Init02Players, true, true);
     TriggerExecute(gt_Init03Units, true, true);
@@ -275,8 +279,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init05Environment, true, true);
     TriggerExecute(gt_Init06Difficulties, true, true);
     TriggerExecute(gt_Init07Help, true, true);
-    libCamp_gf_RegisterFootageRecording(gt_IntroBriefingQ);
-    libCamp_gf_PurchaseStorymodeTech();
+    libWoLC_gf_RegisterFootageRecording(gt_IntroBriefingQ);
     TriggerExecute(gt_IntroSequence, true, false);
     return true;
 }
@@ -297,7 +300,6 @@ bool gt_Init01Technology_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_SetTechRestrictionsCallback(TriggerGetCurrent());
     TechTreeUpgradeAddLevel(gv_p3_TEMPLE, "PsiStormTech", 1);
     TechTreeUpgradeAddLevel(gv_p3_TEMPLE, "HighTemplarKhaydarinAmulet", 1);
     TechTreeUpgradeAddLevel(gv_p4_LOWER_CAUSEWAY, "PsiStormTech", 1);
@@ -318,6 +320,9 @@ void gt_Init01Technology_Init () {
 //--------------------------------------------------------------------------------------------------
 bool gt_Init02Players_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
+    playergroup auto459C8F30_g;
+    int auto459C8F30_var;
+
     // Actions
     if (!runActions) {
         return true;
@@ -357,6 +362,15 @@ bool gt_Init02Players_Func (bool testConds, bool runActions) {
     PlayerModifyPropertyInt(gv_p3_TEMPLE, c_playerPropVespene, c_playerPropOperSetTo, 5000);
     PlayerSetState(gv_p3_TEMPLE, c_playerStateShowScore, false);
     PlayerSetState(gv_p6_FIRST_PROTOSS, c_playerStateShowScore, false);
+    auto459C8F30_g = gv_protossPlayers;
+    auto459C8F30_var = -1;
+    while (true) {
+        auto459C8F30_var = PlayerGroupNextPlayer(auto459C8F30_g, auto459C8F30_var);
+        if (auto459C8F30_var < 0) { break; }
+        libNtve_gf_PlayerApplySkinReplacingExistingUnit(auto459C8F30_var, "TaldarimCampaignSkin", true);
+        PlayerSetColorIndex(auto459C8F30_var, 3, true);
+    }
+    libWCMI_gf_WM_DetectionUpgradesApply();
     return true;
 }
 
@@ -371,46 +385,29 @@ void gt_Init02Players_Init () {
 bool gt_Init03Units_Func (bool testConds, bool runActions) {
     // Variable Declarations
     int lv_i;
-    bool lv_playerHasMercTech;
-    int lv_merc;
 
     // Automatic Variable Declarations
-    int auto65CDADE4_i;
     unitgroup autoB4BEC9FD_g;
     int autoB4BEC9FD_u;
     unit autoB4BEC9FD_var;
     unitgroup autoB5398E34_g;
     int autoB5398E34_u;
     unit autoB5398E34_var;
+    unitgroup auto9C010599_g;
+    int auto9C010599_u;
+    unit auto9C010599_var;
     unitgroup auto3DC7C8BE_g;
     int auto3DC7C8BE_u;
     unit auto3DC7C8BE_var;
 
     // Variable Initialization
-    lv_merc = libCamp_ge_StoryMercID_MercNone;
 
     // Actions
     if (!runActions) {
         return true;
     }
 
-    lv_playerHasMercTech = false;
-    auto65CDADE4_i = libCamp_gv_TSC_MERC_FIRST;
-    while (auto65CDADE4_i <= libCamp_gv_TSC_MERC_LAST) {
-        lv_merc = libCamp_gv_tS_MercID[auto65CDADE4_i];
-        if ((libCamp_gf_MercStatusCheck(lv_merc, libCamp_ge_StoryMercStatus_Purchased) == true)) {
-            lv_playerHasMercTech = true;
-            break;
-        }
-
-        auto65CDADE4_i = auto65CDADE4_i + 1;
-    }
-    if ((lv_playerHasMercTech == true)) {
-        libNtve_gf_PauseUnit(UnitFromId(1975), true);
-    }
-    else {
-        UnitRemove(UnitFromId(1975));
-    }
+    libWCMI_gf_HandleMercCompound(UnitFromId(1975));
     TriggerExecute(gt_FirstGuard, true, false);
     TriggerExecute(gt_OuterForcefieldArea, true, false);
     TriggerExecute(gt_LowerForcefieldArea, true, false);
@@ -428,6 +425,7 @@ bool gt_Init03Units_Func (bool testConds, bool runActions) {
     UnitGroupAdd(gv_initialStalkers, UnitFromId(427));
     UnitGroupAdd(gv_initialStalkers, UnitFromId(424));
     TriggerExecute(gt_MarauderQ, true, false);
+    UnitSetPropertyFixed(UnitFromId(27), c_unitPropEnergy, 50.0);
     autoB5398E34_g = UnitGroup(null, c_playerAny, RegionEntireMap(), UnitFilter((1 << c_targetFilterCanHaveEnergy), 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     autoB5398E34_u = UnitGroupCount(autoB5398E34_g, c_unitCountAll);
     for (;; autoB5398E34_u -= 1) {
@@ -435,7 +433,13 @@ bool gt_Init03Units_Func (bool testConds, bool runActions) {
         if (autoB5398E34_var == null) { break; }
         UnitSetPropertyFixed(autoB5398E34_var, c_unitPropEnergyPercent, 100.0);
     }
-    UnitSetPropertyFixed(UnitFromId(27), c_unitPropEnergy, 50.0);
+    auto9C010599_g = UnitGroup("StoneZealot", 0, RegionEntireMap(), UnitFilter(0, 0, 0, (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+    auto9C010599_u = UnitGroupCount(auto9C010599_g, c_unitCountAll);
+    for (;; auto9C010599_u -= 1) {
+        auto9C010599_var = UnitGroupUnitFromEnd(auto9C010599_g, auto9C010599_u);
+        if (auto9C010599_var == null) { break; }
+        UnitBehaviorAdd(auto9C010599_var, "Detector8", auto9C010599_var, 1);
+    }
     libNtve_gf_MakeUnitInvulnerable(gv_artifact, true);
     VisRevealerCreate(gv_p1_USER, RegionCircle(UnitGetPosition(gv_artifact), 24.0));
     gv_artifactRevealer = VisRevealerLastCreated();
@@ -593,14 +597,6 @@ bool gt_Init06Difficulties_Func (bool testConds, bool runActions) {
         UnitSetPropertyFixed(auto0411363C_var, c_unitPropLifeMax, gv_statueHealth);
         UnitSetPropertyFixed(auto0411363C_var, c_unitPropLifePercent, 100.0);
     }
-    if ((libNtve_gf_DifficultyValueInt(1, 0, 0, 0) == 1)) {
-        PlayerModifyPropertyInt(gv_p2_ZERG, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p3_TEMPLE, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p4_LOWER_CAUSEWAY, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p5_UPPER_CAUSEWAY, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p6_FIRST_PROTOSS, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-    }
-
     auto42E01964_g = gv_protossPlayers;
     auto42E01964_var = -1;
     while (true) {
@@ -697,6 +693,8 @@ bool gt_IntroSequence_Func (bool testConds, bool runActions) {
         UnitSetState(autoB5D7B041_var, c_unitStateHidden, true);
     }
     TriggerExecute(gt_StartAI, true, false);
+    libWCMI_gf_SetWorkerRallyPointforNexus2(UnitFromId(27));
+    libWCMI_gf_StartingWorkersAutoHarvest(RegionFromId(73), RegionFromId(72));
     Wait(0.1, c_timeReal);
     VisRevealArea(gv_p1_USER, RegionFromId(19), 0.1, false);
     UIAlertPoint("Trigger", gv_p1_USER, StringExternal("Param/Value/40B74FD7"), null, UnitGetPosition(UnitFromId(27)));
@@ -728,7 +726,6 @@ bool gt_StartGame_Func (bool testConds, bool runActions) {
         TimerStart(gv_achievementHardTimer, 900.0, false, c_timeAI);
     }
 
-    libNtve_gf_PauseUnit(UnitFromId(1975), false);
     TriggerExecute(gt_StalkerGather, true, false);
     Wait(2.0, c_timeReal);
     TriggerExecute(gt_ObjectiveGettotheArtifactDiscoverQ, true, true);
@@ -799,7 +796,7 @@ bool gt_ZergCreepTipQ_Func (bool testConds, bool runActions) {
             return false;
         }
 
-        if (!((libCamp_gf_StoryState(libCamp_ge_StoryStateID_StoryStateTipZergCreepPlayed) == 0))) {
+        if (!((libWoLC_gf_StoryState("TipZergCreepPlayed") == false))) {
             return false;
         }
 
@@ -822,15 +819,8 @@ bool gt_ZergCreepTipQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    if ((gv_gameOver == true)) {
-        return true;
-    }
-
+    libWoLC_gf_SetStoryStateBoolean("TipZergCreepPlayed", true);
     libCamp_gf_CreateTipFromConversationState("StoryTips|Campaign_Creep", libNtve_ge_TipType_NormalTip, PlayerGroupAll());
-    libCamp_gf_SetStoryState(libCamp_ge_StoryStateID_StoryStateTipZergCreepPlayed, 1);
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -1295,14 +1285,7 @@ bool gt_PylonTipQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    if ((gv_gameOver == true)) {
-        return true;
-    }
-
     libCamp_gf_CreateTipFromConversationState("StoryTips|Tychus01_Pylons", libNtve_ge_TipType_NormalTip, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -1536,7 +1519,7 @@ bool gt_MarauderQ_Func (bool testConds, bool runActions) {
     while (true) {
         Wait(1.0, c_timeGame);
         if ((UnitCargoValue(lv_swannDropship, c_unitCargoUnitCount) == 0)) {
-            libCamp_gf_EnableCampaignTechUnit(true, libCamp_ge_StoryTechGroup_StoryTechGroupInfantryMarauder, gv_p1_USER);
+            libWoLC_gf_EnableCampaignTechUnit(true, "Marauder", gv_p1_USER);
             UnitIssueOrder(lv_swannDropship, OrderTargetingPoint(AbilityCommand("move", 0), PointFromId(166)), c_orderQueueReplace);
             break;
         }
@@ -1611,17 +1594,6 @@ bool gt_MarauderQ2_Func (bool testConds, bool runActions) {
         AIAttackWaveSend(gv_p6_FIRST_PROTOSS, 0, false);
     }
 
-    while (true) {
-        Wait(1.0, c_timeGame);
-        if ((UnitGroupCount(gv_initialStalkers, c_unitCountAlive) == 0)) {
-            TriggerQueueEnter();
-            libCamp_gf_CreateTipFromConversationState("StoryTips|Tychus01_Marauder", libNtve_ge_TipType_NewUnit, PlayerGroupAll());
-            Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-            TriggerQueueExit();
-            break;
-        }
-
-    }
     return true;
 }
 
@@ -2062,7 +2034,7 @@ bool gt_ArtifactGuardianDestroyed_Func (bool testConds, bool runActions) {
     SoundPlayAtPoint(SoundLink("Thor_Movement", -1), PlayerGroupAll(), UnitGetPosition(EventUnit()), 0.0, 100.0, 0.0);
     if ((UnitGroupHasUnit(gv_artifactGuardiansSouth, EventUnit()) == true)) {
         gv_statuesDestoyed += 1;
-        ObjectiveSetName(gv_objective_DestroytheStatues, (StringExternal("Param/Value/98F1F2DC") + IntToText(gv_statuesDestoyed) + StringExternal("Param/Value/4BD9CBE6")));
+        libWCMI_gf_SetMissionObjectiveProgress("TTychus01_3", gv_statuesDestoyed);
     }
 
     if (((UnitGroupCount(gv_artifactGuardiansSouth, c_unitCountAlive) == 0) || ((UnitGroupCount(gv_artifactGuardiansNorth, c_unitCountAlive) == 0) && (UnitGroupCount(UnitGroup(null, gv_p1_USER, RegionFromId(63), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) > UnitGroupCount(UnitGroup(null, gv_p2_ZERG, RegionFromId(63), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive))))) {
@@ -2075,7 +2047,7 @@ bool gt_ArtifactGuardianDestroyed_Func (bool testConds, bool runActions) {
         libNtve_gf_PlayAnimationOnDoodadsInRegion(RegionFromId(66), "ArtifactShrine", c_animNameDefault, "Stand A", c_animFlagPlayForever, c_animTimeDefault);
         TriggerExecute(gt_ObjectiveGettotheArtifactComplete, true, false);
         TriggerExecute(gt_ObjectiveDestroytheStatuesComplete, true, false);
-        Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+        Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
         TriggerExecute(gt_VictoryArtifactGained, true, false);
         return true;
     }
@@ -3901,7 +3873,7 @@ bool gt_VictoryArtifactGained_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_RunMissionVictorySequence(gt_VictoryQ);
+    libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
     return true;
 }
 
@@ -3921,15 +3893,15 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     }
 
     if ((ObjectiveGetState(gv_objective_DestroytheStatues) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_objective_Relics) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_objective_GetToTheArtifact) == c_objectiveStateCompleted)) {
-        AchievementAward(gv_p1_USER, "TTychus01_1");
+        libWoLC_gf_CampaignAwardAchievement("TTychus01_1");
     }
 
     if ((libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1) && (gv_statStoneGuardianKillCount == 0)) {
-        AchievementAward(gv_p1_USER, "TTychus01_2");
+        libWoLC_gf_CampaignAwardAchievement("TTychus01_2");
     }
 
     if ((libNtve_gf_DifficultyValueInt(0, 0, 1, 1) == 1) && (TimerGetRemaining(gv_achievementHardTimer) != 0.0)) {
-        AchievementAward(gv_p1_USER, "TTychus01_3");
+        libWoLC_gf_CampaignAwardAchievement("TTychus01_3");
     }
 
     VictoryPanelAddAchievement("TTychus01_1");
@@ -3943,8 +3915,7 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/E7611FA8"), IntToText(gv_statStoneGuardianKillCount));
     VictoryPanelAddCustomStatisticLine(StringToText(""), StringToText(""));
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/3F94A9B8"), (IntToText(gv_relicsFound) + StringExternal("Param/Value/1BB42988") + IntToText(gv_relicsNeeded)));
-    VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/9F2E56B5"), IntToText(gv_relicsFound));
-    libCamp_gf_EndCampaignMission(gv_p1_USER, c_gameOverVictory);
+    libWCMI_gf_EndCampaignMission(gv_p1_USER, c_gameOverVictory);
     return true;
 }
 
@@ -3986,7 +3957,7 @@ bool gt_DefeatBaseDead_Func (bool testConds, bool runActions) {
     TriggerQueueClear(c_triggerQueueRemove);
     Wait(2.0, c_timeReal);
     libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/E1487EC9"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_Defeat, true, false);
     return true;
 }
@@ -4012,7 +3983,7 @@ bool gt_DefeatArtifactLost_Func (bool testConds, bool runActions) {
     TriggerQueuePause(true);
     TriggerQueueClear(c_triggerQueueRemove);
     libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/43235472"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_Defeat, true, false);
     return true;
 }
@@ -4032,7 +4003,7 @@ bool gt_Defeat_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_EndCampaignMission(gv_p1_USER, c_gameOverDefeat);
+    libWCMI_gf_EndCampaignMission(gv_p1_USER, c_gameOverDefeat);
     return true;
 }
 
@@ -4059,7 +4030,7 @@ bool gt_VictoryCheat_Func (bool testConds, bool runActions) {
     }
 
     gv_gameOver = true;
-    libCamp_gf_RunMissionVictorySequence(gt_Victory);
+    libWCMI_gf_RunMissionVictorySequence(gt_Victory);
     return true;
 }
 
@@ -4115,9 +4086,8 @@ bool gt_ObjectiveGettotheArtifactCreate_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    ObjectiveCreate(StringExternal("Param/Value/9E172D60"), StringExternal("Param/Value/7B506F18"), c_objectiveStateActive, true);
+    libWCMI_gf_CreateObjectiveCampaign("TTychus01_1");
     gv_objective_GetToTheArtifact = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_TTychus01Objective1, ObjectiveLastCreated(), StringExternal("Param/Value/CDC448F8"));
     return true;
 }
 
@@ -4148,9 +4118,8 @@ bool gt_ObjectiveGettotheArtifactDiscoverQ_Func (bool testConds, bool runActions
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
     TriggerExecute(gt_ObjectiveGettotheArtifactCreate, true, false);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     auto6F37DB70_g = UnitGroup("StoneZealot", 0, null, UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32))), 0);
     auto6F37DB70_u = UnitGroupCount(auto6F37DB70_g, c_unitCountAll);
     for (;; auto6F37DB70_u -= 1) {
@@ -4160,11 +4129,8 @@ bool gt_ObjectiveGettotheArtifactDiscoverQ_Func (bool testConds, bool runActions
     }
     VisRevealArea(gv_p1_USER, RegionCircle(UnitGetPosition(gv_artifact), 16.0), 10.0, false);
     VisRevealerCreate(gv_p1_USER, RegionCircle(UnitGetPosition(gv_artifact), 8.0));
-    ObjectiveSetState(gv_objective_GetToTheArtifact, c_objectiveStateActive);
-    libNtve_gf_CreatePingFacingAngle(PlayerGroupSingle(gv_p1_USER), "PingObjective", UnitGetPosition(gv_artifact), Color(0.00, 100.00, 0.00), 0.0, 270.0);
+    libWCMI_gf_CreateObjectivePing(true, UnitGetPosition(gv_artifact), StringExternal("Param/Value/23A853D9"));
     gv_artifactObjectivePing = PingLastCreated();
-    PingSetTooltip(PingLastCreated(), StringExternal("Param/Value/51B6CAEE"));
-    TriggerQueueExit();
     return true;
 }
 
@@ -4192,7 +4158,7 @@ bool gt_ObjectiveGettotheArtifactComplete_Func (bool testConds, bool runActions)
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveGettotheArtifactCreate, true, false);
-    ObjectiveSetState(gv_objective_GetToTheArtifact, c_objectiveStateCompleted);
+    libWCMI_gf_ZS_SetMissionObjectiveState("TTychus01_1", libWoLC_ge_MissionObjectiveState_Completed);
     PingDestroy(gv_artifactObjectivePing);
     return true;
 }
@@ -4220,9 +4186,8 @@ bool gt_ObjectiveDestroytheStatuesCreate_Func (bool testConds, bool runActions) 
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    ObjectiveCreate(StringExternal("Param/Value/88629B8D"), StringExternal("Param/Value/35A1F683"), c_objectiveStateActive, true);
+    libWCMI_gf_CreateObjectiveCampaign("TTychus01_3");
     gv_objective_DestroytheStatues = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_TTychus01Objective3, ObjectiveLastCreated(), StringExternal("Param/Value/92024AE5"));
     return true;
 }
 
@@ -4254,7 +4219,6 @@ bool gt_ObjectiveDestroytheStatuesDiscover_Func (bool testConds, bool runActions
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveDestroytheStatuesCreate, true, false);
-    ObjectiveSetState(gv_objective_DestroytheStatues, c_objectiveStateActive);
     return true;
 }
 
@@ -4285,8 +4249,7 @@ bool gt_ObjectiveDestroytheStatuesComplete_Func (bool testConds, bool runActions
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    ObjectiveSetName(gv_objective_DestroytheStatues, StringExternal("Param/Value/8A9312C3"));
-    ObjectiveSetState(gv_objective_DestroytheStatues, c_objectiveStateCompleted);
+    libWCMI_gf_ZS_SetMissionObjectiveState("TTychus01_3", libWoLC_ge_MissionObjectiveState_Completed);
     return true;
 }
 
@@ -4313,12 +4276,9 @@ bool gt_ObjectiveRelicsCreateQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate((StringExternal("Param/Value/D3C88D88") + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectFindProtossRelics, libCamp_ge_StoryResearchObjectiveTextStyle_Multipart, gv_relicsNeeded, gv_relicsFound) + StringExternal("Param/Value/E005FE1E")), StringExternal("Param/Value/3A5CA4C7"), c_objectiveStateActive, false);
+    libWCMI_gf_CreateObjectiveCampaign("TTychus01_2");
     gv_objective_Relics = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_TTychus01Objective2, ObjectiveLastCreated(), StringExternal("Param/Value/7ED37176"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -4395,17 +4355,17 @@ bool gt_ObjectiveRelicsUpdate_Func (bool testConds, bool runActions) {
     }
 
     libNtve_gf_KillModel(gv_relicPingActor);
-    libCamp_gf_DisplayResearchPointsGiventoPlayer(libCamp_ge_StoryResearchObject_ResearchObjectFindProtossRelics, EventUnit(), gv_p1_USER);
+    libWCMI_gf_DisplayMissionObjectiveRewardFloatingText(UnitGetPosition(EventUnit()), "TTychus01_2");
     TriggerExecute(gt_ObjectiveRelicsCreateQ, true, false);
     UnitKill(EventUnit());
     gv_relicsFound += 1;
-    ObjectiveSetName(gv_objective_Relics, (StringExternal("Param/Value/1647A2D5") + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectFindProtossRelics, libCamp_ge_StoryResearchObjectiveTextStyle_Multipart, gv_relicsNeeded, gv_relicsFound) + StringExternal("Param/Value/88438701")));
+    libWCMI_gf_SetMissionObjectiveProgress("TTychus01_2", gv_relicsFound);
     if ((gv_relicsFound == gv_relicsNeeded)) {
         TriggerExecute(gt_ObjectiveRelicsComplete, true, false);
     }
 
     if ((gv_relicsFound == gv_relicsNeeded) && (libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1) && (gv_zergStructuresKilled == false)) {
-        AchievementAward(gv_p1_USER, "Anniversary_TTychus01");
+        libWoLC_gf_CampaignAwardAchievement("Anniversary_TTychus01");
         TriggerDebugOutput(1, StringExternal("Param/Value/CE2CE6AB"), false);
     }
 
@@ -4437,8 +4397,7 @@ bool gt_ObjectiveRelicsComplete_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveRelicsCreateQ, true, false);
-    ObjectiveSetName(gv_objective_Relics, (StringExternal("Param/Value/38722FC6") + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectFindProtossRelics, libCamp_ge_StoryResearchObjectiveTextStyle_Multipart, gv_relicsNeeded, gv_relicsFound)));
-    ObjectiveSetState(gv_objective_Relics, c_objectiveStateCompleted);
+    libWCMI_gf_ZS_SetMissionObjectiveState("TTychus01_2", libWoLC_ge_MissionObjectiveState_Completed);
     return true;
 }
 
@@ -4465,14 +4424,7 @@ bool gt_RelicTipQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    if ((gv_gameOver == true)) {
-        return true;
-    }
-
     libCamp_gf_CreateTipFromConversationState("StoryTips|Tychus01_ProtossRelic", libNtve_ge_TipType_NormalTip, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 

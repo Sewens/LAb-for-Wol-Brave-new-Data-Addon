@@ -7,7 +7,10 @@
 //==================================================================================================
 include "TriggerLibs/NativeLib"
 include "TriggerLibs/LibertyLib"
-include "TriggerLibs/CampaignLib"
+include "LibCamp"
+include "LibWoLC"
+include "LibWCMI"
+include "LibWCUI"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -16,6 +19,9 @@ void InitLibs () {
     libNtve_InitLib();
     libLbty_InitLib();
     libCamp_InitLib();
+    libWoLC_InitLib();
+    libWCMI_InitLib();
+    libWCUI_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -49,10 +55,12 @@ playergroup gv_zergPlayers;
 bool gv_gameOver;
 bool gv_inCinematic;
 unit gv_artifact;
+unitgroup gv_artifactGroup;
+int gv_artifactCommandCardContainer;
+int gv_artifactCommandCard;
 fixed gv_artifactChargeIncrement;
 fixed gv_artifactChargeMax;
 fixed gv_artifactChargeCurrent;
-int gv_artifactBoard;
 revealer gv_artifactRevealer;
 int gv_energyQPendingCount;
 int gv_energyNovaKills;
@@ -104,9 +112,11 @@ void InitGlobals () {
 
     gv_zergPlayers = PlayerGroupEmpty();
     gv_artifact = UnitFromId(42);
+    gv_artifactGroup = libNtve_gf_ConvertUnitToUnitGroup(gv_artifact);
+    gv_artifactCommandCardContainer = c_invalidDialogControlId;
+    gv_artifactCommandCard = c_invalidDialogControlId;
     gv_artifactChargeIncrement = 1.0;
     gv_artifactChargeMax = 2000.0;
-    gv_artifactBoard = c_boardNone;
     for (init_i = 0; init_i <= 16; init_i += 1) {
         gv_persistentSpawnRegions[init_i] = RegionFromId(5);
     }
@@ -140,8 +150,10 @@ void InitGlobals () {
 //--------------------------------------------------------------------------------------------------
 // Global Function Declarations
 //--------------------------------------------------------------------------------------------------
-bool gf_ABChoiceA ();
+bool gf_ABChoicevsAir ();
+bool gf_ABChoicevsGround ();
 string gf_ABUnit (string lp_aUnit, string lp_bUnit);
+string gf_RandomUnit (string lp_aUnit, string lp_bUnit);
 int gf_Lookup (int lp_index, int lp_val1, int lp_val2, int lp_val3, int lp_val4, int lp_val5, int lp_val6);
 void gf_SpawnCrashingDoodad (point lp_crashPoint, string lp_crashingDoodadType);
 fixed gf_ArtifactChargePercent ();
@@ -234,14 +246,12 @@ trigger gt_OverlordAttack;
 trigger gt_OverlordAttackQ;
 trigger gt_VictoryArtifactCharged;
 trigger gt_Victory;
-trigger gt_AbortMission;
 trigger gt_DefeatArtifactDestroyed;
 trigger gt_Defeat;
 trigger gt_VictoryCheat;
 trigger gt_DefeatCheat;
 trigger gt_ObjectiveArtifactCreateQ;
 trigger gt_ObjectiveArtifactComplete;
-trigger gt_ObjectiveArtifactFailed;
 trigger gt_BriefingQ;
 trigger gt_BriefingScene00;
 trigger gt_BriefingScene01;
@@ -266,10 +276,21 @@ trigger gt_VictoryCleanup;
 //--------------------------------------------------------------------------------------------------
 // Global Functions
 //--------------------------------------------------------------------------------------------------
-bool gf_ABChoiceA () {
+bool gf_ABChoicevsAir () {
     // Automatic Variable Declarations
     // Implementation
-    if ((libCamp_gf_MissionStatusCheck(libCamp_ge_MapID_MapTValerian02A, libCamp_ge_MissionStatus_Completed) == true)) {
+    if (((UserDataGetInt("StoryStates", "TValerian03Enemy", "Value", 1) == 1) || (UserDataGetInt("StoryStates", "TValerian03Enemy", "Value", 1) == 3))) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool gf_ABChoicevsGround () {
+    // Automatic Variable Declarations
+    // Implementation
+    if (((UserDataGetInt("StoryStates", "TValerian03Enemy", "Value", 1) == 2) || (UserDataGetInt("StoryStates", "TValerian03Enemy", "Value", 1) == 3))) {
         return true;
     }
     else {
@@ -280,7 +301,22 @@ bool gf_ABChoiceA () {
 string gf_ABUnit (string lp_aUnit, string lp_bUnit) {
     // Automatic Variable Declarations
     // Implementation
-    if ((gf_ABChoiceA() == true)) {
+    if ((gf_ABChoicevsAir() == true) && (gf_ABChoicevsGround() == true)) {
+        return gf_RandomUnit(lp_aUnit, lp_bUnit);
+    }
+
+    if ((gf_ABChoicevsAir() == true)) {
+        return lp_aUnit;
+    }
+    else {
+        return lp_bUnit;
+    }
+}
+
+string gf_RandomUnit (string lp_aUnit, string lp_bUnit) {
+    // Automatic Variable Declarations
+    // Implementation
+    if ((RandomInt(0, 1) == 0)) {
         return lp_aUnit;
     }
     else {
@@ -707,7 +743,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_LoadCampaignData(libCamp_ge_MapID_MapTValerian03);
+    libWoLC_gf_ULoadCampaignData("TValerian03");
     TriggerExecute(gt_Init01Technology, true, true);
     TriggerExecute(gt_Init02Players, true, true);
     TriggerExecute(gt_Init03Units, true, true);
@@ -715,8 +751,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init05Environment, true, true);
     TriggerExecute(gt_Init06Difficulties, true, true);
     TriggerExecute(gt_Init07Help, true, true);
-    libCamp_gf_RegisterFootageRecording(gt_BriefingQ);
-    libCamp_gf_PurchaseStorymodeTech();
+    libWoLC_gf_RegisterFootageRecording(gt_BriefingQ);
     TriggerExecute(gt_IntroQ, true, false);
     return true;
 }
@@ -737,12 +772,6 @@ bool gt_Init01Technology_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
     // Variable Initialization
 
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    libCamp_gf_SetTechRestrictionsCallback(TriggerGetCurrent());
     return true;
 }
 
@@ -791,6 +820,7 @@ bool gt_Init02Players_Func (bool testConds, bool runActions) {
     PlayerSetColorIndex(gv_pLAYER_ZERG_SPECIAL, 4, true);
     gv_specialUnitColor = 6;
     PlayerSetState(gv_pLAYER_ZERG_SPECIAL, c_playerStateShowScore, false);
+    libWCMI_gf_WM_DetectionUpgradesApply();
     return true;
 }
 
@@ -822,11 +852,11 @@ bool gt_Init03Units_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    libWCMI_gf_HandleMercCompound(UnitFromId(321));
     TriggerExecute(gt_AmbientOverlordInitialization, true, false);
     TechTreeAbilityAllow(gv_pLAYER_USER, AbilityCommand("EnergyNova", 0), false);
     UnitSetPropertyFixed(UnitFromId(1543), c_unitPropLifePercent, 73.0);
     UnitSetPropertyFixed(UnitFromId(1025), c_unitPropLifePercent, 62.0);
-    UnitSetPropertyFixed(UnitFromId(1), c_unitPropEnergy, 50.0);
     auto02146F9D_g = UnitGroup(null, c_playerAny, RegionEntireMap(), UnitFilter((1 << c_targetFilterCanHaveEnergy), 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     auto02146F9D_u = UnitGroupCount(auto02146F9D_g, c_unitCountAll);
     for (;; auto02146F9D_u -= 1) {
@@ -864,8 +894,15 @@ bool gt_Init03Units_Func (bool testConds, bool runActions) {
 
     }
     AISetUnitScriptControlled(gv_kerrigan, true);
-    if ((gf_ABChoiceA() == true)) {
+    if ((gf_ABChoicevsAir() == false)) {
+        UnitRemove(UnitFromId(1570));
+        UnitRemove(UnitFromId(1571));
+        UnitRemove(UnitFromId(267));
+    }
+    else {
         libNtve_gf_CreateUnitsAtPoint2(1, "BroodLord", 0, gv_pLAYER_ZERG_SOUTH, PointFromId(587));
+    }
+    if ((gf_ABChoicevsGround() == false)) {
         UnitRemove(UnitFromId(269));
         UnitRemove(UnitFromId(268));
         UnitRemove(UnitFromId(306));
@@ -874,9 +911,6 @@ bool gt_Init03Units_Func (bool testConds, bool runActions) {
     }
     else {
         libNtve_gf_CreateUnitsAtPoint2(1, "Ultralisk", 0, gv_pLAYER_ZERG_SOUTH, PointFromId(587));
-        UnitRemove(UnitFromId(1570));
-        UnitRemove(UnitFromId(1571));
-        UnitRemove(UnitFromId(267));
     }
     return true;
 }
@@ -922,7 +956,7 @@ bool gt_Init05Environment_Func (bool testConds, bool runActions) {
     GameTimeOfDaySet("08:00:00");
     libNtve_gf_PlayAnimationOnDoodadsInRegion(RegionEntireMap(), "CharRibs", c_animNameDefault, "Stand", c_animFlagPlayForever, c_animTimeDefault);
     GameSetBackground(c_backgroundFixed, null, 100.0);
-    if ((gf_ABChoiceA() == true)) {
+    if ((gf_ABChoicevsAir() == true)) {
         libNtve_gf_RemoveDoodadsinRegion(RegionEntireMap(), "DestroyedPlatformChunks");
     }
     else {
@@ -971,24 +1005,12 @@ void gt_Init05Environment_Init () {
 //--------------------------------------------------------------------------------------------------
 bool gt_Init06Difficulties_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
-    playergroup auto2008B5F2_g;
-    int auto2008B5F2_var;
     playergroup auto8D73373B_g;
     int auto8D73373B_var;
 
     // Actions
     if (!runActions) {
         return true;
-    }
-
-    if ((PlayerDifficulty(gv_pLAYER_USER) == 1)) {
-        auto2008B5F2_g = gv_zergPlayers;
-        auto2008B5F2_var = -1;
-        while (true) {
-            auto2008B5F2_var = PlayerGroupNextPlayer(auto2008B5F2_g, auto2008B5F2_var);
-            if (auto2008B5F2_var < 0) { break; }
-            PlayerModifyPropertyInt(auto2008B5F2_var, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        }
     }
 
     gv_artifactChargeMax = 1800.0;
@@ -1052,16 +1074,18 @@ bool gt_Init07Help_Func (bool testConds, bool runActions) {
     libCamp_gf_AddUnitTypeToUnitHelpPanel("Overseer", false, gv_pLAYER_USER);
     libCamp_gf_AddUnitTypeToUnitHelpPanel("SpineCrawler", false, gv_pLAYER_USER);
     libCamp_gf_AddUnitTypeToUnitHelpPanel("SporeCrawler", false, gv_pLAYER_USER);
-    if ((gf_ABChoiceA() == true)) {
+    if ((gf_ABChoicevsAir() == true)) {
         libCamp_gf_AddUnitTypeToUnitHelpPanel("Mutalisk", false, gv_pLAYER_USER);
         libCamp_gf_AddUnitTypeToUnitHelpPanel("Scourge", false, gv_pLAYER_USER);
         libCamp_gf_AddUnitTypeToUnitHelpPanel("Corruptor", false, gv_pLAYER_USER);
         libCamp_gf_AddUnitTypeToUnitHelpPanel("BroodLord", false, gv_pLAYER_USER);
         libCamp_gf_AddUnitTypeToUnitHelpPanel("Leviathan", false, gv_pLAYER_USER);
     }
-    else {
+
+    if ((gf_ABChoicevsGround() == true)) {
         libCamp_gf_AddUnitTypeToUnitHelpPanel("NydusCanal", false, gv_pLAYER_USER);
     }
+
     return true;
 }
 
@@ -1113,9 +1137,7 @@ bool gt_CampaignTipQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
     libCamp_gf_CreateStorymodeTips();
-    TriggerQueueExit();
     return true;
 }
 
@@ -1131,7 +1153,7 @@ bool gt_CreateCrashingDebris_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
     // Conditions
     if (testConds) {
-        if (!((gf_ABChoiceA() == false))) {
+        if (!((gf_ABChoicevsAir() == false))) {
             return false;
         }
     }
@@ -1183,45 +1205,23 @@ bool gt_ArtifactStatus_Func (bool testConds, bool runActions) {
 
     TriggerExecute(gt_ArtifactCharging, true, false);
     VisRevealerEnable(gv_artifactRevealer, true);
-    BoardCreate(1, 2, StringExternal("Param/Value/21DB17A4"), Color(100.00, 100.00, 100.00));
-    gv_artifactBoard = BoardLastCreated();
-    BoardItemSetText(gv_artifactBoard, 1, c_boardRowHeader, StringExternal("Param/Value/9C83DB5C"));
-    BoardItemSetTextColor(gv_artifactBoard, 1, c_boardRowHeader, Color(0.00, 100.00, 0.00));
-    BoardSetState(gv_artifactBoard, PlayerGroupAll(), c_boardStateShowHeader, true);
-    BoardSetState(gv_artifactBoard, PlayerGroupAll(), c_boardStateShowTitle, false);
-    BoardSetColumnWidth(gv_artifactBoard, 1, 25.0);
-    BoardItemSetAlignment(gv_artifactBoard, 1, 1, c_alignCenter);
-    BoardItemSetAlignment(gv_artifactBoard, 1, 2, c_alignCenter);
-    BoardItemSetAlignment(gv_artifactBoard, 1, 3, c_alignCenter);
-    BoardItemSetProgressShow(gv_artifactBoard, 1, 2, true);
-    BoardItemSetProgressRange(gv_artifactBoard, 1, 2, 0.0, 1.0);
-    BoardItemSetProgressColor(gv_artifactBoard, 1, 2, Color(50.20, 50.20, 100.00), 1);
-    BoardItemSetProgressValue(gv_artifactBoard, 1, 2, (gv_artifactChargeCurrent / gv_artifactChargeMax));
-    BoardItemSetText(gv_artifactBoard, 1, 1, (StringExternal("Param/Value/DE6AFFF6") + FixedToText(gf_ArtifactChargePercent(), 1) + StringExternal("Param/Value/F2914021")));
-    BoardItemSetFontSize(gv_artifactBoard, 1, 1, 18);
-    BoardShowAll(true, PlayerGroupAll());
-    libNtve_gf_DisplayScreenButton(1, (StringExternal("Param/Value/EE7FA59B") + StringExternal("Param/Value/470B45ED") + libCamp_gf_FormatTimeCampaign(FixedToInt(UnitAbilityGetCooldown(gv_artifact, "EnergyNova", "Abil/Supernova"))) + StringExternal("Param/Value/21D8590C")), 400, 132, c_anchorTopRight, 15, 225, gt_EnergyNovaButton);
-    DialogControlSetEnabled(libNtve_gf_ScreenButton(1), PlayerGroupAll(), false);
-    libNtve_gf_HideScreenButton(true, 1);
+    libWCUI_gf_DisplayProgressBar(StringExternal("Param/Value/477F0499"), 0, FloorI(gv_artifactChargeMax));
+    libWCUI_gf_SetProgressBarLabel((StringExternal("Param/Value/AF2F1813") + FixedToText(gf_ArtifactChargePercent(), 1) + StringExternal("Param/Value/A31B3D5C")));
+    DialogControlHookupStandard(c_triggerControlTypePanel, "UIContainer/ConsoleUIContainer/ArtifactGlobalCommandPanel");
+    gv_artifactCommandCardContainer = DialogControlLastCreated();
+    DialogControlHookup(gv_artifactCommandCardContainer, c_triggerControlTypeCommandPanel, "CommandPanel");
+    gv_artifactCommandCard = DialogControlLastCreated();
+    libNtve_gf_SetDialogItemUnitGroup(gv_artifactCommandCard, gv_artifactGroup, PlayerGroupAll());
+    DialogControlSetVisible(gv_artifactCommandCardContainer, PlayerGroupAll(), true);
     SoundPlay(SoundLink("UI_DropdownListSelect", -1), PlayerGroupAll(), 100.0, 0.0);
     while (true) {
         Wait(1.0, c_timeGame);
-        BoardItemSetProgressValue(gv_artifactBoard, 1, 2, (gv_artifactChargeCurrent / gv_artifactChargeMax));
-        BoardItemSetText(gv_artifactBoard, 1, 1, (StringExternal("Param/Value/CE5FAE7A") + FixedToText(gf_ArtifactChargePercent(), 1) + StringExternal("Param/Value/CEEF6569")));
+        libWCUI_gf_SetProgressBarProgress(FloorI(gv_artifactChargeCurrent));
+        libWCUI_gf_SetProgressBarLabel((StringExternal("Param/Value/2CDCC82E") + FixedToText(gf_ArtifactChargePercent(), 1) + StringExternal("Param/Value/EFD68BBD")));
         if ((gv_gameOver == true)) {
             return true;
         }
 
-        if ((UnitAbilityGetCooldown(gv_artifact, "EnergyNova", "Abil/Supernova") == 0.0)) {
-            libNtve_gf_SetDialogItemText(libNtve_gf_ScreenButton(1), StringExternal("Param/Value/FC58AB37"), PlayerGroupAll());
-            DialogControlSetEnabled(libNtve_gf_ScreenButton(1), PlayerGroupAll(), true);
-            libNtve_gf_FlashScreenButton(1, 2.0, ColorWithAlpha(0.00, 100.00, 100.00, 0.00), ColorWithAlpha(100.00, 100.00, 100.00, 0.00));
-        }
-        else {
-            libNtve_gf_SetDialogItemText(libNtve_gf_ScreenButton(1), (StringExternal("Param/Value/ADB51156") + StringExternal("Param/Value/D927B1B4") + libCamp_gf_FormatTimeCampaign(FixedToInt(UnitAbilityGetCooldown(gv_artifact, "EnergyNova", "Abil/Supernova"))) + StringExternal("Param/Value/4B589141")), PlayerGroupAll());
-            DialogControlSetEnabled(libNtve_gf_ScreenButton(1), PlayerGroupAll(), false);
-            libNtve_gf_StopFlashingScreenButton(1);
-        }
     }
     return true;
 }
@@ -1291,7 +1291,6 @@ bool gt_BunkerQ_Func (bool testConds, bool runActions) {
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Game);
     Wait(2.0, c_timeReal);
     libCamp_gf_CreateTipFromConversationState("StoryTips|Valerian03_EnergyNova", libNtve_ge_TipType_NewAbility, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
     TriggerQueueExit();
     return true;
 }
@@ -1420,7 +1419,7 @@ bool gt_EnergyNovaKills_Func (bool testConds, bool runActions) {
 
     gv_energyNovaKills += 1;
     if ((libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1) && (gv_energyNovaKills == 150)) {
-        AchievementAward(gv_pLAYER_USER, "TValerian03_2");
+        libWoLC_gf_CampaignAwardAchievement("TValerian03_2");
     }
 
     return true;
@@ -1948,12 +1947,13 @@ bool gt_ZergAttackWavesMainA08mins_Func (bool testConds, bool runActions) {
         Wait(5.0, c_timeAI);
     }
     Wait(105.0, c_timeAI);
-    if ((gf_ABChoiceA() == true)) {
+    if ((gf_ABChoicevsAir() == true)) {
         gf_SetAttackWaveParameters(gv_mainSpawnRegions[4]);
         AIAttackWaveAddUnits4(1, 1, 1, 1, "BroodLord");
         AIAttackWaveSend(gv_nextWavePlayer, 120, false);
     }
-    else {
+
+    if ((gf_ABChoicevsGround() == true)) {
         gf_SetAttackWaveParameters(gv_mainSpawnRegions[2]);
         AIAttackWaveAddUnits4(2, 2, 2, 2, "Hydralisk");
         AIAttackWaveSend(gv_nextWavePlayer, 120, false);
@@ -1962,6 +1962,7 @@ bool gt_ZergAttackWavesMainA08mins_Func (bool testConds, bool runActions) {
         AIAttackWaveAddUnits4(0, 0, 0, 1, "Ultralisk");
         AIAttackWaveSend(gv_nextWavePlayer, 120, false);
     }
+
     lv_i = 1;
     for ( ; ( (autoFAE12993_ai >= 0 && lv_i <= autoFAE12993_ae) || (autoFAE12993_ai < 0 && lv_i >= autoFAE12993_ae) ) ; lv_i += autoFAE12993_ai ) {
         gf_SetAttackWaveParameters(gv_mainSpawnRegions[lv_i]);
@@ -2496,7 +2497,7 @@ bool gt_SpawnDropPod_Func (bool testConds, bool runActions) {
 
     // Conditions
     if (testConds) {
-        if (!((gf_ABChoiceA() == true))) {
+        if (!((gf_ABChoicevsAir() == true))) {
             return false;
         }
 
@@ -2555,7 +2556,7 @@ bool gt_SpawnAirWave_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
     // Conditions
     if (testConds) {
-        if (!((gf_ABChoiceA() == true))) {
+        if (!((gf_ABChoicevsAir() == true))) {
             return false;
         }
     }
@@ -2625,7 +2626,7 @@ bool gt_SpawnLeviathanWave_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
     // Conditions
     if (testConds) {
-        if (!((gf_ABChoiceA() == true))) {
+        if (!((gf_ABChoicevsAir() == true))) {
             return false;
         }
     }
@@ -2820,7 +2821,7 @@ bool gt_AirQ_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    if ((gf_ABChoiceA() == false)) {
+    if ((gf_ABChoicevsAir() == false)) {
         return true;
     }
 
@@ -2887,7 +2888,7 @@ bool gt_AirBehindQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    if ((gf_ABChoiceA() == false)) {
+    if ((gf_ABChoicevsAir() == false)) {
         return true;
     }
 
@@ -2924,7 +2925,7 @@ bool gt_LeviathanQ_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    if ((gf_ABChoiceA() == false)) {
+    if ((gf_ABChoicevsAir() == false)) {
         return true;
     }
 
@@ -3061,7 +3062,7 @@ bool gt_SpawnNydusWorm_Func (bool testConds, bool runActions) {
 
     // Conditions
     if (testConds) {
-        if (!((gf_ABChoiceA() == false))) {
+        if (!((gf_ABChoicevsGround() == true))) {
             return false;
         }
 
@@ -3166,7 +3167,7 @@ bool gt_SpawnNydusWormWave_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
     // Conditions
     if (testConds) {
-        if (!((gf_ABChoiceA() == false))) {
+        if (!((gf_ABChoicevsGround() == true))) {
             return false;
         }
     }
@@ -3291,7 +3292,7 @@ bool gt_NydusQ_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    if ((gf_ABChoiceA() == true)) {
+    if ((gf_ABChoicevsGround() == false)) {
         return true;
     }
 
@@ -3331,7 +3332,7 @@ bool gt_NydusWarningQ_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    if ((gf_ABChoiceA() == true)) {
+    if ((gf_ABChoicevsGround() == false)) {
         return true;
     }
 
@@ -4417,7 +4418,7 @@ bool gt_VictoryArtifactCharged_Func (bool testConds, bool runActions) {
     TriggerQueueClear(c_triggerQueueRetain);
     TriggerExecute(gt_ObjectiveArtifactComplete, true, false);
     Wait(2.0, c_timeReal);
-    libCamp_gf_RunMissionVictorySequence(gt_VictoryQ);
+    libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
     return true;
 }
 
@@ -4436,8 +4437,8 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    BoardDestroy(gv_artifactBoard);
-    libNtve_gf_HideScreenButton(false, 1);
+    libWCUI_gf_ShowHideProgressBar(false);
+    DialogControlSetVisible(gv_artifactCommandCardContainer, PlayerGroupAll(), false);
     TriggerStop(gt_ArtifactCharging);
     TriggerStop(gt_ReplaceZergDefender);
     TriggerStop(gt_KerriganRetreatingfromLowLife);
@@ -4451,15 +4452,15 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     TriggerStop(gt_ZergAttackWavesMainG2930mins);
     TriggerStop(gt_ZergAttackWavesPersistent);
     if ((ObjectiveGetState(gv_objective_Artifact) == c_objectiveStateCompleted)) {
-        AchievementAward(gv_pLAYER_USER, "TValerian03_1");
+        libWoLC_gf_CampaignAwardAchievement("TValerian03_1");
     }
 
     if ((libNtve_gf_DifficultyValueInt(0, 0, 1, 1) == 1) && (gv_energyNovasUsed < 2)) {
-        AchievementAward(gv_pLAYER_USER, "TValerian03_3");
+        libWoLC_gf_CampaignAwardAchievement("TValerian03_3");
     }
 
     if ((libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1) && (gv_energyNovasUsed == 0)) {
-        AchievementAward(gv_pLAYER_USER, "Anniversary_TValerian03");
+        libWoLC_gf_CampaignAwardAchievement("Anniversary_TValerian03");
         TriggerDebugOutput(1, StringExternal("Param/Value/A3D605D8"), false);
     }
 
@@ -4476,38 +4477,13 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/9566A49E"), IntToText(gv_energyNovasUsed));
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/EB580377"), IntToText(gv_energyNovaKills));
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/3D236DCD"), IntToText(gv_kerriganKills));
-    libCamp_gf_EndCampaignMission(gv_pLAYER_USER, c_gameOverVictory);
+    libWCMI_gf_EndCampaignMission(gv_pLAYER_USER, c_gameOverVictory);
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 void gt_Victory_Init () {
     gt_Victory = TriggerCreate("gt_Victory_Func");
-}
-
-//--------------------------------------------------------------------------------------------------
-// Trigger: Abort Mission
-//--------------------------------------------------------------------------------------------------
-bool gt_AbortMission_Func (bool testConds, bool runActions) {
-    // Automatic Variable Declarations
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    gv_gameOver = true;
-    DialogControlSetEnabled(libNtve_gf_ScreenButton(1), PlayerGroupAll(), false);
-    BoardShowAll(false, PlayerGroupAll());
-    libNtve_gf_HideScreenButton(false, 1);
-    libNtve_gf_ChangeUnitDamage(gv_artifact, libNtve_ge_UnitDamageTakenDealt_Damage_Take, libNtve_ge_UnitDamageChangeOption_No);
-    TriggerQueueClear(c_triggerQueueRetain);
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void gt_AbortMission_Init () {
-    gt_AbortMission = TriggerCreate("gt_AbortMission_Func");
-    TriggerAddEventAbortMission(gt_AbortMission, c_playerAny);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -4532,7 +4508,7 @@ bool gt_DefeatArtifactDestroyed_Func (bool testConds, bool runActions) {
     TriggerQueueClear(c_triggerQueueRemove);
     Wait(2.0, c_timeReal);
     libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/D98A6E70"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_Defeat, true, false);
     return true;
 }
@@ -4557,7 +4533,7 @@ bool gt_Defeat_Func (bool testConds, bool runActions) {
     AITimePause(true);
     TriggerStop(gt_ZergAttackWavesMain);
     TriggerStop(gt_ZergAttackWavesPersistent);
-    libCamp_gf_EndCampaignMission(gv_pLAYER_USER, c_gameOverDefeat);
+    libWCMI_gf_EndCampaignMission(gv_pLAYER_USER, c_gameOverDefeat);
     return true;
 }
 
@@ -4584,7 +4560,7 @@ bool gt_VictoryCheat_Func (bool testConds, bool runActions) {
     }
 
     gv_gameOver = true;
-    libCamp_gf_RunMissionVictorySequence(gt_Victory);
+    libWCMI_gf_RunMissionVictorySequence(gt_Victory);
     return true;
 }
 
@@ -4640,15 +4616,12 @@ bool gt_ObjectiveArtifactCreateQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate(StringExternal("Param/Value/CA604703"), StringExternal("Param/Value/BFB1AA45"), c_objectiveStateActive, true);
+    libWCMI_gf_CreateObjectiveCampaign("TValerian03_1");
     gv_objective_Artifact = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_TValerian03Objective1, ObjectiveLastCreated(), StringExternal("Param/Value/BCFF1976"));
     libNtve_gf_CreatePingFacingAngle(PlayerGroupSingle(gv_pLAYER_USER), "PingObjective", UnitGetPosition(gv_artifact), ColorWithAlpha(0.00, 100.00, 100.00, 0.00), 0.0, 135.0);
     PingSetTooltip(PingLastCreated(), StringExternal("Param/Value/0140CB99"));
     PingSetScale(PingLastCreated(), 0.8);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -4676,45 +4649,14 @@ bool gt_ObjectiveArtifactComplete_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveArtifactCreateQ, true, false);
-    ObjectiveSetState(gv_objective_Artifact, c_objectiveStateCompleted);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    BoardShowAll(false, PlayerGroupAll());
-    libNtve_gf_HideScreenButton(false, 1);
+    libWCMI_gf_ZS_SetMissionObjectiveState("TValerian03_1", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 void gt_ObjectiveArtifactComplete_Init () {
     gt_ObjectiveArtifactComplete = TriggerCreate("gt_ObjectiveArtifactComplete_Func");
-}
-
-//--------------------------------------------------------------------------------------------------
-// Trigger: Objective - Artifact - Failed
-//--------------------------------------------------------------------------------------------------
-bool gt_ObjectiveArtifactFailed_Func (bool testConds, bool runActions) {
-    // Automatic Variable Declarations
-    // Conditions
-    if (testConds) {
-        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
-            return false;
-        }
-    }
-
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    TriggerEnable(TriggerGetCurrent(), false);
-    TriggerExecute(gt_ObjectiveArtifactCreateQ, true, false);
-    ObjectiveSetState(gv_objective_Artifact, c_objectiveStateFailed);
-    libNtve_gf_HideScreenButton(false, 1);
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void gt_ObjectiveArtifactFailed_Init () {
-    gt_ObjectiveArtifactFailed = TriggerCreate("gt_ObjectiveArtifactFailed_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -4749,8 +4691,6 @@ bool gt_BriefingQ_Func (bool testConds, bool runActions) {
     UnitPauseAll(true);
     AITimePause(true);
     GameTimeOfDayPause(true);
-    DialogControlSetEnabled(libNtve_gf_ScreenButton(1), PlayerGroupAll(), false);
-    libNtve_gf_HideScreenButton(false, 1);
     CinematicFade(false, 0.1, c_fadeStyleNormal, ColorWithAlpha(0.00, 0.00, 0.00, 0.00), 0.0, true);
     libNtve_gf_CinematicMode(true, PlayerGroupAll(), 0.0);
     libNtve_gf_GlobalCinematicSetting(true);
@@ -5343,7 +5283,6 @@ bool gt_IntroCleanup_Func (bool testConds, bool runActions) {
     UnitSetPropertyFixed(UnitFromId(42), c_unitPropKills, 0.0);
     UnitSetPropertyFixed(UnitFromId(1543), c_unitPropLifePercent, 100.0);
     UnitSetPropertyFixed(UnitFromId(1025), c_unitPropLifePercent, 100.0);
-    UnitSetPropertyFixed(UnitFromId(1), c_unitPropEnergy, 50.0);
     GameTimeOfDayPause(false);
     PlayerSetState(gv_pLAYER_USER, c_playerStateXPGain, true);
     PlayerSetState(gv_pLAYER_ZERG_MAIN, c_playerStateFidgetingEnabled, true);
@@ -5359,6 +5298,8 @@ bool gt_IntroCleanup_Func (bool testConds, bool runActions) {
     UnitIssueOrder(UnitFromId(285), OrderTargetingPoint(AbilityCommand("attack", 0), PointFromId(1006)), c_orderQueueReplace);
     UnitIssueOrder(UnitFromId(282), OrderTargetingPoint(AbilityCommand("attack", 0), PointFromId(1008)), c_orderQueueReplace);
     UnitSelect(UnitGroupUnit(UnitGroup("CommandCenter", gv_pLAYER_USER, RegionEntireMap(), UnitFilter(0, 0, 0, (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), 1), gv_pLAYER_USER, true);
+    libWCMI_gf_SetWorkerRallyPointforNexus2(UnitFromId(1));
+    libWCMI_gf_StartingWorkersAutoHarvest(RegionFromId(41), RegionFromId(40));
     UIAlertPoint("Trigger", gv_pLAYER_USER, StringExternal("Param/Value/850C034D"), null, PointFromId(2));
     if ((gv_introCinematicCompleted == true)) {
         lv_fadeDuration = 1.5;
@@ -5553,8 +5494,6 @@ bool gt_VictorySetup_Func (bool testConds, bool runActions) {
     SoundChannelSetVolume(PlayerGroupAll(), c_soundCategoryMusic, 100.0, 0.0);
     UnitClearSelection(gv_pLAYER_USER);
     PlayerSetState(gv_pLAYER_USER, c_playerStateXPGain, false);
-    DialogControlSetEnabled(libNtve_gf_ScreenButton(1), PlayerGroupAll(), false);
-    libNtve_gf_HideScreenButton(false, 1);
     GameTimeOfDayPause(true);
     GameSetBackground(c_backgroundFixed, "CharSkyBox", 100.0);
     AITimePause(true);
@@ -5860,14 +5799,12 @@ void InitTriggers () {
     gt_OverlordAttackQ_Init();
     gt_VictoryArtifactCharged_Init();
     gt_Victory_Init();
-    gt_AbortMission_Init();
     gt_DefeatArtifactDestroyed_Init();
     gt_Defeat_Init();
     gt_VictoryCheat_Init();
     gt_DefeatCheat_Init();
     gt_ObjectiveArtifactCreateQ_Init();
     gt_ObjectiveArtifactComplete_Init();
-    gt_ObjectiveArtifactFailed_Init();
     gt_BriefingQ_Init();
     gt_BriefingScene00_Init();
     gt_BriefingScene01_Init();

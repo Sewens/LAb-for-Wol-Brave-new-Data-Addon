@@ -7,7 +7,10 @@
 //==================================================================================================
 include "TriggerLibs/NativeLib"
 include "TriggerLibs/LibertyLib"
-include "TriggerLibs/CampaignLib"
+include "LibCamp"
+include "LibWoLC"
+include "LibWCMI"
+include "LibWCUI"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -16,6 +19,9 @@ void InitLibs () {
     libNtve_InitLib();
     libLbty_InitLib();
     libCamp_InitLib();
+    libWoLC_InitLib();
+    libWCMI_InitLib();
+    libWCUI_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -300,10 +306,8 @@ trigger gt_DefeatCheat;
 trigger gt_ObjectiveDestroyCoolantTowersCreateQ;
 trigger gt_ObjectiveDestroyCoolantTowersUpdate;
 trigger gt_ObjectiveDestroyCoolantTowersComplete;
-trigger gt_ObjectiveDestroyCoolantTowersFailed;
 trigger gt_ObjectiveKillLeviathanCreateQ;
 trigger gt_ObjectiveKillLeviathanComplete;
-trigger gt_ObjectiveKillLeviathanFailed;
 trigger gt_BriefingQ;
 trigger gt_BriefingScene00;
 trigger gt_BriefingScene01;
@@ -573,7 +577,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_LoadCampaignData(libCamp_ge_MapID_MapTValerian02B);
+    libWoLC_gf_ULoadCampaignData("TValerian02B");
     TriggerExecute(gt_Init01Technology, true, true);
     TriggerExecute(gt_Init02Players, true, true);
     TriggerExecute(gt_Init03Units, true, true);
@@ -581,9 +585,9 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init05Environment, true, true);
     TriggerExecute(gt_Init06Difficulties, true, true);
     TriggerExecute(gt_Init07Help, true, true);
-    libCamp_gf_RegisterFootageRecording(gt_BriefingQ);
-    libCamp_gf_PurchaseStorymodeTech();
+    libWoLC_gf_RegisterFootageRecording(gt_BriefingQ);
     TriggerExecute(gt_IntroSequence, true, false);
+    libWCMI_gf_WM_DetectionUpgradesApply();
     return true;
 }
 
@@ -603,7 +607,6 @@ bool gt_Init01Technology_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_SetTechRestrictionsCallback(TriggerGetCurrent());
     TechTreeUpgradeAllow(gv_pLAYER_P09_HORNER, "OrbitalRelay", true);
     TechTreeUpgradeAddLevel(gv_pLAYER_P09_HORNER, "OrbitalRelay", 1);
     return true;
@@ -705,8 +708,6 @@ void gt_Init02Players_Init () {
 //--------------------------------------------------------------------------------------------------
 bool gt_Init03Units_Func (bool testConds, bool runActions) {
     // Variable Declarations
-    bool lv_playerHasMercTech;
-    int lv_merc;
     int lv_i;
 
     // Automatic Variable Declarations
@@ -733,13 +734,13 @@ bool gt_Init03Units_Func (bool testConds, bool runActions) {
     unit auto10416F19_var;
 
     // Variable Initialization
-    lv_merc = libCamp_ge_StoryMercID_MercNone;
 
     // Actions
     if (!runActions) {
         return true;
     }
 
+    libWCMI_gf_HandleMercCompound(UnitFromId(373));
     auto10F0BB12_g = UnitGroup("PlatformConnector", gv_pLAYER_P02_COOLANT_TOWERS, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     auto10F0BB12_u = UnitGroupCount(auto10F0BB12_g, c_unitCountAll);
     for (;; auto10F0BB12_u -= 1) {
@@ -933,15 +934,6 @@ bool gt_Init06Difficulties_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    if ((PlayerDifficulty(gv_pLAYER_P01_USER) == 1)) {
-        PlayerModifyPropertyInt(gv_pLAYER_P03_ZERG_BR, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_pLAYER_P04_ZERG_BL, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_pLAYER_P05_ZERG_TL, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_pLAYER_P06_ZERG_TR, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_pLAYER_P07_ZERG_EXP, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_pLAYER_P08_MUTALISK_TOWERS, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-    }
-
     auto9C4C39D5_g = UnitGroup("PlatformConnector", c_playerAny, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     auto9C4C39D5_u = UnitGroupCount(auto9C4C39D5_g, c_unitCountAll);
     for (;; auto9C4C39D5_u -= 1) {
@@ -1094,6 +1086,8 @@ bool gt_IntroSequence_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_StartAI, true, false);
     Wait(0.1, c_timeReal);
     TriggerExecute(gt_StartMutaSpawners, true, false);
+    libWCMI_gf_SetWorkerRallyPointforNexus2(UnitFromId(1));
+    libWCMI_gf_StartingWorkersAutoHarvest(RegionFromId(49), RegionFromId(50));
     UIAlertPoint("Trigger", gv_pLAYER_P01_USER, StringExternal("Param/Value/78CF50B7"), null, PointFromId(37));
     libNtve_gf_CinematicMode(false, PlayerGroupAll(), 1.5);
     libNtve_gf_GlobalCinematicSetting(false);
@@ -1261,7 +1255,7 @@ bool gt_LeviathanDies_Func (bool testConds, bool runActions) {
     TextExpressionSetToken("Param/Expression/3E1FEF24", "A", StringToText(FixedToString(TimerGetRemaining(gv_leviathanDeathWindow), c_fixedPrecisionAny)));
     TriggerDebugOutput(1, TextExpressionAssemble("Param/Expression/3E1FEF24"), false);
     if ((libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1) && (TimerGetRemaining(gv_leviathanDeathWindow) > 0.0)) {
-        AchievementAward(gv_pLAYER_P01_USER, "Anniversary_TValerian02B");
+        libWoLC_gf_CampaignAwardAchievement("Anniversary_TValerian02B");
         TriggerDebugOutput(1, StringExternal("Param/Value/D09C0E7C"), false);
     }
 
@@ -1510,7 +1504,7 @@ bool gt_Area01CoolantTowerKilledRedSouthEastQ_Func (bool testConds, bool runActi
 
     TriggerExecute(gt_PlatformLinesBRAQ, true, false);
     TimerStart(gv_platformBlowsTimerArea01, 45.0, false, c_timeGame);
-    TimerWindowCreate(TimerLastStarted(), StringExternal("Param/Value/4C8584A2"), true, false);
+    libWCUI_gf_TimerWindowCreate(TimerLastStarted(), StringExternal("Param/Value/D5DA8398"), true, false);
     TimerWindowSetFormat(TimerWindowLastCreated(), StringToText("<min2/>:<sec2/>"));
     if ((gv_inCinematic == true)) {
         TimerPause(TimerLastStarted(), true);
@@ -1578,7 +1572,7 @@ bool gt_Area02CoolantTowerKilledGreenSouthWestQ_Func (bool testConds, bool runAc
 
     TriggerExecute(gt_PlatformLinesBLAQ, true, false);
     TimerStart(gv_platformBlowsTimerArea02, 45.0, false, c_timeGame);
-    TimerWindowCreate(TimerLastStarted(), StringExternal("Param/Value/6A242E34"), true, false);
+    libWCUI_gf_TimerWindowCreate(TimerLastStarted(), StringExternal("Param/Value/568BF307"), true, false);
     TimerWindowSetFormat(TimerWindowLastCreated(), StringToText("<min2/>:<sec2/>"));
     if ((gv_inCinematic == true)) {
         TimerPause(TimerLastStarted(), true);
@@ -1646,7 +1640,7 @@ bool gt_Area03CoolantTowerKilledPurpleNorthWestQ_Func (bool testConds, bool runA
 
     TriggerExecute(gt_PlatformLinesTLAQ, true, false);
     TimerStart(gv_platformBlowsTimerArea03, 45.0, false, c_timeGame);
-    TimerWindowCreate(TimerLastStarted(), StringExternal("Param/Value/2F9B939E"), true, false);
+    libWCUI_gf_TimerWindowCreate(TimerLastStarted(), StringExternal("Param/Value/AD0EDC92"), true, false);
     TimerWindowSetFormat(TimerWindowLastCreated(), StringToText("<min2/>:<sec2/>"));
     if ((gv_inCinematic == true)) {
         TimerPause(TimerLastStarted(), true);
@@ -1714,7 +1708,7 @@ bool gt_Area04CoolantTowerKilledWhiteCentralQ_Func (bool testConds, bool runActi
 
     TriggerExecute(gt_PlatformLinesTRAQ, true, false);
     TimerStart(gv_platformBlowsTimerArea04, 45.0, false, c_timeGame);
-    TimerWindowCreate(TimerLastStarted(), StringExternal("Param/Value/AD56BF00"), true, false);
+    libWCUI_gf_TimerWindowCreate(TimerLastStarted(), StringExternal("Param/Value/18483265"), true, false);
     TimerWindowSetFormat(TimerWindowLastCreated(), StringToText("<min2/>:<sec2/>"));
     if ((gv_inCinematic == true)) {
         TimerPause(TimerLastStarted(), true);
@@ -4777,9 +4771,7 @@ bool gt_TipCampaignTipsQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
     libCamp_gf_CreateStorymodeTips();
-    TriggerQueueExit();
     return true;
 }
 
@@ -4805,10 +4797,7 @@ bool gt_TipCoolantTowersQ_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    TriggerQueueEnter();
     libCamp_gf_CreateTipFromConversationState("StoryTips|Valerian02b_CoolantTowers", libNtve_ge_TipType_NormalTip, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -4834,10 +4823,7 @@ bool gt_TipEscapingtheExplosionQ_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    TriggerQueueEnter();
     libCamp_gf_CreateTipFromConversationState("StoryTips|Valerian02b_Explosion", libNtve_ge_TipType_NormalTip, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -4863,10 +4849,7 @@ bool gt_TipLeviathanQ_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    TriggerQueueEnter();
     libCamp_gf_CreateTipFromConversationState("StoryTips|Valerian02b_Leviathan", libNtve_ge_TipType_NormalTip, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -4938,7 +4921,7 @@ bool gt_VictoryDestroySpacePlatformsCompleted_Func (bool testConds, bool runActi
     TriggerEnable(TriggerGetCurrent(), false);
     gv_gameOver = true;
     TriggerExecute(gt_ObjectiveDestroyCoolantTowersComplete, true, false);
-    libCamp_gf_RunMissionVictorySequence(gt_VictoryQ);
+    libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
     return true;
 }
 
@@ -4958,15 +4941,15 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     }
 
     if ((ObjectiveGetState(gv_objectiveDestroyCoolantTowers) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_objectiveKillLeviathan) == c_objectiveStateCompleted)) {
-        AchievementAward(gv_pLAYER_P01_USER, "TValerian02B_1");
+        libWoLC_gf_CampaignAwardAchievement("TValerian02B_1");
     }
 
     if ((libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1) && (gv_stat_PlayerUnitsLostToPlatform == 0)) {
-        AchievementAward(gv_pLAYER_P01_USER, "TValerian02B_2");
+        libWoLC_gf_CampaignAwardAchievement("TValerian02B_2");
     }
 
     if ((libNtve_gf_DifficultyValueInt(0, 0, 1, 1) == 1) && (TimerGetRemaining(gv_achievementHardTimer) != 0.0)) {
-        AchievementAward(gv_pLAYER_P01_USER, "TValerian02B_3");
+        libWoLC_gf_CampaignAwardAchievement("TValerian02B_3");
     }
 
     VictoryPanelAddAchievement("TValerian02B_1");
@@ -4981,7 +4964,7 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     VictoryPanelAddCustomStatisticLine(StringToText(""), StringToText(""));
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/6856AC4A"), IntToText(gv_stat_ZergKilledByPlatform));
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/C048D02E"), IntToText(gv_stat_PlayerUnitsLostToPlatform));
-    libCamp_gf_EndCampaignMission(gv_pLAYER_P01_USER, c_gameOverVictory);
+    libWCMI_gf_EndCampaignMission(gv_pLAYER_P01_USER, c_gameOverVictory);
     return true;
 }
 
@@ -5021,7 +5004,7 @@ bool gt_DefeatBaseDead_Func (bool testConds, bool runActions) {
     TriggerQueueClear(c_triggerQueueRemove);
     Wait(2.0, c_timeReal);
     libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/E7BF8BDE"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_Defeat, true, false);
     return true;
 }
@@ -5042,7 +5025,7 @@ bool gt_Defeat_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_EndCampaignMission(gv_pLAYER_P01_USER, c_gameOverDefeat);
+    libWCMI_gf_EndCampaignMission(gv_pLAYER_P01_USER, c_gameOverDefeat);
     return true;
 }
 
@@ -5069,7 +5052,7 @@ bool gt_VictoryCheat_Func (bool testConds, bool runActions) {
     }
 
     gv_gameOver = true;
-    libCamp_gf_RunMissionVictorySequence(gt_Victory);
+    libWCMI_gf_RunMissionVictorySequence(gt_Victory);
     return true;
 }
 
@@ -5126,12 +5109,9 @@ bool gt_ObjectiveDestroyCoolantTowersCreateQ_Func (bool testConds, bool runActio
 
     TriggerEnable(TriggerGetCurrent(), false);
     gv_objectiveDestroyCoolantTowersTotal = 4;
-    TriggerQueueEnter();
-    ObjectiveCreate((StringExternal("Param/Value/074A3321") + IntToText(gv_objectiveDestroyCoolantTowerProgress) + StringExternal("Param/Value/3C3FF16F") + IntToText(gv_objectiveDestroyCoolantTowersTotal) + StringExternal("Param/Value/0C759493")), StringExternal("Param/Value/06F1D37B"), c_objectiveStateActive, true);
+    libWCMI_gf_CreateObjectiveCampaign("TValerian02B_1");
     gv_objectiveDestroyCoolantTowers = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_TValerian02BObjective1, ObjectiveLastCreated(), StringExternal("Param/Value/09462CD7"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeGame);
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeGame);
     return true;
 }
 
@@ -5161,8 +5141,9 @@ bool gt_ObjectiveDestroyCoolantTowersUpdate_Func (bool testConds, bool runAction
         return true;
     }
 
+    TriggerExecute(gt_ObjectiveDestroyCoolantTowersCreateQ, true, false);
     gv_objectiveDestroyCoolantTowerProgress += 1;
-    ObjectiveSetName(gv_objectiveDestroyCoolantTowers, (StringExternal("Param/Value/4A3AE9EE") + IntToText(gv_objectiveDestroyCoolantTowerProgress) + StringExternal("Param/Value/93348B29") + IntToText(gv_objectiveDestroyCoolantTowersTotal) + StringExternal("Param/Value/7D0B2B5E")));
+    libWCMI_gf_SetMissionObjectiveProgress("TValerian02B_1", gv_objectiveDestroyCoolantTowerProgress);
     if ((gv_objectiveDestroyCoolantTowerProgress == 1)) {
         TriggerExecute(gt_PlatformLinesFirstTowerQ, true, false);
     }
@@ -5194,41 +5175,13 @@ bool gt_ObjectiveDestroyCoolantTowersComplete_Func (bool testConds, bool runActi
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveDestroyCoolantTowersCreateQ, true, false);
-    ObjectiveSetState(gv_objectiveDestroyCoolantTowers, c_objectiveStateCompleted);
+    libWCMI_gf_ZS_SetMissionObjectiveState("TValerian02B_1", libWoLC_ge_MissionObjectiveState_Completed);
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 void gt_ObjectiveDestroyCoolantTowersComplete_Init () {
     gt_ObjectiveDestroyCoolantTowersComplete = TriggerCreate("gt_ObjectiveDestroyCoolantTowersComplete_Func");
-}
-
-//--------------------------------------------------------------------------------------------------
-// Trigger: Objective Destroy Coolant Towers Failed
-//--------------------------------------------------------------------------------------------------
-bool gt_ObjectiveDestroyCoolantTowersFailed_Func (bool testConds, bool runActions) {
-    // Automatic Variable Declarations
-    // Conditions
-    if (testConds) {
-        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
-            return false;
-        }
-    }
-
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    TriggerEnable(TriggerGetCurrent(), false);
-    TriggerExecute(gt_ObjectiveDestroyCoolantTowersCreateQ, true, false);
-    ObjectiveSetState(gv_objectiveDestroyCoolantTowers, c_objectiveStateFailed);
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void gt_ObjectiveDestroyCoolantTowersFailed_Init () {
-    gt_ObjectiveDestroyCoolantTowersFailed = TriggerCreate("gt_ObjectiveDestroyCoolantTowersFailed_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -5249,12 +5202,9 @@ bool gt_ObjectiveKillLeviathanCreateQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate((StringExternal("Param/Value/739C328F")), StringExternal("Param/Value/0BCA1AE6"), c_objectiveStateActive, false);
+    libWCMI_gf_CreateObjectiveCampaign("TValerian02B_2");
     gv_objectiveKillLeviathan = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_TValerian02BObjective2, ObjectiveLastCreated(), StringExternal("Param/Value/B8769560"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeGame);
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeGame);
     return true;
 }
 
@@ -5282,42 +5232,14 @@ bool gt_ObjectiveKillLeviathanComplete_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveKillLeviathanCreateQ, true, false);
-    ObjectiveSetState(gv_objectiveKillLeviathan, c_objectiveStateCompleted);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    libWCMI_gf_ZS_SetMissionObjectiveState("TValerian02B_2", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 void gt_ObjectiveKillLeviathanComplete_Init () {
     gt_ObjectiveKillLeviathanComplete = TriggerCreate("gt_ObjectiveKillLeviathanComplete_Func");
-}
-
-//--------------------------------------------------------------------------------------------------
-// Trigger: Objective Kill Leviathan Failed
-//--------------------------------------------------------------------------------------------------
-bool gt_ObjectiveKillLeviathanFailed_Func (bool testConds, bool runActions) {
-    // Automatic Variable Declarations
-    // Conditions
-    if (testConds) {
-        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
-            return false;
-        }
-    }
-
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    TriggerEnable(TriggerGetCurrent(), false);
-    TriggerExecute(gt_ObjectiveKillLeviathanCreateQ, true, false);
-    ObjectiveSetState(gv_objectiveKillLeviathan, c_objectiveStateFailed);
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void gt_ObjectiveKillLeviathanFailed_Init () {
-    gt_ObjectiveKillLeviathanFailed = TriggerCreate("gt_ObjectiveKillLeviathanFailed_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -7307,10 +7229,8 @@ void InitTriggers () {
     gt_ObjectiveDestroyCoolantTowersCreateQ_Init();
     gt_ObjectiveDestroyCoolantTowersUpdate_Init();
     gt_ObjectiveDestroyCoolantTowersComplete_Init();
-    gt_ObjectiveDestroyCoolantTowersFailed_Init();
     gt_ObjectiveKillLeviathanCreateQ_Init();
     gt_ObjectiveKillLeviathanComplete_Init();
-    gt_ObjectiveKillLeviathanFailed_Init();
     gt_BriefingQ_Init();
     gt_BriefingScene00_Init();
     gt_BriefingScene01_Init();

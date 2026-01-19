@@ -30,6 +30,80 @@
     <CEffectEnumArea default="1" id="SquadAbilSearchRadiusExt" parent="SquadAbilSearch">
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
     </CEffectEnumArea>
+    <CEffectDamage id="RedScannerFireDamage">
+        <EditorCategories value="Race:Terran"/>
+        <Flags index="NoVitalLeechShields" value="1"/>
+        <Flags index="NoVitalLeechEnergy" value="1"/>
+        <Flags index="NoVitalGainShields" value="1"/>
+        <Flags index="NoVitalGainEnergy" value="1"/>
+        <Death value="Fire"/>
+        <AttributeBonus index="Light" value="2"/>
+        <AttributeBonus index="Biological" value="2"/>
+        <Amount value="2"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="SensorTowerMiniWorldSearchArea">
+        <EditorCategories value="Race:Terran"/>
+        <SearchFilters value="Visible;Player,Ally,Neutral,Missile,Dead"/>
+        <AreaArray Radius="1" Effect="SensorTowerMiniWorldApply"/>
+    </CEffectEnumArea>
+    <CEffectApplyBehavior id="VanillaScannerTargetLockAB">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="VanillaScannerTargetLock"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadNovaDominationApplyBehavior">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="SquadNovaDomination"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="SquadNovaDominationApplyNovaBehavior">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="SquadNovaDominationAlreadyDominating"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="SquadNovaDominationApplySet">
+        <ValidatorArray value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadNovaDominationApplyBehavior"/>
+        <EffectArray value="SquadNovaDominationApplyNovaBehavior"/>
+    </CEffectSet>
+    <CEffectEnumArea id="SquadNovaDominationDeathTBSearchArea">
+        <EditorCategories value="Race:Terran"/>
+        <SearchFilters value="-;Player,Ally,Neutral,Structure,Heroic,RawResource,HarvestableResource,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray MaxCount="1" Radius="5" Effect="SquadNovaDominationDeathTransferBehavior"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectEnumArea>
+    <CEffectTransferBehavior id="SquadNovaDominationDeathTransferBehavior">
+        <EditorCategories value=""/>
+        <OwningPlayer Effect="SquadNovaDominationApplyBehavior" Value="Caster"/>
+        <ImpactUnit Value="Target"/>
+        <Behavior value="SquadNovaDomination"/>
+        <Count value="1"/>
+        <Copy value="1"/>
+    </CEffectTransferBehavior>
+    <CEffectCreatePersistent id="SquadNovaDominationPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <Flags index="PersistUntilDestroyed" value="1"/>
+        <InitialEffect value="SquadNovaDominationApplySet"/>
+        <FinalEffect value="SquadNovaDominationRemoveSet"/>
+        <PeriodicValidator value="Domination"/>
+        <PeriodicPeriodArray value="0.2"/>
+    </CEffectCreatePersistent>
+    <CEffectRemoveBehavior id="SquadNovaDominationRemoveBehavior">
+        <EditorCategories value="Race:Terran"/>
+        <BehaviorLink value="Domination"/>
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="SquadNovaDominationRemoveNovaBehavior">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Source"/>
+        <BehaviorLink value="AlreadyDominating"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectSet id="SquadNovaDominationRemoveSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="SquadNovaDominationRemoveNovaBehavior"/>
+        <EffectArray value="SquadNovaDominationRemoveBehavior"/>
+    </CEffectSet>
     <CEffectUseCalldown id="SquadNovaSpiderMineCalldown">
         <EditorCategories value="Race:Terran"/>
         <WhichLocation Value="TargetPoint"/>
@@ -3133,10 +3207,10 @@
         <EditorCategories value="Race:Terran"/>
         <Behavior value="SensorTowerMiniWorld"/>
     </CEffectApplyBehavior>
-    <CEffectEnumArea id="SensorTowerMiniWorldSearch">
+    <CEffectEnumArea id="SensorTowerMiniWorldSearchTarget">
         <EditorCategories value="Race:Terran"/>
         <SearchFilters value="Visible;Player,Ally,Neutral,Missile,Dead"/>
-        <AreaArray MaxCount="1" Radius="30" Effect="SensorTowerMiniWorldApply"/>
+        <AreaArray MaxCount="1" Radius="30" Effect="SensorTowerMiniWorldSearchArea"/>
     </CEffectEnumArea>
     <CEffectDamage id="SquadToshConsumptionDamage">
         <EditorCategories value="Race:Terran"/>
@@ -5266,7 +5340,7 @@
         <EditorCategories value="Race:Terran"/>
         <OwningPlayer Value="Source"/>
         <SearchFilters value="-;Player,Ally,Neutral"/>
-        <AreaArray MaxCount="5" Radius="13" Effect="SquadHavocTargetLockABTarget"/>
+        <AreaArray MaxCount="5" Radius="13" Effect="VanillaScannerTargetLockAB"/>
         <MaxCount value="5"/>
     </CEffectEnumArea>
     <CEffectCreatePersistent id="VanillaScannerSweep">

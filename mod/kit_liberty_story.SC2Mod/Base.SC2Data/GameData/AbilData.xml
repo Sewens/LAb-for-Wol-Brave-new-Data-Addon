@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <!--  -->
+    <CAbilAttack id="DiamondbackAttack">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <TargetMessage value="Abil/TargetMessage/attack"/>
+        <MinAttackSpeedMultiplier value="0.25"/>
+        <MaxAttackSpeedMultiplier value="128"/>
+    </CAbilAttack>
+    <CAbilMove id="DiamondbackMove">
+        <AbilSetId value="Move"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+    </CAbilMove>
+    <CAbilStop id="DiamondbackStop">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+    </CAbilStop>
+    <!--  -->
     <CAbilEffectInstant id="Kit@PerditionTurretRemoveHoldFire">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Flags index="Transient" value="1"/>
@@ -32,6 +47,7 @@
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectInstant>
+    <!--  -->
     <CAbilEffectTarget id="NexusMassRecall">
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
         <Effect index="0" value="NexusMassRecallSearch"/>
@@ -43,6 +59,7 @@
         <CursorEffect value="NexusMassRecallSearch"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="MassRecall"/>
     </CAbilEffectTarget>
+    <!--  -->
     <CAbilEffectTarget id="DarkTemplarBlink">
         <AbilSetId value="Blnk"/>
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
@@ -56,6 +73,22 @@
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectTarget>
+    <CAbilEffectInstant id="Stimpack">
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Flags index="PassengerAcquirePassengers" value="1"/>
+        <AutoCastRange value="7"/>
+        <AutoCastValidatorArray value="Kit@CasterNotMarineStimmed"/>
+        <AutoCastValidatorArray value="CasterIsFiringWeapon"/>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="StimpackMarauder">
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Flags index="PassengerAcquirePassengers" value="1"/>
+        <AutoCastRange value="7"/>
+        <AutoCastValidatorArray value="Kit@CasterNotMarauderStimmed"/>
+        <AutoCastValidatorArray value="CasterIsFiringWeapon"/>
+    </CAbilEffectInstant>
     <CAbilEffectTarget id="ZeratulBlink">
         <PrepEffect value="MakeCasterFacingTargetPoint"/>
     </CAbilEffectTarget>
@@ -128,6 +161,7 @@
     </CAbilMorph>
     <CAbilTransport id="MedivacTransport">
         <LoadValidatorArray value="NotSiegedTank"/>
+        <LoadValidatorArray value="NotSiegedTankMerc"/>
     </CAbilTransport>
     <CAbilMorph id="PerditionTurretBurrow">
         <InfoArray index="0">
@@ -336,6 +370,19 @@
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectTarget>
+    <CAbilAttack id="BattlecruiserAttack">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <TargetMessage value="Abil/TargetMessage/attack"/>
+        <MinAttackSpeedMultiplier value="0.25"/>
+        <MaxAttackSpeedMultiplier value="128"/>
+    </CAbilAttack>
+    <CAbilMove id="BattlecruiserMove">
+        <AbilSetId value="Move"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+    </CAbilMove>
+    <CAbilStop id="BattlecruiserStop">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+    </CAbilStop>
     <!-- TValerian02a Shared Command Card -->
     <CAbilEffectTarget id="RaynorSnipe">
         <CmdButtonArray index="Execute">
@@ -386,24 +433,6 @@
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectInstant>
-    <!-- Medic Heal -->
-    <CAbilEffectTarget id="heal">
-        <!-- Range Buff -->
-        <Range index="0" value="4"/>
-        <!-- Allow mind controlled zerg -->
-        <TargetFilters index="0" value="Biological,Visible;Self,Enemy,Missile,UnderConstruction,Dead,Hidden"/>
-        <!-- And correct validators -->
-        <AutoCastValidatorArray value="UnitOrAttackingStructure"/>
-        <AutoCastValidatorArray value="NotStasis"/>
-        <AutoCastValidatorArray value="NotTimedLifeUnitAndNotLarva"/>
-        <AutoCastValidatorArray value="Unrepairable"/>
-        <SmartValidatorArray value="NotMaxHP"/>
-        <!-- Prioritize damaged units -->
-        <TargetSorts>
-            <SortArray index="1" value="TSLifeFraction"/>
-            <SortArray index="2" value="TSDistance"/>
-        </TargetSorts>
-    </CAbilEffectTarget>
     <!-- Reaper AutoCast Bombs-->
     <CAbilEffectTarget id="D8Charge">
         <Flags index="AutoCast" value="1"/>
@@ -431,6 +460,7 @@
         <AutoCastValidatorArray value="NotStasis"/>
         <AutoCastValidatorArray value="NotTimedLifeUnitAndNotLarva"/>
         <AutoCastValidatorArray value="Unrepairable"/>
+        <Flags index="TransportAcquirePassengers" value="1"/>
     </CAbilEffectTarget>
     <CAbilEffectTarget id="MedivacHeal">
         <TargetFilters index="0" value="Biological,Visible;Self,Enemy,Missile,UnderConstruction,Dead,Hidden"/>
@@ -566,5 +596,23 @@
         <Cost index="0">
             <Vital index="Energy" value="0"/>
         </Cost>
+    </CAbilEffectTarget>
+    <!-- Medic Heal -->
+    <CAbilEffectTarget id="heal">
+        <!-- Allow mind controlled zerg -->
+        <TargetFilters index="0" value="Biological,Visible;Self,Enemy,Missile,UnderConstruction,Dead,Hidden"/>
+        <!-- Prioritize damaged units -->
+        <TargetSorts>
+            <SortArray index="1" value="TSLifeFraction"/>
+            <SortArray index="2" value="TSDistance"/>
+        </TargetSorts>
+        <!-- Range Buff -->
+        <Range index="0" value="4"/>
+        <SmartValidatorArray value="NotMaxHP"/>
+        <!-- And correct validators -->
+        <AutoCastValidatorArray value="UnitOrAttackingStructure"/>
+        <AutoCastValidatorArray value="NotStasis"/>
+        <AutoCastValidatorArray value="NotTimedLifeUnitAndNotLarva"/>
+        <AutoCastValidatorArray value="Unrepairable"/>
     </CAbilEffectTarget>
 </Catalog>

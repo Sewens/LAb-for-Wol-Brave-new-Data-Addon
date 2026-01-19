@@ -7,7 +7,10 @@
 //==================================================================================================
 include "TriggerLibs/NativeLib"
 include "TriggerLibs/LibertyLib"
-include "TriggerLibs/CampaignLib"
+include "LibCamp"
+include "LibWoLC"
+include "LibWCMI"
+include "LibWCUI"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -16,6 +19,9 @@ void InitLibs () {
     libNtve_InitLib();
     libLbty_InitLib();
     libCamp_InitLib();
+    libWoLC_InitLib();
+    libWCMI_InitLib();
+    libWCUI_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -65,7 +71,6 @@ int gv_beaconPingMutalisks;
 int gv_beaconPingZerglings;
 timer gv_achievementHardTimer;
 int gv_objectiveReachNexus;
-int gv_objectiveZeratulMustSurvive;
 int gv_overmindTendrilsVisited;
 int gv_objectiveOvermindTendrils;
 int gv_obelisksPowered;
@@ -100,7 +105,6 @@ void InitGlobals () {
     gv_nydusWormHP = 200.0;
     gv_achievementHardTimer = TimerCreate();
     gv_objectiveReachNexus = c_invalidObjectiveId;
-    gv_objectiveZeratulMustSurvive = c_invalidObjectiveId;
     gv_objectiveOvermindTendrils = c_invalidObjectiveId;
     gv_objectivePowerTheObelisks = c_invalidObjectiveId;
     gv_midColossusHiddenGroup = UnitGroupEmpty();
@@ -135,6 +139,7 @@ trigger gt_IntroSequence;
 trigger gt_StartGameStage1;
 trigger gt_StartGameStage2;
 trigger gt_Stage2Init;
+trigger gt_HandleZeratulDeath;
 trigger gt_RainCycling;
 trigger gt_ChangeOwnerofZeratul;
 trigger gt_ZeratulFindsObserver;
@@ -211,16 +216,12 @@ trigger gt_TipObserver;
 trigger gt_TipWarpInQ;
 trigger gt_ObjectiveReachtheNexusCreateQ;
 trigger gt_ObjectiveReachtheNexusComplete;
-trigger gt_ObjectiveReachtheNexusFailed;
-trigger gt_ObjectiveOvermindTendrilsCreateHidden;
-trigger gt_ObjectiveOvermindTendrilsShowQ;
+trigger gt_ObjectiveOvermindTendrilsCreateQ;
 trigger gt_ObjectiveOvermindTendrilsUpdateQ;
 trigger gt_ObjectiveOvermindTendrilsComplete;
-trigger gt_ObjectiveOvermindTendrilsFailed;
 trigger gt_ObjectivePowerTheObelisksCreateQ;
 trigger gt_ObjectivePowerTheObelisksUpdateQ;
 trigger gt_ObjectivePowerTheObelisksComplete;
-trigger gt_ObjectivePowerTheObelisksFailed;
 trigger gt_BriefingQ;
 trigger gt_BriefingScene00;
 trigger gt_BriefingScene01;
@@ -335,7 +336,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_LoadCampaignData(libCamp_ge_MapID_MapTZeratul03);
+    libWoLC_gf_ULoadCampaignData("TZeratul03");
     TriggerExecute(gt_Init01Technology, true, true);
     TriggerExecute(gt_Init02Players, true, true);
     TriggerExecute(gt_Init03Units, true, true);
@@ -343,8 +344,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init05Environment, true, true);
     TriggerExecute(gt_Init06Difficulties, true, true);
     TriggerExecute(gt_Init07Help, true, true);
-    libCamp_gf_RegisterFootageRecording(gt_BriefingQ);
-    libCamp_gf_PurchaseStorymodeTech();
+    libWoLC_gf_RegisterFootageRecording(gt_BriefingQ);
     TriggerExecute(gt_IntroSequence, true, false);
     return true;
 }
@@ -365,15 +365,29 @@ bool gt_Init01Technology_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_SetTechRestrictionsCallback(TriggerGetCurrent());
-    TechTreeUpgradeAddLevel(gv_p01_USER, "Charge", 1);
-    TechTreeUpgradeAddLevel(gv_p01_USER, "PsiStormTech", 1);
-    TechTreeUpgradeAddLevel(gv_p01_USER, "BlinkTech", 1);
+    TechTreeAbilityAllow(gv_p01_USER, AbilityCommand("CyberneticsCoreResearch", 6), false);
+    TechTreeAbilityAllow(gv_p01_USER, AbilityCommand("UpgradeToWarpGate", 0), false);
+    TechTreeUnitAllow(gv_p01_USER, "Zealot", true);
+    TechTreeUnitAllow(gv_p01_USER, "HighTemplar", true);
+    TechTreeUnitAllow(gv_p01_USER, "Archon", true);
+    TechTreeUnitAllow(gv_p01_USER, "DarkTemplar", true);
+    TechTreeUnitAllow(gv_p01_USER, "Stalker", true);
+    TechTreeAbilityAllow(gv_p01_USER, AbilityCommand("Blink", 0), true);
+    TechTreeUnitAllow(gv_p01_USER, "Sentry", true);
+    TechTreeUpgradeAddLevel(gv_p01_USER, "VoidSentryShieldRepair", 1);
+    TechTreeAbilityAllow(gv_p01_USER, AbilityCommand("VoidSentryShieldRepair", 0), true);
+    TechTreeAbilityAllow(gv_p01_USER, AbilityCommand("ForceField", 0), true);
+    TechTreeUnitAllow(gv_p01_USER, "Immortal", true);
+    TechTreeUnitAllow(gv_p01_USER, "Observer", true);
+    TechTreeUnitAllow(gv_p01_USER, "Colossus", true);
     TechTreeUpgradeAddLevel(gv_p01_USER, "ExtendedThermalLance", 1);
-    TechTreeAbilityAllow(gv_p01_USER, AbilityCommand("ProtossBuild", 13), true);
-    TechTreeAbilityAllow(gv_p01_USER, AbilityCommand("ProtossBuild", 14), true);
-    TechTreeAbilityAllow(gv_p01_USER, AbilityCommand("RoboticsFacilityTrain", 1), true);
-    TechTreeAbilityAllow(gv_p01_USER, AbilityCommand("RoboticsFacilityTrain", 2), true);
+    TechTreeAbilityAllow(gv_p01_USER, AbilityCommand("ForgeResearch", 6), true);
+    TechTreeAbilityAllow(gv_p01_USER, AbilityCommand("ForgeResearch", 0), true);
+    TechTreeAbilityAllow(gv_p01_USER, AbilityCommand("ForgeResearch", 3), true);
+    TechTreeAbilityAllow(gv_p01_USER, AbilityCommand("ForgeResearch", 7), true);
+    TechTreeAbilityAllow(gv_p01_USER, AbilityCommand("ForgeResearch", 1), true);
+    TechTreeAbilityAllow(gv_p01_USER, AbilityCommand("ForgeResearch", 4), true);
+    TechTreeAbilityAllow(gv_p01_USER, AbilityCommand("ProtossBuild", 24), false);
     gf_AddUpgradeForEnemies(1, "Burrow");
     gf_AddUpgradeForEnemies(1, "overlordtransport");
     TechTreeUpgradeAddLevel(gv_p02_ZERG_LOW_GROUND_AI, "overlordspeed", 1);
@@ -432,6 +446,7 @@ bool gt_Init02Players_Func (bool testConds, bool runActions) {
     PlayerSetColorIndex(gv_p03_ZERG_NORTH, 4, true);
     PlayerSetColorIndex(gv_p04_ZERG_EAST, 4, true);
     PlayerSetColorIndex(gv_p05_ZERG_LOW_GROUND_NOAI, 4, true);
+    libWCMI_gf_WM_DetectionUpgradesApply();
     return true;
 }
 
@@ -605,13 +620,6 @@ bool gt_Init06Difficulties_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    if ((PlayerDifficulty(gv_p01_USER) == 1)) {
-        PlayerModifyPropertyInt(gv_p02_ZERG_LOW_GROUND_AI, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p03_ZERG_NORTH, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p04_ZERG_EAST, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p05_ZERG_LOW_GROUND_NOAI, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-    }
-
     gv_nydusWormHP = libNtve_gf_DifficultyValueFixed(400.0, 400.0, 600.0, 800.0);
     gf_AddUpgradeForEnemies(libNtve_gf_DifficultyValueInt(0, 0, 0, 1), "ZergFlyerArmorsLevel1");
     gf_AddUpgradeForEnemies(libNtve_gf_DifficultyValueInt(0, 0, 1, 1), "ZergMeleeWeaponsLevel1");
@@ -726,8 +734,6 @@ bool gt_StartGameStage1_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_TransmissionZeratulIntroQ, true, false);
     Wait(3.0, c_timeReal);
     TriggerExecute(gt_ObjectiveReachtheNexusCreateQ, true, true);
-    Wait(0.1, c_timeReal);
-    TriggerExecute(gt_ObjectiveOvermindTendrilsCreateHidden, true, false);
     Wait(2.0, c_timeReal);
     UnitBehaviorAdd(UnitFromId(685), "VoidSeekerDock", UnitFromId(685), 1);
     VisRevealArea(gv_p01_USER, RegionCircle(UnitGetPosition(UnitFromId(2)), 4.0), 6.0, false);
@@ -779,7 +785,7 @@ bool gt_StartGameStage2_Func (bool testConds, bool runActions) {
     VisRevealArea(gv_p01_USER, RegionCircle(UnitGetPosition(UnitFromId(36)), 4.0), 0.1, false);
     VisRevealArea(gv_p01_USER, RegionCircle(UnitGetPosition(UnitFromId(38)), 4.0), 0.1, false);
     VisRevealArea(gv_p01_USER, RegionCircle(UnitGetPosition(UnitFromId(46)), 4.0), 0.1, false);
-    TriggerExecute(gt_ObjectiveOvermindTendrilsShowQ, true, false);
+    TriggerExecute(gt_ObjectiveOvermindTendrilsCreateQ, true, false);
     TriggerExecute(gt_TransmissionGettoOvermindRemainsQ, true, false);
     Wait(10.0, c_timeGame);
     CreepSetSpeed(c_creepSpeedGrowth, 100.0);
@@ -793,7 +799,6 @@ bool gt_StartGameStage2_Func (bool testConds, bool runActions) {
     libNtve_gf_CreateUnitsAtPoint2(19, "ZerglingBurrowed", 0, gv_p05_ZERG_LOW_GROUND_NOAI, PointFromId(83));
     libNtve_gf_AddUnitGroupToUnitGroup(UnitLastCreatedGroup(), gv_zerglingRush);
     TriggerExecute(gt_ZergFrenzyTimerInitialization, true, false);
-    UISetRestartLoadingScreen(ConversationDataStateText("Maps|TZeratul03", "Loading Screen Restart 2"));
     TriggerEnable(gt_AfterZerglingAttack, true);
     TriggerExecute(gt_AfterZerglingAttackFailsafe, true, false);
     Wait(1.0, c_timeGame);
@@ -823,6 +828,8 @@ bool gt_Stage2Init_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    TriggerEnable(gt_DefeatZeratulDies, false);
+    TriggerEnable(gt_HandleZeratulDeath, true);
     TriggerEnable(gt_OverlordWandering, true);
     TriggerEnable(gt_OvermindTendrilBeaconBanelingsNE, true);
     TriggerEnable(gt_OvermindTendrilBeaconLurkersSE, true);
@@ -850,6 +857,69 @@ bool gt_Stage2Init_Func (bool testConds, bool runActions) {
 //--------------------------------------------------------------------------------------------------
 void gt_Stage2Init_Init () {
     gt_Stage2Init = TriggerCreate("gt_Stage2Init_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Handle Zeratul Death
+//--------------------------------------------------------------------------------------------------
+bool gt_HandleZeratulDeath_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    int lv_duration;
+    unit lv_nexus;
+    unit lv_beacon;
+
+    // Automatic Variable Declarations
+    int autoF1C70A4A_ae;
+    int autoF1C70A4A_var;
+
+    // Variable Initialization
+    lv_duration = 60;
+    lv_nexus = UnitGroupClosestToPoint(UnitGroup(null, gv_p01_USER, RegionEntireMap(), UnitFilter((1 << c_targetFilterPreventReveal), 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), PointFromId(24));
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    if ((lv_nexus == null)) {
+        libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_Warning, StringExternal("Param/Value/E6D08BF5"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
+    }
+    else {
+        TextExpressionSetToken("Param/Expression/219AE45F", "A", IntToText(lv_duration));
+        libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_Warning, TextExpressionAssemble("Param/Expression/219AE45F"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
+    }
+    while ((lv_nexus == null)) {
+        lv_nexus = UnitGroupClosestToPoint(UnitGroup(null, gv_p01_USER, RegionEntireMap(), UnitFilter((1 << c_targetFilterPreventReveal), 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), PointFromId(24));
+        Wait(1.0, c_timeGame);
+    }
+    libNtve_gf_CreateUnitsWithDefaultFacing(1, "TZeratul03ReviveBeacon", c_unitCreateIgnoreBirth, gv_p01_USER, UnitGetPosition(lv_nexus));
+    lv_beacon = UnitLastCreated();
+    Kit_UIHeroPanel_SetHeroUnit(0, lv_beacon, "Assets\\Textures\\zeratul_ingame_heroportrait.dds");
+    UnitCreateEffectUnit(lv_beacon, "CopyTargetSelectionAndControlGroups", gv_zeratul);
+    UnitSelect(lv_beacon, gv_p01_USER, false);
+    UnitIssueOrder(lv_beacon, OrderTargetingUnit(AbilityCommand("TZeratul03RallyReviveBeacon", 0), lv_beacon), c_orderQueueReplace);
+    UnitSetFacing(gv_zeratul, UnitGetFacing(lv_beacon), 0.0);
+    UnitSetPropertyFixed(lv_beacon, c_unitPropLifeMax, UnitGetPropertyFixed(gv_zeratul, c_unitPropLifeMax, c_unitPropCurrent));
+    autoF1C70A4A_ae = lv_duration;
+    autoF1C70A4A_var = 1;
+    for ( ; autoF1C70A4A_var <= autoF1C70A4A_ae; autoF1C70A4A_var += 1 ) {
+        UnitSetPropertyFixed(lv_beacon, c_unitPropLifePercent, ((autoF1C70A4A_var / IntToFixed(lv_duration)) * 100.0));
+        Wait(1.0, c_timeGame);
+    }
+    libNtve_gf_PlayerRemoveCooldown(1, "Abil/KerriganRevive");
+    UnitIssueOrder(lv_beacon, libNtve_gf_ReviveOrderWithNoTarget(AbilityCommand("KerriganRevive", 0), gv_zeratul), c_orderQueueReplace);
+    Wait(0.125, c_timeGame);
+    UnitCreateEffectUnit(gv_zeratul, "CopyTargetSelectionAndControlGroups", lv_beacon);
+    UnitKill(lv_beacon);
+    Kit_UIHeroPanel_SetHeroUnit(0, gv_zeratul, "Assets\\Textures\\zeratul_ingame_heroportrait.dds");
+    libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_Warning, StringExternal("Param/Value/EB1FF18F"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_HandleZeratulDeath_Init () {
+    gt_HandleZeratulDeath = TriggerCreate("gt_HandleZeratulDeath_Func");
+    TriggerAddEventUnitDied(gt_HandleZeratulDeath, UnitRefFromVariable("gv_zeratul"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -909,6 +979,7 @@ bool gt_ChangeOwnerofZeratul_Func (bool testConds, bool runActions) {
     UnitFlashSelection(gv_zeratul, 1.0);
     UnitSelect(gv_zeratul, gv_p01_USER, true);
     UnitIssueOrder(gv_zeratul, OrderTargetingPoint(AbilityCommand("move", 0), PointFromId(1520)), c_orderQueueReplace);
+    Kit_UIHeroPanel_SetHeroUnit(0, gv_zeratul, "Assets\\Textures\\zeratul_ingame_heroportrait.dds");
     return true;
 }
 
@@ -1223,7 +1294,7 @@ bool gt_WarpGateNorthPowered_Func (bool testConds, bool runActions) {
             TriggerExecute(gt_WarpInNorthUnits, true, true);
         }
 
-        Wait(libCamp_gv_campaignObjectiveDelay, c_timeGame);
+        Wait(libWCMI_gv_campaignObjectiveDelay, c_timeGame);
     }
 
     return true;
@@ -1268,7 +1339,7 @@ bool gt_WarpGateSouthPowered_Func (bool testConds, bool runActions) {
             TriggerExecute(gt_WarpInSouthUnits, true, true);
         }
 
-        Wait(libCamp_gv_campaignObjectiveDelay, c_timeGame);
+        Wait(libWCMI_gv_campaignObjectiveDelay, c_timeGame);
     }
 
     return true;
@@ -1315,9 +1386,9 @@ bool gt_ObeliskNorthPowered_Func (bool testConds, bool runActions) {
         gv_obelisksPowered += 1;
         lv_obelisk = UnitFromId(287);
         libNtve_gf_RescueUnit(lv_obelisk, gv_p01_USER, true);
-        libCamp_gf_DisplayResearchPointsGiventoPlayer(libCamp_ge_StoryResearchObject_ResearchObjectPowertheObelisks, lv_obelisk, gv_p01_USER);
+        libWCMI_gf_DisplayMissionObjectiveRewardFloatingText(UnitGetPosition(lv_obelisk), "TZeratul03_3");
         TriggerExecute(gt_ObjectivePowerTheObelisksUpdateQ, true, false);
-        Wait(libCamp_gv_campaignObjectiveDelay, c_timeGame);
+        Wait(libWCMI_gv_campaignObjectiveDelay, c_timeGame);
     }
 
     return true;
@@ -1364,9 +1435,9 @@ bool gt_ObeliskSouthPowered_Func (bool testConds, bool runActions) {
         gv_obelisksPowered += 1;
         lv_obelisk = UnitFromId(285);
         libNtve_gf_RescueUnit(lv_obelisk, gv_p01_USER, true);
-        libCamp_gf_DisplayResearchPointsGiventoPlayer(libCamp_ge_StoryResearchObject_ResearchObjectPowertheObelisks, lv_obelisk, gv_p01_USER);
+        libWCMI_gf_DisplayMissionObjectiveRewardFloatingText(UnitGetPosition(lv_obelisk), "TZeratul03_3");
         TriggerExecute(gt_ObjectivePowerTheObelisksUpdateQ, true, false);
-        Wait(libCamp_gv_campaignObjectiveDelay, c_timeGame);
+        Wait(libWCMI_gv_campaignObjectiveDelay, c_timeGame);
     }
 
     return true;
@@ -1406,7 +1477,7 @@ bool gt_RoboFacNorthPowered_Func (bool testConds, bool runActions) {
     if ((PowerLevel(gv_p01_USER, UnitGetPosition(UnitFromId(29)), "PowerSource") > 0)) {
         TriggerEnable(TriggerGetCurrent(), false);
         libNtve_gf_RescueUnit(UnitFromId(29), gv_p01_USER, true);
-        Wait(libCamp_gv_campaignObjectiveDelay, c_timeGame);
+        Wait(libWCMI_gv_campaignObjectiveDelay, c_timeGame);
     }
 
     return true;
@@ -1446,7 +1517,7 @@ bool gt_RoboFacSouthPowered_Func (bool testConds, bool runActions) {
     if ((PowerLevel(gv_p01_USER, UnitGetPosition(UnitFromId(170)), "PowerSource") > 0)) {
         TriggerEnable(TriggerGetCurrent(), false);
         libNtve_gf_RescueUnit(UnitFromId(170), gv_p01_USER, true);
-        Wait(libCamp_gv_campaignObjectiveDelay, c_timeGame);
+        Wait(libWCMI_gv_campaignObjectiveDelay, c_timeGame);
     }
 
     return true;
@@ -1486,7 +1557,7 @@ bool gt_RoboBayPowered_Func (bool testConds, bool runActions) {
     if ((PowerLevel(gv_p01_USER, UnitGetPosition(UnitFromId(174)), "PowerSource") > 0)) {
         TriggerEnable(TriggerGetCurrent(), false);
         libNtve_gf_RescueUnit(UnitFromId(174), gv_p01_USER, true);
-        Wait(libCamp_gv_campaignObjectiveDelay, c_timeGame);
+        Wait(libWCMI_gv_campaignObjectiveDelay, c_timeGame);
     }
 
     return true;
@@ -1790,11 +1861,11 @@ bool gt_ZergFrenzyTimerInitialization_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    TimerWindowCreate(gv_zergFrenzyTimer, StringExternal("Param/Value/8BA0DBD1"), true, false);
+    libWCUI_gf_SetTimerWindowDangerThreshold(30.0);
+    libWCUI_gf_TimerWindowCreate(gv_zergFrenzyTimer, StringExternal("Param/Value/9662F748"), false, false);
     gv_zergWormFrenzyTimerWindow = TimerWindowLastCreated();
-    TimerWindowSetFormat(gv_zergWormFrenzyTimerWindow, StringToText("<mintotal/>:<sec2/>"));
-    TimerWindowSetColor(gv_zergWormFrenzyTimerWindow, c_timerWindowColorTime, Color(0.00, 100.00, 100.00), 0.0);
     TimerWindowShow(gv_zergWormFrenzyTimerWindow, PlayerGroupAll(), false);
+    TimerWindowSetFormat(gv_zergWormFrenzyTimerWindow, StringToText("<mintotal/>:<sec2/>"));
     return true;
 }
 
@@ -2831,7 +2902,6 @@ bool gt_OvermindTendrilBeaconZerglingsSW_Func (bool testConds, bool runActions) 
     TriggerEnable(TriggerGetCurrent(), false);
     lv_beacon = UnitFromId(36);
     UIAlertUnit("Trigger", gv_p01_USER, StringExternal("Param/Value/24EE165C"), null, gv_zeratul);
-    libCamp_gf_DisplayResearchPointsGiventoPlayer(libCamp_ge_StoryResearchObject_ResearchObjectOvermindTendrils, lv_beacon, gv_p01_USER);
     TriggerExecute(gt_TransmissionZeratulReachesTendrilsQ, true, false);
     UnitBehaviorAdd(gv_zeratul, "SuppressCloak", gv_zeratul, 1);
     libNtve_gf_MakeUnitUncommandable(gv_zeratul, true);
@@ -2894,7 +2964,6 @@ bool gt_OvermindTendrilBeaconMutalisksNW_Func (bool testConds, bool runActions) 
     TriggerEnable(TriggerGetCurrent(), false);
     lv_beacon = UnitFromId(929);
     UIAlertUnit("Trigger", gv_p01_USER, StringExternal("Param/Value/40839C6C"), null, gv_zeratul);
-    libCamp_gf_DisplayResearchPointsGiventoPlayer(libCamp_ge_StoryResearchObject_ResearchObjectOvermindTendrils, lv_beacon, gv_p01_USER);
     TriggerExecute(gt_TransmissionZeratulReachesTendrilsQ, true, false);
     UnitBehaviorAdd(gv_zeratul, "SuppressCloak", gv_zeratul, 1);
     libNtve_gf_MakeUnitUncommandable(gv_zeratul, true);
@@ -2957,7 +3026,6 @@ bool gt_OvermindTendrilBeaconLurkersSE_Func (bool testConds, bool runActions) {
     TriggerEnable(TriggerGetCurrent(), false);
     lv_beacon = UnitFromId(46);
     UIAlertUnit("Trigger", gv_p01_USER, StringExternal("Param/Value/57A961AD"), null, gv_zeratul);
-    libCamp_gf_DisplayResearchPointsGiventoPlayer(libCamp_ge_StoryResearchObject_ResearchObjectOvermindTendrils, lv_beacon, gv_p01_USER);
     TriggerExecute(gt_TransmissionZeratulReachesTendrilsQ, true, false);
     UnitBehaviorAdd(gv_zeratul, "SuppressCloak", gv_zeratul, 1);
     libNtve_gf_MakeUnitUncommandable(gv_zeratul, true);
@@ -3020,7 +3088,6 @@ bool gt_OvermindTendrilBeaconBanelingsNE_Func (bool testConds, bool runActions) 
     TriggerEnable(TriggerGetCurrent(), false);
     lv_beacon = UnitFromId(38);
     UIAlertUnit("Trigger", gv_p01_USER, StringExternal("Param/Value/0FA47BA1"), null, gv_zeratul);
-    libCamp_gf_DisplayResearchPointsGiventoPlayer(libCamp_ge_StoryResearchObject_ResearchObjectOvermindTendrils, lv_beacon, gv_p01_USER);
     TriggerExecute(gt_TransmissionZeratulReachesTendrilsQ, true, false);
     UnitBehaviorAdd(gv_zeratul, "SuppressCloak", gv_zeratul, 1);
     libNtve_gf_MakeUnitUncommandable(gv_zeratul, true);
@@ -3125,7 +3192,6 @@ bool gt_TransmissionZeratulFindsObserverQ_Func (bool testConds, bool runActions)
     libCamp_gf_SendTransmissionCampaign(gv_zeratul, SoundLink("TZeratul03Zeratul00040", -1), c_transmissionDurationAdd, 0.0, true);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Game);
     TriggerExecute(gt_TipObserver, true, false);
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
     TriggerQueueExit();
     return true;
 }
@@ -3406,6 +3472,13 @@ void gt_TransmissionUseObserversQ_Init () {
 //--------------------------------------------------------------------------------------------------
 bool gt_TransmissionZeratulFindsWarpGatesQ_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
+    unitgroup autoE40B1229_g;
+    int autoE40B1229_u;
+    unit autoE40B1229_var;
+    unitgroup auto24EFE7CA_g;
+    int auto24EFE7CA_u;
+    unit auto24EFE7CA_var;
+
     // Conditions
     if (testConds) {
         if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
@@ -3427,9 +3500,23 @@ bool gt_TransmissionZeratulFindsWarpGatesQ_Func (bool testConds, bool runActions
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TechTreeUpgradeAddLevel(gv_p01_USER, "WarpGateResearch", 1);
     TechTreeAbilityAllow(gv_p01_USER, AbilityCommand("UpgradeToWarpGate", 0), true);
     TechTreeAbilityAllow(gv_p01_USER, AbilityCommand("CyberneticsCoreResearch", 6), true);
+    TechTreeUpgradeAddLevel(gv_p01_USER, "WarpGateResearch", 1);
+    autoE40B1229_g = UnitGroup("Gateway", gv_p01_USER, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+    autoE40B1229_u = UnitGroupCount(autoE40B1229_g, c_unitCountAll);
+    for (;; autoE40B1229_u -= 1) {
+        autoE40B1229_var = UnitGroupUnitFromEnd(autoE40B1229_g, autoE40B1229_u);
+        if (autoE40B1229_var == null) { break; }
+        UnitBehaviorAdd(autoE40B1229_var, "UpgradeToWarpGateInstant", autoE40B1229_var, 1);
+    }
+    auto24EFE7CA_g = UnitGroup("RoboticsFacility", gv_p01_USER, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+    auto24EFE7CA_u = UnitGroupCount(auto24EFE7CA_g, c_unitCountAll);
+    for (;; auto24EFE7CA_u -= 1) {
+        auto24EFE7CA_var = UnitGroupUnitFromEnd(auto24EFE7CA_g, auto24EFE7CA_u);
+        if (auto24EFE7CA_var == null) { break; }
+        UnitBehaviorAdd(auto24EFE7CA_var, "RoboticsFacilityWarpMorphInstant", auto24EFE7CA_var, 1);
+    }
     TriggerQueueEnter();
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
     libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
@@ -3577,7 +3664,7 @@ bool gt_VictoryOvermindTendrilsCompleted_Func (bool testConds, bool runActions) 
     gv_gameOver = true;
     Wait(2.0, c_timeGame);
     TriggerExecute(gt_ObjectiveOvermindTendrilsComplete, true, false);
-    libCamp_gf_RunMissionVictorySequence(gt_VictoryQ);
+    libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
     return true;
 }
 
@@ -3596,16 +3683,16 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    if ((ObjectiveGetState(gv_objectiveOvermindTendrils) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_objectivePowerTheObelisks) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_objectiveZeratulMustSurvive) == c_objectiveStateCompleted)) {
-        AchievementAward(gv_p01_USER, "TZeratul03_1");
+    if ((ObjectiveGetState(gv_objectiveOvermindTendrils) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_objectivePowerTheObelisks) == c_objectiveStateCompleted)) {
+        libWoLC_gf_CampaignAwardAchievement("TZeratul03_1");
     }
 
     if ((libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1) && (UnitGetPropertyFixed(gv_zeratul, c_unitPropKills, c_unitPropCurrent) >= 50.0)) {
-        AchievementAward(gv_p01_USER, "TZeratul03_2");
+        libWoLC_gf_CampaignAwardAchievement("TZeratul03_2");
     }
 
     if ((libNtve_gf_DifficultyValueInt(0, 0, 1, 1) == 1) && (TimerGetRemaining(gv_achievementHardTimer) != 0.0)) {
-        AchievementAward(gv_p01_USER, "TZeratul03_3");
+        libWoLC_gf_CampaignAwardAchievement("TZeratul03_3");
     }
 
     VictoryPanelAddAchievement("TZeratul03_1");
@@ -3618,9 +3705,7 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/58FF8B12"), IntToText(libNtve_gf_UnitGetPropertyKills(gv_zeratul, c_unitPropCurrent)));
     VictoryPanelAddCustomStatisticLine(StringToText(""), StringToText(""));
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/AA8F352E"), (IntToText(gv_obelisksPowered) + StringExternal("Param/Value/4757F4D8") + StringExternal("Param/Value/BDB2696E")));
-    VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/58055980"), IntToText(gv_obelisksPowered));
-    VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/658227DE"), StringExternal("Param/Value/2A2B4FE5"));
-    libCamp_gf_EndCampaignMission(gv_p01_USER, c_gameOverVictory);
+    libWCMI_gf_EndCampaignMission(gv_p01_USER, c_gameOverVictory);
     return true;
 }
 
@@ -3656,7 +3741,7 @@ bool gt_DefeatBaseDead_Func (bool testConds, bool runActions) {
     TriggerQueueClear(c_triggerQueueRemove);
     Wait(2.0, c_timeReal);
     libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/7C41B1F5"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_Defeat, true, false);
     return true;
 }
@@ -3695,7 +3780,7 @@ bool gt_DefeatZeratulDies_Func (bool testConds, bool runActions) {
     TriggerQueueClear(c_triggerQueueRemove);
     Wait(2.0, c_timeReal);
     libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/0A50BA2F"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_Defeat, true, false);
     return true;
 }
@@ -3716,7 +3801,7 @@ bool gt_Defeat_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_EndCampaignMission(gv_p01_USER, c_gameOverDefeat);
+    libWCMI_gf_EndCampaignMission(gv_p01_USER, c_gameOverDefeat);
     return true;
 }
 
@@ -3744,7 +3829,7 @@ bool gt_VictoryCheat_Func (bool testConds, bool runActions) {
 
     gv_gameOver = true;
     UnitPauseAll(true);
-    libCamp_gf_RunMissionVictorySequence(gt_Victory);
+    libWCMI_gf_RunMissionVictorySequence(gt_Victory);
     return true;
 }
 
@@ -3804,9 +3889,7 @@ bool gt_TipStoryModeQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
     libCamp_gf_CreateStorymodeTips();
-    TriggerQueueExit();
     return true;
 }
 
@@ -3832,10 +3915,7 @@ bool gt_TipColossusQ_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    TriggerQueueEnter();
     libCamp_gf_CreateTipFromConversationState("StoryTips|Zeratul03_Colossus", libNtve_ge_TipType_NewUnit, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -3862,7 +3942,6 @@ bool gt_TipObserver_Func (bool testConds, bool runActions) {
     }
 
     libCamp_gf_CreateTipFromConversationState("StoryTips|Zeratul03_Observer", libNtve_ge_TipType_NewUnit, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
     return true;
 }
 
@@ -3892,10 +3971,7 @@ bool gt_TipWarpInQ_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    TriggerQueueEnter();
     libCamp_gf_CreateTipFromConversationState("StoryTips|Zeratul03_WarpGate", libNtve_ge_TipType_NewAbility, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -3922,12 +3998,9 @@ bool gt_ObjectiveReachtheNexusCreateQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate(StringExternal("Param/Value/23EF9A8D"), StringExternal("Param/Value/FF2D6A5A"), c_objectiveStateActive, true);
+    libWCMI_gf_CreateObjectiveCampaign("TZeratul03_1");
     gv_objectiveReachNexus = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_TZeratul03Objective1, ObjectiveLastCreated(), StringExternal("Param/Value/87592C22"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -3955,8 +4028,8 @@ bool gt_ObjectiveReachtheNexusComplete_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveReachtheNexusCreateQ, true, false);
-    ObjectiveSetState(gv_objectiveReachNexus, c_objectiveStateCompleted);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    libWCMI_gf_ZS_SetMissionObjectiveState("TZeratul03_1", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -3966,9 +4039,9 @@ void gt_ObjectiveReachtheNexusComplete_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
-// Trigger: Objective Reach the Nexus Failed
+// Trigger: Objective Overmind Tendrils Create Q
 //--------------------------------------------------------------------------------------------------
-bool gt_ObjectiveReachtheNexusFailed_Func (bool testConds, bool runActions) {
+bool gt_ObjectiveOvermindTendrilsCreateQ_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
     // Conditions
     if (testConds) {
@@ -3983,70 +4056,9 @@ bool gt_ObjectiveReachtheNexusFailed_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerExecute(gt_ObjectiveReachtheNexusCreateQ, true, false);
-    ObjectiveSetState(gv_objectiveReachNexus, c_objectiveStateFailed);
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void gt_ObjectiveReachtheNexusFailed_Init () {
-    gt_ObjectiveReachtheNexusFailed = TriggerCreate("gt_ObjectiveReachtheNexusFailed_Func");
-}
-
-//--------------------------------------------------------------------------------------------------
-// Trigger: Objective Overmind Tendrils Create Hidden
-//--------------------------------------------------------------------------------------------------
-bool gt_ObjectiveOvermindTendrilsCreateHidden_Func (bool testConds, bool runActions) {
-    // Automatic Variable Declarations
-    // Conditions
-    if (testConds) {
-        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
-            return false;
-        }
-    }
-
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    TriggerEnable(TriggerGetCurrent(), false);
-    ObjectiveCreate((StringExternal("Param/Value/072A571E") + IntToText(gv_overmindTendrilsVisited) + StringExternal("Param/Value/15A1F491")), StringExternal("Param/Value/A28B7D22"), c_objectiveStateHidden, true);
+    libWCMI_gf_CreateObjectiveCampaign("TZeratul03_2");
     gv_objectiveOvermindTendrils = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_TZeratul03Objective2, ObjectiveLastCreated(), StringExternal("Param/Value/51A16B0B"));
-    ObjectiveCreate(StringExternal("Param/Value/062D6BA5"), StringExternal("Param/Value/873AE416"), c_objectiveStateActive, true);
-    gv_objectiveZeratulMustSurvive = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_TZeratul03Objective4, ObjectiveLastCreated(), StringExternal("Param/Value/383549AC"));
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void gt_ObjectiveOvermindTendrilsCreateHidden_Init () {
-    gt_ObjectiveOvermindTendrilsCreateHidden = TriggerCreate("gt_ObjectiveOvermindTendrilsCreateHidden_Func");
-}
-
-//--------------------------------------------------------------------------------------------------
-// Trigger: Objective Overmind Tendrils Show Q
-//--------------------------------------------------------------------------------------------------
-bool gt_ObjectiveOvermindTendrilsShowQ_Func (bool testConds, bool runActions) {
-    // Automatic Variable Declarations
-    // Conditions
-    if (testConds) {
-        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
-            return false;
-        }
-    }
-
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveShow(gv_objectiveOvermindTendrils, PlayerGroupAll(), true);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     VisRevealArea(gv_p01_USER, RegionCircle(UnitGetPosition(UnitFromId(46)), 5.0), 6.0, false);
     PingCreate(PlayerGroupSingle(gv_p01_USER), "PingObjective", UnitGetPosition(UnitFromId(46)), ColorWithAlpha(0.00, 100.00, 0.00, 0.00), 0.0);
     gv_beaconPingLurkers = PingLastCreated();
@@ -4067,8 +4079,8 @@ bool gt_ObjectiveOvermindTendrilsShowQ_Func (bool testConds, bool runActions) {
 }
 
 //--------------------------------------------------------------------------------------------------
-void gt_ObjectiveOvermindTendrilsShowQ_Init () {
-    gt_ObjectiveOvermindTendrilsShowQ = TriggerCreate("gt_ObjectiveOvermindTendrilsShowQ_Func");
+void gt_ObjectiveOvermindTendrilsCreateQ_Init () {
+    gt_ObjectiveOvermindTendrilsCreateQ = TriggerCreate("gt_ObjectiveOvermindTendrilsCreateQ_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -4092,27 +4104,23 @@ bool gt_ObjectiveOvermindTendrilsUpdateQ_Func (bool testConds, bool runActions) 
         return true;
     }
 
+    TriggerExecute(gt_ObjectiveOvermindTendrilsCreateQ, true, false);
     gv_overmindTendrilsVisited += 1;
     if ((gv_overmindTendrilsVisited == 2) && (libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1) && (GameGetMissionTime() < 241.0)) {
-        TriggerQueueEnter();
-        AchievementAward(gv_p01_USER, "Anniversary_TZeratul03");
+        libWoLC_gf_CampaignAwardAchievement("Anniversary_TZeratul03");
         TriggerDebugOutput(1, StringExternal("Param/Value/0CD8BFF4"), false);
-        TriggerQueueExit();
     }
 
+    libWCMI_gf_SetMissionObjectiveProgress("TZeratul03_2", gv_overmindTendrilsVisited);
     if ((gv_overmindTendrilsVisited < 4)) {
-        TriggerQueueEnter();
         SoundPlay(SoundLink("UI_TerranRescueUnit", 0), PlayerGroupAll(), 100.0, 0.0);
-        ObjectiveSetName(gv_objectiveOvermindTendrils, (StringExternal("Param/Value/F3BFF16E") + IntToText(gv_overmindTendrilsVisited) + StringExternal("Param/Value/DF5F980D")));
-        Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+        Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
         TriggerExecute(gt_ReleaseControlofZeratul, true, true);
         libCamp_gf_CreateMissionAutosavePoint(StringExternal("Param/Value/14530411"));
-        TriggerQueueExit();
     }
     else {
         TriggerEnable(TriggerGetCurrent(), false);
         libNtve_gf_MakeUnitInvulnerable(gv_zeratul, true);
-        ObjectiveSetName(gv_objectiveOvermindTendrils, (StringExternal("Param/Value/C4B2628D") + IntToText(gv_overmindTendrilsVisited) + StringExternal("Param/Value/890B8AA5")));
         TriggerExecute(gt_VictoryOvermindTendrilsCompleted, true, true);
     }
     return true;
@@ -4141,45 +4149,15 @@ bool gt_ObjectiveOvermindTendrilsComplete_Func (bool testConds, bool runActions)
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerExecute(gt_ObjectiveOvermindTendrilsCreateHidden, true, false);
-    ObjectiveSetState(gv_objectiveOvermindTendrils, c_objectiveStateCompleted);
-    ObjectiveSetState(gv_objectiveZeratulMustSurvive, c_objectiveStateCompleted);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    TriggerExecute(gt_ObjectiveOvermindTendrilsCreateQ, true, false);
+    libWCMI_gf_ZS_SetMissionObjectiveState("TZeratul03_2", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 void gt_ObjectiveOvermindTendrilsComplete_Init () {
     gt_ObjectiveOvermindTendrilsComplete = TriggerCreate("gt_ObjectiveOvermindTendrilsComplete_Func");
-}
-
-//--------------------------------------------------------------------------------------------------
-// Trigger: Objective Overmind Tendrils Failed
-//--------------------------------------------------------------------------------------------------
-bool gt_ObjectiveOvermindTendrilsFailed_Func (bool testConds, bool runActions) {
-    // Automatic Variable Declarations
-    // Conditions
-    if (testConds) {
-        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
-            return false;
-        }
-    }
-
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    TriggerEnable(TriggerGetCurrent(), false);
-    TriggerExecute(gt_ObjectiveOvermindTendrilsCreateHidden, true, false);
-    ObjectiveSetState(gv_objectiveOvermindTendrils, c_objectiveStateFailed);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeGame);
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void gt_ObjectiveOvermindTendrilsFailed_Init () {
-    gt_ObjectiveOvermindTendrilsFailed = TriggerCreate("gt_ObjectiveOvermindTendrilsFailed_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -4200,12 +4178,9 @@ bool gt_ObjectivePowerTheObelisksCreateQ_Func (bool testConds, bool runActions) 
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate((StringExternal("Param/Value/134A8EB5") + IntToText(gv_obelisksPowered) + StringExternal("Param/Value/69B5C892")), StringExternal("Param/Value/24C2D047"), c_objectiveStateActive, false);
+    libWCMI_gf_CreateObjectiveCampaign("TZeratul03_3");
     gv_objectivePowerTheObelisks = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_TZeratul02Objective42, ObjectiveLastCreated(), StringExternal("Param/Value/D71EC072"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -4219,8 +4194,6 @@ void gt_ObjectivePowerTheObelisksCreateQ_Init () {
 //--------------------------------------------------------------------------------------------------
 bool gt_ObjectivePowerTheObelisksUpdateQ_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
-    int auto746D6D18_val;
-
     // Conditions
     if (testConds) {
         if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
@@ -4237,20 +4210,14 @@ bool gt_ObjectivePowerTheObelisksUpdateQ_Func (bool testConds, bool runActions) 
         return true;
     }
 
-    auto746D6D18_val = gv_obelisksPowered;
-    if (auto746D6D18_val == 1) {
-        TriggerQueueEnter();
-        ObjectiveSetName(gv_objectivePowerTheObelisks, (StringExternal("Param/Value/41C52231") + IntToText(gv_obelisksPowered) + StringExternal("Param/Value/0C997FDC")));
-        Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-        TriggerQueueExit();
-    }
-    else if (auto746D6D18_val == 2) {
+    TriggerExecute(gt_ObjectivePowerTheObelisksCreateQ, true, false);
+    libWCMI_gf_SetMissionObjectiveProgress("TZeratul03_3", gv_obelisksPowered);
+    if ((gv_obelisksPowered == 2)) {
         TriggerEnable(TriggerGetCurrent(), false);
         TriggerExecute(gt_ObjectivePowerTheObelisksComplete, true, false);
-        Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
     }
-    else {
-    }
+
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -4278,43 +4245,14 @@ bool gt_ObjectivePowerTheObelisksComplete_Func (bool testConds, bool runActions)
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectivePowerTheObelisksCreateQ, true, false);
-    ObjectiveSetName(gv_objectivePowerTheObelisks, (StringExternal("Param/Value/48E96967") + IntToText(gv_obelisksPowered) + StringExternal("Param/Value/A74E1FDD")));
-    ObjectiveSetState(gv_objectivePowerTheObelisks, c_objectiveStateCompleted);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    libWCMI_gf_ZS_SetMissionObjectiveState("TZeratul03_3", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 void gt_ObjectivePowerTheObelisksComplete_Init () {
     gt_ObjectivePowerTheObelisksComplete = TriggerCreate("gt_ObjectivePowerTheObelisksComplete_Func");
-}
-
-//--------------------------------------------------------------------------------------------------
-// Trigger: Objective Power The Obelisks Failed
-//--------------------------------------------------------------------------------------------------
-bool gt_ObjectivePowerTheObelisksFailed_Func (bool testConds, bool runActions) {
-    // Automatic Variable Declarations
-    // Conditions
-    if (testConds) {
-        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
-            return false;
-        }
-    }
-
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    TriggerEnable(TriggerGetCurrent(), false);
-    TriggerExecute(gt_ObjectivePowerTheObelisksCreateQ, true, false);
-    ObjectiveSetState(gv_objectivePowerTheObelisks, c_objectiveStateFailed);
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void gt_ObjectivePowerTheObelisksFailed_Init () {
-    gt_ObjectivePowerTheObelisksFailed = TriggerCreate("gt_ObjectivePowerTheObelisksFailed_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -4712,9 +4650,6 @@ bool gt_MidCineSetup_Func (bool testConds, bool runActions) {
     unitgroup auto2648660F_g;
     int auto2648660F_u;
     unit auto2648660F_var;
-    unitgroup autoCBE7BA18_g;
-    int autoCBE7BA18_u;
-    unit autoCBE7BA18_var;
 
     // Actions
     if (!runActions) {
@@ -4756,13 +4691,6 @@ bool gt_MidCineSetup_Func (bool testConds, bool runActions) {
         auto2648660F_var = UnitGroupUnitFromEnd(auto2648660F_g, auto2648660F_u);
         if (auto2648660F_var == null) { break; }
         libNtve_gf_ShowHideUnit(auto2648660F_var, false);
-    }
-    autoCBE7BA18_g = gv_protossProbeGroup;
-    autoCBE7BA18_u = UnitGroupCount(autoCBE7BA18_g, c_unitCountAll);
-    for (;; autoCBE7BA18_u -= 1) {
-        autoCBE7BA18_var = UnitGroupUnitFromEnd(autoCBE7BA18_g, autoCBE7BA18_u);
-        if (autoCBE7BA18_var == null) { break; }
-        libNtve_gf_ShowHideUnit(autoCBE7BA18_var, true);
     }
     libNtve_gf_ShowHideUnit(UnitFromId(455), true);
     libNtve_gf_ShowHideUnit(UnitFromId(154), true);
@@ -4922,6 +4850,7 @@ bool gt_MidCineCleanup_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    libWCMI_gf_HideObjectiveCampaign("TZeratul03_1");
     auto70095B8D_g = gv_midColossusZergActiveGroup;
     auto70095B8D_u = UnitGroupCount(auto70095B8D_g, c_unitCountAll);
     for (;; auto70095B8D_u -= 1) {
@@ -4951,13 +4880,13 @@ bool gt_MidCineCleanup_Func (bool testConds, bool runActions) {
         libNtve_gf_RescueUnit(auto98891B06_var, gv_p01_USER, true);
         UnitSetState(auto98891B06_var, c_unitStateTargetable, true);
     }
-    auto22CEE286_g = UnitGroup("Probe", gv_p10_ABANDONED_STRUCTURES, RegionFromId(21), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+    auto22CEE286_g = UnitGroup("Probe", gv_p10_ABANDONED_STRUCTURES, RegionFromId(21), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32))), 0);
     auto22CEE286_u = UnitGroupCount(auto22CEE286_g, c_unitCountAll);
     for (;; auto22CEE286_u -= 1) {
         auto22CEE286_var = UnitGroupUnitFromEnd(auto22CEE286_g, auto22CEE286_u);
         if (auto22CEE286_var == null) { break; }
+        libNtve_gf_ShowHideUnit(auto22CEE286_var, true);
         libNtve_gf_RescueUnit(auto22CEE286_var, gv_p01_USER, true);
-        UnitIssueOrder(auto22CEE286_var, OrderTargetingPoint(AbilityCommand("move", 0), PointFromId(71)), c_orderQueueReplace);
     }
     UnitSetOwner(UnitFromId(90), gv_p01_USER, true);
     UnitSetPosition(UnitFromId(154), PointFromId(532), false);
@@ -4982,6 +4911,8 @@ bool gt_MidCineCleanup_Func (bool testConds, bool runActions) {
     UnitBehaviorRemove(gv_zeratul, "Read", 1);
     UnitBehaviorRemove(gv_zeratul, "SuppressCloak", 1);
     CreepSetSpeed(c_creepSpeedDecay, 100.0);
+    libWCMI_gf_SetWorkerRallyPointforNexus(UnitFromId(2));
+    libWCMI_gf_StartingWorkersAutoHarvest(RegionFromId(27), RegionFromId(26));
     if ((gv_midColossusCinematicCompleted == true)) {
         lv_fadeDuration = 2.0;
     }
@@ -5694,6 +5625,7 @@ void InitTriggers () {
     gt_StartGameStage1_Init();
     gt_StartGameStage2_Init();
     gt_Stage2Init_Init();
+    gt_HandleZeratulDeath_Init();
     gt_RainCycling_Init();
     gt_ChangeOwnerofZeratul_Init();
     gt_ZeratulFindsObserver_Init();
@@ -5770,16 +5702,12 @@ void InitTriggers () {
     gt_TipWarpInQ_Init();
     gt_ObjectiveReachtheNexusCreateQ_Init();
     gt_ObjectiveReachtheNexusComplete_Init();
-    gt_ObjectiveReachtheNexusFailed_Init();
-    gt_ObjectiveOvermindTendrilsCreateHidden_Init();
-    gt_ObjectiveOvermindTendrilsShowQ_Init();
+    gt_ObjectiveOvermindTendrilsCreateQ_Init();
     gt_ObjectiveOvermindTendrilsUpdateQ_Init();
     gt_ObjectiveOvermindTendrilsComplete_Init();
-    gt_ObjectiveOvermindTendrilsFailed_Init();
     gt_ObjectivePowerTheObelisksCreateQ_Init();
     gt_ObjectivePowerTheObelisksUpdateQ_Init();
     gt_ObjectivePowerTheObelisksComplete_Init();
-    gt_ObjectivePowerTheObelisksFailed_Init();
     gt_BriefingQ_Init();
     gt_BriefingScene00_Init();
     gt_BriefingScene01_Init();

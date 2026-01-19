@@ -1022,6 +1022,7 @@
         <AbilArray Link="SquadNovaSpiderMineMagazine"/>
         <AbilArray Link="SquadNoveDeploySpiderMine"/>
         <AbilArray Link="SquadNovaSpiderMineQueue"/>
+        <AbilArray Link="SquadNovaDomination"/>
         <BehaviorArray Link="HeroLevelUpTo10"/>
         <TurretArray value="SquadNovaRotateTurret"/>
         <WeaponArray Link="SquadNovaCanisterRifle" Turret="SquadNovaRotateTurret"/>
@@ -1031,9 +1032,10 @@
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
-            <LayoutButtons Face="SquadNovaSnipe" Type="AbilCmd" AbilCmd="SquadNovaTripleSnipe,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="SquadNovaTripleSnipe" Type="AbilCmd" AbilCmd="SquadNovaTripleSnipe,Execute" Row="2" Column="0"/>
             <LayoutButtons Face="DisbandSquad" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="4"/>
             <LayoutButtons Face="NovaSpiderMineMagazine" Type="AbilCmd" AbilCmd="SquadNoveDeploySpiderMine,Execute" Row="2" Column="1"/>
+            <LayoutButtons Face="SquadNovaDomination" Type="AbilCmd" AbilCmd="SquadNovaDomination,Execute" Row="2" Column="2"/>
         </CardLayouts>
         <SeparationRadius value="0.375"/>
         <InnerRadius value="1"/>
@@ -1198,6 +1200,8 @@
         <AbilArray Link="SquadMeatWagonSalvageUnits"/>
         <AbilArray Link="SquadCorpseExplosion"/>
         <AbilArray Link="SquadCreateMarineCorpse"/>
+        <BehaviorArray Link="SquadCloakandDetectorRadar"/>
+        <BehaviorArray Link="HeroLevelUpTo10"/>
         <WeaponArray Link="SquadMeatWagonBileCannons" Turret="SquadMeatWagonTurret"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -1225,8 +1229,6 @@
         <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
         <LeaderAlias value=""/>
         <HotkeyAlias value=""/>
-        <BehaviorArray Link="SquadCloakandDetectorRadar"/>
-        <BehaviorArray Link="HeroLevelUpTo10"/>
     </CUnit>
     <CUnit id="SquadArtilleryMengsk">
         <DeathRevealRadius value="3"/>
@@ -3290,6 +3292,7 @@
         <StationaryTurningRate value="360"/>
         <TurningRate value="359.4726"/>
         <Sight value="13"/>
+        <CostCategory value="Army"/>
         <CostResource index="Minerals" value="200"/>
         <CostResource index="Vespene" value="125"/>
         <RepairTime value="50"/>
@@ -3320,14 +3323,14 @@
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
             <LayoutButtons Face="MothershipCoreAttack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="DisbandSquad" Type="AbilCmd" AbilCmd="DisbandSquad,Execute" Row="1" Column="4"/>
-            <LayoutButtons Face="ExcavatorHarvestDropPoint" Type="AbilCmd" AbilCmd="ExcavatorGatherModeSwitch,On" Row="1" Column="1"/>
-            <LayoutButtons Face="ExcavatorHarvestDropPoint" Type="Passive" Row="1" Column="1"/>
+            <LayoutButtons Face="ExcavatorHarvestDropPoint" Type="Passive" Row="2" Column="1"/>
             <LayoutButtons Face="ExcavatorGather" Type="AbilCmd" AbilCmd="SquadExcavatorGather,Gather" Row="1" Column="0"/>
             <LayoutButtons Face="ReturnCargo" Type="AbilCmd" AbilCmd="SquadExcavatorGather,Return" Row="1" Column="0"/>
-            <LayoutButtons Face="ExcavatorBehemothProtocal" Type="AbilCmd" AbilCmd="ExcavatorGatherModeSwitch,Off" Row="1" Column="2"/>
-            <LayoutButtons Face="ExcavatorBehemothProtocal" Type="Passive" Row="1" Column="2"/>
+            <LayoutButtons Face="ExcavatorBehemothProtocal" Type="AbilCmd" AbilCmd="ExcavatorGatherModeSwitch,Off" Row="2" Column="2"/>
+            <LayoutButtons Face="ExcavatorBehemothProtocal" Type="Passive" Row="2" Column="2"/>
             <LayoutButtons Face="BehemothIgniteAfterburners" Type="AbilCmd" AbilCmd="BehemothAfterburner,Execute" Row="2" Column="0"/>
             <LayoutButtons Face="ScavageStructure" Type="Passive" Behavior="ExcavatorRecycleStructureCauseDropPickup" Row="2" Column="3"/>
+            <LayoutButtons Face="ExcavatorHarvestDropPoint" Type="AbilCmd" AbilCmd="ExcavatorGatherModeSwitch,On" Row="2" Column="1"/>
         </CardLayouts>
         <Radius value="1"/>
         <SeparationRadius value="1"/>
@@ -3340,7 +3343,6 @@
         <EditorCategories value="Race:Terran,ObjectType:Hero,ObjectFamily:Campaign"/>
         <SelectAlias value="Thor"/>
         <HotkeyCategory value="Unit/Category/Lawbda"/>
-        <CostCategory value="Army"/>
         <ReviveInfoBase>
             <Charge Link="CaptainExcavatorRevive/Revive"/>
             <Cooldown Link="CaptainExcavatorRevive/Revive"/>
@@ -4659,6 +4661,12 @@
         <LifeMax value="280"/>
         <LifeArmor value="1"/>
         <LifeArmorName value="Unit/LifeArmorName/TerranVehiclePlating"/>
+        <EnergyStart value="200"/>
+        <EnergyMax value="200"/>
+        <ShieldsStart value="100"/>
+        <ShieldsMax value="100"/>
+        <ShieldRegenRate value="5"/>
+        <Mover value="CliffJumper"/>
         <Speed value="4"/>
         <Acceleration value="1000"/>
         <LateralAcceleration value="46"/>
@@ -4680,6 +4688,10 @@
         <AbilArray Link="SquadInfantry"/>
         <AbilArray Link="QueueMagazine"/>
         <AbilArray Link="DisbandSquad"/>
+        <BehaviorArray Link="SquadMissileTurretDetector11"/>
+        <BehaviorArray Link="SquadJump"/>
+        <BehaviorArray Link="LootOnDealDamage"/>
+        <BehaviorArray Link="HeroLevelUpTo10"/>
         <WeaponArray Link="CaptainPredatorKaiserBlades"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -4720,16 +4732,6 @@
             <Charge Link="Predator/Revive"/>
             <Cooldown Link="Predator/Revive"/>
         </ReviveInfoBase>
-        <EnergyStart value="200"/>
-        <EnergyMax value="200"/>
-        <ShieldsStart value="100"/>
-        <ShieldsMax value="100"/>
-        <ShieldRegenRate value="5"/>
-        <BehaviorArray Link="SquadMissileTurretDetector11"/>
-        <BehaviorArray Link="SquadJump"/>
-        <BehaviorArray Link="LootOnDealDamage"/>
-        <BehaviorArray Link="HeroLevelUpTo10"/>
-        <Mover value="CliffJumper"/>
     </CUnit>
     <CUnit id="LawbdaCore">
         <DeathTime value="-1"/>

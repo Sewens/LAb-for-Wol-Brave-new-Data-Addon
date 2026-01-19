@@ -7,7 +7,10 @@
 //==================================================================================================
 include "TriggerLibs/NativeLib"
 include "TriggerLibs/LibertyLib"
-include "TriggerLibs/CampaignLib"
+include "LibEA0820A1"
+include "LibCamp"
+include "LibWoLC"
+include "LibWCMI"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -15,7 +18,10 @@ include "TriggerLibs/CampaignLib"
 void InitLibs () {
     libNtve_InitLib();
     libLbty_InitLib();
+    libEA0820A1_InitLib();
     libCamp_InitLib();
+    libWoLC_InitLib();
+    libWCMI_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -41,7 +47,6 @@ playergroup gv_miraHanPlayers;
 unitgroup gv_playerSCVs;
 int gv_orlansFortressPing;
 int gv_mERC_CONTRACT_PRICE;
-int gv_merc_Contract_Price_Board;
 bool gv_miraHanContractBought;
 int gv_oRLANS_MINERAL_COUNT;
 unit gv_ghostNukeSilo;
@@ -53,6 +58,12 @@ int gv_pingCommandCenterSW;
 int gv_pingCommandCenterSE;
 int gv_pingCommandCenterNE;
 unit[9] gv_initialElevatorBlockers;
+int gv_contractWindowRoot;
+int gv_contractWindowTitle;
+int gv_contractWindowRaynorBar;
+int gv_contractWindowRaynorLabel;
+int gv_contractWindowOrlanBar;
+int gv_contractWindowOrlanLabel;
 unit gv_junker_NE;
 unit gv_junker_S;
 unit gv_junker_W;
@@ -63,6 +74,7 @@ unitgroup gv_huge_Scrap_2;
 unitgroup gv_huge_Scrap_3;
 actor gv_nukeActor;
 revealer gv_salvageRevealer;
+unitgroup gv_respawnSalvagePingUnits;
 actor gv_respawnSalvagePingActor2;
 actor gv_respawnSalvagePingActor1;
 actor gv_salvagePingActor;
@@ -87,16 +99,22 @@ void InitGlobals () {
     gv_enemyPlayers = PlayerGroupEmpty();
     gv_miraHanPlayers = PlayerGroupEmpty();
     gv_playerSCVs = UnitGroupEmpty();
-    gv_merc_Contract_Price_Board = c_boardNone;
     gv_minerals_In_Expansion_1 = UnitGroupEmpty();
     gv_minerals_In_Expansion_2 = UnitGroupEmpty();
     gv_minerals_In_Expansion_3 = UnitGroupEmpty();
     gv_pingCommandCenterSW = c_invalidPingId;
     gv_pingCommandCenterSE = c_invalidPingId;
     gv_pingCommandCenterNE = c_invalidPingId;
+    gv_contractWindowRoot = c_invalidDialogControlId;
+    gv_contractWindowTitle = c_invalidDialogControlId;
+    gv_contractWindowRaynorBar = c_invalidDialogControlId;
+    gv_contractWindowRaynorLabel = c_invalidDialogControlId;
+    gv_contractWindowOrlanBar = c_invalidDialogControlId;
+    gv_contractWindowOrlanLabel = c_invalidDialogControlId;
     gv_huge_Scrap_1 = UnitGroupEmpty();
     gv_huge_Scrap_2 = UnitGroupEmpty();
     gv_huge_Scrap_3 = UnitGroupEmpty();
+    gv_respawnSalvagePingUnits = UnitGroupEmpty();
     gv_primaryObjectiveBuyContract = c_invalidObjectiveId;
     gv_primaryObjectiveDestroyOrlan = c_invalidObjectiveId;
     gv_bonusObjectiveFindContraband = c_invalidObjectiveId;
@@ -118,10 +136,12 @@ void gf_SpawnSalvageIfAreaIsClear (string lp_salvageType, region lp_salvageRegio
 void gf_GhostNukeEm (unit lp_nuker, point lp_nukeTarget, point lp_retreatTo);
 void gf_OrlanAttackWaveWaypointWest ();
 void gf_OrlanAttackWaveWaypointEast ();
+void gf_TryRemoveRespawnSalvagePings (unit lp_scrap);
 
 //--------------------------------------------------------------------------------------------------
 // Trigger Variables
 //--------------------------------------------------------------------------------------------------
+trigger gt_OnPlayer1GetUnit;
 trigger gt_Initialization;
 trigger gt_Init01Technology;
 trigger gt_Init02Players;
@@ -223,11 +243,9 @@ trigger gt_ObjectiveBuyContractComplete;
 trigger gt_ObjectiveBuyContractFailedQ;
 trigger gt_ObjectiveDestroyOrlanCreateQ;
 trigger gt_ObjectiveDestroyOrlanComplete;
-trigger gt_ObjectiveDestroyOrlanFailedQ;
 trigger gt_ObjectiveFindContrabandCreateQ;
 trigger gt_ObjectiveFindContrabandUpdate;
 trigger gt_ObjectiveFindContrabandComplete;
-trigger gt_ObjectiveFindContrabandFailedQ;
 trigger gt_BriefingQ;
 trigger gt_BriefingScene00;
 trigger gt_BriefingScene00Stuff;
@@ -391,6 +409,35 @@ void gf_OrlanAttackWaveWaypointEast () {
     }
 }
 
+void gf_TryRemoveRespawnSalvagePings (unit lp_scrap) {
+    // Automatic Variable Declarations
+    // Implementation
+    if ((libNtve_gf_UnitInRegion(lp_scrap, gv_respawnableSalvage) == true)) {
+        TriggerExecute(gt_RemoveRespawnSalvagePings, true, false);
+    }
+
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: OnPlayer1GetUnit
+//--------------------------------------------------------------------------------------------------
+bool gt_OnPlayer1GetUnit_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerExecute(libEA0820A1_gt_Init00ReplaceUnit, true, true);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_OnPlayer1GetUnit_Init () {
+    gt_OnPlayer1GetUnit = TriggerCreate("gt_OnPlayer1GetUnit_Func");
+    TriggerAddEventUnitChangeOwner(gt_OnPlayer1GetUnit, null);
+}
+
 //--------------------------------------------------------------------------------------------------
 // Trigger: Initialization
 //--------------------------------------------------------------------------------------------------
@@ -401,7 +448,8 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_LoadCampaignData(libCamp_ge_MapID_MapTHorner02);
+    libWoLC_gf_ULoadCampaignData("THorner02");
+    TriggerExecute(libEA0820A1_gt_Init00ReplaceUnit, true, true);
     TriggerExecute(gt_Init01Technology, true, true);
     TriggerExecute(gt_Init02Players, true, true);
     TriggerExecute(gt_Init03Units, true, true);
@@ -409,9 +457,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init05Environment, true, true);
     TriggerExecute(gt_Init06Difficulties, true, true);
     TriggerExecute(gt_Init07Help, true, true);
-    libCamp_gf_RegisterFootageRecording(gt_BriefingQ);
-    libCamp_gf_PurchaseStorymodeTech();
-    UIAlertPoint("Trigger", gv_p01_USER, StringToText(""), null, PointFromId(46));
+    libWoLC_gf_RegisterFootageRecording(gt_BriefingQ);
     TriggerExecute(gt_IntroSequence, true, false);
     return true;
 }
@@ -432,7 +478,6 @@ bool gt_Init01Technology_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_SetTechRestrictionsCallback(TriggerGetCurrent());
     libNtve_gf_SetUpgradeLevelForPlayer(gv_p02_ORLAN_ENEMY, "SiegeTech", 1);
     libNtve_gf_SetUpgradeLevelForPlayer(gv_p03_MIRA_HAN, "SiegeTech", 1);
     libNtve_gf_SetUpgradeLevelForPlayer(gv_p04_DOMINION, "PersonalCloaking", 1);
@@ -493,6 +538,7 @@ bool gt_Init02Players_Func (bool testConds, bool runActions) {
     PlayerModifyPropertyInt(gv_p03_MIRA_HAN, c_playerPropVespene, c_playerPropOperSetTo, 5000);
     PlayerModifyPropertyInt(gv_p04_DOMINION, c_playerPropMinerals, c_playerPropOperSetTo, 5000);
     PlayerModifyPropertyInt(gv_p04_DOMINION, c_playerPropVespene, c_playerPropOperSetTo, 5000);
+    libWCMI_gf_WM_DetectionUpgradesApply();
     return true;
 }
 
@@ -505,10 +551,6 @@ void gt_Init02Players_Init () {
 // Trigger: Init 03 Units
 //--------------------------------------------------------------------------------------------------
 bool gt_Init03Units_Func (bool testConds, bool runActions) {
-    // Variable Declarations
-    bool lv_playerHasMercTech;
-    int lv_merc;
-
     // Automatic Variable Declarations
     unitgroup auto4801D79A_g;
     int auto4801D79A_u;
@@ -551,14 +593,12 @@ bool gt_Init03Units_Func (bool testConds, bool runActions) {
     int autoAC6F62B3_u;
     unit autoAC6F62B3_var;
 
-    // Variable Initialization
-    lv_merc = libCamp_ge_StoryMercID_MercNone;
-
     // Actions
     if (!runActions) {
         return true;
     }
 
+    libWCMI_gf_HandleMercCompound(UnitFromId(1054));
     gv_ghostNukeSilo = UnitFromId(1327);
     UnitSetPropertyFixed(UnitFromId(1226), c_unitPropEnergyPercent, 100.0);
     libNtve_gf_ShowHideUnit(UnitFromId(1327), false);
@@ -779,11 +819,6 @@ bool gt_Init06Difficulties_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    if ((PlayerDifficulty(gv_p01_USER) == 1)) {
-        PlayerModifyPropertyInt(gv_p02_ORLAN_ENEMY, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        PlayerModifyPropertyInt(gv_p04_DOMINION, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-    }
-
     gv_mERC_CONTRACT_PRICE = 6000;
     gv_oRLANS_MINERAL_COUNT = 0;
     PlayerModifyPropertyInt(gv_p02_ORLAN_ENEMY, c_playerPropSuppliesLimit, c_playerPropOperSetTo, 400);
@@ -898,6 +933,7 @@ bool gt_IntroSequence_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_StartAI, true, false);
     Wait(0.1, c_timeReal);
     TriggerExecute(gt_IntroLanding, true, false);
+    UIAlertPoint("Trigger", gv_p01_USER, StringToText(""), null, PointFromId(46));
     libNtve_gf_CinematicMode(false, PlayerGroupAll(), 1.5);
     libNtve_gf_GlobalCinematicSetting(false);
     libNtve_gf_SwooshCamera(gv_p01_USER, ((CameraInfoGetValue(CameraInfoDefault(), c_cameraValueDistance)) + 8.0), CameraInfoGetValue(CameraInfoDefault(), c_cameraValueDistance), CameraInfoGetTarget(CameraInfoFromId(1055)), 1.5);
@@ -990,7 +1026,7 @@ bool gt_StartGameStage2_Func (bool testConds, bool runActions) {
     UIAlertPoint("Trigger", gv_p01_USER, StringExternal("Param/Value/813453E8"), null, PointFromId(47));
     Wait(1.0, c_timeGame);
     if ((libNtve_gf_DifficultyValueInt(0, 0, 1, 1) == 1) && (gv_achievementSCVsTrained == 0)) {
-        AchievementAward(gv_p01_USER, "THorner02_3");
+        libWoLC_gf_CampaignAwardAchievement("THorner02_3");
     }
 
     Wait(1.0, c_timeGame);
@@ -1073,6 +1109,7 @@ bool gt_ChangeOwnerofIntroStructures_Func (bool testConds, bool runActions) {
     libNtve_gf_RescueUnit(EventUnit(), gv_p01_USER, true);
     if ((UnitGetType(EventUnit()) == "CommandCenter")) {
         UnitSetPropertyFixed(EventUnit(), c_unitPropEnergy, 50.0);
+        libWCMI_gf_SetWorkerRallyPointforNexus2(EventUnit());
     }
 
     TriggerExecute(gt_ChangeOwnerofPreplacedStructures, true, false);
@@ -1180,10 +1217,17 @@ void gt_ChangeOwnerofDropshipUnits_Init () {
 // Trigger: Change Owner of SCVs
 //--------------------------------------------------------------------------------------------------
 bool gt_ChangeOwnerofSCVs_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    unitgroup lv_introMinerals;
+    unit lv_targetMineralField;
+
     // Automatic Variable Declarations
     unitgroup autoE8678206_g;
     int autoE8678206_u;
     unit autoE8678206_var;
+
+    // Variable Initialization
+    lv_introMinerals = UnitGroup("MineralField", c_playerAny, RegionFromId(1), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
 
     // Conditions
     if (testConds) {
@@ -1216,6 +1260,9 @@ bool gt_ChangeOwnerofSCVs_Func (bool testConds, bool runActions) {
         autoE8678206_var = UnitGroupUnitFromEnd(autoE8678206_g, autoE8678206_u);
         if (autoE8678206_var == null) { break; }
         libNtve_gf_RescueUnit(autoE8678206_var, gv_p01_USER, true);
+        lv_targetMineralField = UnitGroupClosestToPoint(lv_introMinerals, UnitGetPosition(autoE8678206_var));
+        UnitGroupRemove(lv_introMinerals, lv_targetMineralField);
+        UnitIssueOrder(autoE8678206_var, OrderTargetingUnit(AbilityCommand("SCVHarvest", 0), lv_targetMineralField), c_orderQueueReplace);
     }
     return true;
 }
@@ -1352,27 +1399,22 @@ bool gt_CreateContractWindow_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    BoardCreate(1, 4, StringToText(""), Color(0.00, 100.00, 0.00));
-    gv_merc_Contract_Price_Board = BoardLastCreated();
-    BoardSetState(gv_merc_Contract_Price_Board, PlayerGroupAll(), c_boardStateShowTitle, false);
-    BoardItemSetText(gv_merc_Contract_Price_Board, 1, c_boardRowHeader, (StringExternal("Param/Value/B4F093E9") + IntToText(gv_mERC_CONTRACT_PRICE) + StringExternal("Param/Value/7B4624DB")));
-    BoardItemSetProgressShow(gv_merc_Contract_Price_Board, 1, 2, true);
-    BoardItemSetText(gv_merc_Contract_Price_Board, 1, 1, (StringExternal("Param/Value/DB71EC73") + IntToText(PlayerGetPropertyInt(gv_p01_USER, c_playerPropMinerals))));
-    BoardItemSetTextColor(gv_merc_Contract_Price_Board, 1, 1, Color(0.00, 100.00, 100.00));
-    BoardItemSetFontSize(gv_merc_Contract_Price_Board, 1, 1, 18);
-    BoardItemSetProgressRange(gv_merc_Contract_Price_Board, 1, 2, 0.0, IntToFixed(gv_mERC_CONTRACT_PRICE));
-    BoardItemSetProgressColor(gv_merc_Contract_Price_Board, 1, 2, Color(0.00, 100.00, 100.00), 1);
-    BoardItemSetProgressShow(gv_merc_Contract_Price_Board, 1, 4, true);
-    BoardItemSetText(gv_merc_Contract_Price_Board, 1, 3, (StringExternal("Param/Value/A79B6B3E") + IntToText(gv_oRLANS_MINERAL_COUNT)));
-    BoardItemSetTextColor(gv_merc_Contract_Price_Board, 1, 3, Color(75.29, 0.00, 0.00));
-    BoardItemSetFontSize(gv_merc_Contract_Price_Board, 1, 3, 18);
-    BoardItemSetProgressRange(gv_merc_Contract_Price_Board, 1, 4, 0.0, IntToFixed(gv_mERC_CONTRACT_PRICE));
-    BoardItemSetProgressColor(gv_merc_Contract_Price_Board, 1, 4, Color(100.00, 0.00, 0.00), 1);
-    BoardItemSetProgressValue(gv_merc_Contract_Price_Board, 1, 2, IntToFixed(PlayerGetPropertyInt(gv_p01_USER, c_playerPropMinerals)));
-    BoardItemSetProgressValue(gv_merc_Contract_Price_Board, 1, 4, IntToFixed(gv_oRLANS_MINERAL_COUNT));
-    BoardItemSetIcon(gv_merc_Contract_Price_Board, 1, 2, "Assets\\Textures\\icon-mineral-terran.dds", false);
-    BoardItemSetIcon(gv_merc_Contract_Price_Board, 1, 4, "Assets\\Textures\\icon-mineral-zerg.dds", false);
-    BoardMinimizeShow(gv_merc_Contract_Price_Board, PlayerGroupAll(), false);
+    DialogControlHookupStandard(c_triggerControlTypePanel, "UIContainer/ConsoleUIContainer/ContractWindow");
+    gv_contractWindowRoot = DialogControlLastCreated();
+    DialogControlHookup(gv_contractWindowRoot, c_triggerControlTypeLabel, "NameLabel");
+    gv_contractWindowTitle = DialogControlLastCreated();
+    TextExpressionSetToken("Param/Expression/F04E335C", "A", IntToText(gv_mERC_CONTRACT_PRICE));
+    libNtve_gf_SetDialogItemText(gv_contractWindowTitle, TextExpressionAssemble("Param/Expression/F04E335C"), PlayerGroupAll());
+    DialogControlHookup(gv_contractWindowRoot, c_triggerControlTypeImage, "RaynorBarImage");
+    gv_contractWindowRaynorBar = DialogControlLastCreated();
+    DialogControlHookup(gv_contractWindowRoot, c_triggerControlTypeLabel, "RaynorBarLabel");
+    gv_contractWindowRaynorLabel = DialogControlLastCreated();
+    DialogControlHookup(gv_contractWindowRoot, c_triggerControlTypeImage, "OrlanBarImage");
+    gv_contractWindowOrlanBar = DialogControlLastCreated();
+    DialogControlHookup(gv_contractWindowRoot, c_triggerControlTypeLabel, "OrlanBarLabel");
+    gv_contractWindowOrlanLabel = DialogControlLastCreated();
+    TriggerExecute(gt_UpdateContractWindow, true, true);
+    DialogControlSetVisible(gv_contractWindowRoot, PlayerGroupAll(), true);
     SoundPlay(SoundLink("TUI_StarmapMenuPopup", -1), PlayerGroupAll(), 100.0, 0.0);
     TriggerEnable(gt_OrlanMineralCount, true);
     return true;
@@ -1387,7 +1429,15 @@ void gt_CreateContractWindow_Init () {
 // Trigger: Update Contract Window
 //--------------------------------------------------------------------------------------------------
 bool gt_UpdateContractWindow_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    int lv_height;
+    int lv_maxWidth;
+
     // Automatic Variable Declarations
+    // Variable Initialization
+    lv_height = 20;
+    lv_maxWidth = 280;
+
     // Conditions
     if (testConds) {
         if (!((gv_gameOver == false))) {
@@ -1404,10 +1454,24 @@ bool gt_UpdateContractWindow_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    BoardItemSetProgressValue(gv_merc_Contract_Price_Board, 1, 2, IntToFixed(PlayerGetPropertyInt(gv_p01_USER, c_playerPropMinerals)));
-    BoardItemSetProgressValue(gv_merc_Contract_Price_Board, 1, 4, IntToFixed(gv_oRLANS_MINERAL_COUNT));
-    BoardItemSetText(gv_merc_Contract_Price_Board, 1, 1, (StringExternal("Param/Value/BC8609EA") + IntToText(PlayerGetPropertyInt(gv_p01_USER, c_playerPropMinerals))));
-    BoardItemSetText(gv_merc_Contract_Price_Board, 1, 3, (StringExternal("Param/Value/92B49FB8") + IntToText(gv_oRLANS_MINERAL_COUNT)));
+    TextExpressionSetToken("Param/Expression/8CF71F2C", "A", IntToText(PlayerGetPropertyInt(gv_p01_USER, c_playerPropMinerals)));
+    libNtve_gf_SetDialogItemText(gv_contractWindowRaynorLabel, TextExpressionAssemble("Param/Expression/8CF71F2C"), PlayerGroupAll());
+    TextExpressionSetToken("Param/Expression/CE70FF53", "A", IntToText(gv_oRLANS_MINERAL_COUNT));
+    libNtve_gf_SetDialogItemText(gv_contractWindowOrlanLabel, TextExpressionAssemble("Param/Expression/CE70FF53"), PlayerGroupAll());
+    if ((PlayerGetPropertyInt(gv_p01_USER, c_playerPropMinerals) > 0)) {
+        DialogControlSetVisible(gv_contractWindowRaynorBar, PlayerGroupAll(), true);
+        DialogControlSetSize(gv_contractWindowRaynorBar, PlayerGroupAll(), libNtve_gf_ArithmeticIntClamp(FixedToInt((lv_maxWidth * (PlayerGetPropertyFixed(gv_p01_USER, c_playerPropMinerals) / gv_mERC_CONTRACT_PRICE))), 1, lv_maxWidth), lv_height);
+    }
+    else {
+        DialogControlSetVisible(gv_contractWindowRaynorBar, PlayerGroupAll(), false);
+    }
+    if ((gv_oRLANS_MINERAL_COUNT > 0)) {
+        DialogControlSetVisible(gv_contractWindowOrlanBar, PlayerGroupAll(), true);
+        DialogControlSetSize(gv_contractWindowOrlanBar, PlayerGroupAll(), libNtve_gf_ArithmeticIntClamp(FixedToInt((lv_maxWidth * (IntToFixed(gv_oRLANS_MINERAL_COUNT) / gv_mERC_CONTRACT_PRICE))), 1, lv_maxWidth), lv_height);
+    }
+    else {
+        DialogControlSetVisible(gv_contractWindowOrlanBar, PlayerGroupAll(), false);
+    }
     return true;
 }
 
@@ -1460,12 +1524,12 @@ bool gt_PlayerBuysContract_Func (bool testConds, bool runActions) {
     UnitClearInfoText(UnitFromId(893));
     UnitClearInfoText(UnitFromId(894));
     UnitClearInfoText(UnitFromId(767));
-    BoardDestroy(gv_merc_Contract_Price_Board);
+    DialogControlSetVisible(gv_contractWindowRoot, PlayerGroupAll(), false);
     SoundPlay(SoundLink("UI_TechConsole_Purchase", -1), PlayerGroupAll(), 100.0, 0.0);
     PlayerModifyPropertyInt(gv_p01_USER, c_playerPropMinerals, c_playerPropOperSubtract, gv_mERC_CONTRACT_PRICE);
     libNtve_gf_SetAlliance(gv_p01_USER, gv_p03_MIRA_HAN, libNtve_ge_AllianceSetting_AllyWithSharedVision);
     TriggerExecute(gt_ObjectiveBuyContractComplete, true, false);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeGame);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeGame);
     TriggerExecute(gt_MidQ, true, false);
     return true;
 }
@@ -1503,7 +1567,7 @@ bool gt_MiraHanDestroyed_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveBuyContractFailedQ, true, true);
-    BoardDestroy(gv_merc_Contract_Price_Board);
+    DialogControlSetVisible(gv_contractWindowRoot, PlayerGroupAll(), false);
     TriggerExecute(gt_DefeatMiraHanDead, true, false);
     return true;
 }
@@ -1549,7 +1613,7 @@ bool gt_MiraHanGivesVulturestoPlayer_Func (bool testConds, bool runActions) {
     TriggerEnable(TriggerGetCurrent(), false);
     libNtve_gf_CreateUnitsAtPoint2(1, "Medivac", 0, gv_p03_MIRA_HAN, PointFromId(1242));
     lv_medivac = UnitLastCreated();
-    UnitCargoCreate(lv_medivac, "Vulture", 4);
+    UnitCargoCreate(lv_medivac, "SquadVulture", 4);
     libLbty_gf_OrderTransporttoUnloadAllthenDespawn(lv_medivac, PointFromId(1243), PointFromId(1242));
     Wait(6.0, c_timeGame);
     TriggerExecute(gt_TransmissionMiraHanGivesVulturesQ, true, true);
@@ -1580,7 +1644,7 @@ bool gt_ChangeOwnerofVultureDropshipUnits_Func (bool testConds, bool runActions)
             return false;
         }
 
-        if (!(((UnitGetType(EventUnit()) == "Vulture")))) {
+        if (!(((UnitGetType(EventUnit()) == "SquadVulture")))) {
             return false;
         }
     }
@@ -1634,8 +1698,7 @@ bool gt_OrlanMineralCount_Func (bool testConds, bool runActions) {
         UnitClearInfoText(UnitFromId(893));
         UnitClearInfoText(UnitFromId(894));
         UnitClearInfoText(UnitFromId(767));
-        BoardDestroy(gv_merc_Contract_Price_Board);
-        libNtve_gf_HideScreenButton(false, 1);
+        DialogControlSetVisible(gv_contractWindowRoot, PlayerGroupAll(), false);
         gv_miraHanContractBought = true;
         TriggerEnable(gt_MiraHanDestroyed, false);
         TriggerEnable(gt_UpdateContractWindow, false);
@@ -2520,6 +2583,7 @@ bool gt_RespawnableScrapSalvaged3x3Site11_Func (bool testConds, bool runActions)
             lv_scrapPoint = UnitGetPosition(lv_scrap);
             gf_SalvageScrap(lv_scrap, gv_p01_USER, 150, 0, true);
             gv_salvageTotal += 150;
+            gf_TryRemoveRespawnSalvagePings(lv_scrap);
             Wait(libNtve_gf_DifficultyValueFixed(120.0, 120.0, 160.0, 180.0), c_timeGame);
             while (!((gf_ScrapCanBeSalvaged(gv_p01_USER, lv_scrapPoint, 8.0) == false))) {
                 Wait(5.0, c_timeGame);
@@ -2578,6 +2642,7 @@ bool gt_RespawnableScrapSalvaged3x3Site12_Func (bool testConds, bool runActions)
             lv_scrapPoint = UnitGetPosition(lv_scrap);
             gf_SalvageScrap(lv_scrap, gv_p01_USER, 150, 0, true);
             gv_salvageTotal += 150;
+            gf_TryRemoveRespawnSalvagePings(lv_scrap);
             Wait(libNtve_gf_DifficultyValueFixed(120.0, 120.0, 160.0, 180.0), c_timeGame);
             while (!((gf_ScrapCanBeSalvaged(gv_p01_USER, lv_scrapPoint, 8.0) == false))) {
                 Wait(5.0, c_timeGame);
@@ -2636,6 +2701,7 @@ bool gt_RespawnableScrapSalvaged3x3Site21_Func (bool testConds, bool runActions)
             lv_scrapPoint = UnitGetPosition(lv_scrap);
             gf_SalvageScrap(lv_scrap, gv_p01_USER, 150, 0, true);
             gv_salvageTotal += 150;
+            gf_TryRemoveRespawnSalvagePings(lv_scrap);
             Wait(libNtve_gf_DifficultyValueFixed(120.0, 120.0, 160.0, 180.0), c_timeGame);
             while (!((gf_ScrapCanBeSalvaged(gv_p01_USER, lv_scrapPoint, 8.0) == false))) {
                 Wait(5.0, c_timeGame);
@@ -2694,6 +2760,7 @@ bool gt_RespawnableScrapSalvaged3x3Site22_Func (bool testConds, bool runActions)
             lv_scrapPoint = UnitGetPosition(lv_scrap);
             gf_SalvageScrap(lv_scrap, gv_p01_USER, 150, 0, true);
             gv_salvageTotal += 150;
+            gf_TryRemoveRespawnSalvagePings(lv_scrap);
             Wait(libNtve_gf_DifficultyValueFixed(120.0, 120.0, 160.0, 180.0), c_timeGame);
             while (!((gf_ScrapCanBeSalvaged(gv_p01_USER, lv_scrapPoint, 8.0) == false))) {
                 Wait(5.0, c_timeGame);
@@ -2752,6 +2819,7 @@ bool gt_RespawnableScrapSalvaged3x3Site31_Func (bool testConds, bool runActions)
             lv_scrapPoint = UnitGetPosition(lv_scrap);
             gf_SalvageScrap(lv_scrap, gv_p01_USER, 150, 0, true);
             gv_salvageTotal += 150;
+            gf_TryRemoveRespawnSalvagePings(lv_scrap);
             Wait(libNtve_gf_DifficultyValueFixed(120.0, 120.0, 160.0, 180.0), c_timeGame);
             while (!((gf_ScrapCanBeSalvaged(gv_p01_USER, lv_scrapPoint, 8.0) == false))) {
                 Wait(5.0, c_timeGame);
@@ -2810,6 +2878,7 @@ bool gt_RespawnableScrapSalvaged3x3Site32_Func (bool testConds, bool runActions)
             lv_scrapPoint = UnitGetPosition(lv_scrap);
             gf_SalvageScrap(lv_scrap, gv_p01_USER, 150, 0, true);
             gv_salvageTotal += 150;
+            gf_TryRemoveRespawnSalvagePings(lv_scrap);
             Wait(libNtve_gf_DifficultyValueFixed(120.0, 120.0, 160.0, 180.0), c_timeGame);
             while (!((gf_ScrapCanBeSalvaged(gv_p01_USER, lv_scrapPoint, 8.0) == false))) {
                 Wait(5.0, c_timeGame);
@@ -2868,6 +2937,7 @@ bool gt_RespawnableScrapSalvaged3x3Site41_Func (bool testConds, bool runActions)
             lv_scrapPoint = UnitGetPosition(lv_scrap);
             gf_SalvageScrap(lv_scrap, gv_p01_USER, 150, 0, true);
             gv_salvageTotal += 150;
+            gf_TryRemoveRespawnSalvagePings(lv_scrap);
             Wait(libNtve_gf_DifficultyValueFixed(120.0, 120.0, 160.0, 180.0), c_timeGame);
             while (!((gf_ScrapCanBeSalvaged(gv_p01_USER, lv_scrapPoint, 8.0) == false))) {
                 Wait(5.0, c_timeGame);
@@ -2926,6 +2996,7 @@ bool gt_RespawnableScrapSalvaged3x3Site42_Func (bool testConds, bool runActions)
             lv_scrapPoint = UnitGetPosition(lv_scrap);
             gf_SalvageScrap(lv_scrap, gv_p01_USER, 150, 0, true);
             gv_salvageTotal += 150;
+            gf_TryRemoveRespawnSalvagePings(lv_scrap);
             Wait(libNtve_gf_DifficultyValueFixed(120.0, 120.0, 160.0, 180.0), c_timeGame);
             while (!((gf_ScrapCanBeSalvaged(gv_p01_USER, lv_scrapPoint, 8.0) == false))) {
                 Wait(5.0, c_timeGame);
@@ -3795,7 +3866,6 @@ bool gt_TransmissionRespawnableSalvageQ_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     gv_respawnableSalvage = EventUnitRegion();
-    TriggerEnable(gt_RemoveRespawnSalvagePings, true);
     if ((EventUnitRegion() == RegionFromId(5))) {
         libNtve_gf_CreateModelAtPoint("BriefingUnitSelect", RegionGetCenter(RegionFromId(20)));
         gv_respawnSalvagePingActor1 = libNtve_gf_ActorLastCreated();
@@ -3832,6 +3902,7 @@ bool gt_TransmissionRespawnableSalvageQ_Func (bool testConds, bool runActions) {
         VisRevealArea(gv_p01_USER, RegionCircle(RegionGetCenter(RegionFromId(19)), 5.0), 6.0, false);
     }
 
+    TriggerEnable(gt_RemoveRespawnSalvagePings, true);
     TriggerQueueEnter();
     UIAlertPoint("Trigger", gv_p01_USER, StringExternal("Param/Value/E41F86F3"), null, RegionGetCenter(EventUnitRegion()));
     MinimapPing(PlayerGroupAll(), RegionGetCenter(EventUnitRegion()), 6.0, Color(0.00, 100.00, 0.00));
@@ -3860,15 +3931,7 @@ bool gt_RemoveRespawnSalvagePings_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
     // Conditions
     if (testConds) {
-        if (!((UnitGetOwner(EventUnit()) == gv_p01_USER))) {
-            return false;
-        }
-
-        if (!((UnitFilterMatch(EventUnit(), gv_p01_USER, UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32)))) == true))) {
-            return false;
-        }
-
-        if (!((libNtve_gf_UnitInRegion(EventUnit(), gv_respawnableSalvage) == true))) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
             return false;
         }
     }
@@ -3888,14 +3951,6 @@ bool gt_RemoveRespawnSalvagePings_Func (bool testConds, bool runActions) {
 void gt_RemoveRespawnSalvagePings_Init () {
     gt_RemoveRespawnSalvagePings = TriggerCreate("gt_RemoveRespawnSalvagePings_Func");
     TriggerEnable(gt_RemoveRespawnSalvagePings, false);
-    TriggerAddEventUnitRegion(gt_RemoveRespawnSalvagePings, null, RegionFromId(20), true);
-    TriggerAddEventUnitRegion(gt_RemoveRespawnSalvagePings, null, RegionFromId(21), true);
-    TriggerAddEventUnitRegion(gt_RemoveRespawnSalvagePings, null, RegionFromId(12), true);
-    TriggerAddEventUnitRegion(gt_RemoveRespawnSalvagePings, null, RegionFromId(8), true);
-    TriggerAddEventUnitRegion(gt_RemoveRespawnSalvagePings, null, RegionFromId(13), true);
-    TriggerAddEventUnitRegion(gt_RemoveRespawnSalvagePings, null, RegionFromId(14), true);
-    TriggerAddEventUnitRegion(gt_RemoveRespawnSalvagePings, null, RegionFromId(18), true);
-    TriggerAddEventUnitRegion(gt_RemoveRespawnSalvagePings, null, RegionFromId(19), true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -3932,7 +3987,7 @@ bool gt_TransmissionMiraHanGivesVulturesQ_Func (bool testConds, bool runActions)
     UIAlertPoint("Trigger", gv_p01_USER, StringExternal("Param/Value/4950C282"), null, PointFromId(1243));
     // Transmission - SoundLink("THorner02Han00017", 0)
     libCamp_gf_SendTransmissionCampaign(null, SoundLink("THorner02Han00017", -1), c_transmissionDurationAdd, 0.0, true);
-    libCamp_gf_EnableCampaignTechUnit(true, libCamp_ge_StoryTechGroup_StoryTechGroupVehiclesVulture, gv_p01_USER);
+    libWoLC_gf_EnableCampaignTechUnit(true, "Vulture", gv_p01_USER);
     // Transmission - SoundLink("THorner02Tychus00023", -1)
     libCamp_gf_SendTransmissionCampaign(null, SoundLink("THorner02Tychus00023", -1), c_transmissionDurationAdd, 0.0, true);
     // Transmission - SoundLink("THorner02Raynor00024", -1)
@@ -4185,9 +4240,7 @@ bool gt_CampaignTipsQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
     libCamp_gf_CreateStorymodeTips();
-    TriggerQueueExit();
     return true;
 }
 
@@ -4207,10 +4260,7 @@ bool gt_MercenaryContractTipQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
     libCamp_gf_CreateTipFromConversationState("StoryTips|Horner02_MercContract", libNtve_ge_TipType_NormalTip, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -4230,11 +4280,7 @@ bool gt_NewUnitVultureTipQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
     libCamp_gf_CreateTipFromConversationState("StoryTips|Horner02_Vultures", libNtve_ge_TipType_NewUnit, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerExecute(gt_NewAbilitySpiderMineTip, true, false);
-    TriggerQueueExit();
     return true;
 }
 
@@ -4255,7 +4301,6 @@ bool gt_NewAbilitySpiderMineTip_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     libCamp_gf_CreateTipFromConversationState("StoryTips|Horner02_SpiderMines", libNtve_ge_TipType_NewAbility, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
     return true;
 }
 
@@ -4275,10 +4320,7 @@ bool gt_StopOrlanTipQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
     libCamp_gf_CreateTipFromConversationState("StoryTips|Horner02_StopOrlan", libNtve_ge_TipType_NormalTip, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -4299,7 +4341,6 @@ bool gt_SalvageTip_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     libCamp_gf_CreateTipFromConversationState("StoryTips|Horner02_Scrap", libNtve_ge_TipType_NormalTip, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
     return true;
 }
 
@@ -4369,7 +4410,7 @@ bool gt_Achievement25SpiderMineKills_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    AchievementAward(gv_p01_USER, "THorner02_2");
+    libWoLC_gf_CampaignAwardAchievement("THorner02_2");
     return true;
 }
 
@@ -4482,7 +4523,7 @@ bool gt_VictoryDestroyOrlanCompleted_Func (bool testConds, bool runActions) {
     }
 
     if ((libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1) && (ObjectiveGetState(gv_primaryObjectiveBuyContract) == c_objectiveStateActive)) {
-        AchievementAward(gv_p01_USER, "Anniversary_THorner02");
+        libWoLC_gf_CampaignAwardAchievement("Anniversary_THorner02");
         TriggerDebugOutput(1, StringExternal("Param/Value/542503D6"), false);
     }
 
@@ -4492,7 +4533,7 @@ bool gt_VictoryDestroyOrlanCompleted_Func (bool testConds, bool runActions) {
     libNtve_gf_ChangeUnitDamage(UnitFromId(90), libNtve_ge_UnitDamageTakenDealt_Damage_Take, libNtve_ge_UnitDamageChangeOption_No);
     TriggerExecute(gt_ObjectiveBuyContractComplete, true, true);
     TriggerExecute(gt_ObjectiveDestroyOrlanComplete, true, true);
-    libCamp_gf_RunMissionVictorySequence(gt_VictoryQ);
+    libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
     return true;
 }
 
@@ -4513,7 +4554,7 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     }
 
     if ((ObjectiveGetState(gv_primaryObjectiveBuyContract) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_primaryObjectiveDestroyOrlan) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_bonusObjectiveFindContraband) == c_objectiveStateCompleted)) {
-        AchievementAward(gv_p01_USER, "THorner02_1");
+        libWoLC_gf_CampaignAwardAchievement("THorner02_1");
     }
 
     VictoryPanelAddAchievement("THorner02_1");
@@ -4528,8 +4569,7 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/6C4C2088"), FormatNumber(gv_spiderMineKillCount));
     VictoryPanelAddCustomStatisticLine(StringToText(""), StringToText(""));
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/825A8B19"), (IntToText(gv_contrabandRelicsFound) + StringExternal("Param/Value/1B75B417") + IntToText(gv_contrabandRelicsTotal)));
-    VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/6DF56EB6"), IntToText(gv_contrabandRelicsFound));
-    libCamp_gf_EndCampaignMission(gv_p01_USER, c_gameOverVictory);
+    libWCMI_gf_EndCampaignMission(gv_p01_USER, c_gameOverVictory);
     return true;
 }
 
@@ -4556,7 +4596,7 @@ bool gt_VictoryCheat_Func (bool testConds, bool runActions) {
     }
 
     gv_gameOver = true;
-    libCamp_gf_RunMissionVictorySequence(gt_Victory);
+    libWCMI_gf_RunMissionVictorySequence(gt_Victory);
     return true;
 }
 
@@ -4593,7 +4633,7 @@ bool gt_DefeatBaseDead_Func (bool testConds, bool runActions) {
     TriggerQueueClear(c_triggerQueueRemove);
     Wait(2.0, c_timeReal);
     libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/359DECC7"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_Defeat, true, false);
     return true;
 }
@@ -4628,7 +4668,7 @@ bool gt_DefeatMiraHanDead_Func (bool testConds, bool runActions) {
     TriggerQueueClear(c_triggerQueueRemove);
     Wait(2.0, c_timeReal);
     libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/306B371C"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_Defeat, true, false);
     return true;
 }
@@ -4661,7 +4701,7 @@ bool gt_DefeatOrlanBuysContract_Func (bool testConds, bool runActions) {
     TriggerQueueClear(c_triggerQueueRemove);
     Wait(2.0, c_timeReal);
     libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/5B13ECF2"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_Defeat, true, false);
     return true;
 }
@@ -4682,7 +4722,7 @@ bool gt_Defeat_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_EndCampaignMission(gv_p01_USER, c_gameOverDefeat);
+    libWCMI_gf_EndCampaignMission(gv_p01_USER, c_gameOverDefeat);
     return true;
 }
 
@@ -4737,14 +4777,12 @@ bool gt_ObjectiveBuyContractCreateQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate((StringExternal("Param/Value/1589E053") + TextReplaceWord(StringExternal("Param/Value/D33401E3"), StringExternal("Param/Value/9590FC4A"), IntToText(gv_mERC_CONTRACT_PRICE), c_stringReplaceAll, c_stringCase) + StringExternal("Param/Value/E8C55C35")), StringExternal("Param/Value/EADB19A4"), c_objectiveStateActive, true);
+    libWCMI_gf_CreateObjectiveCampaign("THorner02_1");
     gv_primaryObjectiveBuyContract = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_THorner02Objective1, ObjectiveLastCreated(), StringExternal("Param/Value/024F788C"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    libWCMI_gf_SetMissionObjectiveProgress2("THorner02_1", TextReplaceWord(StringExternal("Param/Value/6A6A5E89"), StringExternal("Param/Value/D2D3EE56"), IntToText(gv_mERC_CONTRACT_PRICE), c_stringReplaceAll, c_stringCase));
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_CreateContractWindow, true, false);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -4772,8 +4810,8 @@ bool gt_ObjectiveBuyContractComplete_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveBuyContractCreateQ, true, false);
-    ObjectiveSetState(gv_primaryObjectiveBuyContract, c_objectiveStateCompleted);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    libWCMI_gf_ZS_SetMissionObjectiveState("THorner02_1", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -4801,9 +4839,7 @@ bool gt_ObjectiveBuyContractFailedQ_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveBuyContractCreateQ, true, false);
-    TriggerQueueEnter();
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -4830,12 +4866,9 @@ bool gt_ObjectiveDestroyOrlanCreateQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate(StringExternal("Param/Value/9FFE53DF"), StringExternal("Param/Value/149F8BF7"), c_objectiveStateActive, true);
+    libWCMI_gf_CreateObjectiveCampaign("THorner02_2");
     gv_primaryObjectiveDestroyOrlan = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_THorner02Objective2, ObjectiveLastCreated(), StringExternal("Param/Value/088E0A54"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -4863,45 +4896,14 @@ bool gt_ObjectiveDestroyOrlanComplete_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveDestroyOrlanCreateQ, true, false);
-    ObjectiveSetState(gv_primaryObjectiveDestroyOrlan, c_objectiveStateCompleted);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    libWCMI_gf_ZS_SetMissionObjectiveState("THorner02_2", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 void gt_ObjectiveDestroyOrlanComplete_Init () {
     gt_ObjectiveDestroyOrlanComplete = TriggerCreate("gt_ObjectiveDestroyOrlanComplete_Func");
-}
-
-//--------------------------------------------------------------------------------------------------
-// Trigger: Objective Destroy Orlan Failed Q
-//--------------------------------------------------------------------------------------------------
-bool gt_ObjectiveDestroyOrlanFailedQ_Func (bool testConds, bool runActions) {
-    // Automatic Variable Declarations
-    // Conditions
-    if (testConds) {
-        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
-            return false;
-        }
-    }
-
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    TriggerEnable(TriggerGetCurrent(), false);
-    TriggerExecute(gt_ObjectiveDestroyOrlanCreateQ, true, false);
-    TriggerQueueEnter();
-    ObjectiveSetState(gv_primaryObjectiveDestroyOrlan, c_objectiveStateFailed);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void gt_ObjectiveDestroyOrlanFailedQ_Init () {
-    gt_ObjectiveDestroyOrlanFailedQ = TriggerCreate("gt_ObjectiveDestroyOrlanFailedQ_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -4922,12 +4924,9 @@ bool gt_ObjectiveFindContrabandCreateQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate((StringExternal("Param/Value/29858229") + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectFindProtossRelicContraband, libCamp_ge_StoryResearchObjectiveTextStyle_Multipart, gv_contrabandRelicsTotal, gv_contrabandRelicsFound) + StringToText("")), StringExternal("Param/Value/BBBD9501"), c_objectiveStateActive, false);
+    libWCMI_gf_CreateObjectiveCampaign("THorner02_3");
     gv_bonusObjectiveFindContraband = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_THorner02Objective3, ObjectiveLastCreated(), StringExternal("Param/Value/46EFAF90"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -4964,9 +4963,9 @@ bool gt_ObjectiveFindContrabandUpdate_Func (bool testConds, bool runActions) {
     gv_contrabandRelicsFound += 1;
     TriggerExecute(gt_ObjectiveFindContrabandCreateQ, true, false);
     UIAlertPoint("Trigger", gv_p01_USER, StringExternal("Param/Value/D16B38BA"), null, UnitGetPosition(EventUnit()));
-    libCamp_gf_DisplayResearchPointsGiventoPlayer(libCamp_ge_StoryResearchObject_ResearchObjectFindProtossRelicContraband, EventUnit(), gv_p01_USER);
+    libWCMI_gf_DisplayMissionObjectiveRewardFloatingText(UnitGetPosition(EventUnit()), "THorner02_3");
     UnitKill(EventUnit());
-    ObjectiveSetName(gv_bonusObjectiveFindContraband, (StringExternal("Param/Value/057D9AD4") + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectFindProtossRelicContraband, libCamp_ge_StoryResearchObjectiveTextStyle_Multipart, gv_contrabandRelicsTotal, gv_contrabandRelicsFound)));
+    libWCMI_gf_SetMissionObjectiveProgress("THorner02_3", gv_contrabandRelicsFound);
     if ((gv_contrabandRelicsFound == gv_contrabandRelicsTotal)) {
         TriggerExecute(gt_ObjectiveFindContrabandComplete, true, false);
     }
@@ -4999,45 +4998,14 @@ bool gt_ObjectiveFindContrabandComplete_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveFindContrabandCreateQ, true, false);
-    ObjectiveSetState(gv_bonusObjectiveFindContraband, c_objectiveStateCompleted);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    libWCMI_gf_ZS_SetMissionObjectiveState("THorner02_3", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 void gt_ObjectiveFindContrabandComplete_Init () {
     gt_ObjectiveFindContrabandComplete = TriggerCreate("gt_ObjectiveFindContrabandComplete_Func");
-}
-
-//--------------------------------------------------------------------------------------------------
-// Trigger: Objective Find Contraband Failed Q
-//--------------------------------------------------------------------------------------------------
-bool gt_ObjectiveFindContrabandFailedQ_Func (bool testConds, bool runActions) {
-    // Automatic Variable Declarations
-    // Conditions
-    if (testConds) {
-        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
-            return false;
-        }
-    }
-
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    TriggerEnable(TriggerGetCurrent(), false);
-    TriggerExecute(gt_ObjectiveFindContrabandCreateQ, true, false);
-    TriggerQueueEnter();
-    ObjectiveSetState(gv_bonusObjectiveFindContraband, c_objectiveStateFailed);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void gt_ObjectiveFindContrabandFailedQ_Init () {
-    gt_ObjectiveFindContrabandFailedQ = TriggerCreate("gt_ObjectiveFindContrabandFailedQ_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -5658,8 +5626,7 @@ bool gt_VictorySetup_Func (bool testConds, bool runActions) {
     UnitClearSelection(gv_p01_USER);
     PlayerSetState(gv_p01_USER, c_playerStateXPGain, false);
     GameTimeOfDayPause(true);
-    BoardDestroy(gv_merc_Contract_Price_Board);
-    libNtve_gf_HideScreenButton(false, 1);
+    DialogControlSetVisible(gv_contractWindowRoot, PlayerGroupAll(), false);
     UnitRemove(UnitFromId(928));
     UnitRemove(UnitFromId(1026));
     UnitPauseAll(true);
@@ -5903,6 +5870,7 @@ void gt_VictoryScene_Init () {
 // Trigger Initialization
 //--------------------------------------------------------------------------------------------------
 void InitTriggers () {
+    gt_OnPlayer1GetUnit_Init();
     gt_Initialization_Init();
     gt_Init01Technology_Init();
     gt_Init02Players_Init();
@@ -6004,11 +5972,9 @@ void InitTriggers () {
     gt_ObjectiveBuyContractFailedQ_Init();
     gt_ObjectiveDestroyOrlanCreateQ_Init();
     gt_ObjectiveDestroyOrlanComplete_Init();
-    gt_ObjectiveDestroyOrlanFailedQ_Init();
     gt_ObjectiveFindContrabandCreateQ_Init();
     gt_ObjectiveFindContrabandUpdate_Init();
     gt_ObjectiveFindContrabandComplete_Init();
-    gt_ObjectiveFindContrabandFailedQ_Init();
     gt_BriefingQ_Init();
     gt_BriefingScene00_Init();
     gt_BriefingScene00Stuff_Init();

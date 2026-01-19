@@ -7,7 +7,10 @@
 //==================================================================================================
 include "TriggerLibs/NativeLib"
 include "TriggerLibs/LibertyLib"
-include "TriggerLibs/CampaignLib"
+include "LibEA0820A1"
+include "LibCamp"
+include "LibWoLC"
+include "LibWCMI"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -15,7 +18,10 @@ include "TriggerLibs/CampaignLib"
 void InitLibs () {
     libNtve_InitLib();
     libLbty_InitLib();
+    libEA0820A1_InitLib();
     libCamp_InitLib();
+    libWoLC_InitLib();
+    libWCMI_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -72,9 +78,9 @@ int gv_initialMarineCount;
 unitgroup gv_zergOnTheLoose;
 unitgroup gv_zergOnTheLoose2;
 int gv_colonistsSaveQuota;
+int gv_colonistsDeathQuota;
 int gv_colonistsSaved;
 int gv_colonistsKilled;
-int gv_colonistsDeathQuota;
 int gv_convoyTrucksSent;
 int gv_colonistLeaderBoard;
 unit gv_chrysalisPingUnit;
@@ -134,7 +140,7 @@ void InitGlobals () {
     gv_zergOnTheLoose = UnitGroupEmpty();
     gv_zergOnTheLoose2 = UnitGroupEmpty();
     gv_colonistsSaveQuota = 50;
-    gv_colonistsDeathQuota = libNtve_gf_DifficultyValueInt(0, 0, 20, 20);
+    gv_colonistsDeathQuota = 20;
     gv_colonistLeaderBoard = c_timerWindowNone;
     gv_activeNydusWorms = UnitGroupEmpty();
     gv_nydusSpawnDelay = 12.0;
@@ -166,6 +172,7 @@ void gf_ColonyShipBlastoff (unit lp_unit);
 //--------------------------------------------------------------------------------------------------
 // Trigger Variables
 //--------------------------------------------------------------------------------------------------
+trigger gt_OnPlayer1GetUnit;
 trigger gt_Initialization;
 trigger gt_Init01Technology;
 trigger gt_Init02Players;
@@ -489,6 +496,26 @@ void gf_ColonyShipBlastoff (unit lp_unit) {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: OnPlayer1GetUnit
+//--------------------------------------------------------------------------------------------------
+bool gt_OnPlayer1GetUnit_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerExecute(libEA0820A1_gt_Init00ReplaceUnit, true, true);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_OnPlayer1GetUnit_Init () {
+    gt_OnPlayer1GetUnit = TriggerCreate("gt_OnPlayer1GetUnit_Func");
+    TriggerAddEventUnitChangeOwner(gt_OnPlayer1GetUnit, null);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: Initialization
 //--------------------------------------------------------------------------------------------------
 bool gt_Initialization_Func (bool testConds, bool runActions) {
@@ -498,7 +525,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_LoadCampaignData(libCamp_ge_MapID_MapTHanson01);
+    libWoLC_gf_ULoadCampaignData("THanson01");
     TriggerExecute(gt_Init01Technology, true, false);
     TriggerExecute(gt_Init02Players, true, true);
     TriggerExecute(gt_Init03VariablesUnits, true, true);
@@ -506,8 +533,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init05Environment, true, true);
     TriggerExecute(gt_Init06Difficulty, true, true);
     TriggerExecute(gt_Init07Help, true, true);
-    libCamp_gf_RegisterFootageRecording(gt_BriefingQ);
-    libCamp_gf_PurchaseStorymodeTech();
+    libWoLC_gf_RegisterFootageRecording(gt_BriefingQ);
     TriggerExecute(gt_IntroSequence, true, false);
     return true;
 }
@@ -528,8 +554,7 @@ bool gt_Init01Technology_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_SetTechRestrictionsCallback(TriggerGetCurrent());
-    libCamp_gf_EnableCampaignTechUnit(true, libCamp_ge_StoryTechGroup_StoryTechGroupInfantryFirebat, 1);
+    libWoLC_gf_EnableCampaignTechUnit(true, "Firebat", gv_p1_USER);
     TechTreeUpgradeAddLevel(gv_p2_ZERG_ORANGE_NW, "Burrow", 1);
     TechTreeUpgradeAddLevel(gv_p3_ZERG_LIGHTBLUE_SE, "Burrow", 1);
     TechTreeUpgradeAddLevel(gv_p2_ZERG_ORANGE_NW, "overlordspeed", 1);
@@ -585,6 +610,7 @@ bool gt_Init02Players_Func (bool testConds, bool runActions) {
     PlayerModifyPropertyInt(gv_p3_ZERG_LIGHTBLUE_SE, c_playerPropVespene, c_playerPropOperSetTo, 5000);
     PlayerModifyPropertyInt(gv_p4_COLONISTS, c_playerPropMinerals, c_playerPropOperSetTo, 0);
     PlayerModifyPropertyInt(gv_p4_COLONISTS, c_playerPropVespene, c_playerPropOperSetTo, 0);
+    libWCMI_gf_WM_DetectionUpgradesApply();
     return true;
 }
 
@@ -597,12 +623,7 @@ void gt_Init02Players_Init () {
 // Trigger: Init 03 Variables/Units
 //--------------------------------------------------------------------------------------------------
 bool gt_Init03VariablesUnits_Func (bool testConds, bool runActions) {
-    // Variable Declarations
-    bool lv_playerHasMercTech;
-    int lv_merc;
-
     // Automatic Variable Declarations
-    int autoBAE5F0D6_i;
     unitgroup autoE0D555BB_g;
     int autoE0D555BB_u;
     unit autoE0D555BB_var;
@@ -619,30 +640,12 @@ bool gt_Init03VariablesUnits_Func (bool testConds, bool runActions) {
     int autoBB9F27D7_u;
     unit autoBB9F27D7_var;
 
-    // Variable Initialization
-    lv_merc = libCamp_ge_StoryMercID_MercNone;
-
     // Actions
     if (!runActions) {
         return true;
     }
 
-    autoBAE5F0D6_i = libCamp_gv_TSC_MERC_FIRST;
-    while (autoBAE5F0D6_i <= libCamp_gv_TSC_MERC_LAST) {
-        lv_merc = libCamp_gv_tS_MercID[autoBAE5F0D6_i];
-        if ((libCamp_gf_MercStatusCheck(lv_merc, libCamp_ge_StoryMercStatus_Purchased) == true)) {
-            lv_playerHasMercTech = true;
-            break;
-        }
-
-        autoBAE5F0D6_i = autoBAE5F0D6_i + 1;
-    }
-    if ((lv_playerHasMercTech == false)) {
-        UnitRemove(UnitFromId(3245));
-    }
-    else {
-        libNtve_gf_PauseUnit(UnitFromId(3245), true);
-    }
+    libWCMI_gf_HandleMercCompound(UnitFromId(3245));
     gv_bonusObjectiveCollectChrysalisNeeded = UnitGroupCount(UnitGroup("ChrysalisEgg", c_playerAny, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive);
     gv_initialMarineCount = UnitGroupCount(UnitGroup("Marine", gv_p4_COLONISTS, RegionEntireMap(), UnitFilter(0, 0, 0, (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive);
     libNtve_gf_PauseUnit(UnitFromId(96), true);
@@ -798,27 +801,15 @@ void gt_Init05Environment_Init () {
 //--------------------------------------------------------------------------------------------------
 bool gt_Init06Difficulty_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
-    playergroup auto395B6C3C_g;
-    int auto395B6C3C_var;
-
     // Actions
     if (!runActions) {
         return true;
     }
 
-    if ((libNtve_gf_DifficultyValueInt(1, 0, 0, 0) == 1)) {
-        auto395B6C3C_g = gv_zergPlayers;
-        auto395B6C3C_var = -1;
-        while (true) {
-            auto395B6C3C_var = PlayerGroupNextPlayer(auto395B6C3C_g, auto395B6C3C_var);
-            if (auto395B6C3C_var < 0) { break; }
-            PlayerModifyPropertyInt(auto395B6C3C_var, c_playerPropHandicap, c_playerPropOperSetTo, 50);
-        }
-    }
-
     gv_nydusSpawnDelay = libNtve_gf_DifficultyValueFixed(12.0, 12.0, 9.0, 8.0);
     gv_nydusWormHP = libNtve_gf_DifficultyValueFixed(200.0, 200.0, 350.0, 500.0);
-    gv_colonistsSaveQuota = 50;
+    gv_colonistsSaveQuota = CatalogFieldValueGetAsInt(c_gameCatalogObjective, "THanson01_2", "RequiredCount", c_playerAny);
+    gv_colonistsDeathQuota = CatalogFieldValueGetAsInt(c_gameCatalogObjective, "THanson01_4", "RequiredCount", c_playerAny);
     gv_waveDelay = libNtve_gf_DifficultyValueFixed(50.0, 50.0, 25.0, 15.0);
     gv_doomsdayZergSpawnCount = libNtve_gf_DifficultyValueInt(3, 3, 4, 5);
     gv_unloadAmount[1] = 10;
@@ -894,8 +885,6 @@ bool gt_IntroSequence_Func (bool testConds, bool runActions) {
     libNtve_gf_SwooshCamera(gv_p1_USER, ((CameraInfoGetValue(CameraInfoDefault(), c_cameraValueDistance)) + 8.0), CameraInfoGetValue(CameraInfoDefault(), c_cameraValueDistance), PointFromId(125), 1.5);
     SoundtrackPlay(PlayerGroupAll(), c_soundtrackCategoryMusic, "THanson01MusicIntro", c_soundtrackCueAny, c_soundtrackIndexAny, false);
     TriggerExecute(gt_FirebatDropshipAction, true, false);
-    PlayerPauseAllCooldowns(gv_p1_USER, true);
-    PlayerPauseAllCharges(gv_p1_USER, true);
     CinematicFade(true, 1.5, c_fadeStyleNormal, ColorWithAlpha(0.00, 0.00, 0.00, 0.00), 0.0, true);
     TriggerExecute(gt_StartGame, true, false);
     TriggerExecute(gt_StartHansonEscortPhase, true, false);
@@ -967,7 +956,6 @@ bool gt_SwanntalksaboutFirebatQ_Func (bool testConds, bool runActions) {
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Game);
     Wait(2.0, c_timeReal);
     libCamp_gf_CreateTipFromConversationState("StoryTips|Hanson01_Firebats", libNtve_ge_TipType_NewUnit, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
     TriggerQueueExit();
     return true;
 }
@@ -994,9 +982,9 @@ bool gt_FirebatDropshipAction_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    UnitCargoCreate(UnitFromId(290), "Firebat", 2);
+    UnitCargoCreate(UnitFromId(290), "SquadFirebat", 2);
     libNtve_gf_AddUnitGroupToUnitGroup(UnitCargoLastCreatedGroup(), gv_firebatCargoUnits);
-    UnitCargoCreate(UnitFromId(290), "Medic", 2);
+    UnitCargoCreate(UnitFromId(290), "SquadMedic", 2);
     autoA5804961_g = UnitCargoLastCreatedGroup();
     autoA5804961_u = UnitGroupCount(autoA5804961_g, c_unitCountAll);
     for (;; autoA5804961_u -= 1) {
@@ -1016,6 +1004,7 @@ bool gt_FirebatDropshipAction_Func (bool testConds, bool runActions) {
     UnitIssueOrder(UnitFromId(290), OrderTargetingPoint(AbilityCommand("SpecOpsDropshipTransport", 2), PointFromId(2157)), c_orderQueueReplace);
     libNtve_gf_MakeUnitUncommandable(UnitFromId(290), true);
     UnitSetState(UnitFromId(290), c_unitStateTargetable, false);
+    UnitSetState(UnitFromId(290), c_unitStateSelectable, false);
     while (!(((UnitGroupCount(UnitCargoGroup(UnitFromId(290)), c_unitCountAlive) == 0) || (UnitIsAlive(UnitFromId(290)) == false)))) {
         Wait(1.0, c_timeGame);
     }
@@ -1041,7 +1030,7 @@ bool gt_FirebatMove_Func (bool testConds, bool runActions) {
 
     // Conditions
     if (testConds) {
-        if (!(((UnitGetType(EventUnitCargo()) == "Firebat") || (UnitGetType(EventUnitCargo()) == "Medic")))) {
+        if (!(((UnitGetType(EventUnitCargo()) == "SquadFirebat") || (UnitGetType(EventUnitCargo()) == "SquadMedic")))) {
             return false;
         }
     }
@@ -1051,7 +1040,7 @@ bool gt_FirebatMove_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    if ((UnitGetType(EventUnitCargo()) == "Firebat")) {
+    if ((UnitGetType(EventUnitCargo()) == "SquadFirebat")) {
         Wait(0.2, c_timeGame);
         auto256F7B23_val = gv_firebatMove;
         if (auto256F7B23_val == 1) {
@@ -1446,10 +1435,6 @@ void gt_Zerg3_Init () {
 // Trigger: Switch to Escort Phase
 //--------------------------------------------------------------------------------------------------
 bool gt_SwitchtoEscortPhase_Func (bool testConds, bool runActions) {
-    // Variable Declarations
-    point lv_mcompound;
-    bool lv_merccompoundisselected;
-
     // Automatic Variable Declarations
     unitgroup autoEAEE2387_g;
     int autoEAEE2387_u;
@@ -1457,8 +1442,6 @@ bool gt_SwitchtoEscortPhase_Func (bool testConds, bool runActions) {
     unitgroup auto338F5CC8_g;
     int auto338F5CC8_u;
     unit auto338F5CC8_var;
-
-    // Variable Initialization
 
     // Conditions
     if (testConds) {
@@ -1500,7 +1483,6 @@ bool gt_SwitchtoEscortPhase_Func (bool testConds, bool runActions) {
     }
 
     libNtve_gf_PauseUnit(UnitFromId(96), false);
-    libNtve_gf_PauseUnit(UnitFromId(3245), false);
     autoEAEE2387_g = UnitGroup(null, gv_p4_COLONISTS, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32))), 0);
     autoEAEE2387_u = UnitGroupCount(autoEAEE2387_g, c_unitCountAll);
     for (;; autoEAEE2387_u -= 1) {
@@ -1512,7 +1494,7 @@ bool gt_SwitchtoEscortPhase_Func (bool testConds, bool runActions) {
 
     }
     UnitSetPropertyFixed(UnitFromId(236), c_unitPropEnergy, 50.0);
-    UnitIssueOrder(UnitFromId(236), OrderTargetingUnit(null, UnitFromId(236)), c_orderQueueReplace);
+    libWCMI_gf_SetWorkerRallyPointforNexus2(UnitFromId(236));
     auto338F5CC8_g = UnitGroup("SCV", gv_p1_USER, RegionEntireMap(), UnitFilter(0, 0, 0, (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     auto338F5CC8_u = UnitGroupCount(auto338F5CC8_g, c_unitCountAll);
     for (;; auto338F5CC8_u -= 1) {
@@ -1688,8 +1670,6 @@ bool gt_StartHansonEscortPhase_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    PlayerPauseAllCooldowns(gv_p1_USER, false);
-    PlayerPauseAllCharges(gv_p1_USER, false);
     while (!((gv_missionPhase == ge_PRESET_MissionPhase_Escort) && (gv_gameOver == false))) {
         Wait(0.1, c_timeGame);
     }
@@ -1748,9 +1728,7 @@ bool gt_CreateStorymodeTipsQ_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    TriggerQueueEnter();
     libCamp_gf_CreateStorymodeTips();
-    TriggerQueueExit();
     return true;
 }
 
@@ -1839,7 +1817,7 @@ bool gt_TIPZergCreep_Func (bool testConds, bool runActions) {
             return false;
         }
 
-        if (!((libCamp_gf_StoryState(libCamp_ge_StoryStateID_StoryStateTipZergCreepPlayed) == 0))) {
+        if (!((libWoLC_gf_StoryState("TipZergCreepPlayed") == false))) {
             return false;
         }
 
@@ -1858,11 +1836,8 @@ bool gt_TIPZergCreep_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    libCamp_gf_SetStoryState(libCamp_ge_StoryStateID_StoryStateTipZergCreepPlayed, 1);
+    libWoLC_gf_SetStoryStateBoolean("TipZergCreepPlayed", true);
     libCamp_gf_CreateTipFromConversationState("StoryTips|Campaign_Creep", libNtve_ge_TipType_NormalTip, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeGame);
-    TriggerQueueExit();
     return true;
 }
 
@@ -2955,7 +2930,6 @@ bool gt_ChrysalisTipQ_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_ResearchObjectiveChrysalisCreateQ, true, false);
     TriggerQueueEnter();
     libCamp_gf_CreateTipFromConversationState("StoryTips|Hanson01_Chrysalis", libNtve_ge_TipType_NormalTip, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeGame);
     TriggerQueueExit();
     return true;
 }
@@ -3783,7 +3757,7 @@ bool gt_Convoyloadsintocolonyship_Func (bool testConds, bool runActions) {
     }
 
     gv_colonistsSaved = MinI((gv_colonistsSaved + 1), 50);
-    ObjectiveSetName(gv_objective_SaveColonists, (StringExternal("Param/Value/01B02760") + IntToText(gv_colonistsSaved) + StringExternal("Param/Value/09C44398") + IntToText(gv_colonistsSaveQuota) + StringExternal("Param/Value/38C9869C")));
+    libWCMI_gf_SetMissionObjectiveProgress("THanson01_2", gv_colonistsSaved);
     SoundPlay(SoundLink("Terran_Veterancy", -1), PlayerGroupAll(), 100.0, 0.0);
     UnitRemove(EventUnitCargo());
     return true;
@@ -4171,7 +4145,6 @@ bool gt_WaveOver01TipabouthowtoplaythismissionQ_Func (bool testConds, bool runAc
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Game);
     Wait(1.0, c_timeGame);
     libCamp_gf_CreateTipFromConversationState("StoryTips|Hanson01_EscortStrat", libNtve_ge_TipType_NormalTip, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeGame);
     TriggerQueueExit();
     return true;
 }
@@ -4294,7 +4267,7 @@ bool gt_ColonistKilled_Func (bool testConds, bool runActions) {
 
     gv_colonistsKilled = (gv_colonistsKilled + 1);
     if ((libNtve_gf_DifficultyValueInt(0, 0, 1, 1) == 1)) {
-        ObjectiveSetName(gv_objective_DontLetColonistsDie, (TextReplaceWord(StringExternal("Param/Value/2F86BD5F"), StringExternal("Param/Value/1C42E24F"), IntToText(gv_colonistsDeathQuota), c_stringReplaceAll, c_stringCase) + TextReplaceWord(StringExternal("Param/Value/87078404"), StringExternal("Param/Value/11147D32"), IntToText(gv_colonistsKilled), c_stringReplaceAll, c_stringCase)));
+        libWCMI_gf_SetMissionObjectiveProgress("THanson01_4", gv_colonistsKilled);
     }
 
     if ((UnitGetType(EventUnit()) == "ColonistTransport")) {
@@ -4490,7 +4463,7 @@ bool gt_Playerkillscolonists_Func (bool testConds, bool runActions) {
     }
 
     if ((libNtve_gf_DifficultyValueInt(0, 0, 1, 1) == 1)) {
-        ObjectiveSetName(gv_objective_DontLetColonistsDie, (TextReplaceWord(StringExternal("Param/Value/5E1B1335"), StringExternal("Param/Value/C00EA670"), IntToText(gv_colonistsDeathQuota), c_stringReplaceAll, c_stringCase) + TextReplaceWord(StringExternal("Param/Value/D744ABDE"), StringExternal("Param/Value/23575D29"), IntToText(gv_colonistsKilled), c_stringReplaceAll, c_stringCase)));
+        libWCMI_gf_SetMissionObjectiveProgress("THanson01_4", gv_colonistsKilled);
     }
 
     if ((TriggerGetExecCount(gt_PlayerkillscolonistsQ) == 0)) {
@@ -4835,7 +4808,7 @@ bool gt_DefeatBaseDead_Func (bool testConds, bool runActions) {
             return false;
         }
 
-        if (!((UnitGroupCount(UnitGroup(null, gv_p1_USER, RegionEntireMap(), UnitFilter((1 << c_targetFilterPreventDefeat), 0, 0, 0), 0), c_unitCountAlive) == 0))) {
+        if (!((UnitGroupCount(UnitGroup(null, gv_p1_USER, RegionEntireMap(), UnitFilter((1 << c_targetFilterPreventDefeat), 0, 0, 0), 1), c_unitCountAlive) == 0))) {
             return false;
         }
     }
@@ -4850,7 +4823,7 @@ bool gt_DefeatBaseDead_Func (bool testConds, bool runActions) {
     TriggerQueueClear(c_triggerQueueRemove);
     Wait(2.0, c_timeReal);
     libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/24E1C1CC"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_Defeat, true, false);
     return true;
 }
@@ -4880,7 +4853,7 @@ bool gt_DefeatTacticalPhase_Func (bool testConds, bool runActions) {
             return false;
         }
 
-        if (!((UnitGroupCount(UnitGroup(null, gv_p1_USER, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), 0), 0), c_unitCountAlive) == 0))) {
+        if (!((UnitGroupCount(UnitGroup(null, gv_p1_USER, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 1), c_unitCountAlive) == 0))) {
             return false;
         }
     }
@@ -4895,7 +4868,7 @@ bool gt_DefeatTacticalPhase_Func (bool testConds, bool runActions) {
     TriggerQueueClear(c_triggerQueueRemove);
     Wait(2.0, c_timeReal);
     libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/BFCBA162"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_Defeat, true, false);
     return true;
 }
@@ -4933,7 +4906,7 @@ bool gt_DefeatColonyShipDead_Func (bool testConds, bool runActions) {
     TriggerQueueClear(c_triggerQueueRemove);
     Wait(2.0, c_timeReal);
     libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/81E5BD63"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_Defeat, true, false);
     return true;
 }
@@ -4973,7 +4946,7 @@ bool gt_DefeatColonistHutsDie_Func (bool testConds, bool runActions) {
     TriggerQueueClear(c_triggerQueueRemove);
     Wait(2.0, c_timeReal);
     libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/FE1E0156"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_Defeat, true, false);
     return true;
 }
@@ -5002,6 +4975,10 @@ bool gt_DefeatTooManyColonistsDie_Func (bool testConds, bool runActions) {
         if (!((gv_gameOver == false))) {
             return false;
         }
+
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
     }
 
     // Actions
@@ -5010,13 +4987,13 @@ bool gt_DefeatTooManyColonistsDie_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    ObjectiveSetState(gv_objective_DontLetColonistsDie, c_objectiveStateFailed);
+    libWCMI_gf_ZS_SetMissionObjectiveState("THanson01_4", libWoLC_ge_MissionObjectiveState_Failed);
     gv_gameOver = true;
     TriggerQueuePause(true);
     TriggerQueueClear(c_triggerQueueRemove);
     Wait(2.0, c_timeReal);
     libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/7206DCA9"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_Defeat, true, false);
     return true;
 }
@@ -5024,7 +5001,7 @@ bool gt_DefeatTooManyColonistsDie_Func (bool testConds, bool runActions) {
 //--------------------------------------------------------------------------------------------------
 void gt_DefeatTooManyColonistsDie_Init () {
     gt_DefeatTooManyColonistsDie = TriggerCreate("gt_DefeatTooManyColonistsDie_Func");
-    TriggerAddEventTimePeriodic(gt_DefeatTooManyColonistsDie, 0.1, c_timeGame);
+    TriggerAddEventTimePeriodic(gt_DefeatTooManyColonistsDie, 0.5, c_timeGame);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -5074,7 +5051,7 @@ bool gt_VictoryPlayerSavesEnoughColonists_Func (bool testConds, bool runActions)
     TriggerExecute(gt_MainObjectiveSaveColonistsComplete, true, false);
     TriggerExecute(gt_VictoryPlayerSavesEnoughColonistsQ, true, true);
     gv_structuresLost = (PlayerScoreValueGetAsInt(gv_p1_USER, "StructuresLostCount") + PlayerScoreValueGetAsInt(gv_p1_USER, "StructuresFriendlyFireCount") + PlayerScoreValueGetAsInt(gv_p1_USER, "StructuresSalvagedCount"));
-    libCamp_gf_RunMissionVictorySequence(gt_VictoryQ);
+    libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
     return true;
 }
 
@@ -5155,23 +5132,23 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     }
 
     if ((libNtve_gf_DifficultyValueInt(1, 1, 0, 0) == 1) && (ObjectiveGetState(gv_objective_ReachHanson) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_objective_SaveColonists) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_bonusObjectiveCollectChrysalis) == c_objectiveStateCompleted)) {
-        AchievementAward(gv_p1_USER, "THanson01_1");
+        libWoLC_gf_CampaignAwardAchievement("THanson01_1");
     }
 
     if ((libNtve_gf_DifficultyValueInt(0, 0, 1, 1) == 1) && (ObjectiveGetState(gv_objective_ReachHanson) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_objective_SaveColonists) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_objective_DontLetColonistsDie) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_bonusObjectiveCollectChrysalis) == c_objectiveStateCompleted)) {
-        AchievementAward(gv_p1_USER, "THanson01_1");
+        libWoLC_gf_CampaignAwardAchievement("THanson01_1");
     }
 
     if ((libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1) && (gv_colonistsKilled == 0)) {
-        AchievementAward(gv_p1_USER, "THanson01_2");
+        libWoLC_gf_CampaignAwardAchievement("THanson01_2");
     }
 
     if ((libNtve_gf_DifficultyValueInt(0, 0, 1, 1) == 1) && (gv_structuresLost == 0)) {
-        AchievementAward(gv_p1_USER, "THanson01_3");
+        libWoLC_gf_CampaignAwardAchievement("THanson01_3");
     }
 
     if ((libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1) && (UnitGroupCount(UnitGroup(null, gv_p2_ZERG_ORANGE_NW, RegionEntireMap(), lv_enemyZergBuildings, 0), c_unitCountAlive) == 0) && (UnitGroupCount(UnitGroup(null, gv_p3_ZERG_LIGHTBLUE_SE, RegionEntireMap(), lv_enemyZergBuildings, 0), c_unitCountAlive) == 0)) {
-        AchievementAward(gv_p1_USER, "Anniversary_THanson01");
+        libWoLC_gf_CampaignAwardAchievement("Anniversary_THanson01");
         TriggerDebugOutput(1, StringExternal("Param/Value/092F1A5C"), false);
     }
 
@@ -5187,8 +5164,7 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/8A21BFFA"), IntToText(gv_structuresLost));
     VictoryPanelAddCustomStatisticLine(StringToText(""), StringToText(""));
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/A92AB29D"), (IntToText(gv_bonusObjectiveCollectChrysalisFound) + StringExternal("Param/Value/4B1EACA7")));
-    VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/054C9CD8"), IntToText(gv_bonusObjectiveCollectChrysalisFound));
-    libCamp_gf_EndCampaignMission(gv_p1_USER, c_gameOverVictory);
+    libWCMI_gf_EndCampaignMission(gv_p1_USER, c_gameOverVictory);
     return true;
 }
 
@@ -5215,7 +5191,7 @@ bool gt_VictoryCheat_Func (bool testConds, bool runActions) {
     }
 
     gv_gameOver = true;
-    libCamp_gf_RunMissionVictorySequence(gt_Victory);
+    libWCMI_gf_RunMissionVictorySequence(gt_Victory);
     return true;
 }
 
@@ -5235,7 +5211,7 @@ bool gt_Defeat_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_EndCampaignMission(gv_p1_USER, c_gameOverDefeat);
+    libWCMI_gf_EndCampaignMission(gv_p1_USER, c_gameOverDefeat);
     return true;
 }
 
@@ -5290,9 +5266,8 @@ bool gt_MainObjectiveReachHansonCreate_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    ObjectiveCreate(StringExternal("Param/Value/E2D2B8C2"), StringExternal("Param/Value/75A746D2"), c_objectiveStateActive, true);
+    libWCMI_gf_CreateObjectiveCampaign("THanson01_1");
     gv_objective_ReachHanson = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_THanson01Objective1, ObjectiveLastCreated(), StringExternal("Param/Value/36494D64"));
     return true;
 }
 
@@ -5322,7 +5297,6 @@ bool gt_MainObjectiveReachHansonDiscoverQ_Func (bool testConds, bool runActions)
     TriggerQueueEnter();
     TriggerExecute(gt_MainObjectiveReachHansonCreate, true, false);
     VisExploreArea(gv_p1_USER, RegionFromId(34), true, false);
-    ObjectiveSetState(gv_objective_ReachHanson, c_objectiveStateActive);
     Wait(4.0, c_timeReal);
     SoundPlay(SoundLink("UI_TerranPing", 0), PlayerGroupAll(), 100.0, 0.0);
     libNtve_gf_CreatePingFacingAngle(PlayerGroupAll(), "PingObjective", PointFromId(1638), ColorWithAlpha(0.00, 100.00, 0.00, 0.00), 0.0, 270.0);
@@ -5356,9 +5330,9 @@ bool gt_MainObjectiveReachHansonComplete_Func (bool testConds, bool runActions) 
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_MainObjectiveReachHansonCreate, true, false);
-    ObjectiveSetState(gv_objective_ReachHanson, c_objectiveStateCompleted);
+    libWCMI_gf_ZS_SetMissionObjectiveState("THanson01_1", libWoLC_ge_MissionObjectiveState_Completed);
     PingDestroy(gv_objPing_ReachHanson);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -5385,13 +5359,11 @@ bool gt_MainObjectiveSaveColonistsCreate_Func (bool testConds, bool runActions) 
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    ObjectiveCreate((StringExternal("Param/Value/DA0F59F5") + IntToText(gv_colonistsSaved) + StringExternal("Param/Value/02AC2B85") + IntToText(gv_colonistsSaveQuota) + StringExternal("Param/Value/9D657228")), StringExternal("Param/Value/2A5C2427"), c_objectiveStateActive, true);
+    libWCMI_gf_CreateObjectiveCampaign("THanson01_2");
     gv_objective_SaveColonists = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_THanson01Objective2, ObjectiveLastCreated(), StringExternal("Param/Value/08EAF061"));
     if ((libNtve_gf_DifficultyValueInt(0, 0, 1, 1) == 1)) {
-        ObjectiveCreate((TextReplaceWord(StringExternal("Param/Value/16FE1334"), StringExternal("Param/Value/8B5EA2CC"), IntToText(gv_colonistsDeathQuota), c_stringReplaceAll, c_stringCase) + TextReplaceWord(StringExternal("Param/Value/E0B8EF62"), StringExternal("Param/Value/BEDB5804"), IntToText(gv_colonistsKilled), c_stringReplaceAll, c_stringCase)), StringExternal("Param/Value/9A73EBCA"), c_objectiveStateActive, true);
+        libWCMI_gf_CreateObjectiveCampaign("THanson01_4");
         gv_objective_DontLetColonistsDie = ObjectiveLastCreated();
-        libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_THanson01Objective4, ObjectiveLastCreated(), StringExternal("Param/Value/0F66C14F"));
     }
 
     return true;
@@ -5420,11 +5392,8 @@ bool gt_MainObjectiveSaveColonistsDiscoverQ_Func (bool testConds, bool runAction
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
     TriggerExecute(gt_MainObjectiveSaveColonistsCreate, true, false);
-    ObjectiveSetState(gv_objective_SaveColonists, c_objectiveStateActive);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -5452,12 +5421,12 @@ bool gt_MainObjectiveSaveColonistsComplete_Func (bool testConds, bool runActions
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_MainObjectiveSaveColonistsCreate, true, false);
-    ObjectiveSetState(gv_objective_SaveColonists, c_objectiveStateCompleted);
+    libWCMI_gf_ZS_SetMissionObjectiveState("THanson01_2", libWoLC_ge_MissionObjectiveState_Completed);
     if ((libNtve_gf_DifficultyValueInt(0, 0, 1, 1) == 1)) {
-        ObjectiveSetState(gv_objective_DontLetColonistsDie, c_objectiveStateCompleted);
+        libWCMI_gf_ZS_SetMissionObjectiveState("THanson01_4", libWoLC_ge_MissionObjectiveState_Completed);
     }
 
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -5484,12 +5453,9 @@ bool gt_ResearchObjectiveChrysalisCreateQ_Func (bool testConds, bool runActions)
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate((StringExternal("Param/Value/3851E49D") + IntToText(gv_bonusObjectiveCollectChrysalisFound) + StringExternal("Param/Value/42B56155")), StringExternal("Param/Value/05BF0798"), c_objectiveStateActive, false);
+    libWCMI_gf_CreateObjectiveCampaign("THanson01_3");
     gv_bonusObjectiveCollectChrysalis = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_THanson01Objective3, ObjectiveLastCreated(), StringExternal("Param/Value/D82AA183"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -5524,10 +5490,10 @@ bool gt_ResearchObjectiveChrysalisUpdate_Func (bool testConds, bool runActions) 
     }
 
     TriggerExecute(gt_ResearchObjectiveChrysalisCreateQ, true, false);
-    libCamp_gf_DisplayResearchPointsGiventoPlayer(libCamp_ge_StoryResearchObject_ResearchObjectFindChrysalisDNA, EventUnit(), gv_p1_USER);
+    libWCMI_gf_DisplayMissionObjectiveRewardFloatingText(UnitGetPosition(EventUnit()), "THanson01_3");
     UnitKill(EventUnit());
     gv_bonusObjectiveCollectChrysalisFound += 1;
-    ObjectiveSetName(gv_bonusObjectiveCollectChrysalis, (StringExternal("Param/Value/D8E396B5") + IntToText(gv_bonusObjectiveCollectChrysalisFound) + StringExternal("Param/Value/4AC47548")));
+    libWCMI_gf_SetMissionObjectiveProgress("THanson01_3", gv_bonusObjectiveCollectChrysalisFound);
     if ((gv_bonusObjectiveCollectChrysalisFound == gv_bonusObjectiveCollectChrysalisNeeded)) {
         TriggerExecute(gt_ResearchObjectiveChrysalisComplete, true, false);
     }
@@ -5560,8 +5526,8 @@ bool gt_ResearchObjectiveChrysalisComplete_Func (bool testConds, bool runActions
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ResearchObjectiveChrysalisCreateQ, true, false);
-    ObjectiveSetState(gv_bonusObjectiveCollectChrysalis, c_objectiveStateCompleted);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    libWCMI_gf_ZS_SetMissionObjectiveState("THanson01_3", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -6494,6 +6460,7 @@ void gt_VictoryCleanup_Init () {
 // Trigger Initialization
 //--------------------------------------------------------------------------------------------------
 void InitTriggers () {
+    gt_OnPlayer1GetUnit_Init();
     gt_Initialization_Init();
     gt_Init01Technology_Init();
     gt_Init02Players_Init();

@@ -23,6 +23,35 @@
         <RandomDelayMin value="0"/>
         <RandomDelayMax value="0"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="BattlecruiserWeaponSwitch">
+        <EditorCategories value="Race:Terran"/>
+        <Options index="Hidden" value="1"/>
+        <Options index="OnlyFireWhileInAttackOrder" value="0"/>
+        <Options index="OnlyFireAtAttackOrderTarget" value="0"/>
+        <Options index="LinkedCooldown" value="0"/>
+        <Options index="IgnoreThreat" value="1"/>
+        <Options index="IgnoreAttackPriority" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel0.dds"/>
+        <DisplayEffect value="ATSLaserBatteryU"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AcquireTargetSorts>
+            <SortArray value="TSTrackedByBattlecruiser"/>
+            <SortArray value="TSThreatenBattlecruiser"/>
+            <SortArray value="TSPriorityDesc"/>
+            <SortArray value="TSTransientBattlecruiser"/>
+            <SortArray value="GroundTarget"/>
+        </AcquireTargetSorts>
+        <Range value="6"/>
+        <Arc value="360"/>
+        <Marker Count="0" Link="Effect/BattlecruiserAttackTrackerCP">
+            <MatchFlags index="CasterUnit" value="1"/>
+        </Marker>
+        <Period value="0.225"/>
+        <Effect value="BattlecruiserDamageSet"/>
+        <AllowedMovement value="Moving"/>
+        <RandomDelayMin value="0"/>
+        <RandomDelayMax value="0"/>
+    </CWeaponLegacy>
     <CWeaponLegacy id="ArcliteShockCannon">
         <MinScanRange value="13.5"/>
     </CWeaponLegacy>
@@ -77,13 +106,55 @@
         </Cost>
         <AllowedMovement value="Moving"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="DRBattlecruiserWeaponSwitch">
+        <EditorCategories value="Race:Terran"/>
+        <Options index="Hidden" value="1"/>
+        <Options index="OnlyFireWhileInAttackOrder" value="0"/>
+        <Options index="OnlyFireAtAttackOrderTarget" value="0"/>
+        <Options index="IgnoreThreat" value="1"/>
+        <Options index="IgnoreAttackPriority" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel0.dds"/>
+        <DisplayEffect value="DRBattlecruiserGU"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AcquireTargetSorts>
+            <SortArray value="TSTrackedByBattlecruiser"/>
+            <SortArray value="TSThreatenBattlecruiser"/>
+            <SortArray value="TSPriorityDesc"/>
+            <SortArray value="TSTransientBattlecruiser"/>
+            <SortArray value="GroundTarget"/>
+        </AcquireTargetSorts>
+        <Range value="6"/>
+        <Arc value="360"/>
+        <Marker Count="0" Link="Effect/BattlecruiserAttackTrackerCP">
+            <MatchFlags index="CasterUnit" value="1"/>
+        </Marker>
+        <Period value="0.225"/>
+        <Effect value="DRBattlecruiserDamageSet"/>
+        <AllowedMovement value="Moving"/>
+        <RandomDelayMin value="0"/>
+        <RandomDelayMax value="0"/>
+        <MinScanRange value="6.5"/>
+    </CWeaponLegacy>
     <CWeaponLegacy id="DevilDogFlameThrower">
         <DamagePoint value="0.25"/>
         <Backswing value="0.5"/>
     </CWeaponLegacy>
     <CWeaponLegacy id="Diamondback">
+        <Options index="IgnoreThreat" value="1"/>
+        <Options index="IgnoreAttackPriority" value="1"/>
+        <AcquireTargetSorts>
+            <SortArray value="TSTrackedByDiamondback"/>
+            <SortArray value="TSThreatenDiamondback"/>
+            <SortArray value="TSPriorityDesc"/>
+            <SortArray value="TSTransientDiamondback"/>
+        </AcquireTargetSorts>
         <MinScanRange value="6.5"/>
+        <Arc value="360"/>
+        <Marker Count="0" Link="Effect/DiamondbackAttackTrackerCP">
+            <MatchFlags index="CasterUnit" value="1"/>
+        </Marker>
         <Period value="1.5"/>
+        <Effect value="DiamondbackDamageSet"/>
     </CWeaponLegacy>
     <CWeaponLegacy id="DisruptionBeam">
         <MinScanRange value="6.5"/>

@@ -7,7 +7,10 @@
 //==================================================================================================
 include "TriggerLibs/NativeLib"
 include "TriggerLibs/LibertyLib"
-include "TriggerLibs/CampaignLib"
+include "LibCamp"
+include "LibWoLC"
+include "LibWCMI"
+include "LibWCUI"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -16,6 +19,9 @@ void InitLibs () {
     libNtve_InitLib();
     libLbty_InitLib();
     libCamp_InitLib();
+    libWoLC_InitLib();
+    libWCMI_InitLib();
+    libWCUI_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -134,7 +140,9 @@ void gf_MedicAI (int lp_owner, unit lp_medic, unitgroup lp_candidates);
 //--------------------------------------------------------------------------------------------------
 // Trigger Variables
 //--------------------------------------------------------------------------------------------------
+trigger gt_OnPlayer1Birth;
 trigger gt_Initialization;
+trigger gt_Init00ReplaceRaynorUnit;
 trigger gt_Init01Technology;
 trigger gt_Init02Players;
 trigger gt_Init03Units;
@@ -314,8 +322,8 @@ void gf_CellBlockMoveWorker (unit lp_worker, region lp_locale) {
         return ;
     }
 
-    libNtve_gf_AddUnitGroupToUnitGroup(UnitGroup("Diamondback", gv_p0_NEUTRAL, lp_locale, UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), lv_vehicles);
-    libNtve_gf_AddUnitGroupToUnitGroup(UnitGroup("SiegeTank", gv_p0_NEUTRAL, lp_locale, UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), lv_vehicles);
+    libNtve_gf_AddUnitGroupToUnitGroup(UnitGroup("SquadDiamondback", gv_p0_NEUTRAL, lp_locale, UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), lv_vehicles);
+    libNtve_gf_AddUnitGroupToUnitGroup(UnitGroup("SquadSiegeTank", gv_p0_NEUTRAL, lp_locale, UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), lv_vehicles);
     if ((UnitGroupCount(lv_vehicles, c_unitCountAlive) > 0)) {
         UnitIssueOrder(lp_worker, OrderTargetingPoint(AbilityCommand("move", 0), UnitGetPosition(UnitGroupRandomUnit(lv_vehicles, c_unitCountAlive))), c_orderQueueReplace);
     }
@@ -484,6 +492,26 @@ void gf_MedicAI (int lp_owner, unit lp_medic, unitgroup lp_candidates) {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: OnPlayerRaynorGetUnit
+//--------------------------------------------------------------------------------------------------
+bool gt_OnPlayer1Birth_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerExecute(gt_Init00ReplaceRaynorUnit, true, true);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_OnPlayer1Birth_Init () {
+    gt_OnPlayer1Birth = TriggerCreate("gt_OnPlayer1Birth_Func");
+    TriggerAddEventUnitCreated(gt_OnPlayer1Birth, null, null, null);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: Initialization
 //--------------------------------------------------------------------------------------------------
 bool gt_Initialization_Func (bool testConds, bool runActions) {
@@ -493,7 +521,8 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_LoadCampaignData(libCamp_ge_MapID_MapTTosh03A);
+    libWoLC_gf_ULoadCampaignData("TTosh03A");
+    TriggerExecute(gt_Init00ReplaceRaynorUnit, true, true);
     TriggerExecute(gt_Init01Technology, true, true);
     TriggerExecute(gt_Init02Players, true, true);
     TriggerExecute(gt_Init03Units, true, true);
@@ -501,8 +530,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init05Environment, true, true);
     TriggerExecute(gt_Init06Difficulties, true, true);
     TriggerExecute(gt_Init07Help, true, true);
-    libCamp_gf_RegisterFootageRecording(gt_BriefingQ);
-    libCamp_gf_PurchaseStorymodeTech();
+    libWoLC_gf_RegisterFootageRecording(gt_BriefingQ);
     TriggerExecute(gt_IntroSequence, true, false);
     return true;
 }
@@ -514,37 +542,243 @@ void gt_Initialization_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
-// Trigger: Init 01 Technology
+// Trigger: Init 00 ReplaceRaynorUnit
 //--------------------------------------------------------------------------------------------------
-bool gt_Init01Technology_Func (bool testConds, bool runActions) {
+bool gt_Init00ReplaceRaynorUnit_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    unitgroup lv_unitGroupForReplaced;
+    unit lv_unitForReplaced;
+    const int lv_pLAYER_01_USER = 1;
+    const int lv_pLAYER_02_ZERG = 2;
+    string lv_originUnitType;
+
     // Automatic Variable Declarations
+    unitgroup auto2C61107F_g;
+    int auto2C61107F_u;
+    string auto1EF4F378_val;
+
+    // Variable Initialization
+    lv_unitGroupForReplaced = UnitGroupEmpty();
+
     // Actions
     if (!runActions) {
         return true;
     }
 
-    libCamp_gf_SetTechRestrictionsCallback(TriggerGetCurrent());
+    lv_unitGroupForReplaced = UnitGroup(null, gv_p2_RAYNOR_LIGHTBLUE, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+    auto2C61107F_g = lv_unitGroupForReplaced;
+    auto2C61107F_u = UnitGroupCount(auto2C61107F_g, c_unitCountAll);
+    for (;; auto2C61107F_u -= 1) {
+        lv_unitForReplaced = UnitGroupUnitFromEnd(auto2C61107F_g, auto2C61107F_u);
+        if (lv_unitForReplaced == null) { break; }
+        lv_originUnitType = UnitGetType(lv_unitForReplaced);
+        auto1EF4F378_val = lv_originUnitType;
+        if (auto1EF4F378_val == "Marine") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadMarine", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "CommandCenter") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadCommandCenter", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "SupplyDepot") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadSupplyDepot", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "SupplyDepotLowered") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadSupplyDepotLowered", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "Barracks") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadBarracks", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "EngineeringBay") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadEngineeringBay", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "Factory") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadFactory", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "Starport") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadStarport", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "Armory") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadArmory", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "MissileTurret") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadMissileTurret", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "Bunker") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadBunkerVanilla", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "SensorTower") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadSensorTower", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "Refinery") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadRefinery", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "TechLab") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadTechlab", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "BarracksTechLab") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadTechlab", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "FactoryTechLab") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadTechlab", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "StarportTechLab") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadTechlab", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "Reactor") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadReactor", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "BarracksReactor") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadReactor", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "FactoryReactor") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadReactor", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "StarportTechReactor") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadReactor", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "FusionCore") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadFusionCore", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "GhostAcademy") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadGhostAcademy", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "SCV") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadSCV", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "Medic") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadMedic", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "Firebat") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadFirebat", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "Marauder") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadMarauder", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "Reaper") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadReaper", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "Ghost") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadGhost", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "Spectre") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadSpectre", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "Banshee") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadBanshee", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "Wraith") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadWraith", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "VikingFighter") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadVikingA", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "VikingAssault") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadVikingG", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "Battlecruiser") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadBattlecruiser", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "Medivac") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadMedivac", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "ScienceVessel") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadScienceVessel", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "Raven") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadRaven", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "Hellion") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadHellion", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "Diamondback") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadDiamondback", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "Goliath") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadGoliath", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "Vulture") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadVulture", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "ThorAP") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadThorAP", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "SiegeTank") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadSiegeTank", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "SiegeTankSieged") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "SquadSiegeTankSieged", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "Raynor") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "CaptainFreeman", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "Raynor01") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "CaptainFreeman", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else if (auto1EF4F378_val == "RaynorCommando") {
+            libNtve_gf_ReplaceUnit(lv_unitForReplaced, "CaptainFreeman", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+        }
+        else {
+        }
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_Init00ReplaceRaynorUnit_Init () {
+    gt_Init00ReplaceRaynorUnit = TriggerCreate("gt_Init00ReplaceRaynorUnit_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Init 01 Technology
+//--------------------------------------------------------------------------------------------------
+bool gt_Init01Technology_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    string lv_upgrade;
+
+    // Automatic Variable Declarations
+    int autoEA0E11FC_catalog;
+    int autoEA0E11FC_i;
+
+    // Variable Initialization
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
     TechTreeAbilityAllow(gv_p1_USER, AbilityCommand("HeroNuclearStrike", 0), false);
     TechTreeAbilityAllow(gv_p1_USER, AbilityCommand("MindBlast", 0), false);
     TechTreeAbilityAllow(gv_p1_USER, AbilityCommand("Consumption", 0), false);
     gf_UpgradeForAllies(1, "TerranInfantryArmorsLevel1");
-    gf_UpgradeForAllies(1, "SiegeTech");
-    TechTreeUnitAllow(gv_p2_RAYNOR_LIGHTBLUE, "Marauder", true);
-    libCamp_gf_EnableCampaignTechUnit(true, libCamp_ge_StoryTechGroup_StoryTechGroupInfantryMarauder, gv_p2_RAYNOR_LIGHTBLUE);
-    libCamp_gf_EnableCampaignTechUnit(true, libCamp_ge_StoryTechGroup_StoryTechGroupVehiclesDiamondback, gv_p11_ALLIED_CELLBLOCK_A);
-    libCamp_gf_EnableCampaignTechUnit(true, libCamp_ge_StoryTechGroup_StoryTechGroupVehiclesSiegeTank, gv_p12_ALLIED_CELLBLOCK_B);
-    TechTreeAbilityAllow(gv_p2_RAYNOR_LIGHTBLUE, AbilityCommand("StimPack", 0), false);
+    libWoLC_gf_EnableCampaignTechUnit(true, "Marauder", gv_p2_RAYNOR_LIGHTBLUE);
+    libWoLC_gf_EnableCampaignTechUnit(true, "Diamondback", gv_p11_ALLIED_CELLBLOCK_A);
+    libWoLC_gf_EnableCampaignTechUnit(true, "SiegeTank", gv_p12_ALLIED_CELLBLOCK_B);
     gf_UpgradeForEnemies(1, "TerranInfantryArmorsLevel1");
-    gf_UpgradeForEnemies(1, "SiegeTech");
     TechTreeUpgradeAddLevel(gv_p3_DOMINION_RED, "PunisherGrenades", 1);
     TechTreeUpgradeAddLevel(gv_p4_DOMINION_PURPLE, "PunisherGrenades", 1);
     TechTreeUpgradeAddLevel(gv_p5_DOMINION_GREY, "PunisherGrenades", 1);
     TechTreeUpgradeAddLevel(gv_p6_DOMINION_ORANGE, "PunisherGrenades", 1);
-    TechTreeAbilityAllow(gv_p3_DOMINION_RED, AbilityCommand("AutoTurret", 0), false);
-    TechTreeAbilityAllow(gv_p6_DOMINION_ORANGE, AbilityCommand("AutoTurret", 0), false);
     TechTreeUnitAllow(gv_p3_DOMINION_RED, "AutoTurret", false);
     TechTreeUnitAllow(gv_p6_DOMINION_ORANGE, "AutoTurret", false);
     TechTreeAbilityAllow(gv_p3_DOMINION_RED, AbilityCommand("D8Charge", 0), false);
+    libNtve_gf_SetUpgradeLevelForPlayer(gv_p2_RAYNOR_LIGHTBLUE, "Kit@AISmartServos", 0);
+    libNtve_gf_SetUpgradeLevelForPlayer(gv_p8_ALLIED_PINK, "Kit@AISmartServos", 0);
+    libNtve_gf_SetUpgradeLevelForPlayer(gv_p9_ALLIED_GREEN, "Kit@AISmartServos", 0);
+    libNtve_gf_SetUpgradeLevelForPlayer(gv_p11_ALLIED_CELLBLOCK_A, "Kit@AISmartServos", 0);
+    libNtve_gf_SetUpgradeLevelForPlayer(gv_p12_ALLIED_CELLBLOCK_B, "Kit@AISmartServos", 0);
+    autoEA0E11FC_catalog = c_gameCatalogArmyUpgrade;
+    autoEA0E11FC_i = 1;
+    for ( ; autoEA0E11FC_i <= CatalogEntryCount(c_gameCatalogArmyUpgrade) ; autoEA0E11FC_i += 1 ) {
+        lv_upgrade = CatalogEntryGet(autoEA0E11FC_catalog, autoEA0E11FC_i);
+        if ((libWoLC_gf_WC_ArmyUpgradePurchased(lv_upgrade) == true)) {
+            libWoLC_gf_EnableCampaignUpgrade(true, lv_upgrade, gv_p2_RAYNOR_LIGHTBLUE);
+            libWoLC_gf_EnableCampaignUpgrade(true, lv_upgrade, gv_p8_ALLIED_PINK);
+            libWoLC_gf_EnableCampaignUpgrade(true, lv_upgrade, gv_p9_ALLIED_GREEN);
+            libWoLC_gf_EnableCampaignUpgrade(true, lv_upgrade, gv_p11_ALLIED_CELLBLOCK_A);
+            libWoLC_gf_EnableCampaignUpgrade(true, lv_upgrade, gv_p12_ALLIED_CELLBLOCK_B);
+        }
+
+    }
     return true;
 }
 
@@ -644,6 +878,7 @@ bool gt_Init02Players_Func (bool testConds, bool runActions) {
     UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeSupply, false);
     PlayerSetState(gv_p0_NEUTRAL, c_playerStateFidgetingEnabled, false);
     PlayerSetState(gv_p6_DOMINION_ORANGE, c_playerStateFidgetingEnabled, false);
+    libWCMI_gf_WM_DetectionUpgradesApply();
     return true;
 }
 
@@ -698,6 +933,7 @@ bool gt_Init03Units_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    Kit_UIHeroPanel_SetHeroUnit(0, gv_tosh, "Assets\\Textures\\ui_wol_tosh_hero_icon.dds");
     UnitIssueOrder(UnitFromId(528), Order(AbilityCommand("move", 2)), c_orderQueueReplace);
     UnitIssueOrder(UnitFromId(583), Order(AbilityCommand("move", 2)), c_orderQueueReplace);
     auto272E9EB2_g = UnitGroup(null, c_playerAny, RegionEntireMap(), UnitFilter((1 << c_targetFilterCanHaveEnergy), 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
@@ -739,7 +975,7 @@ bool gt_Init03Units_Func (bool testConds, bool runActions) {
         UnitSetState(autoAE243F6A_var, c_unitStateStatusBar, false);
         UnitSetState(autoAE243F6A_var, c_unitStateInvulnerable, true);
     }
-    auto34E8DD9B_g = UnitGroup("SiegeTank", 0, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+    auto34E8DD9B_g = UnitGroup("SquadSiegeTank", 0, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     auto34E8DD9B_u = UnitGroupCount(auto34E8DD9B_g, c_unitCountAll);
     for (;; auto34E8DD9B_u -= 1) {
         auto34E8DD9B_var = UnitGroupUnitFromEnd(auto34E8DD9B_g, auto34E8DD9B_u);
@@ -789,8 +1025,8 @@ bool gt_Init03Units_Func (bool testConds, bool runActions) {
     UnitIssueOrder(UnitFromId(1648), Order(AbilityCommand("move", 2)), c_orderQueueReplace);
     UnitBehaviorAdd(UnitFromId(24), "FastBuild", UnitFromId(24), 1);
     UnitBehaviorAdd(UnitFromId(25), "FastBuild", UnitFromId(25), 1);
-    UnitCargoCreate(UnitFromId(6), "Marine", 4);
-    UnitCargoCreate(UnitFromId(7), "Marine", 4);
+    UnitCargoCreate(UnitFromId(6), "SquadMarine", 4);
+    UnitCargoCreate(UnitFromId(7), "SquadMarine", 4);
     autoB69A8C3C_g = UnitGroup(null, gv_p3_DOMINION_RED, RegionFromId(58), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     autoB69A8C3C_u = UnitGroupCount(autoB69A8C3C_g, c_unitCountAll);
     for (;; autoB69A8C3C_u -= 1) {
@@ -958,7 +1194,7 @@ bool gt_Init07Help_Func (bool testConds, bool runActions) {
     libCamp_gf_AddUnitTypeToUnitHelpPanel("Marine", false, gv_p1_USER);
     libCamp_gf_AddUnitTypeToUnitHelpPanel("Marauder", false, gv_p1_USER);
     libCamp_gf_AddUnitTypeToUnitHelpPanel("Hellion", false, gv_p1_USER);
-    libCamp_gf_AddUnitTypeToUnitHelpPanel("SiegeTank", false, gv_p1_USER);
+    libCamp_gf_AddUnitTypeToUnitHelpPanel("SquadSiegeTank", false, gv_p1_USER);
     libCamp_gf_AddUnitTypeToUnitHelpPanel("Medic", false, gv_p1_USER);
     libCamp_gf_AddUnitTypeToUnitHelpPanel("Raven", false, gv_p1_USER);
     libCamp_gf_AddUnitTypeToUnitHelpPanel("VikingAssault", false, gv_p1_USER);
@@ -1099,8 +1335,6 @@ bool gt_StartGame_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_ObjectiveClearMainPrisonCreateQ, true, false);
     TriggerExecute(gt_StorymodeTipsQ, true, false);
     Wait(4.0, c_timeReal);
-    TriggerExecute(gt_ObjectiveCellBlock_ACreateQ, true, false);
-    TriggerExecute(gt_ObjectiveCellBlock_BCreateQ, true, false);
     TriggerExecute(gt_OpeningDialogueQ, true, false);
     TriggerExecute(gt_TIPCloakingQ, true, false);
     TriggerEnable(gt_MedicMana, true);
@@ -1978,7 +2212,6 @@ bool gt_TIPNukeReadyFirstQ_Func (bool testConds, bool runActions) {
     SoundPlay(SoundLink("Alert_TerranNukeReady", -1), PlayerGroupAll(), 100.0, 0.0);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Game);
     libCamp_gf_CreateTipFromConversationState("StoryTips|Tosh03a_TacNuke", libNtve_ge_TipType_NewAbility, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
     TriggerQueueExit();
     return true;
 }
@@ -2098,6 +2331,7 @@ bool gt_CellBlockACompleted_Func (bool testConds, bool runActions) {
     SoundtrackPlay(PlayerGroupAll(), c_soundtrackCategoryMusic, "TTosh03AMusicEventB", c_soundtrackCueAny, c_soundtrackIndexAny, false);
     gv_cellBlocksFreed += 1;
     gv_bonusCreditsEarned += 25000;
+    libWCMI_gf_DisplayMissionObjectiveRewardFloatingText(UnitGetPosition(gv_tosh), "TTosh03A_2");
     TriggerExecute(gt_ObjectiveCellBlock_AComplete, true, false);
     UnitIssueOrder(UnitFromId(156), Order(AbilityCommand("SecurityGateDiagonalULBRLowered", 0)), c_orderQueueReplace);
     Wait(1.5, c_timeGame);
@@ -2188,7 +2422,7 @@ bool gt_CellBlockAReminderQ_Func (bool testConds, bool runActions) {
     MinimapPing(PlayerGroupAll(), PointFromId(2056), 5.0, Color(100.00, 100.00, 0.00));
     UIAlertPoint("Trigger", gv_p1_USER, StringExternal("Param/Value/B84B328A"), null, RegionGetCenter(RegionFromId(21)));
     SoundPlay(SoundLink("UI_TerranPing", 0), PlayerGroupAll(), 100.0, 0.0);
-    ObjectiveShow(gv_objectiveCellBlock_A, PlayerGroupAll(), true);
+    TriggerExecute(gt_ObjectiveCellBlock_ACreateQ, true, false);
     VisRevealArea(gv_p1_USER, RegionFromId(22), 4.0, false);
     libNtve_gf_CreatePingFacingAngle(PlayerGroupAll(), "PingObjective", RegionGetCenter(RegionFromId(22)), ColorWithAlpha(100.00, 100.00, 0.00, 0.00), 0.0, 270.0);
     PingSetScale(PingLastCreated(), 0.8);
@@ -2469,13 +2703,14 @@ bool gt_CellBlockBCompleted_Func (bool testConds, bool runActions) {
     SoundtrackPlay(PlayerGroupAll(), c_soundtrackCategoryMusic, "TTosh03AMusicEventB", c_soundtrackCueAny, c_soundtrackIndexAny, false);
     gv_cellBlocksFreed += 1;
     gv_bonusCreditsEarned += 25000;
+    libWCMI_gf_DisplayMissionObjectiveRewardFloatingText(UnitGetPosition(gv_tosh), "TTosh03A_3");
     TriggerExecute(gt_ObjectiveCellBlock_BComplete, true, false);
     UnitIssueOrder(UnitFromId(131), Order(AbilityCommand("SecurityGateDiagonalULBRLowered", 0)), c_orderQueueReplace);
     Wait(1.5, c_timeGame);
     VisRevealArea(gv_p1_USER, RegionFromId(15), 0.0, false);
     TriggerExecute(gt_CellBlockBCompletedQ, true, false);
     TriggerStop(gt_CellBlockBPrisonerWander);
-    gf_CellBlockAssignDrivers("SiegeTank", "SiegeTank", RegionFromId(31), RegionFromId(15));
+    gf_CellBlockAssignDrivers("SquadSiegeTank", "SquadSiegeTank", RegionFromId(31), RegionFromId(15));
     while (!((gv_firstSiegeTanksActivated >= 2))) {
         Wait(1.0, c_timeAI);
     }
@@ -2560,7 +2795,7 @@ bool gt_CellBlockBReminderQ_Func (bool testConds, bool runActions) {
     MinimapPing(PlayerGroupAll(), PointFromId(2057), 5.0, Color(100.00, 100.00, 0.00));
     UIAlertPoint("Trigger", gv_p1_USER, StringExternal("Param/Value/0C27CF7E"), null, RegionGetCenter(RegionFromId(24)));
     SoundPlay(SoundLink("UI_TerranPing", 0), PlayerGroupAll(), 100.0, 0.0);
-    ObjectiveShow(gv_objectiveCellBlock_B, PlayerGroupAll(), true);
+    TriggerExecute(gt_ObjectiveCellBlock_BCreateQ, true, false);
     VisRevealArea(gv_p1_USER, RegionFromId(31), 4.0, false);
     libNtve_gf_CreatePingFacingAngle(PlayerGroupAll(), "PingObjective", RegionGetCenter(RegionFromId(31)), ColorWithAlpha(100.00, 100.00, 0.00, 0.00), 0.0, 270.0);
     PingSetScale(PingLastCreated(), 0.8);
@@ -2793,8 +3028,8 @@ bool gt_CellBlockSpawners_Func (bool testConds, bool runActions) {
     }
 
     if ((gv_bonusClear01 == true)) {
-        if ((UnitGroupCount(UnitGroup("Diamondback", gv_p0_NEUTRAL, RegionFromId(18), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) < 1)) {
-            UnitCreate(1, "Diamondback", 0, gv_p0_NEUTRAL, RegionGetCenter(RegionFromId(18)), 43.0);
+        if ((UnitGroupCount(UnitGroup("SquadDiamondback", gv_p0_NEUTRAL, RegionFromId(18), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) < 1)) {
+            UnitCreate(1, "SquadDiamondback", 0, gv_p0_NEUTRAL, RegionGetCenter(RegionFromId(18)), 43.0);
             UnitSetState(UnitLastCreated(), c_unitStateTargetable, false);
             UnitSetState(UnitLastCreated(), c_unitStateStatusBar, false);
             UnitSetState(UnitLastCreated(), c_unitStateInvulnerable, true);
@@ -2803,15 +3038,15 @@ bool gt_CellBlockSpawners_Func (bool testConds, bool runActions) {
     }
 
     if ((gv_bonusClear02 == true)) {
-        if ((UnitGroupCount(UnitGroup("SiegeTank", gv_p0_NEUTRAL, RegionFromId(20), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) < 1)) {
-            UnitCreate(1, "SiegeTank", 0, gv_p0_NEUTRAL, RegionGetCenter(RegionFromId(20)), 135.0);
+        if ((UnitGroupCount(UnitGroup("SquadSiegeTank", gv_p0_NEUTRAL, RegionFromId(20), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) < 1)) {
+            UnitCreate(1, "SquadSiegeTank", 0, gv_p0_NEUTRAL, RegionGetCenter(RegionFromId(20)), 135.0);
             UnitSetState(UnitLastCreated(), c_unitStateTargetable, false);
             UnitSetState(UnitLastCreated(), c_unitStateStatusBar, false);
             UnitSetState(UnitLastCreated(), c_unitStateInvulnerable, true);
         }
 
-        if ((UnitGroupCount(UnitGroup("SiegeTank", gv_p0_NEUTRAL, RegionFromId(19), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) < 1)) {
-            UnitCreate(1, "SiegeTank", 0, gv_p0_NEUTRAL, RegionGetCenter(RegionFromId(19)), 45.0);
+        if ((UnitGroupCount(UnitGroup("SquadSiegeTank", gv_p0_NEUTRAL, RegionFromId(19), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) < 1)) {
+            UnitCreate(1, "SquadSiegeTank", 0, gv_p0_NEUTRAL, RegionGetCenter(RegionFromId(19)), 45.0);
             UnitSetState(UnitLastCreated(), c_unitStateTargetable, false);
             UnitSetState(UnitLastCreated(), c_unitStateStatusBar, false);
             UnitSetState(UnitLastCreated(), c_unitStateInvulnerable, true);
@@ -3028,9 +3263,9 @@ bool gt_DefenseOutpost01Create_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    gf_SpawnDropPod(gv_p8_ALLIED_PINK, PointFromId(292), PointFromId(280), 4, "Marine", 1, "Medic", 1, "SCV", 0.5);
-    gf_SpawnDropPod(gv_p8_ALLIED_PINK, PointFromId(293), PointFromId(281), 4, "Marine", 1, "Medic", 1, "SCV", 0.5);
-    gf_SpawnDropPod(gv_p8_ALLIED_PINK, PointFromId(341), PointFromId(282), 4, "Marine", 1, "Medic", 1, "SCV", 0.5);
+    gf_SpawnDropPod(gv_p8_ALLIED_PINK, PointFromId(292), PointFromId(280), 8, "SquadMarine", 4, "SquadMedic", 2, "SquadSCV", 0.5);
+    gf_SpawnDropPod(gv_p8_ALLIED_PINK, PointFromId(293), PointFromId(281), 8, "SquadMarine", 3, "SquadMedic", 2, "SquadSCV", 0.5);
+    gf_SpawnDropPod(gv_p8_ALLIED_PINK, PointFromId(341), PointFromId(282), 8, "SquadMarine", 5, "SquadMedic", 2, "SquadSCV", 0.5);
     Wait(5.0, c_timeGame);
     AIToggleBulliesInRegion(gv_p8_ALLIED_PINK, RegionFromId(5), true);
     auto87C9B864_g = UnitGroup(null, gv_p8_ALLIED_PINK, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
@@ -3041,12 +3276,12 @@ bool gt_DefenseOutpost01Create_Func (bool testConds, bool runActions) {
         AISetUnitScriptControlled(auto87C9B864_var, false);
     }
     Wait(5.0, c_timeGame);
-    auto5B138040_g = UnitGroup("SCV", gv_p8_ALLIED_PINK, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+    auto5B138040_g = UnitGroup("SquadSCV", gv_p8_ALLIED_PINK, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     auto5B138040_u = UnitGroupCount(auto5B138040_g, c_unitCountAll);
     for (;; auto5B138040_u -= 1) {
         auto5B138040_var = UnitGroupUnitFromEnd(auto5B138040_g, auto5B138040_u);
         if (auto5B138040_var == null) { break; }
-        UnitIssueOrder(auto5B138040_var, OrderSetAutoCast(AbilityCommand("Repair", 0), true), c_orderQueueReplace);
+        UnitIssueOrder(auto5B138040_var, OrderSetAutoCast(AbilityCommand("SquadSCVRepair", 0), true), c_orderQueueReplace);
         AISetUnitScriptControlled(auto5B138040_var, false);
     }
     return true;
@@ -3141,9 +3376,9 @@ bool gt_DefenseOutpost02Create_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    gf_SpawnDropPod(gv_p9_ALLIED_GREEN, PointFromId(292), PointFromId(434), 4, "Marine", 1, "Medic", 1, "SCV", 0.5);
-    gf_SpawnDropPod(gv_p9_ALLIED_GREEN, PointFromId(293), PointFromId(435), 4, "Marine", 1, "Medic", 1, "SCV", 0.5);
-    gf_SpawnDropPod(gv_p9_ALLIED_GREEN, PointFromId(341), PointFromId(442), 4, "Marine", 1, "Medic", 1, "SCV", 0.5);
+    gf_SpawnDropPod(gv_p9_ALLIED_GREEN, PointFromId(292), PointFromId(434), 8, "SquadMarine", 3, "SquadMedic", 2, "SquadSCV", 0.5);
+    gf_SpawnDropPod(gv_p9_ALLIED_GREEN, PointFromId(293), PointFromId(435), 8, "SquadMarine", 2, "SquadMedic", 2, "SquadSCV", 0.5);
+    gf_SpawnDropPod(gv_p9_ALLIED_GREEN, PointFromId(341), PointFromId(442), 8, "SquadMarine", 3, "SquadMedic", 2, "SquadSCV", 0.5);
     Wait(5.0, c_timeGame);
     AIToggleBulliesInRegion(gv_p9_ALLIED_GREEN, RegionFromId(6), true);
     auto93529AFD_g = UnitGroup(null, gv_p9_ALLIED_GREEN, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
@@ -3154,12 +3389,12 @@ bool gt_DefenseOutpost02Create_Func (bool testConds, bool runActions) {
         AISetUnitScriptControlled(auto93529AFD_var, false);
     }
     Wait(5.0, c_timeGame);
-    auto190CD919_g = UnitGroup("SCV", gv_p9_ALLIED_GREEN, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+    auto190CD919_g = UnitGroup("SquadSCV", gv_p9_ALLIED_GREEN, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     auto190CD919_u = UnitGroupCount(auto190CD919_g, c_unitCountAll);
     for (;; auto190CD919_u -= 1) {
         auto190CD919_var = UnitGroupUnitFromEnd(auto190CD919_g, auto190CD919_u);
         if (auto190CD919_var == null) { break; }
-        UnitIssueOrder(auto190CD919_var, OrderSetAutoCast(AbilityCommand("Repair", 0), true), c_orderQueueReplace);
+        UnitIssueOrder(auto190CD919_var, OrderSetAutoCast(AbilityCommand("SquadSCVRepair", 0), true), c_orderQueueReplace);
         AISetUnitScriptControlled(auto190CD919_var, false);
     }
     return true;
@@ -3181,7 +3416,7 @@ bool gt_SCVReturn_Func (bool testConds, bool runActions) {
             return false;
         }
 
-        if (!((UnitGetType(EventUnit()) == "SCV"))) {
+        if (!((UnitGetType(EventUnit()) == "SquadSCV"))) {
             return false;
         }
     }
@@ -3322,8 +3557,8 @@ bool gt_ALLYAttackWavesMainBase_Func (bool testConds, bool runActions) {
     if (auto95CD12D3_val == 0) {
         AIAttackWaveSetTargetPlayer(gv_p2_RAYNOR_LIGHTBLUE, PlayerGroupSingle(gv_p5_DOMINION_GREY));
         gf_SetWaypoints(gv_p2_RAYNOR_LIGHTBLUE, 1, gv_waypointCount);
-        AIAttackWaveAddUnits4(4, 4, 4, 4, "Marine");
-        AIAttackWaveAddUnits4(1, 1, 1, 1, "Medic");
+        AIAttackWaveAddUnits4(6, 6, 6, 6, "SquadMarine");
+        AIAttackWaveAddUnits4(2, 2, 2, 2, "SquadMedic");
         if ((TimerGetRemaining(gv_maraudersComeOnline) == 0.0)) {
             AIAttackWaveAddUnits4(1, 1, 1, 1, "Marauder");
         }
@@ -3332,16 +3567,16 @@ bool gt_ALLYAttackWavesMainBase_Func (bool testConds, bool runActions) {
     else if (auto95CD12D3_val == 1) {
         AIAttackWaveSetTargetPlayer(gv_p2_RAYNOR_LIGHTBLUE, PlayerGroupSingle(gv_p4_DOMINION_PURPLE));
         gf_SetWaypoints(gv_p2_RAYNOR_LIGHTBLUE, 1, gv_waypointCount);
-        AIAttackWaveAddUnits4(6, 6, 6, 6, "Marine");
-        AIAttackWaveAddUnits4(2, 2, 2, 2, "Marauder");
-        AIAttackWaveAddUnits4(2, 2, 2, 2, "Medic");
+        AIAttackWaveAddUnits4(6, 6, 6, 6, "SquadMarine");
+        AIAttackWaveAddUnits4(2, 2, 2, 2, "SquadMarauder");
+        AIAttackWaveAddUnits4(2, 2, 2, 2, "SquadMedic");
     }
     else if (auto95CD12D3_val == 2) {
         AIAttackWaveSetTargetPlayer(gv_p2_RAYNOR_LIGHTBLUE, PlayerGroupSingle(gv_p3_DOMINION_RED));
         gf_SetWaypoints(gv_p2_RAYNOR_LIGHTBLUE, 1, gv_waypointCount);
-        AIAttackWaveAddUnits4(8, 8, 8, 8, "Marine");
-        AIAttackWaveAddUnits4(3, 3, 3, 3, "Marauder");
-        AIAttackWaveAddUnits4(2, 2, 2, 2, "Medic");
+        AIAttackWaveAddUnits4(8, 8, 8, 8, "SquadMarine");
+        AIAttackWaveAddUnits4(3, 3, 3, 3, "SquadMarauder");
+        AIAttackWaveAddUnits4(2, 2, 2, 2, "SquadMedic");
     }
     else {
     }
@@ -3405,8 +3640,8 @@ bool gt_ALLYAttackWavesCellBlockA_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libNtve_gf_RescueUnit(UnitGroupUnit(UnitGroup("Diamondback", 0, RegionFromId(18), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), 1), gv_p11_ALLIED_CELLBLOCK_A, true);
-    autoCF6BBBEF_g = UnitGroup("Diamondback", gv_p11_ALLIED_CELLBLOCK_A, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+    libNtve_gf_RescueUnit(UnitGroupUnit(UnitGroup("SquadDiamondback", 0, RegionFromId(18), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), 1), gv_p11_ALLIED_CELLBLOCK_A, true);
+    autoCF6BBBEF_g = UnitGroup("SquadDiamondback", gv_p11_ALLIED_CELLBLOCK_A, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     autoCF6BBBEF_u = UnitGroupCount(autoCF6BBBEF_g, c_unitCountAll);
     for (;; autoCF6BBBEF_u -= 1) {
         autoCF6BBBEF_var = UnitGroupUnitFromEnd(autoCF6BBBEF_g, autoCF6BBBEF_u);
@@ -3416,7 +3651,7 @@ bool gt_ALLYAttackWavesCellBlockA_Func (bool testConds, bool runActions) {
         UnitSetState(autoCF6BBBEF_var, c_unitStateInvulnerable, false);
     }
     gf_SetWaypoints(gv_p11_ALLIED_CELLBLOCK_A, 8, gv_waypointCount);
-    AIAttackWaveAddUnits4(1, 1, 1, 1, "Diamondback");
+    AIAttackWaveAddUnits4(1, 1, 1, 1, "SquadDiamondback");
     AIAttackWaveSend(gv_p11_ALLIED_CELLBLOCK_A, 0, false);
     return true;
 }
@@ -3479,7 +3714,7 @@ bool gt_ALLYAttackWavesCellBlockB_Func (bool testConds, bool runActions) {
     }
 
     if ((RandomInt(1, 2) == 1)) {
-        lv_chosenTank = UnitGroupUnit(UnitGroup("SiegeTank", 0, RegionFromId(20), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), 1);
+        lv_chosenTank = UnitGroupUnit(UnitGroup("SquadSiegeTank", 0, RegionFromId(20), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), 1);
         libNtve_gf_RescueUnit(lv_chosenTank, gv_p12_ALLIED_CELLBLOCK_B, true);
         UnitSetState(lv_chosenTank, c_unitStateTargetable, true);
         UnitSetState(lv_chosenTank, c_unitStateStatusBar, true);
@@ -3487,7 +3722,7 @@ bool gt_ALLYAttackWavesCellBlockB_Func (bool testConds, bool runActions) {
         UnitIssueOrder(lv_chosenTank, OrderTargetingPoint(AbilityCommand("attack", 0), PointFromId(1958)), c_orderQueueReplace);
     }
     else {
-        lv_chosenTank = UnitGroupUnit(UnitGroup("SiegeTank", 0, RegionFromId(19), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), 1);
+        lv_chosenTank = UnitGroupUnit(UnitGroup("SquadSiegeTank", 0, RegionFromId(19), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), 1);
         libNtve_gf_RescueUnit(lv_chosenTank, gv_p12_ALLIED_CELLBLOCK_B, true);
         UnitSetState(lv_chosenTank, c_unitStateTargetable, true);
         UnitSetState(lv_chosenTank, c_unitStateStatusBar, true);
@@ -4063,10 +4298,7 @@ bool gt_StorymodeTipsQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
     libCamp_gf_CreateStorymodeTips();
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -4092,10 +4324,7 @@ bool gt_TIPCloakingQ_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    TriggerQueueEnter();
     libCamp_gf_CreateTipFromConversationState("StoryTips|Tosh03a_Detectors", libNtve_ge_TipType_NormalTip, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
-    TriggerQueueExit();
     return true;
 }
 
@@ -4211,7 +4440,6 @@ bool gt_TIPConsumptionQ_Func (bool testConds, bool runActions) {
     libCamp_gf_SendTransmissionCampaign(gv_tosh, SoundLink("TTosh03ATosh00025", -1), c_transmissionDurationAdd, 0.0, true);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Game);
     libCamp_gf_CreateTipFromConversationState("StoryTips|Tosh03a_Consume", libNtve_ge_TipType_NewAbility, PlayerGroupAll());
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
     TriggerQueueExit();
     return true;
 }
@@ -4253,7 +4481,6 @@ bool gt_TIPPsiShieldQ_Func (bool testConds, bool runActions) {
 
     libCamp_gf_CreateTipFromConversationState("StoryTips|Tosh3A_VoodooShield", libNtve_ge_TipType_NewAbility, PlayerGroupAll());
     TriggerExecute(gt_GivePsiShield, true, false);
-    Wait(libCamp_gv_campaignHintDelay, c_timeReal);
     TriggerQueueExit();
     return true;
 }
@@ -4406,7 +4633,7 @@ bool gt_StatEnemiesKilledByNukes_Func (bool testConds, bool runActions) {
 
     gv_enemiesKilledByNukes += 1;
     if ((libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1)) {
-        AchievementTermQuantitySet(gv_p1_USER, "Anniversary_TTosh03A", gv_enemiesKilledByNukes);
+        libWoLC_gf_SetAchievementTermQuantityCampaign("Anniversary_TTosh03A", gv_enemiesKilledByNukes);
         TextExpressionSetToken("Param/Expression/80B7A938", "A", IntToText(gv_enemiesKilledByNukes));
         TriggerDebugOutput(1, TextExpressionAssemble("Param/Expression/80B7A938"), false);
     }
@@ -4536,7 +4763,7 @@ bool gt_VictoryMainPrisonCleared_Func (bool testConds, bool runActions) {
     TriggerStop(gt_CellBlockSpawners);
     libNtve_gf_PlayAnimation(libNtve_gf_MainActorofUnit(UnitFromId(922)), c_animNameDefault, "Death", c_animFlagPlayForever | c_animFlagNonLooping, c_animTimeDefault);
     TriggerExecute(gt_ObjectiveClearMainPrisonComplete, true, true);
-    libCamp_gf_RunMissionVictorySequence(gt_VictoryQ);
+    libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
     return true;
 }
 
@@ -4557,15 +4784,15 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     }
 
     if ((ObjectiveGetState(gv_objectiveCellBlock_A) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_objectiveCellBlock_B) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_objectiveClearMainPrison) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_objectiveToshMustSurvive) == c_objectiveStateCompleted)) {
-        AchievementAward(gv_p1_USER, "TTosh03A_1");
+        libWoLC_gf_CampaignAwardAchievement("TTosh03A_1");
     }
 
     if ((libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1) && (gv_toshLowestHealth >= 100)) {
-        AchievementAward(gv_p1_USER, "TTosh03A_2");
+        libWoLC_gf_CampaignAwardAchievement("TTosh03A_2");
     }
 
     if ((libNtve_gf_DifficultyValueInt(0, 0, 1, 1) == 1) && (TimerGetRemaining(gv_achievementHardTimer) != 0.0)) {
-        AchievementAward(gv_p1_USER, "TTosh03A_3");
+        libWoLC_gf_CampaignAwardAchievement("TTosh03A_3");
     }
 
     VictoryPanelAddAchievement("TTosh03A_1");
@@ -4578,8 +4805,7 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/2E860ECD"), IntToText(gv_enemiesKilledByNukes));
     VictoryPanelAddCustomStatisticLine(StringToText(""), StringToText(""));
     VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/EEE3E8BD"), (IntToText(gv_cellBlocksFreed) + StringExternal("Param/Value/92A97F06") + StringExternal("Param/Value/E7798C49")));
-    VictoryPanelAddCustomStatisticLine(StringExternal("Param/Value/F513B674"), libCamp_gf_FormatCredits(gv_bonusCreditsEarned, true));
-    libCamp_gf_EndCampaignMission(gv_p1_USER, c_gameOverVictory);
+    libWCMI_gf_EndCampaignMission(gv_p1_USER, c_gameOverVictory);
     return true;
 }
 
@@ -4619,7 +4845,7 @@ bool gt_DefeatBaseDead_Func (bool testConds, bool runActions) {
     TriggerQueueClear(c_triggerQueueRemove);
     Wait(2.0, c_timeGame);
     libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/59E462FF"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_Defeat, true, false);
     return true;
 }
@@ -4662,7 +4888,7 @@ bool gt_DefeatToshDies_Func (bool testConds, bool runActions) {
     Wait(2.0, c_timeGame);
     TriggerExecute(gt_ObjectiveClearMainPrisonFailed, true, false);
     libCamp_gf_DisplayCampaignMessage(PlayerGroupAll(), libCamp_ge_CampaignMessageType_MissionFailed, StringExternal("Param/Value/F6A2D66D"), libCamp_ge_CampaignMessageFormatNotFormat_FormatMessage);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     TriggerExecute(gt_Defeat, true, false);
     return true;
 }
@@ -4683,7 +4909,7 @@ bool gt_Defeat_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_EndCampaignMission(gv_p1_USER, c_gameOverDefeat);
+    libWCMI_gf_EndCampaignMission(gv_p1_USER, c_gameOverDefeat);
     return true;
 }
 
@@ -4710,7 +4936,7 @@ bool gt_VictoryCheat_Func (bool testConds, bool runActions) {
     }
 
     gv_gameOver = true;
-    libCamp_gf_RunMissionVictorySequence(gt_Victory);
+    libWCMI_gf_RunMissionVictorySequence(gt_Victory);
     return true;
 }
 
@@ -4766,20 +4992,17 @@ bool gt_ObjectiveClearMainPrisonCreateQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate(StringExternal("Param/Value/D2D30F59"), StringExternal("Param/Value/AEA83BA8"), c_objectiveStateActive, true);
+    libWCMI_gf_CreateObjectiveCampaign("TTosh03A_1");
     gv_objectiveClearMainPrison = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_TTosh03AObjective1, ObjectiveLastCreated(), StringExternal("Param/Value/FDD20C03"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     VisRevealArea(gv_p1_USER, RegionFromId(8), 16.0, false);
     UIAlertPoint("Trigger", gv_p1_USER, StringExternal("Param/Value/7F61BFCD"), null, RegionGetCenter(RegionFromId(8)));
     libNtve_gf_CreatePingFacingAngle(PlayerGroupAll(), "PingObjective", RegionGetCenter(RegionFromId(8)), ColorWithAlpha(0.00, 100.00, 0.00, 0.00), 0.0, 270.0);
     gv_mainPrisonPing = PingLastCreated();
     PingSetTooltip(gv_mainPrisonPing, StringExternal("Param/Value/8D06E3F4"));
-    ObjectiveCreate(StringExternal("Param/Value/19F8DA70"), StringExternal("Param/Value/C829731D"), c_objectiveStateActive, true);
+    libWCMI_gf_CreateObjectiveCampaign("TTosh03A_4");
     gv_objectiveToshMustSurvive = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_TTosh03AObjective4, ObjectiveLastCreated(), StringExternal("Param/Value/30EB4842"));
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -4808,9 +5031,9 @@ bool gt_ObjectiveClearMainPrisonComplete_Func (bool testConds, bool runActions) 
     TriggerEnable(TriggerGetCurrent(), false);
     PingDestroy(gv_mainPrisonPing);
     TriggerExecute(gt_ObjectiveClearMainPrisonCreateQ, true, false);
-    ObjectiveSetState(gv_objectiveClearMainPrison, c_objectiveStateCompleted);
-    ObjectiveSetState(gv_objectiveToshMustSurvive, c_objectiveStateCompleted);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    libWCMI_gf_ZS_SetMissionObjectiveState("TTosh03A_1", libWoLC_ge_MissionObjectiveState_Completed);
+    libWCMI_gf_ZS_SetMissionObjectiveState("TTosh03A_4", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -4864,12 +5087,9 @@ bool gt_ObjectiveCellBlock_ACreateQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate(StringExternal("Param/Value/1A489F89"), StringExternal("Param/Value/A5253672"), c_objectiveStateHidden, false);
+    libWCMI_gf_CreateObjectiveCampaign("TTosh03A_2");
     gv_objectiveCellBlock_A = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_TTosh03AObjective2, ObjectiveLastCreated(), StringExternal("Param/Value/8EDB0902"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -4898,9 +5118,8 @@ bool gt_ObjectiveCellBlock_AComplete_Func (bool testConds, bool runActions) {
     TriggerEnable(TriggerGetCurrent(), false);
     PingDestroy(gv_cellBlock_A_Ping);
     TriggerExecute(gt_ObjectiveCellBlock_ACreateQ, true, false);
-    ObjectiveSetState(gv_objectiveCellBlock_A, c_objectiveStateCompleted);
-    libCamp_gf_AddProgressToStoryObjective(1, libCamp_ge_MissionObjective_TTosh03AObjective2);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    libWCMI_gf_ZS_SetMissionObjectiveState("TTosh03A_2", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -4927,12 +5146,9 @@ bool gt_ObjectiveCellBlock_BCreateQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerQueueEnter();
-    ObjectiveCreate(StringExternal("Param/Value/05DF4AC2"), StringExternal("Param/Value/F0DF8BF5"), c_objectiveStateHidden, false);
+    libWCMI_gf_CreateObjectiveCampaign("TTosh03A_3");
     gv_objectiveCellBlock_B = ObjectiveLastCreated();
-    libCamp_gf_RegisterMissionObjective(libCamp_ge_MissionObjective_TTosh03AObjective3, ObjectiveLastCreated(), StringExternal("Param/Value/98C738B2"));
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
-    TriggerQueueExit();
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -4961,9 +5177,8 @@ bool gt_ObjectiveCellBlock_BComplete_Func (bool testConds, bool runActions) {
     TriggerEnable(TriggerGetCurrent(), false);
     PingDestroy(gv_cellBlock_B_Ping);
     TriggerExecute(gt_ObjectiveCellBlock_BCreateQ, true, false);
-    ObjectiveSetState(gv_objectiveCellBlock_B, c_objectiveStateCompleted);
-    libCamp_gf_AddProgressToStoryObjective(1, libCamp_ge_MissionObjective_TTosh03AObjective3);
-    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    libWCMI_gf_ZS_SetMissionObjectiveState("TTosh03A_3", libWoLC_ge_MissionObjectiveState_Completed);
+    Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
 
@@ -5430,7 +5645,9 @@ void gt_VictoryCleanup_Init () {
 // Trigger Initialization
 //--------------------------------------------------------------------------------------------------
 void InitTriggers () {
+    gt_OnPlayer1Birth_Init();
     gt_Initialization_Init();
+    gt_Init00ReplaceRaynorUnit_Init();
     gt_Init01Technology_Init();
     gt_Init02Players_Init();
     gt_Init03Units_Init();

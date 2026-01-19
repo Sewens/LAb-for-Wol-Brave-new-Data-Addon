@@ -1,5 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <!-- Diamondback -->
+    <CEffectApplyBehavior id="DiamondbackAttackTrackerAB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Effect="DiamondbackAttackTrackerUnitSet"/>
+        <Behavior value="DiamondbackAttackTracker"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="DiamondbackAttackTrackerRB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Effect="DiamondbackAttackTrackerUnitSet"/>
+        <BehaviorLink value="DiamondbackAttackTracker"/>
+    </CEffectRemoveBehavior>
+    <CEffectCreatePersistent id="DiamondbackAttackTrackerCP">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="CasterUnit"/>
+        <Flags index="PersistUntilDestroyed" value="1"/>
+        <FinalEffect value="DiamondbackAttackTrackerRB"/>
+        <ValidatorArray value="TargetIsEnemyOrNeutral"/>
+        <InitialEffect value="DiamondbackAttackTrackerAB"/>
+        <PeriodicValidator value="DiamondbackTrackingTarget"/>
+        <PeriodicPeriodArray value="0.125"/>
+    </CEffectCreatePersistent>
+    <CEffectDestroyPersistent id="DiamondbackAttackTrackerDP">
+        <EditorCategories value="Race:Terran"/>
+        <Effect value="DiamondbackAttackTrackerCP"/>
+    </CEffectDestroyPersistent>
+    <CEffectSet id="DiamondbackAttackTrackerUnitSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="DiamondbackChasingAB"/>
+        <EffectArray value="DiamondbackAttackTrackerDP"/>
+        <EffectArray value="DiamondbackAttackTrackerCP"/>
+        <Marker Link="Effect/DiamondbackAttackTrackerCP">
+            <MatchFlags index="CasterUnit" value="1"/>
+        </Marker>
+    </CEffectSet>
+    <CEffectApplyBehavior id="DiamondbackChasingAB">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="DiamondbackChasing"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="DiamondbackChasingRB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="DiamondbackChasing"/>
+    </CEffectRemoveBehavior>
+    <CEffectSet id="DiamondbackDamageSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="DiamondbackTransientTrackerAB"/>
+        <EffectArray value="Diamondback"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="DiamondbackTransientTrackerAB">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="DiamondbackTransientTracker"/>
+    </CEffectApplyBehavior>
+    <!-- Battlecruiser -->
+    <CEffectApplyBehavior id="BattlecruiserAttackTrackerAB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Effect="BattlecruiserAttackTrackerUnitSet"/>
+        <Behavior value="BattlecruiserAttackTracker"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="BatttlecruiserAttackTrackerRB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Effect="BattlecruiserAttackTrackerUnitSet"/>
+        <BehaviorLink value="BattlecruiserAttackTracker"/>
+    </CEffectRemoveBehavior>
+    <CEffectCreatePersistent id="BattlecruiserAttackTrackerCP">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="CasterUnit"/>
+        <Flags index="PersistUntilDestroyed" value="1"/>
+        <FinalEffect value="BatttlecruiserAttackTrackerRB"/>
+        <ValidatorArray value="TargetIsEnemyOrNeutral"/>
+        <InitialEffect value="BattlecruiserAttackTrackerAB"/>
+        <PeriodicValidator value="BattlecruiserTrackingTarget"/>
+        <PeriodicPeriodArray value="0.125"/>
+    </CEffectCreatePersistent>
+    <CEffectDestroyPersistent id="BattlecruiserAttackTrackerDP">
+        <EditorCategories value="Race:Terran"/>
+        <Effect value="BattlecruiserAttackTrackerCP"/>
+    </CEffectDestroyPersistent>
+    <CEffectSet id="BattlecruiserAttackTrackerUnitSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="BattlecruiserChasingAB"/>
+        <EffectArray value="BattlecruiserAttackTrackerDP"/>
+        <EffectArray value="BattlecruiserAttackTrackerCP"/>
+        <Marker Link="Effect/BattlecruiserAttackTrackerCP">
+            <MatchFlags index="CasterUnit" value="1"/>
+        </Marker>
+    </CEffectSet>
+    <CEffectApplyBehavior id="BattlecruiserChasingAB">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="BattlecruiserChasing"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="BattlecruiserChasingRB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="BattlecruiserChasing"/>
+    </CEffectRemoveBehavior>
+    <CEffectSet id="BattlecruiserDamageSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="BattlecruiserTransientTrackerAB"/>
+        <EffectArray value="BattlecruiserDamageSwitch"/>
+    </CEffectSet>
+    <CEffectSwitch id="BattlecruiserDamageSwitch">
+        <EditorCategories value="Race:Terran"/>
+        <CaseArray Validator="GroundUnitFilter" Effect="ATSLaserBatteryLM"/>
+        <CaseDefault value="ATALaserBatteryLM"/>
+        <Marker Count="0" Link="Effect/BattlecruiserAttackTrackerCP">
+            <MatchFlags index="CasterUnit" value="1"/>
+        </Marker>
+    </CEffectSwitch>
+    <CEffectApplyBehavior id="BattlecruiserTransientTrackerAB">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="BattlecruiserTransientTracker"/>
+    </CEffectApplyBehavior>
+    <!-- Merc Battlecruiser -->
+    <CEffectSet id="DRBattlecruiserDamageSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="BattlecruiserTransientTrackerAB"/>
+        <EffectArray value="DRBattlecruiserDamageSwitch"/>
+    </CEffectSet>
+    <CEffectSwitch id="DRBattlecruiserDamageSwitch">
+        <EditorCategories value="Race:Terran"/>
+        <CaseArray Validator="Kit@MercBattlecruiserUseCannonGround" Effect="DRCannonsG"/>
+        <CaseArray Validator="Kit@MercBattlecruiserUseCannonAir" Effect="DRCannonsA"/>
+        <CaseArray Validator="GroundUnitFilter" Effect="DRBattlecruiserGLM"/>
+        <CaseDefault value="DRBattlecruiserALM"/>
+        <Marker Count="0" Link="Effect/BattlecruiserAttackTrackerCP">
+            <MatchFlags index="CasterUnit" value="1"/>
+        </Marker>
+    </CEffectSwitch>
+    <CEffectEnumArea id="KarassPsiStormSearch">
+        <AINotifyFlags index="HurtFriend" value="0"/>
+        <SearchFilters value="-;Player,Ally,Structure,Missile,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
+    </CEffectEnumArea>
+    <!-- Hold Fire -->
     <CEffectApplyBehavior id="Kit@PerditionTurretHoldFire">
         <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="Caster"/>
@@ -222,10 +357,6 @@
         <ShieldBonus value="20"/>
         <Flags index="Notification" value="1"/>
     </CEffectDamage>
-    <!-- Medic Coop Fix -->
-    <CEffectCreateHealer id="heal">
-        <ValidatorArray value="NotStasis"/>
-    </CEffectCreateHealer>
     <!-- Reaper Charge remove Friendly Fire -->
     <CEffectDamage id="D8ChargeExplodeDamage">
         <AINotifyFlags index="HurtFriend" value="0"/>
@@ -526,4 +657,8 @@
     <CEffectDamage id="SeekerMissileDamage">
         <SearchFilters value="-;Player,Ally,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
     </CEffectDamage>
+    <!-- Medic Coop Fix -->
+    <CEffectCreateHealer id="heal">
+        <ValidatorArray value="NotStasis"/>
+    </CEffectCreateHealer>
 </Catalog>
