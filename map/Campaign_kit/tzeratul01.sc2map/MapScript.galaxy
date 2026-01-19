@@ -7,11 +7,11 @@
 //==================================================================================================
 include "TriggerLibs/NativeLib"
 include "TriggerLibs/LibertyLib"
-include "LibEA0820A1"
 include "LibCamp"
 include "LibWoLC"
 include "LibWCMI"
 include "LibWCUI"
+include "LibB27CC4B1"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -19,11 +19,11 @@ include "LibWCUI"
 void InitLibs () {
     libNtve_InitLib();
     libLbty_InitLib();
-    libEA0820A1_InitLib();
     libCamp_InitLib();
     libWoLC_InitLib();
     libWCMI_InitLib();
     libWCUI_InitLib();
+    libB27CC4B1_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -60,6 +60,7 @@ unitgroup gv_nydusWorms;
 unitgroup gv_patrollingZerg;
 timer gv_runoutTimer;
 unitgroup gv_airAttackGroup;
+unit gv_safetyBeacon;
 bool gv_flashButtonBlink;
 bool gv_flashButtonVoidPrison;
 revealer gv_blinkRevealer1;
@@ -178,6 +179,7 @@ void InitGlobals () {
 //--------------------------------------------------------------------------------------------------
 // Global Function Declarations
 //--------------------------------------------------------------------------------------------------
+point gf_GetDropPoint ();
 void gf_SpawnNydusWorm (region lp_region, trigger lp_trigger);
 void gf_RefreshPlayersHPandShields ();
 void gf_AnimateShrine (unit lp_shrine);
@@ -275,6 +277,7 @@ trigger gt_RumbleAiurProtossAIPush1;
 trigger gt_RumbleAiurProtossAIPush2;
 trigger gt_RumbleAiurProtossAIPush3;
 trigger gt_RumbleFinish;
+trigger gt_RumbleSafety;
 trigger gt_StunnedUltraliskQ;
 trigger gt_AntiAirRequestQ;
 trigger gt_KarassKilledBeforeRunoutQ;
@@ -322,6 +325,17 @@ trigger gt_RunoutConstantNydusAttacks;
 trigger gt_RunoutAttackWaves;
 trigger gt_NydusSpawnRunout;
 trigger gt_NydusSpawnAIRunout;
+trigger gt_Checkpoint1;
+trigger gt_Checkpoint2;
+trigger gt_Checkpoint3;
+trigger gt_Checkpoint4;
+trigger gt_Checkpoint5;
+trigger gt_Checkpoint6;
+trigger gt_Checkpoint7;
+trigger gt_Checkpoint8;
+trigger gt_Checkpoint9;
+trigger gt_Checkpoint10;
+trigger gt_ChallengeDropUnits;
 trigger gt_TimerEscape;
 trigger gt_TimerEscapeExpires;
 trigger gt_ShieldImpactRemove;
@@ -392,6 +406,26 @@ trigger gt_VictoryCleanup;
 //--------------------------------------------------------------------------------------------------
 // Global Functions
 //--------------------------------------------------------------------------------------------------
+point gf_GetDropPoint () {
+    // Variable Declarations
+    point lv_candidate;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+
+    // Implementation
+    while (true) {
+        lv_candidate = RegionRandomPoint(RegionCircle(UnitGetPosition(gv_tHEONEZERATUL), 3.0));
+        if ((PointPathingPassable(lv_candidate) == true) && (AbsF((PointGetHeight(lv_candidate) - UnitGetHeight(gv_tHEONEZERATUL))) <= 0.5)) {
+            return lv_candidate;
+        }
+        else {
+            Wait(0.01, c_timeGame);
+        }
+    }
+    return lv_candidate;
+}
+
 void gf_SpawnNydusWorm (region lp_region, trigger lp_trigger) {
     // Automatic Variable Declarations
     // Implementation
@@ -518,7 +552,6 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     }
 
     libWoLC_gf_ULoadCampaignData("TZeratul01");
-    TriggerExecute(libEA0820A1_gt_Init00ReplaceUnit, true, true);
     TriggerExecute(gt_Init01Technology, true, true);
     TriggerExecute(gt_Init02Players, true, true);
     TriggerExecute(gt_Init03UnitsVariables, true, true);
@@ -527,6 +560,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init06Difficulties, true, true);
     TriggerExecute(gt_Init07Help, true, true);
     libWoLC_gf_RegisterFootageRecording(gt_BriefingQ);
+    TriggerExecute(libB27CC4B1_gt_RogueInit, true, true);
     TriggerExecute(gt_IntroSequence, true, false);
     return true;
 }
@@ -699,6 +733,8 @@ bool gt_Init03UnitsVariables_Func (bool testConds, bool runActions) {
         if (autoD8483A2F_var == null) { break; }
         UnitSetInfoText(autoD8483A2F_var, StringExternal("Param/Value/5A53900C"), StringExternal("Param/Value/AB96565D"), StringToText(""));
     }
+    gv_safetyBeacon = UnitFromId(541673022);
+    UnitSetInfoText(gv_safetyBeacon, StringExternal("Param/Value/C5A4D50F"), StringToText(""), StringToText(""));
     gv_tHEONEZERATUL = UnitFromId(1);
     Kit_UIHeroPanel_SetHeroUnit(0, gv_tHEONEZERATUL, "Assets\\Textures\\zeratul_ingame_heroportrait.dds");
     auto24BC69D6_g = UnitGroup("Overseer", gv_p3_ZERG, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterStructure) | (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
@@ -1118,7 +1154,9 @@ bool gt_StartGame_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    TriggerExecute(libB27CC4B1_gt_InitTableButtons, true, true);
     Wait(3.0, c_timeReal);
+    libB27CC4B1_gf_ChallengeTime("ChallengeZeratul1");
     TriggerExecute(gt_ObjectiveShrinesDiscoverQ, true, true);
     TriggerExecute(gt_ObjectiveZeratulDiscover, true, false);
     TriggerExecute(gt_StorymodeTipsQ, true, false);
@@ -1154,6 +1192,7 @@ bool gt_HellomynameisZeratulQ_Func (bool testConds, bool runActions) {
 
     TriggerQueueEnter();
     UIAlertUnit("Trigger", gv_p1_USER, StringToText(""), null, gv_tHEONEZERATUL);
+    TriggerExecute(gt_ChallengeDropUnits, true, false);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
     libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
     // Transmission - SoundLink("TZeratul01Zeratul00046", 0)
@@ -1564,6 +1603,7 @@ bool gt_BlinkTeachQ_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_ButtonFlashBlinkOn, true, false);
     TriggerQueueEnter();
     if ((TriggerIsEnabled(gt_ButtonFlashBlinkOff) == true)) {
+        TriggerExecute(gt_ChallengeDropUnits, true, false);
         libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
         libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
         // Transmission - SoundLink("TZeratul01Zeratul00033", 0)
@@ -1830,6 +1870,7 @@ bool gt_VoidPrisonTeachQ_Func (bool testConds, bool runActions) {
     gv_voidPrisonVictimActor = libNtve_gf_AttachModelToUnit(UnitFromId(36), "BriefingUnitSelectProtoss", "Ref_Head");
     TriggerQueueEnter();
     if ((TriggerIsEnabled(gt_ButtonFlashVoidPrisonOff) == true)) {
+        TriggerExecute(gt_ChallengeDropUnits, true, false);
         libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
         libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
         // Transmission - SoundLink("TZeratul01Zeratul00069", 0)
@@ -2055,6 +2096,7 @@ bool gt_GuardedSporeCalloutQ_Func (bool testConds, bool runActions) {
 
     TriggerQueueEnter();
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
+    TriggerExecute(gt_ChallengeDropUnits, true, false);
     libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
     UIAlertPoint("Trigger", gv_p1_USER, StringExternal("Param/Value/6B39D9A2"), null, UnitGetPosition(UnitFromId(223)));
     libNtve_gf_CreateModelAtPoint("BriefingUnitSelectProtoss", UnitGetPosition(UnitFromId(223)));
@@ -2144,6 +2186,7 @@ bool gt_OverseerIntroActionsQ_Func (bool testConds, bool runActions) {
     SoundPlayAtPoint(SoundLink("Uni_RockExplosionLarge", 1), PlayerGroupAll(), PointFromId(216), 16.0, 100.0, 0.0);
     gf_ActivatePatrolAIForUnit(UnitFromId(221), PointFromId(849), 1.0);
     TriggerQueueEnter();
+    TriggerExecute(gt_ChallengeDropUnits, true, false);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
     libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
     // Transmission - SoundLink("TZeratul01Zeratul00068", 0)
@@ -2253,6 +2296,7 @@ bool gt_ObjectiveShrine1ReachedQ_Func (bool testConds, bool runActions) {
     gf_AnimateShrine(UnitFromId(73));
     Wait(2.0, c_timeGame);
     TriggerQueueEnter();
+    TriggerExecute(gt_ChallengeDropUnits, true, false);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
     SoundChannelSetVolume(PlayerGroupAll(), c_soundCategoryDoodad, 10.0, 0.0);
     libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
@@ -2335,6 +2379,7 @@ bool gt_KerriganTaunt11Q_Func (bool testConds, bool runActions) {
     libCamp_gf_SendTransmissionCampaign(null, SoundLink("TZeratul01Kerrigan00011", -1), c_transmissionDurationAdd, 0.0, false);
     gv_interruptableTransmission = TransmissionLastSent();
     TransmissionWait(TransmissionLastSent(), 0.0);
+    TriggerExecute(gt_ChallengeDropUnits, true, false);
     // Transmission - SoundLink("TZeratul01Zeratul00003", 0)
     libCamp_gf_SendTransmissionCampaign(gv_tHEONEZERATUL, SoundLink("TZeratul01Zeratul00003", -1), c_transmissionDurationAdd, 0.0, false);
     gv_interruptableTransmission = TransmissionLastSent();
@@ -2512,6 +2557,7 @@ bool gt_KerriganTaunt12Q_Func (bool testConds, bool runActions) {
     SoundPlayAtPoint(SoundLink("Mutalisk_Attack", 9), PlayerGroupAll(), UnitGetPosition(gv_tHEONEZERATUL), 0.0, 100.0, 0.0);
     SoundWait(SoundLastPlayed(), 0.0, c_soundOffsetEnd);
     TriggerQueueEnter();
+    TriggerExecute(gt_ChallengeDropUnits, true, false);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
     // Transmission - SoundLink("TZeratul01Zeratul00028", 0)
     libCamp_gf_SendTransmissionCampaign(gv_tHEONEZERATUL, SoundLink("TZeratul01Zeratul00028", -1), c_transmissionDurationAdd, 0.0, true);
@@ -2547,6 +2593,7 @@ bool gt_StalkersIntroWarpInQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerQueueEnter();
+    TriggerExecute(gt_ChallengeDropUnits, true, false);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
     libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
     // Transmission - SoundLink("TZeratul01Stalker00049", 0)
@@ -2879,10 +2926,12 @@ bool gt_StalkersRevealerTipQ_Func (bool testConds, bool runActions) {
     Wait(2.0, c_timeGame);
     TriggerQueueEnter();
     if ((UnitIsAlive(gv_tHEONEKARASS) == true) && (UnitGroupCount(UnitGroup("Stalker", gv_p1_USER, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) >= 1)) {
+        TriggerExecute(gt_ChallengeDropUnits, true, false);
         libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
         libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
         // Transmission - SoundLink("TZeratul01Stalker00050", 0)
         libCamp_gf_SendTransmissionCampaign(null, SoundLink("TZeratul01Stalker00050", -1), c_transmissionDurationAdd, 0.0, true);
+        TriggerExecute(gt_ChallengeDropUnits, true, false);
         // Transmission - SoundLink("TZeratul01Zeratul00051", 0)
         libCamp_gf_SendTransmissionCampaign(gv_tHEONEZERATUL, SoundLink("TZeratul01Zeratul00051", -1), c_transmissionDurationAdd, 0.0, true);
         libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Game);
@@ -2970,6 +3019,7 @@ bool gt_StalkerCliffPewQ_Func (bool testConds, bool runActions) {
         gf_ActivatePatrolAIForUnit(UnitFromId(232), PointFromId(1840), 5.0);
     }
     TriggerQueueEnter();
+    TriggerExecute(gt_ChallengeDropUnits, true, false);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
     libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
     // Transmission - SoundLink("TZeratul01Stalker00029", 0)
@@ -3158,6 +3208,7 @@ bool gt_BroodlordPatrolQ_Func (bool testConds, bool runActions) {
     gf_ActivatePatrolAIForUnit(UnitFromId(196), PointFromId(1191), 5.0);
     libLbty_gf_AutoRevealRegion(RegionFromId(72), RegionFromId(25), gv_p1_USER);
     TriggerQueueEnter();
+    TriggerExecute(gt_ChallengeDropUnits, true, false);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
     libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
     UIAlertUnit("Trigger", gv_p1_USER, StringExternal("Param/Value/7DD02F27"), null, UnitFromId(170));
@@ -3325,6 +3376,7 @@ bool gt_AirAssaultQ_Func (bool testConds, bool runActions) {
     SoundPlayAtPoint(SoundLink("Mutalisk_Attack", 9), PlayerGroupAll(), UnitGetPosition(gv_tHEONEZERATUL), 0.0, 100.0, 0.0);
     SoundWait(SoundLastPlayed(), 0.0, c_soundOffsetEnd);
     TriggerQueueEnter();
+    TriggerExecute(gt_ChallengeDropUnits, true, false);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
     libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
     // Transmission - SoundLink("TZeratul01Zeratul00071", 0)
@@ -3814,6 +3866,7 @@ bool gt_HatcheryDiscovered1Q_Func (bool testConds, bool runActions) {
         UnitBehaviorAdd(autoC2AE3C4B_var, "InstallationZergWander", autoC2AE3C4B_var, 1);
     }
     TriggerQueueEnter();
+    TriggerExecute(gt_ChallengeDropUnits, true, false);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
     libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
     UIAlertPoint("Trigger", gv_p1_USER, StringExternal("Param/Value/12A43ADF"), null, UnitGetPosition(UnitFromId(28)));
@@ -3873,6 +3926,7 @@ bool gt_ObjectiveShrine2ReachedQ_Func (bool testConds, bool runActions) {
     UnitSetState(UnitFromId(7), c_unitStateSelectable, false);
     UnitSelect(gv_tHEONEZERATUL, gv_p1_USER, false);
     UnitIssueOrder(gv_tHEONEZERATUL, OrderTargetingPoint(AbilityCommand("move", 0), PointFromId(1750)), c_orderQueueReplace);
+    libB27CC4B1_gf_TalentTime(1, false, 0, 0);
     Wait(0.75, c_timeGame);
     SoundPlay(SoundLink("UI_DoorMenu_Popup", 2), PlayerGroupAll(), 100.0, 0.0);
     UnitKill(UnitFromId(1406));
@@ -3888,6 +3942,7 @@ bool gt_ObjectiveShrine2ReachedQ_Func (bool testConds, bool runActions) {
     gf_AnimateShrine(UnitFromId(7));
     Wait(2.0, c_timeGame);
     TriggerQueueEnter();
+    TriggerExecute(gt_ChallengeDropUnits, true, false);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
     SoundChannelSetVolume(PlayerGroupAll(), c_soundCategoryDoodad, 10.0, 0.0);
     libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
@@ -3925,6 +3980,7 @@ bool gt_ObjectiveShrine2ReachedQ_Func (bool testConds, bool runActions) {
         UnitRemove(auto6244EC10_var);
     }
     TriggerEnable(gt_KerriganTaunt2Q, true);
+    libB27CC4B1_gf_CurseDifficultyModifier(2);
     return true;
 }
 
@@ -4003,6 +4059,7 @@ bool gt_KerriganTaunt2Q_Func (bool testConds, bool runActions) {
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
     // Transmission - SoundLink("TZeratul01Kerrigan00035", 0)
     libCamp_gf_SendTransmissionCampaign(null, SoundLink("TZeratul01Kerrigan00035", -1), c_transmissionDurationAdd, 0.0, true);
+    TriggerExecute(gt_ChallengeDropUnits, true, false);
     // Transmission - SoundLink("TZeratul01Zeratul00034", 0)
     libCamp_gf_SendTransmissionCampaign(gv_tHEONEZERATUL, SoundLink("TZeratul01Zeratul00034", -1), c_transmissionDurationAdd, 0.0, true);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Game);
@@ -4049,10 +4106,12 @@ bool gt_HeavyHitterPuzzleInitQ_Func (bool testConds, bool runActions) {
     gf_ActivatePatrolAIForUnit(UnitFromId(324), PointFromId(704), 5.0);
     TriggerExecute(gt_HeavyHitterPuzzleBurrowedUltraliskInit, true, false);
     TriggerQueueEnter();
+    TriggerExecute(gt_ChallengeDropUnits, true, false);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
     libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
     // Transmission - SoundLink("TZeratul01Zeratul00023", 0)
     libCamp_gf_SendTransmissionCampaign(gv_tHEONEZERATUL, SoundLink("TZeratul01Zeratul00023", 0), c_transmissionDurationAdd, 0.0, true);
+    TriggerExecute(gt_ChallengeDropUnits, true, false);
     // Transmission - SoundLink("TZeratul01Zeratul00073", 0)
     libCamp_gf_SendTransmissionCampaign(gv_tHEONEZERATUL, SoundLink("TZeratul01Zeratul00073", 0), c_transmissionDurationAdd, 0.0, true);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Game);
@@ -4142,6 +4201,7 @@ bool gt_BanelingPuzzleIntroQ_Func (bool testConds, bool runActions) {
     UIAlertPoint("Trigger", gv_p1_USER, StringExternal("Param/Value/63A7E1EE"), null, PointFromId(337));
     if ((UnitGroupCount(UnitGroup("Stalker", gv_p1_USER, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) >= 1)) {
         TriggerQueueEnter();
+        TriggerExecute(gt_ChallengeDropUnits, true, false);
         libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
         libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
         // Transmission - SoundLink("TZeratul01Zeratul00072", 0)
@@ -4334,6 +4394,7 @@ bool gt_HatcheryDiscovered2UltralisksQ_Func (bool testConds, bool runActions) {
     libNtve_gf_ShowHideUnit(UnitFromId(336), true);
     gf_ActivatePatrolAIForUnit(UnitFromId(336), PointFromId(229), 5.0);
     TriggerQueueEnter();
+    TriggerExecute(gt_ChallengeDropUnits, true, false);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
     libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
     UIAlertPoint("Trigger", gv_p1_USER, StringExternal("Param/Value/F3C65CBC"), null, UnitGetPosition(UnitFromId(205)));
@@ -4569,6 +4630,7 @@ bool gt_CrawlersQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerQueueEnter();
+    TriggerExecute(gt_ChallengeDropUnits, true, false);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
     libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
     // Transmission - SoundLink("TZeratul01Zeratul00015", 0)
@@ -4615,6 +4677,7 @@ bool gt_CrawlersDestroyedQ_Func (bool testConds, bool runActions) {
     gv_tHEONEPING = PingLastCreated();
     if ((UnitGroupCount(UnitGroup("Stalker", gv_p1_USER, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) >= 1)) {
         TriggerQueueEnter();
+        TriggerExecute(gt_ChallengeDropUnits, true, false);
         libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
         libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
         // Transmission - SoundLink("TZeratul01Stalker00067", 0)
@@ -4709,6 +4772,7 @@ bool gt_RumbleInit_Func (bool testConds, bool runActions) {
     libNtve_gf_ShareVisionofUnit(gv_tHEONEKARASS, true, gv_p1_USER);
     gf_StalkerReinforcements(RegionFromId(77), libNtve_gf_DifficultyValueInt(6, 6, 6, 5));
     TriggerEnable(gt_RumbleFinish, true);
+    TriggerEnable(gt_RumbleSafety, true);
     TriggerEnable(gt_StunnedUltraliskQ, true);
     TriggerEnable(gt_AntiAirRequestQ, true);
     TriggerExecute(gt_RumbleAiurProtossAIPush1, true, false);
@@ -4899,6 +4963,7 @@ bool gt_RumbleFinish_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    TriggerEnable(gt_RumbleSafety, false);
     libNtve_gf_ShowHideUnit(UnitFromId(1563), true);
     TriggerEnable(gt_ObjectiveShrine3Reached, true);
     return true;
@@ -4909,6 +4974,36 @@ void gt_RumbleFinish_Init () {
     gt_RumbleFinish = TriggerCreate("gt_RumbleFinish_Func");
     TriggerEnable(gt_RumbleFinish, false);
     TriggerAddEventUnitDied(gt_RumbleFinish, null);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Rumble Safety
+//--------------------------------------------------------------------------------------------------
+bool gt_RumbleSafety_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerGetExecCount(TriggerGetCurrent()) == 0))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(gt_RumbleFinish, false);
+    libNtve_gf_ShowHideUnit(UnitFromId(1563), true);
+    TriggerEnable(gt_ObjectiveShrine3Reached, true);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_RumbleSafety_Init () {
+    gt_RumbleSafety = TriggerCreate("gt_RumbleSafety_Func");
+    TriggerEnable(gt_RumbleSafety, false);
+    TriggerAddEventUnitRegion(gt_RumbleSafety, UnitRefFromVariable("gv_tHEONEZERATUL"), RegionFromId(130), true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -4938,6 +5033,7 @@ bool gt_StunnedUltraliskQ_Func (bool testConds, bool runActions) {
 
     TriggerQueueEnter();
     if ((UnitIsAlive(gv_tHEONEKARASS) == true)) {
+        TriggerExecute(gt_ChallengeDropUnits, true, false);
         libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
         libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
         // Transmission - SoundLink("TZeratul01Zeratul00074", 0)
@@ -5019,6 +5115,7 @@ bool gt_AntiAirRequestQ_Func (bool testConds, bool runActions) {
 
     TriggerQueueEnter();
     if ((UnitGroupCount(UnitGroup("Stalker", gv_p1_USER, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) >= 1) && (UnitIsAlive(gv_tHEONEKARASS) == true)) {
+        TriggerExecute(gt_ChallengeDropUnits, true, false);
         libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
         libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
         // Transmission - SoundLink("TZeratul01Karass00075", 0)
@@ -5076,6 +5173,7 @@ bool gt_KarassKilledBeforeRunoutQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerQueueEnter();
+    TriggerExecute(gt_ChallengeDropUnits, true, false);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
     libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
     UIAlertPoint("Trigger", gv_p1_USER, StringToText(""), null, UnitGetPosition(EventUnit()));
@@ -5217,11 +5315,13 @@ bool gt_NydusSpawningQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerQueueEnter();
+    TriggerExecute(gt_ChallengeDropUnits, true, false);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
     libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
     // Transmission - SoundLink("TZeratul01Zeratul00012", 0)
     libCamp_gf_SendTransmissionCampaign(gv_tHEONEZERATUL, SoundLink("TZeratul01Zeratul00012", -1), c_transmissionDurationAdd, 0.0, true);
     if ((UnitGroupCount(UnitGroup("Stalker", gv_p1_USER, RegionFromId(79), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) == 0) && (UnitGroupCount(UnitGroup("Stalker", gv_p1_USER, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) >= 1)) {
+        TriggerExecute(gt_ChallengeDropUnits, true, false);
         libNtve_gf_CreateModelAtPoint("BriefingUnitSelectProtoss", PointFromId(851));
         lv_ping = libNtve_gf_ActorLastCreated();
         // Transmission - SoundLink("TZeratul01Zeratul00076", 0)
@@ -5263,8 +5363,7 @@ bool gt_NydusSpawnRumble_Func (bool testConds, bool runActions) {
     lv_region = gv_runoutNydusSpawnRegion;
     CameraShakeStart(gv_p1_USER, c_cameraPositionTarget, c_cameraDirectionZ, 0.06, 2.0, 100.0, 3.0);
     libNtve_gf_CreateUnitsWithDefaultFacing(1, "NydusCanal", 0, gv_p3_ZERG, RegionGetCenter(lv_region));
-    UnitSetPropertyFixed(UnitLastCreated(), c_unitPropLifeMax, 200.0);
-    UnitSetPropertyFixed(UnitLastCreated(), c_unitPropLifePercent, 100.0);
+    libB27CC4B1_gf_SetUnitHPDynamically(UnitLastCreated(), 200.0, 100.0);
     UnitGroupAdd(gv_nydusWorms, UnitLastCreated());
     libNtve_gf_PlayAnimationOnDoodadsInRegion(RegionCircle(RegionGetCenter(lv_region), 6.0), "Spires", c_animNameDefault, "Death", c_animFlagPlayForever, c_animTimeDefault);
     libNtve_gf_PlayAnimationOnDoodadsInRegion(RegionCircle(RegionGetCenter(lv_region), 6.0), "CliffSpires", c_animNameDefault, "Death", c_animFlagPlayForever, c_animTimeDefault);
@@ -5422,6 +5521,7 @@ bool gt_NydusWormsAllDeadQ_Func (bool testConds, bool runActions) {
 
     TriggerQueueEnter();
     if ((UnitIsAlive(gv_tHEONEKARASS) == true)) {
+        TriggerExecute(gt_ChallengeDropUnits, true, false);
         libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
         libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
         // Transmission - SoundLink("TZeratul01Karass00077", 0)
@@ -5608,6 +5708,7 @@ bool gt_HatcheryDiscovered3RumbleQ_Func (bool testConds, bool runActions) {
     libNtve_gf_PauseUnit(UnitFromId(134), false);
     libNtve_gf_PauseUnit(UnitFromId(173), false);
     TriggerQueueEnter();
+    TriggerExecute(gt_ChallengeDropUnits, true, false);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
     libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
     UIAlertPoint("Trigger", gv_p1_USER, StringExternal("Param/Value/68DEA97C"), null, UnitGetPosition(UnitFromId(445)));
@@ -6589,11 +6690,13 @@ bool gt_KarassFelledLineQ_Func (bool testConds, bool runActions) {
 
     UnitIssueOrder(gv_tHEONEKERRIGAN, OrderTargetingPoint(AbilityCommand("attack", 0), PointFromId(215)), c_orderQueueReplace);
     TriggerQueueEnter();
+    TriggerExecute(gt_ChallengeDropUnits, true, false);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
     libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
     // Transmission - SoundLink("TZeratul01Karass00062", 0)
     libCamp_gf_SendTransmissionCampaign(null, SoundLink("TZeratul01Karass00062", -1), c_transmissionDurationAdd, 1.0, true);
     if (((libNtve_gf_UnitInRegion(gv_tHEONEZERATUL, RegionFromId(101)) == false) && (libNtve_gf_UnitInRegion(gv_tHEONEZERATUL, RegionPlayableMap()) == true))) {
+        TriggerExecute(gt_ChallengeDropUnits, true, false);
         // Transmission - SoundLink("TZeratul01Zeratul00044", 0)
         libCamp_gf_SendTransmissionCampaign(gv_tHEONEZERATUL, SoundLink("TZeratul01Zeratul00044", -1), c_transmissionDurationAdd, 1.0, true);
     }
@@ -7058,8 +7161,7 @@ bool gt_NydusSpawnRunout_Func (bool testConds, bool runActions) {
     lv_region = gv_runoutNydusSpawnRegion;
     CameraShakeStart(1, c_cameraPositionTarget, c_cameraDirectionZ, 0.06, 2.0, 100.0, 3.0);
     libNtve_gf_CreateUnitsWithDefaultFacing(1, "NydusCanal", 0, gv_p3_ZERG, RegionGetCenter(lv_region));
-    UnitSetPropertyFixed(UnitLastCreated(), c_unitPropLifeMax, 200.0);
-    UnitSetPropertyFixed(UnitLastCreated(), c_unitPropLifePercent, 100.0);
+    libB27CC4B1_gf_SetUnitHPDynamically(UnitLastCreated(), 200.0, 100.0);
     UnitGroupAdd(gv_nydusWorms, UnitLastCreated());
     libNtve_gf_ShareVisionofUnit(UnitLastCreated(), true, gv_p1_USER);
     libNtve_gf_PlayAnimationOnDoodadsInRegion(RegionCircle(RegionGetCenter(lv_region), 6.0), "Spires", c_animNameDefault, "Death", c_animFlagPlayForever, c_animTimeDefault);
@@ -7161,6 +7263,295 @@ void gt_NydusSpawnAIRunout_Init () {
     gt_NydusSpawnAIRunout = TriggerCreate("gt_NydusSpawnAIRunout_Func");
     TriggerEnable(gt_NydusSpawnAIRunout, false);
     TriggerAddEventTimePeriodic(gt_NydusSpawnAIRunout, 1.0, c_timeGame);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Checkpoint 1
+//--------------------------------------------------------------------------------------------------
+bool gt_Checkpoint1_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    UnitSetPosition(gv_safetyBeacon, PointFromId(1822777150), false);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_Checkpoint1_Init () {
+    gt_Checkpoint1 = TriggerCreate("gt_Checkpoint1_Func");
+    TriggerAddEventUnitRangePoint(gt_Checkpoint1, UnitRefFromVariable("gv_tHEONEZERATUL"), PointFromId(1822777150), 3.0, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Checkpoint 2
+//--------------------------------------------------------------------------------------------------
+bool gt_Checkpoint2_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    UnitSetPosition(gv_safetyBeacon, PointFromId(30677194), false);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_Checkpoint2_Init () {
+    gt_Checkpoint2 = TriggerCreate("gt_Checkpoint2_Func");
+    TriggerAddEventUnitRangePoint(gt_Checkpoint2, UnitRefFromVariable("gv_tHEONEZERATUL"), PointFromId(30677194), 3.0, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Checkpoint 3
+//--------------------------------------------------------------------------------------------------
+bool gt_Checkpoint3_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    UnitSetPosition(gv_safetyBeacon, PointFromId(827493936), false);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_Checkpoint3_Init () {
+    gt_Checkpoint3 = TriggerCreate("gt_Checkpoint3_Func");
+    TriggerAddEventUnitRangePoint(gt_Checkpoint3, UnitRefFromVariable("gv_tHEONEZERATUL"), PointFromId(827493936), 3.0, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Checkpoint 4
+//--------------------------------------------------------------------------------------------------
+bool gt_Checkpoint4_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    UnitSetPosition(gv_safetyBeacon, PointFromId(1734340094), false);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_Checkpoint4_Init () {
+    gt_Checkpoint4 = TriggerCreate("gt_Checkpoint4_Func");
+    TriggerAddEventUnitRangePoint(gt_Checkpoint4, UnitRefFromVariable("gv_tHEONEZERATUL"), PointFromId(1734340094), 3.0, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Checkpoint 5
+//--------------------------------------------------------------------------------------------------
+bool gt_Checkpoint5_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    UnitSetPosition(gv_safetyBeacon, PointFromId(1046398308), false);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_Checkpoint5_Init () {
+    gt_Checkpoint5 = TriggerCreate("gt_Checkpoint5_Func");
+    TriggerAddEventUnitRangePoint(gt_Checkpoint5, UnitRefFromVariable("gv_tHEONEZERATUL"), PointFromId(1046398308), 3.0, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Checkpoint 6
+//--------------------------------------------------------------------------------------------------
+bool gt_Checkpoint6_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    UnitSetPosition(gv_safetyBeacon, PointFromId(559042546), false);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_Checkpoint6_Init () {
+    gt_Checkpoint6 = TriggerCreate("gt_Checkpoint6_Func");
+    TriggerAddEventUnitRangePoint(gt_Checkpoint6, UnitRefFromVariable("gv_tHEONEZERATUL"), PointFromId(559042546), 3.0, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Checkpoint 7
+//--------------------------------------------------------------------------------------------------
+bool gt_Checkpoint7_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    UnitSetPosition(gv_safetyBeacon, PointFromId(2090929904), false);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_Checkpoint7_Init () {
+    gt_Checkpoint7 = TriggerCreate("gt_Checkpoint7_Func");
+    TriggerAddEventUnitRangePoint(gt_Checkpoint7, UnitRefFromVariable("gv_tHEONEZERATUL"), PointFromId(2090929904), 3.0, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Checkpoint 8
+//--------------------------------------------------------------------------------------------------
+bool gt_Checkpoint8_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    UnitSetPosition(gv_safetyBeacon, PointFromId(1220800867), false);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_Checkpoint8_Init () {
+    gt_Checkpoint8 = TriggerCreate("gt_Checkpoint8_Func");
+    TriggerAddEventUnitRangePoint(gt_Checkpoint8, UnitRefFromVariable("gv_tHEONEZERATUL"), PointFromId(1220800867), 3.0, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Checkpoint 9
+//--------------------------------------------------------------------------------------------------
+bool gt_Checkpoint9_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    UnitSetPosition(gv_safetyBeacon, PointFromId(246525245), false);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_Checkpoint9_Init () {
+    gt_Checkpoint9 = TriggerCreate("gt_Checkpoint9_Func");
+    TriggerAddEventUnitRangePoint(gt_Checkpoint9, UnitRefFromVariable("gv_tHEONEZERATUL"), PointFromId(246525245), 3.0, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Checkpoint 10
+//--------------------------------------------------------------------------------------------------
+bool gt_Checkpoint10_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    UnitSetPosition(gv_safetyBeacon, PointFromId(2855280), false);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_Checkpoint10_Init () {
+    gt_Checkpoint10 = TriggerCreate("gt_Checkpoint10_Func");
+    TriggerAddEventUnitRangePoint(gt_Checkpoint10, UnitRefFromVariable("gv_tHEONEZERATUL"), PointFromId(2855280), 3.0, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Challenge Drop Units
+//--------------------------------------------------------------------------------------------------
+bool gt_ChallengeDropUnits_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    point lv_dropPoint;
+    unitgroup lv_dropGroup;
+    unit lv_dropCrawler;
+    int lv_rand;
+    const int lv_rANDMAX = 3;
+
+    // Automatic Variable Declarations
+    int autoE3E05C0B_val;
+    unitgroup auto8E13C19A_g;
+    int auto8E13C19A_u;
+    unit auto8E13C19A_var;
+
+    // Variable Initialization
+    lv_dropGroup = UnitGroupEmpty();
+
+    // Conditions
+    if (testConds) {
+        if (!((libB27CC4B1_gf_TalentAcquired("ChallengeZeratul1") == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    Wait(RandomFixed(2.0, 4.0), c_timeReal);
+    lv_dropPoint = gf_GetDropPoint();
+    libNtve_gf_CreateUnitsWithDefaultFacing(1, "CreepTumorBurrowed", 0, gv_p3_ZERG, lv_dropPoint);
+    UnitGroupAdd(lv_dropGroup, UnitLastCreated());
+    libNtve_gf_CreateUnitsWithDefaultFacing(1, "SporeCrawlerUprooted", 0, gv_p3_ZERG, lv_dropPoint);
+    lv_dropCrawler = UnitLastCreated();
+    UnitGroupAdd(lv_dropGroup, UnitLastCreated());
+    lv_rand = RandomInt(1, lv_rANDMAX);
+    autoE3E05C0B_val = lv_rand;
+    if (autoE3E05C0B_val == 1) {
+        libNtve_gf_CreateUnitsWithDefaultFacing(libB27CC4B1_gf_CurseAttackWaveModifier(4), "Zergling", 0, gv_p3_ZERG, lv_dropPoint);
+        UnitGroupAddUnitGroup(lv_dropGroup, UnitLastCreatedGroup());
+    }
+    else if (autoE3E05C0B_val == 2) {
+        libNtve_gf_CreateUnitsWithDefaultFacing(libB27CC4B1_gf_CurseAttackWaveModifier(2), "Zergling", 0, gv_p3_ZERG, lv_dropPoint);
+        UnitGroupAddUnitGroup(lv_dropGroup, UnitLastCreatedGroup());
+        libNtve_gf_CreateUnitsWithDefaultFacing(libB27CC4B1_gf_CurseAttackWaveModifier(1), "Roach", 0, gv_p3_ZERG, lv_dropPoint);
+        UnitGroupAddUnitGroup(lv_dropGroup, UnitLastCreatedGroup());
+    }
+    else if (autoE3E05C0B_val == 3) {
+        libNtve_gf_CreateUnitsWithDefaultFacing(libB27CC4B1_gf_CurseAttackWaveModifier(2), "Zergling", 0, gv_p3_ZERG, lv_dropPoint);
+        UnitGroupAddUnitGroup(lv_dropGroup, UnitLastCreatedGroup());
+        libNtve_gf_CreateUnitsWithDefaultFacing(libB27CC4B1_gf_CurseAttackWaveModifier(1), "Hydralisk", 0, gv_p3_ZERG, lv_dropPoint);
+        UnitGroupAddUnitGroup(lv_dropGroup, UnitLastCreatedGroup());
+    }
+    else {
+        libNtve_gf_CreateUnitsWithDefaultFacing(libB27CC4B1_gf_CurseAttackWaveModifier(4), "Zergling", 0, gv_p3_ZERG, lv_dropPoint);
+        UnitGroupAddUnitGroup(lv_dropGroup, UnitLastCreatedGroup());
+    }
+    auto8E13C19A_g = lv_dropGroup;
+    auto8E13C19A_u = UnitGroupCount(auto8E13C19A_g, c_unitCountAll);
+    for (;; auto8E13C19A_u -= 1) {
+        auto8E13C19A_var = UnitGroupUnitFromEnd(auto8E13C19A_g, auto8E13C19A_u);
+        if (auto8E13C19A_var == null) { break; }
+        UnitSetFacing(auto8E13C19A_var, libNtve_gf_RandomAngle(), 0.0);
+    }
+    libWCMI_gf_CreateDropPod(libWCMI_ge_DropPodRace_Zerg, UnitGroupCenterOfGroup(lv_dropGroup), lv_dropGroup, true, gv_p3_ZERG);
+    CreepModify(lv_dropPoint, 3.0, true, false);
+    UnitIssueOrder(lv_dropCrawler, OrderTargetingPoint(AbilityCommand("SporeCrawlerRoot", 0), UnitTypePlacementFromPoint("SporeCrawler", gv_p3_ZERG, lv_dropPoint, 10.0)), c_orderQueueReplace);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ChallengeDropUnits_Init () {
+    gt_ChallengeDropUnits = TriggerCreate("gt_ChallengeDropUnits_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -7334,9 +7725,7 @@ bool gt_StalkerConvertAfterWarpIn_Func (bool testConds, bool runActions) {
 
     SoundPlay(SoundLink("UI_TerranRescueUnit", 0), PlayerGroupAll(), 100.0, 0.0);
     UnitSetState(EventUnitProgressUnit(), c_unitStateTargetable, true);
-    libNtve_gf_RescueUnit(EventUnitProgressUnit(), gv_p1_USER, true);
-    UnitFlashSelection(EventUnitProgressUnit(), 1.5);
-    UnitIssueOrder(EventUnitProgressUnit(), Order(AbilityCommand("move", 2)), c_orderQueueReplace);
+    libB27CC4B1_gf_RescueUnitWithUpgrades(EventUnitProgressUnit());
     return true;
 }
 
@@ -7820,9 +8209,13 @@ bool gt_VictoryAncestralRecallComplete_Func (bool testConds, bool runActions) {
 
     gv_gameOver = true;
     PingDestroy(gv_tHEONEPING);
+    libB27CC4B1_gf_TalentTime(2, false, 0, 0);
+    libB27CC4B1_gf_CurseDifficultyModifier(3);
+    libB27CC4B1_gf_CurseDifficultyModifier(4);
     TriggerExecute(gt_ObjectiveShrinesComplete, true, false);
     TriggerExecute(gt_ObjectiveZeratulComplete, true, false);
     TriggerExecute(gt_ObjectiveVoidSeekerComplete, true, false);
+    libB27CC4B1_gf_RogueEnding();
     Wait(1.0, c_timeReal);
     libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
     return true;
@@ -7897,6 +8290,10 @@ bool gt_DefeatZeratulDead_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    libNtve_gf_CreateUnitsWithDefaultFacing(1, "Zeratul", 0, gv_p1_USER, UnitGetPosition(gv_safetyBeacon));
+    gv_tHEONEZERATUL = UnitLastCreated();
+    MinimapPing(PlayerGroupAll(), UnitGetPosition(gv_safetyBeacon), 2.0, Color(0.00, 100.00, 100.00));
+    return true;
     TriggerEnable(TriggerGetCurrent(), false);
     TimerPause(gv_timerEscape, true);
     gv_gameOver = true;
@@ -8368,7 +8765,9 @@ bool gt_ObjectiveHatcheriesCompleteQ_Func (bool testConds, bool runActions) {
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveHatcheriesCreate, true, false);
     libWCMI_gf_ZS_SetMissionObjectiveState("TZeratul01_3", libWoLC_ge_MissionObjectiveState_Completed);
+    libB27CC4B1_gf_TalentTime(1, false, 0, 0);
     TriggerQueueEnter();
+    TriggerExecute(gt_ChallengeDropUnits, true, false);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
     libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
     // Transmission - SoundLink("TZeratul01Zeratul00043", 0)
@@ -8394,6 +8793,7 @@ bool gt_ObjectiveHatcheriesDestroyedQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerExecute(gt_ObjectiveHatcheriesCreate, true, false);
+    libB27CC4B1_gf_TalentBonusObjectiveTrigger();
     gv_objectiveHatcheriesKilled += 1;
     libWCMI_gf_DisplayMissionObjectiveRewardFloatingText(UnitGetPosition(EventUnit()), "TZeratul01_3");
     libWCMI_gf_SetMissionObjectiveProgress("TZeratul01_3", gv_objectiveHatcheriesKilled);
@@ -8530,6 +8930,7 @@ bool gt_DialogueGetToVoidSeeker_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
+    TriggerExecute(gt_ChallengeDropUnits, true, false);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
     libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
     // Transmission - SoundLink("TZeratul01Zeratul00063", 0)
@@ -8717,10 +9118,12 @@ bool gt_CinematicKarassMidQ_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerQueueEnter();
+    TriggerExecute(libB27CC4B1_gt_TableButtonsHide, true, true);
     TriggerExecute(gt_CinematicKarassMidSetup, true, true);
     TriggerExecute(gt_CinematicKarassMidCinematic, true, true);
     TriggerExecute(gt_CinematicKarassMidCinematicEnd, true, true);
     TriggerExecute(gt_CinematicKarassMidCleanup, true, true);
+    TriggerExecute(libB27CC4B1_gt_TableButtonsShow, true, true);
     TriggerQueueExit();
     return true;
 }
@@ -9106,10 +9509,12 @@ bool gt_CinematicKerriganQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerQueueEnter();
+    TriggerExecute(libB27CC4B1_gt_TableButtonsHide, true, true);
     TriggerExecute(gt_CinematicKerriganSetup, true, true);
     TriggerExecute(gt_CinematicKerriganCinematic, true, true);
     TriggerExecute(gt_CinematicKerriganCinematicEnd, true, true);
     TriggerExecute(gt_CinematicKerriganCleanup, true, true);
+    TriggerExecute(libB27CC4B1_gt_TableButtonsShow, true, true);
     TriggerQueueExit();
     return true;
 }
@@ -9698,6 +10103,7 @@ bool gt_VictoryQ_Func (bool testConds, bool runActions) {
 
     gv_gameOver = true;
     TriggerQueueEnter();
+    TriggerExecute(libB27CC4B1_gt_TableButtonsHide, true, true);
     TriggerExecute(gt_VictorySetup, true, true);
     TriggerExecute(gt_VictoryCinematic, true, true);
     TriggerExecute(gt_VictoryCinematicEnd, true, true);
@@ -9945,6 +10351,7 @@ void InitTriggers () {
     gt_RumbleAiurProtossAIPush2_Init();
     gt_RumbleAiurProtossAIPush3_Init();
     gt_RumbleFinish_Init();
+    gt_RumbleSafety_Init();
     gt_StunnedUltraliskQ_Init();
     gt_AntiAirRequestQ_Init();
     gt_KarassKilledBeforeRunoutQ_Init();
@@ -9992,6 +10399,17 @@ void InitTriggers () {
     gt_RunoutAttackWaves_Init();
     gt_NydusSpawnRunout_Init();
     gt_NydusSpawnAIRunout_Init();
+    gt_Checkpoint1_Init();
+    gt_Checkpoint2_Init();
+    gt_Checkpoint3_Init();
+    gt_Checkpoint4_Init();
+    gt_Checkpoint5_Init();
+    gt_Checkpoint6_Init();
+    gt_Checkpoint7_Init();
+    gt_Checkpoint8_Init();
+    gt_Checkpoint9_Init();
+    gt_Checkpoint10_Init();
+    gt_ChallengeDropUnits_Init();
     gt_TimerEscape_Init();
     gt_TimerEscapeExpires_Init();
     gt_ShieldImpactRemove_Init();

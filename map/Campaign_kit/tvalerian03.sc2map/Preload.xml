@@ -48,8 +48,20 @@
 <Actor id="QueenChamber"/>
 <Actor id="TTosh01Lavafall" Variations="2"/>
 <Actor id="ZergInfestedCliff" Variations="0"/>
+<Behavior id="Hallucination"/>
 <Behavior id="ArtifactRecharging"/>
 <Behavior id="KerriganWalk"/>
+<Behavior id="ForceShield"/>
+<Behavior id="ForceShieldSpell"/>
+<Behavior id="TValerian03QueenOfBladesDontDie"/>
+<Behavior id="Char03KerriganHighGroundVision"/>
+<Behavior id="SocialDistancingRequired"/>
+<Behavior id="PainTrain"/>
+<Behavior id="AllcrackerSlow"/>
+<Behavior id="OmegaliskSpeed"/>
+<Effect id="NukeDamage"/>
+<Effect id="PsiStormPremarker"/>
+<Effect id="SunscreenDamage"/>
 <Light id="AiurFlashback"/>
 <Model id="PingBoss"/>
 <Model id="PingObjective"/>
@@ -59,6 +71,7 @@
 <Model id="ArtifactActivated"/>
 <Model id="ArtifactFullyCharged"/>
 <Model id="PowerOverwhelming"/>
+<Sound id="Thor_Movement"/>
 <Sound id="WarpGate_MorphToGateway" Variations="2"/>
 <Sound id="CreepTumor_Explode" Variations="5"/>
 <Sound id="HydraliskDen_Explode" Variations="2"/>
@@ -74,6 +87,8 @@
 <Sound id="Artifact_EnergyNovaImpact"/>
 <Sound id="XelNagaShrine_StandWork" Variations="0"/>
 <Sound id="ZergMothership_Birth" Variations="0"/>
+<Sound id="Event_UltraliskEvo_UltraliskRoar" Variations="0"/>
+<Sound id="Void_Thrasher_Birth_Fx" Variations="0"/>
 <Sound id="TTychus03Horner00033"/>
 <Sound id="TValerian03Adjutant00001" Variations="0"/>
 <Sound id="TValerian03Kerrigan00002"/>
@@ -137,8 +152,11 @@
 <Soundtrack id="TValerian03MusicIntro"/>
 <Soundtrack id="TValerian03MusicMain"/>
 <Soundtrack id="TValerian03MusicOutro"/>
+<Soundtrack id="TValerian03MusicChallengeIntro"/>
+<Soundtrack id="TValerian03MusicChallenge"/>
 <Terrain id="Char"/>
 <Unit id="Baneling"/>
+<Unit id="Mothership"/>
 <Unit id="CommandCenter"/>
 <Unit id="SupplyDepot"/>
 <Unit id="Refinery"/>
@@ -146,6 +164,7 @@
 <Unit id="EngineeringBay"/>
 <Unit id="MissileTurret"/>
 <Unit id="Bunker"/>
+<Unit id="GhostAcademy"/>
 <Unit id="Factory"/>
 <Unit id="Starport"/>
 <Unit id="MercCompound"/>
@@ -155,9 +174,15 @@
 <Unit id="SiegeTank"/>
 <Unit id="SCV"/>
 <Unit id="Marine"/>
+<Unit id="Ghost"/>
 <Unit id="Marauder"/>
+<Unit id="Hellion"/>
 <Unit id="Banshee"/>
 <Unit id="Battlecruiser"/>
+<Unit id="Zealot"/>
+<Unit id="Stalker"/>
+<Unit id="Carrier"/>
+<Unit id="VoidRay"/>
 <Unit id="SpawningPool"/>
 <Unit id="EvolutionChamber"/>
 <Unit id="HydraliskDen"/>
@@ -186,19 +211,97 @@
 <Unit id="UltraliskBurrowed"/>
 <Unit id="CreepTumorBurrowed"/>
 <Unit id="NydusCanal"/>
+<Unit id="Tempest"/>
 <Unit id="MineralField" Variations="1,2,3,4,5,6,7,8,9"/>
 <Unit id="InfestedCivilian"/>
 <Unit id="KerriganChar"/>
+<Unit id="OmegaliskBurrowed"/>
+<Unit id="Omegalisk"/>
 <Unit id="HunterKillerBurrowed"/>
 <Unit id="InfestedTerranCampaign"/>
+<Unit id="Odin"/>
+<Unit id="Firebat"/>
 <Unit id="DestructibleSandbags" Variations="0,1,2"/>
+<Unit id="ArtifactPiece1"/>
+<Unit id="ArtifactPiece2"/>
+<Unit id="ArtifactPiece4"/>
+<Unit id="ArtifactPiece3"/>
+<Unit id="ArtifactPiece5"/>
 <Unit id="Artifact"/>
+<Unit id="PickupGrenades"/>
+<Unit id="PickupPlasmaGun"/>
+<Unit id="PickupChronoRiftDevice"/>
+<Unit id="PickupChronoRiftCharge"/>
+<Unit id="FreightCar"/>
 <Unit id="Food1000"/>
 <Unit id="Medic"/>
+<Unit id="StoneZealot"/>
 <Unit id="DefenseWallE" Variations="1"/>
 <Unit id="DefenseWallW" Variations="3"/>
 <Unit id="DefenseWallN" Variations="0"/>
 <Unit id="DefenseWallNE" Variations="0"/>
 <Unit id="DefenseWallSW" Variations="1"/>
 <Unit id="DefenseWallNW" Variations="0,3,4"/>
+<Unit id="Yagdra"/>
+<Unit id="SoACaster"/>
+<Unit id="Dragoon"/>
+<Unit id="VoidRayTaldarim"/>
+<Unit id="ColossusPurifier"/>
+<Unit id="InfestedExploderBurrowed"/>
+<Unit id="VoidThrasher"/>
+<Unit id="Hel"/>
+<Unit id="Fenrir"/>
+<Unit id="HeroOverseer"/>
+<Unit id="Terratron"/>
+<Unit id="PrimaryHive"/>
+<Unit id="Jormungand"/>
+<Unit id="KerriganClone"/>
+<Unit id="AntiHeroMagMine"/>
+<Upgrade id="ChallengeArtifact2"/>
+<Upgrade id="ChallengeRaynor1"/>
+<Upgrade id="ChallengeArtifact3"/>
+<Upgrade id="ChallengeArtifact4"/>
+<Upgrade id="ChallengeArtifact5"/>
+<Upgrade id="ChallengeChar2BB"/>
+<Upgrade id="ChallengeChar3"/>
+<Upgrade id="ChallengeChar2SS"/>
+<Upgrade id="ChallengeHanson2"/>
+<Upgrade id="ChallengeHanson3P"/>
+<Upgrade id="ChallengeHanson3Z"/>
+<Upgrade id="ChallengeHorner2"/>
+<Upgrade id="ChallengeHorner3"/>
+<Upgrade id="ChallengeHorner14"/>
+<Upgrade id="ChallengeHorner5"/>
+<Upgrade id="ChallengeRaynor2"/>
+<Upgrade id="ChallengeRaynor3"/>
+<Upgrade id="ChallengeTosh1"/>
+<Upgrade id="ChallengeHanson1"/>
+<Upgrade id="ChallengeHorner1"/>
+<Upgrade id="ChallengeTosh2"/>
+<Upgrade id="ChallengeTosh3N"/>
+<Upgrade id="ChallengeTosh3T"/>
+<Upgrade id="ChallengeZeratul1"/>
+<Upgrade id="ChallengeArtifact1"/>
+<Upgrade id="ChallengeChar1"/>
+<Upgrade id="ChallengeZeratul2"/>
+<Upgrade id="ChallengeZeratul3"/>
+<Upgrade id="ChallengeZeratul4"/>
+<Upgrade id="ChampionHaveHero"/>
+<Upgrade id="DeathknightExplosion"/>
+<Upgrade id="DruidHatchery"/>
+<Upgrade id="DummyAcolyteMain"/>
+<Upgrade id="BardMain"/>
+<Upgrade id="GamblerMain"/>
+<Upgrade id="DummyNecromancerMain"/>
+<Upgrade id="EngineerCosts"/>
+<Upgrade id="HunterMainBuff"/>
+<Upgrade id="MGAbilities"/>
+<Upgrade id="MonkUnlockBuff"/>
+<Upgrade id="PaladinUnlockLevelup"/>
+<Upgrade id="PsychicUnlockTrooper"/>
+<Upgrade id="RogueCasterCloak"/>
+<Upgrade id="ScientistUnlockUpgrades"/>
+<Upgrade id="SorcererPrecisionStrike"/>
+<Upgrade id="WarlockUnlockLab"/>
+<Upgrade id="WizardRegen"/>
 </Preload>

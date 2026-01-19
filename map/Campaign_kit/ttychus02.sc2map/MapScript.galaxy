@@ -2,7 +2,7 @@
 // 
 // Generated Map Script
 // 
-// Name:   The Dig
+// Name:   ????????????
 // 
 //==================================================================================================
 include "TriggerLibs/NativeLib"
@@ -11,6 +11,7 @@ include "LibCamp"
 include "LibWoLC"
 include "LibWCMI"
 include "LibWCUI"
+include "LibB27CC4B1"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -22,6 +23,7 @@ void InitLibs () {
     libWoLC_InitLib();
     libWCMI_InitLib();
     libWCUI_InitLib();
+    libB27CC4B1_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -294,6 +296,7 @@ bool gf_PlayerIsInCombat (int lp_player) {
 void gf_AddDelayedAttackWaveUnitTypes (int lp_qty, string lp_type) {
     // Automatic Variable Declarations
     // Implementation
+    lp_qty = libB27CC4B1_gf_CurseAttackWaveModifier(lp_qty);
     gv_dAWUnitCount = (gv_dAWUnitCount + 1);
     gv_dAWUnitQuantities[gv_dAWUnitCount] = lp_qty;
     gv_dAWUnitTypes[gv_dAWUnitCount] = lp_type;
@@ -395,6 +398,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init06Difficulty, true, true);
     TriggerExecute(gt_Init07Help, true, true);
     libWoLC_gf_RegisterFootageRecording(gt_BriefingQ);
+    TriggerExecute(libB27CC4B1_gt_RogueInit, true, true);
     TriggerExecute(gt_IntroSequence, true, false);
     return true;
 }
@@ -453,7 +457,7 @@ bool gt_Init02Players_Func (bool testConds, bool runActions) {
     libNtve_gf_SetAlliance(gv_p4_SE_PROTOSSRight, gv_p5_NW_PROTOSSLeft, libNtve_ge_AllianceSetting_AllyWithSharedVisionAndPushable);
     libNtve_gf_SetAlliance(gv_p4_SE_PROTOSSRight, gv_p6_PROTOSSAir, libNtve_ge_AllianceSetting_AllyWithSharedVisionAndPushable);
     libNtve_gf_SetAlliance(gv_p5_NW_PROTOSSLeft, gv_p6_PROTOSSAir, libNtve_ge_AllianceSetting_AllyWithSharedVisionAndPushable);
-    libNtve_gf_SetAlliance(gv_p7_ABANDONED_BASE, gv_p1_USER, libNtve_ge_AllianceSetting_Neutral);
+    libNtve_gf_SetAlliance(gv_p7_ABANDONED_BASE, gv_p1_USER, libNtve_ge_AllianceSetting_Ally);
     libNtve_gf_SetAlliance(gv_p7_ABANDONED_BASE, gv_p6_PROTOSSAir, libNtve_ge_AllianceSetting_Neutral);
     libNtve_gf_SetAlliance(gv_p7_ABANDONED_BASE, gv_p8_ANCIENT_TEMPLE, libNtve_ge_AllianceSetting_Enemy);
     libNtve_gf_SetAllianceAspectForPlayerGroup(gv_protossPlayerGroup, c_allianceIdPower, true);
@@ -538,6 +542,7 @@ bool gt_Init03Units_Func (bool testConds, bool runActions) {
     libNtve_gf_ShowHideUnit(gv_superWarpGateP6, false);
     libNtve_gf_PauseUnit(gv_tHEONEDRILL, true);
     UnitSetInfoText(gv_tHEONEDRILL, StringToText(""), StringExternal("Param/Value/408B5421"), StringToText(""));
+    UnitBehaviorRemove(UnitFromId(125), "RogueUniversalBuildingBuff", 1);
     libWCMI_gf_HandleMercCompound(UnitFromId(581));
     auto2980A265_g = UnitGroup("XelNagaShrineXil", c_playerAny, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     auto2980A265_u = UnitGroupCount(auto2980A265_g, c_unitCountAll);
@@ -730,9 +735,11 @@ bool gt_StartGameTacticalPhase_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    TriggerExecute(libB27CC4B1_gt_InitTableButtons, true, true);
     Wait(0.5, c_timeReal);
     TriggerExecute(gt_RaynorQ, true, true);
     Wait(2.0, c_timeReal);
+    libB27CC4B1_gf_ChallengeTime("ChallengeArtifact2");
     TriggerExecute(gt_PrimaryObjectiveExploreDiscovered, true, true);
     Wait(2.0, c_timeReal);
     libNtve_gf_CreatePingFacingAngle(PlayerGroupAll(), "PingObjective", UnitGetPosition(gv_tHEONEDRILL), ColorWithAlpha(0.00, 100.00, 0.00, 0.00), 0.0, 270.0);
@@ -1343,6 +1350,7 @@ bool gt_TacticalVictory_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    libB27CC4B1_gf_TalentTime(1, false, 0, 0);
     libNtve_gf_KillModel(gv_siegeTankPingActor);
     TriggerEnable(gt_SiegeTankTipQ, false);
     TriggerEnable(gt_DefeatTacticalTroopsDestroyed, false);
@@ -1399,6 +1407,7 @@ bool gt_StartGameDefensePhase_Func (bool testConds, bool runActions) {
         TechTreeUpgradeAddLevel(auto8992C0F7_var, "HighTemplarKhaydarinAmulet", libNtve_gf_DifficultyValueInt(0, 0, 0, 1));
     }
     Wait(0.5, c_timeReal);
+    libB27CC4B1_gf_CurseDifficultyModifier(2);
     if ((libNtve_gf_DifficultyValueInt(0, 0, 1, 1) == 1)) {
         auto10E30015_g = gv_protossPlayerGroup;
         auto10E30015_var = -1;
@@ -1429,6 +1438,8 @@ bool gt_StartGameDefensePhase_Func (bool testConds, bool runActions) {
     PingSetTooltip(PingLastCreated(), StringExternal("Param/Value/EFA780FD"));
     TriggerExecute(gt_CreateTempleDoorBossBar, true, false);
     Wait(8.0, c_timeGame);
+    libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
+    UIDisplayMessage(PlayerGroupAll(), c_messageAreaSubtitle, StringExternal("Param/Value/DC5C5DC0"));
     TriggerExecute(gt_WeneedTanksandBunkersQ15s, true, false);
     TriggerEnable(gt_PingDangerousUnits, true);
     TriggerEnable(gt_Laserisattackedbyenemy, true);
@@ -1515,7 +1526,7 @@ bool gt_ProtossincomingQ65s_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    Wait(65.0, c_timeGame);
+    Wait(65.0, c_timeAI);
     TriggerQueueEnter();
     if ((gv_gameOver == true)) {
         return true;
@@ -1562,6 +1573,8 @@ void gt_ProtossincomingQ65s_Init () {
 //--------------------------------------------------------------------------------------------------
 bool gt_UseLaserDrillQ360s_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
+    fixed auto29234DFF_at;
+
     // Conditions
     if (testConds) {
         if (!((TriggerGetExecCount(TriggerGetCurrent()) == 0))) {
@@ -1574,7 +1587,11 @@ bool gt_UseLaserDrillQ360s_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    Wait(360.0, c_timeGame);
+    auto29234DFF_at = 0;
+    while (!((UnitGetPropertyFixed(gv_tHEONEDOOR, c_unitPropLifePercent, c_unitPropCurrent) <= 65.0)) && auto29234DFF_at <= 360.0) {
+        Wait(1.0, c_timeAI);
+        auto29234DFF_at = auto29234DFF_at + 1.0;
+    }
     TriggerQueueEnter();
     if ((gv_gameOver == true)) {
         return true;
@@ -1704,7 +1721,7 @@ bool gt_DelayedRelicReveal630s_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    Wait(630.0, c_timeGame);
+    Wait(630.0, c_timeAI);
     TriggerExecute(gt_RevealRelicShrinesQ, true, false);
     return true;
 }
@@ -3151,6 +3168,7 @@ bool gt_SendDelayedAttackWaveThread_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
     int autoE1D09B31_ae;
     const int autoE1D09B31_ai = 1;
+    int auto43613EEF_val;
     int auto433B3895_ae;
     const int auto433B3895_ai = 1;
 
@@ -3176,6 +3194,33 @@ bool gt_SendDelayedAttackWaveThread_Func (bool testConds, bool runActions) {
     gv_dAWWaypoint = null;
     lv_lingerTime = MinI(lv_lingerTime, lv_arrivalTime);
     Wait(IntToFixed((lv_arrivalTime - lv_lingerTime)), c_timeAI);
+    if ((libB27CC4B1_gf_TalentAcquired("ChallengeArtifact2") == true)) {
+        auto43613EEF_val = lv_attacker;
+        if (auto43613EEF_val == gv_p2_NE_PROTOSSMiddle) {
+            if ((UnitIsAlive(UnitFromId(49)) == true)) {
+                libNtve_gf_CreateUnitsWithDefaultFacing(libB27CC4B1_gf_CurseAttackWaveModifier(1), "Dragoon", 0, lv_attacker, PointFromId(1662503225));
+                AIAttackWaveUseGroup(lv_attacker, UnitLastCreatedGroup());
+            }
+
+        }
+        else if (auto43613EEF_val == gv_p4_SE_PROTOSSRight) {
+            if ((UnitIsAlive(UnitFromId(103)) == true)) {
+                libNtve_gf_CreateUnitsWithDefaultFacing(libB27CC4B1_gf_CurseAttackWaveModifier(1), "Dragoon", 0, lv_attacker, PointFromId(1084814802));
+                AIAttackWaveUseGroup(lv_attacker, UnitLastCreatedGroup());
+            }
+
+        }
+        else if (auto43613EEF_val == gv_p5_NW_PROTOSSLeft) {
+            if ((UnitIsAlive(UnitFromId(254)) == true)) {
+                libNtve_gf_CreateUnitsWithDefaultFacing(libB27CC4B1_gf_CurseAttackWaveModifier(1), "Dragoon", 0, lv_attacker, PointFromId(1399843907));
+                AIAttackWaveUseGroup(lv_attacker, UnitLastCreatedGroup());
+            }
+
+        }
+        else {
+        }
+    }
+
     auto433B3895_ae = lv_unitCount;
     lv_index = 1;
     for ( ; ( (auto433B3895_ai >= 0 && lv_index <= auto433B3895_ae) || (auto433B3895_ai < 0 && lv_index >= auto433B3895_ae) ) ; lv_index += auto433B3895_ai ) {
@@ -3219,6 +3264,12 @@ bool gt_StartAI_Func (bool testConds, bool runActions) {
     AISetBullyAttackWavePercent(100, gv_p2_NE_PROTOSSMiddle);
     AISetBullyAttackWavePercent(100, gv_p4_SE_PROTOSSRight);
     AISetBullyAttackWavePercent(100, gv_p5_NW_PROTOSSLeft);
+    if ((libB27CC4B1_gf_TalentAcquired("ChallengeArtifact2") == true)) {
+        TechTreeUpgradeAddLevel(gv_p2_NE_PROTOSSMiddle, "DragoonBonusRange", 1);
+        TechTreeUpgradeAddLevel(gv_p4_SE_PROTOSSRight, "DragoonBonusRange", 1);
+        TechTreeUpgradeAddLevel(gv_p5_NW_PROTOSSLeft, "DragoonBonusRange", 1);
+    }
+
     TriggerExecute(gt_AIAttackWaves, true, false);
     return true;
 }
@@ -4338,6 +4389,10 @@ bool gt_VictoryDestroyDoor_Func (bool testConds, bool runActions) {
     libNtve_gf_PlayAnimation(libNtve_gf_MainActorofUnit(gv_tHEONEDRILL), c_animNameDefault, "Stand Work End", c_animFlagPlayForever | c_animFlagNonLooping, c_animTimeDefault);
     libNtve_gf_PauseUnit(gv_tHEONEDRILL, true);
     libNtve_gf_MakeUnitInvulnerable(gv_tHEONEDRILL, true);
+    libB27CC4B1_gf_TalentTime(2, false, 0, 0);
+    libB27CC4B1_gf_CurseDifficultyModifier(3);
+    libB27CC4B1_gf_CurseDifficultyModifier(4);
+    libB27CC4B1_gf_RogueEnding();
     TriggerExecute(gt_PrimaryObjectiveOpenShrineCompleted, true, true);
     libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
     return true;
@@ -4422,6 +4477,10 @@ bool gt_VictoryDestroyProtoss_Func (bool testConds, bool runActions) {
     libNtve_gf_PlayAnimation(libNtve_gf_MainActorofUnit(gv_tHEONEDRILL), c_animNameDefault, "Stand Work End", c_animFlagPlayForever | c_animFlagNonLooping, c_animTimeDefault);
     libNtve_gf_PauseUnit(gv_tHEONEDRILL, true);
     libNtve_gf_MakeUnitInvulnerable(gv_tHEONEDRILL, true);
+    libB27CC4B1_gf_TalentTime(2, false, 0, 0);
+    libB27CC4B1_gf_CurseDifficultyModifier(3);
+    libB27CC4B1_gf_CurseDifficultyModifier(4);
+    libB27CC4B1_gf_RogueEnding();
     TriggerExecute(gt_VictoryDestroyProtossDialogueQ, true, true);
     TriggerExecute(gt_PrimaryObjectiveOpenShrineCompleted, true, true);
     libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
@@ -4504,14 +4563,16 @@ void gt_Victory_Init () {
 // Trigger: Defeat Tactical Troops Destroyed
 //--------------------------------------------------------------------------------------------------
 bool gt_DefeatTacticalTroopsDestroyed_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    unitgroup lv_dropGroup;
+
     // Automatic Variable Declarations
+    // Variable Initialization
+    lv_dropGroup = UnitGroupEmpty();
+
     // Conditions
     if (testConds) {
-        if (!((TriggerGetExecCount(TriggerGetCurrent()) == 0))) {
-            return false;
-        }
-
-        if (!((UnitGroupCount(UnitGroup(null, gv_p1_USER, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterAir) | (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) == 0))) {
+        if (!((UnitGroupCount(UnitGroup(null, gv_p1_USER, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterAir) | (1 << c_targetFilterStructure) | (1 << c_targetFilterHeroic) | (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) == 0))) {
             return false;
         }
 
@@ -4525,6 +4586,20 @@ bool gt_DefeatTacticalTroopsDestroyed_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    libNtve_gf_CreateUnitsWithDefaultFacing(1, "Marauder", 0, gv_p1_USER, PointFromId(1924548817));
+    UnitGroupAddUnitGroup(lv_dropGroup, UnitLastCreatedGroup());
+    libNtve_gf_CreateUnitsWithDefaultFacing(4, "Marine", 0, gv_p1_USER, PointFromId(1924548817));
+    UnitGroupAddUnitGroup(lv_dropGroup, UnitLastCreatedGroup());
+    libNtve_gf_CreateUnitsWithDefaultFacing(2, "Medic", 0, gv_p1_USER, PointFromId(1924548817));
+    UnitGroupAddUnitGroup(lv_dropGroup, UnitLastCreatedGroup());
+    MinimapPing(PlayerGroupAll(), PointFromId(1924548817), 2.0, Color(0.00, 0.00, 100.00));
+    libWCMI_gf_CreateDropPod(libWCMI_ge_DropPodRace_Terran, PointFromId(1924548817), lv_dropGroup, true, gv_p1_USER);
+    if ((TriggerGetExecCount(gt_SiegeTankIntroQ) >= 1)) {
+        libNtve_gf_CreateUnitsWithDefaultFacing(2, "SiegeTank", 0, gv_p1_USER, PointFromId(1273132521));
+        libWCMI_gf_CreateDropPod(libWCMI_ge_DropPodRace_Terran, PointFromId(1273132521), lv_dropGroup, true, gv_p1_USER);
+    }
+
+    return true;
     gv_gameOver = true;
     TriggerQueuePause(true);
     TriggerQueueClear(c_triggerQueueRemove);
@@ -4894,6 +4969,10 @@ bool gt_ObjectiveRelicsUpdate_Func (bool testConds, bool runActions) {
         if (!((gv_gameOver == false))) {
             return false;
         }
+
+        if (!((UnitGetType(EventUnit()) == "ProtossRelic"))) {
+            return false;
+        }
     }
 
     // Actions
@@ -4903,6 +4982,7 @@ bool gt_ObjectiveRelicsUpdate_Func (bool testConds, bool runActions) {
 
     UIAlertPoint("Trigger", gv_p1_USER, StringExternal("Param/Value/177B7A17"), null, UnitGetPosition(EventUnit()));
     gv_bonusObjectiveCollectRelicsFound += 1;
+    libB27CC4B1_gf_TalentBonusObjectiveTrigger();
     TriggerExecute(gt_ObjectiveRelicsCreateQ, true, false);
     libWCMI_gf_DisplayMissionObjectiveRewardFloatingText(UnitGetPosition(EventUnit()), "TTychus02_4");
     UnitKill(EventUnit());
@@ -4937,6 +5017,7 @@ bool gt_ObjectiveRelicsComplete_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    libB27CC4B1_gf_TalentTime(1, false, 0, 0);
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveRelicsCreateQ, true, false);
     libWCMI_gf_ZS_SetMissionObjectiveState("TTychus02_4", libWoLC_ge_MissionObjectiveState_Completed);
@@ -5132,10 +5213,12 @@ bool gt_MidQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerQueueEnter();
+    TriggerExecute(libB27CC4B1_gt_TableButtonsHide, true, true);
     TriggerExecute(gt_MidSetup, true, true);
     TriggerExecute(gt_MidCinematic, true, true);
     TriggerExecute(gt_MidCinematicEnd, true, true);
     TriggerExecute(gt_MidCleanup, true, true);
+    TriggerExecute(libB27CC4B1_gt_TableButtonsShow, true, true);
     TriggerQueueExit();
     return true;
 }
@@ -5238,7 +5321,6 @@ bool gt_MidCinematic_Func (bool testConds, bool runActions) {
         libNtve_gf_RescueUnit(autoBAD08B60_var, gv_p1_USER, true);
         Wait(0.25, c_timeGame);
     }
-    libNtve_gf_RescueUnit(UnitFromId(44), gv_p1_USER, true);
     Wait(2.0, c_timeGame);
     CameraApplyInfo(gv_p1_USER, CameraInfoFromId(566), 0.0, -1, 10, true);
     CameraApplyInfo(gv_p1_USER, CameraInfoFromId(568), (SoundLengthSync(SoundLink("TTychus02Tychus00008", -1)) - 1.0), -1, 10, true);
@@ -5355,9 +5437,9 @@ bool gt_MidCleanup_Func (bool testConds, bool runActions) {
     unitgroup autoF6C0C4EE_g;
     int autoF6C0C4EE_u;
     unit autoF6C0C4EE_var;
-    unitgroup auto8C8E2B83_g;
-    int auto8C8E2B83_u;
-    unit auto8C8E2B83_var;
+    unitgroup autoB09C4B0E_g;
+    int autoB09C4B0E_u;
+    unit autoB09C4B0E_var;
 
     // Variable Initialization
 
@@ -5415,17 +5497,15 @@ bool gt_MidCleanup_Func (bool testConds, bool runActions) {
     for (;; autoF6C0C4EE_u -= 1) {
         autoF6C0C4EE_var = UnitGroupUnitFromEnd(autoF6C0C4EE_g, autoF6C0C4EE_u);
         if (autoF6C0C4EE_var == null) { break; }
-        libNtve_gf_ShowHideUnit(autoF6C0C4EE_var, true);
-        libNtve_gf_RescueUnit(autoF6C0C4EE_var, gv_p1_USER, true);
+        libB27CC4B1_gf_RescueUnitWithUpgrades(autoF6C0C4EE_var);
     }
-    auto8C8E2B83_g = UnitGroup(null, gv_p7_ABANDONED_BASE, RegionFromId(10), UnitFilter((1 << c_targetFilterStructure), 0, (1 << c_targetFilterRawResource) | (1 << c_targetFilterHarvestableResource) | (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
-    auto8C8E2B83_u = UnitGroupCount(auto8C8E2B83_g, c_unitCountAll);
-    for (;; auto8C8E2B83_u -= 1) {
-        auto8C8E2B83_var = UnitGroupUnitFromEnd(auto8C8E2B83_g, auto8C8E2B83_u);
-        if (auto8C8E2B83_var == null) { break; }
-        libNtve_gf_RescueUnit(auto8C8E2B83_var, gv_p1_USER, true);
+    autoB09C4B0E_g = UnitGroup(null, gv_p7_ABANDONED_BASE, RegionFromId(10), UnitFilter((1 << c_targetFilterStructure), 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32))), 0);
+    autoB09C4B0E_u = UnitGroupCount(autoB09C4B0E_g, c_unitCountAll);
+    for (;; autoB09C4B0E_u -= 1) {
+        autoB09C4B0E_var = UnitGroupUnitFromEnd(autoB09C4B0E_g, autoB09C4B0E_u);
+        if (autoB09C4B0E_var == null) { break; }
+        libB27CC4B1_gf_RescueUnitWithUpgrades(autoB09C4B0E_var);
     }
-    libNtve_gf_RescueUnit(UnitFromId(44), gv_p1_USER, true);
     UnitSetPropertyFixed(UnitFromId(508), c_unitPropEnergy, 50.0);
     libWCMI_gf_SetWorkerRallyPointforNexus2(UnitFromId(508));
     libWCMI_gf_StartingWorkersAutoHarvest(RegionFromId(23), RegionFromId(22));
@@ -5607,6 +5687,7 @@ bool gt_VictoryQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerQueueEnter();
+    TriggerExecute(libB27CC4B1_gt_TableButtonsHide, true, true);
     TriggerExecute(gt_VictorySetup, true, true);
     TriggerExecute(gt_VictoryCinematic, true, true);
     TriggerExecute(gt_VictoryCinematicEnd, true, true);

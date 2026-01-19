@@ -2,15 +2,16 @@
 // 
 // Generated Map Script
 // 
-// Name:   The Evacuation
+// Name:   ?????????
 // 
 //==================================================================================================
 include "TriggerLibs/NativeLib"
 include "TriggerLibs/LibertyLib"
-include "LibEA0820A1"
+include "TriggerLibs/VoidLib"
 include "LibCamp"
 include "LibWoLC"
 include "LibWCMI"
+include "LibB27CC4B1"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -18,10 +19,11 @@ include "LibWCMI"
 void InitLibs () {
     libNtve_InitLib();
     libLbty_InitLib();
-    libEA0820A1_InitLib();
+    libLotv_InitLib();
     libCamp_InitLib();
     libWoLC_InitLib();
     libWCMI_InitLib();
+    libB27CC4B1_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -34,6 +36,14 @@ const int gv_p1_USER = 1;
 //--------------------------------------------------------------------------------------------------
 const int ge_PRESET_MissionPhase_Tactical = 0;
 const int ge_PRESET_MissionPhase_Escort = 1;
+const int ge_Thrasher_WestEasy = 0;
+const int ge_Thrasher_WestSouth = 1;
+const int ge_Thrasher_WestNorth = 2;
+const int ge_Thrasher_WestHard = 3;
+const int ge_Thrasher_EastEasy = 4;
+const int ge_Thrasher_EastSouth = 5;
+const int ge_Thrasher_EastNorth = 6;
+const int ge_Thrasher_EastHard = 7;
 
 //--------------------------------------------------------------------------------------------------
 // Global Variables
@@ -43,6 +53,7 @@ int gv_p3_ZERG_LIGHTBLUE_SE;
 int gv_p4_COLONISTS;
 int gv_p5_ZERG_TACTICALPHASE;
 int gv_p6_ZERG_NOAIPREPLACED;
+int gv_p7_VOID_THRASHERS;
 playergroup gv_zergPlayers;
 bool gv_gameOver;
 bool gv_inCinematic;
@@ -84,6 +95,8 @@ int gv_colonistsKilled;
 int gv_convoyTrucksSent;
 int gv_colonistLeaderBoard;
 unit gv_chrysalisPingUnit;
+unit[9] gv_thrasher;
+int[9] gv_thrasherPing;
 int gv_doomsdayZergSpawnCount;
 point gv_tempTumorPoint;
 point gv_tempNydusPoint;
@@ -101,6 +114,7 @@ fixed gv_waveDelay;
 int gv_convoyTrucksKilled;
 bool gv_hansonQQInhibitor;
 int gv_doomsdayWavesSent;
+bool gv_zergCleared;
 int gv_objPing_ReachHanson;
 int gv_objective_ReachHanson;
 int gv_objective_SaveColonists;
@@ -115,11 +129,14 @@ unitgroup gv_victoryHiddenUnitGroup;
 bool gv_victoryCinematicCompleted;
 
 void InitGlobals () {
+    int init_i;
+
     gv_p2_ZERG_ORANGE_NW = 2;
     gv_p3_ZERG_LIGHTBLUE_SE = 3;
     gv_p4_COLONISTS = 4;
     gv_p5_ZERG_TACTICALPHASE = 5;
     gv_p6_ZERG_NOAIPREPLACED = 6;
+    gv_p7_VOID_THRASHERS = 7;
     gv_zergPlayers = PlayerGroupEmpty();
     gv_civilianSpawners = UnitGroupEmpty();
     gv_missionPhase = ge_PRESET_MissionPhase_Tactical;
@@ -142,6 +159,9 @@ void InitGlobals () {
     gv_colonistsSaveQuota = 50;
     gv_colonistsDeathQuota = 20;
     gv_colonistLeaderBoard = c_timerWindowNone;
+    for (init_i = 0; init_i <= 8; init_i += 1) {
+        gv_thrasherPing[init_i] = c_invalidPingId;
+    }
     gv_activeNydusWorms = UnitGroupEmpty();
     gv_nydusSpawnDelay = 12.0;
     gv_nydusWormHP = 200.0;
@@ -159,6 +179,11 @@ void InitGlobals () {
 void gf_GenerateColonist ();
 bool gf_PlayerIsInCombat (int lp_player);
 void gf_BunkerGet (unit lp_unit);
+void gf_ThrasherSummonController (int lp_thrasher);
+void gf_ThrasherSpawn (int lp_index, point lp_point);
+void gf_ThrasherAI (int lp_index);
+void gf_ThrasherAttackEnemies (int lp_index, int lp_count);
+void gf_ThrasherHideTerrain (unit lp_voidThrasher);
 void gf_WaitForColonistToEnterRegion (region lp_region);
 void gf_SpoogeAreawithOverlord (point lp_param_Spawn, point lp_param_SpoogeTarget);
 void gf_SpoogeAreawithTumor (point lp_spawnPoint);
@@ -172,7 +197,6 @@ void gf_ColonyShipBlastoff (unit lp_unit);
 //--------------------------------------------------------------------------------------------------
 // Trigger Variables
 //--------------------------------------------------------------------------------------------------
-trigger gt_OnPlayer1GetUnit;
 trigger gt_Initialization;
 trigger gt_Init01Technology;
 trigger gt_Init02Players;
@@ -226,6 +250,7 @@ trigger gt_ChrysalisTipTriggerB;
 trigger gt_ChrysalisTipTriggerC;
 trigger gt_ChrysalisTipQ;
 trigger gt_ChrysalisPing;
+trigger gt_ThrasherDies;
 trigger gt_ConvoyAttack1Freebie;
 trigger gt_ConvoyAttack2StressBunkersnotallfull;
 trigger gt_ConvoyAttack3Burnsinglebunkers;
@@ -266,6 +291,7 @@ trigger gt_DefeatTacticalPhase;
 trigger gt_DefeatColonyShipDead;
 trigger gt_DefeatColonistHutsDie;
 trigger gt_DefeatTooManyColonistsDie;
+trigger gt_VictoryZergDead;
 trigger gt_VictoryPlayerSavesEnoughColonists;
 trigger gt_VictoryPlayerSavesEnoughColonistsQ;
 trigger gt_Victory;
@@ -317,7 +343,7 @@ void gf_GenerateColonist () {
             UnitSetPropertyFixed(UnitLastCreated(), c_unitPropMovementSpeed, gv_convoyMovementSpeed);
             gv_vehicleCount += 1;
             gv_tHEONETRUCK = UnitLastCreated();
-            Wait(14.0, c_timeGame);
+            Wait(14.0, c_timeAI);
             libNtve_gf_SendActorMessageToUnit(gv_tHEONETRUCK, "AnimBracketStart Work Stand,Work,Start Stand,Work Stand,Work,End");
         }
         else {
@@ -361,8 +387,371 @@ void gf_BunkerGet (unit lp_unit) {
     // Implementation
     PingCreate(PlayerGroupSingle(gv_p1_USER), "PingSimple", UnitGetPosition(lp_unit), ColorWithAlpha(0.00, 100.00, 0.00, 0.00), 5.0);
     UIAlertPoint("Trigger", gv_p1_USER, StringExternal("Param/Value/EB027D65"), null, UnitGetPosition(lp_unit));
-    libNtve_gf_RescueUnit(lp_unit, gv_p1_USER, true);
+    libB27CC4B1_gf_RescueUnitWithUpgrades(lp_unit);
     TriggerExecute(gt_BunkerLineQ, true, false);
+}
+
+void gf_ThrasherSummonController (int lp_thrasher) {
+    // Automatic Variable Declarations
+    int auto114DA5E3_val;
+
+    // Implementation
+    if ((libB27CC4B1_gf_TalentAcquired("ChallengeHanson1") == true)) {
+        auto114DA5E3_val = lp_thrasher;
+        if (auto114DA5E3_val == ge_Thrasher_EastEasy) {
+            gf_ThrasherSpawn(1, PointFromId(1516914543));
+        }
+        else if (auto114DA5E3_val == ge_Thrasher_EastHard) {
+            gf_ThrasherSpawn(2, PointFromId(1789802478));
+        }
+        else if (auto114DA5E3_val == ge_Thrasher_EastNorth) {
+            gf_ThrasherSpawn(3, PointFromId(1786069012));
+        }
+        else if (auto114DA5E3_val == ge_Thrasher_EastSouth) {
+            gf_ThrasherSpawn(4, PointFromId(244957830));
+        }
+        else if (auto114DA5E3_val == ge_Thrasher_WestEasy) {
+            gf_ThrasherSpawn(5, PointFromId(1836637952));
+        }
+        else if (auto114DA5E3_val == ge_Thrasher_WestHard) {
+            gf_ThrasherSpawn(6, PointFromId(1867375842));
+        }
+        else if (auto114DA5E3_val == ge_Thrasher_WestNorth) {
+            gf_ThrasherSpawn(7, PointFromId(698888239));
+        }
+        else if (auto114DA5E3_val == ge_Thrasher_WestSouth) {
+            gf_ThrasherSpawn(8, PointFromId(53738615));
+        }
+        else {
+        }
+    }
+
+}
+
+trigger auto_gf_ThrasherSpawn_Trigger = null;
+int auto_gf_ThrasherSpawn_lp_index;
+point auto_gf_ThrasherSpawn_lp_point;
+
+void gf_ThrasherSpawn (int lp_index, point lp_point) {
+    auto_gf_ThrasherSpawn_lp_index = lp_index;
+    auto_gf_ThrasherSpawn_lp_point = lp_point;
+
+    if (auto_gf_ThrasherSpawn_Trigger == null) {
+        auto_gf_ThrasherSpawn_Trigger = TriggerCreate("auto_gf_ThrasherSpawn_TriggerFunc");
+    }
+
+    TriggerExecute(auto_gf_ThrasherSpawn_Trigger, false, false);
+}
+
+bool auto_gf_ThrasherSpawn_TriggerFunc (bool testConds, bool runActions) {
+    int lp_index = auto_gf_ThrasherSpawn_lp_index;
+    point lp_point = auto_gf_ThrasherSpawn_lp_point;
+
+    // Automatic Variable Declarations
+    // Implementation
+    if ((UnitIsAlive(gv_thrasher[lp_index]) == false)) {
+        CameraShake(1, "Medium", "Shake", 0.0, 2.0, 3.0);
+        SoundPlayForPlayer(SoundLink("Void_Thrasher_Birth_Fx", 0), c_maxPlayers, PlayerGroupAll(), 100.0, 0.0);
+        libNtve_gf_CreateUnitsAtPoint2(1, "VoidThrasher", c_unitCreateIgnorePlacement, gv_p7_VOID_THRASHERS, lp_point);
+        gv_thrasher[lp_index] = UnitLastCreated();
+        UnitSetPropertyFixed(gv_thrasher[lp_index], c_unitPropLifeMax, libNtve_gf_DifficultyValueFixed(400.0, 500.0, 600.0, 750.0));
+        UnitSetPropertyFixed(gv_thrasher[lp_index], c_unitPropLifePercent, 100.0);
+        UnitSetPropertyFixed(gv_thrasher[lp_index], c_unitPropShieldsMax, libNtve_gf_DifficultyValueFixed(400.0, 500.0, 600.0, 750.0));
+        UnitSetPropertyFixed(gv_thrasher[lp_index], c_unitPropShieldsPercent, 100.0);
+        libNtve_gf_MakeUnitInvulnerable(gv_thrasher[lp_index], true);
+        libNtve_gf_CreatePingFacingAngle(PlayerGroupAll(), "PingBoss", UnitGetPosition(gv_thrasher[lp_index]), ColorWithAlpha(0.00, 0.00, 0.00, 0.00), 0.0, 270.0);
+        gv_thrasherPing[lp_index] = PingLastCreated();
+        PingSetUnit(gv_thrasherPing[lp_index], gv_thrasher[lp_index]);
+        libNtve_gf_PlayAnimation(libNtve_gf_MainActorofUnit(gv_thrasher[lp_index]), "Birth", "Birth", c_animFlagFullMatch | c_animFlagNonLooping, 0.0);
+        gf_ThrasherHideTerrain(gv_thrasher[lp_index]);
+        Wait(3.5, c_timeAI);
+        libNtve_gf_MakeUnitInvulnerable(gv_thrasher[lp_index], false);
+        gf_ThrasherAI(lp_index);
+    }
+
+    return true;
+}
+
+trigger auto_gf_ThrasherAI_Trigger = null;
+int auto_gf_ThrasherAI_lp_index;
+
+void gf_ThrasherAI (int lp_index) {
+    auto_gf_ThrasherAI_lp_index = lp_index;
+
+    if (auto_gf_ThrasherAI_Trigger == null) {
+        auto_gf_ThrasherAI_Trigger = TriggerCreate("auto_gf_ThrasherAI_TriggerFunc");
+    }
+
+    TriggerExecute(auto_gf_ThrasherAI_Trigger, false, false);
+}
+
+bool auto_gf_ThrasherAI_TriggerFunc (bool testConds, bool runActions) {
+    int lp_index = auto_gf_ThrasherAI_lp_index;
+
+    // Automatic Variable Declarations
+    // Implementation
+    while ((UnitIsAlive(gv_thrasher[lp_index]) == true)) {
+        UnitIssueOrder(gv_thrasher[lp_index], OrderTargetingUnit(AbilityCommand("KaiserWormScourgeMissile", 0), UnitGroupClosestToPoint(UnitGroupAlliance(gv_p7_VOID_THRASHERS, c_unitAllianceEnemy, RegionPlayableMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), UnitGetPosition(gv_thrasher[lp_index]))), c_orderQueueReplace);
+        if ((UnitIsAlive(gv_thrasher[lp_index]) == true) && (UnitGroupCount(UnitGroupAlliance(gv_p7_VOID_THRASHERS, c_unitAllianceEnemy, RegionCircle(UnitGetPosition(gv_thrasher[lp_index]), 10.0), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) > 0)) {
+            gf_ThrasherAttackEnemies(lp_index, libLotv_gf_DifficultyValueInt2(1, 2, 3, 3));
+            Wait(7.0, c_timeAI);
+        }
+        else {
+            Wait(3.5, c_timeAI);
+        }
+    }
+    return true;
+}
+
+trigger auto_gf_ThrasherAttackEnemies_Trigger = null;
+int auto_gf_ThrasherAttackEnemies_lp_index;
+int auto_gf_ThrasherAttackEnemies_lp_count;
+
+void gf_ThrasherAttackEnemies (int lp_index, int lp_count) {
+    auto_gf_ThrasherAttackEnemies_lp_index = lp_index;
+    auto_gf_ThrasherAttackEnemies_lp_count = lp_count;
+
+    if (auto_gf_ThrasherAttackEnemies_Trigger == null) {
+        auto_gf_ThrasherAttackEnemies_Trigger = TriggerCreate("auto_gf_ThrasherAttackEnemies_TriggerFunc");
+    }
+
+    TriggerExecute(auto_gf_ThrasherAttackEnemies_Trigger, false, false);
+}
+
+bool auto_gf_ThrasherAttackEnemies_TriggerFunc (bool testConds, bool runActions) {
+    int lp_index = auto_gf_ThrasherAttackEnemies_lp_index;
+    int lp_count = auto_gf_ThrasherAttackEnemies_lp_count;
+
+    // Variable Declarations
+    unitgroup lv_enemyGroup;
+    unit lv_targetUnit;
+    point lv_primaryTarget;
+    point lv_extraTarget;
+
+    // Automatic Variable Declarations
+    unitgroup autoFD7BA9B9_g;
+    int autoFD7BA9B9_u;
+    unit autoFD7BA9B9_var;
+    unitgroup autoFA0F99FC_g;
+    int autoFA0F99FC_u;
+    unit autoFA0F99FC_var;
+    unitgroup auto1BA9CFB6_g;
+    int auto1BA9CFB6_u;
+    unit auto1BA9CFB6_var;
+    unitgroup auto241D7138_g;
+    int auto241D7138_u;
+    unit auto241D7138_var;
+    unitgroup auto40648150_g;
+    int auto40648150_u;
+    unit auto40648150_var;
+    unitgroup auto0DDEF0CA_g;
+    int auto0DDEF0CA_u;
+    unit auto0DDEF0CA_var;
+    unitgroup auto57AD2D58_g;
+    int auto57AD2D58_u;
+    unit auto57AD2D58_var;
+    int auto9A83A515_n;
+    int auto9A83A515_i;
+    unitgroup auto3BA47736_g;
+    int auto3BA47736_u;
+    unit auto3BA47736_var;
+    unitgroup auto4C9F5EE4_g;
+    int auto4C9F5EE4_u;
+    unit auto4C9F5EE4_var;
+
+    // Variable Initialization
+    lv_enemyGroup = UnitGroupEmpty();
+
+    // Implementation
+    if (((UnitIsAlive(gv_thrasher[lp_index]) == false))) {
+        return true;
+    }
+
+    lv_enemyGroup = UnitGroupAlliance(gv_p7_VOID_THRASHERS, c_unitAllianceEnemy, RegionCircle(UnitGetPosition(gv_thrasher[lp_index]), 10.0), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+    autoFD7BA9B9_g = lv_enemyGroup;
+    autoFD7BA9B9_u = UnitGroupCount(autoFD7BA9B9_g, c_unitCountAll);
+    for (;; autoFD7BA9B9_u -= 1) {
+        autoFD7BA9B9_var = UnitGroupUnitFromEnd(autoFD7BA9B9_g, autoFD7BA9B9_u);
+        if (autoFD7BA9B9_var == null) { break; }
+        if ((UnitGetType(autoFD7BA9B9_var) == "SOAThermalLanceTargeter")) {
+            UnitGroupRemove(lv_enemyGroup, autoFD7BA9B9_var);
+        }
+
+    }
+    if ((UnitGroupCount(lv_enemyGroup, c_unitCountAlive) == 0)) {
+        return true;
+    }
+
+    lv_targetUnit = UnitGroupRandomUnit(UnitGroupFilterRegion(lv_enemyGroup, RegionCircle(UnitGroupCenterOfGroup(lv_enemyGroup), 4.0), 0), c_unitCountAlive);
+    if ((lv_targetUnit == null)) {
+        lv_targetUnit = UnitGroupRandomUnit(lv_enemyGroup, c_unitCountAlive);
+    }
+
+    if ((DistanceBetweenPoints(UnitGetPosition(gv_thrasher[lp_index]), UnitGetPosition(lv_targetUnit)) < 5.0)) {
+        lv_primaryTarget = PointWithOffsetPolar(UnitGetPosition(gv_thrasher[lp_index]), 5.0, AngleBetweenPoints(UnitGetPosition(gv_thrasher[lp_index]), UnitGetPosition(lv_targetUnit)));
+        autoFA0F99FC_g = UnitGroupFilterRegion(lv_enemyGroup, RegionCircle(UnitGetPosition(lv_targetUnit), 3.0), 0);
+        autoFA0F99FC_u = UnitGroupCount(autoFA0F99FC_g, c_unitCountAll);
+        for (;; autoFA0F99FC_u -= 1) {
+            autoFA0F99FC_var = UnitGroupUnitFromEnd(autoFA0F99FC_g, autoFA0F99FC_u);
+            if (autoFA0F99FC_var == null) { break; }
+            UnitGroupRemove(lv_enemyGroup, autoFA0F99FC_var);
+        }
+    }
+    else {
+        lv_primaryTarget = UnitGetPosition(lv_targetUnit);
+    }
+    UnitIssueOrder(gv_thrasher[lp_index], OrderTargetingPoint(AbilityCommand("VoidThrasherLightningAoE", 0), lv_primaryTarget), c_orderQueueReplace);
+    auto1BA9CFB6_g = UnitGroupFilterRegion(lv_enemyGroup, RegionCircle(lv_primaryTarget, 3.0), 0);
+    auto1BA9CFB6_u = UnitGroupCount(auto1BA9CFB6_g, c_unitCountAll);
+    for (;; auto1BA9CFB6_u -= 1) {
+        auto1BA9CFB6_var = UnitGroupUnitFromEnd(auto1BA9CFB6_g, auto1BA9CFB6_u);
+        if (auto1BA9CFB6_var == null) { break; }
+        UnitGroupRemove(lv_enemyGroup, auto1BA9CFB6_var);
+    }
+    Wait(0.0625, c_timeAI);
+    if ((lp_count >= 2) && (UnitGroupCount(lv_enemyGroup, c_unitCountAlive) > 0) && (UnitIsAlive(gv_thrasher[lp_index]) == true)) {
+        lv_targetUnit = UnitGroupRandomUnit(UnitGroupFilterRegion(lv_enemyGroup, RegionCircle(PointWithOffsetPolar(UnitGetPosition(gv_thrasher[lp_index]), 7.0, (AngleBetweenPoints(UnitGetPosition(gv_thrasher[lp_index]), lv_primaryTarget) + 60.0)), 8.0), 0), c_unitCountAlive);
+        if ((lv_targetUnit == null)) {
+            lv_targetUnit = UnitGroupRandomUnit(lv_enemyGroup, c_unitCountAlive);
+        }
+
+        if ((DistanceBetweenPoints(UnitGetPosition(gv_thrasher[lp_index]), UnitGetPosition(lv_targetUnit)) < 5.0)) {
+            lv_extraTarget = PointWithOffsetPolar(UnitGetPosition(gv_thrasher[lp_index]), 5.0, AngleBetweenPoints(UnitGetPosition(gv_thrasher[lp_index]), UnitGetPosition(lv_targetUnit)));
+            auto241D7138_g = UnitGroupFilterRegion(lv_enemyGroup, RegionCircle(UnitGetPosition(lv_targetUnit), 3.0), 0);
+            auto241D7138_u = UnitGroupCount(auto241D7138_g, c_unitCountAll);
+            for (;; auto241D7138_u -= 1) {
+                auto241D7138_var = UnitGroupUnitFromEnd(auto241D7138_g, auto241D7138_u);
+                if (auto241D7138_var == null) { break; }
+                UnitGroupRemove(lv_enemyGroup, auto241D7138_var);
+            }
+        }
+        else {
+            lv_extraTarget = UnitGetPosition(lv_targetUnit);
+        }
+        UnitIssueOrder(gv_thrasher[lp_index], OrderTargetingPoint(AbilityCommand("VoidThrasherLightningAoEExtra", 0), lv_extraTarget), c_orderQueueAddToFront);
+        auto40648150_g = UnitGroupFilterRegion(lv_enemyGroup, RegionCircle(lv_extraTarget, 3.0), 0);
+        auto40648150_u = UnitGroupCount(auto40648150_g, c_unitCountAll);
+        for (;; auto40648150_u -= 1) {
+            auto40648150_var = UnitGroupUnitFromEnd(auto40648150_g, auto40648150_u);
+            if (auto40648150_var == null) { break; }
+            UnitGroupRemove(lv_enemyGroup, auto40648150_var);
+        }
+    }
+
+    Wait(0.0625, c_timeAI);
+    if ((lp_count >= 3) && (UnitGroupCount(lv_enemyGroup, c_unitCountAlive) > 0) && (UnitIsAlive(gv_thrasher[lp_index]) == true)) {
+        lv_targetUnit = UnitGroupRandomUnit(UnitGroupFilterRegion(lv_enemyGroup, RegionCircle(PointWithOffsetPolar(UnitGetPosition(gv_thrasher[lp_index]), 7.0, (AngleBetweenPoints(UnitGetPosition(gv_thrasher[lp_index]), lv_primaryTarget) - 60.0)), 8.0), 0), c_unitCountAlive);
+        if ((lv_targetUnit == null)) {
+            lv_targetUnit = UnitGroupRandomUnit(lv_enemyGroup, c_unitCountAlive);
+        }
+
+        if ((DistanceBetweenPoints(UnitGetPosition(gv_thrasher[lp_index]), UnitGetPosition(lv_targetUnit)) < 5.0)) {
+            lv_extraTarget = PointWithOffsetPolar(UnitGetPosition(gv_thrasher[lp_index]), 5.0, AngleBetweenPoints(UnitGetPosition(gv_thrasher[lp_index]), UnitGetPosition(lv_targetUnit)));
+            auto0DDEF0CA_g = UnitGroupFilterRegion(lv_enemyGroup, RegionCircle(UnitGetPosition(lv_targetUnit), 3.0), 0);
+            auto0DDEF0CA_u = UnitGroupCount(auto0DDEF0CA_g, c_unitCountAll);
+            for (;; auto0DDEF0CA_u -= 1) {
+                auto0DDEF0CA_var = UnitGroupUnitFromEnd(auto0DDEF0CA_g, auto0DDEF0CA_u);
+                if (auto0DDEF0CA_var == null) { break; }
+                UnitGroupRemove(lv_enemyGroup, auto0DDEF0CA_var);
+            }
+        }
+        else {
+            lv_extraTarget = UnitGetPosition(lv_targetUnit);
+        }
+        UnitIssueOrder(gv_thrasher[lp_index], OrderTargetingPoint(AbilityCommand("VoidThrasherLightningAoEExtra", 0), lv_extraTarget), c_orderQueueAddToFront);
+        auto57AD2D58_g = UnitGroupFilterRegion(lv_enemyGroup, RegionCircle(lv_extraTarget, 3.0), 0);
+        auto57AD2D58_u = UnitGroupCount(auto57AD2D58_g, c_unitCountAll);
+        for (;; auto57AD2D58_u -= 1) {
+            auto57AD2D58_var = UnitGroupUnitFromEnd(auto57AD2D58_g, auto57AD2D58_u);
+            if (auto57AD2D58_var == null) { break; }
+            UnitGroupRemove(lv_enemyGroup, auto57AD2D58_var);
+        }
+    }
+
+    auto9A83A515_n = (lp_count - 3);
+    for (auto9A83A515_i = 1; auto9A83A515_i <= auto9A83A515_n; auto9A83A515_i += 1) {
+        Wait(0.0625, c_timeAI);
+        if (((UnitGroupCount(lv_enemyGroup, c_unitCountAlive) == 0) || (UnitIsAlive(gv_thrasher[lp_index]) == false))) {
+            return true;
+        }
+
+        lv_targetUnit = UnitGroupRandomUnit(lv_enemyGroup, c_unitCountAlive);
+        if ((DistanceBetweenPoints(UnitGetPosition(gv_thrasher[lp_index]), UnitGetPosition(lv_targetUnit)) < 5.0)) {
+            lv_extraTarget = PointWithOffsetPolar(UnitGetPosition(gv_thrasher[lp_index]), 5.0, AngleBetweenPoints(UnitGetPosition(gv_thrasher[lp_index]), UnitGetPosition(lv_targetUnit)));
+            auto3BA47736_g = UnitGroupFilterRegion(lv_enemyGroup, RegionCircle(UnitGetPosition(lv_targetUnit), 3.0), 0);
+            auto3BA47736_u = UnitGroupCount(auto3BA47736_g, c_unitCountAll);
+            for (;; auto3BA47736_u -= 1) {
+                auto3BA47736_var = UnitGroupUnitFromEnd(auto3BA47736_g, auto3BA47736_u);
+                if (auto3BA47736_var == null) { break; }
+                UnitGroupRemove(lv_enemyGroup, auto3BA47736_var);
+            }
+        }
+        else {
+            lv_extraTarget = UnitGetPosition(lv_targetUnit);
+        }
+        UnitIssueOrder(gv_thrasher[lp_index], OrderTargetingPoint(AbilityCommand("VoidThrasherLightningAoEExtra", 0), lv_extraTarget), c_orderQueueAddToFront);
+        auto4C9F5EE4_g = UnitGroupFilterRegion(lv_enemyGroup, RegionCircle(lv_extraTarget, 3.0), 0);
+        auto4C9F5EE4_u = UnitGroupCount(auto4C9F5EE4_g, c_unitCountAll);
+        for (;; auto4C9F5EE4_u -= 1) {
+            auto4C9F5EE4_var = UnitGroupUnitFromEnd(auto4C9F5EE4_g, auto4C9F5EE4_u);
+            if (auto4C9F5EE4_var == null) { break; }
+            UnitGroupRemove(lv_enemyGroup, auto4C9F5EE4_var);
+        }
+    }
+    return true;
+}
+
+trigger auto_gf_ThrasherHideTerrain_Trigger = null;
+unit auto_gf_ThrasherHideTerrain_lp_voidThrasher;
+
+void gf_ThrasherHideTerrain (unit lp_voidThrasher) {
+    auto_gf_ThrasherHideTerrain_lp_voidThrasher = lp_voidThrasher;
+
+    if (auto_gf_ThrasherHideTerrain_Trigger == null) {
+        auto_gf_ThrasherHideTerrain_Trigger = TriggerCreate("auto_gf_ThrasherHideTerrain_TriggerFunc");
+    }
+
+    TriggerExecute(auto_gf_ThrasherHideTerrain_Trigger, false, false);
+}
+
+bool auto_gf_ThrasherHideTerrain_TriggerFunc (bool testConds, bool runActions) {
+    unit lp_voidThrasher = auto_gf_ThrasherHideTerrain_lp_voidThrasher;
+
+    // Variable Declarations
+    bool lv_terrainHidden;
+    point lv_voidThrasherPoint;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+
+    // Implementation
+    Wait(1.0, c_timeGame);
+    lv_voidThrasherPoint = UnitGetPosition(lp_voidThrasher);
+    RegionSetCenter(RegionFromId(53), lv_voidThrasherPoint);
+    TerrainShowRegion(RegionFromId(53), false);
+    lv_terrainHidden = true;
+    while ((UnitIsAlive(lp_voidThrasher) == true)) {
+        if ((libNtve_gf_UnitIsHidden(lp_voidThrasher) == true)) {
+            if ((lv_terrainHidden == true)) {
+                RegionSetCenter(RegionFromId(53), lv_voidThrasherPoint);
+                TerrainShowRegion(RegionFromId(53), true);
+                lv_terrainHidden = false;
+            }
+
+        }
+        else {
+            if ((lv_terrainHidden == false)) {
+                RegionSetCenter(RegionFromId(53), lv_voidThrasherPoint);
+                TerrainShowRegion(RegionFromId(53), false);
+                lv_terrainHidden = true;
+            }
+
+        }
+        Wait(1.0, c_timeGame);
+    }
+    RegionSetCenter(RegionFromId(53), lv_voidThrasherPoint);
+    TerrainShowRegion(RegionFromId(53), true);
+    return true;
 }
 
 void gf_WaitForColonistToEnterRegion (region lp_region) {
@@ -428,7 +817,7 @@ void gf_CreateUnburrowingUnits (int lp_qty, string lp_type, int lp_player, point
     // Variable Initialization
 
     // Implementation
-    libNtve_gf_CreateUnitsAtPoint2(lp_qty, lp_type, 0, lp_player, lp_loc);
+    libNtve_gf_CreateUnitsAtPoint2(libB27CC4B1_gf_CurseAttackWaveModifier(lp_qty), lp_type, 0, lp_player, lp_loc);
     gf_AttackwithUnburrowingUnits(lp_player, UnitLastCreatedGroup());
 }
 
@@ -445,11 +834,11 @@ void gf_AttackwithZergDropPod (int lp_qty1, string lp_type1, int lp_qty2, string
     lv_unitGroup = UnitGroupEmpty();
 
     // Implementation
-    libNtve_gf_UnitCreateFacingPoint(lp_qty1, lp_type1, 0, gv_p2_ZERG_ORANGE_NW, RegionGetCenter(RegionFromId(11)), PointFromId(858));
+    libNtve_gf_UnitCreateFacingPoint(libB27CC4B1_gf_CurseAttackWaveModifier(lp_qty1), lp_type1, 0, gv_p2_ZERG_ORANGE_NW, RegionGetCenter(RegionFromId(11)), PointFromId(858));
     libNtve_gf_AddUnitGroupToUnitGroup(UnitLastCreatedGroup(), lv_unitGroup);
-    libNtve_gf_UnitCreateFacingPoint(lp_qty2, lp_type2, 0, gv_p2_ZERG_ORANGE_NW, RegionGetCenter(RegionFromId(11)), PointFromId(858));
+    libNtve_gf_UnitCreateFacingPoint(libB27CC4B1_gf_CurseAttackWaveModifier(lp_qty2), lp_type2, 0, gv_p2_ZERG_ORANGE_NW, RegionGetCenter(RegionFromId(11)), PointFromId(858));
     libNtve_gf_AddUnitGroupToUnitGroup(UnitLastCreatedGroup(), lv_unitGroup);
-    libNtve_gf_UnitCreateFacingPoint(lp_qty3, lp_type3, 0, gv_p2_ZERG_ORANGE_NW, RegionGetCenter(RegionFromId(11)), PointFromId(858));
+    libNtve_gf_UnitCreateFacingPoint(libB27CC4B1_gf_CurseAttackWaveModifier(lp_qty3), lp_type3, 0, gv_p2_ZERG_ORANGE_NW, RegionGetCenter(RegionFromId(11)), PointFromId(858));
     libNtve_gf_AddUnitGroupToUnitGroup(UnitLastCreatedGroup(), lv_unitGroup);
     libCamp_gf_CreateDropPod(libCamp_ge_DropPodRace_Zerg, RegionRandomPoint(RegionCircle(lp_target, 1.0)), lv_unitGroup, true);
     auto142C38A1_g = lv_unitGroup;
@@ -496,26 +885,6 @@ void gf_ColonyShipBlastoff (unit lp_unit) {
 }
 
 //--------------------------------------------------------------------------------------------------
-// Trigger: OnPlayer1GetUnit
-//--------------------------------------------------------------------------------------------------
-bool gt_OnPlayer1GetUnit_Func (bool testConds, bool runActions) {
-    // Automatic Variable Declarations
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    TriggerExecute(libEA0820A1_gt_Init00ReplaceUnit, true, true);
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void gt_OnPlayer1GetUnit_Init () {
-    gt_OnPlayer1GetUnit = TriggerCreate("gt_OnPlayer1GetUnit_Func");
-    TriggerAddEventUnitChangeOwner(gt_OnPlayer1GetUnit, null);
-}
-
-//--------------------------------------------------------------------------------------------------
 // Trigger: Initialization
 //--------------------------------------------------------------------------------------------------
 bool gt_Initialization_Func (bool testConds, bool runActions) {
@@ -534,6 +903,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init06Difficulty, true, true);
     TriggerExecute(gt_Init07Help, true, true);
     libWoLC_gf_RegisterFootageRecording(gt_BriefingQ);
+    TriggerExecute(libB27CC4B1_gt_RogueInit, true, true);
     TriggerExecute(gt_IntroSequence, true, false);
     return true;
 }
@@ -582,21 +952,28 @@ bool gt_Init02Players_Func (bool testConds, bool runActions) {
     PlayerGroupAdd(gv_zergPlayers, gv_p3_ZERG_LIGHTBLUE_SE);
     PlayerGroupAdd(gv_zergPlayers, gv_p5_ZERG_TACTICALPHASE);
     PlayerGroupAdd(gv_zergPlayers, gv_p6_ZERG_NOAIPREPLACED);
+    PlayerGroupAdd(gv_zergPlayers, gv_p7_VOID_THRASHERS);
     libNtve_gf_SetAlliance(gv_p1_USER, gv_p2_ZERG_ORANGE_NW, libNtve_ge_AllianceSetting_Enemy);
     libNtve_gf_SetAlliance(gv_p1_USER, gv_p3_ZERG_LIGHTBLUE_SE, libNtve_ge_AllianceSetting_Enemy);
     libNtve_gf_SetAlliance(gv_p1_USER, gv_p4_COLONISTS, libNtve_ge_AllianceSetting_Ally);
     libNtve_gf_SetAlliance(gv_p1_USER, gv_p5_ZERG_TACTICALPHASE, libNtve_ge_AllianceSetting_Enemy);
     libNtve_gf_SetAlliance(gv_p1_USER, gv_p6_ZERG_NOAIPREPLACED, libNtve_ge_AllianceSetting_Enemy);
+    libNtve_gf_SetAlliance(gv_p1_USER, gv_p7_VOID_THRASHERS, libNtve_ge_AllianceSetting_EnemyWithSharedVision);
     libNtve_gf_SetAlliance(gv_p2_ZERG_ORANGE_NW, gv_p3_ZERG_LIGHTBLUE_SE, libNtve_ge_AllianceSetting_AllyWithSharedVisionAndPushable);
     libNtve_gf_SetAlliance(gv_p2_ZERG_ORANGE_NW, gv_p4_COLONISTS, libNtve_ge_AllianceSetting_Enemy);
     libNtve_gf_SetAlliance(gv_p2_ZERG_ORANGE_NW, gv_p5_ZERG_TACTICALPHASE, libNtve_ge_AllianceSetting_NeutralWithSharedVisionAndPushable);
     libNtve_gf_SetAlliance(gv_p2_ZERG_ORANGE_NW, gv_p6_ZERG_NOAIPREPLACED, libNtve_ge_AllianceSetting_NeutralWithSharedVisionAndPushable);
+    libNtve_gf_SetAlliance(gv_p2_ZERG_ORANGE_NW, gv_p7_VOID_THRASHERS, libNtve_ge_AllianceSetting_AllyWithSharedVisionAndPushable);
     libNtve_gf_SetAlliance(gv_p3_ZERG_LIGHTBLUE_SE, gv_p4_COLONISTS, libNtve_ge_AllianceSetting_Enemy);
     libNtve_gf_SetAlliance(gv_p3_ZERG_LIGHTBLUE_SE, gv_p5_ZERG_TACTICALPHASE, libNtve_ge_AllianceSetting_NeutralWithSharedVisionAndPushable);
     libNtve_gf_SetAlliance(gv_p3_ZERG_LIGHTBLUE_SE, gv_p6_ZERG_NOAIPREPLACED, libNtve_ge_AllianceSetting_NeutralWithSharedVisionAndPushable);
+    libNtve_gf_SetAlliance(gv_p3_ZERG_LIGHTBLUE_SE, gv_p7_VOID_THRASHERS, libNtve_ge_AllianceSetting_AllyWithSharedVisionAndPushable);
     libNtve_gf_SetAlliance(gv_p4_COLONISTS, gv_p5_ZERG_TACTICALPHASE, libNtve_ge_AllianceSetting_Enemy);
     libNtve_gf_SetAlliance(gv_p4_COLONISTS, gv_p6_ZERG_NOAIPREPLACED, libNtve_ge_AllianceSetting_Enemy);
+    libNtve_gf_SetAlliance(gv_p4_COLONISTS, gv_p7_VOID_THRASHERS, libNtve_ge_AllianceSetting_EnemyWithSharedVision);
     libNtve_gf_SetAlliance(gv_p5_ZERG_TACTICALPHASE, gv_p6_ZERG_NOAIPREPLACED, libNtve_ge_AllianceSetting_AllyWithSharedVisionAndPushable);
+    libNtve_gf_SetAlliance(gv_p5_ZERG_TACTICALPHASE, gv_p7_VOID_THRASHERS, libNtve_ge_AllianceSetting_AllyWithSharedVision);
+    libNtve_gf_SetAlliance(gv_p6_ZERG_NOAIPREPLACED, gv_p7_VOID_THRASHERS, libNtve_ge_AllianceSetting_AllyWithSharedVision);
     PlayerSetAlliance(gv_p1_USER, c_allianceIdPushable, gv_p4_COLONISTS, true);
     PlayerSetAlliance(gv_p2_ZERG_ORANGE_NW, c_allianceIdPushable, gv_p4_COLONISTS, true);
     PlayerSetAlliance(gv_p3_ZERG_LIGHTBLUE_SE, c_allianceIdPushable, gv_p4_COLONISTS, true);
@@ -886,6 +1263,7 @@ bool gt_IntroSequence_Func (bool testConds, bool runActions) {
     SoundtrackPlay(PlayerGroupAll(), c_soundtrackCategoryMusic, "THanson01MusicIntro", c_soundtrackCueAny, c_soundtrackIndexAny, false);
     TriggerExecute(gt_FirebatDropshipAction, true, false);
     CinematicFade(true, 1.5, c_fadeStyleNormal, ColorWithAlpha(0.00, 0.00, 0.00, 0.00), 0.0, true);
+    TriggerExecute(libB27CC4B1_gt_InitTableButtons, true, true);
     TriggerExecute(gt_StartGame, true, false);
     TriggerExecute(gt_StartHansonEscortPhase, true, false);
     return true;
@@ -906,12 +1284,16 @@ bool gt_StartGame_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    Wait(6.0, c_timeGame);
+    Wait(2.0, c_timeGame);
+    libB27CC4B1_gf_ChallengeTime("ChallengeHanson1");
+    Wait(4.0, c_timeGame);
     libNtve_gf_SetAlliance(gv_p4_COLONISTS, gv_p1_USER, libNtve_ge_AllianceSetting_AllyWithSharedVision);
     PlayerSetAlliance(gv_p1_USER, c_allianceIdPushable, gv_p4_COLONISTS, true);
     libNtve_gf_ShareVisionofUnit(UnitFromId(2440), true, gv_p1_USER);
     libNtve_gf_ShareVisionofUnit(UnitFromId(2442), true, gv_p1_USER);
     libNtve_gf_ShareVisionofUnit(UnitFromId(2441), true, gv_p1_USER);
+    libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
+    UIDisplayMessage(PlayerGroupAll(), c_messageAreaSubtitle, StringExternal("Param/Value/FF671E58"));
     TriggerExecute(gt_MainObjectiveReachHansonDiscoverQ, true, false);
     Wait(9.0, c_timeGame);
     TriggerExecute(gt_SwanntalksaboutFirebatQ, true, false);
@@ -982,9 +1364,9 @@ bool gt_FirebatDropshipAction_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    UnitCargoCreate(UnitFromId(290), "SquadFirebat", 2);
+    UnitCargoCreate(UnitFromId(290), "Firebat", 2);
     libNtve_gf_AddUnitGroupToUnitGroup(UnitCargoLastCreatedGroup(), gv_firebatCargoUnits);
-    UnitCargoCreate(UnitFromId(290), "SquadMedic", 2);
+    UnitCargoCreate(UnitFromId(290), "Medic", 2);
     autoA5804961_g = UnitCargoLastCreatedGroup();
     autoA5804961_u = UnitGroupCount(autoA5804961_g, c_unitCountAll);
     for (;; autoA5804961_u -= 1) {
@@ -1030,7 +1412,7 @@ bool gt_FirebatMove_Func (bool testConds, bool runActions) {
 
     // Conditions
     if (testConds) {
-        if (!(((UnitGetType(EventUnitCargo()) == "SquadFirebat") || (UnitGetType(EventUnitCargo()) == "SquadMedic")))) {
+        if (!(((UnitGetType(EventUnitCargo()) == "Firebat") || (UnitGetType(EventUnitCargo()) == "Medic")))) {
             return false;
         }
     }
@@ -1040,7 +1422,7 @@ bool gt_FirebatMove_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    if ((UnitGetType(EventUnitCargo()) == "SquadFirebat")) {
+    if ((UnitGetType(EventUnitCargo()) == "Firebat")) {
         Wait(0.2, c_timeGame);
         auto256F7B23_val = gv_firebatMove;
         if (auto256F7B23_val == 1) {
@@ -1472,6 +1854,7 @@ bool gt_SwitchtoEscortPhase_Func (bool testConds, bool runActions) {
     libNtve_gf_ShareVisionofUnit(UnitFromId(2442), false, gv_p1_USER);
     libNtve_gf_ShareVisionofUnit(UnitFromId(2441), false, gv_p1_USER);
     UnitKill(UnitFromId(2508));
+    libB27CC4B1_gf_TalentTime(1, false, 0, 0);
     TriggerEnable(gt_ZergontheLoose, false);
     TriggerEnable(gt_ZergontheLoose2, false);
     TriggerExecute(gt_MainObjectiveReachHansonComplete, true, false);
@@ -1488,13 +1871,17 @@ bool gt_SwitchtoEscortPhase_Func (bool testConds, bool runActions) {
     for (;; autoEAEE2387_u -= 1) {
         autoEAEE2387_var = UnitGroupUnitFromEnd(autoEAEE2387_g, autoEAEE2387_u);
         if (autoEAEE2387_var == null) { break; }
-        if (((UnitGetType(autoEAEE2387_var) == "SCV") || (UnitGetType(autoEAEE2387_var) == "CommandCenter") || (UnitGetType(autoEAEE2387_var) == "Refinery") || (UnitGetType(autoEAEE2387_var) == "SupplyDepot") || (UnitGetType(autoEAEE2387_var) == "SupplyDepotLowered") || (UnitGetType(autoEAEE2387_var) == "Barracks") || (UnitGetType(autoEAEE2387_var) == "BarracksTechLab") || (UnitGetType(autoEAEE2387_var) == "MercCompound"))) {
-            libNtve_gf_RescueUnit(autoEAEE2387_var, gv_p1_USER, true);
+        if (((UnitGetType(autoEAEE2387_var) == "SCV") || (UnitGetType(autoEAEE2387_var) == "Refinery") || (UnitGetType(autoEAEE2387_var) == "RefineryRich") || (UnitGetType(autoEAEE2387_var) == "AutomatedRefinery") || (UnitGetType(autoEAEE2387_var) == "SupplyDepot") || (UnitGetType(autoEAEE2387_var) == "SupplyDepotLowered") || (UnitGetType(autoEAEE2387_var) == "Barracks") || (UnitGetType(autoEAEE2387_var) == "BarracksTechLab") || (UnitGetType(autoEAEE2387_var) == "MercCompound"))) {
+            libB27CC4B1_gf_RescueUnitWithUpgrades(autoEAEE2387_var);
+        }
+
+        if (((UnitGetType(autoEAEE2387_var) == "CommandCenter") || (UnitGetType(autoEAEE2387_var) == "OrbitalCommand"))) {
+            libB27CC4B1_gf_RescueUnitWithUpgrades(autoEAEE2387_var);
+            UnitSetPropertyFixed(libB27CC4B1_gv_lastRescuedUnit, c_unitPropEnergy, 50.0);
+            libWCMI_gf_SetWorkerRallyPointforNexus2(libB27CC4B1_gv_lastRescuedUnit);
         }
 
     }
-    UnitSetPropertyFixed(UnitFromId(236), c_unitPropEnergy, 50.0);
-    libWCMI_gf_SetWorkerRallyPointforNexus2(UnitFromId(236));
     auto338F5CC8_g = UnitGroup("SCV", gv_p1_USER, RegionEntireMap(), UnitFilter(0, 0, 0, (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     auto338F5CC8_u = UnitGroupCount(auto338F5CC8_g, c_unitCountAll);
     for (;; auto338F5CC8_u -= 1) {
@@ -1675,6 +2062,7 @@ bool gt_StartHansonEscortPhase_Func (bool testConds, bool runActions) {
     }
     libCamp_gf_CreateMissionAutosavePoint(StringExternal("Param/Value/E23525AD"));
     Wait(2.0, c_timeGame);
+    libB27CC4B1_gf_CurseDifficultyModifier(2);
     TriggerExecute(gt_MainObjectiveSaveColonistsDiscoverQ, true, false);
     Wait(2.0, c_timeGame);
     Wait(15.0, c_timeGame);
@@ -1894,9 +2282,9 @@ bool gt_Gathercolonistspriortoevacuation_Func (bool testConds, bool runActions) 
     auto37AAE177_n = gv_unloadAmount[gv_escortIndex];
     for (auto37AAE177_i = 1; auto37AAE177_i <= auto37AAE177_n; auto37AAE177_i += 1) {
         gf_GenerateColonist();
-        Wait(2.25, c_timeGame);
+        Wait(2.25, c_timeAI);
     }
-    Wait(18.0, c_timeGame);
+    Wait(18.0, c_timeAI);
     TriggerExecute(gt_ConvoySpawned, true, false);
     return true;
 }
@@ -2417,7 +2805,7 @@ bool gt_PingConvoy_Func (bool testConds, bool runActions) {
 
     PingCreate(PlayerGroupSingle(gv_p1_USER), "PingSimple", UnitGetPosition(gv_pingConvoy), ColorWithAlpha(0.00, 100.00, 0.00, 0.00), 3.0);
     PingSetTooltip(PingLastCreated(), StringExternal("Param/Value/214DE41B"));
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     if ((UnitGroupCount(gv_colonistsOnTheMove, c_unitCountAlive) == 0)) {
         TriggerEnable(TriggerGetCurrent(), false);
     }
@@ -2516,7 +2904,7 @@ bool gt_ConvoyMovement_Func (bool testConds, bool runActions) {
 void gt_ConvoyMovement_Init () {
     gt_ConvoyMovement = TriggerCreate("gt_ConvoyMovement_Func");
     TriggerEnable(gt_ConvoyMovement, false);
-    TriggerAddEventTimePeriodic(gt_ConvoyMovement, 0.5, c_timeGame);
+    TriggerAddEventTimePeriodic(gt_ConvoyMovement, 0.5, c_timeAI);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2991,6 +3379,35 @@ void gt_ChrysalisPing_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: Thrasher Dies
+//--------------------------------------------------------------------------------------------------
+bool gt_ThrasherDies_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    const int auto264C978F_ae = 8;
+    int auto264C978F_var;
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    auto264C978F_var = 1;
+    for ( ; auto264C978F_var <= auto264C978F_ae; auto264C978F_var += 1 ) {
+        if ((EventUnit() == gv_thrasher[auto264C978F_var])) {
+            PingDestroy(gv_thrasherPing[auto264C978F_var]);
+        }
+
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ThrasherDies_Init () {
+    gt_ThrasherDies = TriggerCreate("gt_ThrasherDies_Func");
+    TriggerAddEventUnitDied(gt_ThrasherDies, null);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: Convoy Attack 1 (Freebie)
 //--------------------------------------------------------------------------------------------------
 bool gt_ConvoyAttack1Freebie_Func (bool testConds, bool runActions) {
@@ -3018,11 +3435,12 @@ bool gt_ConvoyAttack1Freebie_Func (bool testConds, bool runActions) {
     gf_SpoogeAreawithOverlord(PointFromId(183), PointFromId(597));
     gf_AttackwithUnburrowingUnits(gv_p2_ZERG_ORANGE_NW, UnitGroup(null, gv_p6_ZERG_NOAIPREPLACED, RegionFromId(21), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0));
     gf_WaitForColonistToEnterRegion(RegionFromId(5));
-    AIAttackWaveAddUnits4(4, 5, 8, 12, "Zergling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(12), "Zergling");
     AIAttackWaveSend(gv_p2_ZERG_ORANGE_NW, 0, false);
     gf_WaitForColonistToEnterRegion(RegionFromId(10));
     gf_SpoogeAreawithOverlord(PointFromId(183), PointFromId(2691));
     gf_WaitForColonistToEnterRegion(RegionFromId(13));
+    gf_ThrasherSummonController(ge_Thrasher_EastNorth);
     gf_WaitForColonistToEnterRegion(RegionFromId(20));
     return true;
 }
@@ -3051,37 +3469,38 @@ bool gt_ConvoyAttack2StressBunkersnotallfull_Func (bool testConds, bool runActio
 
     gf_WaitForColonistToEnterRegion(RegionFromId(12));
     gf_SpoogeAreawithOverlord(PointFromId(145), PointFromId(1402));
-    AIAttackWaveAddUnits4(7, 7, 9, 12, "Zergling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(7), libB27CC4B1_gf_CurseAttackWaveModifier(7), libB27CC4B1_gf_CurseAttackWaveModifier(9), libB27CC4B1_gf_CurseAttackWaveModifier(12), "Zergling");
     AIAttackWaveSend(gv_p2_ZERG_ORANGE_NW, 0, false);
     gf_WaitForColonistToEnterRegion(RegionFromId(1));
-    AIAttackWaveAddUnits4(8, 8, 10, 5, "Zergling");
-    AIAttackWaveAddUnits4(0, 0, 0, 1, "Hydralisk");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(10), libB27CC4B1_gf_CurseAttackWaveModifier(5), "Zergling");
+    AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "Hydralisk");
     AIAttackWaveSend(gv_p2_ZERG_ORANGE_NW, 0, false);
+    gf_ThrasherSummonController(ge_Thrasher_EastEasy);
     gf_WaitForColonistToEnterRegion(RegionFromId(7));
     gf_WaitForColonistToEnterRegion(RegionFromId(3));
-    AIAttackWaveAddUnits4(1, 1, 1, 1, "Hydralisk");
-    AIAttackWaveAddUnits4(0, 0, 6, 10, "Zergling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Hydralisk");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(6), libB27CC4B1_gf_CurseAttackWaveModifier(10), "Zergling");
     AIAttackWaveSend(gv_p3_ZERG_LIGHTBLUE_SE, 0, false);
     gf_WaitForColonistToEnterRegion(RegionFromId(8));
     gf_SpoogeAreawithOverlord(PointFromId(145), PointFromId(1404));
-    AIAttackWaveAddUnits4(6, 6, 7, 10, "Zergling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(6), libB27CC4B1_gf_CurseAttackWaveModifier(6), libB27CC4B1_gf_CurseAttackWaveModifier(7), libB27CC4B1_gf_CurseAttackWaveModifier(10), "Zergling");
     AIAttackWaveSend(gv_p3_ZERG_LIGHTBLUE_SE, 0, false);
     gf_WaitForColonistToEnterRegion(RegionFromId(4));
-    AIAttackWaveAddUnits4(6, 6, 8, 11, "Zergling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(6), libB27CC4B1_gf_CurseAttackWaveModifier(6), libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(11), "Zergling");
     AIAttackWaveSend(gv_p3_ZERG_LIGHTBLUE_SE, 0, false);
     gf_WaitForColonistToEnterRegion(RegionFromId(9));
     gf_SpoogeAreawithOverlord(PointFromId(183), PointFromId(1406));
-    AIAttackWaveAddUnits4(5, 5, 7, 11, "Zergling");
-    AIAttackWaveAddUnits4(1, 1, 1, 0, "Hydralisk");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(7), libB27CC4B1_gf_CurseAttackWaveModifier(11), "Zergling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), 0, "Hydralisk");
     AIAttackWaveSend(gv_p2_ZERG_ORANGE_NW, 0, false);
     gf_WaitForColonistToEnterRegion(RegionFromId(5));
-    AIAttackWaveAddUnits4(9, 9, 12, 12, "Zergling");
-    AIAttackWaveAddUnits4(1, 1, 1, 1, "Hydralisk");
-    AIAttackWaveAddUnits4(0, 0, 0, 1, "Roach");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(9), libB27CC4B1_gf_CurseAttackWaveModifier(9), libB27CC4B1_gf_CurseAttackWaveModifier(12), libB27CC4B1_gf_CurseAttackWaveModifier(12), "Zergling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Hydralisk");
+    AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "Roach");
     AIAttackWaveSend(gv_p2_ZERG_ORANGE_NW, 0, false);
     gf_WaitForColonistToEnterRegion(RegionFromId(10));
     gf_WaitForColonistToEnterRegion(RegionFromId(13));
-    AIAttackWaveAddUnits4(5, 5, 7, 9, "Zergling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(7), libB27CC4B1_gf_CurseAttackWaveModifier(9), "Zergling");
     AIAttackWaveSend(gv_p2_ZERG_ORANGE_NW, 0, false);
     gf_WaitForColonistToEnterRegion(RegionFromId(20));
     return true;
@@ -3111,39 +3530,41 @@ bool gt_ConvoyAttack3Burnsinglebunkers_Func (bool testConds, bool runActions) {
 
     gf_SpoogeAreawithOverlord(PointFromId(145), PointFromId(1407));
     gf_WaitForColonistToEnterRegion(RegionFromId(12));
-    AIAttackWaveAddUnits4(17, 10, 14, 21, "Zergling");
-    AIAttackWaveAddUnits4(0, 1, 1, 1, "Hydralisk");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(17), libB27CC4B1_gf_CurseAttackWaveModifier(10), libB27CC4B1_gf_CurseAttackWaveModifier(14), libB27CC4B1_gf_CurseAttackWaveModifier(21), "Zergling");
+    AIAttackWaveAddUnits4(0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Hydralisk");
     AIAttackWaveSend(gv_p2_ZERG_ORANGE_NW, 0, false);
     gf_WaitForColonistToEnterRegion(RegionFromId(1));
     gf_WaitForColonistToEnterRegion(RegionFromId(7));
-    AIAttackWaveAddUnits4(0, 0, 0, 2, "Roach");
+    AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(2), "Roach");
     AIAttackWaveSend(gv_p2_ZERG_ORANGE_NW, 0, false);
-    AIAttackWaveAddUnits4(4, 4, 8, 5, "Zergling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(5), "Zergling");
     AIAttackWaveSend(gv_p3_ZERG_LIGHTBLUE_SE, 0, false);
     gf_WaitForColonistToEnterRegion(RegionFromId(3));
     gf_SpoogeAreawithOverlord(PointFromId(145), PointFromId(1410));
+    gf_ThrasherSummonController(ge_Thrasher_WestSouth);
     gf_WaitForColonistToEnterRegion(RegionFromId(8));
     gf_SpoogeAreawithTumor(PointFromId(1427));
-    AIAttackWaveAddUnits4(9, 9, 13, 18, "Zergling");
-    AIAttackWaveAddUnits4(1, 1, 1, 1, "Hydralisk");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(9), libB27CC4B1_gf_CurseAttackWaveModifier(9), libB27CC4B1_gf_CurseAttackWaveModifier(13), libB27CC4B1_gf_CurseAttackWaveModifier(18), "Zergling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Hydralisk");
     AIAttackWaveSend(gv_p3_ZERG_LIGHTBLUE_SE, 0, false);
     gf_AttackwithUnburrowingUnits(gv_p2_ZERG_ORANGE_NW, UnitGroup(null, gv_p6_ZERG_NOAIPREPLACED, RegionFromId(43), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0));
     gf_WaitForColonistToEnterRegion(RegionFromId(4));
     gf_SpoogeAreawithTumor(PointFromId(660));
     gf_WaitForColonistToEnterRegion(RegionFromId(9));
-    AIAttackWaveAddUnits4(8, 14, 14, 11, "Zergling");
-    AIAttackWaveAddUnits4(1, 1, 1, 1, "Hydralisk");
-    AIAttackWaveAddUnits4(0, 0, 2, 3, "Roach");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(14), libB27CC4B1_gf_CurseAttackWaveModifier(14), libB27CC4B1_gf_CurseAttackWaveModifier(11), "Zergling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Hydralisk");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Roach");
     AIAttackWaveSend(gv_p2_ZERG_ORANGE_NW, 0, false);
     gf_WaitForColonistToEnterRegion(RegionFromId(5));
     gf_SpoogeAreawithOverlord(PointFromId(183), PointFromId(1412));
-    AIAttackWaveAddUnits4(0, 1, 2, 2, "Mutalisk");
+    AIAttackWaveAddUnits4(0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Mutalisk");
     AIAttackWaveSend(gv_p3_ZERG_LIGHTBLUE_SE, 0, false);
     gf_WaitForColonistToEnterRegion(RegionFromId(10));
     gf_SpoogeAreawithTumor(PointFromId(661));
     gf_WaitForColonistToEnterRegion(RegionFromId(13));
     gf_AttackwithUnburrowingUnits(gv_p2_ZERG_ORANGE_NW, UnitGroup(null, gv_p6_ZERG_NOAIPREPLACED, RegionFromId(40), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0));
     gf_WaitForColonistToEnterRegion(RegionFromId(20));
+    gf_ThrasherSummonController(ge_Thrasher_EastSouth);
     return true;
 }
 
@@ -3174,10 +3595,11 @@ bool gt_ConvoyAttack4Droppods_Func (bool testConds, bool runActions) {
     gf_WaitForColonistToEnterRegion(RegionFromId(1));
     gf_SpoogeAreawithTumor(PointFromId(657));
     gf_AttackwithZergDropPod(libNtve_gf_DifficultyValueInt(4, 4, 8, 12), "Zergling", 0, "Hydralisk", 0, "Roach", PointFromId(773));
-    AIAttackWaveAddUnits4(0, 0, 0, 1, "Mutalisk");
+    AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "Mutalisk");
     AIAttackWaveSend(gv_p2_ZERG_ORANGE_NW, 0, false);
     gf_WaitForColonistToEnterRegion(RegionFromId(7));
     gf_AttackwithZergDropPod(libNtve_gf_DifficultyValueInt(14, 14, 16, 12), "Zergling", 0, "Hydralisk", libNtve_gf_DifficultyValueInt(0, 0, 1, 2), "Roach", PointFromId(127));
+    gf_ThrasherSummonController(ge_Thrasher_EastSouth);
     gf_WaitForColonistToEnterRegion(RegionFromId(3));
     gf_SpoogeAreawithOverlord(PointFromId(2675), PointFromId(1408));
     gf_SpoogeAreawithTumor(PointFromId(658));
@@ -3187,19 +3609,20 @@ bool gt_ConvoyAttack4Droppods_Func (bool testConds, bool runActions) {
     gf_AttackwithZergDropPod(libNtve_gf_DifficultyValueInt(11, 17, 22, 25), "Zergling", 0, "Baneling", 0, "Baneling", PointFromId(139));
     gf_WaitForColonistToEnterRegion(RegionFromId(9));
     gf_AttackwithZergDropPod(libNtve_gf_DifficultyValueInt(1, 2, 2, 1), "Hydralisk", 0, "Hydralisk", libNtve_gf_DifficultyValueInt(0, 0, 0, 1), "Roach", PointFromId(777));
-    AIAttackWaveAddUnits4(8, 0, 12, 13, "Zergling");
-    AIAttackWaveAddUnits4(0, 0, 1, 1, "Baneling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(8), 0, libB27CC4B1_gf_CurseAttackWaveModifier(12), libB27CC4B1_gf_CurseAttackWaveModifier(13), "Zergling");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Baneling");
     AIAttackWaveSend(gv_p2_ZERG_ORANGE_NW, 0, false);
     gf_WaitForColonistToEnterRegion(RegionFromId(5));
-    AIAttackWaveAddUnits4(5, 5, 9, 11, "Zergling");
-    AIAttackWaveAddUnits4(0, 1, 1, 0, "Mutalisk");
-    AIAttackWaveAddUnits4(0, 0, 1, 2, "Baneling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(9), libB27CC4B1_gf_CurseAttackWaveModifier(11), "Zergling");
+    AIAttackWaveAddUnits4(0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), 0, "Mutalisk");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Baneling");
     AIAttackWaveSend(gv_p2_ZERG_ORANGE_NW, 0, false);
     gf_WaitForColonistToEnterRegion(RegionFromId(10));
     gf_SpoogeAreawithOverlord(PointFromId(183), PointFromId(1405));
     gf_AttackwithZergDropPod(libNtve_gf_DifficultyValueInt(4, 4, 8, 12), "Zergling", libNtve_gf_DifficultyValueInt(1, 1, 1, 1), "Hydralisk", libNtve_gf_DifficultyValueInt(0, 0, 1, 2), "Roach", PointFromId(221));
     gf_WaitForColonistToEnterRegion(RegionFromId(13));
     gf_SpoogeAreawithTumor(PointFromId(663));
+    gf_ThrasherSummonController(ge_Thrasher_EastNorth);
     gf_WaitForColonistToEnterRegion(RegionFromId(20));
     return true;
 }
@@ -3227,13 +3650,15 @@ bool gt_ConvoyAttack5Nydusworms_Func (bool testConds, bool runActions) {
     }
 
     gf_SpoogeAreawithOverlord(PointFromId(145), PointFromId(1409));
+    gf_ThrasherSummonController(ge_Thrasher_WestHard);
     gf_WaitForColonistToEnterRegion(RegionFromId(12));
     gf_SpoogeAreawithOverlord(PointFromId(145), PointFromId(1411));
-    AIAttackWaveAddUnits4(8, 12, 13, 8, "Zergling");
-    AIAttackWaveAddUnits4(1, 1, 0, 1, "Hydralisk");
-    AIAttackWaveAddUnits4(0, 0, 2, 3, "Baneling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(12), libB27CC4B1_gf_CurseAttackWaveModifier(13), libB27CC4B1_gf_CurseAttackWaveModifier(8), "Zergling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "Hydralisk");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Baneling");
     AIAttackWaveSend(gv_p2_ZERG_ORANGE_NW, 0, false);
     gf_WaitForColonistToEnterRegion(RegionFromId(1));
+    gf_ThrasherSummonController(ge_Thrasher_EastHard);
     gf_WaitForColonistToEnterRegion(RegionFromId(7));
     gf_SpoogeAreawithTumor(PointFromId(672));
     gf_SpawnNydusWorm(PointFromId(779), gv_p2_ZERG_ORANGE_NW, libNtve_gf_DifficultyValueInt(4, 4, 6, 7), 2, "Zergling", gv_nydusSpawnDelay);
@@ -3241,17 +3666,17 @@ bool gt_ConvoyAttack5Nydusworms_Func (bool testConds, bool runActions) {
     gf_SpoogeAreawithOverlord(PointFromId(145), PointFromId(1413));
     gf_WaitForColonistToEnterRegion(RegionFromId(8));
     gf_WaitForColonistToEnterRegion(RegionFromId(4));
-    AIAttackWaveAddUnits4(7, 7, 8, 12, "Zergling");
-    AIAttackWaveAddUnits4(1, 1, 1, 2, "Hydralisk");
-    AIAttackWaveAddUnits4(0, 0, 2, 2, "Roach");
-    AIAttackWaveAddUnits4(0, 0, 1, 1, "Mutalisk");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(7), libB27CC4B1_gf_CurseAttackWaveModifier(7), libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(12), "Zergling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Hydralisk");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Roach");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Mutalisk");
     AIAttackWaveSend(gv_p3_ZERG_LIGHTBLUE_SE, 0, false);
     gf_WaitForColonistToEnterRegion(RegionFromId(9));
     gf_SpoogeAreawithOverlord(PointFromId(183), PointFromId(1414));
     gf_SpawnNydusWorm(PointFromId(785), gv_p2_ZERG_ORANGE_NW, libNtve_gf_DifficultyValueInt(3, 4, 1, 1), libNtve_gf_DifficultyValueInt(2, 2, 1, 1), libNtve_gf_DifficultyValueUnitType("Zergling", "Zergling", "Hydralisk", "Hydralisk"), gv_nydusSpawnDelay);
-    AIAttackWaveAddUnits4(3, 3, 0, 0, "Hydralisk");
-    AIAttackWaveAddUnits4(0, 0, 12, 16, "Zergling");
-    AIAttackWaveAddUnits4(0, 0, 1, 1, "Mutalisk");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), 0, 0, "Hydralisk");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(12), libB27CC4B1_gf_CurseAttackWaveModifier(16), "Zergling");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Mutalisk");
     AIAttackWaveSend(gv_p2_ZERG_ORANGE_NW, 0, false);
     Wait(2.0, c_timeGame);
     gf_SpoogeAreawithTumor(PointFromId(678));
@@ -3261,6 +3686,7 @@ bool gt_ConvoyAttack5Nydusworms_Func (bool testConds, bool runActions) {
     Wait(3.0, c_timeGame);
     gf_SpoogeAreawithTumor(PointFromId(680));
     gf_WaitForColonistToEnterRegion(RegionFromId(13));
+    gf_ThrasherSummonController(ge_Thrasher_WestNorth);
     gf_WaitForColonistToEnterRegion(RegionFromId(20));
     if ((libNtve_gf_DifficultyValueInt(1, 1, 1, 0) == 1)) {
         gf_SpawnNydusWorm(PointFromId(980), gv_p2_ZERG_ORANGE_NW, libNtve_gf_DifficultyValueInt(2, 2, 3, 0), 2, "Zergling", gv_nydusSpawnDelay);
@@ -3296,9 +3722,10 @@ bool gt_ConvoyAttack6AHH_Func (bool testConds, bool runActions) {
     }
 
     gf_WaitForColonistToEnterRegion(RegionFromId(12));
-    AIAttackWaveAddUnits4(12, 8, 7, 10, "Zergling");
-    AIAttackWaveAddUnits4(1, 2, 1, 0, "Hydralisk");
-    AIAttackWaveAddUnits4(0, 0, 1, 1, "Ultralisk");
+    gf_ThrasherSummonController(ge_Thrasher_WestEasy);
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(12), libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(7), libB27CC4B1_gf_CurseAttackWaveModifier(10), "Zergling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(1), 0, "Hydralisk");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Ultralisk");
     AIAttackWaveSend(gv_p2_ZERG_ORANGE_NW, 0, false);
     gf_SpoogeAreawithOverlord(PointFromId(145), PointFromId(1415));
     gf_WaitForColonistToEnterRegion(RegionFromId(1));
@@ -3306,37 +3733,39 @@ bool gt_ConvoyAttack6AHH_Func (bool testConds, bool runActions) {
     Wait(2.0, c_timeGame);
     gf_SpawnNydusWorm(PointFromId(144), gv_p2_ZERG_ORANGE_NW, libNtve_gf_DifficultyValueInt(4, 4, 5, 6), 2, "Zergling", gv_nydusSpawnDelay);
     gf_WaitForColonistToEnterRegion(RegionFromId(7));
-    AIAttackWaveAddUnits4(0, 1, 1, 1, "Mutalisk");
+    AIAttackWaveAddUnits4(0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Mutalisk");
     AIAttackWaveSend(gv_p2_ZERG_ORANGE_NW, 0, false);
     gf_SpoogeAreawithTumor(PointFromId(684));
     gf_WaitForColonistToEnterRegion(RegionFromId(3));
-    AIAttackWaveAddUnits4(0, 0, 0, 1, "Mutalisk");
+    AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "Mutalisk");
     AIAttackWaveSend(gv_p3_ZERG_LIGHTBLUE_SE, 0, false);
     gf_SpoogeAreawithOverlord(PointFromId(145), PointFromId(1416));
+    gf_ThrasherSummonController(ge_Thrasher_EastSouth);
     gf_WaitForColonistToEnterRegion(RegionFromId(8));
     gf_WaitForColonistToEnterRegion(RegionFromId(4));
-    AIAttackWaveAddUnits4(12, 16, 22, 25, "Zergling");
-    AIAttackWaveAddUnits4(0, 0, 0, 1, "Infestor");
-    AIAttackWaveAddUnits4(0, 0, 1, 0, "Baneling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(12), libB27CC4B1_gf_CurseAttackWaveModifier(16), libB27CC4B1_gf_CurseAttackWaveModifier(22), libB27CC4B1_gf_CurseAttackWaveModifier(25), "Zergling");
+    AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "Infestor");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), 0, "Baneling");
     AIAttackWaveSend(gv_p3_ZERG_LIGHTBLUE_SE, 0, false);
     gf_SpoogeAreawithOverlord(PointFromId(183), PointFromId(1417));
     gf_WaitForColonistToEnterRegion(RegionFromId(9));
     gf_SpawnNydusWorm(PointFromId(559), gv_p2_ZERG_ORANGE_NW, libNtve_gf_DifficultyValueInt(3, 3, 4, 5), 2, "Zergling", gv_nydusSpawnDelay);
     gf_SpoogeAreawithTumor(PointFromId(685));
     gf_WaitForColonistToEnterRegion(RegionFromId(5));
-    AIAttackWaveAddUnits4(12, 12, 7, 19, "Zergling");
-    AIAttackWaveAddUnits4(1, 1, 1, 0, "Hydralisk");
-    AIAttackWaveAddUnits4(0, 0, 2, 3, "Baneling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(12), libB27CC4B1_gf_CurseAttackWaveModifier(12), libB27CC4B1_gf_CurseAttackWaveModifier(7), libB27CC4B1_gf_CurseAttackWaveModifier(19), "Zergling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), 0, "Hydralisk");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Baneling");
     AIAttackWaveSend(gv_p2_ZERG_ORANGE_NW, 0, false);
-    AIAttackWaveAddUnits4(0, 1, 1, 1, "Mutalisk");
+    AIAttackWaveAddUnits4(0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Mutalisk");
     AIAttackWaveSend(gv_p3_ZERG_LIGHTBLUE_SE, 0, false);
     gf_SpoogeAreawithOverlord(PointFromId(183), PointFromId(1418));
+    gf_ThrasherSummonController(ge_Thrasher_WestHard);
     gf_WaitForColonistToEnterRegion(RegionFromId(10));
     gf_AttackwithZergDropPod(libNtve_gf_DifficultyValueInt(9, 9, 13, 16), "Zergling", 0, "Hydralisk", libNtve_gf_DifficultyValueInt(0, 0, 1, 1), "Roach", PointFromId(613));
     gf_SpoogeAreawithTumor(PointFromId(964));
     gf_WaitForColonistToEnterRegion(RegionFromId(13));
     gf_SpawnNydusWorm(PointFromId(1066), gv_p2_ZERG_ORANGE_NW, libNtve_gf_DifficultyValueInt(3, 3, 3, 3), 2, "Zergling", gv_nydusSpawnDelay);
-    AIAttackWaveAddUnits4(0, 0, 2, 0, "Roach");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(2), 0, "Roach");
     AIAttackWaveSend(gv_p2_ZERG_ORANGE_NW, 0, false);
     gf_SpoogeAreawithTumor(PointFromId(1399));
     gf_WaitForColonistToEnterRegion(RegionFromId(20));
@@ -3370,41 +3799,43 @@ bool gt_ConvoyAttack7VariationAHH_Func (bool testConds, bool runActions) {
     }
 
     gf_WaitForColonistToEnterRegion(RegionFromId(12));
-    AIAttackWaveAddUnits4(11, 13, 10, 7, "Zergling");
-    AIAttackWaveAddUnits4(1, 1, 0, 0, "Hydralisk");
-    AIAttackWaveAddUnits4(0, 0, 1, 1, "Ultralisk");
-    AIAttackWaveAddUnits4(0, 0, 0, 1, "Infestor");
-    AIAttackWaveAddUnits4(0, 0, 0, 1, "Roach");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(11), libB27CC4B1_gf_CurseAttackWaveModifier(13), libB27CC4B1_gf_CurseAttackWaveModifier(10), libB27CC4B1_gf_CurseAttackWaveModifier(7), "Zergling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), 0, 0, "Hydralisk");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Ultralisk");
+    AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "Infestor");
+    AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "Roach");
     AIAttackWaveSend(gv_p2_ZERG_ORANGE_NW, 0, false);
     gf_SpoogeAreawithOverlord(PointFromId(145), PointFromId(1415));
     gf_WaitForColonistToEnterRegion(RegionFromId(1));
+    gf_ThrasherSummonController(ge_Thrasher_EastHard);
     gf_AttackwithZergDropPod(libNtve_gf_DifficultyValueInt(5, 5, 8, 12), "Zergling", 0, "Hydralisk", 0, "Roach", PointFromId(611));
     Wait(2.0, c_timeGame);
     gf_SpawnNydusWorm(PointFromId(2763), gv_p2_ZERG_ORANGE_NW, libNtve_gf_DifficultyValueInt(1, 1, 2, 2), 2, "Roach", gv_nydusSpawnDelay);
     gf_WaitForColonistToEnterRegion(RegionFromId(7));
     gf_SpoogeAreawithTumor(PointFromId(684));
     gf_WaitForColonistToEnterRegion(RegionFromId(3));
-    AIAttackWaveAddUnits4(0, 1, 1, 1, "Mutalisk");
+    AIAttackWaveAddUnits4(0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Mutalisk");
     AIAttackWaveSend(gv_p2_ZERG_ORANGE_NW, 0, false);
-    AIAttackWaveAddUnits4(0, 1, 1, 1, "Mutalisk");
+    AIAttackWaveAddUnits4(0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Mutalisk");
     AIAttackWaveSend(gv_p3_ZERG_LIGHTBLUE_SE, 0, false);
     gf_SpoogeAreawithOverlord(PointFromId(145), PointFromId(1416));
     gf_WaitForColonistToEnterRegion(RegionFromId(8));
+    gf_ThrasherSummonController(ge_Thrasher_WestHard);
     gf_WaitForColonistToEnterRegion(RegionFromId(4));
-    AIAttackWaveAddUnits4(12, 16, 19, 22, "Zergling");
-    AIAttackWaveAddUnits4(0, 0, 1, 2, "Baneling");
-    AIAttackWaveAddUnits4(0, 0, 1, 1, "Hydralisk");
-    AIAttackWaveAddUnits4(0, 0, 1, 1, "Mutalisk");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(12), libB27CC4B1_gf_CurseAttackWaveModifier(16), libB27CC4B1_gf_CurseAttackWaveModifier(19), libB27CC4B1_gf_CurseAttackWaveModifier(22), "Zergling");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Baneling");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Hydralisk");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Mutalisk");
     AIAttackWaveSend(gv_p3_ZERG_LIGHTBLUE_SE, 0, false);
     gf_SpoogeAreawithOverlord(PointFromId(183), PointFromId(1417));
     gf_WaitForColonistToEnterRegion(RegionFromId(9));
     gf_SpawnNydusWorm(PointFromId(2780), gv_p2_ZERG_ORANGE_NW, libNtve_gf_DifficultyValueInt(3, 3, 4, 4), 2, "Zergling", gv_nydusSpawnDelay);
     gf_SpoogeAreawithTumor(PointFromId(685));
     gf_WaitForColonistToEnterRegion(RegionFromId(5));
-    AIAttackWaveAddUnits4(7, 7, 13, 17, "Zergling");
-    AIAttackWaveAddUnits4(1, 1, 1, 1, "Hydralisk");
-    AIAttackWaveAddUnits4(0, 0, 2, 0, "Baneling");
-    AIAttackWaveAddUnits4(0, 0, 1, 1, "Mutalisk");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(7), libB27CC4B1_gf_CurseAttackWaveModifier(7), libB27CC4B1_gf_CurseAttackWaveModifier(13), libB27CC4B1_gf_CurseAttackWaveModifier(17), "Zergling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Hydralisk");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(2), 0, "Baneling");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Mutalisk");
     AIAttackWaveSend(gv_p2_ZERG_ORANGE_NW, 0, false);
     gf_SpoogeAreawithOverlord(PointFromId(183), PointFromId(1418));
     gf_WaitForColonistToEnterRegion(RegionFromId(10));
@@ -3414,6 +3845,7 @@ bool gt_ConvoyAttack7VariationAHH_Func (bool testConds, bool runActions) {
     gf_SpawnNydusWorm(PointFromId(2781), gv_p2_ZERG_ORANGE_NW, libNtve_gf_DifficultyValueInt(3, 3, 4, 3), 2, "Zergling", gv_nydusSpawnDelay);
     gf_CreateUnburrowingUnits(libNtve_gf_DifficultyValueInt(0, 0, 1, 1), "UltraliskBurrowed", gv_p2_ZERG_ORANGE_NW, PointFromId(2792));
     gf_SpoogeAreawithTumor(PointFromId(1399));
+    gf_ThrasherSummonController(ge_Thrasher_EastEasy);
     gf_WaitForColonistToEnterRegion(RegionFromId(20));
     gf_SpoogeAreawithTumor(PointFromId(1398));
     Wait(1.5, c_timeGame);
@@ -3607,7 +4039,7 @@ bool gt_NydusSpawningTrigger_Func (bool testConds, bool runActions) {
         for (autoC7919796_i = 1; autoC7919796_i <= autoC7919796_n; autoC7919796_i += 1) {
             if ((UnitIsAlive(lv_nydusWorm) == true) && (UnitGroupHasUnit(gv_activeNydusWorms, lv_nydusWorm) == true)) {
                 libNtve_gf_PlayAnimation(libNtve_gf_MainActorofUnit(lv_nydusWorm), c_animNameDefault, "Spell", 0, c_animTimeDefault);
-                libNtve_gf_CreateUnitsAtPoint2(lv_packSize, lv_type, 0, gv_p2_ZERG_ORANGE_NW, UnitGetPosition(lv_nydusWorm));
+                libNtve_gf_CreateUnitsAtPoint2(libB27CC4B1_gf_CurseAttackWaveModifier(lv_packSize), lv_type, 0, gv_p2_ZERG_ORANGE_NW, UnitGetPosition(lv_nydusWorm));
                 auto56518657_g = UnitLastCreatedGroup();
                 auto56518657_u = UnitGroupCount(auto56518657_g, c_unitCountAll);
                 for (;; auto56518657_u -= 1) {
@@ -4839,6 +5271,10 @@ void gt_DefeatBaseDead_Init () {
 //--------------------------------------------------------------------------------------------------
 bool gt_DefeatTacticalPhase_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
+    unitgroup autoD14B358E_g;
+    int autoD14B358E_u;
+    unit autoD14B358E_var;
+
     // Conditions
     if (testConds) {
         if (!((gv_missionPhase == ge_PRESET_MissionPhase_Tactical))) {
@@ -4853,7 +5289,7 @@ bool gt_DefeatTacticalPhase_Func (bool testConds, bool runActions) {
             return false;
         }
 
-        if (!((UnitGroupCount(UnitGroup(null, gv_p1_USER, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 1), c_unitCountAlive) == 0))) {
+        if (!((UnitGroupCount(UnitGroup(null, gv_p1_USER, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterStructure) | (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 1), c_unitCountAlive) == 0))) {
             return false;
         }
     }
@@ -4863,6 +5299,20 @@ bool gt_DefeatTacticalPhase_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    libNtve_gf_CreateUnitsAtPoint2(2, "Firebat", 0, gv_p1_USER, PointFromId(639816145));
+    libNtve_gf_AddUnitGroupToUnitGroup(UnitLastCreatedGroup(), gv_firebatCargoUnits);
+    libNtve_gf_CreateUnitsAtPoint2(2, "Medic", 0, gv_p1_USER, PointFromId(639816145));
+    libNtve_gf_AddUnitGroupToUnitGroup(UnitLastCreatedGroup(), gv_firebatCargoUnits);
+    autoD14B358E_g = UnitCargoLastCreatedGroup();
+    autoD14B358E_u = UnitGroupCount(autoD14B358E_g, c_unitCountAll);
+    for (;; autoD14B358E_u -= 1) {
+        autoD14B358E_var = UnitGroupUnitFromEnd(autoD14B358E_g, autoD14B358E_u);
+        if (autoD14B358E_var == null) { break; }
+        UnitSetPropertyFixed(autoD14B358E_var, c_unitPropEnergyPercent, 100.0);
+    }
+    MinimapPing(PlayerGroupAll(), PointFromId(639816145), 2.0, Color(0.00, 0.00, 100.00));
+    libWCMI_gf_CreateDropPod(libWCMI_ge_DropPodRace_Terran, PointFromId(639816145), gv_firebatCargoUnits, true, gv_p1_USER);
+    return true;
     gv_gameOver = true;
     TriggerQueuePause(true);
     TriggerQueueClear(c_triggerQueueRemove);
@@ -5005,7 +5455,60 @@ void gt_DefeatTooManyColonistsDie_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
-// Trigger: Victory Player Saves Enough Colonists
+// Trigger: Victory - Zerg Dead
+//--------------------------------------------------------------------------------------------------
+bool gt_VictoryZergDead_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((gv_missionPhase == ge_PRESET_MissionPhase_Escort))) {
+            return false;
+        }
+
+        if (!((gv_gameOver == false))) {
+            return false;
+        }
+
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+
+        if (!((UnitGroupCount(UnitGroup(null, gv_p2_ZERG_ORANGE_NW, RegionPlayableMap(), UnitFilter((1 << c_targetFilterPreventDefeat), 0, 0, 0), 1), c_unitCountAlive) == 0))) {
+            return false;
+        }
+
+        if (!((UnitGroupCount(UnitGroup(null, gv_p3_ZERG_LIGHTBLUE_SE, RegionPlayableMap(), UnitFilter((1 << c_targetFilterPreventDefeat), 0, 0, 0), 1), c_unitCountAlive) == 0))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    gv_gameOver = true;
+    TriggerEnable(gt_DefeatColonyShipDead, false);
+    TriggerEnable(gt_DefeatColonistHutsDie, false);
+    TriggerEnable(gt_DefeatBaseDead, false);
+    TriggerEnable(gt_VictoryPlayerSavesEnoughColonists, false);
+    TriggerExecute(gt_MainObjectiveSaveColonistsComplete, true, false);
+    TriggerExecute(gt_VictoryPlayerSavesEnoughColonistsQ, true, true);
+    gv_structuresLost = (PlayerScoreValueGetAsInt(gv_p1_USER, "StructuresLostCount") + PlayerScoreValueGetAsInt(gv_p1_USER, "StructuresFriendlyFireCount") + PlayerScoreValueGetAsInt(gv_p1_USER, "StructuresSalvagedCount"));
+    gv_zergCleared = true;
+    libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_VictoryZergDead_Init () {
+    gt_VictoryZergDead = TriggerCreate("gt_VictoryZergDead_Func");
+    TriggerAddEventTimePeriodic(gt_VictoryZergDead, 1.0, c_timeGame);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Victory - Player Saves Enough Colonists
 //--------------------------------------------------------------------------------------------------
 bool gt_VictoryPlayerSavesEnoughColonists_Func (bool testConds, bool runActions) {
     // Variable Declarations
@@ -5041,6 +5544,7 @@ bool gt_VictoryPlayerSavesEnoughColonists_Func (bool testConds, bool runActions)
     TriggerEnable(gt_DefeatColonyShipDead, false);
     TriggerEnable(gt_DefeatColonistHutsDie, false);
     TriggerEnable(gt_DefeatBaseDead, false);
+    TriggerEnable(gt_VictoryZergDead, false);
     libNtve_gf_MakeUnitInvulnerable(UnitFromId(1403), true);
     libNtve_gf_MakeUnitInvulnerable(UnitFromId(698), true);
     libNtve_gf_MakeUnitInvulnerable(UnitFromId(693), true);
@@ -5062,7 +5566,7 @@ void gt_VictoryPlayerSavesEnoughColonists_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
-// Trigger: Victory Player Saves Enough Colonists Q
+// Trigger: Victory - Player Saves Enough Colonists Q
 //--------------------------------------------------------------------------------------------------
 bool gt_VictoryPlayerSavesEnoughColonistsQ_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
@@ -5087,11 +5591,15 @@ bool gt_VictoryPlayerSavesEnoughColonistsQ_Func (bool testConds, bool runActions
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerQueueEnter();
+    libB27CC4B1_gf_TalentTime(2, false, 0, 0);
+    libB27CC4B1_gf_CurseDifficultyModifier(3);
+    libB27CC4B1_gf_CurseDifficultyModifier(4);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
     libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
     // Transmission - SoundLink("THanson01Raynor00019", 0)
     libCamp_gf_SendTransmissionCampaign(null, SoundLink("THanson01Raynor00019", -1), c_transmissionDurationAdd, 0.0, true);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Game);
+    libB27CC4B1_gf_RogueEnding();
     autoA19D92B5_g = UnitGroup("PathingBlocker1x1", c_playerAny, RegionFromId(50), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     autoA19D92B5_u = UnitGroupCount(autoA19D92B5_g, c_unitCountAll);
     for (;; autoA19D92B5_u -= 1) {
@@ -5490,6 +5998,7 @@ bool gt_ResearchObjectiveChrysalisUpdate_Func (bool testConds, bool runActions) 
     }
 
     TriggerExecute(gt_ResearchObjectiveChrysalisCreateQ, true, false);
+    libB27CC4B1_gf_TalentBonusObjectiveTrigger();
     libWCMI_gf_DisplayMissionObjectiveRewardFloatingText(UnitGetPosition(EventUnit()), "THanson01_3");
     UnitKill(EventUnit());
     gv_bonusObjectiveCollectChrysalisFound += 1;
@@ -5525,6 +6034,7 @@ bool gt_ResearchObjectiveChrysalisComplete_Func (bool testConds, bool runActions
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
+    libB27CC4B1_gf_TalentTime(1, false, 0, 0);
     TriggerExecute(gt_ResearchObjectiveChrysalisCreateQ, true, false);
     libWCMI_gf_ZS_SetMissionObjectiveState("THanson01_3", libWoLC_ge_MissionObjectiveState_Completed);
     Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
@@ -6155,6 +6665,7 @@ bool gt_VictoryQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerQueueEnter();
+    TriggerExecute(libB27CC4B1_gt_TableButtonsHide, true, true);
     TriggerExecute(gt_VictorySetup, true, true);
     TriggerExecute(gt_VictoryCinematic, true, true);
     TriggerExecute(gt_VictoryCinematicEnd, true, true);
@@ -6365,6 +6876,13 @@ bool gt_VictoryAction_Func (bool testConds, bool runActions) {
 
     // Variable Initialization
 
+    // Conditions
+    if (testConds) {
+        if (!((gv_zergCleared == false))) {
+            return false;
+        }
+    }
+
     // Actions
     if (!runActions) {
         return true;
@@ -6460,7 +6978,6 @@ void gt_VictoryCleanup_Init () {
 // Trigger Initialization
 //--------------------------------------------------------------------------------------------------
 void InitTriggers () {
-    gt_OnPlayer1GetUnit_Init();
     gt_Initialization_Init();
     gt_Init01Technology_Init();
     gt_Init02Players_Init();
@@ -6514,6 +7031,7 @@ void InitTriggers () {
     gt_ChrysalisTipTriggerC_Init();
     gt_ChrysalisTipQ_Init();
     gt_ChrysalisPing_Init();
+    gt_ThrasherDies_Init();
     gt_ConvoyAttack1Freebie_Init();
     gt_ConvoyAttack2StressBunkersnotallfull_Init();
     gt_ConvoyAttack3Burnsinglebunkers_Init();
@@ -6554,6 +7072,7 @@ void InitTriggers () {
     gt_DefeatColonyShipDead_Init();
     gt_DefeatColonistHutsDie_Init();
     gt_DefeatTooManyColonistsDie_Init();
+    gt_VictoryZergDead_Init();
     gt_VictoryPlayerSavesEnoughColonists_Init();
     gt_VictoryPlayerSavesEnoughColonistsQ_Init();
     gt_Victory_Init();

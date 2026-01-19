@@ -7,10 +7,10 @@
 //==================================================================================================
 include "TriggerLibs/NativeLib"
 include "TriggerLibs/LibertyLib"
-include "LibEA0820A1"
 include "LibCamp"
 include "LibWoLC"
 include "LibWCMI"
+include "LibB27CC4B1"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -18,10 +18,10 @@ include "LibWCMI"
 void InitLibs () {
     libNtve_InitLib();
     libLbty_InitLib();
-    libEA0820A1_InitLib();
     libCamp_InitLib();
     libWoLC_InitLib();
     libWCMI_InitLib();
+    libB27CC4B1_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -73,6 +73,8 @@ int gv_multipleTerrazineSealingFirstTarget;
 int gv_protossScore;
 int[14] gv_protossHarvesterPings;
 int gv_protossThreatLevel;
+unitgroup gv_hallucinatedZealots;
+unitgroup gv_hallucinatedStalkers;
 int gv_statSCVsLost;
 int gv_primaryObjectiveGetGas;
 int gv_primaryObjectiveStopProtossGas;
@@ -92,6 +94,8 @@ void InitGlobals () {
     gv_nEDefendersGroup = UnitGroupEmpty();
     gv_probeHarvesters = UnitGroupEmpty();
     gv_protossThreatLevel = 1;
+    gv_hallucinatedZealots = UnitGroupEmpty();
+    gv_hallucinatedStalkers = UnitGroupEmpty();
     gv_primaryObjectiveGetGas = c_invalidObjectiveId;
     gv_primaryObjectiveStopProtossGas = c_invalidObjectiveId;
     gv_bonusObjectiveCollectRelics = c_invalidObjectiveId;
@@ -109,6 +113,9 @@ int gf_GetClosestDroppedTerrazineToProtoss ();
 unit gf_GetClosestProbeToNode (int lp_canisterHarvestTargetIndex);
 unit gf_NodeMatchingCustomValue (int lp_param_TerrazineIndex);
 void gf_ResearchForAllProtoss (string lp_upgrade);
+bool gf_HallucinationAttack (int lp_player, point lp_point, string lp_unit, int lp_number);
+bool gf_HallucinationAttackOffset (int lp_player, point lp_point, string lp_unit, int lp_number, unit lp_escort, fixed lp_angle);
+int gf_HallucinationDifficultyModifier (int lp_amount);
 
 //--------------------------------------------------------------------------------------------------
 // Trigger Variables
@@ -132,6 +139,7 @@ trigger gt_ProtossAggroBullies;
 trigger gt_StartRain;
 trigger gt_HarvestingSpeedBumpsNWesternTerritory;
 trigger gt_HarvestingSpeedBumpsCentralTerritory;
+trigger gt_MidTalents;
 trigger gt_InitNERelicDefenders;
 trigger gt_NEDefenderScriptedAI;
 trigger gt_NEDefenderDeath;
@@ -169,6 +177,7 @@ trigger gt_AITerrazineSealingH;
 trigger gt_AITerrazineSealingI;
 trigger gt_AIResourcesMinerals;
 trigger gt_AIResourcesGas;
+trigger gt_Hallucinations;
 trigger gt_StatSCVsLost;
 trigger gt_VictoryProtossDestroyed;
 trigger gt_ProtossDestroyedQ;
@@ -323,6 +332,7 @@ void gf_AITerrazineHarvestAttempt (int lp_primaryTerrazineIndex, int lp_secondar
         return ;
     }
 
+    UnitBehaviorRemove(lv_harvestingProbe, "RogueUniversalUnitBuff", 1);
     UnitIssueOrder(lv_harvestingProbe, Order(AbilityCommand("stop", 0)), c_orderQueueReplace);
     UnitIssueOrder(lv_harvestingProbe, Order(AbilityCommand("ProbeHarvest", 1)), c_orderQueueAddToEnd);
     UnitIssueOrder(lv_harvestingProbe, OrderTargetingUnit(AbilityCommand("ProbeHarvest", 0), gf_NodeMatchingCustomValue(lv_targetTerrazineIndex)), c_orderQueueAddToEnd);
@@ -332,118 +342,148 @@ void gf_AITerrazineHarvestAttempt (int lp_primaryTerrazineIndex, int lp_secondar
     autoD1A8BB6F_val = gv_protossThreatLevel;
     if (autoD1A8BB6F_val == 1) {
         AIAttackWaveSetTargetEscortNL(gv_p4_PROTOSS_WEST_ESCORTS, libNtve_gf_ConvertUnitToUnitGroup(lv_harvestingProbe), 0);
-        AIAttackWaveAddUnits4(1, 1, 2, 2, "Stalker");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Stalker");
+        gf_HallucinationAttack(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "Stalker", libNtve_gf_DifficultyValueInt(1, 1, 2, 2));
         AIAttackWaveSend(gv_p4_PROTOSS_WEST_ESCORTS, 0, false);
         AIAttackWaveSetTargetEscortNL(gv_p4_PROTOSS_WEST_ESCORTS, libNtve_gf_ConvertUnitToUnitGroup(lv_harvestingProbe), 0);
         lv_escortCount = libNtve_gf_DifficultyValueInt(1, 1, 2, 3);
+        lv_escortCount = libB27CC4B1_gf_CurseAttackWaveModifier(lv_escortCount);
         lv_offsetAngle = gf_CalculateOffset(IntToFixed(lv_escortCount));
         auto7291BAD7_ae = lv_escortCount;
         lv_i = 1;
         for ( ; ( (auto7291BAD7_ai >= 0 && lv_i <= auto7291BAD7_ae) || (auto7291BAD7_ai < 0 && lv_i >= auto7291BAD7_ae) ) ; lv_i += auto7291BAD7_ai ) {
             AIAttackWaveAddEscortType(gv_p4_PROTOSS_WEST_ESCORTS, "Scout", lv_harvestingProbe, 3.5, (lv_offsetAngle * IntToFixed(lv_i)));
+            gf_HallucinationAttackOffset(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "Scout", 1, lv_harvestingProbe, (lv_offsetAngle * IntToFixed(lv_i)));
         }
         AIAttackWaveSend(gv_p4_PROTOSS_WEST_ESCORTS, 0, false);
     }
     else if (autoD1A8BB6F_val == 2) {
         AIAttackWaveSetTargetEscortNL(gv_p4_PROTOSS_WEST_ESCORTS, libNtve_gf_ConvertUnitToUnitGroup(lv_harvestingProbe), 0);
-        AIAttackWaveAddUnits4(1, 1, 2, 2, "Stalker");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Stalker");
+        gf_HallucinationAttack(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "Stalker", libNtve_gf_DifficultyValueInt(1, 1, 2, 2));
         AIAttackWaveSend(gv_p4_PROTOSS_WEST_ESCORTS, 0, false);
         AIAttackWaveSetTargetEscortNL(gv_p4_PROTOSS_WEST_ESCORTS, libNtve_gf_ConvertUnitToUnitGroup(lv_harvestingProbe), 0);
         lv_escortCount = libNtve_gf_DifficultyValueInt(2, 2, 3, 3);
+        lv_escortCount = libB27CC4B1_gf_CurseAttackWaveModifier(lv_escortCount);
         lv_offsetAngle = gf_CalculateOffset(IntToFixed(lv_escortCount));
         autoD3883E60_ae = lv_escortCount;
         lv_i = 1;
         for ( ; ( (autoD3883E60_ai >= 0 && lv_i <= autoD3883E60_ae) || (autoD3883E60_ai < 0 && lv_i >= autoD3883E60_ae) ) ; lv_i += autoD3883E60_ai ) {
             AIAttackWaveAddEscortType(gv_p4_PROTOSS_WEST_ESCORTS, "Scout", lv_harvestingProbe, 3.5, (lv_offsetAngle * IntToFixed(lv_i)));
+            gf_HallucinationAttackOffset(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "Scout", 1, lv_harvestingProbe, (lv_offsetAngle * IntToFixed(lv_i)));
         }
         AIAttackWaveSend(gv_p4_PROTOSS_WEST_ESCORTS, 0, false);
     }
     else if (autoD1A8BB6F_val == 3) {
         AIAttackWaveSetTargetEscortNL(gv_p4_PROTOSS_WEST_ESCORTS, libNtve_gf_ConvertUnitToUnitGroup(lv_harvestingProbe), 0);
-        AIAttackWaveAddUnits4(0, 0, 1, 2, "Stalker");
+        AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Stalker");
+        gf_HallucinationAttack(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "Stalker", libNtve_gf_DifficultyValueInt(0, 0, 1, 2));
         AIAttackWaveSend(gv_p4_PROTOSS_WEST_ESCORTS, 0, false);
         AIAttackWaveSetTargetEscortNL(gv_p4_PROTOSS_WEST_ESCORTS, libNtve_gf_ConvertUnitToUnitGroup(lv_harvestingProbe), 0);
         lv_escortCount = libNtve_gf_DifficultyValueInt(2, 2, 3, 3);
+        lv_escortCount = libB27CC4B1_gf_CurseAttackWaveModifier(lv_escortCount);
         lv_offsetAngle = gf_CalculateOffset(IntToFixed(lv_escortCount));
         auto4A5B622D_ae = lv_escortCount;
         lv_i = 1;
         for ( ; ( (auto4A5B622D_ai >= 0 && lv_i <= auto4A5B622D_ae) || (auto4A5B622D_ai < 0 && lv_i >= auto4A5B622D_ae) ) ; lv_i += auto4A5B622D_ai ) {
             AIAttackWaveAddEscortType(gv_p4_PROTOSS_WEST_ESCORTS, "Scout", lv_harvestingProbe, 3.5, (lv_offsetAngle * IntToFixed(lv_i)));
+            gf_HallucinationAttackOffset(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "Scout", 1, lv_harvestingProbe, (lv_offsetAngle * IntToFixed(lv_i)));
         }
         lv_escortCount = libNtve_gf_DifficultyValueInt(1, 1, 2, 2);
+        lv_escortCount = libB27CC4B1_gf_CurseAttackWaveModifier(lv_escortCount);
         lv_offsetAngle = gf_CalculateOffset(IntToFixed(lv_escortCount));
         auto3E772D7A_ae = lv_escortCount;
         lv_i = 1;
         for ( ; ( (auto3E772D7A_ai >= 0 && lv_i <= auto3E772D7A_ae) || (auto3E772D7A_ai < 0 && lv_i >= auto3E772D7A_ae) ) ; lv_i += auto3E772D7A_ai ) {
             AIAttackWaveAddEscortType(gv_p4_PROTOSS_WEST_ESCORTS, "VoidRay", lv_harvestingProbe, 1.5, (lv_offsetAngle * IntToFixed(lv_i)));
+            gf_HallucinationAttackOffset(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "VoidRay", 1, lv_harvestingProbe, (lv_offsetAngle * IntToFixed(lv_i)));
         }
         AIAttackWaveSend(gv_p4_PROTOSS_WEST_ESCORTS, 0, false);
     }
     else if (autoD1A8BB6F_val == 4) {
         AIAttackWaveSetTargetEscortNL(gv_p4_PROTOSS_WEST_ESCORTS, libNtve_gf_ConvertUnitToUnitGroup(lv_harvestingProbe), 0);
-        AIAttackWaveAddUnits4(1, 1, 2, 2, "Stalker");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Stalker");
+        gf_HallucinationAttack(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "Stalker", libNtve_gf_DifficultyValueInt(1, 1, 2, 2));
         AIAttackWaveSend(gv_p4_PROTOSS_WEST_ESCORTS, 0, false);
         AIAttackWaveSetTargetEscortNL(gv_p4_PROTOSS_WEST_ESCORTS, libNtve_gf_ConvertUnitToUnitGroup(lv_harvestingProbe), 0);
         lv_escortCount = libNtve_gf_DifficultyValueInt(2, 2, 3, 3);
+        lv_escortCount = libB27CC4B1_gf_CurseAttackWaveModifier(lv_escortCount);
         lv_offsetAngle = gf_CalculateOffset(IntToFixed(lv_escortCount));
         auto3D79AC45_ae = lv_escortCount;
         lv_i = 1;
         for ( ; ( (auto3D79AC45_ai >= 0 && lv_i <= auto3D79AC45_ae) || (auto3D79AC45_ai < 0 && lv_i >= auto3D79AC45_ae) ) ; lv_i += auto3D79AC45_ai ) {
             AIAttackWaveAddEscortType(gv_p4_PROTOSS_WEST_ESCORTS, "Scout", lv_harvestingProbe, 3.5, (lv_offsetAngle * IntToFixed(lv_i)));
+            gf_HallucinationAttackOffset(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "Scout", 1, lv_harvestingProbe, (lv_offsetAngle * IntToFixed(lv_i)));
         }
         lv_escortCount = libNtve_gf_DifficultyValueInt(1, 1, 2, 2);
+        lv_escortCount = libB27CC4B1_gf_CurseAttackWaveModifier(lv_escortCount);
         lv_offsetAngle = gf_CalculateOffset(IntToFixed(lv_escortCount));
         autoAE209E35_ae = lv_escortCount;
         lv_i = 1;
         for ( ; ( (autoAE209E35_ai >= 0 && lv_i <= autoAE209E35_ae) || (autoAE209E35_ai < 0 && lv_i >= autoAE209E35_ae) ) ; lv_i += autoAE209E35_ai ) {
             AIAttackWaveAddEscortType(gv_p4_PROTOSS_WEST_ESCORTS, "VoidRay", lv_harvestingProbe, 1.5, (lv_offsetAngle * IntToFixed(lv_i)));
+            gf_HallucinationAttackOffset(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "VoidRay", 1, lv_harvestingProbe, (lv_offsetAngle * IntToFixed(lv_i)));
         }
-        AIAttackWaveAddUnits4(0, 0, 1, 1, "Observer");
+        AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Observer");
+        gf_HallucinationAttack(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "Observer", libNtve_gf_DifficultyValueInt(0, 0, 1, 1));
         AIAttackWaveSend(gv_p4_PROTOSS_WEST_ESCORTS, 0, false);
     }
     else if (autoD1A8BB6F_val == 5) {
         AIAttackWaveSetTargetEscortNL(gv_p4_PROTOSS_WEST_ESCORTS, libNtve_gf_ConvertUnitToUnitGroup(lv_harvestingProbe), 0);
-        AIAttackWaveAddUnits4(2, 2, 3, 3, "Stalker");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Stalker");
+        gf_HallucinationAttack(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "Stalker", libNtve_gf_DifficultyValueInt(2, 2, 3, 3));
         AIAttackWaveSend(gv_p4_PROTOSS_WEST_ESCORTS, 0, false);
         AIAttackWaveSetTargetEscortNL(gv_p4_PROTOSS_WEST_ESCORTS, libNtve_gf_ConvertUnitToUnitGroup(lv_harvestingProbe), 0);
         lv_escortCount = libNtve_gf_DifficultyValueInt(2, 2, 3, 4);
+        lv_escortCount = libB27CC4B1_gf_CurseAttackWaveModifier(lv_escortCount);
         lv_offsetAngle = gf_CalculateOffset(IntToFixed(lv_escortCount));
         autoC2C70BA9_ae = lv_escortCount;
         lv_i = 1;
         for ( ; ( (autoC2C70BA9_ai >= 0 && lv_i <= autoC2C70BA9_ae) || (autoC2C70BA9_ai < 0 && lv_i >= autoC2C70BA9_ae) ) ; lv_i += autoC2C70BA9_ai ) {
             AIAttackWaveAddEscortType(gv_p4_PROTOSS_WEST_ESCORTS, "Scout", lv_harvestingProbe, 3.5, (lv_offsetAngle * IntToFixed(lv_i)));
+            gf_HallucinationAttackOffset(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "Scout", 1, lv_harvestingProbe, (lv_offsetAngle * IntToFixed(lv_i)));
         }
         lv_escortCount = libNtve_gf_DifficultyValueInt(1, 1, 2, 2);
+        lv_escortCount = libB27CC4B1_gf_CurseAttackWaveModifier(lv_escortCount);
         lv_offsetAngle = gf_CalculateOffset(IntToFixed(lv_escortCount));
         autoF7DDB999_ae = lv_escortCount;
         lv_i = 1;
         for ( ; ( (autoF7DDB999_ai >= 0 && lv_i <= autoF7DDB999_ae) || (autoF7DDB999_ai < 0 && lv_i >= autoF7DDB999_ae) ) ; lv_i += autoF7DDB999_ai ) {
             AIAttackWaveAddEscortType(gv_p4_PROTOSS_WEST_ESCORTS, "VoidRay", lv_harvestingProbe, 1.5, (lv_offsetAngle * IntToFixed(lv_i)));
+            gf_HallucinationAttackOffset(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "VoidRay", 1, lv_harvestingProbe, (lv_offsetAngle * IntToFixed(lv_i)));
         }
-        AIAttackWaveAddUnits4(0, 1, 1, 1, "Observer");
+        AIAttackWaveAddUnits4(0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Observer");
+        gf_HallucinationAttack(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "Observer", libNtve_gf_DifficultyValueInt(0, 1, 1, 1));
         AIAttackWaveSend(gv_p4_PROTOSS_WEST_ESCORTS, 0, false);
     }
     else if (autoD1A8BB6F_val == 6) {
         AIAttackWaveSetTargetEscortNL(gv_p4_PROTOSS_WEST_ESCORTS, libNtve_gf_ConvertUnitToUnitGroup(lv_harvestingProbe), 0);
-        AIAttackWaveAddUnits4(2, 2, 3, 2, "Stalker");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Stalker");
+        gf_HallucinationAttack(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "Stalker", libNtve_gf_DifficultyValueInt(2, 2, 3, 2));
         AIAttackWaveSend(gv_p4_PROTOSS_WEST_ESCORTS, 0, false);
         AIAttackWaveSetTargetEscortNL(gv_p4_PROTOSS_WEST_ESCORTS, libNtve_gf_ConvertUnitToUnitGroup(lv_harvestingProbe), 0);
-        AIAttackWaveAddUnits4(0, 0, 0, 1, "Colossus");
+        AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "Colossus");
+        gf_HallucinationAttack(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "Colossus", libNtve_gf_DifficultyValueInt(0, 0, 0, 1));
         lv_escortCount = libNtve_gf_DifficultyValueInt(3, 3, 4, 4);
+        lv_escortCount = libB27CC4B1_gf_CurseAttackWaveModifier(lv_escortCount);
         lv_offsetAngle = gf_CalculateOffset(IntToFixed(lv_escortCount));
         autoF6D145CD_ae = lv_escortCount;
         lv_i = 1;
         for ( ; ( (autoF6D145CD_ai >= 0 && lv_i <= autoF6D145CD_ae) || (autoF6D145CD_ai < 0 && lv_i >= autoF6D145CD_ae) ) ; lv_i += autoF6D145CD_ai ) {
             AIAttackWaveAddEscortType(gv_p4_PROTOSS_WEST_ESCORTS, "Scout", lv_harvestingProbe, 3.5, (lv_offsetAngle * IntToFixed(lv_i)));
+            gf_HallucinationAttackOffset(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "Scout", 1, lv_harvestingProbe, (lv_offsetAngle * IntToFixed(lv_i)));
         }
         lv_escortCount = libNtve_gf_DifficultyValueInt(1, 1, 2, 2);
+        lv_escortCount = libB27CC4B1_gf_CurseAttackWaveModifier(lv_escortCount);
         lv_offsetAngle = gf_CalculateOffset(IntToFixed(lv_escortCount));
         auto0D7B1014_ae = lv_escortCount;
         lv_i = 1;
         for ( ; ( (auto0D7B1014_ai >= 0 && lv_i <= auto0D7B1014_ae) || (auto0D7B1014_ai < 0 && lv_i >= auto0D7B1014_ae) ) ; lv_i += auto0D7B1014_ai ) {
             AIAttackWaveAddEscortType(gv_p4_PROTOSS_WEST_ESCORTS, "VoidRay", lv_harvestingProbe, 1.5, (lv_offsetAngle * IntToFixed(lv_i)));
+            gf_HallucinationAttackOffset(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "VoidRay", 1, lv_harvestingProbe, (lv_offsetAngle * IntToFixed(lv_i)));
         }
-        AIAttackWaveAddUnits4(1, 1, 1, 1, "Observer");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Observer");
+        gf_HallucinationAttack(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "Observer", libNtve_gf_DifficultyValueInt(1, 1, 1, 1));
         AIAttackWaveSend(gv_p4_PROTOSS_WEST_ESCORTS, 0, false);
     }
     else {
@@ -647,6 +687,85 @@ void gf_ResearchForAllProtoss (string lp_upgrade) {
     }
 }
 
+bool gf_HallucinationAttack (int lp_player, point lp_point, string lp_unit, int lp_number) {
+    // Automatic Variable Declarations
+    unitgroup auto3BFE3C24_g;
+    int auto3BFE3C24_u;
+    unit auto3BFE3C24_var;
+
+    // Implementation
+    if ((libB27CC4B1_gf_TalentAcquired("ChallengeTosh2") == true) && (UnitIsAlive(UnitFromId(95)) == true)) {
+        lp_number = libB27CC4B1_gf_CurseAttackWaveModifier(lp_number);
+        lp_number = gf_HallucinationDifficultyModifier(lp_number);
+        libNtve_gf_CreateUnitsWithDefaultFacing(lp_number, lp_unit, 0, lp_player, lp_point);
+        AIAttackWaveUseGroup(lp_player, UnitLastCreatedGroup());
+        auto3BFE3C24_g = UnitLastCreatedGroup();
+        auto3BFE3C24_u = UnitGroupCount(auto3BFE3C24_g, c_unitCountAll);
+        for (;; auto3BFE3C24_u -= 1) {
+            auto3BFE3C24_var = UnitGroupUnitFromEnd(auto3BFE3C24_g, auto3BFE3C24_u);
+            if (auto3BFE3C24_var == null) { break; }
+            UnitBehaviorAdd(auto3BFE3C24_var, "Hallucination", auto3BFE3C24_var, 1);
+        }
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool gf_HallucinationAttackOffset (int lp_player, point lp_point, string lp_unit, int lp_number, unit lp_escort, fixed lp_angle) {
+    // Automatic Variable Declarations
+    unitgroup autoF7197FF7_g;
+    int autoF7197FF7_u;
+    unit autoF7197FF7_var;
+
+    // Implementation
+    if ((libB27CC4B1_gf_TalentAcquired("ChallengeTosh2") == true) && (UnitIsAlive(UnitFromId(95)) == true)) {
+        lp_number = gf_HallucinationDifficultyModifier(lp_number);
+        libNtve_gf_CreateUnitsWithDefaultFacing(lp_number, lp_unit, 0, lp_player, lp_point);
+        autoF7197FF7_g = UnitLastCreatedGroup();
+        autoF7197FF7_u = UnitGroupCount(autoF7197FF7_g, c_unitCountAll);
+        for (;; autoF7197FF7_u -= 1) {
+            autoF7197FF7_var = UnitGroupUnitFromEnd(autoF7197FF7_g, autoF7197FF7_u);
+            if (autoF7197FF7_var == null) { break; }
+            UnitBehaviorAdd(autoF7197FF7_var, "Hallucination", autoF7197FF7_var, 1);
+            AIAttackWaveAddEscortUnit(lp_player, autoF7197FF7_var, lp_escort, 3.5, lp_angle);
+        }
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+int gf_HallucinationDifficultyModifier (int lp_amount) {
+    // Variable Declarations
+    fixed lv_newAmount;
+    int lv_integerAmount;
+    int lv_chance;
+    int lv_rand;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+
+    // Implementation
+    lv_newAmount = (lp_amount * libNtve_gf_DifficultyValueFixed(0.7, 1.0, 1.3, 1.6));
+    lv_integerAmount = TruncI(lv_newAmount);
+    if ((IntToFixed(lv_integerAmount) == lv_newAmount)) {
+        return lv_integerAmount;
+    }
+    else {
+        lv_chance = TruncI(((lv_newAmount - IntToFixed(lv_integerAmount)) * 100.0));
+        lv_rand = RandomInt(1, 100);
+        if ((lv_rand <= lv_chance)) {
+            return (lv_integerAmount + 1);
+        }
+        else {
+            return lv_integerAmount;
+        }
+    }
+}
+
 //--------------------------------------------------------------------------------------------------
 // Trigger: Initialization
 //--------------------------------------------------------------------------------------------------
@@ -658,7 +777,6 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     }
 
     libWoLC_gf_ULoadCampaignData("TTosh02");
-    TriggerExecute(libEA0820A1_gt_Init00ReplaceUnit, true, false);
     TriggerExecute(gt_Init01Technology, true, false);
     TriggerExecute(gt_Init02Players, true, true);
     TriggerExecute(gt_Init03VariablesUnits, true, true);
@@ -667,6 +785,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init06Difficulty, true, true);
     TriggerExecute(gt_Init07Help, true, true);
     libWoLC_gf_RegisterFootageRecording(gt_BriefingQ);
+    TriggerExecute(libB27CC4B1_gt_RogueInit, true, true);
     TriggerExecute(gt_IntroSequence, true, false);
     return true;
 }
@@ -990,11 +1109,19 @@ bool gt_StartGame_Func (bool testConds, bool runActions) {
 
     libNtve_gf_ShareVisionofUnit(UnitFromId(34), true, gv_p1_USER);
     TimerStart(gv_protossAggroTimer, 180.0, false, c_timeGame);
+    TriggerExecute(libB27CC4B1_gt_InitTableButtons, true, true);
     Wait(3.0, c_timeReal);
+    libB27CC4B1_gf_ChallengeTime("ChallengeTosh2");
     TriggerExecute(gt_PrimaryObjectiveCollectTerrazineCreateQ, true, true);
     Wait(8.0, c_timeReal);
+    libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
+    UIDisplayMessage(PlayerGroupAll(), c_messageAreaSubtitle, StringExternal("Param/Value/8E745D59"));
     TriggerExecute(gt_GoliathandGatherTerrazineTipsQ, true, false);
     Wait(4.0, c_timeGame);
+    if ((libB27CC4B1_gf_TalentAcquired("ChallengeTosh2") == true)) {
+        TriggerEnable(gt_Hallucinations, true);
+    }
+
     TriggerExecute(gt_ObjectiveRelicsCreateQ, true, true);
     return true;
 }
@@ -1404,6 +1531,34 @@ void gt_HarvestingSpeedBumpsCentralTerritory_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: Mid Talents
+//--------------------------------------------------------------------------------------------------
+bool gt_MidTalents_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    libB27CC4B1_gf_TalentTime(1, false, 0, 0);
+    libB27CC4B1_gf_CurseDifficultyModifier(2);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_MidTalents_Init () {
+    gt_MidTalents = TriggerCreate("gt_MidTalents_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: Init NE Relic Defenders
 //--------------------------------------------------------------------------------------------------
 bool gt_InitNERelicDefenders_Func (bool testConds, bool runActions) {
@@ -1640,7 +1795,7 @@ bool gt_Playerstartsharvestingterrazine_Func (bool testConds, bool runActions) {
 
     // Conditions
     if (testConds) {
-        if (!((UnitGetType(EventUnit()) == "SquadSCV"))) {
+        if (!(((UnitGetType(EventUnit()) == "SCV") || (UnitGetType(EventUnit()) == "Dave")))) {
             return false;
         }
 
@@ -1659,7 +1814,7 @@ bool gt_Playerstartsharvestingterrazine_Func (bool testConds, bool runActions) {
     }
 
     lv_harvestingSCV = EventUnit();
-    UnitBehaviorAdd(lv_harvestingSCV, "SquadHarvestingTerrazine", lv_harvestingSCV, 1);
+    UnitBehaviorAdd(lv_harvestingSCV, "HarvestingTerrazine", lv_harvestingSCV, 1);
     lv_customTerrazineGasValue = FixedToInt(UnitGetCustomValue(EventUnitTargetUnit(), 0));
     gv_gasControlCount += 1;
     gv_gasHarvestingCount += 1;
@@ -1683,7 +1838,8 @@ bool gt_Playerstartsharvestingterrazine_Func (bool testConds, bool runActions) {
     }
 
     if (((gv_gasControlCount + gv_playerScore) == 2)) {
-        AIAttackWaveAddUnits4(1, 1, 2, 3, "Stalker");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Stalker");
+        gf_HallucinationAttack(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "Stalker", libNtve_gf_DifficultyValueInt(1, 1, 2, 3));
         AIAttackWaveSetTargetPoint(gv_p4_PROTOSS_WEST_ESCORTS, UnitGetPosition(EventUnit()));
         gf_AddFriendlyWavepoints(FixedToInt(UnitGetCustomValue(EventUnitTargetUnit(), 0)));
         AIAttackWaveSend(gv_p4_PROTOSS_WEST_ESCORTS, 40, false);
@@ -1691,8 +1847,10 @@ bool gt_Playerstartsharvestingterrazine_Func (bool testConds, bool runActions) {
     }
 
     if (((gv_gasControlCount + gv_playerScore) == 3)) {
-        AIAttackWaveAddUnits4(1, 1, 2, 3, "Stalker");
-        AIAttackWaveAddUnits4(1, 1, 2, 2, "Scout");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Stalker");
+        gf_HallucinationAttack(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "Stalker", libNtve_gf_DifficultyValueInt(1, 1, 2, 3));
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Scout");
+        gf_HallucinationAttack(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "Scout", libNtve_gf_DifficultyValueInt(1, 1, 2, 2));
         AIAttackWaveSetTargetPoint(gv_p4_PROTOSS_WEST_ESCORTS, UnitGetPosition(EventUnit()));
         gf_AddFriendlyWavepoints(FixedToInt(UnitGetCustomValue(EventUnitTargetUnit(), 0)));
         AIAttackWaveSend(gv_p4_PROTOSS_WEST_ESCORTS, 40, false);
@@ -1701,8 +1859,10 @@ bool gt_Playerstartsharvestingterrazine_Func (bool testConds, bool runActions) {
 
     if (((gv_gasControlCount + gv_playerScore) == 4)) {
         TriggerExecute(gt_ProtossmediumretaliationannounceQ, true, false);
-        AIAttackWaveAddUnits4(3, 3, 4, 4, "Scout");
-        AIAttackWaveAddUnits4(0, 0, 1, 2, "VoidRay");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(4), "Scout");
+        gf_HallucinationAttack(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "Scout", libNtve_gf_DifficultyValueInt(3, 3, 4, 4));
+        AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), "VoidRay");
+        gf_HallucinationAttack(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "VoidRay", libNtve_gf_DifficultyValueInt(0, 0, 1, 2));
         AIAttackWaveSetTargetPoint(gv_p4_PROTOSS_WEST_ESCORTS, UnitGetPosition(EventUnit()));
         gf_AddFriendlyWavepoints(FixedToInt(UnitGetCustomValue(EventUnitTargetUnit(), 0)));
         AIAttackWaveSend(gv_p4_PROTOSS_WEST_ESCORTS, 40, false);
@@ -1710,14 +1870,18 @@ bool gt_Playerstartsharvestingterrazine_Func (bool testConds, bool runActions) {
     }
 
     if (((gv_gasControlCount + gv_playerScore) == 5)) {
-        AIAttackWaveAddUnits4(1, 1, 2, 3, "Stalker");
-        AIAttackWaveAddUnits4(1, 1, 2, 3, "Scout");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Stalker");
+        gf_HallucinationAttack(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "Stalker", libNtve_gf_DifficultyValueInt(1, 1, 2, 3));
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Scout");
+        gf_HallucinationAttack(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "Scout", libNtve_gf_DifficultyValueInt(1, 1, 2, 3));
         AIAttackWaveSetTargetPoint(gv_p4_PROTOSS_WEST_ESCORTS, UnitGetPosition(EventUnit()));
         gf_AddFriendlyWavepoints(FixedToInt(UnitGetCustomValue(EventUnitTargetUnit(), 0)));
         AIAttackWaveSend(gv_p4_PROTOSS_WEST_ESCORTS, 0, false);
         gv_terrazineAttackWaves[FixedToInt(UnitGetCustomValue(EventUnitTargetUnit(), 0))][1] = WaveLastCreated();
-        AIAttackWaveAddUnits4(1, 1, 2, 2, "Scout");
-        AIAttackWaveAddUnits4(1, 1, 2, 2, "VoidRay");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Scout");
+        gf_HallucinationAttack(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "Scout", libNtve_gf_DifficultyValueInt(1, 1, 2, 2));
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "VoidRay");
+        gf_HallucinationAttack(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "VoidRay", libNtve_gf_DifficultyValueInt(1, 1, 2, 2));
         AIAttackWaveSetTargetPoint(gv_p4_PROTOSS_WEST_ESCORTS, UnitGetPosition(EventUnit()));
         gf_AddFriendlyWavepoints(FixedToInt(UnitGetCustomValue(EventUnitTargetUnit(), 0)));
         AIAttackWaveSend(gv_p4_PROTOSS_WEST_ESCORTS, 45, false);
@@ -1725,14 +1889,18 @@ bool gt_Playerstartsharvestingterrazine_Func (bool testConds, bool runActions) {
     }
 
     if (((gv_gasControlCount + gv_playerScore) == 6)) {
-        AIAttackWaveAddUnits4(2, 2, 3, 4, "Zealot");
-        AIAttackWaveAddUnits4(1, 1, 2, 1, "Scout");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(4), "Zealot");
+        gf_HallucinationAttack(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "Zealot", libNtve_gf_DifficultyValueInt(2, 2, 3, 4));
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Scout");
+        gf_HallucinationAttack(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "Scout", libNtve_gf_DifficultyValueInt(1, 1, 2, 1));
         AIAttackWaveSetTargetPoint(gv_p4_PROTOSS_WEST_ESCORTS, UnitGetPosition(EventUnit()));
         gf_AddFriendlyWavepoints(FixedToInt(UnitGetCustomValue(EventUnitTargetUnit(), 0)));
         AIAttackWaveSend(gv_p4_PROTOSS_WEST_ESCORTS, 0, false);
         gv_terrazineAttackWaves[FixedToInt(UnitGetCustomValue(EventUnitTargetUnit(), 0))][1] = WaveLastCreated();
-        AIAttackWaveAddUnits4(2, 2, 1, 2, "Scout");
-        AIAttackWaveAddUnits4(1, 1, 2, 2, "VoidRay");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Scout");
+        gf_HallucinationAttack(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "Scout", libNtve_gf_DifficultyValueInt(2, 2, 1, 2));
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "VoidRay");
+        gf_HallucinationAttack(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "VoidRay", libNtve_gf_DifficultyValueInt(1, 1, 2, 2));
         AIAttackWaveSetTargetPoint(gv_p4_PROTOSS_WEST_ESCORTS, UnitGetPosition(EventUnit()));
         gf_AddFriendlyWavepoints(FixedToInt(UnitGetCustomValue(EventUnitTargetUnit(), 0)));
         AIAttackWaveSend(gv_p4_PROTOSS_WEST_ESCORTS, 45, false);
@@ -1741,14 +1909,18 @@ bool gt_Playerstartsharvestingterrazine_Func (bool testConds, bool runActions) {
 
     if (((gv_gasControlCount + gv_playerScore) >= 7)) {
         TriggerExecute(gt_ProtossheavyretaliationannounceQ, true, false);
-        AIAttackWaveAddUnits4(2, 2, 3, 3, "Scout");
-        AIAttackWaveAddUnits4(1, 1, 2, 2, "Stalker");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Scout");
+        gf_HallucinationAttack(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "Scout", libNtve_gf_DifficultyValueInt(2, 2, 3, 3));
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Stalker");
+        gf_HallucinationAttack(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "Stalker", libNtve_gf_DifficultyValueInt(1, 1, 2, 2));
         AIAttackWaveSetTargetPoint(gv_p4_PROTOSS_WEST_ESCORTS, UnitGetPosition(EventUnit()));
         gf_AddFriendlyWavepoints(FixedToInt(UnitGetCustomValue(EventUnitTargetUnit(), 0)));
         AIAttackWaveSend(gv_p4_PROTOSS_WEST_ESCORTS, 0, false);
         gv_terrazineAttackWaves[FixedToInt(UnitGetCustomValue(EventUnitTargetUnit(), 0))][1] = WaveLastCreated();
-        AIAttackWaveAddUnits4(1, 1, 2, 2, "VoidRay");
-        AIAttackWaveAddUnits4(3, 3, 2, 4, "Scout");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "VoidRay");
+        gf_HallucinationAttack(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "VoidRay", libNtve_gf_DifficultyValueInt(1, 1, 2, 2));
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(4), "Scout");
+        gf_HallucinationAttack(gv_p4_PROTOSS_WEST_ESCORTS, PointFromId(374697273), "Scout", libNtve_gf_DifficultyValueInt(3, 3, 2, 4));
         AIAttackWaveSetTargetPoint(gv_p4_PROTOSS_WEST_ESCORTS, UnitGetPosition(EventUnit()));
         gf_AddFriendlyWavepoints(FixedToInt(UnitGetCustomValue(EventUnitTargetUnit(), 0)));
         AIAttackWaveSend(gv_p4_PROTOSS_WEST_ESCORTS, 45, false);
@@ -1761,7 +1933,7 @@ bool gt_Playerstartsharvestingterrazine_Func (bool testConds, bool runActions) {
 //--------------------------------------------------------------------------------------------------
 void gt_Playerstartsharvestingterrazine_Init () {
     gt_Playerstartsharvestingterrazine = TriggerCreate("gt_Playerstartsharvestingterrazine_Func");
-    TriggerAddEventUnitAbility(gt_Playerstartsharvestingterrazine, null, AbilityCommand("SquadSCVGather", 0), c_abilHarvestStageHarvest, false);
+    TriggerAddEventUnitAbility(gt_Playerstartsharvestingterrazine, null, AbilityCommand("SCVHarvest", 0), c_abilHarvestStageHarvest, false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1957,7 +2129,7 @@ bool gt_SCVharvestingmanuallystopped_Func (bool testConds, bool runActions) {
             return false;
         }
 
-        if (!((UnitGetType(EventUnit()) == "SquadSCV"))) {
+        if (!((UnitGetType(EventUnit()) == "SCV"))) {
             return false;
         }
     }
@@ -1988,7 +2160,7 @@ bool gt_SCVharvestingmanuallystopped_Func (bool testConds, bool runActions) {
 //--------------------------------------------------------------------------------------------------
 void gt_SCVharvestingmanuallystopped_Init () {
     gt_SCVharvestingmanuallystopped = TriggerCreate("gt_SCVharvestingmanuallystopped_Func");
-    TriggerAddEventUnitAbility(gt_SCVharvestingmanuallystopped, null, AbilityCommand("SquadSCVGather", 1), c_unitAbilStageCancel, false);
+    TriggerAddEventUnitAbility(gt_SCVharvestingmanuallystopped, null, AbilityCommand("SCVHarvest", 0), c_unitAbilStageCancel, false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2048,11 +2220,11 @@ bool gt_SCVisheadinghomewithterrazine_Func (bool testConds, bool runActions) {
             return false;
         }
 
-        if (!((UnitGetType(EventUnit()) == "SquadSCV"))) {
+        if (!((UnitGetType(EventUnit()) == "SCV"))) {
             return false;
         }
 
-        if (!((UnitHasBehavior(EventUnit(), "SquadHarvestingTerrazine") == true))) {
+        if (!((UnitHasBehavior(EventUnit(), "HarvestingTerrazine") == true))) {
             return false;
         }
     }
@@ -2063,7 +2235,7 @@ bool gt_SCVisheadinghomewithterrazine_Func (bool testConds, bool runActions) {
     }
 
     gv_gasHarvestingCount -= 1;
-    UnitBehaviorRemove(EventUnit(), "SquadHarvestingTerrazine", 1);
+    UnitBehaviorRemove(EventUnit(), "HarvestingTerrazine", 1);
     auto1DDD3DFF_g = UnitGroup("TerrazineNode", c_playerAny, RegionCircle(UnitGetPosition(EventUnit()), 2.0), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     auto1DDD3DFF_u = UnitGroupCount(auto1DDD3DFF_g, c_unitCountAll);
     for (;; auto1DDD3DFF_u -= 1) {
@@ -2089,8 +2261,8 @@ bool gt_SCVisheadinghomewithterrazine_Func (bool testConds, bool runActions) {
 //--------------------------------------------------------------------------------------------------
 void gt_SCVisheadinghomewithterrazine_Init () {
     gt_SCVisheadinghomewithterrazine = TriggerCreate("gt_SCVisheadinghomewithterrazine_Func");
-    TriggerAddEventUnitAbility(gt_SCVisheadinghomewithterrazine, null, AbilityCommand("SquadSCVGather", 1), c_abilHarvestStageWaitToReturn, false);
-    TriggerAddEventUnitAbility(gt_SCVisheadinghomewithterrazine, null, AbilityCommand("SquadSCVGather", 0), c_unitAbilStageComplete, false);
+    TriggerAddEventUnitAbility(gt_SCVisheadinghomewithterrazine, null, AbilityCommand("SCVHarvest", 1), c_abilHarvestStageWaitToReturn, false);
+    TriggerAddEventUnitAbility(gt_SCVisheadinghomewithterrazine, null, AbilityCommand("SCVHarvest", 0), c_unitAbilStageComplete, false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2161,7 +2333,7 @@ bool gt_SCVwithterrazinediesonreturntrip_Func (bool testConds, bool runActions) 
             return false;
         }
 
-        if (!((UnitGetType(EventUnit()) == "SquadSCV"))) {
+        if (!((UnitGetType(EventUnit()) == "SCV"))) {
             return false;
         }
     }
@@ -2301,7 +2473,7 @@ bool gt_Playerhasclaimedterrazine_Func (bool testConds, bool runActions) {
 //--------------------------------------------------------------------------------------------------
 void gt_Playerhasclaimedterrazine_Init () {
     gt_Playerhasclaimedterrazine = TriggerCreate("gt_Playerhasclaimedterrazine_Func");
-    TriggerAddEventUnitAbility(gt_Playerhasclaimedterrazine, null, AbilityCommand("SquadSCVGather", 1), c_abilHarvestStageDropOff, false);
+    TriggerAddEventUnitAbility(gt_Playerhasclaimedterrazine, null, AbilityCommand("SCVHarvest", 1), c_abilHarvestStageDropOff, false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2377,6 +2549,7 @@ bool gt_Playerharvested3NodeQ_Func (bool testConds, bool runActions) {
     // Transmission - SoundLink("TTosh02Tosh00016", -1)
     libCamp_gf_SendTransmissionCampaign(null, SoundLink("TTosh02Tosh00016", -1), c_transmissionDurationAdd, 0.0, true);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Game);
+    TriggerExecute(gt_MidTalents, true, true);
     TriggerQueueExit();
     return true;
 }
@@ -3022,65 +3195,97 @@ bool gt_AIP2AttackWaves_Func (bool testConds, bool runActions) {
     }
 
     AIAttackWaveSetTargetPlayer(gv_p2_PROTOSS_EAST_ATTACKERS, PlayerGroupSingle(gv_p1_USER));
-    AIAttackWaveAddUnits4(1, 1, 2, 2, "Zealot");
-    AIAttackWaveAddUnits4(0, 0, 0, 1, "Stalker");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Zealot");
+    gf_HallucinationAttack(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(374697273), "Zealot", libNtve_gf_DifficultyValueInt(1, 1, 2, 2));
+    AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "Stalker");
+    gf_HallucinationAttack(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(374697273), "Stalker", libNtve_gf_DifficultyValueInt(0, 0, 0, 1));
     AIAttackWaveSetGatherPoint(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(22));
     AIAttackWaveAddWaypoint(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(3014), false);
     AIAttackWaveSend(gv_p2_PROTOSS_EAST_ATTACKERS, libNtve_gf_DifficultyValueInt(240, 240, 240, 240), true);
-    AIAttackWaveAddUnits4(1, 1, 2, 0, "Zealot");
-    AIAttackWaveAddUnits4(2, 2, 3, 4, "Scout");
-    AIAttackWaveAddUnits4(0, 0, 1, 1, "Stalker");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), 0, "Zealot");
+    gf_HallucinationAttack(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(374697273), "Zealot", libNtve_gf_DifficultyValueInt(1, 1, 2, 0));
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(4), "Scout");
+    gf_HallucinationAttack(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(374697273), "Scout", libNtve_gf_DifficultyValueInt(2, 2, 3, 4));
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Stalker");
+    gf_HallucinationAttack(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(374697273), "Stalker", libNtve_gf_DifficultyValueInt(0, 0, 1, 1));
     AIAttackWaveAddWaypoint(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(3014), false);
     AIAttackWaveSend(gv_p2_PROTOSS_EAST_ATTACKERS, libNtve_gf_DifficultyValueInt(300, 300, 300, 240), true);
-    AIAttackWaveAddUnits4(2, 2, 3, 1, "Stalker");
-    AIAttackWaveAddUnits4(1, 1, 2, 3, "Scout");
-    AIAttackWaveAddUnits4(1, 1, 2, 0, "VoidRay");
-    AIAttackWaveAddUnits4(0, 0, 0, 1, "HighTemplar");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Stalker");
+    gf_HallucinationAttack(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(374697273), "Stalker", libNtve_gf_DifficultyValueInt(2, 2, 3, 1));
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Scout");
+    gf_HallucinationAttack(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(374697273), "Scout", libNtve_gf_DifficultyValueInt(1, 1, 2, 3));
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), 0, "VoidRay");
+    gf_HallucinationAttack(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(374697273), "VoidRay", libNtve_gf_DifficultyValueInt(1, 1, 2, 0));
+    AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "HighTemplar");
+    gf_HallucinationAttack(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(374697273), "HighTemplar", libNtve_gf_DifficultyValueInt(0, 0, 0, 1));
     AIAttackWaveSetGatherPoint(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(48));
     AIAttackWaveAddWaypoint(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(3014), false);
     AIAttackWaveSend(gv_p2_PROTOSS_EAST_ATTACKERS, libNtve_gf_DifficultyValueInt(300, 300, 240, 240), true);
-    AIAttackWaveAddUnits4(3, 3, 4, 1, "Scout");
-    AIAttackWaveAddUnits4(1, 1, 1, 0, "VoidRay");
-    AIAttackWaveAddUnits4(0, 0, 1, 1, "Stalker");
-    AIAttackWaveAddUnits4(0, 0, 0, 1, "Colossus");
-    AIAttackWaveAddUnits4(0, 0, 0, 1, "HighTemplar");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Scout");
+    gf_HallucinationAttack(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(374697273), "Scout", libNtve_gf_DifficultyValueInt(3, 3, 4, 1));
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), 0, "VoidRay");
+    gf_HallucinationAttack(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(374697273), "VoidRay", libNtve_gf_DifficultyValueInt(1, 1, 1, 0));
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Stalker");
+    gf_HallucinationAttack(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(374697273), "Stalker", libNtve_gf_DifficultyValueInt(0, 0, 1, 1));
+    AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "Colossus");
+    gf_HallucinationAttack(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(374697273), "Colossus", libNtve_gf_DifficultyValueInt(0, 0, 0, 1));
+    AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "HighTemplar");
+    gf_HallucinationAttack(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(374697273), "HighTemplar", libNtve_gf_DifficultyValueInt(0, 0, 0, 1));
     AIAttackWaveSetGatherPoint(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(22));
     AIAttackWaveAddWaypoint(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(3014), false);
     AIAttackWaveAddWaypoint(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(3017), false);
     AIAttackWaveAddWaypoint(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(43), false);
     AIAttackWaveSend(gv_p2_PROTOSS_EAST_ATTACKERS, libNtve_gf_DifficultyValueInt(270, 270, 210, 210), true);
-    AIAttackWaveAddUnits4(2, 2, 3, 1, "Zealot");
-    AIAttackWaveAddUnits4(0, 0, 0, 2, "Stalker");
-    AIAttackWaveAddUnits4(2, 2, 1, 0, "Scout");
-    AIAttackWaveAddUnits4(1, 1, 2, 1, "VoidRay");
-    AIAttackWaveAddUnits4(0, 0, 1, 1, "Colossus");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Zealot");
+    gf_HallucinationAttack(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(374697273), "Zealot", libNtve_gf_DifficultyValueInt(2, 2, 3, 1));
+    AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(2), "Stalker");
+    gf_HallucinationAttack(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(374697273), "Stalker", libNtve_gf_DifficultyValueInt(0, 0, 0, 2));
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(1), 0, "Scout");
+    gf_HallucinationAttack(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(374697273), "Scout", libNtve_gf_DifficultyValueInt(2, 2, 1, 0));
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(1), "VoidRay");
+    gf_HallucinationAttack(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(374697273), "VoidRay", libNtve_gf_DifficultyValueInt(1, 1, 2, 1));
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Colossus");
+    gf_HallucinationAttack(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(374697273), "Colossus", libNtve_gf_DifficultyValueInt(0, 0, 1, 1));
     AIAttackWaveSetGatherPoint(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(48));
     AIAttackWaveAddWaypoint(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(3014), false);
     AIAttackWaveAddWaypoint(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(3017), false);
     AIAttackWaveAddWaypoint(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(43), false);
     AIAttackWaveSend(gv_p2_PROTOSS_EAST_ATTACKERS, libNtve_gf_DifficultyValueInt(300, 300, 240, 240), true);
     while (true) {
-        AIAttackWaveAddUnits4(2, 2, 3, 2, "Stalker");
-        AIAttackWaveAddUnits4(3, 3, 2, 3, "Scout");
-        AIAttackWaveAddUnits4(0, 0, 1, 1, "VoidRay");
-        AIAttackWaveAddUnits4(0, 0, 0, 1, "HighTemplar");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Stalker");
+        gf_HallucinationAttack(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(374697273), "Stalker", libNtve_gf_DifficultyValueInt(2, 2, 3, 2));
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Scout");
+        gf_HallucinationAttack(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(374697273), "Scout", libNtve_gf_DifficultyValueInt(3, 3, 2, 3));
+        AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "VoidRay");
+        gf_HallucinationAttack(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(374697273), "VoidRay", libNtve_gf_DifficultyValueInt(0, 0, 1, 1));
+        AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "HighTemplar");
+        gf_HallucinationAttack(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(374697273), "HighTemplar", libNtve_gf_DifficultyValueInt(0, 0, 0, 1));
         AIAttackWaveSetGatherPoint(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(22));
         AIAttackWaveAddWaypoint(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(3014), false);
         AIAttackWaveSend(gv_p2_PROTOSS_EAST_ATTACKERS, libNtve_gf_DifficultyValueInt(300, 300, 240, 240), true);
-        AIAttackWaveAddUnits4(4, 4, 3, 3, "Scout");
-        AIAttackWaveAddUnits4(1, 1, 2, 0, "VoidRay");
-        AIAttackWaveAddUnits4(0, 0, 1, 2, "Colossus");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Scout");
+        gf_HallucinationAttack(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(374697273), "Scout", libNtve_gf_DifficultyValueInt(4, 4, 3, 3));
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), 0, "VoidRay");
+        gf_HallucinationAttack(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(374697273), "VoidRay", libNtve_gf_DifficultyValueInt(1, 1, 2, 0));
+        AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Colossus");
+        gf_HallucinationAttack(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(374697273), "Colossus", libNtve_gf_DifficultyValueInt(0, 0, 1, 2));
         AIAttackWaveSetGatherPoint(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(48));
         AIAttackWaveAddWaypoint(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(3014), false);
         AIAttackWaveAddWaypoint(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(3017), false);
         AIAttackWaveAddWaypoint(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(43), false);
         AIAttackWaveSend(gv_p2_PROTOSS_EAST_ATTACKERS, libNtve_gf_DifficultyValueInt(300, 300, 240, 240), true);
-        AIAttackWaveAddUnits4(3, 3, 4, 0, "Zealot");
-        AIAttackWaveAddUnits4(0, 0, 0, 3, "Stalker");
-        AIAttackWaveAddUnits4(3, 3, 0, 0, "Scout");
-        AIAttackWaveAddUnits4(0, 0, 3, 1, "VoidRay");
-        AIAttackWaveAddUnits4(0, 0, 1, 1, "Colossus");
-        AIAttackWaveAddUnits4(0, 0, 0, 1, "HighTemplar");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(4), 0, "Zealot");
+        gf_HallucinationAttack(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(374697273), "Zealot", libNtve_gf_DifficultyValueInt(3, 3, 4, 0));
+        AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(3), "Stalker");
+        gf_HallucinationAttack(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(374697273), "Stalker", libNtve_gf_DifficultyValueInt(0, 0, 0, 3));
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), 0, 0, "Scout");
+        gf_HallucinationAttack(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(374697273), "Scout", libNtve_gf_DifficultyValueInt(3, 3, 0, 0));
+        AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(1), "VoidRay");
+        gf_HallucinationAttack(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(374697273), "VoidRay", libNtve_gf_DifficultyValueInt(0, 0, 3, 1));
+        AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Colossus");
+        gf_HallucinationAttack(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(374697273), "Colossus", libNtve_gf_DifficultyValueInt(0, 0, 0, 1));
+        AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "HighTemplar");
+        gf_HallucinationAttack(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(374697273), "HighTemplar", libNtve_gf_DifficultyValueInt(0, 0, 0, 1));
         AIAttackWaveSetGatherPoint(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(22));
         AIAttackWaveAddWaypoint(gv_p2_PROTOSS_EAST_ATTACKERS, PointFromId(3014), false);
         AIAttackWaveSend(gv_p2_PROTOSS_EAST_ATTACKERS, libNtve_gf_DifficultyValueInt(300, 300, 240, 240), true);
@@ -3114,39 +3319,39 @@ bool gt_AITerrazineSealingEN_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    Wait(215.0, c_timeGame);
+    Wait(215.0, c_timeAI);
     gf_AITerrazineHarvestAttempt(4, 1);
-    Wait(180.0, c_timeGame);
+    Wait(180.0, c_timeAI);
     gf_AITerrazineHarvestAttempt(9, 2);
-    Wait(180.0, c_timeGame);
+    Wait(180.0, c_timeAI);
     gv_protossThreatLevel = 2;
     gf_AITerrazineHarvestAttempt(2, 3);
-    Wait(180.0, c_timeGame);
+    Wait(180.0, c_timeAI);
     gf_AITerrazineHarvestAttempt(7, 2);
-    Wait(180.0, c_timeGame);
+    Wait(180.0, c_timeAI);
     gv_protossThreatLevel = 3;
     gf_AITerrazineHarvestAttempt(3, 4);
-    Wait(180.0, c_timeGame);
+    Wait(180.0, c_timeAI);
     gf_AITerrazineHarvestAttempt(6, 3);
-    Wait(180.0, c_timeGame);
+    Wait(180.0, c_timeAI);
     gv_protossThreatLevel = 4;
     gf_AITerrazineHarvestAttempt(3, 4);
-    Wait(180.0, c_timeGame);
+    Wait(180.0, c_timeAI);
     gf_AITerrazineHarvestAttempt(12, 4);
-    Wait(180.0, c_timeGame);
+    Wait(180.0, c_timeAI);
     gv_protossThreatLevel = 5;
     gf_AITerrazineHarvestAttempt(13, 5);
-    Wait(180.0, c_timeGame);
+    Wait(180.0, c_timeAI);
     gf_AITerrazineHarvestAttempt(8, 5);
-    Wait(180.0, c_timeGame);
+    Wait(180.0, c_timeAI);
     gf_AITerrazineHarvestAttempt(11, 6);
-    Wait(180.0, c_timeGame);
+    Wait(180.0, c_timeAI);
     gv_protossThreatLevel = 6;
     gf_AITerrazineHarvestAttempt(10, 6);
-    Wait(180.0, c_timeGame);
+    Wait(180.0, c_timeAI);
     while (true) {
         gf_AITerrazineHarvestAttempt(1, 1);
-        Wait(180.0, c_timeGame);
+        Wait(180.0, c_timeAI);
     }
     return true;
 }
@@ -3177,46 +3382,46 @@ bool gt_AITerrazineSealingH_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    Wait(215.0, c_timeGame);
+    Wait(215.0, c_timeAI);
     gf_AITerrazineHarvestAttempt(4, 1);
-    Wait(150.0, c_timeGame);
+    Wait(150.0, c_timeAI);
     gf_AITerrazineHarvestAttempt(9, 2);
     gf_ResearchForAllProtoss("ProtossGroundArmorsLevel1");
-    Wait(150.0, c_timeGame);
+    Wait(150.0, c_timeAI);
     gv_protossThreatLevel = 2;
     gf_AITerrazineHarvestAttempt(6, 3);
     gf_ResearchForAllProtoss("ProtossAirArmorsLevel1");
-    Wait(150.0, c_timeGame);
+    Wait(150.0, c_timeAI);
     gf_AITerrazineHarvestAttempt(7, 2);
     gf_ResearchForAllProtoss("ProtossGroundWeaponsLevel1");
-    Wait(150.0, c_timeGame);
+    Wait(150.0, c_timeAI);
     gv_protossThreatLevel = 3;
     gf_ResearchForAllProtoss("GraviticThrusters");
     gf_AITerrazineHarvestAttempt(5, 4);
     gf_ResearchForAllProtoss("ProtossAirWeaponsLevel1");
-    Wait(150.0, c_timeGame);
+    Wait(150.0, c_timeAI);
     gf_AITerrazineHarvestAttempt(2, 3);
     gf_ResearchForAllProtoss("ProtossShieldsLevel2");
-    Wait(150.0, c_timeGame);
+    Wait(150.0, c_timeAI);
     gv_protossThreatLevel = 4;
     gf_ResearchForAllProtoss("VoidRaySpeedUpgrade");
     gf_AITerrazineHarvestAttempt(3, 4);
-    Wait(150.0, c_timeGame);
+    Wait(150.0, c_timeAI);
     gf_AITerrazineHarvestAttempt(13, 5);
-    Wait(150.0, c_timeGame);
+    Wait(150.0, c_timeAI);
     gv_protossThreatLevel = 5;
     gf_AITerrazineHarvestAttempt(12, 4);
-    Wait(150.0, c_timeGame);
+    Wait(150.0, c_timeAI);
     gf_AITerrazineHarvestAttempt(8, 5);
-    Wait(150.0, c_timeGame);
+    Wait(150.0, c_timeAI);
     gf_AITerrazineHarvestAttempt(11, 6);
-    Wait(150.0, c_timeGame);
+    Wait(150.0, c_timeAI);
     gv_protossThreatLevel = 6;
     gf_AITerrazineHarvestAttempt(10, 6);
-    Wait(150.0, c_timeGame);
+    Wait(150.0, c_timeAI);
     while (true) {
         gf_AITerrazineHarvestAttempt(1, 1);
-        Wait(150.0, c_timeGame);
+        Wait(150.0, c_timeAI);
     }
     return true;
 }
@@ -3247,49 +3452,49 @@ bool gt_AITerrazineSealingI_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    Wait(215.0, c_timeGame);
+    Wait(215.0, c_timeAI);
     gf_AITerrazineHarvestAttempt(1, 1);
     gf_ResearchForAllProtoss("ProtossAirArmorsLevel1");
-    Wait(130.0, c_timeGame);
+    Wait(130.0, c_timeAI);
     gf_AITerrazineHarvestAttempt(7, 2);
     gf_ResearchForAllProtoss("ProtossGroundWeaponsLevel1");
-    Wait(130.0, c_timeGame);
+    Wait(130.0, c_timeAI);
     gv_protossThreatLevel = 2;
     gf_ResearchForAllProtoss("Charge");
     gf_AITerrazineHarvestAttempt(6, 3);
     gf_ResearchForAllProtoss("ProtossAirWeaponsLevel1");
-    Wait(130.0, c_timeGame);
+    Wait(130.0, c_timeAI);
     gf_AITerrazineHarvestAttempt(7, 2);
     gf_ResearchForAllProtoss("ProtossShieldsLevel2");
-    Wait(130.0, c_timeGame);
+    Wait(130.0, c_timeAI);
     gv_protossThreatLevel = 3;
     gf_AITerrazineHarvestAttempt(5, 4);
     gf_ResearchForAllProtoss("GraviticThrusters");
-    Wait(130.0, c_timeGame);
+    Wait(130.0, c_timeAI);
     gf_AITerrazineHarvestAttempt(2, 3);
     gf_ResearchForAllProtoss("ProtossGroundArmorsLevel2");
-    Wait(130.0, c_timeGame);
+    Wait(130.0, c_timeAI);
     gv_protossThreatLevel = 4;
     gf_ResearchForAllProtoss("VoidRaySpeedUpgrade");
     gf_AITerrazineHarvestAttempt(3, 4);
     gf_ResearchForAllProtoss("ProtossAirArmorsLevel2");
-    Wait(120.0, c_timeGame);
+    Wait(120.0, c_timeAI);
     gf_AITerrazineHarvestAttempt(13, 5);
     gf_ResearchForAllProtoss("ProtossGroundWeaponsLevel2");
     gv_protossThreatLevel = 5;
     gf_AITerrazineHarvestAttempt(12, 4);
     gf_ResearchForAllProtoss("ProtossAirWeaponsLevel2");
-    Wait(120.0, c_timeGame);
+    Wait(120.0, c_timeAI);
     gv_protossThreatLevel = 6;
     gf_AITerrazineHarvestAttempt(8, 5);
-    Wait(120.0, c_timeGame);
+    Wait(120.0, c_timeAI);
     gf_AITerrazineHarvestAttempt(11, 6);
-    Wait(120.0, c_timeGame);
+    Wait(120.0, c_timeAI);
     gf_AITerrazineHarvestAttempt(10, 6);
-    Wait(120.0, c_timeGame);
+    Wait(120.0, c_timeAI);
     while (true) {
         gf_AITerrazineHarvestAttempt(1, 1);
-        Wait(120.0, c_timeGame);
+        Wait(120.0, c_timeAI);
     }
     return true;
 }
@@ -3347,6 +3552,47 @@ void gt_AIResourcesGas_Init () {
     TriggerAddEventPlayerPropChange(gt_AIResourcesGas, gv_p2_PROTOSS_EAST_ATTACKERS, c_playerPropVespene);
     TriggerAddEventPlayerPropChange(gt_AIResourcesGas, gv_p3_PROTOSS_SCRIPTED, c_playerPropVespene);
     TriggerAddEventPlayerPropChange(gt_AIResourcesGas, gv_p4_PROTOSS_WEST_ESCORTS, c_playerPropVespene);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Hallucinations
+//--------------------------------------------------------------------------------------------------
+bool gt_Hallucinations_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    if ((UnitIsAlive(UnitFromId(95)) == false)) {
+        TriggerEnable(TriggerGetCurrent(), false);
+        return true;
+    }
+
+    if ((UnitGroupCount(gv_hallucinatedZealots, c_unitCountAlive) < 16)) {
+        libNtve_gf_CreateUnitsWithDefaultFacing(1, "Zealot", c_unitCreateIgnorePlacement, gv_p3_PROTOSS_SCRIPTED, PointFromId(374697273));
+        UnitBehaviorAdd(UnitLastCreated(), "Hallucination", UnitLastCreated(), 1);
+        UnitGroupAdd(gv_hallucinatedZealots, UnitLastCreated());
+        UnitIssueOrder(UnitLastCreated(), OrderTargetingPoint(AbilityCommand("attack", 0), RegionRandomPoint(RegionFromId(47))), c_orderQueueReplace);
+        UnitIssueOrder(UnitLastCreated(), OrderTargetingPoint(AbilityCommand("move", 1), RegionRandomPoint(RegionFromId(47))), c_orderQueueAddToEnd);
+    }
+
+    if ((UnitGroupCount(gv_hallucinatedStalkers, c_unitCountAlive) < 8)) {
+        libNtve_gf_CreateUnitsWithDefaultFacing(1, "Stalker", c_unitCreateIgnorePlacement, gv_p3_PROTOSS_SCRIPTED, PointFromId(374697273));
+        UnitBehaviorAdd(UnitLastCreated(), "Hallucination", UnitLastCreated(), 1);
+        UnitGroupAdd(gv_hallucinatedStalkers, UnitLastCreated());
+        UnitIssueOrder(UnitLastCreated(), OrderTargetingPoint(AbilityCommand("attack", 0), RegionRandomPoint(RegionFromId(47))), c_orderQueueReplace);
+        UnitIssueOrder(UnitLastCreated(), OrderTargetingPoint(AbilityCommand("move", 1), RegionRandomPoint(RegionFromId(47))), c_orderQueueAddToEnd);
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_Hallucinations_Init () {
+    gt_Hallucinations = TriggerCreate("gt_Hallucinations_Func");
+    TriggerEnable(gt_Hallucinations, false);
+    TriggerAddEventTimePeriodic(gt_Hallucinations, 30.0, c_timeAI);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -3419,8 +3665,13 @@ bool gt_VictoryProtossDestroyed_Func (bool testConds, bool runActions) {
     }
 
     gv_gameOver = true;
+    TriggerExecute(gt_MidTalents, true, true);
+    libB27CC4B1_gf_TalentTime(2, false, 0, 0);
+    libB27CC4B1_gf_CurseDifficultyModifier(3);
+    libB27CC4B1_gf_CurseDifficultyModifier(4);
     TriggerExecute(gt_ProtossDestroyedQ, true, true);
     TriggerExecute(gt_PrimaryObjectiveCollectTerrazineCompleted, true, true);
+    libB27CC4B1_gf_RogueEnding();
     libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
     return true;
 }
@@ -3475,7 +3726,12 @@ bool gt_VictoryTerrazineCollected_Func (bool testConds, bool runActions) {
 
     gv_gameOver = true;
     Wait(2.0, c_timeReal);
+    TriggerExecute(gt_MidTalents, true, true);
+    libB27CC4B1_gf_TalentTime(2, false, 0, 0);
+    libB27CC4B1_gf_CurseDifficultyModifier(3);
+    libB27CC4B1_gf_CurseDifficultyModifier(4);
     TriggerExecute(gt_PrimaryObjectiveCollectTerrazineCompleted, true, true);
+    libB27CC4B1_gf_RogueEnding();
     libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
     return true;
 }
@@ -3544,7 +3800,7 @@ bool gt_DefeatBaseDead_Func (bool testConds, bool runActions) {
             return false;
         }
 
-        if (!((UnitGroupCount(UnitGroup(null, gv_p1_USER, null, UnitFilter((1 << c_targetFilterPreventDefeat), 0, 0, 0), 1), c_unitCountAlive) == 0))) {
+        if (!((UnitGroupCount(UnitGroup(null, gv_p1_USER, RegionPlayableMap(), UnitFilter((1 << c_targetFilterPreventDefeat), 0, 0, 0), 1), c_unitCountAlive) == 0))) {
             return false;
         }
     }
@@ -3845,11 +4101,13 @@ bool gt_ObjectiveRelicUpdate_Func (bool testConds, bool runActions) {
 
     libWCMI_gf_DisplayMissionObjectiveRewardFloatingText(UnitGetPosition(EventUnit()), "TTosh02_3");
     UnitKill(EventUnit());
+    libB27CC4B1_gf_TalentBonusObjectiveTrigger();
     TriggerExecute(gt_ObjectiveRelicsCreateQ, true, false);
     gv_bonusObjectiveCollectRelicsFound += 1;
     libWCMI_gf_SetMissionObjectiveProgress("TTosh02_3", gv_bonusObjectiveCollectRelicsFound);
     if ((gv_bonusObjectiveCollectRelicsFound == gv_bonusObjectiveCollectRelicsNeeded)) {
         libWCMI_gf_ZS_SetMissionObjectiveState("TTosh02_3", libWoLC_ge_MissionObjectiveState_Completed);
+        libB27CC4B1_gf_TalentTime(1, false, 0, 0);
     }
 
     return true;
@@ -4154,6 +4412,7 @@ bool gt_VictoryQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerQueueEnter();
+    TriggerExecute(libB27CC4B1_gt_TableButtonsHide, true, true);
     TriggerExecute(gt_VictorySetup, true, true);
     TriggerExecute(gt_VictoryCinematic, true, true);
     TriggerExecute(gt_VictoryCinematicEnd, true, true);
@@ -4332,6 +4591,7 @@ void InitTriggers () {
     gt_StartRain_Init();
     gt_HarvestingSpeedBumpsNWesternTerritory_Init();
     gt_HarvestingSpeedBumpsCentralTerritory_Init();
+    gt_MidTalents_Init();
     gt_InitNERelicDefenders_Init();
     gt_NEDefenderScriptedAI_Init();
     gt_NEDefenderDeath_Init();
@@ -4369,6 +4629,7 @@ void InitTriggers () {
     gt_AITerrazineSealingI_Init();
     gt_AIResourcesMinerals_Init();
     gt_AIResourcesGas_Init();
+    gt_Hallucinations_Init();
     gt_StatSCVsLost_Init();
     gt_VictoryProtossDestroyed_Init();
     gt_ProtossDestroyedQ_Init();

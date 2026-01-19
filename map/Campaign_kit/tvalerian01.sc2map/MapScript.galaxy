@@ -11,6 +11,7 @@ include "LibCamp"
 include "LibWoLC"
 include "LibWCMI"
 include "LibWCUI"
+include "LibB27CC4B1"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -22,6 +23,7 @@ void InitLibs () {
     libWoLC_InitLib();
     libWCMI_InitLib();
     libWCUI_InitLib();
+    libB27CC4B1_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -39,6 +41,7 @@ const int gv_p08_RESCUABLE = 8;
 const int gv_p09_ACTORDOMINION = 9;
 const int gv_p10_ZERG_WHITEHIVE = 10;
 const int gv_p11_ZERG_YELLOWSPORECANNON = 11;
+const int gv_p12_HYBRID = 12;
 
 //--------------------------------------------------------------------------------------------------
 // Global Structures
@@ -85,6 +88,7 @@ bool gv_drop01Done;
 playergroup gv_zergPlayers;
 fixed gv_nydusWormMaximumHP;
 int gv_dropPodFirstPing;
+int gv_hybridTier;
 int gv_dropPodsRemaining;
 timer gv_dropPodTimer;
 unitgroup gv_gankGroupDrop01;
@@ -254,6 +258,8 @@ void InitGlobals () {
 //--------------------------------------------------------------------------------------------------
 // Global Function Declarations
 //--------------------------------------------------------------------------------------------------
+void gf_ChallengeCreateHybrid (int lp_player);
+void gf_ChallengeHybridSacrifice (unit lp_hybrid);
 void gf_RescueUnits (unit lp_rescuedUnit);
 void gf_CreateRescuable (int lp_region, int lp_index, fixed lp_delayTillNextDrop);
 void gf_PrepareRescuableDrop (int lp_int, string lp_unitType);
@@ -284,6 +290,10 @@ trigger gt_FirstDropDialogue;
 trigger gt_FirstDropPodSpawnQ;
 trigger gt_FirstDropRescue;
 trigger gt_LeaderboardInitiate;
+trigger gt_ChallengeHybridsInit;
+trigger gt_ChallengeHybridsController;
+trigger gt_ChallengeHybridsExponent;
+trigger gt_ChallengeHybridsAI;
 trigger gt_DropPodallPodSpawnsQ;
 trigger gt_Gank_Drop01Marines;
 trigger gt_Gank_Drop02Marauder;
@@ -374,6 +384,7 @@ trigger gt_DominionSupplyShipDoodad01;
 trigger gt_DominionSupplyShipDoodad02;
 trigger gt_DominionSupplyShipDoodad03;
 trigger gt_ResourcePickups;
+trigger gt_InfestedCCTalent;
 trigger gt_NydusInfiniteSpawning01;
 trigger gt_NydusInfiniteSpawning02;
 trigger gt_NydusInfiniteSpawning03;
@@ -444,6 +455,221 @@ trigger gt_VictoryCleanup;
 //--------------------------------------------------------------------------------------------------
 // Global Functions
 //--------------------------------------------------------------------------------------------------
+void gf_ChallengeCreateHybrid (int lp_player) {
+    // Variable Declarations
+    string lv_hybridType;
+    int lv_rand;
+
+    // Automatic Variable Declarations
+    int auto1D6023A1_val;
+    unitgroup autoAE034F16_g;
+    int autoAE034F16_u;
+    unit autoAE034F16_var;
+
+    // Variable Initialization
+
+    // Implementation
+    if ((TechTreeUnitCount(lp_player, "Larva", c_techCountCompleteOnly) >= 1) && (((lp_player == gv_p02_ZERG_PURPLE_NE) && (UnitIsAlive(UnitFromId(383)) == true)) || ((lp_player == gv_p05_ZERG_ORANGE_NW) && (UnitIsAlive(UnitFromId(322)) == true)) || ((lp_player == gv_p06_ZERG_GREEN_SW) && (UnitIsAlive(UnitFromId(58)) == true)) || ((lp_player == gv_p10_ZERG_WHITEHIVE) && (UnitIsAlive(UnitFromId(106)) == true)))) {
+        lv_rand = RandomInt(1, 100);
+        auto1D6023A1_val = gv_hybridTier;
+        if (auto1D6023A1_val == 0) {
+            if ((lv_rand >= 50)) {
+                lv_hybridType = "WarlockHybridDestroyer";
+            }
+            else {
+                lv_hybridType = "WarlockHybridReaver";
+            }
+        }
+        else if (auto1D6023A1_val == 1) {
+            if ((lv_rand >= 60)) {
+                lv_hybridType = "WarlockHybridDestroyer";
+            }
+            else {
+                if ((lv_rand >= 20)) {
+                    lv_hybridType = "WarlockHybridReaver";
+                }
+                else {
+                    lv_hybridType = "WarlockHybridNemesis";
+                }
+            }
+        }
+        else if (auto1D6023A1_val == 2) {
+            if ((lv_rand >= 75)) {
+                lv_hybridType = "WarlockHybridDestroyer";
+            }
+            else {
+                if ((lv_rand >= 50)) {
+                    lv_hybridType = "WarlockHybridReaver";
+                }
+                else {
+                    if ((lv_rand >= 30)) {
+                        lv_hybridType = "WarlockHybridNemesis";
+                    }
+                    else {
+                        if ((lv_rand >= 15)) {
+                            lv_hybridType = "WarlockHybridBehemoth";
+                        }
+                        else {
+                            lv_hybridType = "WarlockHybridDominator";
+                        }
+                    }
+                }
+            }
+        }
+        else if (auto1D6023A1_val == 3) {
+            if ((lv_rand >= 80)) {
+                lv_hybridType = "WarlockHybridDestroyer";
+            }
+            else {
+                if ((lv_rand >= 60)) {
+                    lv_hybridType = "WarlockHybridReaver";
+                }
+                else {
+                    if ((lv_rand >= 45)) {
+                        lv_hybridType = "WarlockHybridNemesis";
+                    }
+                    else {
+                        if ((lv_rand >= 30)) {
+                            lv_hybridType = "WarlockHybridBehemoth";
+                        }
+                        else {
+                            if ((lv_rand >= 15)) {
+                                lv_hybridType = "WarlockHybridDominator";
+                            }
+                            else {
+                                lv_hybridType = "WarlockHybridMastermind";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else if (auto1D6023A1_val == 4) {
+            if ((lv_rand >= 80)) {
+                lv_hybridType = "WarlockHybridDestroyer";
+            }
+            else {
+                if ((lv_rand >= 60)) {
+                    lv_hybridType = "WarlockHybridReaver";
+                }
+                else {
+                    if ((lv_rand >= 50)) {
+                        lv_hybridType = "WarlockHybridNemesis";
+                    }
+                    else {
+                        if ((lv_rand >= 40)) {
+                            lv_hybridType = "WarlockHybridBehemoth";
+                        }
+                        else {
+                            if ((lv_rand >= 30)) {
+                                lv_hybridType = "WarlockHybridDominator";
+                            }
+                            else {
+                                if ((lv_rand >= 15)) {
+                                    lv_hybridType = "WarlockHybridMastermind";
+                                }
+                                else {
+                                    lv_hybridType = "WarlockVoidThrasher";
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else if (auto1D6023A1_val == 5) {
+            if ((lv_rand >= 85)) {
+                lv_hybridType = "WarlockHybridDestroyer";
+            }
+            else {
+                if ((lv_rand >= 70)) {
+                    lv_hybridType = "WarlockHybridReaver";
+                }
+                else {
+                    if ((lv_rand >= 60)) {
+                        lv_hybridType = "WarlockHybridNemesis";
+                    }
+                    else {
+                        if ((lv_rand >= 50)) {
+                            lv_hybridType = "WarlockHybridBehemoth";
+                        }
+                        else {
+                            if ((lv_rand >= 35)) {
+                                lv_hybridType = "WarlockHybridDominator";
+                            }
+                            else {
+                                if ((lv_rand >= 20)) {
+                                    lv_hybridType = "WarlockHybridMastermind";
+                                }
+                                else {
+                                    lv_hybridType = "WarlockVoidThrasher";
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else {
+            if (auto1D6023A1_val == 5) {
+                if ((lv_rand >= 85)) {
+                    lv_hybridType = "WarlockHybridDestroyer";
+                }
+                else {
+                    if ((lv_rand >= 70)) {
+                        lv_hybridType = "WarlockHybridReaver";
+                    }
+                    else {
+                        if ((lv_rand >= 60)) {
+                            lv_hybridType = "WarlockHybridNemesis";
+                        }
+                        else {
+                            if ((lv_rand >= 50)) {
+                                lv_hybridType = "WarlockHybridBehemoth";
+                            }
+                            else {
+                                if ((lv_rand >= 35)) {
+                                    lv_hybridType = "WarlockHybridDominator";
+                                }
+                                else {
+                                    if ((lv_rand >= 20)) {
+                                        lv_hybridType = "WarlockHybridMastermind";
+                                    }
+                                    else {
+                                        lv_hybridType = "WarlockVoidThrasher";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        UnitCreate(libB27CC4B1_gf_CurseAttackWaveModifier(1), lv_hybridType, c_unitCreateIgnoreBirth, gv_p12_HYBRID, UnitGetPosition(UnitGroupRandomUnit(UnitGroup("Larva", lp_player, RegionPlayableMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive)), libNtve_gf_RandomAngle());
+        autoAE034F16_g = UnitLastCreatedGroup();
+        autoAE034F16_u = UnitGroupCount(autoAE034F16_g, c_unitCountAll);
+        for (;; autoAE034F16_u -= 1) {
+            autoAE034F16_var = UnitGroupUnitFromEnd(autoAE034F16_g, autoAE034F16_u);
+            if (autoAE034F16_var == null) { break; }
+            UnitXPAddXP(autoAE034F16_var, null, RandomFixed(50.0, 650.0));
+        }
+        AISetGroupSuicide(UnitLastCreatedGroup(), true);
+    }
+
+}
+
+void gf_ChallengeHybridSacrifice (unit lp_hybrid) {
+    // Variable Declarations
+    unit lv_victim;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+
+    // Implementation
+    lv_victim = UnitGroupClosestToPoint(UnitGroupAlliance(c_playerAny, c_unitAllianceAllyExcludeSelf, RegionCircle(UnitGetPosition(lp_hybrid), 6.0), UnitFilter((1 << c_targetFilterLight), 0, (1 << c_targetFilterStructure) | (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), UnitGetPosition(lp_hybrid));
+    libNtve_gf_AICast(lp_hybrid, OrderTargetingUnit(AbilityCommand("WarlockSacrifice", 0), lv_victim));
+}
+
 void gf_RescueUnits (unit lp_rescuedUnit) {
     // Variable Declarations
     unitgroup lv_unitGroup;
@@ -453,13 +679,13 @@ void gf_RescueUnits (unit lp_rescuedUnit) {
     lv_unitGroup = UnitGroupEmpty();
 
     // Implementation
-    libNtve_gf_RescueUnit(lp_rescuedUnit, gv_p01_USER, true);
     if ((UnitTypeTestAttribute(UnitGetType(lp_rescuedUnit), c_unitAttributeStructure) == true)) {
         gv_statStructuresRescued += 1;
     }
     else {
         gv_achievementDropPodForcesRescued += 1;
     }
+    libB27CC4B1_gf_RescueUnitWithUpgrades(lp_rescuedUnit);
 }
 
 void gf_CreateRescuable (int lp_region, int lp_index, fixed lp_delayTillNextDrop) {
@@ -520,10 +746,10 @@ void gf_CreateRescuable (int lp_region, int lp_index, fixed lp_delayTillNextDrop
         libNtve_gf_AddUnitGroupToUnitGroup(lv_unitgroup, gv_rescuableUnitGroup[lv_int1][lv_int2]);
         Wait(1.0, c_timeGame);
         if ((lp_delayTillNextDrop > 5.0)) {
-            Wait((lp_delayTillNextDrop - 5.0), c_timeGame);
+            Wait((lp_delayTillNextDrop - 5.0), c_timeAI);
         }
         else {
-            Wait(lp_delayTillNextDrop, c_timeGame);
+            Wait(lp_delayTillNextDrop, c_timeAI);
         }
     }
 
@@ -763,7 +989,7 @@ bool auto_gf_SpawnCrashingDoodad_TriggerFunc (bool testConds, bool runActions) {
     lv_crashingDoodad = libNtve_gf_ActorLastCreated();
     libNtve_gf_MakeModelFaceAngle(lv_crashingDoodad, RandomFixed(135.0, 225.0));
     libNtve_gf_PlayAnimation(lv_crashingDoodad, c_animNameDefault, "Death", c_animFlagNonLooping, c_animTimeDefault);
-    Wait(20.0, c_timeGame);
+    Wait(20.0, c_timeAI);
     ActorSend(lv_crashingDoodad, "Destroy");
     return true;
 }
@@ -788,6 +1014,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init07Help, true, true);
     TriggerExecute(gt_Init08Variables, true, true);
     libWoLC_gf_RegisterFootageRecording(gt_BriefingQ);
+    TriggerExecute(libB27CC4B1_gt_RogueInit, true, true);
     TriggerExecute(gt_IntroSequence, true, false);
     return true;
 }
@@ -847,6 +1074,7 @@ bool gt_Init02Players_Func (bool testConds, bool runActions) {
     libNtve_gf_SetAlliance(gv_p01_USER, gv_p10_ZERG_WHITEHIVE, libNtve_ge_AllianceSetting_Enemy);
     libNtve_gf_SetAlliance(gv_p01_USER, gv_p10_ZERG_WHITEHIVE, libNtve_ge_AllianceSetting_Enemy);
     libNtve_gf_SetAlliance(gv_p01_USER, gv_p11_ZERG_YELLOWSPORECANNON, libNtve_ge_AllianceSetting_Enemy);
+    libNtve_gf_SetAlliance(gv_p01_USER, gv_p12_HYBRID, libNtve_ge_AllianceSetting_Enemy);
     libNtve_gf_SetAlliance(gv_p02_ZERG_PURPLE_NE, gv_p03_DOMINION_RED, libNtve_ge_AllianceSetting_Enemy);
     libNtve_gf_SetAlliance(gv_p02_ZERG_PURPLE_NE, gv_p04_WARFIELD, libNtve_ge_AllianceSetting_Enemy);
     libNtve_gf_SetAlliance(gv_p02_ZERG_PURPLE_NE, gv_p05_ZERG_ORANGE_NW, libNtve_ge_AllianceSetting_AllyWithSharedVisionAndPushable);
@@ -856,6 +1084,7 @@ bool gt_Init02Players_Func (bool testConds, bool runActions) {
     libNtve_gf_SetAlliance(gv_p02_ZERG_PURPLE_NE, gv_p09_ACTORDOMINION, libNtve_ge_AllianceSetting_Enemy);
     libNtve_gf_SetAlliance(gv_p02_ZERG_PURPLE_NE, gv_p10_ZERG_WHITEHIVE, libNtve_ge_AllianceSetting_AllyWithSharedVision);
     libNtve_gf_SetAlliance(gv_p02_ZERG_PURPLE_NE, gv_p11_ZERG_YELLOWSPORECANNON, libNtve_ge_AllianceSetting_AllyWithSharedVisionAndPushable);
+    libNtve_gf_SetAlliance(gv_p02_ZERG_PURPLE_NE, gv_p12_HYBRID, libNtve_ge_AllianceSetting_AllyWithSharedVisionAndPushable);
     libNtve_gf_SetAlliance(gv_p03_DOMINION_RED, gv_p04_WARFIELD, libNtve_ge_AllianceSetting_Ally);
     libNtve_gf_SetAlliance(gv_p03_DOMINION_RED, gv_p05_ZERG_ORANGE_NW, libNtve_ge_AllianceSetting_Enemy);
     libNtve_gf_SetAlliance(gv_p03_DOMINION_RED, gv_p06_ZERG_GREEN_SW, libNtve_ge_AllianceSetting_Enemy);
@@ -864,6 +1093,7 @@ bool gt_Init02Players_Func (bool testConds, bool runActions) {
     libNtve_gf_SetAlliance(gv_p03_DOMINION_RED, gv_p09_ACTORDOMINION, libNtve_ge_AllianceSetting_NeutralWithSharedVision);
     libNtve_gf_SetAlliance(gv_p03_DOMINION_RED, gv_p10_ZERG_WHITEHIVE, libNtve_ge_AllianceSetting_Enemy);
     libNtve_gf_SetAlliance(gv_p03_DOMINION_RED, gv_p11_ZERG_YELLOWSPORECANNON, libNtve_ge_AllianceSetting_Enemy);
+    libNtve_gf_SetAlliance(gv_p03_DOMINION_RED, gv_p12_HYBRID, libNtve_ge_AllianceSetting_Neutral);
     libNtve_gf_SetAlliance(gv_p04_WARFIELD, gv_p05_ZERG_ORANGE_NW, libNtve_ge_AllianceSetting_Enemy);
     libNtve_gf_SetAlliance(gv_p04_WARFIELD, gv_p06_ZERG_GREEN_SW, libNtve_ge_AllianceSetting_Enemy);
     libNtve_gf_SetAlliance(gv_p04_WARFIELD, gv_p07_ZERG_PINK, libNtve_ge_AllianceSetting_Enemy);
@@ -871,27 +1101,35 @@ bool gt_Init02Players_Func (bool testConds, bool runActions) {
     libNtve_gf_SetAlliance(gv_p04_WARFIELD, gv_p09_ACTORDOMINION, libNtve_ge_AllianceSetting_Neutral);
     libNtve_gf_SetAlliance(gv_p04_WARFIELD, gv_p10_ZERG_WHITEHIVE, libNtve_ge_AllianceSetting_Enemy);
     libNtve_gf_SetAlliance(gv_p04_WARFIELD, gv_p11_ZERG_YELLOWSPORECANNON, libNtve_ge_AllianceSetting_Enemy);
+    libNtve_gf_SetAlliance(gv_p04_WARFIELD, gv_p12_HYBRID, libNtve_ge_AllianceSetting_Neutral);
     libNtve_gf_SetAlliance(gv_p05_ZERG_ORANGE_NW, gv_p06_ZERG_GREEN_SW, libNtve_ge_AllianceSetting_AllyWithSharedVisionAndPushable);
     libNtve_gf_SetAlliance(gv_p05_ZERG_ORANGE_NW, gv_p07_ZERG_PINK, libNtve_ge_AllianceSetting_AllyWithSharedVisionAndPushable);
     libNtve_gf_SetAlliance(gv_p05_ZERG_ORANGE_NW, gv_p08_RESCUABLE, libNtve_ge_AllianceSetting_Enemy);
     libNtve_gf_SetAlliance(gv_p05_ZERG_ORANGE_NW, gv_p09_ACTORDOMINION, libNtve_ge_AllianceSetting_Enemy);
     libNtve_gf_SetAlliance(gv_p05_ZERG_ORANGE_NW, gv_p10_ZERG_WHITEHIVE, libNtve_ge_AllianceSetting_AllyWithSharedVisionAndPushable);
     libNtve_gf_SetAlliance(gv_p05_ZERG_ORANGE_NW, gv_p11_ZERG_YELLOWSPORECANNON, libNtve_ge_AllianceSetting_AllyWithSharedVisionAndPushable);
+    libNtve_gf_SetAlliance(gv_p05_ZERG_ORANGE_NW, gv_p12_HYBRID, libNtve_ge_AllianceSetting_AllyWithSharedVisionAndPushable);
     libNtve_gf_SetAlliance(gv_p06_ZERG_GREEN_SW, gv_p07_ZERG_PINK, libNtve_ge_AllianceSetting_AllyWithSharedVision);
     libNtve_gf_SetAlliance(gv_p06_ZERG_GREEN_SW, gv_p08_RESCUABLE, libNtve_ge_AllianceSetting_Enemy);
     libNtve_gf_SetAlliance(gv_p06_ZERG_GREEN_SW, gv_p09_ACTORDOMINION, libNtve_ge_AllianceSetting_Enemy);
     libNtve_gf_SetAlliance(gv_p06_ZERG_GREEN_SW, gv_p10_ZERG_WHITEHIVE, libNtve_ge_AllianceSetting_AllyWithSharedVisionAndPushable);
     libNtve_gf_SetAlliance(gv_p06_ZERG_GREEN_SW, gv_p11_ZERG_YELLOWSPORECANNON, libNtve_ge_AllianceSetting_AllyWithSharedVisionAndPushable);
+    libNtve_gf_SetAlliance(gv_p06_ZERG_GREEN_SW, gv_p12_HYBRID, libNtve_ge_AllianceSetting_AllyWithSharedVisionAndPushable);
     libNtve_gf_SetAlliance(gv_p07_ZERG_PINK, gv_p08_RESCUABLE, libNtve_ge_AllianceSetting_Enemy);
     libNtve_gf_SetAlliance(gv_p07_ZERG_PINK, gv_p09_ACTORDOMINION, libNtve_ge_AllianceSetting_Enemy);
     libNtve_gf_SetAlliance(gv_p07_ZERG_PINK, gv_p10_ZERG_WHITEHIVE, libNtve_ge_AllianceSetting_AllyWithSharedVisionAndPushable);
     libNtve_gf_SetAlliance(gv_p07_ZERG_PINK, gv_p11_ZERG_YELLOWSPORECANNON, libNtve_ge_AllianceSetting_AllyWithSharedVisionAndPushable);
+    libNtve_gf_SetAlliance(gv_p07_ZERG_PINK, gv_p12_HYBRID, libNtve_ge_AllianceSetting_AllyWithSharedVisionAndPushable);
     libNtve_gf_SetAlliance(gv_p08_RESCUABLE, gv_p09_ACTORDOMINION, libNtve_ge_AllianceSetting_NeutralWithSharedVision);
     libNtve_gf_SetAlliance(gv_p08_RESCUABLE, gv_p10_ZERG_WHITEHIVE, libNtve_ge_AllianceSetting_Enemy);
     libNtve_gf_SetAlliance(gv_p08_RESCUABLE, gv_p11_ZERG_YELLOWSPORECANNON, libNtve_ge_AllianceSetting_Enemy);
+    libNtve_gf_SetAlliance(gv_p08_RESCUABLE, gv_p12_HYBRID, libNtve_ge_AllianceSetting_Neutral);
     libNtve_gf_SetAlliance(gv_p09_ACTORDOMINION, gv_p10_ZERG_WHITEHIVE, libNtve_ge_AllianceSetting_Enemy);
     libNtve_gf_SetAlliance(gv_p09_ACTORDOMINION, gv_p11_ZERG_YELLOWSPORECANNON, libNtve_ge_AllianceSetting_Enemy);
+    libNtve_gf_SetAlliance(gv_p09_ACTORDOMINION, gv_p12_HYBRID, libNtve_ge_AllianceSetting_Neutral);
     libNtve_gf_SetAlliance(gv_p10_ZERG_WHITEHIVE, gv_p11_ZERG_YELLOWSPORECANNON, libNtve_ge_AllianceSetting_AllyWithSharedVisionAndPushable);
+    libNtve_gf_SetAlliance(gv_p10_ZERG_WHITEHIVE, gv_p12_HYBRID, libNtve_ge_AllianceSetting_AllyWithSharedVisionAndPushable);
+    libNtve_gf_SetAlliance(gv_p11_ZERG_YELLOWSPORECANNON, gv_p12_HYBRID, libNtve_ge_AllianceSetting_AllyWithSharedVisionAndPushable);
     PlayerGroupAdd(gv_zergPlayers, gv_p02_ZERG_PURPLE_NE);
     PlayerGroupAdd(gv_zergPlayers, gv_p05_ZERG_ORANGE_NW);
     PlayerGroupAdd(gv_zergPlayers, gv_p06_ZERG_GREEN_SW);
@@ -1202,22 +1440,24 @@ bool gt_Init06Difficulties_Func (bool testConds, bool runActions) {
     for (;; auto11736AB2_u -= 1) {
         auto11736AB2_var = UnitGroupUnitFromEnd(auto11736AB2_g, auto11736AB2_u);
         if (auto11736AB2_var == null) { break; }
-        UnitSetPropertyFixed(auto11736AB2_var, c_unitPropLifeMax, libNtve_gf_DifficultyValueFixed(400.0, 400.0, 700.0, 1000.0));
-        UnitSetPropertyFixed(auto11736AB2_var, c_unitPropLifePercent, 100.0);
+        libB27CC4B1_gf_SetUnitHPDynamically(auto11736AB2_var, libNtve_gf_DifficultyValueFixed(400.0, 400.0, 700.0, 1000.0), 100.0);
     }
     gv_nydusWormMaximumHP = libNtve_gf_DifficultyValueFixed(600.0, 1000.0, 1000.0, 1000.0);
     libNtve_gf_CreateUnitsAtPoint2(1, "NydusCanal", 0, gv_p10_ZERG_WHITEHIVE, PointFromId(1189));
     UnitSetScale(UnitLastCreated(), 130.0, 130.0, 130.0);
+    UnitBehaviorAdd(UnitLastCreated(), "AttributeMapBoss", UnitLastCreated(), 1);
     gv_nydusOBJ01 = UnitLastCreated();
-    UnitSetPropertyFixed(gv_nydusOBJ01, c_unitPropLifeMax, gv_nydusWormMaximumHP);
+    libB27CC4B1_gf_SetUnitHPDynamically(gv_nydusOBJ01, gv_nydusWormMaximumHP, 100.0);
     libNtve_gf_CreateUnitsAtPoint2(1, "NydusCanal", 0, gv_p10_ZERG_WHITEHIVE, PointFromId(1190));
     UnitSetScale(UnitLastCreated(), 130.0, 130.0, 130.0);
+    UnitBehaviorAdd(UnitLastCreated(), "AttributeMapBoss", UnitLastCreated(), 1);
     gv_nydusOBJ02 = UnitLastCreated();
-    UnitSetPropertyFixed(gv_nydusOBJ02, c_unitPropLifeMax, gv_nydusWormMaximumHP);
+    libB27CC4B1_gf_SetUnitHPDynamically(gv_nydusOBJ02, gv_nydusWormMaximumHP, 100.0);
     libNtve_gf_CreateUnitsAtPoint2(1, "NydusCanal", 0, gv_p10_ZERG_WHITEHIVE, PointFromId(1191));
     UnitSetScale(UnitLastCreated(), 130.0, 130.0, 130.0);
+    UnitBehaviorAdd(UnitLastCreated(), "AttributeMapBoss", UnitLastCreated(), 1);
     gv_nydusOBJ03 = UnitLastCreated();
-    UnitSetPropertyFixed(gv_nydusOBJ03, c_unitPropLifeMax, gv_nydusWormMaximumHP);
+    libB27CC4B1_gf_SetUnitHPDynamically(gv_nydusOBJ03, gv_nydusWormMaximumHP, 100.0);
     libNtve_gf_ShowHideUnit(gv_nydusOBJ01, false);
     libNtve_gf_ShowHideUnit(gv_nydusOBJ02, false);
     libNtve_gf_ShowHideUnit(gv_nydusOBJ03, false);
@@ -1345,18 +1585,24 @@ bool gt_StartGame_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    TriggerExecute(libB27CC4B1_gt_InitTableButtons, true, false);
     Wait(2.0, c_timeGame);
+    libB27CC4B1_gf_ChallengeTime("ChallengeChar1");
     TriggerExecute(gt_ObjectiveTroopSupplyCreateQ, true, false);
     TriggerExecute(gt_StorymodeTipsQ, true, false);
     Wait(2.0, c_timeGame);
     TriggerExecute(gt_DialogueCommanderTacticalAnalysisTheZergGreatlyOutnumberQ, true, false);
-    Wait(6.0, c_timeGame);
+    Wait(6.0, c_timeAI);
     TriggerEnable(gt_ZergAmbientAttackBothSidesNew, true);
     TriggerExecute(gt_ZergStartAttack, true, false);
     TriggerExecute(gt_DropPodallPodSpawnsQ, true, false);
-    Wait(15.0, c_timeGame);
+    Wait(15.0, c_timeAI);
     TriggerExecute(gt_DialogueKeepMeUpdatedIfWeCanReachQ, true, false);
-    Wait(30.0, c_timeGame);
+    if ((libB27CC4B1_gf_TalentAcquired("ChallengeChar1") == true)) {
+        TriggerExecute(gt_ChallengeHybridsInit, true, false);
+    }
+
+    Wait(30.0, c_timeAI);
     TriggerExecute(gt_FirstDropDialogue, true, false);
     return true;
 }
@@ -1530,6 +1776,142 @@ void gt_LeaderboardInitiate_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: Challenge Hybrids Init
+//--------------------------------------------------------------------------------------------------
+bool gt_ChallengeHybridsInit_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libNtve_gf_SetUpgradeLevelForPlayer(gv_p12_HYBRID, "WarlockSacrificeAlly", 1);
+    TriggerExecute(gt_ChallengeHybridsController, true, false);
+    TriggerExecute(gt_ChallengeHybridsExponent, true, false);
+    TriggerEnable(gt_ChallengeHybridsAI, true);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ChallengeHybridsInit_Init () {
+    gt_ChallengeHybridsInit = TriggerCreate("gt_ChallengeHybridsInit_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Challenge Hybrids Controller
+//--------------------------------------------------------------------------------------------------
+bool gt_ChallengeHybridsController_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    int lv_rand;
+
+    // Automatic Variable Declarations
+    int auto44E31D02_val;
+
+    // Variable Initialization
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    Wait(45.0, c_timeAI);
+    while (true) {
+        Wait(RandomFixed(20.0, 60.0), c_timeAI);
+        lv_rand = RandomInt(1, 4);
+        auto44E31D02_val = lv_rand;
+        if (auto44E31D02_val == 1) {
+            gf_ChallengeCreateHybrid(gv_p02_ZERG_PURPLE_NE);
+        }
+        else if (auto44E31D02_val == 2) {
+            gf_ChallengeCreateHybrid(gv_p05_ZERG_ORANGE_NW);
+        }
+        else if (auto44E31D02_val == 3) {
+            gf_ChallengeCreateHybrid(gv_p06_ZERG_GREEN_SW);
+        }
+        else if (auto44E31D02_val == 4) {
+            gf_ChallengeCreateHybrid(gv_p10_ZERG_WHITEHIVE);
+        }
+        else {
+            gf_ChallengeCreateHybrid(gv_p10_ZERG_WHITEHIVE);
+        }
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ChallengeHybridsController_Init () {
+    gt_ChallengeHybridsController = TriggerCreate("gt_ChallengeHybridsController_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Challenge Hybrids Exponent
+//--------------------------------------------------------------------------------------------------
+bool gt_ChallengeHybridsExponent_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    Wait(180.0, c_timeAI);
+    gv_hybridTier = 1;
+    Wait(180.0, c_timeAI);
+    gv_hybridTier = 2;
+    Wait(240.0, c_timeAI);
+    gv_hybridTier = 3;
+    Wait(240.0, c_timeAI);
+    gv_hybridTier = 4;
+    Wait(300.0, c_timeAI);
+    gv_hybridTier = 5;
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ChallengeHybridsExponent_Init () {
+    gt_ChallengeHybridsExponent = TriggerCreate("gt_ChallengeHybridsExponent_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Challenge Hybrids AI
+//--------------------------------------------------------------------------------------------------
+bool gt_ChallengeHybridsAI_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    unitgroup autoCF987847_g;
+    int autoCF987847_u;
+    unit autoCF987847_var;
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    autoCF987847_g = UnitGroup(null, gv_p12_HYBRID, RegionPlayableMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+    autoCF987847_u = UnitGroupCount(autoCF987847_g, c_unitCountAll);
+    for (;; autoCF987847_u -= 1) {
+        autoCF987847_var = UnitGroupUnitFromEnd(autoCF987847_g, autoCF987847_u);
+        if (autoCF987847_var == null) { break; }
+        if ((UnitGetPropertyFixed(autoCF987847_var, c_unitPropLifePercent, c_unitPropCurrent) <= 50.0)) {
+            gf_ChallengeHybridSacrifice(autoCF987847_var);
+        }
+
+        if ((UnitGetType(autoCF987847_var) == "WarlockHybridDominator") && (UnitGroupCount(UnitGroup(null, gv_p01_USER, RegionCircle(UnitGetPosition(autoCF987847_var), 7.0), UnitFilter(0, 0, (1 << c_targetFilterStructure) | (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) >= 1)) {
+            libNtve_gf_AICast(autoCF987847_var, Order(AbilityCommand("WarlockPsychicClones", 0)));
+            libNtve_gf_AICast(autoCF987847_var, OrderTargetingPoint(AbilityCommand("Voidstorm", 0), UnitGetPosition(UnitGroupRandomUnit(UnitGroup(null, gv_p01_USER, RegionCircle(UnitGetPosition(autoCF987847_var), 7.0), UnitFilter(0, 0, (1 << c_targetFilterStructure) | (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive))));
+        }
+
+    }
+    gf_ChallengeHybridSacrifice(UnitGroupRandomUnit(UnitGroup(null, gv_p12_HYBRID, RegionPlayableMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive));
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ChallengeHybridsAI_Init () {
+    gt_ChallengeHybridsAI = TriggerCreate("gt_ChallengeHybridsAI_Func");
+    TriggerEnable(gt_ChallengeHybridsAI, false);
+    TriggerAddEventTimePeriodic(gt_ChallengeHybridsAI, 2.0, c_timeAI);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: Drop Pod all Pod Spawns Q
 //--------------------------------------------------------------------------------------------------
 bool gt_DropPodallPodSpawnsQ_Func (bool testConds, bool runActions) {
@@ -1547,9 +1929,9 @@ bool gt_DropPodallPodSpawnsQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TimerStart(gv_dropPodTimer, 167.0, false, c_timeGame);
+    TimerStart(gv_dropPodTimer, 167.0, false, c_timeAI);
     libNtve_gf_WaitForTimer(gv_dropPodTimer, 0.0, false);
-    TimerStart(gv_dropPodTimer, 115.0, false, c_timeGame);
+    TimerStart(gv_dropPodTimer, 115.0, false, c_timeAI);
     gf_PrepareRescuableDrop(3, "Marauder");
     gf_PrepareRescuableDrop(2, "Marine");
     gv_dropPodsRemaining = (gv_dropPodsRemaining - 1);
@@ -1557,12 +1939,12 @@ bool gt_DropPodallPodSpawnsQ_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_DialogueSirIveDetectedaDropPodInYourVicinityQ, true, false);
     gf_CreateRescuable(ge_RescuableRegion_A, 1, 0.0);
     libNtve_gf_WaitForTimer(gv_dropPodTimer, 0.0, false);
-    TimerStart(gv_dropPodTimer, 150.0, false, c_timeGame);
+    TimerStart(gv_dropPodTimer, 150.0, false, c_timeAI);
     TriggerExecute(gt_RescueFactorySpawnQ, true, false);
     TriggerExecute(gt_DialogueSendingCoordinatesToANearbyDroppodQ, true, false);
     gf_CreateRescuable(ge_RescuableRegion_B, 1, 0.0);
     libNtve_gf_WaitForTimer(gv_dropPodTimer, 0.0, false);
-    TimerStart(gv_dropPodTimer, 120.0, false, c_timeGame);
+    TimerStart(gv_dropPodTimer, 120.0, false, c_timeAI);
     gf_PrepareRescuableDrop(2, "SiegeTank");
     gf_PrepareRescuableDrop(4, "Marine");
     gv_dropPodsRemaining = (gv_dropPodsRemaining - 1);
@@ -1570,11 +1952,11 @@ bool gt_DropPodallPodSpawnsQ_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_DialogueSirAnotherDropPodIsComingDownQ, true, false);
     gf_CreateRescuable(ge_RescuableRegion_C, 1, 0.0);
     libNtve_gf_WaitForTimer(gv_dropPodTimer, 0.0, false);
-    TimerStart(gv_dropPodTimer, 150.0, false, c_timeGame);
+    TimerStart(gv_dropPodTimer, 150.0, false, c_timeAI);
     TriggerExecute(gt_RescueStarportSpawnQ, true, false);
     TriggerExecute(gt_DialogueSirAnotherDropPodHasArrivedNearYourPerimeterQ, true, false);
     libNtve_gf_WaitForTimer(gv_dropPodTimer, 0.0, false);
-    TimerStart(gv_dropPodTimer, 120.0, false, c_timeGame);
+    TimerStart(gv_dropPodTimer, 120.0, false, c_timeAI);
     gf_PrepareRescuableDrop(4, "Goliath");
     gf_PrepareRescuableDrop(4, "Marine");
     gv_dropPodsRemaining = (gv_dropPodsRemaining - 1);
@@ -1582,7 +1964,7 @@ bool gt_DropPodallPodSpawnsQ_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_DialogueYouveGotAnotherDropPodLandingNearByQ, true, false);
     gf_CreateRescuable(ge_RescuableRegion_B, 1, 0.0);
     libNtve_gf_WaitForTimer(gv_dropPodTimer, 0.0, false);
-    TimerStart(gv_dropPodTimer, 150.0, false, c_timeGame);
+    TimerStart(gv_dropPodTimer, 150.0, false, c_timeAI);
     gf_PrepareRescuableDrop(3, "Banshee");
     gf_PrepareRescuableDrop(3, "Hellion");
     gv_dropPodsRemaining = (gv_dropPodsRemaining - 1);
@@ -1596,7 +1978,7 @@ bool gt_DropPodallPodSpawnsQ_Func (bool testConds, bool runActions) {
     gf_CreateRescuable(ge_RescuableRegion_B, 2, 0.0);
     libNtve_gf_WaitForTimer(gv_dropPodTimer, 0.0, false);
     TriggerExecute(gt_DropTimerWindowHide, true, false);
-    TimerStart(gv_dropPodTimer, c_timerDurationInfinite, false, c_timeGame);
+    TimerStart(gv_dropPodTimer, c_timerDurationInfinite, false, c_timeAI);
     gf_PrepareRescuableDrop(8, "Marine");
     gf_PrepareRescuableDrop(1, "Thor");
     gv_thor01 = UnitLastCreated();
@@ -1648,7 +2030,7 @@ bool gt_Gank_Drop01Marines_Func (bool testConds, bool runActions) {
     gv_revealerGankDrop01 = VisRevealerLastCreated();
     autoF82AF15F_n = libNtve_gf_DifficultyValueInt(70, 70, 60, 60);
     for (autoF82AF15F_i = 1; autoF82AF15F_i <= autoF82AF15F_n; autoF82AF15F_i += 1) {
-        Wait(1.0, c_timeGame);
+        Wait(1.0, c_timeAI);
         if ((UnitGroupCount(UnitGroup(null, gv_p08_RESCUABLE, RegionFromId(1), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) == 0)) {
             break;
         }
@@ -1685,13 +2067,13 @@ bool gt_Gank_Drop02Marauder_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     gf_PrepareGankTeam(libNtve_gf_DifficultyValueInt(13, 13, 15, 16), "ZerglingBurrowed", RegionFromId(21), gv_gankGroupDrop02);
     VisRevealerCreate(gv_p01_USER, RegionCircle(RegionGetCenter(RegionFromId(21)), 12.0));
     gv_revealerGankDrop02 = VisRevealerLastCreated();
     autoE25E057C_n = libNtve_gf_DifficultyValueInt(70, 70, 60, 60);
     for (autoE25E057C_i = 1; autoE25E057C_i <= autoE25E057C_n; autoE25E057C_i += 1) {
-        Wait(1.0, c_timeGame);
+        Wait(1.0, c_timeAI);
         if ((UnitGroupCount(UnitGroup(null, gv_p08_RESCUABLE, RegionFromId(3), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) == 0)) {
             break;
         }
@@ -1756,7 +2138,7 @@ bool gt_Gank_Drop03Factory_Func (bool testConds, bool runActions) {
     }
 
     libCamp_gf_CreateDropPod(libCamp_ge_DropPodRace_Zerg, PointFromId(705), gv_gankGroupDrop03, false);
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     VisRevealerCreate(gv_p01_USER, RegionCircle(RegionGetCenter(RegionFromId(12)), 12.0));
     gv_revealerGankDrop03 = VisRevealerLastCreated();
     auto85DF51E6_g = gv_gankGroupDrop03;
@@ -1772,7 +2154,7 @@ bool gt_Gank_Drop03Factory_Func (bool testConds, bool runActions) {
     UnitIssueOrder(lv_gankSunken03, OrderTargetingPoint(AbilityCommand("SpineCrawlerRoot", 0), PointFromId(700)), c_orderQueueReplace);
     autoB66C835D_n = libNtve_gf_DifficultyValueInt(70, 70, 60, 60);
     for (autoB66C835D_i = 1; autoB66C835D_i <= autoB66C835D_n; autoB66C835D_i += 1) {
-        Wait(1.0, c_timeGame);
+        Wait(1.0, c_timeAI);
         if ((UnitGroupCount(UnitGroup(null, gv_p08_RESCUABLE, RegionFromId(2), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) == 0)) {
             break;
         }
@@ -1813,12 +2195,12 @@ bool gt_Gank_Drop04Tanks_Func (bool testConds, bool runActions) {
     gf_PrepareGankTeam(libNtve_gf_DifficultyValueInt(4, 4, 5, 1), "Mutalisk", RegionFromId(35), gv_gankGroupDrop04);
     gf_PrepareGankTeam(libNtve_gf_DifficultyValueInt(0, 0, 0, 1), "BroodLord", RegionFromId(35), gv_gankGroupDrop04);
     gf_PrepareGankTeam(libNtve_gf_DifficultyValueInt(2, 2, 3, 2), "Hydralisk", RegionFromId(35), gv_gankGroupDrop04);
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     VisRevealerCreate(gv_p01_USER, RegionCircle(RegionGetCenter(RegionFromId(35)), 12.0));
     gv_revealerGankDrop04 = VisRevealerLastCreated();
     auto9DF69CAF_n = libNtve_gf_DifficultyValueInt(70, 70, 60, 60);
     for (auto9DF69CAF_i = 1; auto9DF69CAF_i <= auto9DF69CAF_n; auto9DF69CAF_i += 1) {
-        Wait(1.0, c_timeGame);
+        Wait(1.0, c_timeAI);
         if ((UnitGroupCount(UnitGroup(null, gv_p08_RESCUABLE, RegionFromId(5), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) == 0)) {
             break;
         }
@@ -1860,14 +2242,14 @@ bool gt_Gank_Drop05Starport_Func (bool testConds, bool runActions) {
     gv_gankStarportUltra = UnitLastCreated();
     UnitGroupAdd(gv_gankGroupDrop05, gv_gankStarportUltra);
     libCamp_gf_CreateDropPod(libCamp_ge_DropPodRace_Zerg, PointFromId(920), gv_gankGroupDrop05, false);
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     VisRevealerCreate(gv_p01_USER, RegionCircle(RegionGetCenter(RegionFromId(37)), 12.0));
     gv_revealerGankDrop05 = VisRevealerLastCreated();
     CameraShakeStart(gv_p01_USER, c_cameraPositionTarget, c_cameraDirectionZ, 0.06, 1.0, 100.0, 2.0);
     Wait(0.5, c_timeGame);
     autoF72DB6CD_n = libNtve_gf_DifficultyValueInt(70, 70, 60, 60);
     for (autoF72DB6CD_i = 1; autoF72DB6CD_i <= autoF72DB6CD_n; autoF72DB6CD_i += 1) {
-        Wait(1.0, c_timeGame);
+        Wait(1.0, c_timeAI);
         if ((UnitGroupCount(UnitGroup(null, gv_p08_RESCUABLE, RegionFromId(8), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) == 0)) {
             break;
         }
@@ -1905,7 +2287,7 @@ bool gt_Gank_Drop06Goliaths_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     gf_PrepareGankTeam(libNtve_gf_DifficultyValueInt(2, 2, 2, 0), "BanelingBurrowed", RegionFromId(32), gv_gankGroupDrop06);
     gf_PrepareGankTeam(libNtve_gf_DifficultyValueInt(5, 5, 6, 2), "RoachBurrowed", RegionFromId(32), gv_gankGroupDrop06);
     gf_PrepareGankTeam(libNtve_gf_DifficultyValueInt(12, 12, 14, 6), "Zergling", RegionFromId(32), gv_gankGroupDrop06);
@@ -1914,7 +2296,7 @@ bool gt_Gank_Drop06Goliaths_Func (bool testConds, bool runActions) {
     gv_revealerGankDrop06 = VisRevealerLastCreated();
     autoC5A019C6_n = libNtve_gf_DifficultyValueInt(70, 70, 60, 60);
     for (autoC5A019C6_i = 1; autoC5A019C6_i <= autoC5A019C6_n; autoC5A019C6_i += 1) {
-        Wait(1.0, c_timeGame);
+        Wait(1.0, c_timeAI);
         if ((UnitGroupCount(UnitGroup(null, gv_p08_RESCUABLE, RegionFromId(4), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) == 0)) {
             break;
         }
@@ -1950,7 +2332,7 @@ bool gt_Gank_Drop07SplitBanshees_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     gf_PrepareGankTeam(libNtve_gf_DifficultyValueInt(5, 5, 5, 6), "BanelingBurrowed", RegionFromId(22), gv_gankGroupDrop07);
     gf_PrepareGankTeam(libNtve_gf_DifficultyValueInt(4, 4, 4, 4), "HydraliskBurrowed", RegionFromId(22), gv_gankGroupDrop07);
     gf_PrepareGankTeam(libNtve_gf_DifficultyValueInt(2, 2, 2, 2), "Mutalisk", RegionFromId(22), gv_gankGroupDrop07);
@@ -1958,7 +2340,7 @@ bool gt_Gank_Drop07SplitBanshees_Func (bool testConds, bool runActions) {
     gv_revealerGankDrop07 = VisRevealerLastCreated();
     autoDB437021_n = libNtve_gf_DifficultyValueInt(90, 90, 75, 75);
     for (autoDB437021_i = 1; autoDB437021_i <= autoDB437021_n; autoDB437021_i += 1) {
-        Wait(1.0, c_timeGame);
+        Wait(1.0, c_timeAI);
         if ((UnitGroupCount(UnitGroup(null, gv_p08_RESCUABLE, RegionFromId(6), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) == 0)) {
             break;
         }
@@ -1994,7 +2376,7 @@ bool gt_Gank_Drop08SplitViking_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     gf_PrepareGankTeam(libNtve_gf_DifficultyValueInt(8, 8, 10, 12), "ZerglingBurrowed", RegionFromId(33), gv_gankGroupDrop08);
     gf_PrepareGankTeam(libNtve_gf_DifficultyValueInt(2, 2, 3, 3), "RoachBurrowed", RegionFromId(33), gv_gankGroupDrop08);
     gf_PrepareGankTeam(libNtve_gf_DifficultyValueInt(2, 2, 2, 2), "HydraliskBurrowed", RegionFromId(33), gv_gankGroupDrop08);
@@ -2003,7 +2385,7 @@ bool gt_Gank_Drop08SplitViking_Func (bool testConds, bool runActions) {
     gv_revealerGankDrop08 = VisRevealerLastCreated();
     auto344D604D_n = libNtve_gf_DifficultyValueInt(90, 90, 75, 75);
     for (auto344D604D_i = 1; auto344D604D_i <= auto344D604D_n; auto344D604D_i += 1) {
-        Wait(1.0, c_timeGame);
+        Wait(1.0, c_timeAI);
         if ((UnitGroupCount(UnitGroup(null, gv_p08_RESCUABLE, RegionFromId(7), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) == 0)) {
             break;
         }
@@ -2042,12 +2424,12 @@ bool gt_Gank_Drop09SplitThors_Func (bool testConds, bool runActions) {
     gf_PrepareGankTeam(libNtve_gf_DifficultyValueInt(22, 22, 0, 6), "ZerglingBurrowed", RegionFromId(34), gv_gankGroupDrop09);
     gf_PrepareGankTeam(libNtve_gf_DifficultyValueInt(4, 4, 2, 0), "RoachBurrowed", RegionFromId(34), gv_gankGroupDrop09);
     gf_PrepareGankTeam(libNtve_gf_DifficultyValueInt(1, 1, 2, 3), "UltraliskBurrowed", RegionFromId(34), gv_gankGroupDrop09);
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     VisRevealerCreate(gv_p01_USER, RegionCircle(RegionGetCenter(RegionFromId(34)), 12.0));
     gv_revealerGankDrop09 = VisRevealerLastCreated();
     autoED0F0911_n = libNtve_gf_DifficultyValueInt(90, 90, 75, 75);
     for (autoED0F0911_i = 1; autoED0F0911_i <= autoED0F0911_n; autoED0F0911_i += 1) {
-        Wait(1.0, c_timeGame);
+        Wait(1.0, c_timeAI);
         if ((UnitGroupCount(UnitGroup(null, gv_p08_RESCUABLE, RegionFromId(10), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) == 0)) {
             break;
         }
@@ -2085,7 +2467,7 @@ bool gt_Gank_Drop10SplitBattlecruiser_Func (bool testConds, bool runActions) {
     TriggerEnable(TriggerGetCurrent(), false);
     gf_PrepareGankTeam(libNtve_gf_DifficultyValueInt(6, 6, 8, 10), "Mutalisk", RegionFromId(31), gv_gankGroupDrop10);
     gf_PrepareGankTeam(libNtve_gf_DifficultyValueInt(2, 2, 3, 3), "Corruptor", RegionFromId(31), gv_gankGroupDrop10);
-    Wait(3.0, c_timeGame);
+    Wait(3.0, c_timeAI);
     gf_PrepareGankTeam(libNtve_gf_DifficultyValueInt(4, 4, 5, 6), "HydraliskBurrowed", RegionFromId(31), gv_gankGroupDrop10);
     gf_PrepareGankTeam(libNtve_gf_DifficultyValueInt(2, 2, 2, 2), "RoachBurrowed", RegionFromId(31), gv_gankGroupDrop10);
     VisRevealerCreate(gv_p01_USER, RegionCircle(RegionGetCenter(RegionFromId(31)), 12.0));
@@ -2094,7 +2476,7 @@ bool gt_Gank_Drop10SplitBattlecruiser_Func (bool testConds, bool runActions) {
     UnitGroupIssueOrder(gv_gankGroupDrop10, Order(AbilityCommand("BurrowRoachUp", 0)), c_orderQueueReplace);
     auto3AFDCF5C_n = libNtve_gf_DifficultyValueInt(90, 90, 75, 75);
     for (auto3AFDCF5C_i = 1; auto3AFDCF5C_i <= auto3AFDCF5C_n; auto3AFDCF5C_i += 1) {
-        Wait(1.0, c_timeGame);
+        Wait(1.0, c_timeAI);
         if ((UnitGroupCount(UnitGroup(null, gv_p08_RESCUABLE, RegionFromId(9), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) == 0)) {
             break;
         }
@@ -2470,7 +2852,7 @@ bool gt_RescueFactorySpawnQ_Func (bool testConds, bool runActions) {
     UIAlertPoint("Trigger", gv_p01_USER, StringExternal("Param/Value/56E56ACD"), null, PointFromId(59));
     CameraShakeStart(gv_p01_USER, c_cameraPositionTarget, c_cameraDirectionZ, 0.06, 1.0, 100.0, 2.0);
     TriggerExecute(gt_Gank_Drop03Factory, true, false);
-    Wait(1.0, c_timeGame);
+    Wait(1.0, c_timeAI);
     libNtve_gf_CreateUnitsWithDefaultFacing(3, "Vulture", 0, gv_p08_RESCUABLE, PointFromId(29));
     UnitGroupIssueOrder(UnitLastCreatedGroup(), Order(AbilityCommand("move", 2)), c_orderQueueReplace);
     libNtve_gf_AddUnitGroupToUnitGroup(UnitLastCreatedGroup(), gv_factoryAllUnits);
@@ -2577,7 +2959,7 @@ bool gt_RescueFactorySafety_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     auto85840440_g = gv_factoryAllUnits;
     auto85840440_u = UnitGroupCount(auto85840440_g, c_unitCountAll);
     for (;; auto85840440_u -= 1) {
@@ -2754,7 +3136,7 @@ bool gt_RescueStarportSafety_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     auto8C1E2B92_g = gv_starportAllUnits;
     auto8C1E2B92_u = UnitGroupCount(auto8C1E2B92_g, c_unitCountAll);
     for (;; auto8C1E2B92_u -= 1) {
@@ -3002,7 +3384,7 @@ bool gt_CreateBuildingDropPodActions_Func (bool testConds, bool runActions) {
     if ((lv_buildingDropType == ge_BuildingDropPodType_Normal)) {
         SoundPlay(SoundLink("Ghost_DropPodImpact", -1), PlayerGroupAll(), 100.0, 0.0);
         UnitSetHeight(lv_droppedBuilding, 0.0, (IntToFixed(lv_speed) * lv_deltaWait));
-        Wait((IntToFixed(lv_speed) * lv_deltaWait), c_timeGame);
+        Wait((IntToFixed(lv_speed) * lv_deltaWait), c_timeAI);
         UnitIssueOrder(lv_droppedBuilding, OrderTargetingPoint(AbilityCommand("StarportLand", 0), lv_landingPoint), c_orderQueueReplace);
         UnitIssueOrder(lv_droppedBuilding, OrderTargetingPoint(AbilityCommand("BarracksLand", 0), lv_landingPoint), c_orderQueueReplace);
         UnitIssueOrder(lv_droppedBuilding, OrderTargetingPoint(AbilityCommand("SurveillanceStationLand", 0), lv_landingPoint), c_orderQueueReplace);
@@ -3028,7 +3410,7 @@ bool gt_CreateBuildingDropPodActions_Func (bool testConds, bool runActions) {
         for (autoFA81D69F_i = 1; autoFA81D69F_i <= autoFA81D69F_n; autoFA81D69F_i += 1) {
             lv_currentFlyingHeight = (lv_currentFlyingHeight - lv_deltaFlyingHeight);
             UnitSetPropertyFixed(lv_droppedBuilding, c_unitPropHeight, lv_currentFlyingHeight);
-            Wait(lv_deltaWait, c_timeGame);
+            Wait(lv_deltaWait, c_timeAI);
         }
         while (!((UnitIsAlive(lv_droppedBuilding) == false))) {
             Wait(0.1, c_timeGame);
@@ -3063,7 +3445,7 @@ bool gt_DialogueCommanderTacticalAnalysisTheZergGreatlyOutnumberQ_Func (bool tes
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerQueueEnter();
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     if ((gv_gameOver == true)) {
         return true;
     }
@@ -3189,7 +3571,7 @@ bool gt_DialogueAlrightletsGetOutThereQ_Func (bool testConds, bool runActions) {
     // Transmission - SoundLink("TValerian01Raynor00026", -1)
     libCamp_gf_SendTransmissionCampaign(null, SoundLink("TValerian01Raynor00026", 0), c_transmissionDurationAdd, 0.0, true);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Game);
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     TriggerExecute(gt_LeaderboardInitiate, true, false);
     TriggerQueueExit();
     return true;
@@ -4195,7 +4577,7 @@ bool gt_ZergAmbientAttackBothSidesNew_Func (bool testConds, bool runActions) {
 void gt_ZergAmbientAttackBothSidesNew_Init () {
     gt_ZergAmbientAttackBothSidesNew = TriggerCreate("gt_ZergAmbientAttackBothSidesNew_Func");
     TriggerEnable(gt_ZergAmbientAttackBothSidesNew, false);
-    TriggerAddEventTimePeriodic(gt_ZergAmbientAttackBothSidesNew, 10.0, c_timeGame);
+    TriggerAddEventTimePeriodic(gt_ZergAmbientAttackBothSidesNew, 10.0, c_timeAI);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -4235,7 +4617,7 @@ bool gt_MoveArea02_Func (bool testConds, bool runActions) {
 //--------------------------------------------------------------------------------------------------
 void gt_MoveArea02_Init () {
     gt_MoveArea02 = TriggerCreate("gt_MoveArea02_Func");
-    TriggerAddEventTimePeriodic(gt_MoveArea02, 6.0, c_timeGame);
+    TriggerAddEventTimePeriodic(gt_MoveArea02, 6.0, c_timeAI);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -4397,6 +4779,10 @@ bool gt_VictoryPrimaryObjectiveCompleted_Func (bool testConds, bool runActions) 
 
     TriggerEnable(TriggerGetCurrent(), false);
     gv_gameOver = true;
+    libB27CC4B1_gf_TalentTime(3, true, libB27CC4B1_gf_TalentUpgradetoIndex("ZerglingChewing"), libB27CC4B1_gf_TalentUpgradetoIndex("SpecialVengeance"));
+    libB27CC4B1_gf_CurseDifficultyModifier(3);
+    libB27CC4B1_gf_CurseDifficultyModifier(4);
+    libB27CC4B1_gf_RogueEnding();
     TriggerExecute(gt_ObjectiveNydusWormsComplete, true, false);
     Wait(2.0, c_timeReal);
     libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
@@ -4579,9 +4965,11 @@ bool gt_StartAI_Func (bool testConds, bool runActions) {
     AICampaignStart(gv_p06_ZERG_GREEN_SW);
     AICampaignStart(gv_p07_ZERG_PINK);
     AICampaignStart(gv_p10_ZERG_WHITEHIVE);
+    AICampaignStart(gv_p12_HYBRID);
     AIAttackWaveSetTargetPlayer(gv_p02_ZERG_PURPLE_NE, PlayerGroupSingle(gv_p01_USER));
     AIAttackWaveSetTargetPlayer(gv_p05_ZERG_ORANGE_NW, PlayerGroupSingle(gv_p01_USER));
     AIAttackWaveSetTargetPlayer(gv_p06_ZERG_GREEN_SW, PlayerGroupSingle(gv_p01_USER));
+    AIAttackWaveSetTargetPlayer(gv_p12_HYBRID, PlayerGroupSingle(gv_p01_USER));
     TriggerExecute(gt_ZerglingRush, true, false);
     TriggerExecute(gt_P5_Zerg_OrangeAttackWAVES, true, false);
     TriggerExecute(gt_P6_Zerg_GreenAttackWAVES, true, false);
@@ -4616,20 +5004,20 @@ bool gt_StartUpgradesAdv_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    Wait(240.0, c_timeGame);
+    Wait(240.0, c_timeAI);
     gf_AddUpgradetoZergPlayers(1, "ZergGroundArmorsLevel1");
-    Wait(240.0, c_timeGame);
+    Wait(240.0, c_timeAI);
     gf_AddUpgradetoZergPlayers(1, "ZergFlyerArmorsLevel1");
-    Wait(240.0, c_timeGame);
+    Wait(240.0, c_timeAI);
     gf_AddUpgradetoZergPlayers(1, "GlialReconstitution");
     gf_AddUpgradetoZergPlayers(1, "zerglingmovementspeed");
-    Wait(240.0, c_timeGame);
+    Wait(240.0, c_timeAI);
     gf_AddUpgradetoZergPlayers(1, "hydraliskspeed");
-    Wait(120.0, c_timeGame);
+    Wait(120.0, c_timeAI);
     gf_AddUpgradetoZergPlayers(1, "ZergMeleeWeaponsLevel2");
-    Wait(120.0, c_timeGame);
+    Wait(120.0, c_timeAI);
     gf_AddUpgradetoZergPlayers(1, "ZergMissileWeaponsLevel2");
-    Wait(120.0, c_timeGame);
+    Wait(120.0, c_timeAI);
     gf_AddUpgradetoZergPlayers(1, "ZergFlyerWeaponsLevel2");
     return true;
 }
@@ -4661,23 +5049,23 @@ bool gt_StartUpgradesExp_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    Wait(240.0, c_timeGame);
+    Wait(240.0, c_timeAI);
     gf_AddUpgradetoZergPlayers(1, "ZergGroundArmorsLevel1");
-    Wait(240.0, c_timeGame);
+    Wait(240.0, c_timeAI);
     gf_AddUpgradetoZergPlayers(1, "ZergMeleeWeaponsLevel2");
-    Wait(240.0, c_timeGame);
+    Wait(240.0, c_timeAI);
     gf_AddUpgradetoZergPlayers(1, "hydraliskspeed");
-    Wait(240.0, c_timeGame);
+    Wait(240.0, c_timeAI);
     gf_AddUpgradetoZergPlayers(1, "ZergFlyerWeaponsLevel2");
-    Wait(120.0, c_timeGame);
+    Wait(120.0, c_timeAI);
     gf_AddUpgradetoZergPlayers(1, "OrganicCarapace");
-    Wait(120.0, c_timeGame);
+    Wait(120.0, c_timeAI);
     gf_AddUpgradetoZergPlayers(1, "ZergGroundArmorsLevel2");
-    Wait(120.0, c_timeGame);
+    Wait(120.0, c_timeAI);
     gf_AddUpgradetoZergPlayers(1, "ZergFlyerArmorsLevel2");
-    Wait(120.0, c_timeGame);
+    Wait(120.0, c_timeAI);
     gf_AddUpgradetoZergPlayers(1, "ZergGroundArmorsLevel3");
-    Wait(120.0, c_timeGame);
+    Wait(120.0, c_timeAI);
     gf_AddUpgradetoZergPlayers(1, "ZergFlyerArmorsLevel3");
     return true;
 }
@@ -4708,7 +5096,7 @@ bool gt_ZerglingRush_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    Wait(110.0, c_timeGame);
+    Wait(110.0, c_timeAI);
     auto98FF846B_g = gv_zergRushGroup03;
     auto98FF846B_u = UnitGroupCount(auto98FF846B_g, c_unitCountAll);
     for (;; auto98FF846B_u -= 1) {
@@ -4720,7 +5108,7 @@ bool gt_ZerglingRush_Func (bool testConds, bool runActions) {
     }
     AISetGroupScriptControlled(gv_zergRushGroup03, false);
     AISetGroupSuicide(gv_zergRushGroup03, true);
-    Wait(12.0, c_timeGame);
+    Wait(12.0, c_timeAI);
     auto0B0EBEB3_g = gv_zergRushGroup01;
     auto0B0EBEB3_u = UnitGroupCount(auto0B0EBEB3_g, c_unitCountAll);
     for (;; auto0B0EBEB3_u -= 1) {
@@ -4732,7 +5120,7 @@ bool gt_ZerglingRush_Func (bool testConds, bool runActions) {
     }
     AISetGroupScriptControlled(gv_zergRushGroup01, false);
     AISetGroupSuicide(gv_zergRushGroup01, true);
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     autoBF8B0FFA_g = gv_zergRushGroup02;
     autoBF8B0FFA_u = UnitGroupCount(autoBF8B0FFA_g, c_unitCountAll);
     for (;; autoBF8B0FFA_u -= 1) {
@@ -4770,37 +5158,37 @@ bool gt_P2_Zerg_PurpleAttackWAVES_Func (bool testConds, bool runActions) {
     }
 
     AIAttackWaveSetGatherPoint(gv_p02_ZERG_PURPLE_NE, PointFromId(133));
-    Wait(110.0, c_timeGame);
-    AIAttackWaveAddUnits4(10, 10, 8, 8, "Zergling");
-    AIAttackWaveAddUnits4(0, 0, 1, 3, "Roach");
-    AIAttackWaveAddUnits4(2, 2, 4, 4, "Mutalisk");
+    Wait(110.0, c_timeAI);
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(10), libB27CC4B1_gf_CurseAttackWaveModifier(10), libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(8), "Zergling");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Roach");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(4), "Mutalisk");
     AIAttackWaveSend(gv_p02_ZERG_PURPLE_NE, 125, true);
-    AIAttackWaveAddUnits4(2, 2, 4, 5, "Hydralisk");
-    AIAttackWaveAddUnits4(6, 6, 10, 12, "Zergling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(5), "Hydralisk");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(6), libB27CC4B1_gf_CurseAttackWaveModifier(6), libB27CC4B1_gf_CurseAttackWaveModifier(10), libB27CC4B1_gf_CurseAttackWaveModifier(12), "Zergling");
     AIAttackWaveAddWaypoint(gv_p02_ZERG_PURPLE_NE, PointFromId(311), false);
     AIAttackWaveSend(gv_p02_ZERG_PURPLE_NE, 180, false);
-    AIAttackWaveAddUnits4(3, 3, 5, 6, "Mutalisk");
-    AIAttackWaveAddUnits4(0, 0, 0, 1, "Overseer");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(6), "Mutalisk");
+    AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "Overseer");
     AIAttackWaveSend(gv_p02_ZERG_PURPLE_NE, 180, true);
-    AIAttackWaveAddUnits4(8, 8, 16, 10, "Zergling");
-    AIAttackWaveAddUnits4(1, 1, 1, 2, "Ultralisk");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(16), libB27CC4B1_gf_CurseAttackWaveModifier(10), "Zergling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Ultralisk");
     AIAttackWaveSend(gv_p02_ZERG_PURPLE_NE, 275, false);
     Wait(175.0, c_timeAI);
-    AIAttackWaveAddUnits4(8, 8, 12, 14, "Zergling");
-    AIAttackWaveAddUnits4(2, 2, 5, 7, "Mutalisk");
-    AIAttackWaveAddUnits4(0, 0, 0, 1, "Infestor");
-    AIAttackWaveAddUnits4(0, 0, 1, 1, "Overseer");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(12), libB27CC4B1_gf_CurseAttackWaveModifier(14), "Zergling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(7), "Mutalisk");
+    AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "Infestor");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Overseer");
     AIAttackWaveSend(gv_p02_ZERG_PURPLE_NE, 160, false);
-    AIAttackWaveAddUnits4(8, 8, 12, 14, "Zergling");
-    AIAttackWaveAddUnits4(2, 2, 5, 8, "Mutalisk");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(12), libB27CC4B1_gf_CurseAttackWaveModifier(14), "Zergling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(6), "Mutalisk");
     AIAttackWaveAddWaypoint(gv_p02_ZERG_PURPLE_NE, PointFromId(311), false);
     AIAttackWaveSend(gv_p02_ZERG_PURPLE_NE, 160, true);
-    AIAttackWaveAddUnits4(4, 4, 5, 7, "Mutalisk");
-    AIAttackWaveAddUnits4(1, 1, 2, 3, "BroodLord");
-    AIAttackWaveAddUnits4(1, 1, 1, 1, "Overseer");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(7), "Mutalisk");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "BroodLord");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Overseer");
     AIAttackWaveSend(gv_p02_ZERG_PURPLE_NE, 140, false);
-    AIAttackWaveAddUnits4(1, 1, 2, 2, "Ultralisk");
-    AIAttackWaveAddUnits4(1, 1, 1, 1, "Infestor");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Ultralisk");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Infestor");
     AIAttackWaveAddWaypoint(gv_p02_ZERG_PURPLE_NE, PointFromId(311), false);
     AIAttackWaveSend(gv_p02_ZERG_PURPLE_NE, 140, true);
     return true;
@@ -4829,40 +5217,40 @@ bool gt_P5_Zerg_OrangeAttackWAVES_Func (bool testConds, bool runActions) {
     }
 
     AIAttackWaveSetGatherPoint(gv_p05_ZERG_ORANGE_NW, PointFromId(131));
-    AIAttackWaveAddUnits4(4, 4, 5, 5, "Baneling");
-    AIAttackWaveAddUnits4(3, 3, 2, 3, "Roach");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(5), "Baneling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Roach");
     AIAttackWaveSend(gv_p05_ZERG_ORANGE_NW, 220, true);
-    AIAttackWaveAddUnits4(8, 8, 15, 20, "Zergling");
-    AIAttackWaveAddUnits4(3, 3, 5, 6, "Mutalisk");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(15), libB27CC4B1_gf_CurseAttackWaveModifier(20), "Zergling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(6), "Mutalisk");
     AIAttackWaveSend(gv_p05_ZERG_ORANGE_NW, 300, true);
-    AIAttackWaveAddUnits4(3, 3, 3, 4, "Roach");
-    AIAttackWaveAddUnits4(1, 1, 2, 3, "Hydralisk");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(4), "Roach");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Hydralisk");
     AIAttackWaveSend(gv_p05_ZERG_ORANGE_NW, 120, true);
-    AIAttackWaveAddUnits4(7, 7, 8, 8, "Zergling");
-    AIAttackWaveAddUnits4(2, 2, 3, 2, "Roach");
-    AIAttackWaveAddUnits4(0, 0, 0, 1, "Overseer");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(7), libB27CC4B1_gf_CurseAttackWaveModifier(7), libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(8), "Zergling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Roach");
+    AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "Overseer");
     AIAttackWaveSend(gv_p05_ZERG_ORANGE_NW, 100, true);
-    AIAttackWaveAddUnits4(3, 3, 3, 3, "Roach");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Roach");
     AIAttackWaveSend(gv_p05_ZERG_ORANGE_NW, 135, false);
-    AIAttackWaveAddUnits4(3, 3, 3, 4, "Mutalisk");
-    AIAttackWaveAddUnits4(0, 0, 1, 1, "Overseer");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(4), "Mutalisk");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Overseer");
     AIAttackWaveAddWaypoint(gv_p05_ZERG_ORANGE_NW, PointFromId(840), false);
     AIAttackWaveSend(gv_p05_ZERG_ORANGE_NW, 135, true);
-    AIAttackWaveAddUnits4(6, 6, 8, 12, "Zergling");
-    AIAttackWaveAddUnits4(4, 4, 7, 10, "Baneling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(6), libB27CC4B1_gf_CurseAttackWaveModifier(6), libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(12), "Zergling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(7), libB27CC4B1_gf_CurseAttackWaveModifier(10), "Baneling");
     AIAttackWaveSend(gv_p05_ZERG_ORANGE_NW, 170, true);
-    AIAttackWaveAddUnits4(10, 10, 9, 13, "Zergling");
-    AIAttackWaveAddUnits4(1, 1, 2, 3, "Hydralisk");
-    AIAttackWaveAddUnits4(0, 0, 1, 1, "Infestor");
-    AIAttackWaveAddUnits4(0, 1, 1, 1, "Overseer");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(10), libB27CC4B1_gf_CurseAttackWaveModifier(10), libB27CC4B1_gf_CurseAttackWaveModifier(9), libB27CC4B1_gf_CurseAttackWaveModifier(13), "Zergling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Hydralisk");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Infestor");
+    AIAttackWaveAddUnits4(0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Overseer");
     AIAttackWaveSend(gv_p05_ZERG_ORANGE_NW, 170, true);
     while (true) {
-        AIAttackWaveAddUnits4(8, 8, 9, 13, "Zergling");
-        AIAttackWaveAddUnits4(1, 1, 2, 3, "Hydralisk");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(9), libB27CC4B1_gf_CurseAttackWaveModifier(13), "Zergling");
+        AIAttackWaveAddUnits4(1, 1, libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Hydralisk");
         AIAttackWaveSend(gv_p05_ZERG_ORANGE_NW, 140, true);
-        AIAttackWaveAddUnits4(3, 3, 8, 10, "Roach");
-        AIAttackWaveAddUnits4(2, 2, 3, 4, "Mutalisk");
-        AIAttackWaveAddUnits4(1, 1, 1, 1, "Overseer");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(10), "Roach");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(4), "Mutalisk");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Overseer");
         AIAttackWaveSend(gv_p05_ZERG_ORANGE_NW, 140, true);
     }
     return true;
@@ -4891,37 +5279,37 @@ bool gt_P6_Zerg_GreenAttackWAVES_Func (bool testConds, bool runActions) {
     }
 
     AIAttackWaveSetGatherPoint(gv_p06_ZERG_GREEN_SW, PointFromId(31));
-    AIAttackWaveAddUnits4(6, 8, 12, 15, "Zergling");
-    AIAttackWaveAddUnits4(1, 1, 2, 2, "Hydralisk");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(6), libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(12), libB27CC4B1_gf_CurseAttackWaveModifier(15), "Zergling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Hydralisk");
     AIAttackWaveSend(gv_p06_ZERG_GREEN_SW, 190, true);
-    AIAttackWaveAddUnits4(4, 4, 5, 6, "Baneling");
-    AIAttackWaveAddUnits4(3, 3, 4, 5, "Mutalisk");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(6), "Baneling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(5), "Mutalisk");
     AIAttackWaveSend(gv_p06_ZERG_GREEN_SW, 220, true);
-    AIAttackWaveAddUnits4(8, 8, 10, 6, "Zergling");
-    AIAttackWaveAddUnits4(1, 1, 1, 2, "Hydralisk");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(10), libB27CC4B1_gf_CurseAttackWaveModifier(6), "Zergling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Hydralisk");
     AIAttackWaveSend(gv_p06_ZERG_GREEN_SW, 120, true);
-    AIAttackWaveAddUnits4(6, 6, 8, 8, "Baneling");
-    AIAttackWaveAddUnits4(2, 2, 5, 8, "Roach");
-    AIAttackWaveAddUnits4(0, 0, 0, 1, "Overseer");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(6), libB27CC4B1_gf_CurseAttackWaveModifier(6), libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(8), "Baneling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(8), "Roach");
+    AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "Overseer");
     AIAttackWaveSend(gv_p06_ZERG_GREEN_SW, 135, true);
-    AIAttackWaveAddUnits4(6, 6, 8, 12, "Zergling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(6), libB27CC4B1_gf_CurseAttackWaveModifier(6), libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(12), "Zergling");
     AIAttackWaveSend(gv_p06_ZERG_GREEN_SW, 120, true);
-    AIAttackWaveAddUnits4(3, 3, 7, 10, "Roach");
-    AIAttackWaveAddUnits4(4, 4, 6, 8, "Baneling");
-    AIAttackWaveAddUnits4(0, 0, 1, 1, "Infestor");
-    AIAttackWaveAddUnits4(0, 0, 1, 1, "Overseer");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(7), libB27CC4B1_gf_CurseAttackWaveModifier(10), "Roach");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(6), libB27CC4B1_gf_CurseAttackWaveModifier(8), "Baneling");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Infestor");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Overseer");
     AIAttackWaveSend(gv_p06_ZERG_GREEN_SW, 95, true);
-    AIAttackWaveAddUnits4(10, 10, 9, 13, "Zergling");
-    AIAttackWaveAddUnits4(1, 1, 2, 3, "Hydralisk");
-    AIAttackWaveAddUnits4(0, 1, 1, 1, "Overseer");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(10), libB27CC4B1_gf_CurseAttackWaveModifier(10), libB27CC4B1_gf_CurseAttackWaveModifier(9), libB27CC4B1_gf_CurseAttackWaveModifier(13), "Zergling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Hydralisk");
+    AIAttackWaveAddUnits4(0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Overseer");
     AIAttackWaveSend(gv_p06_ZERG_GREEN_SW, 165, true);
     while (true) {
-        AIAttackWaveAddUnits4(8, 8, 9, 13, "Zergling");
-        AIAttackWaveAddUnits4(1, 1, 2, 3, "Hydralisk");
-        AIAttackWaveAddUnits4(1, 1, 1, 1, "Overseer");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(9), libB27CC4B1_gf_CurseAttackWaveModifier(13), "Zergling");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Hydralisk");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Overseer");
         AIAttackWaveSend(gv_p06_ZERG_GREEN_SW, 140, true);
-        AIAttackWaveAddUnits4(2, 2, 4, 5, "Roach");
-        AIAttackWaveAddUnits4(4, 4, 5, 6, "Mutalisk");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(5), "Roach");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(6), "Mutalisk");
         AIAttackWaveSend(gv_p06_ZERG_GREEN_SW, 140, true);
     }
     return true;
@@ -4977,7 +5365,7 @@ bool gt_NydusSpawningTrigger_Func (bool testConds, bool runActions) {
     gv_tempNydusPing = PingLastCreated();
     PingSetTooltip(gv_tempNydusPing, StringExternal("Param/Value/B3986079"));
     UIAlertUnit("Trigger", gv_p01_USER, StringExternal("Param/Value/22C55B0D"), null, lv_nydusWorm);
-    Wait(3.7, c_timeGame);
+    Wait(3.7, c_timeAI);
     while (true) {
         if ((UnitIsAlive(lv_nydusWorm) == false)) {
             PingDestroy(gv_tempNydusPing);
@@ -4988,7 +5376,7 @@ bool gt_NydusSpawningTrigger_Func (bool testConds, bool runActions) {
         for (auto32E17CDC_i = 1; auto32E17CDC_i <= auto32E17CDC_n; auto32E17CDC_i += 1) {
             if ((UnitIsAlive(lv_nydusWorm) == true)) {
                 libNtve_gf_PlayAnimation(libNtve_gf_MainActorofUnit(lv_nydusWorm), c_animNameDefault, "Spell", 0, c_animTimeDefault);
-                libNtve_gf_CreateUnitsAtPoint2(lv_packSize, lv_type, 0, lv_player, UnitGetPosition(lv_nydusWorm));
+                libNtve_gf_CreateUnitsAtPoint2(libB27CC4B1_gf_CurseAttackWaveModifier(lv_packSize), lv_type, 0, lv_player, UnitGetPosition(lv_nydusWorm));
                 libNtve_gf_AddUnitGroupToUnitGroup(UnitLastCreatedGroup(), lv_waveUnits);
             }
 
@@ -4998,7 +5386,7 @@ bool gt_NydusSpawningTrigger_Func (bool testConds, bool runActions) {
         AIAttackWaveUseGroup(gv_p10_ZERG_WHITEHIVE, lv_waveUnits);
         AIAttackWaveSend(gv_p10_ZERG_WHITEHIVE, 0, false);
         UnitGroupClear(lv_waveUnits);
-        Wait(lv_cooldown, c_timeGame);
+        Wait(lv_cooldown, c_timeAI);
     }
     return true;
 }
@@ -5129,7 +5517,7 @@ bool gt_SporeCannonShotsAmbient_Func (bool testConds, bool runActions) {
 //--------------------------------------------------------------------------------------------------
 void gt_SporeCannonShotsAmbient_Init () {
     gt_SporeCannonShotsAmbient = TriggerCreate("gt_SporeCannonShotsAmbient_Func");
-    TriggerAddEventTimePeriodic(gt_SporeCannonShotsAmbient, 6.0, c_timeGame);
+    TriggerAddEventTimePeriodic(gt_SporeCannonShotsAmbient, 6.0, c_timeAI);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -5342,6 +5730,27 @@ void gt_ResourcePickups_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: Infested CC Talent
+//--------------------------------------------------------------------------------------------------
+bool gt_InfestedCCTalent_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    libB27CC4B1_gf_TalentTime(1, false, 0, 0);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_InfestedCCTalent_Init () {
+    gt_InfestedCCTalent = TriggerCreate("gt_InfestedCCTalent_Func");
+    TriggerAddEventUnitDied(gt_InfestedCCTalent, UnitRefFromUnit(UnitFromId(106)));
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: Nydus Infinite Spawning 01
 //--------------------------------------------------------------------------------------------------
 bool gt_NydusInfiniteSpawning01_Func (bool testConds, bool runActions) {
@@ -5412,7 +5821,7 @@ bool gt_NydusInfiniteSpawning01_Func (bool testConds, bool runActions) {
 void gt_NydusInfiniteSpawning01_Init () {
     gt_NydusInfiniteSpawning01 = TriggerCreate("gt_NydusInfiniteSpawning01_Func");
     TriggerEnable(gt_NydusInfiniteSpawning01, false);
-    TriggerAddEventTimePeriodic(gt_NydusInfiniteSpawning01, 15.0, c_timeGame);
+    TriggerAddEventTimePeriodic(gt_NydusInfiniteSpawning01, 15.0, c_timeAI);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -5486,7 +5895,7 @@ bool gt_NydusInfiniteSpawning02_Func (bool testConds, bool runActions) {
 void gt_NydusInfiniteSpawning02_Init () {
     gt_NydusInfiniteSpawning02 = TriggerCreate("gt_NydusInfiniteSpawning02_Func");
     TriggerEnable(gt_NydusInfiniteSpawning02, false);
-    TriggerAddEventTimePeriodic(gt_NydusInfiniteSpawning02, 15.0, c_timeGame);
+    TriggerAddEventTimePeriodic(gt_NydusInfiniteSpawning02, 15.0, c_timeAI);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -5560,7 +5969,7 @@ bool gt_NydusInfiniteSpawning03_Func (bool testConds, bool runActions) {
 void gt_NydusInfiniteSpawning03_Init () {
     gt_NydusInfiniteSpawning03 = TriggerCreate("gt_NydusInfiniteSpawning03_Func");
     TriggerEnable(gt_NydusInfiniteSpawning03, false);
-    TriggerAddEventTimePeriodic(gt_NydusInfiniteSpawning03, 15.0, c_timeGame);
+    TriggerAddEventTimePeriodic(gt_NydusInfiniteSpawning03, 15.0, c_timeAI);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -5602,7 +6011,7 @@ bool gt_Barracks01_Func (bool testConds, bool runActions) {
     lv_crashBarracks01 = libNtve_gf_ActorLastCreated();
     libNtve_gf_MakeModelFaceAngle(lv_crashBarracks01, RandomFixed(135.0, 225.0));
     libNtve_gf_PlayAnimation(lv_crashBarracks01, c_animNameDefault, "Death", c_animFlagNonLooping, c_animTimeDefault);
-    Wait(20.0, c_timeGame);
+    Wait(20.0, c_timeAI);
     ActorSend(lv_crashBarracks01, "Destroy");
     return true;
 }
@@ -5662,7 +6071,7 @@ bool gt_Barracks02_Func (bool testConds, bool runActions) {
     else {
     }
     libNtve_gf_PlayAnimation(lv_crashBarracks02, c_animNameDefault, "Death", c_animFlagNonLooping, c_animTimeDefault);
-    Wait(20.0, c_timeGame);
+    Wait(20.0, c_timeAI);
     ActorSend(lv_crashBarracks02, "Destroy");
     return true;
 }
@@ -5722,7 +6131,7 @@ bool gt_Factory01_Func (bool testConds, bool runActions) {
     else {
     }
     libNtve_gf_PlayAnimation(lv_crashFactory01, c_animNameDefault, "Death", c_animFlagNonLooping, c_animTimeDefault);
-    Wait(20.0, c_timeGame);
+    Wait(20.0, c_timeAI);
     ActorSend(lv_crashFactory01, "Destroy");
     return true;
 }
@@ -5782,7 +6191,7 @@ bool gt_Factory02_Func (bool testConds, bool runActions) {
     else {
     }
     libNtve_gf_PlayAnimation(lv_crashFactory02, c_animNameDefault, "Death", c_animFlagNonLooping, c_animTimeDefault);
-    Wait(20.0, c_timeGame);
+    Wait(20.0, c_timeAI);
     ActorSend(lv_crashFactory02, "Destroy");
     return true;
 }
@@ -5842,7 +6251,7 @@ bool gt_Battlecruiser01_Func (bool testConds, bool runActions) {
     else {
     }
     libNtve_gf_PlayAnimation(lv_crashBattlecruiser01, c_animNameDefault, "Death", c_animFlagNonLooping, c_animTimeDefault);
-    Wait(20.0, c_timeGame);
+    Wait(20.0, c_timeAI);
     ActorSend(lv_crashBattlecruiser01, "Destroy");
     return true;
 }
@@ -5902,7 +6311,7 @@ bool gt_Battlecruiser02_Func (bool testConds, bool runActions) {
     else {
     }
     libNtve_gf_PlayAnimation(lv_crashBattlecruiser02, c_animNameDefault, "Death", c_animFlagNonLooping, c_animTimeDefault);
-    Wait(20.0, c_timeGame);
+    Wait(20.0, c_timeAI);
     ActorSend(lv_crashBattlecruiser02, "Destroy");
     return true;
 }
@@ -5957,7 +6366,7 @@ bool gt_CreateFloatingDebris_Func (bool testConds, bool runActions) {
 //--------------------------------------------------------------------------------------------------
 void gt_CreateFloatingDebris_Init () {
     gt_CreateFloatingDebris = TriggerCreate("gt_CreateFloatingDebris_Func");
-    TriggerAddEventTimePeriodic(gt_CreateFloatingDebris, 30.0, c_timeGame);
+    TriggerAddEventTimePeriodic(gt_CreateFloatingDebris, 30.0, c_timeAI);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -6567,7 +6976,7 @@ bool gt_BriefingScene00_Func (bool testConds, bool runActions) {
     gv_briefingSlaughterAreas[4].lv_terranRegion = RegionFromId(97);
     TriggerExecute(gt_BriefingZergCreation, true, false);
     TriggerExecute(gt_BriefingTerranInvasion, true, false);
-    Wait(8.0, c_timeGame);
+    Wait(8.0, c_timeAI);
     CameraApplyInfo(gv_p01_USER, CameraInfoFromId(1349), 0.0, -1, 10, true);
     Wait(0.1, c_timeReal);
     CameraApplyInfo(gv_p01_USER, CameraInfoFromId(1313), 14.0, -1, 10, true);
@@ -7579,10 +7988,14 @@ bool gt_MidQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerQueueEnter();
+    libB27CC4B1_gf_TalentTime(1, false, 0, 0);
+    TriggerExecute(libB27CC4B1_gt_TableButtonsHide, true, true);
     TriggerExecute(gt_MidSetup, true, true);
     TriggerExecute(gt_MidCinematic, true, true);
     TriggerExecute(gt_MidCinematicEnd, true, true);
     TriggerExecute(gt_MidCleanup, true, true);
+    TriggerExecute(libB27CC4B1_gt_TableButtonsShow, true, true);
+    libB27CC4B1_gf_CurseDifficultyModifier(2);
     TriggerQueueExit();
     return true;
 }
@@ -7672,7 +8085,7 @@ bool gt_MidCinematic_Func (bool testConds, bool runActions) {
     libNtve_gf_PauseUnit(UnitFromId(175), false);
     libNtve_gf_PauseUnit(UnitFromId(994), false);
     UnitSetPropertyFixed(gv_warfieldShipFlying, c_unitPropMovementSpeed, 5.0);
-    UnitIssueOrder(gv_warfieldShipFlying, OrderTargetingPoint(AbilityCommand("move", 0), PointFromId(382)), c_orderQueueReplace);
+    UnitIssueOrder(gv_warfieldShipFlying, OrderTargetingPoint(AbilityCommand("BattlecruiserMove", 0), PointFromId(382)), c_orderQueueReplace);
     CinematicFade(true, 1.5, c_fadeStyleNormal, ColorWithAlpha(0.00, 0.00, 0.00, 0.00), 0.0, true);
     TriggerSkippableBegin(PlayerGroupAll(), 0, null, true, false);
     gv_midCinematicCompleted = false;
@@ -8154,7 +8567,7 @@ bool gt_Fire01_Func (bool testConds, bool runActions) {
     gv_hydraSquish = UnitLastCreated();
     UnitIssueOrder(gv_hydraSquish, OrderTargetingPoint(AbilityCommand("move", 0), PointFromId(1759)), c_orderQueueReplace);
     UnitIssueOrder(gv_warfieldShipFlying, Order(AbilityCommand("HeliosCrashMorph", 0)), c_orderQueueReplace);
-    UnitIssueOrder(gv_warfieldShipFlying, OrderTargetingPoint(AbilityCommand("move", 0), PointFromId(382)), c_orderQueueAddToEnd);
+    UnitIssueOrder(gv_warfieldShipFlying, OrderTargetingPoint(AbilityCommand("BattlecruiserMove", 0), PointFromId(382)), c_orderQueueAddToEnd);
     UnitSetHeight(gv_warfieldShipFlying, 0.0, 2.3);
     Wait(2.5, c_timeGame);
     libNtve_gf_CreateActorAtPoint("FireMedium", PointFromId(1192));
@@ -8196,7 +8609,7 @@ bool gt_Fire02_Func (bool testConds, bool runActions) {
     libNtve_gf_CreateActorAtPoint("FireMedium", PointFromId(1198));
     gv_fire02 = libNtve_gf_ActorLastCreated();
     UnitSetHeight(gv_warfieldShipFlying, 0.0, 0.0);
-    UnitIssueOrder(gv_warfieldShipFlying, Order(AbilityCommand("stop", 0)), c_orderQueueReplace);
+    UnitIssueOrder(gv_warfieldShipFlying, Order(AbilityCommand("BattlecruiserStop", 0)), c_orderQueueReplace);
     UnitKill(gv_warfieldShipFlying);
     TriggerExecute(gt_Fire03, true, false);
     return true;
@@ -8374,6 +8787,7 @@ bool gt_VictoryQ_Func (bool testConds, bool runActions) {
     TriggerQueueClear(c_triggerQueueKill);
     gv_gameOver = true;
     TriggerQueueEnter();
+    TriggerExecute(libB27CC4B1_gt_TableButtonsHide, true, true);
     TriggerExecute(gt_VictorySetup, true, true);
     TriggerExecute(gt_VictoryCinematic, true, true);
     TriggerExecute(gt_VictoryCinematicEnd, true, true);
@@ -8500,6 +8914,10 @@ void InitTriggers () {
     gt_FirstDropPodSpawnQ_Init();
     gt_FirstDropRescue_Init();
     gt_LeaderboardInitiate_Init();
+    gt_ChallengeHybridsInit_Init();
+    gt_ChallengeHybridsController_Init();
+    gt_ChallengeHybridsExponent_Init();
+    gt_ChallengeHybridsAI_Init();
     gt_DropPodallPodSpawnsQ_Init();
     gt_Gank_Drop01Marines_Init();
     gt_Gank_Drop02Marauder_Init();
@@ -8590,6 +9008,7 @@ void InitTriggers () {
     gt_DominionSupplyShipDoodad02_Init();
     gt_DominionSupplyShipDoodad03_Init();
     gt_ResourcePickups_Init();
+    gt_InfestedCCTalent_Init();
     gt_NydusInfiniteSpawning01_Init();
     gt_NydusInfiniteSpawning02_Init();
     gt_NydusInfiniteSpawning03_Init();

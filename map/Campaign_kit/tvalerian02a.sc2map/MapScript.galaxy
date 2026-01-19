@@ -7,11 +7,11 @@
 //==================================================================================================
 include "TriggerLibs/NativeLib"
 include "TriggerLibs/LibertyLib"
-include "LibEA0820A1"
 include "LibCamp"
 include "LibWoLC"
 include "LibWCMI"
 include "LibWCUI"
+include "LibB27CC4B1"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -19,11 +19,11 @@ include "LibWCUI"
 void InitLibs () {
     libNtve_InitLib();
     libLbty_InitLib();
-    libEA0820A1_InitLib();
     libCamp_InitLib();
     libWoLC_InitLib();
     libWCMI_InitLib();
     libWCUI_InitLib();
+    libB27CC4B1_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -215,6 +215,9 @@ void InitGlobals () {
 void gf__3ForcePopEgg (unit lp_poppedEgg);
 void gf__3AIQueenPopEggs (region lp_region, int lp_int);
 void gf__3EggSpawnedMobs (unit lp_poppedEgg);
+point gf__3QueenTarget ();
+void gf_UpdateCommandCard ();
+void gf_ReplaceButton (string lp_target, string lp_source);
 void gf_ActivateAI (unit lp_activatedunit);
 void gf_SpawnNydusWorm (region lp_region, int lp_packs, int lp_countPerPacks, string lp_type, fixed lp_delay);
 void gf_CreateUnburrowingUnits (int lp_qty, string lp_type, point lp_loc);
@@ -226,7 +229,6 @@ void gf_CinematicDeployNukeWrapper (unit lp_unit);
 //--------------------------------------------------------------------------------------------------
 // Trigger Variables
 //--------------------------------------------------------------------------------------------------
-trigger gt_OnPlayer1GetUnit;
 trigger gt_Initialization;
 trigger gt_Init01Technology;
 trigger gt_Init02Players;
@@ -360,6 +362,11 @@ trigger gt__3QueenShockwaveScreenShake;
 trigger gt__3CreateQueenBossBar;
 trigger gt__3QueenPopEggs;
 trigger gt__3EggPoppedViaDamageZergQueenOnly;
+trigger gt__3QueenAIRandom;
+trigger gt__3QueenAILine;
+trigger gt__3QueenAICircle;
+trigger gt__3QueenAIMix;
+trigger gt__3QueenAttackSpiral;
 trigger gt__3QueenKill;
 trigger gt__4InitBroodchamber;
 trigger gt__4StartGame;
@@ -378,6 +385,7 @@ trigger gt__4UltraliskUnburrow;
 trigger gt__4Ambush2;
 trigger gt__4Extraction;
 trigger gt__4UnitExtractionController;
+trigger gt_SelectionChanged;
 trigger gt_AIThink;
 trigger gt_InfestorCooldown;
 trigger gt_NydusSpawningTrigger;
@@ -552,6 +560,63 @@ void gf__3EggSpawnedMobs (unit lp_poppedEgg) {
     }
 }
 
+point gf__3QueenTarget () {
+    // Automatic Variable Declarations
+    // Implementation
+    return UnitGetPosition(UnitGroupClosestToPoint(UnitGroup(null, gv_p1_USER, RegionPlayableMap(), UnitFilter(0, 0, (1 << c_targetFilterStructure) | (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), UnitGetPosition(gv_tHEONEBROODMOTHER)));
+}
+
+void gf_UpdateCommandCard () {
+    // Variable Declarations
+    int lv_i;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+    lv_i = 1;
+
+    // Implementation
+    if ((UnitIsSelected(gv_tHEONERAYNOR, gv_p1_USER) == true) && (TechTreeAbilityIsAllowed(gv_p1_USER, AbilityCommand("RaynorSnipe", 0)) == true)) {
+        CatalogLinkReplace(1, c_gameCatalogAbil, ("TValerian02aHeroCommonAbil" + IntToString(gv_p1_USER)), "RaynorSnipe");
+        gf_ReplaceButton((("TValerian02aHeroCommonAbil" + IntToString(lv_i))), "RaynorSnipe");
+        lv_i += 1;
+    }
+
+    if ((UnitIsSelected(gv_tHEONETYCHUS, gv_p1_USER) == true) && (TechTreeAbilityIsAllowed(gv_p1_USER, AbilityCommand("BonesTossGrenade", 0)) == true)) {
+        CatalogLinkReplace(gv_p1_USER, c_gameCatalogAbil, ("TValerian02aHeroCommonAbil" + IntToString(lv_i)), "BonesTossGrenade");
+        gf_ReplaceButton((("TValerian02aHeroCommonAbil" + IntToString(lv_i))), "TossGrenadeTychus");
+        lv_i += 1;
+    }
+
+    if ((UnitIsSelected(gv_tHEONESWANN, gv_p1_USER) == true) && (TechTreeAbilityIsAllowed(gv_p1_USER, AbilityCommand("DutchPlaceTurret", 0)) == true)) {
+        CatalogLinkReplace(gv_p1_USER, c_gameCatalogAbil, ("TValerian02aHeroCommonAbil" + IntToString(lv_i)), "DutchPlaceTurret");
+        gf_ReplaceButton((("TValerian02aHeroCommonAbil" + IntToString(lv_i))), "DutchPlaceTurret");
+        lv_i += 1;
+    }
+
+    if ((UnitIsSelected(gv_tHEONESTETMAN, gv_p1_USER) == true)) {
+        CatalogLinkReplace(gv_p1_USER, c_gameCatalogAbil, ("TValerian02aHeroCommonAbil" + IntToString(lv_i)), "BonesHeal");
+        gf_ReplaceButton((("TValerian02aHeroCommonAbil" + IntToString(lv_i))), "BonesHeal");
+        lv_i += 1;
+    }
+
+    while ((lv_i <= 4)) {
+        CatalogLinkReplace(gv_p1_USER, c_gameCatalogAbil, ("TValerian02aHeroCommonAbil" + IntToString(lv_i)), ("TValerian02aHeroCommonAbil" + IntToString(lv_i)));
+        gf_ReplaceButton((("TValerian02aHeroCommonAbil" + IntToString(lv_i))), (("TValerian02aHeroCommonAbil" + IntToString(lv_i))));
+        lv_i += 1;
+    }
+}
+
+void gf_ReplaceButton (string lp_target, string lp_source) {
+    // Automatic Variable Declarations
+    // Implementation
+    CatalogFieldValueSet(c_gameCatalogButton, lp_target, "Name", gv_p1_USER, CatalogFieldValueGet(c_gameCatalogButton, lp_source, "Name", gv_p1_USER));
+    CatalogFieldValueSet(c_gameCatalogButton, lp_target, "Icon", gv_p1_USER, CatalogFieldValueGet(c_gameCatalogButton, lp_source, "Icon", gv_p1_USER));
+    CatalogFieldValueSet(c_gameCatalogButton, lp_target, "AlertIcon", gv_p1_USER, CatalogFieldValueGet(c_gameCatalogButton, lp_source, "AlertIcon", gv_p1_USER));
+    CatalogFieldValueSet(c_gameCatalogButton, lp_target, "Tooltip", gv_p1_USER, CatalogFieldValueGet(c_gameCatalogButton, lp_source, "Tooltip", gv_p1_USER));
+    CatalogFieldValueSet(c_gameCatalogButton, lp_target, "AlertTooltip", gv_p1_USER, CatalogFieldValueGet(c_gameCatalogButton, lp_source, "AlertTooltip", gv_p1_USER));
+    CatalogFieldValueSet(c_gameCatalogButton, lp_target, "Hotkey", gv_p1_USER, CatalogFieldValueGet(c_gameCatalogButton, lp_source, "Hotkey", gv_p1_USER));
+}
+
 void gf_ActivateAI (unit lp_activatedunit) {
     // Variable Declarations
     point lv_rallypoint;
@@ -683,26 +748,6 @@ void gf_CinematicDeployNukeWrapper (unit lp_unit) {
 }
 
 //--------------------------------------------------------------------------------------------------
-// Trigger: OnPlayer1GetUnit
-//--------------------------------------------------------------------------------------------------
-bool gt_OnPlayer1GetUnit_Func (bool testConds, bool runActions) {
-    // Automatic Variable Declarations
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    TriggerExecute(libEA0820A1_gt_Init00ReplaceUnit, true, true);
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void gt_OnPlayer1GetUnit_Init () {
-    gt_OnPlayer1GetUnit = TriggerCreate("gt_OnPlayer1GetUnit_Func");
-    TriggerAddEventUnitChangeOwner(gt_OnPlayer1GetUnit, null);
-}
-
-//--------------------------------------------------------------------------------------------------
 // Trigger: Initialization
 //--------------------------------------------------------------------------------------------------
 bool gt_Initialization_Func (bool testConds, bool runActions) {
@@ -719,9 +764,9 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init04Music, true, true);
     TriggerExecute(gt_Init05Environment, true, true);
     TriggerExecute(gt_Init06Difficulties, true, true);
-    TriggerExecute(libEA0820A1_gt_Init00ReplaceUnit, true, true);
     TriggerExecute(gt_Init07Help, true, true);
     libWoLC_gf_RegisterFootageRecording(gt_BriefingQ);
+    TriggerExecute(libB27CC4B1_gt_RogueInit, true, true);
     TriggerExecute(gt__1IntroSequence, true, false);
     return true;
 }
@@ -1459,7 +1504,6 @@ bool gt_Init06Difficulties_Func (bool testConds, bool runActions) {
     gv_nydusWormHP = 200.0;
     gv__2NydusKillTeamSwarmlingSpawnAmt = libNtve_gf_DifficultyValueInt(6, 8, 8, 10);
     gv__4TimeLimit = libNtve_gf_DifficultyValueFixed(210.0, 180.0, 180.0, 180.0);
-    gv_queenHP = libNtve_gf_DifficultyValueFixed(2500.0, 3000.0, 3500.0, 4000.0);
     auto2329AB65_g = gv_zergPlayers;
     auto2329AB65_var = -1;
     while (true) {
@@ -1565,11 +1609,19 @@ bool gt__1StartGame_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    TriggerExecute(libB27CC4B1_gt_InitTableButtons, true, false);
     gv__1BroodchamberNuke = UnitFromId(1314);
     TriggerEnable(gt_StetmannOOMQ, true);
     Wait(2.0, c_timeReal);
+    libB27CC4B1_gf_ChallengeTime("ChallengeChar2BB");
     TriggerExecute(gt_ObjectivePlantSeismicChargesCreateQ, true, false);
     Wait(3.5, c_timeReal);
+    if ((libB27CC4B1_gf_TalentAcquired("ChallengeChar2BB") == true)) {
+        gv_queenHP = libNtve_gf_DifficultyValueFixed(5000.0, 6000.0, 7000.0, 8000.0);
+    }
+    else {
+        gv_queenHP = libNtve_gf_DifficultyValueFixed(2500.0, 3000.0, 3500.0, 4000.0);
+    }
     SoundPlay(SoundLink("UI_TerranPing", -1), PlayerGroupAll(), 100.0, 0.0);
     libNtve_gf_CreatePingFacingAngle(PlayerGroupAll(), "PingObjective", RegionGetCenter(RegionFromId(2)), ColorWithAlpha(0.00, 100.00, 0.00, 0.00), 0.0, 270.0);
     PingSetTooltip(PingLastCreated(), StringExternal("Param/Value/61568157"));
@@ -1702,6 +1754,7 @@ bool gt__1TeachSnipeQ_Func (bool testConds, bool runActions) {
         libNtve_gf_ShareVisionofUnit(auto3A0E8422_var, true, gv_p1_USER);
     }
     TechTreeAbilityAllow(gv_p1_USER, AbilityCommand("RaynorSnipe", 0), true);
+    gf_UpdateCommandCard();
     UISetButtonHighlighted(PlayerGroupAll(), AbilityCommand("RaynorSnipe", 0), true);
     TransmissionClear(gv_interruptableTransmission);
     TriggerStop(gt__1OpeningDialogueQ);
@@ -2004,6 +2057,7 @@ bool gt__1TeachNadesQ_Func (bool testConds, bool runActions) {
 
     }
     TechTreeAbilityAllow(gv_p1_USER, AbilityCommand("BonesTossGrenade", 0), true);
+    gf_UpdateCommandCard();
     UISetButtonHighlighted(PlayerGroupAll(), AbilityCommand("BonesTossGrenade", 0), true);
     TriggerQueueEnter();
     libNtve_gf_AttachModelToUnit(gv_tHEONETYCHUS, "TalkIcon", "Origin");
@@ -2335,6 +2389,7 @@ bool gt__1TeachBettyQ_Func (bool testConds, bool runActions) {
     TriggerEnable(gt__1TeachBettyViaCast, true);
     UISetButtonHighlighted(PlayerGroupAll(), AbilityCommand("DutchPlaceTurret", 0), true);
     TechTreeAbilityAllow(gv_p1_USER, AbilityCommand("DutchPlaceTurret", 0), true);
+    gf_UpdateCommandCard();
     TriggerQueueEnter();
     libNtve_gf_AttachModelToUnit(gv_tHEONESWANN, "TalkIcon", "Origin");
     gv__1TalkFXActor = libNtve_gf_ActorLastCreated();
@@ -2781,9 +2836,9 @@ bool gt__1SaveDominionQ_Func (bool testConds, bool runActions) {
     for (;; autoFEEFD5BB_u -= 1) {
         autoFEEFD5BB_var = UnitGroupUnitFromEnd(autoFEEFD5BB_g, autoFEEFD5BB_u);
         if (autoFEEFD5BB_var == null) { break; }
-        libNtve_gf_RescueUnit(autoFEEFD5BB_var, gv_p1_USER, true);
-        UnitGroupAdd(gv_nonHeroicDudes, autoFEEFD5BB_var);
-        UnitGroupRemove(gv__1RescuableDominionGroup, autoFEEFD5BB_var);
+        libB27CC4B1_gf_RescueUnitWithUpgrades(autoFEEFD5BB_var);
+        UnitGroupAdd(gv_nonHeroicDudes, libB27CC4B1_gv_lastRescuedUnit);
+        UnitGroupRemove(gv__1RescuableDominionGroup, libB27CC4B1_gv_lastRescuedUnit);
     }
     UIAlertPoint("Trigger", gv_p1_USER, StringExternal("Param/Value/F3F18D6A"), null, RegionGetCenter(RegionFromId(16)));
     TriggerEnable(gt__1LongConversationQ, true);
@@ -2948,7 +3003,7 @@ bool gt__1SEZergActions_Func (bool testConds, bool runActions) {
         libNtve_gf_MakeUnitInvulnerable(auto94BC3365_var, false);
         gf_ActivateAI(auto94BC3365_var);
     }
-    Wait(6.0, c_timeGame);
+    Wait(6.0, c_timeAI);
     SoundPlay(SoundLink("Roach_Attack", 2), PlayerGroupAll(), 100.0, 0.0);
     autoB621D0A9_g = gv__1SEZergBulliesEast;
     autoB621D0A9_u = UnitGroupCount(autoB621D0A9_g, c_unitCountAll);
@@ -3157,7 +3212,7 @@ bool gt__1NydusWormsTrigger_Func (bool testConds, bool runActions) {
     Wait(2.0, c_timeGame);
     TriggerExecute(gt__1NydusWormsQ, true, false);
     TriggerExecute(gt__1NydusWormsStetmannQQQ, true, false);
-    Wait(6.0, c_timeGame);
+    Wait(6.0, c_timeAI);
     gf_ActivateAI(UnitFromId(23));
     return true;
 }
@@ -3295,7 +3350,7 @@ bool gt__1NydusWormsStetmannQQQ_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    Wait(10.0, c_timeGame);
+    Wait(10.0, c_timeAI);
     TriggerQueueEnter();
     TriggerEnable(gt__1NydusWormKilled, false);
     if ((TriggerGetExecCount(gt__1NydusWormKilled) == 0) && (gv_gameOver == false) && (gv_inCinematic == false)) {
@@ -3460,14 +3515,14 @@ bool gt__1BroodchamberTriggerHoldoutStart_Func (bool testConds, bool runActions)
     UIAlertClear(gv_p1_USER);
     UIAlertPoint("Trigger", gv_p1_USER, StringExternal("Param/Value/FE28BBC0"), null, UnitGetPosition(gv__1BroodchamberNuke));
     libNtve_gf_SendActorMessageToUnit(gv_tHEONERAYNOR, "RefSet ::global.RaynorCommando ::Self");
-    TimerStart(gv_holdoutTimer, 150.0, false, c_timeGame);
+    TimerStart(gv_holdoutTimer, 150.0, false, c_timeAI);
     libWCUI_gf_TimerWindowCreate(TimerLastStarted(), StringExternal("Param/Value/AB3D8D27"), true, false);
     TimerWindowSetFormat(TimerWindowLastCreated(), StringToText("<mintotal/>:<sec2/>"));
     gv_holdoutTimerWindow = TimerWindowLastCreated();
     gv_limitNydusWormSpawnsInHoldout = true;
     gv_nydusWormsActiveInHoldout = 0;
     PingDestroy(gv__1BroodchamberLocPing);
-    Wait(150.0, c_timeGame);
+    Wait(150.0, c_timeAI);
     TriggerExecute(gt__1BroodchamberDestroyHintPings, true, false);
     TriggerEnable(gt_SeismicChargeAtHalfHealthQ, false);
     autoFC32028A_g = UnitGroup(null, gv_p1_USER, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
@@ -3503,61 +3558,61 @@ bool gt__1BroodchamberAttackWaves_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     SoundPlay(SoundLink("Hydralisk_Attack", 0), PlayerGroupAll(), 100.0, 0.0);
     gf_CreateUnburrowingUnits(2, "HydraliskBurrowed", PointFromId(405));
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     SoundPlay(SoundLink("Zergling_Yes", 6), PlayerGroupAll(), 100.0, 0.0);
     gf_CreateUnburrowingUnits(libNtve_gf_DifficultyValueInt(9, 9, 11, 13), "ZerglingBurrowed", PointFromId(21));
-    Wait(5.0, c_timeGame);
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
+    Wait(5.0, c_timeAI);
     gf_SpawnNydusWorm(RegionFromId(3), 1, libNtve_gf_DifficultyValueInt(9, 9, 10, 11), "Swarmling", 12.0);
-    Wait(5.0, c_timeGame);
-    Wait(5.0, c_timeGame);
-    Wait(5.0, c_timeGame);
-    Wait(5.0, c_timeGame);
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
+    Wait(5.0, c_timeAI);
+    Wait(5.0, c_timeAI);
+    Wait(5.0, c_timeAI);
+    Wait(5.0, c_timeAI);
     gf_SpawnNydusWorm(RegionFromId(7), 1, libNtve_gf_DifficultyValueInt(9, 9, 10, 11), "Swarmling", 12.0);
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     SoundPlay(SoundLink("Hydralisk_Ready", 2), PlayerGroupAll(), 100.0, 0.0);
     gf_CreateUnburrowingUnits(3, "RoachBurrowed", PointFromId(72));
-    Wait(5.0, c_timeGame);
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
+    Wait(5.0, c_timeAI);
     SoundPlay(SoundLink("Zergling_Attack", 1), PlayerGroupAll(), 100.0, 0.0);
     gf_CreateUnburrowingUnits(3, "ZerglingBurrowed", PointFromId(407));
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     gf_SpawnNydusWorm(RegionFromId(4), 1, libNtve_gf_DifficultyValueInt(9, 9, 10, 11), "Swarmling", 12.0);
-    Wait(5.0, c_timeGame);
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
+    Wait(5.0, c_timeAI);
     SoundPlay(SoundLink("Zergling_Attack", 2), PlayerGroupAll(), 100.0, 0.0);
     gf_CreateUnburrowingUnits(libNtve_gf_DifficultyValueInt(2, 2, 2, 3), "RoachBurrowed", PointFromId(407));
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     gf_SpawnNydusWorm(RegionFromId(6), 1, libNtve_gf_DifficultyValueInt(9, 9, 10, 11), "Swarmling", 12.0);
     SoundPlay(SoundLink("Hydralisk_Attack", 0), PlayerGroupAll(), 100.0, 0.0);
     gf_CreateUnburrowingUnits(1, "HydraliskBurrowed", PointFromId(72));
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     SoundPlay(SoundLink("Zergling_Yes", 6), PlayerGroupAll(), 100.0, 0.0);
     gf_CreateUnburrowingUnits(3, "ZerglingBurrowed", PointFromId(21));
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     gf_SpawnNydusWorm(RegionFromId(5), 1, libNtve_gf_DifficultyValueInt(9, 9, 10, 11), "Swarmling", 12.0);
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     gf_SpawnNydusWorm(RegionFromId(113), 1, libNtve_gf_DifficultyValueInt(9, 9, 10, 11), "Swarmling", 12.0);
-    Wait(5.0, c_timeGame);
-    Wait(5.0, c_timeGame);
-    Wait(5.0, c_timeGame);
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
+    Wait(5.0, c_timeAI);
+    Wait(5.0, c_timeAI);
+    Wait(5.0, c_timeAI);
     SoundPlay(SoundLink("Ultralisk_Attack", 4), PlayerGroupAll(), 100.0, 0.0);
     gf_CreateUnburrowingUnits(1, "InfestedAbominationBurrowed", PointFromId(1360));
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     gf_CreateUnburrowingUnits(libNtve_gf_DifficultyValueInt(1, 1, 2, 1), libNtve_gf_DifficultyValueUnitType("RoachBurrowed", "HydraliskBurrowed", "HydraliskBurrowed", "InfestedAbominationBurrowed"), PointFromId(407));
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     SoundPlay(SoundLink("Zergling_Yes", 6), PlayerGroupAll(), 100.0, 0.0);
     gf_CreateUnburrowingUnits(libNtve_gf_DifficultyValueInt(3, 3, 1, 1), libNtve_gf_DifficultyValueUnitType("ZerglingBurrowed", "ZerglingBurrowed", "RoachBurrowed", "RoachBurrowed"), PointFromId(407));
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     SoundPlay(SoundLink("Zergling_Attack", 2), PlayerGroupAll(), 100.0, 0.0);
     gf_CreateUnburrowingUnits(2, "ZerglingBurrowed", PointFromId(21));
-    Wait(5.0, c_timeGame);
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
+    Wait(5.0, c_timeAI);
     SoundPlay(SoundLink("Hydralisk_Attack", 0), PlayerGroupAll(), 100.0, 0.0);
     gf_CreateUnburrowingUnits(1, "HydraliskBurrowed", PointFromId(72));
     return true;
@@ -4637,7 +4692,7 @@ bool gt__2ActivateNydusKillTeam_Func (bool testConds, bool runActions) {
 
     gv_nydusSpawnRegion = RegionFromId(70);
     TriggerExecute(gt__2NydusKillTeamSpawning, true, false);
-    Wait(15.0, c_timeGame);
+    Wait(15.0, c_timeAI);
     gv_nydusSpawnRegion = RegionFromId(80);
     TriggerExecute(gt__2NydusKillTeamSpawning, true, false);
     return true;
@@ -4703,7 +4758,7 @@ bool gt__2NydusKillTeamSpawning_Func (bool testConds, bool runActions) {
             }
         }
 
-        Wait(12.0, c_timeGame);
+        Wait(12.0, c_timeAI);
     }
     return true;
 }
@@ -4834,10 +4889,10 @@ bool gt__2SaveDominionQ_Func (bool testConds, bool runActions) {
     for (;; autoA409A568_u -= 1) {
         autoA409A568_var = UnitGroupUnitFromEnd(autoA409A568_g, autoA409A568_u);
         if (autoA409A568_var == null) { break; }
-        libNtve_gf_RescueUnit(autoA409A568_var, gv_p1_USER, true);
-        UnitGroupAdd(gv_nonHeroicDudes, autoA409A568_var);
-        UnitGroupRemove(gv__2RescuableDominionGroup, autoA409A568_var);
-        UnitSetPropertyFixed(autoA409A568_var, c_unitPropEnergyPercent, 100.0);
+        libB27CC4B1_gf_RescueUnitWithUpgrades(autoA409A568_var);
+        UnitGroupAdd(gv_nonHeroicDudes, libB27CC4B1_gv_lastRescuedUnit);
+        UnitGroupRemove(gv__2RescuableDominionGroup, libB27CC4B1_gv_lastRescuedUnit);
+        UnitSetPropertyFixed(libB27CC4B1_gv_lastRescuedUnit, c_unitPropEnergyPercent, 100.0);
     }
     TriggerQueueEnter();
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
@@ -4969,7 +5024,7 @@ bool gt__2AmbushActions_Func (bool testConds, bool runActions) {
         if (autoDE55D377_var == null) { break; }
         gf_ActivateAI(autoDE55D377_var);
     }
-    Wait(3.0, c_timeGame);
+    Wait(3.0, c_timeAI);
     TriggerExecute(gt__2AmbushActionsQ, true, false);
     SoundPlay(SoundLink("Baneling_Attack", 3), PlayerGroupAll(), 100.0, 0.0);
     auto4D2B95AB_g = gv__2AmbushUnits;
@@ -5107,7 +5162,7 @@ bool gt__2GauntletQ_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     TriggerQueueEnter();
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
     libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
@@ -5115,7 +5170,7 @@ bool gt__2GauntletQ_Func (bool testConds, bool runActions) {
     libCamp_gf_SendTransmissionCampaign(gv_tHEONERAYNOR, SoundLink("TValerian02ARaynor00032", 0), c_transmissionDurationAdd, 0.0, true);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Game);
     TriggerQueueExit();
-    Wait(20.0, c_timeGame);
+    Wait(20.0, c_timeAI);
     if ((TriggerGetExecCount(gt__2GauntletKillaWorm1Q) == 0) && (gv_gameOver == false)) {
         TriggerQueueEnter();
         libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
@@ -5217,7 +5272,7 @@ bool gt__2GauntletPushback1Q_Func (bool testConds, bool runActions) {
     gf_CreateUnburrowingUnits(2, "InfestedTerranCampaignBurrowed", PointFromId(939));
     gf_CreateUnburrowingUnits(2, "InfestedTerranCampaignBurrowed", PointFromId(930));
     gf_CreateUnburrowingUnits(2, libNtve_gf_DifficultyValueUnitType("InfestedTerranCampaignBurrowed", "InfestedTerranCampaignBurrowed", "BanelingBurrowed", "BanelingBurrowed"), PointFromId(941));
-    Wait(8.0, c_timeGame);
+    Wait(8.0, c_timeAI);
     if ((libNtve_gf_DifficultyValueInt(0, 0, 1, 1) == 1) && (gv_gameOver == false)) {
         gf_CreateUnburrowingUnits(10, "InfestedCivilianBurrowed", PointFromId(1031));
         TriggerQueueEnter();
@@ -5366,14 +5421,14 @@ bool gt__2BroodchamberTriggerHoldoutStart_Func (bool testConds, bool runActions)
     UIAlertClear(gv_p1_USER);
     UIAlertPoint("Trigger", gv_p1_USER, StringExternal("Param/Value/30A2B639"), null, UnitGetPosition(gv__2BroodchamberNuke));
     libNtve_gf_SendActorMessageToUnit(gv_tHEONERAYNOR, "RefSet ::global.RaynorCommando ::Self");
-    TimerStart(gv_holdoutTimer, 150.0, false, c_timeGame);
+    TimerStart(gv_holdoutTimer, 150.0, false, c_timeAI);
     libWCUI_gf_TimerWindowCreate(TimerLastStarted(), StringExternal("Param/Value/8AF09AC7"), true, false);
     TimerWindowSetFormat(TimerWindowLastCreated(), StringToText("<mintotal/>:<sec2/>"));
     gv_holdoutTimerWindow = TimerWindowLastCreated();
     gv_limitNydusWormSpawnsInHoldout = true;
     gv_nydusWormsActiveInHoldout = 0;
     PingDestroy(gv__2BroodchamberLocPing);
-    Wait(150.0, c_timeGame);
+    Wait(150.0, c_timeAI);
     TriggerEnable(gt_SeismicChargeAtHalfHealthQ, false);
     auto49807F1C_g = UnitGroup(null, gv_p1_USER, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     auto49807F1C_u = UnitGroupCount(auto49807F1C_g, c_unitCountAll);
@@ -5408,78 +5463,78 @@ bool gt__2BroodchamberAttackWaves_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     SoundPlay(SoundLink("InfestedTerranReady", 0), PlayerGroupAll(), 100.0, 0.0);
     gf_CreateUnburrowingUnits(10, "InfestedCivilianBurrowed", PointFromId(897));
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     SoundPlay(SoundLink("InfestedTerran_Yes", 1), PlayerGroupAll(), 100.0, 0.0);
     gf_CreateUnburrowingUnits(10, "InfestedCivilianBurrowed", PointFromId(19));
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     SoundPlay(SoundLink("InfestedTerranReady", 0), PlayerGroupAll(), 100.0, 0.0);
     gf_CreateUnburrowingUnits(4, "InfestedTerranCampaignBurrowed", PointFromId(19));
     gf_CreateUnburrowingUnits(2, "BanelingBurrowed", PointFromId(19));
-    Wait(5.0, c_timeGame);
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
+    Wait(5.0, c_timeAI);
     SoundPlay(SoundLink("Ultralisk_Ready", 0), PlayerGroupAll(), 100.0, 0.0);
     gf_CreateUnburrowingUnits(1, "InfestedAbominationBurrowed", PointFromId(10));
-    Wait(5.0, c_timeGame);
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
+    Wait(5.0, c_timeAI);
     SoundPlay(SoundLink("InfestedTerranReady", 0), PlayerGroupAll(), 100.0, 0.0);
     gf_CreateUnburrowingUnits(10, "InfestedCivilianBurrowed", PointFromId(5));
-    Wait(1.0, c_timeGame);
+    Wait(1.0, c_timeAI);
     SoundPlay(SoundLink("Baneling_Yes", 5), PlayerGroupAll(), 100.0, 0.0);
     gf_CreateUnburrowingUnits(3, "BanelingBurrowed", PointFromId(19));
-    Wait(4.0, c_timeGame);
-    Wait(5.0, c_timeGame);
-    Wait(5.0, c_timeGame);
+    Wait(4.0, c_timeAI);
+    Wait(5.0, c_timeAI);
+    Wait(5.0, c_timeAI);
     gf_SpawnNydusWorm(RegionFromId(23), 8, 1, "InfestedCivilian", 12.0);
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     gf_SpawnNydusWorm(RegionFromId(24), 8, 1, "InfestedCivilian", 12.0);
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     SoundPlay(SoundLink("InfestedTerranReady", 0), PlayerGroupAll(), 100.0, 0.0);
     gf_CreateUnburrowingUnits(12, "InfestedCivilianBurrowed", PointFromId(10));
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     SoundPlay(SoundLink("Hydralisk_Ready", 2), PlayerGroupAll(), 100.0, 0.0);
     gf_CreateUnburrowingUnits(1, "HydraliskBurrowed", PointFromId(19));
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     SoundPlay(SoundLink("Roach_Ready", 0), PlayerGroupAll(), 100.0, 0.0);
     gf_CreateUnburrowingUnits(1, "BanelingBurrowed", PointFromId(5));
     gf_CreateUnburrowingUnits(1, "BanelingBurrowed", PointFromId(19));
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     SoundPlay(SoundLink("Infestor_Ready", 0), PlayerGroupAll(), 100.0, 0.0);
     gf_CreateUnburrowingUnits(1, "InfestorBurrowed", PointFromId(489));
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     SoundPlay(SoundLink("Infestor_Ready", 0), PlayerGroupAll(), 100.0, 0.0);
     gf_CreateUnburrowingUnits(1, "InfestorBurrowed", PointFromId(10));
-    Wait(5.0, c_timeGame);
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
+    Wait(5.0, c_timeAI);
     gf_SpawnNydusWorm(RegionFromId(25), 8, 1, "InfestedCivilian", 12.0);
-    Wait(2.0, c_timeGame);
+    Wait(2.0, c_timeAI);
     gf_SpawnNydusWorm(RegionFromId(26), 8, 1, "InfestedCivilian", 12.0);
-    Wait(3.0, c_timeGame);
+    Wait(3.0, c_timeAI);
     gf_SpawnNydusWorm(RegionFromId(28), 8, 1, "InfestedCivilian", 12.0);
-    Wait(5.0, c_timeGame);
-    Wait(5.0, c_timeGame);
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
+    Wait(5.0, c_timeAI);
+    Wait(5.0, c_timeAI);
     SoundPlay(SoundLink("Ultralisk_Roar", 0), PlayerGroupAll(), 100.0, 0.0);
     CameraShakeStart(gv_p1_USER, c_cameraPositionTarget, c_cameraDirectionZ, 0.06, 2.0, 100.0, 5.0);
-    Wait(2.0, c_timeGame);
+    Wait(2.0, c_timeAI);
     TriggerExecute(gt__2BroodchamberHoldoutUltralisksQ, true, false);
-    Wait(3.0, c_timeGame);
+    Wait(3.0, c_timeAI);
     gf_CreateUnburrowingUnits(1, "UltraliskBurrowed", PointFromId(12));
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
     gf_CreateUnburrowingUnits(1, "UltraliskBurrowed", PointFromId(11));
-    Wait(5.0, c_timeGame);
-    Wait(5.0, c_timeGame);
+    Wait(5.0, c_timeAI);
+    Wait(5.0, c_timeAI);
     gf_SpawnNydusWorm(RegionFromId(116), 5, 1, "Zergling", 12.0);
     SoundPlay(SoundLink("InfestedTerranReady", 0), PlayerGroupAll(), 100.0, 0.0);
     gf_CreateUnburrowingUnits(4, "InfestedTerranCampaignBurrowed", PointFromId(474));
-    Wait(1.0, c_timeGame);
+    Wait(1.0, c_timeAI);
     gf_SpawnNydusWorm(RegionFromId(51), 5, 1, "InfestedTerranCampaign", 12.0);
-    Wait(1.0, c_timeGame);
+    Wait(1.0, c_timeAI);
     SoundPlay(SoundLink("InfestedTerran_Attack", 1), PlayerGroupAll(), 100.0, 0.0);
     gf_CreateUnburrowingUnits(12, "InfestedCivilianBurrowed", PointFromId(897));
-    Wait(3.0, c_timeGame);
+    Wait(3.0, c_timeAI);
     SoundPlay(SoundLink("Zergling_Ready", 2), PlayerGroupAll(), 100.0, 0.0);
     gf_CreateUnburrowingUnits(2, "RoachBurrowed", PointFromId(489));
     return true;
@@ -6178,7 +6233,7 @@ bool gt__3BullyGroup2DelayedActivation_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    Wait(5.5, c_timeGame);
+    Wait(5.5, c_timeAI);
     auto3D866103_g = gv__3BullyGroup2MoverShooters;
     auto3D866103_u = UnitGroupCount(auto3D866103_g, c_unitCountAll);
     for (;; auto3D866103_u -= 1) {
@@ -6411,8 +6466,7 @@ bool gt__3OmegaliskActions_Func (bool testConds, bool runActions) {
     TriggerEnable(gt__3OmegaliskTripViaDamage, false);
     TriggerEnable(gt__3OmegaliskTripViaMovement, false);
     UIAlertPoint("Trigger", gv_p1_USER, StringExternal("Param/Value/ECB6FBCF"), null, UnitGetPosition(gv_tHEONEOMEGALISK));
-    UnitSetPropertyFixed(gv_tHEONEOMEGALISK, c_unitPropLifeMax, gv_omegaliskHP);
-    UnitSetPropertyFixed(gv_tHEONEOMEGALISK, c_unitPropLifePercent, 100.0);
+    libB27CC4B1_gf_SetUnitHPDynamically(gv_tHEONEOMEGALISK, gv_omegaliskHP, 100.0);
     libNtve_gf_ShareVisionofUnit(gv_tHEONEOMEGALISK, true, gv_p1_USER);
     UnitIssueOrder(gv_tHEONEOMEGALISK, Order(AbilityCommand("BurrowOmegaliskUp", 0)), c_orderQueueReplace);
     SoundPlay(SoundLink("Ultralisk_Ready", 0), PlayerGroupAll(), 300.0, 0.0);
@@ -6860,10 +6914,10 @@ bool gt__3SaveDominionQ_Func (bool testConds, bool runActions) {
     for (;; auto70C592E4_u -= 1) {
         auto70C592E4_var = UnitGroupUnitFromEnd(auto70C592E4_g, auto70C592E4_u);
         if (auto70C592E4_var == null) { break; }
-        libNtve_gf_RescueUnit(auto70C592E4_var, gv_p1_USER, true);
-        UnitGroupAdd(gv_nonHeroicDudes, auto70C592E4_var);
-        UnitGroupRemove(gv__3RescuableDominionGroup, auto70C592E4_var);
-        UnitSetCustomValue(auto70C592E4_var, 0, 0.0);
+        libB27CC4B1_gf_RescueUnitWithUpgrades(auto70C592E4_var);
+        UnitGroupAdd(gv_nonHeroicDudes, libB27CC4B1_gv_lastRescuedUnit);
+        UnitGroupRemove(gv__3RescuableDominionGroup, libB27CC4B1_gv_lastRescuedUnit);
+        UnitSetCustomValue(libB27CC4B1_gv_lastRescuedUnit, 0, 0.0);
     }
     TriggerQueueEnter();
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
@@ -7026,8 +7080,7 @@ bool gt__3QueenAIPhase1_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(gt_SeismicChargeAtHalfHealthQ, true);
-    UnitSetPropertyFixed(gv_tHEONEBROODMOTHER, c_unitPropLifeMax, gv_queenHP);
-    UnitSetPropertyFixed(gv_tHEONEBROODMOTHER, c_unitPropLifePercent, 100.0);
+    libB27CC4B1_gf_SetUnitHPDynamically(gv_tHEONEBROODMOTHER, gv_queenHP, 100.0);
     UnitSetPropertyFixed(gv_tHEONEBROODMOTHER, c_unitPropMovementSpeed, 2.5);
     libNtve_gf_CreatePingFacingAngle(PlayerGroupAll(), "PingBoss", UnitGetPosition(gv_tHEONEBROODMOTHER), ColorWithAlpha(50.20, 0.00, 50.20, 0.00), 0.0, 270.0);
     PingSetUnit(PingLastCreated(), gv_tHEONEBROODMOTHER);
@@ -7036,17 +7089,20 @@ bool gt__3QueenAIPhase1_Func (bool testConds, bool runActions) {
     gv__3QueenPing = PingLastCreated();
     UIAlertClear(gv_p1_USER);
     UIAlertPoint("Trigger", gv_p1_USER, StringToText(""), null, UnitGetPosition(gv_tHEONEBROODMOTHER));
+    TriggerEnable(gt__3QueenAIRandom, true);
     gf__3AIQueenPopEggs(RegionFromId(87), 8);
     while (!((UnitGetPropertyFixed(gv_tHEONEBROODMOTHER, c_unitPropLifePercent, c_unitPropCurrent) <= 75.0))) {
         Wait(0.1, c_timeGame);
     }
     PingDestroy(gv__3QueenPing);
+    TriggerEnable(gt__3QueenAIRandom, false);
+    TriggerExecute(gt__3QueenAttackSpiral, true, false);
     TriggerStop(gt__3QueenPopEggs);
     gv__3QueenEggPopLimit = 0;
     UnitGroupRemove(gv_aIThinkGroup, gv_tHEONEBROODMOTHER);
     SoundPlay(SoundLink("Zerg_BurrowLarge", -1), PlayerGroupAll(), 100.0, 0.0);
     UnitIssueOrder(gv_tHEONEBROODMOTHER, Order(AbilityCommand("BurrowZerglingDown", 0)), c_orderQueueReplace);
-    Wait(12.0, c_timeGame);
+    Wait(12.0, c_timeAI);
     TriggerExecute(gt__3QueenAIPhase2, true, false);
     return true;
 }
@@ -7081,22 +7137,25 @@ bool gt__3QueenAIPhase2_Func (bool testConds, bool runActions) {
     UIAlertPoint("Trigger", gv_p1_USER, StringToText(""), null, PointFromId(312));
     Wait(0.1, c_timeGame);
     CameraShakeStart(gv_p1_USER, c_cameraPositionTarget, c_cameraDirectionZ, 0.06, 2.0, 100.0, 1.5);
-    UnitSetPropertyFixed(gv_tHEONEBROODMOTHER, c_unitPropLife, MaxF(UnitGetPropertyFixed(gv_tHEONEBROODMOTHER, c_unitPropLife, c_unitPropCurrent), (gv_queenHP * 0.75)));
+    UnitSetPropertyFixed(gv_tHEONEBROODMOTHER, c_unitPropLifePercent, MaxF(UnitGetPropertyFixed(gv_tHEONEBROODMOTHER, c_unitPropLifePercent, c_unitPropCurrent), 0.75));
     UnitIssueOrder(gv_tHEONEBROODMOTHER, Order(AbilityCommand("BurrowZerglingUp", 0)), c_orderQueueReplace);
     SoundPlay(SoundLink("Zerg_UnburrowLarge", -1), PlayerGroupAll(), 100.0, 0.0);
     Wait(1.7, c_timeGame);
+    TriggerEnable(gt__3QueenAILine, true);
     gf__3AIQueenPopEggs(RegionFromId(88), 8);
     TriggerExecute(gt__3KillQueenReminderQ, true, false);
     while (!((UnitGetPropertyFixed(gv_tHEONEBROODMOTHER, c_unitPropLifePercent, c_unitPropCurrent) <= 50.0))) {
         Wait(0.1, c_timeGame);
     }
     PingDestroy(gv__3QueenPing);
+    TriggerEnable(gt__3QueenAILine, false);
+    TriggerExecute(gt__3QueenAttackSpiral, true, false);
     TriggerStop(gt__3QueenPopEggs);
     gv__3QueenEggPopLimit = 0;
     UnitGroupRemove(gv_aIThinkGroup, gv_tHEONEBROODMOTHER);
     SoundPlay(SoundLink("Zerg_BurrowLarge", -1), PlayerGroupAll(), 100.0, 0.0);
     UnitIssueOrder(gv_tHEONEBROODMOTHER, Order(AbilityCommand("BurrowZerglingDown", 0)), c_orderQueueReplace);
-    Wait(10.0, c_timeGame);
+    Wait(10.0, c_timeAI);
     TriggerExecute(gt__3QueenAIPhase3, true, false);
     return true;
 }
@@ -7175,22 +7234,25 @@ bool gt__3QueenAIPhase3_Func (bool testConds, bool runActions) {
     UIAlertPoint("Trigger", gv_p1_USER, StringToText(""), null, PointFromId(310));
     Wait(0.1, c_timeGame);
     CameraShakeStart(gv_p1_USER, c_cameraPositionTarget, c_cameraDirectionZ, 0.06, 2.0, 100.0, 1.5);
-    UnitSetPropertyFixed(gv_tHEONEBROODMOTHER, c_unitPropLife, MaxF(UnitGetPropertyFixed(gv_tHEONEBROODMOTHER, c_unitPropLife, c_unitPropCurrent), (gv_queenHP * 0.5)));
+    UnitSetPropertyFixed(gv_tHEONEBROODMOTHER, c_unitPropLifePercent, MaxF(UnitGetPropertyFixed(gv_tHEONEBROODMOTHER, c_unitPropLifePercent, c_unitPropCurrent), 0.5));
     UnitIssueOrder(gv_tHEONEBROODMOTHER, Order(AbilityCommand("BurrowZerglingUp", 0)), c_orderQueueReplace);
     SoundPlay(SoundLink("QueenReady", 0), PlayerGroupAll(), 100.0, 0.0);
     SoundPlay(SoundLink("Zerg_UnburrowLarge", -1), PlayerGroupAll(), 100.0, 0.0);
     Wait(1.7, c_timeGame);
+    TriggerEnable(gt__3QueenAICircle, true);
     gf__3AIQueenPopEggs(RegionFromId(89), 10);
     while (!((UnitGetPropertyFixed(gv_tHEONEBROODMOTHER, c_unitPropLifePercent, c_unitPropCurrent) <= 25.0))) {
         Wait(0.1, c_timeGame);
     }
     PingDestroy(gv__3QueenPing);
+    TriggerEnable(gt__3QueenAICircle, false);
+    TriggerExecute(gt__3QueenAttackSpiral, true, false);
     TriggerStop(gt__3QueenPopEggs);
     gv__3QueenEggPopLimit = 0;
     UnitGroupRemove(gv_aIThinkGroup, gv_tHEONEBROODMOTHER);
     SoundPlay(SoundLink("Zerg_BurrowLarge", -1), PlayerGroupAll(), 100.0, 0.0);
     UnitIssueOrder(gv_tHEONEBROODMOTHER, Order(AbilityCommand("BurrowZerglingDown", 0)), c_orderQueueReplace);
-    Wait(15.0, c_timeGame);
+    Wait(15.0, c_timeAI);
     TriggerExecute(gt__3QueenAIPhase4, true, false);
     return true;
 }
@@ -7225,7 +7287,7 @@ bool gt__3QueenAIPhase4_Func (bool testConds, bool runActions) {
     UIAlertPoint("Trigger", gv_p1_USER, StringToText(""), null, PointFromId(221));
     Wait(0.1, c_timeGame);
     CameraShakeStart(gv_p1_USER, c_cameraPositionTarget, c_cameraDirectionZ, 0.06, 2.0, 100.0, 1.5);
-    UnitSetPropertyFixed(gv_tHEONEBROODMOTHER, c_unitPropLife, MaxF(UnitGetPropertyFixed(gv_tHEONEBROODMOTHER, c_unitPropLife, c_unitPropCurrent), (gv_queenHP * 0.35)));
+    UnitSetPropertyFixed(gv_tHEONEBROODMOTHER, c_unitPropLifePercent, MaxF(UnitGetPropertyFixed(gv_tHEONEBROODMOTHER, c_unitPropLifePercent, c_unitPropCurrent), 0.35));
     UnitIssueOrder(gv_tHEONEBROODMOTHER, Order(AbilityCommand("BurrowZerglingUp", 0)), c_orderQueueReplace);
     SoundPlay(SoundLink("Zerg_UnburrowLarge", -1), PlayerGroupAll(), 100.0, 0.0);
     Wait(1.5, c_timeGame);
@@ -7233,6 +7295,8 @@ bool gt__3QueenAIPhase4_Func (bool testConds, bool runActions) {
     CreepSetSpeed(c_creepSpeedGrowth, 200.0);
     SoundPlay(SoundLink("QueenYes", 1), PlayerGroupAll(), 100.0, 0.0);
     UnitIssueOrder(gv_tHEONEBROODMOTHER, Order(AbilityCommand("QueenShockwave", 0)), c_orderQueueReplace);
+    TriggerEnable(gt__3QueenAIMix, true);
+    TriggerEnable(gt__3QueenAIRandom, true);
     Wait(1.0, c_timeGame);
     gf_ActivateAI(gv_tHEONEBROODMOTHER);
     while (!((UnitGetPropertyFixed(gv_tHEONEBROODMOTHER, c_unitPropLifePercent, c_unitPropCurrent) <= 10.0))) {
@@ -7243,7 +7307,7 @@ bool gt__3QueenAIPhase4_Func (bool testConds, bool runActions) {
     Wait(1.0, c_timeGame);
     gf_ActivateAI(gv_tHEONEBROODMOTHER);
     while (true) {
-        Wait(24.0, c_timeGame);
+        Wait(24.0, c_timeAI);
         UnitGroupRemove(gv_aIThinkGroup, gv_tHEONEBROODMOTHER);
         UnitIssueOrder(gv_tHEONEBROODMOTHER, Order(AbilityCommand("QueenShockwave", 0)), c_orderQueueReplace);
         Wait(1.0, c_timeGame);
@@ -7385,6 +7449,138 @@ void gt__3EggPoppedViaDamageZergQueenOnly_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: 3 Queen AI Random
+//--------------------------------------------------------------------------------------------------
+bool gt__3QueenAIRandom_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    const int auto17B583D3_n = 15;
+    int auto17B583D3_i;
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    for (auto17B583D3_i = 1; auto17B583D3_i <= auto17B583D3_n; auto17B583D3_i += 1) {
+        libB27CC4B1_gf_BossQueenAttackRandom(gv_tHEONEBROODMOTHER);
+        Wait(0.5, c_timeGame);
+    }
+    libB27CC4B1_gf_BossQueenImpale(gv_tHEONEBROODMOTHER, gf__3QueenTarget());
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt__3QueenAIRandom_Init () {
+    gt__3QueenAIRandom = TriggerCreate("gt__3QueenAIRandom_Func");
+    TriggerEnable(gt__3QueenAIRandom, false);
+    TriggerAddEventTimePeriodic(gt__3QueenAIRandom, 7.5, c_timeGame);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: 3 Queen AI Line
+//--------------------------------------------------------------------------------------------------
+bool gt__3QueenAILine_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libB27CC4B1_gf_BossQueenAttackLine(gv_tHEONEBROODMOTHER, gf__3QueenTarget());
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt__3QueenAILine_Init () {
+    gt__3QueenAILine = TriggerCreate("gt__3QueenAILine_Func");
+    TriggerEnable(gt__3QueenAILine, false);
+    TriggerAddEventTimePeriodic(gt__3QueenAILine, 7.5, c_timeGame);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: 3 Queen AI Circle
+//--------------------------------------------------------------------------------------------------
+bool gt__3QueenAICircle_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libB27CC4B1_gf_BossQueenAttackCircle(gv_tHEONEBROODMOTHER, gf__3QueenTarget());
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt__3QueenAICircle_Init () {
+    gt__3QueenAICircle = TriggerCreate("gt__3QueenAICircle_Func");
+    TriggerEnable(gt__3QueenAICircle, false);
+    TriggerAddEventTimePeriodic(gt__3QueenAICircle, 10.0, c_timeGame);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: 3 Queen AI Mix
+//--------------------------------------------------------------------------------------------------
+bool gt__3QueenAIMix_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libB27CC4B1_gf_BossQueenAttackLine(gv_tHEONEBROODMOTHER, gf__3QueenTarget());
+    Wait(7.0, c_timeGame);
+    libB27CC4B1_gf_BossQueenAttackCircle(gv_tHEONEBROODMOTHER, gf__3QueenTarget());
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt__3QueenAIMix_Init () {
+    gt__3QueenAIMix = TriggerCreate("gt__3QueenAIMix_Func");
+    TriggerEnable(gt__3QueenAIMix, false);
+    TriggerAddEventTimePeriodic(gt__3QueenAIMix, 14.0, c_timeGame);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: 3 Queen Attack Spiral
+//--------------------------------------------------------------------------------------------------
+bool gt__3QueenAttackSpiral_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    point lv_initial;
+    int lv_i;
+    int lv_j;
+
+    // Automatic Variable Declarations
+    const int auto8D396373_ae = 30;
+    const int auto8D396373_ai = 1;
+    const int auto29258D04_ae = 8;
+    const int auto29258D04_ai = 1;
+
+    // Variable Initialization
+    lv_initial = UnitGetPosition(gv_tHEONEBROODMOTHER);
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lv_j = 1;
+    for ( ; ( (auto8D396373_ai >= 0 && lv_j <= auto8D396373_ae) || (auto8D396373_ai < 0 && lv_j >= auto8D396373_ae) ) ; lv_j += auto8D396373_ai ) {
+        lv_i = 1;
+        for ( ; ( (auto29258D04_ai >= 0 && lv_i <= auto29258D04_ae) || (auto29258D04_ai < 0 && lv_i >= auto29258D04_ae) ) ; lv_i += auto29258D04_ai ) {
+            libB27CC4B1_gf_BossQueenImpale(gv_tHEONEBROODMOTHER, PointWithOffsetPolar(lv_initial, IntToFixed(lv_j), (((IntToFixed(lv_i) / 8.0) * 360.0) + (IntToFixed(lv_j) * 10.0))));
+            Wait(0.04, c_timeGame);
+        }
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt__3QueenAttackSpiral_Init () {
+    gt__3QueenAttackSpiral = TriggerCreate("gt__3QueenAttackSpiral_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: 3 Queen Kill
 //--------------------------------------------------------------------------------------------------
 bool gt__3QueenKill_Func (bool testConds, bool runActions) {
@@ -7409,6 +7605,8 @@ bool gt__3QueenKill_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    TriggerEnable(gt__3QueenAIMix, false);
+    TriggerEnable(gt__3QueenAIRandom, false);
     TriggerStop(gt__3QueenAIPhase1);
     TriggerStop(gt__3QueenAIPhase2);
     TriggerStop(gt__3QueenAIPhase3);
@@ -7687,7 +7885,7 @@ bool gt__4StartLavaViaTime_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    Wait(libNtve_gf_DifficultyValueFixed(15.0, 10.0, 10.0, 10.0), c_timeGame);
+    Wait(libNtve_gf_DifficultyValueFixed(15.0, 10.0, 10.0, 10.0), c_timeAI);
     TriggerExecute(gt__4StartLavaActions, true, false);
     return true;
 }
@@ -7776,7 +7974,7 @@ bool gt__4LavaShakes_Func (bool testConds, bool runActions) {
     while (true) {
         if ((gv_gameOver == false)) {
             CameraShakeStart(gv_p1_USER, c_cameraPositionTarget, c_cameraDirectionZ, 0.2, 2.5, 100.0, RandomFixed(2.0, 4.0));
-            Wait(RandomFixed(8.0, 12.0), c_timeGame);
+            Wait(RandomFixed(8.0, 12.0), c_timeAI);
         }
         else {
             break;
@@ -8167,6 +8365,11 @@ bool gt__4Extraction_Func (bool testConds, bool runActions) {
 
     if ((gv__4HeroesSaved == 4)) {
         gv__4HeroesSaved += 1;
+        libB27CC4B1_gv_rogueAllMissions[7] = true;
+        libB27CC4B1_gf_TalentTime(2, false, 0, 0);
+        libB27CC4B1_gf_CurseDifficultyModifier(3);
+        libB27CC4B1_gf_CurseDifficultyModifier(4);
+        libB27CC4B1_gf_RogueEnding();
         SoundPlay(SoundLink("Terran_Veterancy", -1), PlayerGroupAll(), 100.0, 0.0);
         UnitKill(UnitFromId(2406));
         gv_gameOver = true;
@@ -8227,6 +8430,27 @@ bool gt__4UnitExtractionController_Func (bool testConds, bool runActions) {
 //--------------------------------------------------------------------------------------------------
 void gt__4UnitExtractionController_Init () {
     gt__4UnitExtractionController = TriggerCreate("gt__4UnitExtractionController_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Selection Changed
+//--------------------------------------------------------------------------------------------------
+bool gt_SelectionChanged_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    gf_UpdateCommandCard();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_SelectionChanged_Init () {
+    gt_SelectionChanged = TriggerCreate("gt_SelectionChanged_Func");
+    TriggerAddEventUnitSelected(gt_SelectionChanged, null, gv_p1_USER, true);
+    TriggerAddEventUnitSelected(gt_SelectionChanged, null, gv_p1_USER, false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -8382,8 +8606,7 @@ bool gt_NydusSpawningTrigger_Func (bool testConds, bool runActions) {
     }
 
     libNtve_gf_CreateUnitsAtPoint2(1, "NydusCanal", 0, gv_p2_ZERG, RegionGetCenter(lv_region));
-    UnitSetPropertyFixed(UnitLastCreated(), c_unitPropLifeMax, gv_nydusWormHP);
-    UnitSetPropertyFixed(UnitLastCreated(), c_unitPropLifePercent, 100.0);
+    libB27CC4B1_gf_SetUnitHPDynamically(UnitLastCreated(), gv_nydusWormHP, 100.0);
     UIAlertPoint("Trigger", gv_p1_USER, StringExternal("Param/Value/DEBF77B4"), null, UnitGetPosition(UnitLastCreated()));
     lv_unit = UnitLastCreated();
     if ((gv_limitNydusWormSpawnsInHoldout == true)) {
@@ -8611,31 +8834,31 @@ bool gt_HeroIncapacitated_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    if ((UnitHasBehavior(gv_tHEONERAYNOR, "SquadIncapacitated") == true) && (UnitGroupHasUnit(gv_incappedHeroes, gv_tHEONERAYNOR) == false)) {
+    if ((UnitHasBehavior(gv_tHEONERAYNOR, "Incapacitated") == true) && (UnitGroupHasUnit(gv_incappedHeroes, gv_tHEONERAYNOR) == false)) {
         UnitGroupAdd(gv_incappedHeroes, gv_tHEONERAYNOR);
         gv_achievementHeroIncapCounter += 1;
         TriggerExecute(gt_IncapacitationTipQ, true, false);
     }
 
-    if ((UnitHasBehavior(gv_tHEONESTETMAN, "SquadIncapacitated") == true) && (UnitGroupHasUnit(gv_incappedHeroes, gv_tHEONESTETMAN) == false)) {
+    if ((UnitHasBehavior(gv_tHEONESTETMAN, "Incapacitated") == true) && (UnitGroupHasUnit(gv_incappedHeroes, gv_tHEONESTETMAN) == false)) {
         UnitGroupAdd(gv_incappedHeroes, gv_tHEONESTETMAN);
         gv_achievementHeroIncapCounter += 1;
         TriggerExecute(gt_IncapacitationTipQ, true, false);
     }
 
-    if ((UnitHasBehavior(gv_tHEONESWANN, "SquadIncapacitated") == true) && (UnitGroupHasUnit(gv_incappedHeroes, gv_tHEONESWANN) == false)) {
+    if ((UnitHasBehavior(gv_tHEONESWANN, "Incapacitated") == true) && (UnitGroupHasUnit(gv_incappedHeroes, gv_tHEONESWANN) == false)) {
         UnitGroupAdd(gv_incappedHeroes, gv_tHEONESWANN);
         gv_achievementHeroIncapCounter += 1;
         TriggerExecute(gt_IncapacitationTipQ, true, false);
     }
 
-    if ((UnitHasBehavior(gv_tHEONETYCHUS, "SquadIncapacitated") == true) && (UnitGroupHasUnit(gv_incappedHeroes, gv_tHEONETYCHUS) == false)) {
+    if ((UnitHasBehavior(gv_tHEONETYCHUS, "Incapacitated") == true) && (UnitGroupHasUnit(gv_incappedHeroes, gv_tHEONETYCHUS) == false)) {
         UnitGroupAdd(gv_incappedHeroes, gv_tHEONETYCHUS);
         gv_achievementHeroIncapCounter += 1;
         TriggerExecute(gt_IncapacitationTipQ, true, false);
     }
 
-    if ((UnitHasBehavior(gv_tHEONERAYNOR, "SquadIncapacitated") == true) && (UnitHasBehavior(gv_tHEONETYCHUS, "SquadIncapacitated") == true) && (UnitHasBehavior(gv_tHEONESWANN, "SquadIncapacitated") == true) && (UnitHasBehavior(gv_tHEONESTETMAN, "SquadIncapacitated") == true)) {
+    if ((UnitHasBehavior(gv_tHEONERAYNOR, "Incapacitated") == true) && (UnitHasBehavior(gv_tHEONETYCHUS, "Incapacitated") == true) && (UnitHasBehavior(gv_tHEONESWANN, "Incapacitated") == true) && (UnitHasBehavior(gv_tHEONESTETMAN, "Incapacitated") == true)) {
         TriggerEnable(TriggerGetCurrent(), false);
         TriggerEnable(gt_RecoverIncappedHeroes, false);
         libNtve_gf_PauseUnit(gv_tHEONERAYNOR, true);
@@ -8675,7 +8898,7 @@ bool gt_RecoverIncappedHeroes_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    if ((UnitHasBehavior(gv_tHEONERAYNOR, "SquadIncapacitated") == true) && (UnitHasBehavior(gv_tHEONERAYNOR, "SquadIncapacitatedStandUp") == false)) {
+    if ((UnitHasBehavior(gv_tHEONERAYNOR, "Incapacitated") == true) && (UnitHasBehavior(gv_tHEONERAYNOR, "IncapStandUp") == false)) {
         if ((UnitGroupCount(UnitGroup(null, gv_p1_USER, RegionCircle(UnitGetPosition(gv_tHEONERAYNOR), gv_incapRescueRadius), UnitFilter(0, 0, (1 << c_targetFilterStructure) | (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32)) | (1 << (c_targetFilterInvulnerable - 32))), 0), c_unitCountAlive) == 0)) {
             libNtve_gf_PauseUnit(gv_tHEONERAYNOR, true);
         }
@@ -8684,11 +8907,11 @@ bool gt_RecoverIncappedHeroes_Func (bool testConds, bool runActions) {
         }
     }
 
-    if ((UnitHasBehavior(gv_tHEONERAYNOR, "SquadIncapacitated") == false) && (UnitHasBehavior(gv_tHEONERAYNOR, "SquadIncapacitatedStandUp") == false) && (UnitGroupHasUnit(gv_incappedHeroes, gv_tHEONERAYNOR) == true)) {
+    if ((UnitHasBehavior(gv_tHEONERAYNOR, "Incapacitated") == false) && (UnitHasBehavior(gv_tHEONERAYNOR, "IncapStandUp") == false) && (UnitGroupHasUnit(gv_incappedHeroes, gv_tHEONERAYNOR) == true)) {
         UnitGroupRemove(gv_incappedHeroes, gv_tHEONERAYNOR);
     }
 
-    if ((UnitHasBehavior(gv_tHEONESTETMAN, "SquadIncapacitated") == true) && (UnitHasBehavior(gv_tHEONESTETMAN, "SquadIncapacitatedStandUp") == false)) {
+    if ((UnitHasBehavior(gv_tHEONESTETMAN, "Incapacitated") == true) && (UnitHasBehavior(gv_tHEONESTETMAN, "IncapStandUp") == false)) {
         if ((UnitGroupCount(UnitGroup(null, gv_p1_USER, RegionCircle(UnitGetPosition(gv_tHEONESTETMAN), gv_incapRescueRadius), UnitFilter(0, 0, (1 << c_targetFilterStructure) | (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32)) | (1 << (c_targetFilterInvulnerable - 32))), 0), c_unitCountAlive) == 0)) {
             libNtve_gf_PauseUnit(gv_tHEONESTETMAN, true);
         }
@@ -8697,11 +8920,11 @@ bool gt_RecoverIncappedHeroes_Func (bool testConds, bool runActions) {
         }
     }
 
-    if ((UnitHasBehavior(gv_tHEONESTETMAN, "SquadIncapacitated") == false) && (UnitHasBehavior(gv_tHEONESTETMAN, "SquadIncapacitatedStandUp") == false) && (UnitGroupHasUnit(gv_incappedHeroes, gv_tHEONESTETMAN) == true)) {
+    if ((UnitHasBehavior(gv_tHEONESTETMAN, "Incapacitated") == false) && (UnitHasBehavior(gv_tHEONESTETMAN, "IncapStandUp") == false) && (UnitGroupHasUnit(gv_incappedHeroes, gv_tHEONESTETMAN) == true)) {
         UnitGroupRemove(gv_incappedHeroes, gv_tHEONESTETMAN);
     }
 
-    if ((UnitHasBehavior(gv_tHEONESWANN, "SquadIncapacitated") == true) && (UnitHasBehavior(gv_tHEONESWANN, "SquadIncapacitatedStandUp") == false)) {
+    if ((UnitHasBehavior(gv_tHEONESWANN, "Incapacitated") == true) && (UnitHasBehavior(gv_tHEONESWANN, "IncapStandUp") == false)) {
         if ((UnitGroupCount(UnitGroup(null, gv_p1_USER, RegionCircle(UnitGetPosition(gv_tHEONESWANN), gv_incapRescueRadius), UnitFilter(0, 0, (1 << c_targetFilterStructure) | (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32)) | (1 << (c_targetFilterInvulnerable - 32))), 0), c_unitCountAlive) == 0)) {
             libNtve_gf_PauseUnit(gv_tHEONESWANN, true);
         }
@@ -8710,11 +8933,11 @@ bool gt_RecoverIncappedHeroes_Func (bool testConds, bool runActions) {
         }
     }
 
-    if ((UnitHasBehavior(gv_tHEONESWANN, "SquadIncapacitated") == false) && (UnitHasBehavior(gv_tHEONESWANN, "SquadIncapacitatedStandUp") == false) && (UnitGroupHasUnit(gv_incappedHeroes, gv_tHEONESWANN) == true)) {
+    if ((UnitHasBehavior(gv_tHEONESWANN, "Incapacitated") == false) && (UnitHasBehavior(gv_tHEONESWANN, "IncapStandUp") == false) && (UnitGroupHasUnit(gv_incappedHeroes, gv_tHEONESWANN) == true)) {
         UnitGroupRemove(gv_incappedHeroes, gv_tHEONESWANN);
     }
 
-    if ((UnitHasBehavior(gv_tHEONETYCHUS, "SquadIncapacitated") == true) && (UnitHasBehavior(gv_tHEONETYCHUS, "SquadIncapacitatedStandUp") == false)) {
+    if ((UnitHasBehavior(gv_tHEONETYCHUS, "Incapacitated") == true) && (UnitHasBehavior(gv_tHEONETYCHUS, "IncapStandUp") == false)) {
         if ((UnitGroupCount(UnitGroup(null, gv_p1_USER, RegionCircle(UnitGetPosition(gv_tHEONETYCHUS), gv_incapRescueRadius), UnitFilter(0, 0, (1 << c_targetFilterStructure) | (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32)) | (1 << (c_targetFilterInvulnerable - 32))), 0), c_unitCountAlive) == 0)) {
             libNtve_gf_PauseUnit(gv_tHEONETYCHUS, true);
         }
@@ -8723,7 +8946,7 @@ bool gt_RecoverIncappedHeroes_Func (bool testConds, bool runActions) {
         }
     }
 
-    if ((UnitHasBehavior(gv_tHEONETYCHUS, "SquadIncapacitated") == false) && (UnitHasBehavior(gv_tHEONETYCHUS, "SquadIncapacitatedStandUp") == false) && (UnitGroupHasUnit(gv_incappedHeroes, gv_tHEONETYCHUS) == true)) {
+    if ((UnitHasBehavior(gv_tHEONETYCHUS, "Incapacitated") == false) && (UnitHasBehavior(gv_tHEONETYCHUS, "IncapStandUp") == false) && (UnitGroupHasUnit(gv_incappedHeroes, gv_tHEONETYCHUS) == true)) {
         UnitGroupRemove(gv_incappedHeroes, gv_tHEONETYCHUS);
     }
 
@@ -9345,10 +9568,12 @@ bool gt_CinematicStartHoldout1Q_Func (bool testConds, bool runActions) {
     }
 
     TriggerQueueEnter();
+    TriggerExecute(libB27CC4B1_gt_TableButtonsHide, true, true);
     TriggerExecute(gt_CinematicStartHoldout1Setup, true, true);
     TriggerExecute(gt_CinematicStartHoldout1Cinematic, true, true);
     TriggerExecute(gt_CinematicStartHoldout1CinematicEnd, true, true);
     TriggerExecute(gt_CinematicStartHoldout1Cleanup, true, true);
+    TriggerExecute(libB27CC4B1_gt_TableButtonsShow, true, true);
     TriggerQueueExit();
     return true;
 }
@@ -9683,10 +9908,13 @@ bool gt_CinematicFinishedHoldout1Q_Func (bool testConds, bool runActions) {
     }
 
     TriggerQueueEnter();
+    libB27CC4B1_gf_TalentTime(1, false, 0, 0);
+    TriggerExecute(libB27CC4B1_gt_TableButtonsHide, true, true);
     TriggerExecute(gt_CinematicFinishedHoldout1Setup, true, true);
     TriggerExecute(gt_CinematicFinishedHoldout1Cinematic, true, true);
     TriggerExecute(gt_CinematicFinishedHoldout1CinematicEnd, true, true);
     TriggerExecute(gt_CinematicFinishedHoldout1Cleanup, true, true);
+    TriggerExecute(libB27CC4B1_gt_TableButtonsShow, true, true);
     TriggerQueueExit();
     return true;
 }
@@ -10062,10 +10290,12 @@ bool gt_CinematicStartHoldout2Q_Func (bool testConds, bool runActions) {
     }
 
     TriggerQueueEnter();
+    TriggerExecute(libB27CC4B1_gt_TableButtonsHide, true, true);
     TriggerExecute(gt_CinematicStartHoldout2Setup, true, true);
     TriggerExecute(gt_CinematicStartHoldout2Cinematic, true, true);
     TriggerExecute(gt_CinematicStartHoldout2CinematicEnd, true, true);
     TriggerExecute(gt_CinematicStartHoldout2Cleanup, true, true);
+    TriggerExecute(libB27CC4B1_gt_TableButtonsShow, true, true);
     TriggerQueueExit();
     return true;
 }
@@ -10406,10 +10636,13 @@ bool gt_MidBroodChamber2Q_Func (bool testConds, bool runActions) {
     }
 
     TriggerQueueEnter();
+    libB27CC4B1_gf_CurseDifficultyModifier(2);
+    TriggerExecute(libB27CC4B1_gt_TableButtonsHide, true, true);
     TriggerExecute(gt_CinematicFinishedHoldout2Setup, true, true);
     TriggerExecute(gt_CinematicFinishedHoldout2Cinematic, true, true);
     TriggerExecute(gt_CinematicFinishedHoldout2CinematicEnd, true, true);
     TriggerExecute(gt_CinematicFinishedHoldout2Cleanup, true, true);
+    TriggerExecute(libB27CC4B1_gt_TableButtonsShow, true, true);
     TriggerQueueExit();
     return true;
 }
@@ -10848,10 +11081,12 @@ bool gt_CinematicStartHoldout3Q_Func (bool testConds, bool runActions) {
     }
 
     TriggerQueueEnter();
+    TriggerExecute(libB27CC4B1_gt_TableButtonsHide, true, true);
     TriggerExecute(gt_CinematicStartHoldout3Setup, true, true);
     TriggerExecute(gt_CinematicStartHoldout3Cinematic, true, true);
     TriggerExecute(gt_CinematicStartHoldout3CinematicEnd, true, true);
     TriggerExecute(gt_CinematicStartHoldout3Cleanup, true, true);
+    TriggerExecute(libB27CC4B1_gt_TableButtonsShow, true, true);
     TriggerQueueExit();
     return true;
 }
@@ -11422,10 +11657,13 @@ bool gt_CinematicFinishedHoldout3Q_Func (bool testConds, bool runActions) {
     }
 
     TriggerQueueEnter();
+    libB27CC4B1_gf_TalentTime(1, false, 0, 0);
+    TriggerExecute(libB27CC4B1_gt_TableButtonsHide, true, true);
     TriggerExecute(gt_CinematicFinishedHoldout3Setup, true, true);
     TriggerExecute(gt_CinematicFinishedHoldout3Cinematic, true, true);
     TriggerExecute(gt_CinematicFinishedHoldout3CinematicEnd, true, true);
     TriggerExecute(gt_CinematicFinishedHoldout3Cleanup, true, true);
+    TriggerExecute(libB27CC4B1_gt_TableButtonsShow, true, true);
     TriggerQueueExit();
     return true;
 }
@@ -11916,6 +12154,7 @@ bool gt_VictoryQ_Func (bool testConds, bool runActions) {
 
     gv_gameOver = true;
     TriggerQueueEnter();
+    TriggerExecute(libB27CC4B1_gt_TableButtonsHide, true, true);
     TriggerExecute(gt_CinematicVictorySetup, true, true);
     TriggerExecute(gt_CinematicVictoryCinematic, true, true);
     TriggerExecute(gt_CinematicVictoryCinematicEnd, true, true);
@@ -12634,7 +12873,6 @@ void gt_BriefingScene04_Init () {
 // Trigger Initialization
 //--------------------------------------------------------------------------------------------------
 void InitTriggers () {
-    gt_OnPlayer1GetUnit_Init();
     gt_Initialization_Init();
     gt_Init01Technology_Init();
     gt_Init02Players_Init();
@@ -12768,6 +13006,11 @@ void InitTriggers () {
     gt__3CreateQueenBossBar_Init();
     gt__3QueenPopEggs_Init();
     gt__3EggPoppedViaDamageZergQueenOnly_Init();
+    gt__3QueenAIRandom_Init();
+    gt__3QueenAILine_Init();
+    gt__3QueenAICircle_Init();
+    gt__3QueenAIMix_Init();
+    gt__3QueenAttackSpiral_Init();
     gt__3QueenKill_Init();
     gt__4InitBroodchamber_Init();
     gt__4StartGame_Init();
@@ -12786,6 +13029,7 @@ void InitTriggers () {
     gt__4Ambush2_Init();
     gt__4Extraction_Init();
     gt__4UnitExtractionController_Init();
+    gt_SelectionChanged_Init();
     gt_AIThink_Init();
     gt_InfestorCooldown_Init();
     gt_NydusSpawningTrigger_Init();

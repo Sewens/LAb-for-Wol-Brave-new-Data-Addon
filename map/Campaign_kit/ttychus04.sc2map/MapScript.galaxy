@@ -2,7 +2,7 @@
 // 
 // Generated Map Script
 // 
-// Name:   Supernova
+// Name:   ?????????
 // 
 //==================================================================================================
 include "TriggerLibs/NativeLib"
@@ -10,6 +10,7 @@ include "TriggerLibs/LibertyLib"
 include "LibCamp"
 include "LibWoLC"
 include "LibWCMI"
+include "LibB27CC4B1"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -20,6 +21,7 @@ void InitLibs () {
     libCamp_InitLib();
     libWoLC_InitLib();
     libWCMI_InitLib();
+    libB27CC4B1_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -118,6 +120,7 @@ void InitGlobals () {
 //--------------------------------------------------------------------------------------------------
 void gf_SetUnitMaxStats (unit lp_u, fixed lp_maxShields, fixed lp_maxLife);
 void gf_WarpPrismDefendersWarpIn (unit lp_pickedSuperWarpGate, int lp_count, abilcmd lp_trainCmd, point lp_center, fixed lp_radius, fixed lp_angleOffset, fixed lp_intervalOffsets);
+void gf_YagdraMultipleFireballs (point lp_originalTarget, unit lp_yagdra);
 
 //--------------------------------------------------------------------------------------------------
 // Trigger Variables
@@ -134,6 +137,7 @@ trigger gt_IntroSequence;
 trigger gt_StartGameStage1;
 trigger gt_StartGameStage2;
 trigger gt_StartAIHarvesting;
+trigger gt_StartGameRemoveChallenge;
 trigger gt_Stage1Leashes;
 trigger gt_AreaClearStage2;
 trigger gt_ArtifactVaultPing;
@@ -152,6 +156,7 @@ trigger gt_WallofFireSpeedUp;
 trigger gt_WallofFireSlowDown;
 trigger gt_RemoveResources;
 trigger gt_WarpPrismSpawninBaseDefenders;
+trigger gt_YagdraAI;
 trigger gt_StartAI;
 trigger gt_ProtossP02AttackWaves;
 trigger gt_ProtossP03AttackWaves;
@@ -247,6 +252,55 @@ void gf_WarpPrismDefendersWarpIn (unit lp_pickedSuperWarpGate, int lp_count, abi
     }
 }
 
+void gf_YagdraMultipleFireballs (point lp_originalTarget, unit lp_yagdra) {
+    // Variable Declarations
+    int lv_i;
+    int lv_b;
+    point[64] lv_validPoints;
+    int lv_numberOfFireballs;
+    point[8] lv_fireballTargets;
+    unitgroup lv_targetGroup;
+
+    // Automatic Variable Declarations
+    int auto617CBA47_ae;
+    const int auto617CBA47_ai = 1;
+
+    // Variable Initialization
+    lv_targetGroup = UnitGroupEmpty();
+
+    // Implementation
+    lv_targetGroup = UnitGroup(null, gv_pLAYER01_USER, RegionCircle(UnitGetPosition(lp_yagdra), 14.0), UnitFilter((1 << c_targetFilterGround), 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32)) | (1 << (c_targetFilterInvulnerable - 32))), 0);
+    if ((UnitGroupCount(lv_targetGroup, c_unitCountAlive) >= 1)) {
+        if ((UnitGetPropertyFixed(lp_yagdra, c_unitPropLifePercent, c_unitPropCurrent) <= 25.0)) {
+            lv_numberOfFireballs = 6;
+        }
+        else {
+            if ((UnitGetPropertyFixed(lp_yagdra, c_unitPropLifePercent, c_unitPropCurrent) <= 50.0)) {
+                lv_numberOfFireballs = 5;
+            }
+            else {
+                if ((UnitGetPropertyFixed(lp_yagdra, c_unitPropLifePercent, c_unitPropCurrent) <= 75.0)) {
+                    lv_numberOfFireballs = 4;
+                }
+                else {
+                    lv_numberOfFireballs = 3;
+                }
+            }
+        }
+        auto617CBA47_ae = lv_numberOfFireballs;
+        lv_i = 1;
+        for ( ; ( (auto617CBA47_ai >= 0 && lv_i <= auto617CBA47_ae) || (auto617CBA47_ai < 0 && lv_i >= auto617CBA47_ae) ) ; lv_i += auto617CBA47_ai ) {
+            if ((UnitIsAlive(lp_yagdra) == true)) {
+                UnitIssueOrder(lp_yagdra, OrderTargetingPoint(AbilityCommand("YagdraFireballHard", 0), RegionRandomPoint(RegionCircle(UnitGetPosition(lp_yagdra), 14.0))), c_orderQueueReplace);
+                Wait(0.1, c_timeAI);
+            }
+
+        }
+        UnitIssueOrder(lp_yagdra, OrderTargetingPoint(AbilityCommand("YagdraFireball", 0), lp_originalTarget), c_orderQueueReplace);
+    }
+
+}
+
 //--------------------------------------------------------------------------------------------------
 // Trigger: Initialization
 //--------------------------------------------------------------------------------------------------
@@ -266,6 +320,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init06Difficulties, true, true);
     TriggerExecute(gt_Init07Help, true, true);
     libWoLC_gf_RegisterFootageRecording(gt_BriefingQ);
+    TriggerExecute(libB27CC4B1_gt_RogueInit, true, true);
     TriggerExecute(gt_IntroSequence, true, false);
     return true;
 }
@@ -706,12 +761,20 @@ bool gt_StartGameStage1_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    TriggerExecute(libB27CC4B1_gt_InitTableButtons, true, false);
     SoundtrackPlay(PlayerGroupAll(), c_soundtrackCategoryMusic, "TTychus04MusicIntro", c_soundtrackCueAny, c_soundtrackIndexAny, false);
     AICampaignStart(gv_pLAYER03_PROTOSS);
     TriggerEnable(gt_PingDetectorCannon, true);
     Wait(2.0, c_timeGame);
     TriggerExecute(gt_ObjectiveCleartheLZCreateQ, true, false);
+    libB27CC4B1_gf_ChallengeTime("ChallengeArtifact4");
     Wait(2.0, c_timeGame);
+    if ((libB27CC4B1_gf_TalentAcquired("ChallengeArtifact4") == false)) {
+        TriggerExecute(gt_StartGameRemoveChallenge, true, false);
+    }
+    else {
+        TriggerEnable(gt_YagdraAI, true);
+    }
     libNtve_gf_CreatePingFacingAngle(PlayerGroupAll(), "PingObjective", PointFromId(13), ColorWithAlpha(0.00, 100.00, 0.00, 0.00), 0.0, 270.0);
     gv_clearLZ_Ping = PingLastCreated();
     PingSetTooltip(gv_clearLZ_Ping, StringExternal("Param/Value/FA3342A5"));
@@ -782,6 +845,65 @@ bool gt_StartAIHarvesting_Func (bool testConds, bool runActions) {
 //--------------------------------------------------------------------------------------------------
 void gt_StartAIHarvesting_Init () {
     gt_StartAIHarvesting = TriggerCreate("gt_StartAIHarvesting_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Start Game Remove Challenge
+//--------------------------------------------------------------------------------------------------
+bool gt_StartGameRemoveChallenge_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    unitgroup auto872BF5CF_g;
+    int auto872BF5CF_u;
+    unit auto872BF5CF_var;
+    unitgroup autoF6D33216_g;
+    int autoF6D33216_u;
+    unit autoF6D33216_var;
+    unitgroup autoC3252967_g;
+    int autoC3252967_u;
+    unit autoC3252967_var;
+    unitgroup autoC9DC9198_g;
+    int autoC9DC9198_u;
+    unit autoC9DC9198_var;
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    auto872BF5CF_g = UnitGroup("Firebat", c_playerAny, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32))), 0);
+    auto872BF5CF_u = UnitGroupCount(auto872BF5CF_g, c_unitCountAll);
+    for (;; auto872BF5CF_u -= 1) {
+        auto872BF5CF_var = UnitGroupUnitFromEnd(auto872BF5CF_g, auto872BF5CF_u);
+        if (auto872BF5CF_var == null) { break; }
+        UnitRemove(auto872BF5CF_var);
+    }
+    autoF6D33216_g = UnitGroup("Hellion", c_playerAny, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32))), 0);
+    autoF6D33216_u = UnitGroupCount(autoF6D33216_g, c_unitCountAll);
+    for (;; autoF6D33216_u -= 1) {
+        autoF6D33216_var = UnitGroupUnitFromEnd(autoF6D33216_g, autoF6D33216_u);
+        if (autoF6D33216_var == null) { break; }
+        UnitRemove(autoF6D33216_var);
+    }
+    autoC3252967_g = UnitGroup("ColossusPurifier", c_playerAny, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32))), 0);
+    autoC3252967_u = UnitGroupCount(autoC3252967_g, c_unitCountAll);
+    for (;; autoC3252967_u -= 1) {
+        autoC3252967_var = UnitGroupUnitFromEnd(autoC3252967_g, autoC3252967_u);
+        if (autoC3252967_var == null) { break; }
+        UnitRemove(autoC3252967_var);
+    }
+    autoC9DC9198_g = UnitGroup("Yagdra", c_playerAny, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32))), 0);
+    autoC9DC9198_u = UnitGroupCount(autoC9DC9198_g, c_unitCountAll);
+    for (;; autoC9DC9198_u -= 1) {
+        autoC9DC9198_var = UnitGroupUnitFromEnd(autoC9DC9198_g, autoC9DC9198_u);
+        if (autoC9DC9198_var == null) { break; }
+        UnitRemove(autoC9DC9198_var);
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_StartGameRemoveChallenge_Init () {
+    gt_StartGameRemoveChallenge = TriggerCreate("gt_StartGameRemoveChallenge_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1037,7 +1159,7 @@ bool gt_CreateWallofFire_Func (bool testConds, bool runActions) {
     TriggerEnable(gt_WallofFireDamage, true);
     TriggerEnable(gt_WallofFirePing, true);
     TriggerEnable(gt_ShareWallofFireVision, true);
-    Wait(60.0, c_timeGame);
+    Wait(60.0, c_timeAI);
     TriggerEnable(gt_WallofFireSpeedUp, true);
     return true;
 }
@@ -1231,6 +1353,10 @@ bool gt_WallofFireAtP03ProtossBase_Func (bool testConds, bool runActions) {
         if (!((gv_inCinematic == false))) {
             return false;
         }
+
+        if (!((UnitIsValid(gv_wALLOFFIRE) == true))) {
+            return false;
+        }
     }
 
     // Actions
@@ -1364,6 +1490,10 @@ bool gt_WallofFireFirstWarning_Func (bool testConds, bool runActions) {
         if (!((gv_inCinematic == false))) {
             return false;
         }
+
+        if (!((UnitIsValid(gv_wALLOFFIRE) == true))) {
+            return false;
+        }
     }
 
     // Actions
@@ -1407,6 +1537,10 @@ bool gt_WallofFireEmergencyWarning_Func (bool testConds, bool runActions) {
         }
 
         if (!((gv_inCinematic == false))) {
+            return false;
+        }
+
+        if (!((UnitIsValid(gv_wALLOFFIRE) == true))) {
             return false;
         }
     }
@@ -1457,6 +1591,10 @@ bool gt_WallofFireSpeedUp_Func (bool testConds, bool runActions) {
         if (!((gv_inCinematic == false))) {
             return false;
         }
+
+        if (!((UnitIsValid(gv_wALLOFFIRE) == true))) {
+            return false;
+        }
     }
 
     // Actions
@@ -1464,13 +1602,13 @@ bool gt_WallofFireSpeedUp_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    auto17587D29_g = UnitGroup(null, gv_pLAYER01_USER, RegionPlayableMap(), UnitFilter((1 << c_targetFilterStructure) | (1 << c_targetFilterPreventDefeat), 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+    auto17587D29_g = UnitGroup(null, gv_pLAYER01_USER, RegionPlayableMap(), UnitFilter((1 << c_targetFilterStructure) | (1 << c_targetFilterPreventDefeat), 0, (1 << c_targetFilterHeroic) | (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     auto17587D29_u = UnitGroupCount(auto17587D29_g, c_unitCountAll);
     for (;; auto17587D29_u -= 1) {
         auto17587D29_var = UnitGroupUnitFromEnd(auto17587D29_g, auto17587D29_u);
         if (auto17587D29_var == null) { break; }
         if ((PointGetX(UnitGetPosition(auto17587D29_var)) <= (PointGetX(UnitGetPosition(gv_wALLOFFIRE)) + 30.0))) {
-            if (((UnitGetType(auto17587D29_var) != "SupplyDepot") || (UnitGetType(auto17587D29_var) != "SupplyDepotLowered") || (UnitGetType(auto17587D29_var) != "Refinery") || (UnitGetType(auto17587D29_var) != "MercCompound"))) {
+            if (((UnitGetType(auto17587D29_var) != "SupplyDepot") || (UnitGetType(auto17587D29_var) != "SupplyDepotLowered") || (UnitGetType(auto17587D29_var) != "Refinery") || (UnitGetType(auto17587D29_var) != "RefineryRich") || (UnitGetType(auto17587D29_var) != "AutomatedRefinery") || (UnitGetType(auto17587D29_var) != "MercCompound"))) {
                 return true;
             }
 
@@ -1480,7 +1618,12 @@ bool gt_WallofFireSpeedUp_Func (bool testConds, bool runActions) {
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerEnable(gt_WallofFireSlowDown, true);
     gv_wall_of_Fire_Speed = libNtve_gf_DifficultyValueFixed(0.06, 0.085, 0.095, 0.115);
-    UnitSetPropertyFixed(gv_wALLOFFIRE, c_unitPropMovementSpeed, gv_wall_of_Fire_Speed);
+    if ((libB27CC4B1_gv_talentQueue == false)) {
+        UnitSetPropertyFixed(gv_wALLOFFIRE, c_unitPropMovementSpeed, gv_wall_of_Fire_Speed);
+    }
+    else {
+        UnitSetPropertyFixed(gv_wALLOFFIRE, c_unitPropMovementSpeed, 0.01);
+    }
     return true;
 }
 
@@ -1509,6 +1652,10 @@ bool gt_WallofFireSlowDown_Func (bool testConds, bool runActions) {
         if (!((gv_inCinematic == false))) {
             return false;
         }
+
+        if (!((UnitIsValid(gv_wALLOFFIRE) == true))) {
+            return false;
+        }
     }
 
     // Actions
@@ -1516,17 +1663,22 @@ bool gt_WallofFireSlowDown_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    autoE6F3A8F9_g = UnitGroup(null, gv_pLAYER01_USER, RegionPlayableMap(), UnitFilter((1 << c_targetFilterStructure) | (1 << c_targetFilterPreventDefeat), 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+    autoE6F3A8F9_g = UnitGroup(null, gv_pLAYER01_USER, RegionPlayableMap(), UnitFilter((1 << c_targetFilterStructure) | (1 << c_targetFilterPreventDefeat), 0, (1 << c_targetFilterHeroic) | (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     autoE6F3A8F9_u = UnitGroupCount(autoE6F3A8F9_g, c_unitCountAll);
     for (;; autoE6F3A8F9_u -= 1) {
         autoE6F3A8F9_var = UnitGroupUnitFromEnd(autoE6F3A8F9_g, autoE6F3A8F9_u);
         if (autoE6F3A8F9_var == null) { break; }
         if ((PointGetX(UnitGetPosition(autoE6F3A8F9_var)) <= (PointGetX(UnitGetPosition(gv_wALLOFFIRE)) + 23.0))) {
-            if (((UnitGetType(autoE6F3A8F9_var) != "SupplyDepot") || (UnitGetType(autoE6F3A8F9_var) != "SupplyDepotLowered") || (UnitGetType(autoE6F3A8F9_var) != "Refinery") || (UnitGetType(autoE6F3A8F9_var) != "MercCompound"))) {
+            if (((UnitGetType(autoE6F3A8F9_var) != "SupplyDepot") || (UnitGetType(autoE6F3A8F9_var) != "SupplyDepotLowered") || (UnitGetType(autoE6F3A8F9_var) != "Refinery") || (UnitGetType(autoE6F3A8F9_var) != "RefineryRich") || (UnitGetType(autoE6F3A8F9_var) != "AutomatedRefinery") || (UnitGetType(autoE6F3A8F9_var) != "MercCompound"))) {
                 TriggerEnable(TriggerGetCurrent(), false);
                 TriggerEnable(gt_WallofFireSpeedUp, true);
                 gv_wall_of_Fire_Speed = libNtve_gf_DifficultyValueFixed(0.06, 0.075, 0.085, 0.105);
-                UnitSetPropertyFixed(gv_wALLOFFIRE, c_unitPropMovementSpeed, gv_wall_of_Fire_Speed);
+                if ((libB27CC4B1_gv_talentQueue == false)) {
+                    UnitSetPropertyFixed(gv_wALLOFFIRE, c_unitPropMovementSpeed, gv_wall_of_Fire_Speed);
+                }
+                else {
+                    UnitSetPropertyFixed(gv_wALLOFFIRE, c_unitPropMovementSpeed, 0.01);
+                }
             }
 
         }
@@ -1558,6 +1710,10 @@ bool gt_RemoveResources_Func (bool testConds, bool runActions) {
         }
 
         if (!((gv_inCinematic == false))) {
+            return false;
+        }
+
+        if (!((UnitIsValid(gv_wALLOFFIRE) == true))) {
             return false;
         }
     }
@@ -1633,6 +1789,37 @@ void gt_WarpPrismSpawninBaseDefenders_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: Yagdra AI
+//--------------------------------------------------------------------------------------------------
+bool gt_YagdraAI_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    unitgroup autoF8635EDD_g;
+    int autoF8635EDD_u;
+    unit autoF8635EDD_var;
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    autoF8635EDD_g = UnitGroup("Yagdra", c_playerAny, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32))), 0);
+    autoF8635EDD_u = UnitGroupCount(autoF8635EDD_g, c_unitCountAll);
+    for (;; autoF8635EDD_u -= 1) {
+        autoF8635EDD_var = UnitGroupUnitFromEnd(autoF8635EDD_g, autoF8635EDD_u);
+        if (autoF8635EDD_var == null) { break; }
+        gf_YagdraMultipleFireballs(UnitGetPosition(UnitGroupClosestToPoint(UnitGroup(null, gv_pLAYER01_USER, RegionCircle(UnitGetPosition(autoF8635EDD_var), 14.0), UnitFilter((1 << c_targetFilterGround), 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32)) | (1 << (c_targetFilterInvulnerable - 32))), 0), UnitGetPosition(autoF8635EDD_var))), autoF8635EDD_var);
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_YagdraAI_Init () {
+    gt_YagdraAI = TriggerCreate("gt_YagdraAI_Func");
+    TriggerEnable(gt_YagdraAI, false);
+    TriggerAddEventTimePeriodic(gt_YagdraAI, 5.0, c_timeAI);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: Start AI
 //--------------------------------------------------------------------------------------------------
 bool gt_StartAI_Func (bool testConds, bool runActions) {
@@ -1651,6 +1838,7 @@ bool gt_StartAI_Func (bool testConds, bool runActions) {
     AIToggleBulliesInRegion(gv_pLAYER03_PROTOSS, RegionFromId(2), true);
     TriggerExecute(gt_ProtossP03AttackWaves, true, false);
     TriggerExecute(gt_ProtossP04AttackWaves, true, false);
+    TriggerEnable(gt_ProtossP04GivesUp, true);
     return true;
 }
 
@@ -1679,51 +1867,51 @@ bool gt_ProtossP02AttackWaves_Func (bool testConds, bool runActions) {
     AIAttackWaveSetTargetPlayer(gv_pLAYER02_PROTOSS, PlayerGroupSingle(gv_pLAYER01_USER));
     AIAttackWaveSetGatherPoint(gv_pLAYER02_PROTOSS, PointFromId(123));
     AIAttackWaveAddWaypoint(gv_pLAYER02_PROTOSS, PointFromId(433), false);
-    AIAttackWaveAddUnits4(3, 3, 5, 5, "Zealot");
-    AIAttackWaveAddUnits4(2, 2, 3, 4, "Stalker");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(5), "Zealot");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(4), "Stalker");
     AIAttackWaveSend(gv_pLAYER02_PROTOSS, 120, true);
     Wait(libNtve_gf_DifficultyValueFixed(90.0, 90.0, 55.0, 20.0), c_timeAI);
     AIAttackWaveAddWaypoint(gv_pLAYER02_PROTOSS, PointFromId(36), false);
-    AIAttackWaveAddUnits4(2, 2, 4, 4, "Stalker");
-    AIAttackWaveAddUnits4(1, 1, 2, 3, "Immortal");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(4), "Stalker");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Immortal");
     AIAttackWaveSend(gv_pLAYER02_PROTOSS, 120, true);
     Wait(libNtve_gf_DifficultyValueFixed(90.0, 90.0, 55.0, 20.0), c_timeAI);
     AIAttackWaveAddWaypoint(gv_pLAYER02_PROTOSS, PointFromId(433), false);
-    AIAttackWaveAddUnits4(2, 2, 3, 3, "Immortal");
-    AIAttackWaveAddUnits4(0, 0, 0, 1, "Scout");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Immortal");
+    AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "Scout");
     AIAttackWaveSend(gv_pLAYER02_PROTOSS, 120, true);
     Wait(libNtve_gf_DifficultyValueFixed(90.0, 90.0, 55.0, 20.0), c_timeAI);
     AIAttackWaveAddWaypoint(gv_pLAYER02_PROTOSS, PointFromId(36), false);
-    AIAttackWaveAddUnits4(3, 3, 4, 6, "Zealot");
-    AIAttackWaveAddUnits4(4, 4, 5, 6, "Sentry");
-    AIAttackWaveAddUnits4(0, 0, 0, 1, "Observer");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(6), "Zealot");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(6), "Sentry");
+    AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "Observer");
     AIAttackWaveSend(gv_pLAYER02_PROTOSS, 120, true);
     Wait(libNtve_gf_DifficultyValueFixed(90.0, 90.0, 55.0, 20.0), c_timeAI);
     AIAttackWaveAddWaypoint(gv_pLAYER02_PROTOSS, PointFromId(36), false);
-    AIAttackWaveAddUnits4(3, 3, 3, 3, "Immortal");
-    AIAttackWaveAddUnits4(0, 0, 3, 2, "Stalker");
-    AIAttackWaveAddUnits4(0, 0, 0, 2, "Phoenix");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Immortal");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Stalker");
+    AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(2), "Phoenix");
     AIAttackWaveSend(gv_pLAYER02_PROTOSS, 120, true);
     Wait(libNtve_gf_DifficultyValueFixed(90.0, 90.0, 55.0, 20.0), c_timeAI);
     AIAttackWaveAddWaypoint(gv_pLAYER02_PROTOSS, PointFromId(36), false);
-    AIAttackWaveAddUnits4(2, 2, 3, 0, "Zealot");
-    AIAttackWaveAddUnits4(4, 4, 5, 4, "Stalker");
-    AIAttackWaveAddUnits4(0, 0, 0, 1, "HighTemplar");
-    if ((libNtve_gf_DifficultyValueInt(0, 0, 0, 1) == 1)) {
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), 0, "Zealot");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(4), "Stalker");
+    AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "HighTemplar");
+    if ((libNtve_gf_DifficultyValueInt(0, 0, 0, 1) == 1) && (UnitIsAlive(UnitFromId(539)) == true)) {
         UnitSetOwner(UnitFromId(539), gv_pLAYER02_PROTOSS, true);
         AISetUnitScriptControlled(UnitFromId(539), false);
         AIAttackWaveUseUnit(gv_pLAYER02_PROTOSS, UnitFromId(539));
     }
 
-    AIAttackWaveAddUnits4(0, 0, 0, 1, "Scout");
+    AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "Scout");
     AIAttackWaveSend(gv_pLAYER02_PROTOSS, 120, true);
     while (true) {
         Wait(libNtve_gf_DifficultyValueFixed(60.0, 60.0, 30.0, 0.0), c_timeAI);
         AIAttackWaveAddWaypoint(gv_pLAYER02_PROTOSS, PointFromId(36), false);
-        AIAttackWaveAddUnits4(2, 2, 3, 4, "Zealot");
-        AIAttackWaveAddUnits4(2, 2, 3, 3, "Archon");
-        AIAttackWaveAddUnits4(0, 0, 1, 1, "HighTemplar");
-        if ((libNtve_gf_DifficultyValueInt(0, 0, 1, 0) == 1)) {
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(4), "Zealot");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Archon");
+        AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "HighTemplar");
+        if ((libNtve_gf_DifficultyValueInt(0, 0, 1, 0) == 1) && (UnitIsAlive(UnitFromId(539)) == true)) {
             UnitSetOwner(UnitFromId(539), gv_pLAYER02_PROTOSS, true);
             AISetUnitScriptControlled(UnitFromId(539), false);
             AIAttackWaveUseUnit(gv_pLAYER02_PROTOSS, UnitFromId(539));
@@ -1732,15 +1920,15 @@ bool gt_ProtossP02AttackWaves_Func (bool testConds, bool runActions) {
         AIAttackWaveSend(gv_pLAYER02_PROTOSS, 120, true);
         Wait(libNtve_gf_DifficultyValueFixed(60.0, 60.0, 30.0, 0.0), c_timeAI);
         AIAttackWaveAddWaypoint(gv_pLAYER02_PROTOSS, PointFromId(36), false);
-        AIAttackWaveAddUnits4(4, 4, 6, 8, "Zealot");
-        AIAttackWaveAddUnits4(2, 2, 3, 4, "Stalker");
-        AIAttackWaveAddUnits4(1, 1, 2, 2, "Archon");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(6), libB27CC4B1_gf_CurseAttackWaveModifier(8), "Zealot");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(4), "Stalker");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Archon");
         AIAttackWaveSend(gv_pLAYER02_PROTOSS, 120, true);
         Wait(libNtve_gf_DifficultyValueFixed(60.0, 60.0, 30.0, 0.0), c_timeAI);
         AIAttackWaveAddWaypoint(gv_pLAYER02_PROTOSS, PointFromId(36), false);
-        AIAttackWaveAddUnits4(1, 1, 2, 2, "Immortal");
-        AIAttackWaveAddUnits4(0, 0, 1, 3, "Sentry");
-        AIAttackWaveAddUnits4(2, 2, 3, 4, "Archon");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Immortal");
+        AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Sentry");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(4), "Archon");
         AIAttackWaveSend(gv_pLAYER02_PROTOSS, 120, true);
     }
     return true;
@@ -1771,11 +1959,7 @@ bool gt_ProtossP03AttackWaves_Func (bool testConds, bool runActions) {
     AIAttackWaveSetTargetPlayer(gv_pLAYER03_PROTOSS, PlayerGroupSingle(gv_pLAYER01_USER));
     AIAttackWaveSetGatherPoint(gv_pLAYER03_PROTOSS, PointFromId(322));
     Wait(libNtve_gf_DifficultyValueFixed(90.0, 90.0, 60.0, 30.0), c_timeAI);
-    AIAttackWaveAddUnits4(3, 3, 5, 6, "Zealot");
-    AIAttackWaveSend(gv_pLAYER03_PROTOSS, 120, true);
-    Wait(libNtve_gf_DifficultyValueFixed(90.0, 90.0, 60.0, 30.0), c_timeAI);
-    AIAttackWaveAddUnits4(3, 3, 4, 5, "Stalker");
-    AIAttackWaveAddUnits4(0, 1, 2, 3, "Sentry");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(6), "Zealot");
     AIAttackWaveSend(gv_pLAYER03_PROTOSS, 120, true);
     return true;
 }
@@ -1805,25 +1989,25 @@ bool gt_ProtossP04AttackWaves_Func (bool testConds, bool runActions) {
     AIAttackWaveSetTargetPlayer(gv_pLAYER04_PROTOSS, PlayerGroupSingle(gv_pLAYER01_USER));
     AIAttackWaveSetGatherPoint(gv_pLAYER04_PROTOSS, PointFromId(262));
     Wait(libNtve_gf_DifficultyValueFixed(480.0, 480.0, 400.0, 320.0), c_timeAI);
-    AIAttackWaveAddUnits4(2, 2, 5, 6, "Sentry");
-    AIAttackWaveAddUnits4(1, 1, 2, 2, "Immortal");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(6), "Sentry");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Immortal");
     AIAttackWaveSend(gv_pLAYER04_PROTOSS, 120, true);
     Wait(libNtve_gf_DifficultyValueFixed(90.0, 90.0, 55.0, 20.0), c_timeAI);
-    AIAttackWaveAddUnits4(2, 2, 2, 5, "Sentry");
-    AIAttackWaveAddUnits4(1, 1, 2, 2, "Colossus");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(5), "Sentry");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Colossus");
     AIAttackWaveSend(gv_pLAYER04_PROTOSS, 120, true);
     while (true) {
         Wait(libNtve_gf_DifficultyValueFixed(90.0, 90.0, 55.0, 20.0), c_timeAI);
-        AIAttackWaveAddUnits4(2, 2, 3, 4, "Stalker");
-        AIAttackWaveAddUnits4(1, 1, 2, 3, "Immortal");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(4), "Stalker");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Immortal");
         AIAttackWaveSend(gv_pLAYER04_PROTOSS, 120, true);
         Wait(libNtve_gf_DifficultyValueFixed(90.0, 90.0, 55.0, 20.0), c_timeAI);
-        AIAttackWaveAddUnits4(6, 6, 7, 6, "Sentry");
-        AIAttackWaveAddUnits4(0, 0, 1, 2, "Immortal");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(6), libB27CC4B1_gf_CurseAttackWaveModifier(6), libB27CC4B1_gf_CurseAttackWaveModifier(7), libB27CC4B1_gf_CurseAttackWaveModifier(6), "Sentry");
+        AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Immortal");
         AIAttackWaveSend(gv_pLAYER04_PROTOSS, 120, true);
         Wait(libNtve_gf_DifficultyValueFixed(90.0, 90.0, 55.0, 20.0), c_timeAI);
-        AIAttackWaveAddUnits4(3, 3, 3, 6, "Sentry");
-        AIAttackWaveAddUnits4(1, 1, 2, 2, "Colossus");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(6), "Sentry");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Colossus");
         AIAttackWaveSend(gv_pLAYER04_PROTOSS, 120, true);
     }
     return true;
@@ -1841,6 +2025,10 @@ bool gt_ProtossP04GivesUp_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
     // Conditions
     if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+
         if (!((gv_gameOver == false))) {
             return false;
         }
@@ -1849,7 +2037,7 @@ bool gt_ProtossP04GivesUp_Func (bool testConds, bool runActions) {
             return false;
         }
 
-        if (!(((TechTreeUnitCount(gv_pLAYER04_PROTOSS, "Nexus", c_techCountQueuedOrBetter) == 0) || (TechTreeUnitCount(gv_pLAYER04_PROTOSS, "Gateway", c_techCountQueuedOrBetter) == 0) || (TechTreeUnitCount(gv_pLAYER04_PROTOSS, "Pylon", c_techCountQueuedOrBetter) == 0)))) {
+        if (!(((TechTreeUnitCount(gv_pLAYER04_PROTOSS, "Nexus", c_techCountQueuedOrBetter) == 0) || (TechTreeUnitAliasCount(gv_pLAYER04_PROTOSS, "Alias_Gateway", c_techCountQueuedOrBetter) == 0) || (TechTreeUnitCount(gv_pLAYER04_PROTOSS, "Pylon", c_techCountQueuedOrBetter) == 0)))) {
             return false;
         }
     }
@@ -1869,6 +2057,7 @@ bool gt_ProtossP04GivesUp_Func (bool testConds, bool runActions) {
 //--------------------------------------------------------------------------------------------------
 void gt_ProtossP04GivesUp_Init () {
     gt_ProtossP04GivesUp = TriggerCreate("gt_ProtossP04GivesUp_Func");
+    TriggerEnable(gt_ProtossP04GivesUp, false);
     TriggerAddEventTimePeriodic(gt_ProtossP04GivesUp, 1.0, c_timeGame);
 }
 
@@ -2706,7 +2895,11 @@ bool gt_VictoryDestroytheArtifactVaultCompleted_Func (bool testConds, bool runAc
     libNtve_gf_CreateUnitsAtPoint2(1, "ArtifactPiece4", 0, 0, PointFromId(1422));
     UnitSetPropertyFixed(UnitLastCreated(), c_unitPropHeight, 1.0);
     gv_gameOver = true;
+    libB27CC4B1_gf_TalentTime(2, false, 0, 0);
+    libB27CC4B1_gf_CurseDifficultyModifier(3);
+    libB27CC4B1_gf_CurseDifficultyModifier(4);
     Wait(2.0, c_timeReal);
+    libB27CC4B1_gf_RogueEnding();
     TriggerExecute(gt_ObjectiveDestroytheArtifactVaultComplete, true, true);
     libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
     return true;
@@ -2852,7 +3045,17 @@ void gt_DefeatVaultDestroyed_Init () {
 // Trigger: Defeat Banshee Group Dead
 //--------------------------------------------------------------------------------------------------
 bool gt_DefeatBansheeGroupDead_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    unitgroup lv_banshees;
+
     // Automatic Variable Declarations
+    unitgroup auto5BC0E617_g;
+    int auto5BC0E617_u;
+    unit auto5BC0E617_var;
+
+    // Variable Initialization
+    lv_banshees = UnitGroupEmpty();
+
     // Conditions
     if (testConds) {
         if (!((gv_gameOver == false))) {
@@ -2873,6 +3076,24 @@ bool gt_DefeatBansheeGroupDead_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    UnitCreate(1, "Banshee", 0, gv_pLAYER01_USER, PointFromId(394), 45.0);
+    UnitGroupAdd(lv_banshees, UnitLastCreated());
+    UnitCreate(1, "Banshee", 0, gv_pLAYER01_USER, PointFromId(395), 45.0);
+    UnitGroupAdd(lv_banshees, UnitLastCreated());
+    UnitCreate(1, "Banshee", 0, gv_pLAYER01_USER, PointFromId(396), 45.0);
+    UnitGroupAdd(lv_banshees, UnitLastCreated());
+    UnitCreate(1, "Banshee", 0, gv_pLAYER01_USER, PointFromId(400), 45.0);
+    UnitGroupAdd(lv_banshees, UnitLastCreated());
+    MinimapPing(PlayerGroupAll(), UnitGroupCenterOfGroup(lv_banshees), 2.0, Color(0.00, 0.00, 100.00));
+    auto5BC0E617_g = lv_banshees;
+    auto5BC0E617_u = UnitGroupCount(auto5BC0E617_g, c_unitCountAll);
+    for (;; auto5BC0E617_u -= 1) {
+        auto5BC0E617_var = UnitGroupUnitFromEnd(auto5BC0E617_g, auto5BC0E617_u);
+        if (auto5BC0E617_var == null) { break; }
+        UnitSetHeight(auto5BC0E617_var, 10.0, 0.0);
+        UnitSetHeight(auto5BC0E617_var, libNtve_gf_CatalogFieldValueGetAsReal(c_gameCatalogUnit, "Banshee", "Height", gv_pLAYER01_USER), 5.0);
+    }
+    return true;
     TriggerEnable(TriggerGetCurrent(), false);
     gv_gameOver = true;
     TriggerQueuePause(true);
@@ -3185,6 +3406,7 @@ bool gt_ResearchObjectiveProtossRelicsUpdate_Func (bool testConds, bool runActio
 
     TriggerExecute(gt_ResearchObjectiveProtossRelicsCreateQ, true, false);
     libWCMI_gf_DisplayMissionObjectiveRewardFloatingText(UnitGetPosition(EventUnit()), "TTychus04_3");
+    libB27CC4B1_gf_TalentBonusObjectiveTrigger();
     UnitKill(EventUnit());
     gv_protossRelicsFound += 1;
     libWCMI_gf_SetMissionObjectiveProgress("TTychus04_3", gv_protossRelicsFound);
@@ -3220,6 +3442,7 @@ bool gt_ResearchObjectiveProtossRelicsComplete_Func (bool testConds, bool runAct
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ResearchObjectiveProtossRelicsCreateQ, true, false);
+    libB27CC4B1_gf_TalentTime(1, false, 0, 0);
     libWCMI_gf_ZS_SetMissionObjectiveState("TTychus04_3", libWoLC_ge_MissionObjectiveState_Completed);
     Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
@@ -3574,10 +3797,14 @@ bool gt_MidQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerQueueEnter();
+    libB27CC4B1_gf_TalentTime(1, false, 0, 0);
+    TriggerExecute(libB27CC4B1_gt_TableButtonsHide, true, true);
     TriggerExecute(gt_MidSetup, true, true);
     TriggerExecute(gt_MidCinematic, true, true);
     TriggerExecute(gt_MidCinematicEnd, true, true);
     TriggerExecute(gt_MidCleanup, true, true);
+    TriggerExecute(libB27CC4B1_gt_TableButtonsShow, true, true);
+    libB27CC4B1_gf_CurseDifficultyModifier(2);
     TriggerQueueExit();
     return true;
 }
@@ -3765,8 +3992,20 @@ bool gt_MidCleanup_Func (bool testConds, bool runActions) {
     PingDestroyAll();
     UnitRemove(gv_geyser01);
     UnitRemove(gv_geyser02);
-    libNtve_gf_CreateUnitsWithDefaultFacing(1, "Refinery", 0, gv_pLAYER01_USER, PointFromId(1379));
-    libNtve_gf_CreateUnitsWithDefaultFacing(1, "Refinery", 0, gv_pLAYER01_USER, PointFromId(1380));
+    if ((libWoLC_gf_WC_PerkStateCheck("ResearchP3_1", libWoLC_ge_WC_PerkState_Active) == true)) {
+        libNtve_gf_CreateUnitsWithDefaultFacing(1, "AutomatedRefinery", 0, gv_pLAYER01_USER, PointFromId(1379));
+        libNtve_gf_CreateUnitsWithDefaultFacing(1, "AutomatedRefinery", 0, gv_pLAYER01_USER, PointFromId(1380));
+    }
+    else {
+        if ((UserDataGetInt("RogueTalents", "Angel's Vespenes", "Acquired", 1) >= 1)) {
+            libNtve_gf_CreateUnitsWithDefaultFacing(1, "RefineryRich", 0, gv_pLAYER01_USER, PointFromId(1379));
+            libNtve_gf_CreateUnitsWithDefaultFacing(1, "RefineryRich", 0, gv_pLAYER01_USER, PointFromId(1380));
+        }
+        else {
+            libNtve_gf_CreateUnitsWithDefaultFacing(1, "Refinery", 0, gv_pLAYER01_USER, PointFromId(1379));
+            libNtve_gf_CreateUnitsWithDefaultFacing(1, "Refinery", 0, gv_pLAYER01_USER, PointFromId(1380));
+        }
+    }
     autoE4241DE8_g = gv_midCineTempPlayerGroup;
     autoE4241DE8_u = UnitGroupCount(autoE4241DE8_g, c_unitCountAll);
     for (;; autoE4241DE8_u -= 1) {
@@ -3861,6 +4100,7 @@ bool gt_VictoryQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerQueueEnter();
+    TriggerExecute(libB27CC4B1_gt_TableButtonsHide, true, true);
     TriggerExecute(gt_VictorySetup, true, true);
     TriggerExecute(gt_VictoryCinematic, true, true);
     TriggerExecute(gt_VictoryCinematicEnd, true, true);
@@ -4127,6 +4367,7 @@ void InitTriggers () {
     gt_StartGameStage1_Init();
     gt_StartGameStage2_Init();
     gt_StartAIHarvesting_Init();
+    gt_StartGameRemoveChallenge_Init();
     gt_Stage1Leashes_Init();
     gt_AreaClearStage2_Init();
     gt_ArtifactVaultPing_Init();
@@ -4145,6 +4386,7 @@ void InitTriggers () {
     gt_WallofFireSlowDown_Init();
     gt_RemoveResources_Init();
     gt_WarpPrismSpawninBaseDefenders_Init();
+    gt_YagdraAI_Init();
     gt_StartAI_Init();
     gt_ProtossP02AttackWaves_Init();
     gt_ProtossP03AttackWaves_Init();

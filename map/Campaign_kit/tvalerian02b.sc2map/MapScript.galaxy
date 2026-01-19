@@ -11,6 +11,7 @@ include "LibCamp"
 include "LibWoLC"
 include "LibWCMI"
 include "LibWCUI"
+include "LibB27CC4B1"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -22,6 +23,7 @@ void InitLibs () {
     libWoLC_InitLib();
     libWCMI_InitLib();
     libWCUI_InitLib();
+    libB27CC4B1_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -38,6 +40,7 @@ const int gv_pLAYER_P08_MUTALISK_TOWERS = 8;
 const int gv_pLAYER_P09_HORNER = 9;
 const int gv_pLAYER_P10_LEVIATHAN = 10;
 const int gv_pLAYER_P11_PLATFORM_PIECES = 11;
+const int gv_lEVIATHANS_MAX = 7;
 
 //--------------------------------------------------------------------------------------------------
 // Global Structures
@@ -68,6 +71,12 @@ struct gs_RECORD_UnitArea04 {
     int lv_player;
     point lv_position;
     fixed lv_facing;
+};
+
+struct gs_Leviathan {
+    unit lv_theBoi;
+    int lv_thePing;
+    unitgroup lv_theEscort;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -134,6 +143,7 @@ fixed gv_cMutaSpawnPeriodSlow;
 int gv_mutaSpawnMax;
 int gv_ventPing01;
 unit gv_firstMutaSpawner;
+gs_Leviathan[gv_lEVIATHANS_MAX + 1] gv_challengeLeviathans;
 bool gv_alternateLastWave;
 int gv_stat_PlayerUnitsLostToPlatform;
 int gv_stat_ZergKilledByPlatform;
@@ -183,6 +193,10 @@ void InitGlobals () {
     for (init_i = 0; init_i <= 50; init_i += 1) {
         gv_mutaDefenders[init_i] = UnitGroupEmpty();
     }
+    for (init_i = 0; init_i <= gv_lEVIATHANS_MAX; init_i += 1) {
+        gv_challengeLeviathans[init_i].lv_thePing = c_invalidPingId;
+        gv_challengeLeviathans[init_i].lv_theEscort = UnitGroupEmpty();
+    }
     gv_objectiveKillLeviathan = c_invalidObjectiveId;
     gv_objectiveDestroyCoolantTowers = c_invalidObjectiveId;
     gv_midPlatformsHiddenUnitGroup = UnitGroupEmpty();
@@ -197,7 +211,10 @@ bool gf_PlayerIsInCombat (int lp_player);
 void gf_BlowingUp (unit lp_victim);
 void gf_RemovingUnits (unit lp_victim);
 void gf_HideGround (region lp_rEGION, unitgroup lp_gROUP);
+void gf_ProgressTalents (int lp_count);
 void gf_MutaSpawnerBehavior (unit lp_spawner, unit lp_coolantTower);
+void gf_ChallengeSpawnLeviathan (int lp_index);
+void gf_ChallengeLeviathanPatrol (int lp_index);
 bool gf_PlayerCanAttack (int lp_player);
 void gf_AddUpgradeLevelforZergPlayerGroup (string lp_upgrade);
 
@@ -265,6 +282,12 @@ trigger gt_MutaSpawnersN14;
 trigger gt_MutaSpawnersN23;
 trigger gt_MutaSpawnersI2;
 trigger gt_MutaSpawnersI3;
+trigger gt_ChallengeLeviathanController;
+trigger gt_ChallengeSendLeviathan;
+trigger gt_LeviathanSpawnsMutas2;
+trigger gt_ChallengeLeviathanMutaCatcher;
+trigger gt_ChallengeLeviathanMutaAI;
+trigger gt_ChallengeLeviathanDead;
 trigger gt_ResourcePickups;
 trigger gt_PlatformLinesFirstTowerQ;
 trigger gt_PlatformLinesBRAQ;
@@ -446,6 +469,28 @@ void gf_HideGround (region lp_rEGION, unitgroup lp_gROUP) {
     }
 }
 
+void gf_ProgressTalents (int lp_count) {
+    // Automatic Variable Declarations
+    int autoEC6E947C_val;
+
+    // Implementation
+    autoEC6E947C_val = lp_count;
+    if (autoEC6E947C_val == 1) {
+        libB27CC4B1_gf_TalentTime(1, false, 0, 0);
+
+    }
+    else if (autoEC6E947C_val == 2) {
+        libB27CC4B1_gf_CurseDifficultyModifier(2);
+
+    }
+    else if (autoEC6E947C_val == 3) {
+        libB27CC4B1_gf_TalentTime(1, false, 0, 0);
+
+    }
+    else {
+    }
+}
+
 void gf_MutaSpawnerBehavior (unit lp_spawner, unit lp_coolantTower) {
     // Variable Declarations
     unitgroup lv_nearbyEnemies;
@@ -530,6 +575,80 @@ void gf_MutaSpawnerBehavior (unit lp_spawner, unit lp_coolantTower) {
     }
 }
 
+void gf_ChallengeSpawnLeviathan (int lp_index) {
+    // Variable Declarations
+    unit lv_levy;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+
+    // Implementation
+    if ((UnitIsAlive(gv_challengeLeviathans[lp_index].lv_theBoi) == false)) {
+        libNtve_gf_CreateUnitsAtPoint2(1, "Leviathan", 0, gv_pLAYER_P10_LEVIATHAN, RegionRandomPoint(RegionFromId(104)));
+        lv_levy = UnitLastCreated();
+        gv_challengeLeviathans[lp_index].lv_theBoi = lv_levy;
+        libB27CC4B1_gf_SetUnitHPDynamically(lv_levy, gv_leviathanMaxLife, 100.0);
+        UnitSetPropertyFixed(lv_levy, c_unitPropEnergyMax, gv_leviathanMaxEnergy);
+        UnitSetPropertyFixed(lv_levy, c_unitPropEnergyPercent, 100.0);
+        libNtve_gf_ShareVisionofUnit(lv_levy, true, gv_pLAYER_P01_USER);
+        PingCreate(PlayerGroupAll(), "PingBoss", UnitGetPosition(lv_levy), ColorWithAlpha(100.00, 0.00, 0.00, 0.00), 0.0);
+        gv_challengeLeviathans[lp_index].lv_thePing = PingLastCreated();
+        PingSetUnit(PingLastCreated(), lv_levy);
+        PingSetTooltip(PingLastCreated(), StringExternal("Param/Value/0B03211D"));
+        gf_ChallengeLeviathanPatrol(lp_index);
+    }
+
+}
+
+void gf_ChallengeLeviathanPatrol (int lp_index) {
+    // Variable Declarations
+    unit lv_levy;
+
+    // Automatic Variable Declarations
+    int auto84EAD06B_val;
+
+    // Variable Initialization
+
+    // Implementation
+    lv_levy = gv_challengeLeviathans[lp_index].lv_theBoi;
+    AISetUnitScriptControlled(lv_levy, false);
+    AIAttackWaveUseUnit(gv_pLAYER_P10_LEVIATHAN, lv_levy);
+    AIAttackWaveSetGatherPoint(gv_pLAYER_P10_LEVIATHAN, UnitGetPosition(lv_levy));
+    auto84EAD06B_val = lp_index;
+    if (auto84EAD06B_val == 1) {
+        AIAttackWaveSetTargetRegion(gv_pLAYER_P10_LEVIATHAN, RegionFromId(51), 1);
+
+    }
+    else if (auto84EAD06B_val == 2) {
+        AIAttackWaveSetTargetRegion(gv_pLAYER_P10_LEVIATHAN, RegionFromId(52), 1);
+
+    }
+    else if (auto84EAD06B_val == 3) {
+        AIAttackWaveSetTargetRegion(gv_pLAYER_P10_LEVIATHAN, RegionFromId(54), 1);
+
+    }
+    else if (auto84EAD06B_val == 4) {
+        AIAttackWaveSetTargetRegion(gv_pLAYER_P10_LEVIATHAN, RegionFromId(53), 1);
+
+    }
+    else {
+        AIAttackWaveSetTargetPatrol(gv_pLAYER_P10_LEVIATHAN, 0);
+        AIAttackWaveAddWaypoint(gv_pLAYER_P10_LEVIATHAN, PointFromId(1473), false);
+        AIAttackWaveAddWaypoint(gv_pLAYER_P10_LEVIATHAN, PointFromId(1474), false);
+        AIAttackWaveAddWaypoint(gv_pLAYER_P10_LEVIATHAN, PointFromId(1475), false);
+        AIAttackWaveAddWaypoint(gv_pLAYER_P10_LEVIATHAN, PointFromId(1476), false);
+        AIAttackWaveAddWaypoint(gv_pLAYER_P10_LEVIATHAN, PointFromId(1477), false);
+        AIAttackWaveAddWaypoint(gv_pLAYER_P10_LEVIATHAN, PointFromId(1478), false);
+        AIAttackWaveAddWaypoint(gv_pLAYER_P10_LEVIATHAN, PointFromId(1479), false);
+        AIAttackWaveAddWaypoint(gv_pLAYER_P10_LEVIATHAN, PointFromId(1480), false);
+        AIAttackWaveAddWaypoint(gv_pLAYER_P10_LEVIATHAN, PointFromId(1481), false);
+        AIAttackWaveAddWaypoint(gv_pLAYER_P10_LEVIATHAN, PointFromId(1482), false);
+        AIAttackWaveAddWaypoint(gv_pLAYER_P10_LEVIATHAN, PointFromId(1483), false);
+    }
+    AIAttackWaveUseUnit(gv_pLAYER_P10_LEVIATHAN, lv_levy);
+    AIAttackWaveSend(gv_pLAYER_P10_LEVIATHAN, 0, false);
+}
+
 bool gf_PlayerCanAttack (int lp_player) {
     // Automatic Variable Declarations
     // Implementation
@@ -586,6 +705,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init06Difficulties, true, true);
     TriggerExecute(gt_Init07Help, true, true);
     libWoLC_gf_RegisterFootageRecording(gt_BriefingQ);
+    TriggerExecute(libB27CC4B1_gt_RogueInit, true, true);
     TriggerExecute(gt_IntroSequence, true, false);
     libWCMI_gf_WM_DetectionUpgradesApply();
     return true;
@@ -939,16 +1059,14 @@ bool gt_Init06Difficulties_Func (bool testConds, bool runActions) {
     for (;; auto9C4C39D5_u -= 1) {
         auto9C4C39D5_var = UnitGroupUnitFromEnd(auto9C4C39D5_g, auto9C4C39D5_u);
         if (auto9C4C39D5_var == null) { break; }
-        UnitSetPropertyFixed(auto9C4C39D5_var, c_unitPropLifeMax, libNtve_gf_DifficultyValueFixed(500.0, 1000.0, 1500.0, 2000.0));
-        UnitSetPropertyFixed(auto9C4C39D5_var, c_unitPropLifePercent, 100.0);
+        libB27CC4B1_gf_SetUnitHPDynamically(auto9C4C39D5_var, libNtve_gf_DifficultyValueFixed(500.0, 1000.0, 1500.0, 2000.0), 100.0);
     }
     auto7DC03CB3_g = UnitGroup("SpacePlatformVentsUnit", c_playerAny, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     auto7DC03CB3_u = UnitGroupCount(auto7DC03CB3_g, c_unitCountAll);
     for (;; auto7DC03CB3_u -= 1) {
         auto7DC03CB3_var = UnitGroupUnitFromEnd(auto7DC03CB3_g, auto7DC03CB3_u);
         if (auto7DC03CB3_var == null) { break; }
-        UnitSetPropertyFixed(auto7DC03CB3_var, c_unitPropLifeMax, libNtve_gf_DifficultyValueFixed(700.0, 700.0, 1250.0, 1500.0));
-        UnitSetPropertyFixed(auto7DC03CB3_var, c_unitPropLifePercent, 100.0);
+        libB27CC4B1_gf_SetUnitHPDynamically(auto7DC03CB3_var, libNtve_gf_DifficultyValueFixed(700.0, 700.0, 1250.0, 1500.0), 100.0);
     }
     if ((libNtve_gf_DifficultyValueInt(0, 0, 0, 1) == 1)) {
         UnitSetPosition(UnitFromId(90), PointFromId(1869), false);
@@ -1112,15 +1230,22 @@ bool gt_StartGame_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    TriggerExecute(libB27CC4B1_gt_InitTableButtons, true, false);
     if ((libNtve_gf_DifficultyValueInt(0, 0, 1, 1) == 1)) {
         TimerStart(gv_achievementHardTimer, 1500.0, false, c_timeAI);
     }
 
-    Wait(4.0, c_timeReal);
+    Wait(2.0, c_timeReal);
+    libB27CC4B1_gf_ChallengeTime("ChallengeChar2SS");
+    Wait(2.0, c_timeReal);
+    if ((libB27CC4B1_gf_TalentAcquired("ChallengeChar2SS") == true)) {
+        TriggerExecute(gt_ChallengeLeviathanController, true, false);
+    }
+
     TriggerExecute(gt_ObjectiveDestroyCoolantTowersCreateQ, true, false);
     TriggerExecute(gt_ComsatStationQ, true, false);
     TriggerEnable(gt_PlatformInfestedLineQ, true);
-    Wait(15.0, c_timeGame);
+    Wait(15.0, c_timeAI);
     TriggerExecute(gt_TipCampaignTipsQ, true, false);
     return true;
 }
@@ -1156,10 +1281,9 @@ bool gt_SpawnLeviathan_Func (bool testConds, bool runActions) {
     gv_leviathanGuardArea = PointFromId(1662);
     libNtve_gf_CreateUnitsAtPoint2(1, "Leviathan", 0, gv_pLAYER_P10_LEVIATHAN, RegionRandomPoint(gv_leviathanSpawnRegion));
     gv_leviathan = UnitLastCreated();
-    UnitSetPropertyFixed(gv_leviathan, c_unitPropLifeMax, gv_leviathanMaxLife);
+    libB27CC4B1_gf_SetUnitHPDynamically(gv_leviathan, gv_leviathanMaxLife, 100.0);
     UnitSetPropertyFixed(gv_leviathan, c_unitPropEnergyMax, gv_leviathanMaxEnergy);
-    TimerStart(gv_leviathanDeathWindow, 120.0, false, c_timeGame);
-    UnitSetPropertyFixed(gv_leviathan, c_unitPropLifePercent, 100.0);
+    TimerStart(gv_leviathanDeathWindow, 120.0, false, c_timeAI);
     UnitSetPropertyFixed(gv_leviathan, c_unitPropEnergyPercent, 100.0);
     libNtve_gf_ShareVisionofUnit(UnitLastCreated(), true, gv_pLAYER_P01_USER);
     TriggerEnable(gt_LeviathanDies, true);
@@ -1320,7 +1444,7 @@ bool gt_LeviathanSpawnsMutas_Func (bool testConds, bool runActions) {
     }
     AISetUnitScriptControlled(gv_leviathan, false);
     TriggerExecute(gt_LeviathanPatrolAI, true, false);
-    Wait(libNtve_gf_DifficultyValueFixed(13.5, 12.0, 11.0, 10.25), c_timeGame);
+    Wait(libNtve_gf_DifficultyValueFixed(13.5, 12.0, 11.0, 10.25), c_timeAI);
     TriggerEnable(gt_LeviathanSpawnsMutas, true);
     return true;
 }
@@ -1488,6 +1612,7 @@ bool gt_Area01CoolantTowerKilledRedSouthEastQ_Func (bool testConds, bool runActi
 
     PingDestroy(gv_objectivePlatformsPing03);
     TriggerExecute(gt_ObjectiveDestroyCoolantTowersUpdate, true, false);
+    gf_ProgressTalents(gv_objectiveDestroyCoolantTowerProgress);
     ActorSend(ActorFromDoodad(DoodadFromId(1069)), "Signal OneTower");
     VisRevealerCreate(gv_pLAYER_P01_USER, RegionFromId(1));
     lv_revealer = VisRevealerLastCreated();
@@ -1503,7 +1628,7 @@ bool gt_Area01CoolantTowerKilledRedSouthEastQ_Func (bool testConds, bool runActi
     }
 
     TriggerExecute(gt_PlatformLinesBRAQ, true, false);
-    TimerStart(gv_platformBlowsTimerArea01, 45.0, false, c_timeGame);
+    TimerStart(gv_platformBlowsTimerArea01, 45.0, false, c_timeAI);
     libWCUI_gf_TimerWindowCreate(TimerLastStarted(), StringExternal("Param/Value/D5DA8398"), true, false);
     TimerWindowSetFormat(TimerWindowLastCreated(), StringToText("<min2/>:<sec2/>"));
     if ((gv_inCinematic == true)) {
@@ -1556,6 +1681,7 @@ bool gt_Area02CoolantTowerKilledGreenSouthWestQ_Func (bool testConds, bool runAc
 
     PingDestroy(gv_objectivePlatformsPing04);
     TriggerExecute(gt_ObjectiveDestroyCoolantTowersUpdate, true, false);
+    gf_ProgressTalents(gv_objectiveDestroyCoolantTowerProgress);
     ActorSend(ActorFromDoodad(DoodadFromId(1085)), "Signal OneTower");
     VisRevealerCreate(gv_pLAYER_P01_USER, RegionFromId(2));
     lv_revealer = VisRevealerLastCreated();
@@ -1571,7 +1697,7 @@ bool gt_Area02CoolantTowerKilledGreenSouthWestQ_Func (bool testConds, bool runAc
     }
 
     TriggerExecute(gt_PlatformLinesBLAQ, true, false);
-    TimerStart(gv_platformBlowsTimerArea02, 45.0, false, c_timeGame);
+    TimerStart(gv_platformBlowsTimerArea02, 45.0, false, c_timeAI);
     libWCUI_gf_TimerWindowCreate(TimerLastStarted(), StringExternal("Param/Value/568BF307"), true, false);
     TimerWindowSetFormat(TimerWindowLastCreated(), StringToText("<min2/>:<sec2/>"));
     if ((gv_inCinematic == true)) {
@@ -1624,6 +1750,7 @@ bool gt_Area03CoolantTowerKilledPurpleNorthWestQ_Func (bool testConds, bool runA
 
     PingDestroy(gv_objectivePlatformsPing02);
     TriggerExecute(gt_ObjectiveDestroyCoolantTowersUpdate, true, false);
+    gf_ProgressTalents(gv_objectiveDestroyCoolantTowerProgress);
     ActorSend(ActorFromDoodad(DoodadFromId(554)), "Signal OneTower");
     VisRevealerCreate(gv_pLAYER_P01_USER, RegionFromId(3));
     lv_revealer = VisRevealerLastCreated();
@@ -1639,7 +1766,7 @@ bool gt_Area03CoolantTowerKilledPurpleNorthWestQ_Func (bool testConds, bool runA
     }
 
     TriggerExecute(gt_PlatformLinesTLAQ, true, false);
-    TimerStart(gv_platformBlowsTimerArea03, 45.0, false, c_timeGame);
+    TimerStart(gv_platformBlowsTimerArea03, 45.0, false, c_timeAI);
     libWCUI_gf_TimerWindowCreate(TimerLastStarted(), StringExternal("Param/Value/AD0EDC92"), true, false);
     TimerWindowSetFormat(TimerWindowLastCreated(), StringToText("<min2/>:<sec2/>"));
     if ((gv_inCinematic == true)) {
@@ -1692,6 +1819,7 @@ bool gt_Area04CoolantTowerKilledWhiteCentralQ_Func (bool testConds, bool runActi
 
     PingDestroy(gv_objectivePlatformsPing01);
     TriggerExecute(gt_ObjectiveDestroyCoolantTowersUpdate, true, false);
+    gf_ProgressTalents(gv_objectiveDestroyCoolantTowerProgress);
     ActorSend(ActorFromDoodad(DoodadFromId(1533)), "Signal OneTower");
     VisRevealerCreate(gv_pLAYER_P01_USER, RegionFromId(4));
     lv_revealer = VisRevealerLastCreated();
@@ -1707,7 +1835,7 @@ bool gt_Area04CoolantTowerKilledWhiteCentralQ_Func (bool testConds, bool runActi
     }
 
     TriggerExecute(gt_PlatformLinesTRAQ, true, false);
-    TimerStart(gv_platformBlowsTimerArea04, 45.0, false, c_timeGame);
+    TimerStart(gv_platformBlowsTimerArea04, 45.0, false, c_timeAI);
     libWCUI_gf_TimerWindowCreate(TimerLastStarted(), StringExternal("Param/Value/18483265"), true, false);
     TimerWindowSetFormat(TimerWindowLastCreated(), StringToText("<min2/>:<sec2/>"));
     if ((gv_inCinematic == true)) {
@@ -3443,6 +3571,289 @@ void gt_MutaSpawnersI3_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: Challenge Leviathan Controller
+//--------------------------------------------------------------------------------------------------
+bool gt_ChallengeLeviathanController_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    const int auto2A191FB6_n = 5;
+    int auto2A191FB6_i;
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    Wait(10.0, c_timeAI);
+    TriggerEnable(gt_LeviathanSpawnsMutas2, true);
+    TriggerEnable(gt_ChallengeLeviathanMutaCatcher, true);
+    TriggerEnable(gt_ChallengeLeviathanMutaAI, true);
+    TriggerEnable(gt_ChallengeLeviathanDead, true);
+    for (auto2A191FB6_i = 1; auto2A191FB6_i <= auto2A191FB6_n; auto2A191FB6_i += 1) {
+        Wait(4.5, c_timeAI);
+        TriggerExecute(gt_ChallengeSendLeviathan, true, false);
+    }
+    while (true) {
+        Wait(150.0, c_timeAI);
+        TriggerExecute(gt_ChallengeSendLeviathan, true, false);
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ChallengeLeviathanController_Init () {
+    gt_ChallengeLeviathanController = TriggerCreate("gt_ChallengeLeviathanController_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Challenge Send Leviathan
+//--------------------------------------------------------------------------------------------------
+bool gt_ChallengeSendLeviathan_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    int lv_i;
+
+    // Automatic Variable Declarations
+    const int autoFC121829_ae = gv_lEVIATHANS_MAX;
+    const int autoFC121829_ai = 1;
+
+    // Variable Initialization
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lv_i = 1;
+    for ( ; ( (autoFC121829_ai >= 0 && lv_i <= autoFC121829_ae) || (autoFC121829_ai < 0 && lv_i >= autoFC121829_ae) ) ; lv_i += autoFC121829_ai ) {
+        if ((UnitIsAlive(gv_challengeLeviathans[lv_i].lv_theBoi) == false) && ((lv_i > 4) || ((lv_i == 1) && (UnitIsAlive(UnitFromId(29)) == true)) || ((lv_i == 2) && (UnitIsAlive(UnitFromId(96)) == true)) || ((lv_i == 3) && (UnitIsAlive(UnitFromId(108)) == true)) || ((lv_i == 4) && (UnitIsAlive(UnitFromId(90)) == true)))) {
+            gf_ChallengeSpawnLeviathan(lv_i);
+            return true;
+        }
+
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ChallengeSendLeviathan_Init () {
+    gt_ChallengeSendLeviathan = TriggerCreate("gt_ChallengeSendLeviathan_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Challenge Leviathan Spawns Mutas
+//--------------------------------------------------------------------------------------------------
+bool gt_LeviathanSpawnsMutas2_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    const int auto3DB84C03_ae = gv_lEVIATHANS_MAX;
+    int auto3DB84C03_var;
+    int auto4519FC0B_n;
+    int auto4519FC0B_i;
+
+    // Conditions
+    if (testConds) {
+        if (!((gv_inCinematic == false))) {
+            return false;
+        }
+
+        if (!((gv_gameOver == false))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    auto3DB84C03_var = 1;
+    for ( ; auto3DB84C03_var <= auto3DB84C03_ae; auto3DB84C03_var += 1 ) {
+        if ((UnitIsAlive(gv_challengeLeviathans[auto3DB84C03_var].lv_theBoi) == true) && (UnitGroupCount(UnitGroup(null, gv_pLAYER_P01_USER, RegionCircle(UnitGetPosition(gv_challengeLeviathans[auto3DB84C03_var].lv_theBoi), 11.0), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) >= 1)) {
+            AIRemoveUnitFromAnyWaves(gv_challengeLeviathans[auto3DB84C03_var].lv_theBoi);
+            UnitIssueOrder(gv_challengeLeviathans[auto3DB84C03_var].lv_theBoi, Order(AbilityCommand("stop", 0)), c_orderQueueReplace);
+            auto4519FC0B_n = libNtve_gf_DifficultyValueInt(3, 4, 4, 5);
+            for (auto4519FC0B_i = 1; auto4519FC0B_i <= auto4519FC0B_n; auto4519FC0B_i += 1) {
+                if ((UnitIsAlive(gv_challengeLeviathans[auto3DB84C03_var].lv_theBoi) == false)) {
+                    return true;
+                }
+
+                if ((UnitGroupCount(gv_challengeLeviathans[auto3DB84C03_var].lv_theEscort, c_unitCountAlive) < libNtve_gf_DifficultyValueInt(4, 4, 5, 6))) {
+                    UnitIssueOrder(gv_challengeLeviathans[auto3DB84C03_var].lv_theBoi, Order(AbilityCommand("LeviathanSpawnMutalisk", 0)), c_orderQueueReplace);
+                }
+
+                Wait(libNtve_gf_DifficultyValueFixed(1.5, 1.5, 1.0, 0.75), c_timeGame);
+            }
+            AISetUnitScriptControlled(gv_challengeLeviathans[auto3DB84C03_var].lv_theBoi, false);
+            gf_ChallengeLeviathanPatrol(auto3DB84C03_var);
+        }
+
+    }
+    Wait(libNtve_gf_DifficultyValueFixed(13.5, 12.0, 11.0, 10.25), c_timeAI);
+    TriggerEnable(TriggerGetCurrent(), true);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_LeviathanSpawnsMutas2_Init () {
+    gt_LeviathanSpawnsMutas2 = TriggerCreate("gt_LeviathanSpawnsMutas2_Func");
+    TriggerEnable(gt_LeviathanSpawnsMutas2, false);
+    TriggerAddEventTimePeriodic(gt_LeviathanSpawnsMutas2, 1.0, c_timeGame);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Challenge Leviathan Muta Catcher
+//--------------------------------------------------------------------------------------------------
+bool gt_ChallengeLeviathanMutaCatcher_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    unit lv_levy;
+
+    // Automatic Variable Declarations
+    const int autoE1330286_ae = gv_lEVIATHANS_MAX;
+    int autoE1330286_var;
+
+    // Variable Initialization
+
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetType(EventUnit()) == "Mutalisk"))) {
+            return false;
+        }
+
+        if (!((UnitGetOwner(EventUnit()) == gv_pLAYER_P10_LEVIATHAN))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lv_levy = UnitGroupClosestToPoint(UnitGroup("Leviathan", gv_pLAYER_P10_LEVIATHAN, RegionPlayableMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), UnitGetPosition(EventUnit()));
+    UnitBehaviorAdd(EventUnit(), "ScanRangeBonus", EventUnit(), 1);
+    autoE1330286_var = 1;
+    for ( ; autoE1330286_var <= autoE1330286_ae; autoE1330286_var += 1 ) {
+        if ((gv_challengeLeviathans[autoE1330286_var].lv_theBoi == lv_levy)) {
+            UnitGroupAdd(gv_challengeLeviathans[autoE1330286_var].lv_theEscort, EventUnit());
+            return true;
+        }
+
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ChallengeLeviathanMutaCatcher_Init () {
+    gt_ChallengeLeviathanMutaCatcher = TriggerCreate("gt_ChallengeLeviathanMutaCatcher_Func");
+    TriggerEnable(gt_ChallengeLeviathanMutaCatcher, false);
+    TriggerAddEventUnitRegion(gt_ChallengeLeviathanMutaCatcher, null, RegionEntireMap(), true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Challenge Leviathan Muta AI
+//--------------------------------------------------------------------------------------------------
+bool gt_ChallengeLeviathanMutaAI_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    const int auto3D9652D0_ae = gv_lEVIATHANS_MAX;
+    int auto3D9652D0_var;
+    unitgroup auto6C732FE1_g;
+    int auto6C732FE1_u;
+    unit auto6C732FE1_var;
+    unitgroup autoA4A16350_g;
+    int autoA4A16350_u;
+    unit autoA4A16350_var;
+
+    // Conditions
+    if (testConds) {
+        if (!((gv_inCinematic == false))) {
+            return false;
+        }
+
+        if (!((gv_gameOver == false))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    auto3D9652D0_var = 1;
+    for ( ; auto3D9652D0_var <= auto3D9652D0_ae; auto3D9652D0_var += 1 ) {
+        auto6C732FE1_g = gv_challengeLeviathans[auto3D9652D0_var].lv_theEscort;
+        auto6C732FE1_u = UnitGroupCount(auto6C732FE1_g, c_unitCountAll);
+        for (;; auto6C732FE1_u -= 1) {
+            auto6C732FE1_var = UnitGroupUnitFromEnd(auto6C732FE1_g, auto6C732FE1_u);
+            if (auto6C732FE1_var == null) { break; }
+            libNtve_gf_AICast(auto6C732FE1_var, OrderTargetingPoint(AbilityCommand("attack", 0), PointWithOffsetPolar(RegionRandomPoint(RegionCircle(UnitGetPosition(gv_challengeLeviathans[auto3D9652D0_var].lv_theBoi), 8.0)), 8.0, UnitGetFacing(gv_challengeLeviathans[auto3D9652D0_var].lv_theBoi))));
+        }
+        if ((UnitIsAlive(gv_challengeLeviathans[auto3D9652D0_var].lv_theBoi) == false)) {
+            autoA4A16350_g = gv_challengeLeviathans[auto3D9652D0_var].lv_theEscort;
+            autoA4A16350_u = UnitGroupCount(autoA4A16350_g, c_unitCountAll);
+            for (;; autoA4A16350_u -= 1) {
+                autoA4A16350_var = UnitGroupUnitFromEnd(autoA4A16350_g, autoA4A16350_u);
+                if (autoA4A16350_var == null) { break; }
+                AISetUnitScriptControlled(autoA4A16350_var, false);
+                AISetUnitSuicide(autoA4A16350_var, true);
+                UnitGroupRemove(gv_challengeLeviathans[auto3D9652D0_var].lv_theEscort, autoA4A16350_var);
+            }
+        }
+
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ChallengeLeviathanMutaAI_Init () {
+    gt_ChallengeLeviathanMutaAI = TriggerCreate("gt_ChallengeLeviathanMutaAI_Func");
+    TriggerEnable(gt_ChallengeLeviathanMutaAI, false);
+    TriggerAddEventTimePeriodic(gt_ChallengeLeviathanMutaAI, 2.0, c_timeGame);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Challenge Leviathan Dead
+//--------------------------------------------------------------------------------------------------
+bool gt_ChallengeLeviathanDead_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    const int autoAB794780_ae = gv_lEVIATHANS_MAX;
+    int autoAB794780_var;
+    unitgroup auto1D187723_g;
+    int auto1D187723_u;
+    unit auto1D187723_var;
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    autoAB794780_var = 1;
+    for ( ; autoAB794780_var <= autoAB794780_ae; autoAB794780_var += 1 ) {
+        if ((EventUnit() == gv_challengeLeviathans[autoAB794780_var].lv_theBoi)) {
+            PingDestroy(gv_challengeLeviathans[autoAB794780_var].lv_thePing);
+            auto1D187723_g = gv_challengeLeviathans[autoAB794780_var].lv_theEscort;
+            auto1D187723_u = UnitGroupCount(auto1D187723_g, c_unitCountAll);
+            for (;; auto1D187723_u -= 1) {
+                auto1D187723_var = UnitGroupUnitFromEnd(auto1D187723_g, auto1D187723_u);
+                if (auto1D187723_var == null) { break; }
+                AISetUnitScriptControlled(auto1D187723_var, false);
+                AISetUnitSuicide(auto1D187723_var, true);
+                UnitGroupRemove(gv_challengeLeviathans[autoAB794780_var].lv_theEscort, auto1D187723_var);
+            }
+            return true;
+        }
+
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ChallengeLeviathanDead_Init () {
+    gt_ChallengeLeviathanDead = TriggerCreate("gt_ChallengeLeviathanDead_Func");
+    TriggerEnable(gt_ChallengeLeviathanDead, false);
+    TriggerAddEventUnitDied(gt_ChallengeLeviathanDead, null);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: Resource Pickups
 //--------------------------------------------------------------------------------------------------
 bool gt_ResourcePickups_Func (bool testConds, bool runActions) {
@@ -4384,28 +4795,28 @@ bool gt_CombinedAttackWaves01_Func (bool testConds, bool runActions) {
     Wait(20.0, c_timeAI);
     lv_attacker = gv_pLAYER_P06_ZERG_TR;
     if ((gf_PlayerCanAttack(lv_attacker) == true)) {
-        AIAttackWaveAddUnits4(4, 4, 6, 10, "Zergling");
-        AIAttackWaveAddUnits4(2, 2, 3, 3, "Mutalisk");
-        AIAttackWaveAddUnits4(0, 0, 1, 2, "Roach");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(6), libB27CC4B1_gf_CurseAttackWaveModifier(10), "Zergling");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Mutalisk");
+        AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Roach");
         AIAttackWaveAddWaypoint(lv_attacker, PointFromId(1009), false);
         AIAttackWaveSend(lv_attacker, 160, true);
     }
 
     lv_attacker = gv_pLAYER_P03_ZERG_BR;
     if ((gf_PlayerCanAttack(lv_attacker) == true)) {
-        AIAttackWaveAddUnits4(0, 0, 6, 3, "Zergling");
-        AIAttackWaveAddUnits4(1, 1, 2, 3, "Hydralisk");
-        AIAttackWaveAddUnits4(2, 2, 3, 3, "Mutalisk");
-        AIAttackWaveAddUnits4(0, 0, 0, 1, "Ultralisk");
+        AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(6), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Zergling");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Hydralisk");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Mutalisk");
+        AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "Ultralisk");
         AIAttackWaveAddWaypoint(lv_attacker, PointFromId(1725), false);
         AIAttackWaveSend(lv_attacker, 180, true);
     }
 
     lv_attacker = gv_pLAYER_P05_ZERG_TL;
     if ((gf_PlayerCanAttack(lv_attacker) == true)) {
-        AIAttackWaveAddUnits4(4, 4, 12, 16, "Zergling");
-        AIAttackWaveAddUnits4(2, 2, 3, 4, "Roach");
-        AIAttackWaveAddUnits4(3, 3, 4, 5, "Baneling");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(12), libB27CC4B1_gf_CurseAttackWaveModifier(16), "Zergling");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(4), "Roach");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(5), "Baneling");
         AIAttackWaveAddWaypoint(lv_attacker, PointFromId(250), false);
         AIAttackWaveAddWaypoint(lv_attacker, PointFromId(1009), false);
         AIAttackWaveSend(lv_attacker, 180, true);
@@ -4413,12 +4824,12 @@ bool gt_CombinedAttackWaves01_Func (bool testConds, bool runActions) {
 
     lv_attacker = gv_pLAYER_P04_ZERG_BL;
     if ((gf_PlayerCanAttack(lv_attacker) == true)) {
-        AIAttackWaveAddUnits4(0, 0, 2, 3, "Hydralisk");
-        AIAttackWaveAddUnits4(0, 0, 0, 1, "Infestor");
+        AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Hydralisk");
+        AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "Infestor");
         AIAttackWaveAddWaypoint(lv_attacker, PointFromId(890), false);
         AIAttackWaveSend(lv_attacker, 140, false);
-        AIAttackWaveAddUnits4(2, 2, 2, 4, "Mutalisk");
-        AIAttackWaveAddUnits4(1, 1, 2, 2, "BroodLord");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(4), "Mutalisk");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "BroodLord");
         AIAttackWaveAddWaypoint(lv_attacker, PointFromId(890), false);
         if ((libNtve_gf_DifficultyValueInt(1, 1, 0, 0) == 1)) {
             AIAttackWaveAddWaypoint(lv_attacker, PointFromId(1725), false);
@@ -4454,8 +4865,8 @@ bool gt_CombinedAttackWaves02_Func (bool testConds, bool runActions) {
 
     lv_attacker = gv_pLAYER_P06_ZERG_TR;
     if ((gf_PlayerCanAttack(lv_attacker) == true)) {
-        AIAttackWaveAddUnits4(5, 5, 7, 9, "Mutalisk");
-        AIAttackWaveAddUnits4(0, 0, 0, 1, "Overseer");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(7), libB27CC4B1_gf_CurseAttackWaveModifier(9), "Mutalisk");
+        AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "Overseer");
         if ((libNtve_gf_DifficultyValueInt(1, 1, 0, 0) == 1)) {
             AIAttackWaveAddWaypoint(lv_attacker, PointFromId(1743), false);
         }
@@ -4469,24 +4880,24 @@ bool gt_CombinedAttackWaves02_Func (bool testConds, bool runActions) {
     if ((gf_PlayerCanAttack(lv_attacker) == true)) {
         Wait(40.0, c_timeAI);
         if ((libNtve_gf_DifficultyValueInt(0, 0, 1, 1) == 1)) {
-            AIAttackWaveAddUnits4(0, 0, 5, 6, "Mutalisk");
+            AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(6), "Mutalisk");
             AIAttackWaveAddWaypoint(lv_attacker, PointFromId(1743), false);
             AIAttackWaveSend(lv_attacker, 140, false);
         }
 
-        AIAttackWaveAddUnits4(2, 2, 4, 5, "Hydralisk");
-        AIAttackWaveAddUnits4(3, 3, 0, 0, "Mutalisk");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(5), "Hydralisk");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), 0, 0, "Mutalisk");
         AIAttackWaveAddWaypoint(lv_attacker, PointFromId(1725), false);
         AIAttackWaveSend(lv_attacker, 140, true);
     }
 
     lv_attacker = gv_pLAYER_P05_ZERG_TL;
     if ((gf_PlayerCanAttack(lv_attacker) == true)) {
-        AIAttackWaveAddUnits4(2, 2, 2, 6, "Roach");
-        AIAttackWaveAddUnits4(2, 2, 3, 4, "Hydralisk");
-        AIAttackWaveAddUnits4(1, 1, 2, 1, "Ultralisk");
-        AIAttackWaveAddUnits4(0, 0, 3, 6, "Baneling");
-        AIAttackWaveAddUnits4(0, 0, 1, 1, "Overseer");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(6), "Roach");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(4), "Hydralisk");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Ultralisk");
+        AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(6), "Baneling");
+        AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Overseer");
         AIAttackWaveAddWaypoint(lv_attacker, PointFromId(250), false);
         AIAttackWaveAddWaypoint(lv_attacker, PointFromId(1009), false);
         AIAttackWaveSend(lv_attacker, 180, true);
@@ -4495,16 +4906,16 @@ bool gt_CombinedAttackWaves02_Func (bool testConds, bool runActions) {
     lv_attacker = gv_pLAYER_P04_ZERG_BL;
     if ((gf_PlayerCanAttack(lv_attacker) == true)) {
         if ((libNtve_gf_DifficultyValueInt(0, 0, 1, 1) == 1)) {
-            AIAttackWaveAddUnits4(0, 0, 2, 3, "Hydralisk");
-            AIAttackWaveAddUnits4(0, 0, 1, 1, "Infestor");
+            AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Hydralisk");
+            AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Infestor");
             AIAttackWaveAddWaypoint(lv_attacker, PointFromId(890), false);
             AIAttackWaveAddWaypoint(lv_attacker, PointFromId(1725), false);
             AIAttackWaveSend(lv_attacker, 200, false);
         }
 
-        AIAttackWaveAddUnits4(3, 3, 4, 6, "Mutalisk");
-        AIAttackWaveAddUnits4(1, 1, 2, 2, "BroodLord");
-        AIAttackWaveAddUnits4(0, 1, 1, 1, "Overseer");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(6), "Mutalisk");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "BroodLord");
+        AIAttackWaveAddUnits4(0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Overseer");
         AIAttackWaveAddWaypoint(lv_attacker, PointFromId(890), false);
         if ((libNtve_gf_DifficultyValueInt(1, 1, 0, 0) == 1)) {
             AIAttackWaveAddWaypoint(lv_attacker, PointFromId(1725), false);
@@ -4540,33 +4951,33 @@ bool gt_CombinedAttackWaves03_Func (bool testConds, bool runActions) {
 
     lv_attacker = gv_pLAYER_P06_ZERG_TR;
     if ((gf_PlayerCanAttack(lv_attacker) == true)) {
-        AIAttackWaveAddUnits4(8, 8, 10, 12, "Zergling");
-        AIAttackWaveAddUnits4(0, 0, 1, 2, "Roach");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(10), libB27CC4B1_gf_CurseAttackWaveModifier(12), "Zergling");
+        AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Roach");
         AIAttackWaveAddWaypoint(lv_attacker, PointFromId(1009), false);
         AIAttackWaveSend(lv_attacker, 120, false);
-        AIAttackWaveAddUnits4(4, 4, 5, 7, "Mutalisk");
-        AIAttackWaveAddUnits4(1, 1, 1, 2, "Overseer");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(7), "Mutalisk");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Overseer");
         AIAttackWaveAddWaypoint(lv_attacker, PointFromId(1743), false);
         AIAttackWaveSend(lv_attacker, 160, true);
     }
 
     lv_attacker = gv_pLAYER_P03_ZERG_BR;
     if ((gf_PlayerCanAttack(lv_attacker) == true)) {
-        AIAttackWaveAddUnits4(2, 2, 3, 0, "Hydralisk");
-        AIAttackWaveAddUnits4(3, 3, 5, 13, "Mutalisk");
-        AIAttackWaveAddUnits4(1, 1, 2, 2, "Corruptor");
-        AIAttackWaveAddUnits4(1, 1, 1, 2, "Overseer");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), 0, "Hydralisk");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(13), "Mutalisk");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Corruptor");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Overseer");
         AIAttackWaveAddWaypoint(lv_attacker, PointFromId(1725), false);
         AIAttackWaveSend(lv_attacker, 180, true);
     }
 
     lv_attacker = gv_pLAYER_P05_ZERG_TL;
     if ((gf_PlayerCanAttack(lv_attacker) == true)) {
-        AIAttackWaveAddUnits4(14, 14, 20, 12, "Zergling");
-        AIAttackWaveAddUnits4(0, 0, 1, 0, "Roach");
-        AIAttackWaveAddUnits4(2, 2, 3, 5, "Hydralisk");
-        AIAttackWaveAddUnits4(1, 1, 2, 3, "Ultralisk");
-        AIAttackWaveAddUnits4(1, 1, 1, 2, "Overseer");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(14), libB27CC4B1_gf_CurseAttackWaveModifier(14), libB27CC4B1_gf_CurseAttackWaveModifier(20), libB27CC4B1_gf_CurseAttackWaveModifier(12), "Zergling");
+        AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), 0, "Roach");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(5), "Hydralisk");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Ultralisk");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Overseer");
         AIAttackWaveAddWaypoint(lv_attacker, PointFromId(250), false);
         AIAttackWaveAddWaypoint(lv_attacker, PointFromId(1009), false);
         AIAttackWaveSend(lv_attacker, 180, true);
@@ -4574,11 +4985,11 @@ bool gt_CombinedAttackWaves03_Func (bool testConds, bool runActions) {
 
     lv_attacker = gv_pLAYER_P04_ZERG_BL;
     if ((gf_PlayerCanAttack(lv_attacker) == true)) {
-        AIAttackWaveAddUnits4(2, 2, 4, 3, "Mutalisk");
-        AIAttackWaveAddUnits4(2, 2, 3, 5, "BroodLord");
-        AIAttackWaveAddUnits4(0, 0, 0, 2, "Corruptor");
-        AIAttackWaveAddUnits4(1, 1, 1, 2, "Overseer");
-        AIAttackWaveAddUnits4(1, 1, 1, 1, "Infestor");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Mutalisk");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(5), "BroodLord");
+        AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(2), "Corruptor");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Overseer");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Infestor");
         AIAttackWaveAddWaypoint(lv_attacker, PointFromId(890), false);
         AIAttackWaveAddWaypoint(lv_attacker, PointFromId(1725), false);
         AIAttackWaveSend(lv_attacker, 190, true);
@@ -4610,16 +5021,16 @@ bool gt_CombinedAttackWavesLoop_Func (bool testConds, bool runActions) {
     lv_attacker = gv_pLAYER_P06_ZERG_TR;
     if ((gf_PlayerCanAttack(lv_attacker) == true)) {
         if ((gv_alternateLastWave == false)) {
-            AIAttackWaveAddUnits4(8, 8, 12, 26, "Zergling");
+            AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(12), libB27CC4B1_gf_CurseAttackWaveModifier(26), "Zergling");
             AIAttackWaveAddWaypoint(lv_attacker, PointFromId(1009), false);
             AIAttackWaveSend(lv_attacker, 140, false);
-            AIAttackWaveAddUnits4(6, 6, 8, 6, "Mutalisk");
-            AIAttackWaveAddUnits4(1, 1, 1, 2, "Overseer");
+            AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(6), libB27CC4B1_gf_CurseAttackWaveModifier(6), libB27CC4B1_gf_CurseAttackWaveModifier(8), 6, "Mutalisk");
+            AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Overseer");
             AIAttackWaveAddWaypoint(lv_attacker, PointFromId(1743), false);
         }
         else {
-            AIAttackWaveAddUnits4(3, 3, 6, 9, "Hydralisk");
-            AIAttackWaveAddUnits4(1, 1, 1, 2, "Overseer");
+            AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(6), libB27CC4B1_gf_CurseAttackWaveModifier(9), "Hydralisk");
+            AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Overseer");
             AIAttackWaveAddWaypoint(lv_attacker, PointFromId(1725), false);
         }
         AIAttackWaveSend(lv_attacker, 180, true);
@@ -4628,17 +5039,17 @@ bool gt_CombinedAttackWavesLoop_Func (bool testConds, bool runActions) {
     lv_attacker = gv_pLAYER_P03_ZERG_BR;
     if ((gf_PlayerCanAttack(lv_attacker) == true)) {
         if ((gv_alternateLastWave == false)) {
-            AIAttackWaveAddUnits4(3, 3, 5, 8, "Hydralisk");
-            AIAttackWaveAddUnits4(4, 4, 5, 3, "Mutalisk");
-            AIAttackWaveAddUnits4(1, 1, 2, 2, "Corruptor");
-            AIAttackWaveAddUnits4(0, 1, 1, 2, "Overseer");
+            AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(8), "Hydralisk");
+            AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Mutalisk");
+            AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Corruptor");
+            AIAttackWaveAddUnits4(0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Overseer");
             AIAttackWaveAddWaypoint(lv_attacker, PointFromId(890), false);
             AIAttackWaveAddWaypoint(lv_attacker, PointFromId(1725), false);
         }
         else {
-            AIAttackWaveAddUnits4(1, 1, 2, 3, "Ultralisk");
-            AIAttackWaveAddUnits4(4, 4, 7, 6, "Mutalisk");
-            AIAttackWaveAddUnits4(0, 1, 1, 2, "Overseer");
+            AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Ultralisk");
+            AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(7), libB27CC4B1_gf_CurseAttackWaveModifier(6), "Mutalisk");
+            AIAttackWaveAddUnits4(0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Overseer");
             AIAttackWaveAddWaypoint(lv_attacker, PointFromId(890), false);
             AIAttackWaveAddWaypoint(lv_attacker, PointFromId(1009), false);
         }
@@ -4648,20 +5059,20 @@ bool gt_CombinedAttackWavesLoop_Func (bool testConds, bool runActions) {
     lv_attacker = gv_pLAYER_P05_ZERG_TL;
     if ((gf_PlayerCanAttack(lv_attacker) == true)) {
         if ((gv_alternateLastWave == false)) {
-            AIAttackWaveAddUnits4(8, 8, 12, 18, "Zergling");
-            AIAttackWaveAddUnits4(2, 2, 3, 0, "Roach");
-            AIAttackWaveAddUnits4(2, 2, 3, 5, "Hydralisk");
-            AIAttackWaveAddUnits4(1, 1, 2, 3, "Ultralisk");
-            AIAttackWaveAddUnits4(1, 1, 1, 2, "Overseer");
+            AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(12), libB27CC4B1_gf_CurseAttackWaveModifier(18), "Zergling");
+            AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), 0, "Roach");
+            AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(5), "Hydralisk");
+            AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Ultralisk");
+            AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Overseer");
             AIAttackWaveAddWaypoint(lv_attacker, PointFromId(250), false);
             AIAttackWaveAddWaypoint(lv_attacker, PointFromId(1009), false);
         }
         else {
-            AIAttackWaveAddUnits4(8, 8, 12, 32, "Zergling");
-            AIAttackWaveAddUnits4(0, 0, 3, 8, "Baneling");
-            AIAttackWaveAddUnits4(0, 0, 1, 0, "Ultralisk");
-            AIAttackWaveAddUnits4(3, 3, 0, 0, "Roach");
-            AIAttackWaveAddUnits4(1, 1, 1, 2, "Overseer");
+            AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(12), libB27CC4B1_gf_CurseAttackWaveModifier(32), "Zergling");
+            AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(8), "Baneling");
+            AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), 0, "Ultralisk");
+            AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), 0, 0, "Roach");
+            AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Overseer");
             AIAttackWaveAddWaypoint(lv_attacker, PointFromId(250), false);
             AIAttackWaveAddWaypoint(lv_attacker, PointFromId(1009), false);
         }
@@ -4671,18 +5082,18 @@ bool gt_CombinedAttackWavesLoop_Func (bool testConds, bool runActions) {
     lv_attacker = gv_pLAYER_P04_ZERG_BL;
     if ((gf_PlayerCanAttack(lv_attacker) == true)) {
         if ((gv_alternateLastWave == false)) {
-            AIAttackWaveAddUnits4(5, 5, 7, 10, "Mutalisk");
-            AIAttackWaveAddUnits4(1, 1, 2, 3, "BroodLord");
-            AIAttackWaveAddUnits4(1, 1, 1, 2, "Overseer");
+            AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(7), libB27CC4B1_gf_CurseAttackWaveModifier(10), "Mutalisk");
+            AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "BroodLord");
+            AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Overseer");
             AIAttackWaveAddWaypoint(lv_attacker, PointFromId(890), false);
             AIAttackWaveAddWaypoint(lv_attacker, PointFromId(1725), false);
         }
         else {
-            AIAttackWaveAddUnits4(4, 8, 16, 20, "Zergling");
-            AIAttackWaveAddUnits4(2, 2, 3, 5, "Hydralisk");
-            AIAttackWaveAddUnits4(1, 1, 2, 3, "Ultralisk");
-            AIAttackWaveAddUnits4(1, 1, 1, 2, "Overseer");
-            AIAttackWaveAddUnits4(1, 1, 1, 1, "Infestor");
+            AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(16), libB27CC4B1_gf_CurseAttackWaveModifier(20), "Zergling");
+            AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Hydralisk");
+            AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Ultralisk");
+            AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Overseer");
+            AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Infestor");
             AIAttackWaveAddWaypoint(lv_attacker, PointFromId(890), false);
             AIAttackWaveAddWaypoint(lv_attacker, PointFromId(1725), false);
         }
@@ -4921,6 +5332,11 @@ bool gt_VictoryDestroySpacePlatformsCompleted_Func (bool testConds, bool runActi
     TriggerEnable(TriggerGetCurrent(), false);
     gv_gameOver = true;
     TriggerExecute(gt_ObjectiveDestroyCoolantTowersComplete, true, false);
+    libB27CC4B1_gv_rogueAllMissions[8] = true;
+    libB27CC4B1_gf_TalentTime(2, false, 0, 0);
+    libB27CC4B1_gf_CurseDifficultyModifier(3);
+    libB27CC4B1_gf_CurseDifficultyModifier(4);
+    libB27CC4B1_gf_RogueEnding();
     libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
     return true;
 }
@@ -5231,6 +5647,7 @@ bool gt_ObjectiveKillLeviathanComplete_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
+    libB27CC4B1_gf_TalentBonusObjectiveTrigger();
     TriggerExecute(gt_ObjectiveKillLeviathanCreateQ, true, false);
     libWCMI_gf_ZS_SetMissionObjectiveState("TValerian02B_2", libWoLC_ge_MissionObjectiveState_Completed);
     Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
@@ -5483,10 +5900,12 @@ bool gt_MidPlatformsQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerQueueEnter();
+    TriggerExecute(libB27CC4B1_gt_TableButtonsHide, true, true);
     TriggerExecute(gt_MidPlatformsSetup, true, true);
     TriggerExecute(gt_MidPlatformsCinematic, true, true);
     TriggerExecute(gt_MidPlatformsCinematicEnd, true, true);
     TriggerExecute(gt_MidPlatformsCleanup, true, true);
+    TriggerExecute(libB27CC4B1_gt_TableButtonsShow, true, true);
     TriggerQueueExit();
     return true;
 }
@@ -6414,14 +6833,20 @@ bool gt_MidLeviathanQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
+    if ((libB27CC4B1_gf_TalentAcquired("ChallengeChar2SS") == true)) {
+        return true;
+    }
+
     while (!((gf_PlayerIsInCombat(gv_pLAYER_P01_USER) == false))) {
         Wait(1.0, c_timeGame);
     }
     TriggerQueueEnter();
+    TriggerExecute(libB27CC4B1_gt_TableButtonsHide, true, true);
     TriggerExecute(gt_MidLeviathanSetup, true, true);
     TriggerExecute(gt_MidLeviathanCinematic, true, true);
     TriggerExecute(gt_MidLeviathanCinematicEnd, true, true);
     TriggerExecute(gt_MidLeviathanCleanup, true, true);
+    TriggerExecute(libB27CC4B1_gt_TableButtonsShow, true, true);
     TriggerQueueExit();
     return true;
 }
@@ -6679,6 +7104,7 @@ bool gt_VictoryQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerQueueEnter();
+    TriggerExecute(libB27CC4B1_gt_TableButtonsHide, true, true);
     TriggerExecute(gt_VictorySetup, true, true);
     TriggerExecute(gt_VictoryCinematic, true, true);
     TriggerExecute(gt_VictoryCinematicEnd, true, true);
@@ -7188,6 +7614,12 @@ void InitTriggers () {
     gt_MutaSpawnersN23_Init();
     gt_MutaSpawnersI2_Init();
     gt_MutaSpawnersI3_Init();
+    gt_ChallengeLeviathanController_Init();
+    gt_ChallengeSendLeviathan_Init();
+    gt_LeviathanSpawnsMutas2_Init();
+    gt_ChallengeLeviathanMutaCatcher_Init();
+    gt_ChallengeLeviathanMutaAI_Init();
+    gt_ChallengeLeviathanDead_Init();
     gt_ResourcePickups_Init();
     gt_PlatformLinesFirstTowerQ_Init();
     gt_PlatformLinesBRAQ_Init();

@@ -7,10 +7,10 @@
 //==================================================================================================
 include "TriggerLibs/NativeLib"
 include "TriggerLibs/LibertyLib"
-include "LibEA0820A1"
 include "LibCamp"
 include "LibWoLC"
 include "LibWCMI"
+include "LibB27CC4B1"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -18,10 +18,10 @@ include "LibWCMI"
 void InitLibs () {
     libNtve_InitLib();
     libLbty_InitLib();
-    libEA0820A1_InitLib();
     libCamp_InitLib();
     libWoLC_InitLib();
     libWCMI_InitLib();
+    libB27CC4B1_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -80,6 +80,7 @@ int gv_mineGuardsState;
 unit gv_marineTaunter;
 bool gv_lowerAnimation;
 revealer gv_artifactRevealer;
+int gv_challengeStormCounter;
 actor gv_commandCenterPing;
 actor gv_barracksPing;
 actor gv_geyserPing;
@@ -91,6 +92,7 @@ int gv_medicsTrained;
 int gv_palletsCollected;
 int gv_numberOfPallets;
 bool gv_barracksBuilt;
+bool gv_achievementDeathless;
 int gv_dominionBasePing;
 int gv_rebelPing;
 bool gv_victoryCinematicCompleted;
@@ -107,6 +109,7 @@ void InitGlobals () {
     gv_mineGuardGroup = UnitGroupEmpty();
     gv_mineGuardsState = ge_PRESET_MineGuardsState_Inactive;
     gv_lowerAnimation = true;
+    gv_challengeStormCounter = 1;
     gv_achievementHardTimer = TimerCreate();
     gv_dominionBasePing = c_invalidPingId;
     gv_rebelPing = c_invalidPingId;
@@ -187,6 +190,7 @@ trigger gt_MinerLeft;
 trigger gt_MinerTop;
 trigger gt_MinerRight;
 trigger gt_MinerDespawn;
+trigger gt_ChallengeStorms;
 trigger gt_StartAI;
 trigger gt_StartUpgradesH;
 trigger gt_StartUpgradesI;
@@ -208,6 +212,7 @@ trigger gt_SupplyTipQ;
 trigger gt_StatMedicTrained;
 trigger gt_StatBarracksBuilt;
 trigger gt_ResourcePalletPickups;
+trigger gt_AchievementFailed;
 trigger gt_DefeatBaseDead;
 trigger gt_VictoryDominionOutpostCompleted;
 trigger gt_Victory;
@@ -346,7 +351,6 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     }
 
     libWoLC_gf_ULoadCampaignData("TRaynor02");
-    TriggerExecute(libEA0820A1_gt_Init00ReplaceUnit, true, true);
     TriggerExecute(gt_Init01Technology, true, true);
     TriggerExecute(gt_Init02Players, true, true);
     TriggerExecute(gt_Init03Units, true, true);
@@ -355,6 +359,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init06Difficulties, true, true);
     TriggerExecute(gt_Init07Help, true, true);
     libWoLC_gf_RegisterFootageRecording(gt_BriefingQ);
+    TriggerExecute(libB27CC4B1_gt_RogueInit, true, true);
     TriggerExecute(gt_IntroSequence, true, false);
     return true;
 }
@@ -398,7 +403,7 @@ bool gt_Init02Players_Func (bool testConds, bool runActions) {
 
     libNtve_gf_SetAlliance(gv_pLAYER_01_USER, gv_pLAYER_02_DOMINION, libNtve_ge_AllianceSetting_Enemy);
     libNtve_gf_SetAlliance(gv_pLAYER_01_USER, gv_pLAYER_03_COLONISTS, libNtve_ge_AllianceSetting_Neutral);
-    libNtve_gf_SetAlliance(gv_pLAYER_01_USER, gv_pLAYER_04_REBELS, libNtve_ge_AllianceSetting_Neutral);
+    libNtve_gf_SetAlliance(gv_pLAYER_01_USER, gv_pLAYER_04_REBELS, libNtve_ge_AllianceSetting_Ally);
     libNtve_gf_SetAlliance(gv_pLAYER_01_USER, gv_pLAYER_05_PATROL, libNtve_ge_AllianceSetting_Enemy);
     libNtve_gf_SetAlliance(gv_pLAYER_02_DOMINION, gv_pLAYER_03_COLONISTS, libNtve_ge_AllianceSetting_Neutral);
     libNtve_gf_SetAlliance(gv_pLAYER_02_DOMINION, gv_pLAYER_04_REBELS, libNtve_ge_AllianceSetting_Enemy);
@@ -757,6 +762,7 @@ bool gt_IntroSequence_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_StartUpgradesH, true, false);
     TriggerExecute(gt_StartUpgradesI, true, false);
     Wait(0.1, c_timeReal);
+    TriggerExecute(libB27CC4B1_gt_InitTableButtons, true, false);
     UnitSelect(UnitGroupUnit(UnitGroup("CommandCenter", gv_pLAYER_01_USER, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), 1), gv_pLAYER_01_USER, true);
     UIAlertUnit("Trigger", gv_pLAYER_01_USER, StringToText(""), null, UnitFromId(18));
     VisExploreArea(gv_pLAYER_01_USER, RegionFromId(23), true, false);
@@ -766,6 +772,7 @@ bool gt_IntroSequence_Func (bool testConds, bool runActions) {
     libNtve_gf_GlobalCinematicSetting(false);
     libNtve_gf_SwooshCamera(gv_pLAYER_01_USER, ((CameraInfoGetValue(CameraInfoDefault(), c_cameraValueDistance)) + 8.0), CameraInfoGetValue(CameraInfoDefault(), c_cameraValueDistance), CameraInfoGetTarget(CameraInfoFromId(1117)), 1.5);
     CinematicFade(true, 1.5, c_fadeStyleNormal, ColorWithAlpha(0.00, 0.00, 0.00, 0.00), 0.0, true);
+    libB27CC4B1_gf_ChallengeTime("ChallengeRaynor2");
     TriggerExecute(gt_StartGame, true, false);
     return true;
 }
@@ -1958,9 +1965,9 @@ bool gt_RebelsCompleteQ_Func (bool testConds, bool runActions) {
     for (;; autoCE1A535E_u -= 1) {
         autoCE1A535E_var = UnitGroupUnitFromEnd(autoCE1A535E_g, autoCE1A535E_u);
         if (autoCE1A535E_var == null) { break; }
-        libNtve_gf_RescueUnit(autoCE1A535E_var, gv_pLAYER_01_USER, true);
-        if ((UnitGetType(autoCE1A535E_var) == "Marine")) {
-            UnitGroupAdd(gv_marinesRescued, autoCE1A535E_var);
+        libB27CC4B1_gf_RescueUnitWithUpgrades(autoCE1A535E_var);
+        if ((UnitGetType(libB27CC4B1_gv_lastRescuedUnit) == "Marine")) {
+            UnitGroupAdd(gv_marinesRescued, libB27CC4B1_gv_lastRescuedUnit);
         }
 
     }
@@ -3018,9 +3025,15 @@ bool gt_BunkerDeathQ_Func (bool testConds, bool runActions) {
 
     lv_tempPoint = UnitGetPosition(EventUnit());
     while (true) {
+        if ((gv_achievementDeathless == false)) {
+            libB27CC4B1_gf_AchievementAward(44);
+        }
+
         Wait(1.0, c_timeGame);
         if ((UnitGroupCount(UnitGroup(null, gv_pLAYER_02_DOMINION, RegionCircle(lv_tempPoint, 6.0), UnitFilter(0, 0, (1 << c_targetFilterStructure) | (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) == 0)) {
             TriggerQueueEnter();
+            libB27CC4B1_gf_TalentTime(1, false, 0, 0);
+            libB27CC4B1_gf_CurseDifficultyModifier(2);
             libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
             libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
             // Transmission - SoundLink("TRaynor02Tychus00009", 0)
@@ -3458,6 +3471,45 @@ void gt_MinerDespawn_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: Challenge - Storms
+//--------------------------------------------------------------------------------------------------
+bool gt_ChallengeStorms_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((libB27CC4B1_gf_TalentAcquired("ChallengeRaynor2") == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    if ((gv_challengeStormCounter == libNtve_gf_DifficultyValueInt(15, 10, 8, 6))) {
+        gv_challengeStormCounter = 1;
+        if ((UnitGroupCount(UnitGroup(null, gv_pLAYER_01_USER, RegionFromId(7), UnitFilter(0, 0, (1 << c_targetFilterStructure) | (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) >= 1)) {
+            UnitCreateEffectPoint(UnitFromId(815176968), "PsiStormPremarker", UnitGetPosition(UnitGroupRandomUnit(UnitGroup(null, gv_pLAYER_01_USER, RegionFromId(7), UnitFilter(0, 0, (1 << c_targetFilterStructure) | (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive)));
+        }
+        else {
+            UnitCreateEffectPoint(UnitFromId(815176968), "PsiStormPremarker", RegionRandomPoint(RegionFromId(7)));
+        }
+    }
+    else {
+        gv_challengeStormCounter += 1;
+        UnitCreateEffectPoint(UnitFromId(815176968), "PsiStormPremarker", RegionRandomPoint(RegionFromId(7)));
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ChallengeStorms_Init () {
+    gt_ChallengeStorms = TriggerCreate("gt_ChallengeStorms_Func");
+    TriggerAddEventTimePeriodic(gt_ChallengeStorms, 1.5, c_timeAI);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: Start AI
 //--------------------------------------------------------------------------------------------------
 bool gt_StartAI_Func (bool testConds, bool runActions) {
@@ -3560,33 +3612,33 @@ bool gt_DominionAttackWaves_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     gf_SetAttackWaveParameters();
-    AIAttackWaveAddUnits4(0, 2, 4, 5, "Marine");
+    AIAttackWaveAddUnits4(0, libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(5), "Marine");
     AIAttackWaveSend(gv_pLAYER_02_DOMINION, libNtve_gf_DifficultyValueInt(400, 400, 225, 180), true);
     gf_SetAttackWaveParameters();
-    AIAttackWaveAddUnits4(0, 2, 6, 7, "Marine");
-    AIAttackWaveAddUnits4(0, 0, 0, 1, "Medic");
+    AIAttackWaveAddUnits4(0, libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(6), libB27CC4B1_gf_CurseAttackWaveModifier(7), "Marine");
+    AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "Medic");
     AIAttackWaveSend(gv_pLAYER_02_DOMINION, libNtve_gf_DifficultyValueInt(400, 400, 210, 180), true);
     gf_SetAttackWaveParameters();
-    AIAttackWaveAddUnits4(0, 2, 7, 8, "Marine");
-    AIAttackWaveAddUnits4(0, 0, 2, 3, "Medic");
+    AIAttackWaveAddUnits4(0, libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(7), libB27CC4B1_gf_CurseAttackWaveModifier(8), "Marine");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Medic");
     AIAttackWaveSend(gv_pLAYER_02_DOMINION, libNtve_gf_DifficultyValueInt(400, 400, 210, 180), true);
     gf_SetAttackWaveParameters();
-    AIAttackWaveAddUnits4(0, 2, 0, 0, "Marine");
-    AIAttackWaveAddUnits4(0, 0, 3, 5, "Hellion");
+    AIAttackWaveAddUnits4(0, libB27CC4B1_gf_CurseAttackWaveModifier(2), 0, 0, "Marine");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(5), "Hellion");
     AIAttackWaveSend(gv_pLAYER_02_DOMINION, libNtve_gf_DifficultyValueInt(400, 400, 210, 180), true);
     gf_SetAttackWaveParameters();
-    AIAttackWaveAddUnits4(0, 2, 9, 11, "Marine");
-    AIAttackWaveAddUnits4(0, 0, 3, 4, "Medic");
+    AIAttackWaveAddUnits4(0, libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(9), libB27CC4B1_gf_CurseAttackWaveModifier(11), "Marine");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(4), "Medic");
     AIAttackWaveSend(gv_pLAYER_02_DOMINION, libNtve_gf_DifficultyValueInt(400, 400, 180, 150), true);
     while (true) {
         gf_SetAttackWaveParameters();
-        AIAttackWaveAddUnits4(0, 2, 8, 9, "Marine");
-        AIAttackWaveAddUnits4(0, 0, 3, 4, "Hellion");
+        AIAttackWaveAddUnits4(0, libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(9), "Marine");
+        AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(4), "Hellion");
         AIAttackWaveSend(gv_pLAYER_02_DOMINION, libNtve_gf_DifficultyValueInt(400, 400, 210, 180), true);
         gf_SetAttackWaveParameters();
-        AIAttackWaveAddUnits4(0, 2, 7, 8, "Marine");
-        AIAttackWaveAddUnits4(0, 0, 2, 2, "Medic");
-        AIAttackWaveAddUnits4(0, 0, 2, 3, "Hellion");
+        AIAttackWaveAddUnits4(0, libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(7), libB27CC4B1_gf_CurseAttackWaveModifier(8), "Marine");
+        AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Medic");
+        AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Hellion");
         AIAttackWaveSend(gv_pLAYER_02_DOMINION, libNtve_gf_DifficultyValueInt(400, 400, 210, 180), true);
     }
     return true;
@@ -4190,6 +4242,34 @@ void gt_ResourcePalletPickups_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: Achievement Failed
+//--------------------------------------------------------------------------------------------------
+bool gt_AchievementFailed_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetOwner(EventUnit()) == 1))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    gv_achievementDeathless = true;
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_AchievementFailed_Init () {
+    gt_AchievementFailed = TriggerCreate("gt_AchievementFailed_Func");
+    TriggerAddEventUnitDied(gt_AchievementFailed, null);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: Defeat Base Dead
 //--------------------------------------------------------------------------------------------------
 bool gt_DefeatBaseDead_Func (bool testConds, bool runActions) {
@@ -4254,7 +4334,11 @@ bool gt_VictoryDominionOutpostCompleted_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     gv_gameOver = true;
+    libB27CC4B1_gf_TalentTime(2, false, 0, 0);
+    libB27CC4B1_gf_CurseDifficultyModifier(3);
+    libB27CC4B1_gf_CurseDifficultyModifier(4);
     TriggerExecute(gt_ObjectiveDestroytheDominionBaseComplete, true, true);
+    libB27CC4B1_gf_RogueEnding();
     libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
     return true;
 }
@@ -4551,6 +4635,8 @@ bool gt_ObjectiveRebelsComplete_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
+    libB27CC4B1_gf_TalentBonusObjectiveTrigger();
+    libB27CC4B1_gf_TalentTime(1, false, 0, 0);
     TriggerExecute(gt_ObjectiveRebelsCreate, true, false);
     libWCMI_gf_ZS_SetMissionObjectiveState("TRaynor02_2", libWoLC_ge_MissionObjectiveState_Completed);
     PingDestroy(gv_rebelPing);
@@ -4769,6 +4855,7 @@ bool gt_VictoryQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerQueueEnter();
+    TriggerExecute(libB27CC4B1_gt_TableButtonsHide, true, true);
     TriggerExecute(gt_VictorySetup, true, true);
     TriggerExecute(gt_VictoryCinematic, true, true);
     TriggerExecute(gt_VictoryCinematicEnd, true, true);
@@ -5128,6 +5215,7 @@ void InitTriggers () {
     gt_MinerTop_Init();
     gt_MinerRight_Init();
     gt_MinerDespawn_Init();
+    gt_ChallengeStorms_Init();
     gt_StartAI_Init();
     gt_StartUpgradesH_Init();
     gt_StartUpgradesI_Init();
@@ -5149,6 +5237,7 @@ void InitTriggers () {
     gt_StatMedicTrained_Init();
     gt_StatBarracksBuilt_Init();
     gt_ResourcePalletPickups_Init();
+    gt_AchievementFailed_Init();
     gt_DefeatBaseDead_Init();
     gt_VictoryDominionOutpostCompleted_Init();
     gt_Victory_Init();

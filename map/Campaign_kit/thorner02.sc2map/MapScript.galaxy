@@ -7,10 +7,10 @@
 //==================================================================================================
 include "TriggerLibs/NativeLib"
 include "TriggerLibs/LibertyLib"
-include "LibEA0820A1"
 include "LibCamp"
 include "LibWoLC"
 include "LibWCMI"
+include "LibB27CC4B1"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -18,10 +18,10 @@ include "LibWCMI"
 void InitLibs () {
     libNtve_InitLib();
     libLbty_InitLib();
-    libEA0820A1_InitLib();
     libCamp_InitLib();
     libWoLC_InitLib();
     libWCMI_InitLib();
+    libB27CC4B1_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -36,6 +36,7 @@ const int gv_p06_JUNKERS = 6;
 const int gv_p07_DERELICT_STRUCTURES = 7;
 const int gv_p08_RAYNOR_COMP = 8;
 const int gv_p09_PROTOSS_RELICS = 9;
+const int gv_p10_CHALLENGE = 10;
 
 //--------------------------------------------------------------------------------------------------
 // Global Variables
@@ -79,6 +80,8 @@ actor gv_respawnSalvagePingActor2;
 actor gv_respawnSalvagePingActor1;
 actor gv_salvagePingActor;
 region gv_respawnableSalvage;
+unitgroup gv_challengeSilos;
+unitgroup gv_challengeGhosts;
 int gv_achievementSCVsTrained;
 int gv_spiderMineKillCount;
 int gv_mineralsHarvested;
@@ -115,6 +118,8 @@ void InitGlobals () {
     gv_huge_Scrap_2 = UnitGroupEmpty();
     gv_huge_Scrap_3 = UnitGroupEmpty();
     gv_respawnSalvagePingUnits = UnitGroupEmpty();
+    gv_challengeSilos = UnitGroupEmpty();
+    gv_challengeGhosts = UnitGroupEmpty();
     gv_primaryObjectiveBuyContract = c_invalidObjectiveId;
     gv_primaryObjectiveDestroyOrlan = c_invalidObjectiveId;
     gv_bonusObjectiveFindContraband = c_invalidObjectiveId;
@@ -137,11 +142,11 @@ void gf_GhostNukeEm (unit lp_nuker, point lp_nukeTarget, point lp_retreatTo);
 void gf_OrlanAttackWaveWaypointWest ();
 void gf_OrlanAttackWaveWaypointEast ();
 void gf_TryRemoveRespawnSalvagePings (unit lp_scrap);
+void gf_CreateChallengeGhost ();
 
 //--------------------------------------------------------------------------------------------------
 // Trigger Variables
 //--------------------------------------------------------------------------------------------------
-trigger gt_OnPlayer1GetUnit;
 trigger gt_Initialization;
 trigger gt_Init01Technology;
 trigger gt_Init02Players;
@@ -153,6 +158,7 @@ trigger gt_Init07Help;
 trigger gt_IntroSequence;
 trigger gt_StartGameStage1;
 trigger gt_StartGameStage2;
+trigger gt_MidTalents;
 trigger gt_IntroLanding;
 trigger gt_ChangeOwnerofIntroStructures;
 trigger gt_ChangeOwnerofPreplacedStructures;
@@ -220,6 +226,9 @@ trigger gt_TransmissionOrlanHalfwayDoneQ;
 trigger gt_TransmissionOrlanAlmostDoneQ;
 trigger gt_TransmissionContractHalfFilledQ;
 trigger gt_TransmissionContractAlmostFilledQ;
+trigger gt_SpawnGhosts;
+trigger gt_ArmSilos;
+trigger gt_GhostNukeOrder;
 trigger gt_CampaignTipsQ;
 trigger gt_MercenaryContractTipQ;
 trigger gt_NewUnitVultureTipQ;
@@ -418,24 +427,21 @@ void gf_TryRemoveRespawnSalvagePings (unit lp_scrap) {
 
 }
 
-//--------------------------------------------------------------------------------------------------
-// Trigger: OnPlayer1GetUnit
-//--------------------------------------------------------------------------------------------------
-bool gt_OnPlayer1GetUnit_Func (bool testConds, bool runActions) {
+void gf_CreateChallengeGhost () {
+    // Variable Declarations
+    unit lv_ghost;
+
     // Automatic Variable Declarations
-    // Actions
-    if (!runActions) {
-        return true;
-    }
+    // Variable Initialization
 
-    TriggerExecute(libEA0820A1_gt_Init00ReplaceUnit, true, true);
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void gt_OnPlayer1GetUnit_Init () {
-    gt_OnPlayer1GetUnit = TriggerCreate("gt_OnPlayer1GetUnit_Func");
-    TriggerAddEventUnitChangeOwner(gt_OnPlayer1GetUnit, null);
+    // Implementation
+    UnitCreate(1, "Ghost", 0, gv_p10_CHALLENGE, RegionRandomPoint(RegionFromId(30)), libNtve_gf_RandomAngle());
+    lv_ghost = UnitLastCreated();
+    UnitGroupAdd(gv_challengeGhosts, lv_ghost);
+    libWCMI_gf_CreateDropPod(libWCMI_ge_DropPodRace_Terran, UnitGetPosition(lv_ghost), libNtve_gf_ConvertUnitToUnitGroup(lv_ghost), true, gv_p10_CHALLENGE);
+    UnitIssueOrder(lv_ghost, Order(AbilityCommand("GhostCloak", 0)), c_orderQueueReplace);
+    AISetUnitScriptControlled(lv_ghost, false);
+    AISetUnitSuicide(lv_ghost, true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -449,7 +455,6 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     }
 
     libWoLC_gf_ULoadCampaignData("THorner02");
-    TriggerExecute(libEA0820A1_gt_Init00ReplaceUnit, true, true);
     TriggerExecute(gt_Init01Technology, true, true);
     TriggerExecute(gt_Init02Players, true, true);
     TriggerExecute(gt_Init03Units, true, true);
@@ -458,6 +463,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init06Difficulties, true, true);
     TriggerExecute(gt_Init07Help, true, true);
     libWoLC_gf_RegisterFootageRecording(gt_BriefingQ);
+    TriggerExecute(libB27CC4B1_gt_RogueInit, true, true);
     TriggerExecute(gt_IntroSequence, true, false);
     return true;
 }
@@ -481,6 +487,7 @@ bool gt_Init01Technology_Func (bool testConds, bool runActions) {
     libNtve_gf_SetUpgradeLevelForPlayer(gv_p02_ORLAN_ENEMY, "SiegeTech", 1);
     libNtve_gf_SetUpgradeLevelForPlayer(gv_p03_MIRA_HAN, "SiegeTech", 1);
     libNtve_gf_SetUpgradeLevelForPlayer(gv_p04_DOMINION, "PersonalCloaking", 1);
+    libNtve_gf_SetUpgradeLevelForPlayer(gv_p10_CHALLENGE, "PersonalCloaking", 1);
     return true;
 }
 
@@ -500,13 +507,14 @@ bool gt_Init02Players_Func (bool testConds, bool runActions) {
     }
 
     libNtve_gf_SetAlliance(gv_p01_USER, gv_p02_ORLAN_ENEMY, libNtve_ge_AllianceSetting_Enemy);
-    libNtve_gf_SetAlliance(gv_p01_USER, gv_p03_MIRA_HAN, libNtve_ge_AllianceSetting_Neutral);
+    libNtve_gf_SetAlliance(gv_p01_USER, gv_p03_MIRA_HAN, libNtve_ge_AllianceSetting_Ally);
     libNtve_gf_SetAlliance(gv_p01_USER, gv_p04_DOMINION, libNtve_ge_AllianceSetting_Enemy);
     libNtve_gf_SetAlliance(gv_p01_USER, gv_p05_SCRAP, libNtve_ge_AllianceSetting_Neutral);
     libNtve_gf_SetAlliance(gv_p01_USER, gv_p06_JUNKERS, libNtve_ge_AllianceSetting_Neutral);
     libNtve_gf_SetAlliance(gv_p01_USER, gv_p07_DERELICT_STRUCTURES, libNtve_ge_AllianceSetting_Neutral);
     libNtve_gf_SetAlliance(gv_p01_USER, gv_p08_RAYNOR_COMP, libNtve_ge_AllianceSetting_AllyWithSharedVision);
     libNtve_gf_SetAlliance(gv_p01_USER, gv_p09_PROTOSS_RELICS, libNtve_ge_AllianceSetting_Neutral);
+    libNtve_gf_SetAlliance(gv_p01_USER, gv_p10_CHALLENGE, libNtve_ge_AllianceSetting_Enemy);
     libNtve_gf_SetAlliance(gv_p02_ORLAN_ENEMY, gv_p03_MIRA_HAN, libNtve_ge_AllianceSetting_Neutral);
     libNtve_gf_SetAlliance(gv_p02_ORLAN_ENEMY, gv_p04_DOMINION, libNtve_ge_AllianceSetting_AllyWithSharedVisionAndPushable);
     libNtve_gf_SetAlliance(gv_p02_ORLAN_ENEMY, gv_p08_RAYNOR_COMP, libNtve_ge_AllianceSetting_Neutral);
@@ -514,21 +522,27 @@ bool gt_Init02Players_Func (bool testConds, bool runActions) {
     libNtve_gf_SetAlliance(gv_p02_ORLAN_ENEMY, gv_p06_JUNKERS, libNtve_ge_AllianceSetting_Neutral);
     libNtve_gf_SetAlliance(gv_p02_ORLAN_ENEMY, gv_p07_DERELICT_STRUCTURES, libNtve_ge_AllianceSetting_Neutral);
     libNtve_gf_SetAlliance(gv_p02_ORLAN_ENEMY, gv_p09_PROTOSS_RELICS, libNtve_ge_AllianceSetting_Neutral);
+    libNtve_gf_SetAlliance(gv_p02_ORLAN_ENEMY, gv_p10_CHALLENGE, libNtve_ge_AllianceSetting_AllyWithSharedVisionAndPushable);
     libNtve_gf_SetAlliance(gv_p03_MIRA_HAN, gv_p04_DOMINION, libNtve_ge_AllianceSetting_Neutral);
     libNtve_gf_SetAlliance(gv_p03_MIRA_HAN, gv_p05_SCRAP, libNtve_ge_AllianceSetting_Neutral);
     libNtve_gf_SetAlliance(gv_p03_MIRA_HAN, gv_p06_JUNKERS, libNtve_ge_AllianceSetting_Neutral);
     libNtve_gf_SetAlliance(gv_p03_MIRA_HAN, gv_p07_DERELICT_STRUCTURES, libNtve_ge_AllianceSetting_Neutral);
     libNtve_gf_SetAlliance(gv_p03_MIRA_HAN, gv_p08_RAYNOR_COMP, libNtve_ge_AllianceSetting_Neutral);
     libNtve_gf_SetAlliance(gv_p03_MIRA_HAN, gv_p09_PROTOSS_RELICS, libNtve_ge_AllianceSetting_Neutral);
+    libNtve_gf_SetAlliance(gv_p03_MIRA_HAN, gv_p10_CHALLENGE, libNtve_ge_AllianceSetting_Neutral);
     libNtve_gf_SetAlliance(gv_p04_DOMINION, gv_p05_SCRAP, libNtve_ge_AllianceSetting_Neutral);
     libNtve_gf_SetAlliance(gv_p04_DOMINION, gv_p06_JUNKERS, libNtve_ge_AllianceSetting_Neutral);
+    libNtve_gf_SetAlliance(gv_p04_DOMINION, gv_p10_CHALLENGE, libNtve_ge_AllianceSetting_AllyWithSharedVisionAndPushable);
     libNtve_gf_SetAlliance(gv_p05_SCRAP, gv_p06_JUNKERS, libNtve_ge_AllianceSetting_Neutral);
     libNtve_gf_SetAlliance(gv_p05_SCRAP, gv_p07_DERELICT_STRUCTURES, libNtve_ge_AllianceSetting_Neutral);
+    libNtve_gf_SetAlliance(gv_p05_SCRAP, gv_p10_CHALLENGE, libNtve_ge_AllianceSetting_Neutral);
     libNtve_gf_SetAlliance(gv_p06_JUNKERS, gv_p07_DERELICT_STRUCTURES, libNtve_ge_AllianceSetting_Neutral);
     libNtve_gf_SetAlliance(gv_p06_JUNKERS, gv_p08_RAYNOR_COMP, libNtve_ge_AllianceSetting_Neutral);
     libNtve_gf_SetAlliance(gv_p06_JUNKERS, gv_p09_PROTOSS_RELICS, libNtve_ge_AllianceSetting_Neutral);
+    libNtve_gf_SetAlliance(gv_p06_JUNKERS, gv_p10_CHALLENGE, libNtve_ge_AllianceSetting_Neutral);
     PlayerGroupAdd(gv_enemyPlayers, gv_p02_ORLAN_ENEMY);
     PlayerGroupAdd(gv_enemyPlayers, gv_p04_DOMINION);
+    PlayerGroupAdd(gv_enemyPlayers, gv_p10_CHALLENGE);
     PlayerGroupAdd(gv_miraHanPlayers, gv_p03_MIRA_HAN);
     PlayerModifyPropertyInt(gv_p01_USER, c_playerPropMinerals, c_playerPropOperSetTo, 400);
     PlayerModifyPropertyInt(gv_p01_USER, c_playerPropVespene, c_playerPropOperSetTo, 200);
@@ -599,6 +613,10 @@ bool gt_Init03Units_Func (bool testConds, bool runActions) {
     }
 
     libWCMI_gf_HandleMercCompound(UnitFromId(1054));
+    UnitGroupAdd(gv_challengeSilos, UnitFromId(807231310));
+    UnitGroupAdd(gv_challengeSilos, UnitFromId(1019027854));
+    UnitGroupAdd(gv_challengeSilos, UnitFromId(1458611334));
+    UnitGroupAdd(gv_challengeSilos, UnitFromId(601154548));
     gv_ghostNukeSilo = UnitFromId(1327);
     UnitSetPropertyFixed(UnitFromId(1226), c_unitPropEnergyPercent, 100.0);
     libNtve_gf_ShowHideUnit(UnitFromId(1327), false);
@@ -933,6 +951,7 @@ bool gt_IntroSequence_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_StartAI, true, false);
     Wait(0.1, c_timeReal);
     TriggerExecute(gt_IntroLanding, true, false);
+    TriggerEnable(libB27CC4B1_gt_ResourcePickups, false);
     UIAlertPoint("Trigger", gv_p01_USER, StringToText(""), null, PointFromId(46));
     libNtve_gf_CinematicMode(false, PlayerGroupAll(), 1.5);
     libNtve_gf_GlobalCinematicSetting(false);
@@ -973,8 +992,10 @@ bool gt_StartGameStage1_Func (bool testConds, bool runActions) {
     PlayerPauseAllCooldowns(gv_p01_USER, false);
     PlayerPauseAllCharges(gv_p01_USER, false);
     SoundtrackPlay(PlayerGroupAll(), c_soundtrackCategoryMusic, "THorner02MusicIntro", c_soundtrackCueAny, c_soundtrackIndexAny, false);
+    TriggerExecute(libB27CC4B1_gt_InitTableButtons, true, true);
     TriggerExecute(gt_JunkersStart, true, false);
     Wait(2.0, c_timeReal);
+    libB27CC4B1_gf_ChallengeTime("ChallengeHorner2");
     TriggerExecute(gt_ObjectiveBuyContractCreateQ, true, true);
     TriggerExecute(gt_TransmissionRaynorIntroQ, true, false);
     Wait(6.0, c_timeReal);
@@ -987,6 +1008,7 @@ bool gt_StartGameStage1_Func (bool testConds, bool runActions) {
     Wait(5.0, c_timeGame);
     TriggerExecute(gt_TransmissionHornerTalksAboutPlanetQ, true, true);
     TriggerExecute(gt_ObjectiveFindContrabandCreateQ, true, false);
+    TriggerExecute(gt_SpawnGhosts, true, false);
     Wait(60.0, c_timeGame);
     TriggerExecute(gt_MiraHanGivesVulturestoPlayer, true, false);
     Wait(30.0, c_timeGame);
@@ -1020,6 +1042,7 @@ bool gt_StartGameStage2_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    TriggerExecute(gt_MidTalents, true, true);
     TriggerEnable(gt_OrlanRetributiveNuke, true);
     libLbty_gf_OrderWorkerstoGatherNearbyResources(RegionFromId(61), gv_p01_USER);
     MinimapPing(PlayerGroupAll(), PointFromId(47), 6.0, Color(0.00, 100.00, 0.00));
@@ -1041,6 +1064,34 @@ bool gt_StartGameStage2_Func (bool testConds, bool runActions) {
 //--------------------------------------------------------------------------------------------------
 void gt_StartGameStage2_Init () {
     gt_StartGameStage2 = TriggerCreate("gt_StartGameStage2_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Mid Talents
+//--------------------------------------------------------------------------------------------------
+bool gt_MidTalents_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    libB27CC4B1_gf_TalentTime(1, false, 0, 0);
+    libB27CC4B1_gf_CurseDifficultyModifier(2);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_MidTalents_Init () {
+    gt_MidTalents = TriggerCreate("gt_MidTalents_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1070,6 +1121,7 @@ bool gt_IntroLanding_Func (bool testConds, bool runActions) {
     UnitIssueOrder(UnitFromId(270), OrderTargetingPoint(AbilityCommand("FactoryLand", 0), PointFromId(275)), c_orderQueueReplace);
     UnitIssueOrder(UnitFromId(1056), OrderTargetingPoint(AbilityCommand("SpecOpsDropshipTransport", 2), RegionGetCenter(RegionFromId(4))), c_orderQueueReplace);
     UnitIssueOrder(UnitFromId(1056), OrderTargetingPoint(AbilityCommand("move", 0), PointFromId(100)), c_orderQueueAddToEnd);
+    libNtve_gf_MakeUnitUncommandable(UnitFromId(1056), true);
     libNtve_gf_ShareVisionofUnit(UnitFromId(1056), false, gv_p01_USER);
     Wait(17.0, c_timeGame);
     UnitRemove(UnitFromId(1056));
@@ -1106,10 +1158,10 @@ bool gt_ChangeOwnerofIntroStructures_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libNtve_gf_RescueUnit(EventUnit(), gv_p01_USER, true);
-    if ((UnitGetType(EventUnit()) == "CommandCenter")) {
-        UnitSetPropertyFixed(EventUnit(), c_unitPropEnergy, 50.0);
-        libWCMI_gf_SetWorkerRallyPointforNexus2(EventUnit());
+    libB27CC4B1_gf_RescueUnitWithUpgrades(EventUnit());
+    if ((UnitGetType(libB27CC4B1_gv_lastRescuedUnit) == "CommandCenter")) {
+        UnitSetPropertyFixed(libB27CC4B1_gv_lastRescuedUnit, c_unitPropEnergy, 50.0);
+        libWCMI_gf_SetWorkerRallyPointforNexus2(libB27CC4B1_gv_lastRescuedUnit);
     }
 
     TriggerExecute(gt_ChangeOwnerofPreplacedStructures, true, false);
@@ -1164,7 +1216,7 @@ bool gt_ChangeOwnerofPreplacedStructures_Func (bool testConds, bool runActions) 
         autoBD279A32_var = UnitGroupUnitFromEnd(autoBD279A32_g, autoBD279A32_u);
         if (autoBD279A32_var == null) { break; }
         libNtve_gf_PauseUnit(autoBD279A32_var, false);
-        libNtve_gf_RescueUnit(autoBD279A32_var, gv_p01_USER, true);
+        libB27CC4B1_gf_RescueUnitWithUpgrades(autoBD279A32_var);
     }
     return true;
 }
@@ -1203,7 +1255,7 @@ bool gt_ChangeOwnerofDropshipUnits_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libNtve_gf_RescueUnit(EventUnit(), gv_p01_USER, true);
+    libB27CC4B1_gf_RescueUnitWithUpgrades(EventUnit());
     return true;
 }
 
@@ -1259,7 +1311,6 @@ bool gt_ChangeOwnerofSCVs_Func (bool testConds, bool runActions) {
     for (;; autoE8678206_u -= 1) {
         autoE8678206_var = UnitGroupUnitFromEnd(autoE8678206_g, autoE8678206_u);
         if (autoE8678206_var == null) { break; }
-        libNtve_gf_RescueUnit(autoE8678206_var, gv_p01_USER, true);
         lv_targetMineralField = UnitGroupClosestToPoint(lv_introMinerals, UnitGetPosition(autoE8678206_var));
         UnitGroupRemove(lv_introMinerals, lv_targetMineralField);
         UnitIssueOrder(autoE8678206_var, OrderTargetingUnit(AbilityCommand("SCVHarvest", 0), lv_targetMineralField), c_orderQueueReplace);
@@ -1613,7 +1664,7 @@ bool gt_MiraHanGivesVulturestoPlayer_Func (bool testConds, bool runActions) {
     TriggerEnable(TriggerGetCurrent(), false);
     libNtve_gf_CreateUnitsAtPoint2(1, "Medivac", 0, gv_p03_MIRA_HAN, PointFromId(1242));
     lv_medivac = UnitLastCreated();
-    UnitCargoCreate(lv_medivac, "SquadVulture", 4);
+    UnitCargoCreate(lv_medivac, "Vulture", 4);
     libLbty_gf_OrderTransporttoUnloadAllthenDespawn(lv_medivac, PointFromId(1243), PointFromId(1242));
     Wait(6.0, c_timeGame);
     TriggerExecute(gt_TransmissionMiraHanGivesVulturesQ, true, true);
@@ -1644,7 +1695,7 @@ bool gt_ChangeOwnerofVultureDropshipUnits_Func (bool testConds, bool runActions)
             return false;
         }
 
-        if (!(((UnitGetType(EventUnit()) == "SquadVulture")))) {
+        if (!(((UnitGetType(EventUnit()) == "Vulture")))) {
             return false;
         }
     }
@@ -1654,7 +1705,7 @@ bool gt_ChangeOwnerofVultureDropshipUnits_Func (bool testConds, bool runActions)
         return true;
     }
 
-    libNtve_gf_RescueUnit(EventUnit(), gv_p01_USER, true);
+    libB27CC4B1_gf_RescueUnitWithUpgrades(EventUnit());
     return true;
 }
 
@@ -3451,6 +3502,7 @@ bool gt_StartAI_Func (bool testConds, bool runActions) {
 
     AICampaignStart(gv_p02_ORLAN_ENEMY);
     AICampaignStart(gv_p03_MIRA_HAN);
+    AICampaignStart(gv_p10_CHALLENGE);
     AINearestTownBullyRebuild(gv_p02_ORLAN_ENEMY, true);
     TriggerExecute(gt_OrlanP02AttackWaves, true, false);
     return true;
@@ -3492,17 +3544,17 @@ bool gt_OrlanP02AttackWaves_Func (bool testConds, bool runActions) {
     AIAttackWaveSetGatherPoint(gv_p02_ORLAN_ENEMY, PointFromId(269));
     AIAttackWaveSetTargetPlayer(gv_p02_ORLAN_ENEMY, PlayerGroupSingle(gv_p01_USER));
     Wait(60.0, c_timeAI);
-    AIAttackWaveAddUnits4(3, 3, 5, 8, "Marine");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(8), "Marine");
     AIAttackWaveAddWaypoint(gv_p02_ORLAN_ENEMY, PointFromId(211), false);
     AIAttackWaveSend(gv_p02_ORLAN_ENEMY, 120, true);
     Wait(30.0, c_timeAI);
-    AIAttackWaveAddUnits4(5, 5, 6, 8, "Marine");
-    AIAttackWaveAddUnits4(1, 1, 2, 2, "Medic");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(6), libB27CC4B1_gf_CurseAttackWaveModifier(8), "Marine");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Medic");
     AIAttackWaveAddWaypoint(gv_p02_ORLAN_ENEMY, PointFromId(211), false);
     AIAttackWaveSend(gv_p02_ORLAN_ENEMY, 120, true);
     Wait(30.0, c_timeAI);
-    AIAttackWaveAddUnits4(6, 6, 7, 9, "Marine");
-    AIAttackWaveAddUnits4(1, 1, 2, 2, "Firebat");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(6), libB27CC4B1_gf_CurseAttackWaveModifier(6), libB27CC4B1_gf_CurseAttackWaveModifier(7), libB27CC4B1_gf_CurseAttackWaveModifier(9), "Marine");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Firebat");
     AIAttackWaveAddWaypoint(gv_p02_ORLAN_ENEMY, PointFromId(212), false);
     AIAttackWaveSend(gv_p02_ORLAN_ENEMY, 120, true);
     auto34130251_g = gv_enemyPlayers;
@@ -3517,10 +3569,10 @@ bool gt_OrlanP02AttackWaves_Func (bool testConds, bool runActions) {
         TechTreeUpgradeAddLevel(auto34130251_var, "TerranShipWeaponsLevel2", libNtve_gf_DifficultyValueInt(0, 0, 0, 1));
         TechTreeUpgradeAddLevel(auto34130251_var, "TerranVehicleWeaponsLevel2", libNtve_gf_DifficultyValueInt(0, 0, 0, 1));
     }
-    AIAttackWaveAddUnits4(6, 6, 7, 10, "Marine");
-    AIAttackWaveAddUnits4(1, 1, 0, 0, "Firebat");
-    AIAttackWaveAddUnits4(1, 1, 2, 3, "Medic");
-    AIAttackWaveAddUnits4(0, 0, 1, 1, "Goliath");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(6), libB27CC4B1_gf_CurseAttackWaveModifier(6), libB27CC4B1_gf_CurseAttackWaveModifier(7), libB27CC4B1_gf_CurseAttackWaveModifier(10), "Marine");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), 0, 0, "Firebat");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Medic");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Goliath");
     gf_OrlanAttackWaveWaypointEast();
     AIAttackWaveSend(gv_p02_ORLAN_ENEMY, 120, true);
     autoB5251DD6_g = gv_enemyPlayers;
@@ -3535,9 +3587,9 @@ bool gt_OrlanP02AttackWaves_Func (bool testConds, bool runActions) {
         TechTreeUpgradeAddLevel(autoB5251DD6_var, "TerranShipArmorsLevel2", libNtve_gf_DifficultyValueInt(0, 0, 0, 1));
         TechTreeUpgradeAddLevel(autoB5251DD6_var, "TerranVehicleArmorsLevel2", libNtve_gf_DifficultyValueInt(0, 0, 0, 1));
     }
-    AIAttackWaveAddUnits4(5, 5, 7, 14, "Marine");
-    AIAttackWaveAddUnits4(3, 3, 2, 2, "Firebat");
-    AIAttackWaveAddUnits4(0, 0, 1, 1, "Goliath");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(7), libB27CC4B1_gf_CurseAttackWaveModifier(14), "Marine");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Firebat");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Goliath");
     gf_OrlanAttackWaveWaypointWest();
     AIAttackWaveSend(gv_p02_ORLAN_ENEMY, 120, true);
     auto5DDEC14D_g = gv_enemyPlayers;
@@ -3552,34 +3604,34 @@ bool gt_OrlanP02AttackWaves_Func (bool testConds, bool runActions) {
         TechTreeUpgradeAddLevel(auto5DDEC14D_var, "TerranShipWeaponsLevel3", libNtve_gf_DifficultyValueInt(0, 0, 0, 1));
         TechTreeUpgradeAddLevel(auto5DDEC14D_var, "TerranVehicleWeaponsLevel3", libNtve_gf_DifficultyValueInt(0, 0, 0, 1));
     }
-    AIAttackWaveAddUnits4(6, 6, 8, 12, "Marine");
-    AIAttackWaveAddUnits4(1, 1, 1, 1, "SiegeTank");
-    AIAttackWaveAddUnits4(0, 0, 1, 2, "Goliath");
-    AIAttackWaveAddUnits4(0, 0, 1, 1, "Raven");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(6), libB27CC4B1_gf_CurseAttackWaveModifier(6), libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(12), "Marine");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "SiegeTank");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Goliath");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Raven");
     gf_OrlanAttackWaveWaypointWest();
     AIAttackWaveSend(gv_p02_ORLAN_ENEMY, 120, true);
     Wait(30.0, c_timeAI);
-    AIAttackWaveAddUnits4(7, 7, 9, 12, "Marine");
-    AIAttackWaveAddUnits4(2, 2, 3, 3, "Medic");
-    AIAttackWaveAddUnits4(1, 1, 1, 1, "Wraith");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(7), libB27CC4B1_gf_CurseAttackWaveModifier(7), libB27CC4B1_gf_CurseAttackWaveModifier(9), libB27CC4B1_gf_CurseAttackWaveModifier(12), "Marine");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Medic");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Wraith");
     gf_OrlanAttackWaveWaypointEast();
     AIAttackWaveSend(gv_p02_ORLAN_ENEMY, 120, true);
     while (true) {
         Wait(30.0, c_timeAI);
-        AIAttackWaveAddUnits4(8, 8, 9, 10, "Marine");
-        AIAttackWaveAddUnits4(2, 2, 3, 4, "Firebat");
-        AIAttackWaveAddUnits4(1, 1, 2, 2, "Medic");
-        AIAttackWaveAddUnits4(0, 0, 1, 1, "Raven");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(9), libB27CC4B1_gf_CurseAttackWaveModifier(10), "Marine");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(4), "Firebat");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Medic");
+        AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Raven");
         gf_OrlanAttackWaveWaypointEast();
         AIAttackWaveSend(gv_p02_ORLAN_ENEMY, 120, true);
-        AIAttackWaveAddUnits4(4, 4, 8, 12, "Marine");
-        AIAttackWaveAddUnits4(0, 0, 1, 2, "Goliath");
-        AIAttackWaveAddUnits4(2, 2, 2, 2, "SiegeTank");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(12), "Marine");
+        AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Goliath");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "SiegeTank");
         gf_OrlanAttackWaveWaypointWest();
         AIAttackWaveSend(gv_p02_ORLAN_ENEMY, 120, true);
-        AIAttackWaveAddUnits4(7, 7, 9, 12, "Marine");
-        AIAttackWaveAddUnits4(2, 2, 2, 2, "Wraith");
-        AIAttackWaveAddUnits4(0, 0, 2, 2, "Medic");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(7), libB27CC4B1_gf_CurseAttackWaveModifier(7), libB27CC4B1_gf_CurseAttackWaveModifier(9), libB27CC4B1_gf_CurseAttackWaveModifier(12), "Marine");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Wraith");
+        AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Medic");
         gf_OrlanAttackWaveWaypointWest();
         AIAttackWaveSend(gv_p02_ORLAN_ENEMY, 120, true);
     }
@@ -4230,6 +4282,119 @@ void gt_TransmissionContractAlmostFilledQ_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: Spawn Ghosts
+//--------------------------------------------------------------------------------------------------
+bool gt_SpawnGhosts_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    if ((libB27CC4B1_gf_TalentAcquired("ChallengeHorner2") == false)) {
+        return true;
+    }
+
+    TriggerEnable(gt_ArmSilos, true);
+    Wait(120.0, c_timeAI);
+    TriggerEnable(gt_GhostNukeOrder, true);
+    while (true) {
+        if ((UnitGroupCount(gv_challengeGhosts, c_unitCountAlive) < 4)) {
+            gf_CreateChallengeGhost();
+        }
+
+        Wait(RandomFixed(45.0, 90.0), c_timeAI);
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_SpawnGhosts_Init () {
+    gt_SpawnGhosts = TriggerCreate("gt_SpawnGhosts_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Arm Silos
+//--------------------------------------------------------------------------------------------------
+bool gt_ArmSilos_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    unitgroup auto0D3D8621_g;
+    int auto0D3D8621_u;
+    unit auto0D3D8621_var;
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    auto0D3D8621_g = gv_challengeSilos;
+    auto0D3D8621_u = UnitGroupCount(auto0D3D8621_g, c_unitCountAll);
+    for (;; auto0D3D8621_u -= 1) {
+        auto0D3D8621_var = UnitGroupUnitFromEnd(auto0D3D8621_g, auto0D3D8621_u);
+        if (auto0D3D8621_var == null) { break; }
+        if ((UnitMagazineCount(auto0D3D8621_var, "ArmSiloWithNuke") == 0)) {
+            UnitMagazineArm(auto0D3D8621_var, AbilityCommand("ArmSiloWithNuke", 0), 1);
+        }
+
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ArmSilos_Init () {
+    gt_ArmSilos = TriggerCreate("gt_ArmSilos_Func");
+    TriggerEnable(gt_ArmSilos, false);
+    TriggerAddEventTimePeriodic(gt_ArmSilos, 70.0, c_timeAI);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Ghost Nuke Order
+//--------------------------------------------------------------------------------------------------
+bool gt_GhostNukeOrder_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    unitgroup lv_targetGroup;
+
+    // Automatic Variable Declarations
+    unitgroup auto18A5041D_g;
+    int auto18A5041D_u;
+    unit auto18A5041D_var;
+
+    // Variable Initialization
+    lv_targetGroup = UnitGroupEmpty();
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    auto18A5041D_g = gv_challengeGhosts;
+    auto18A5041D_u = UnitGroupCount(auto18A5041D_g, c_unitCountAll);
+    for (;; auto18A5041D_u -= 1) {
+        auto18A5041D_var = UnitGroupUnitFromEnd(auto18A5041D_g, auto18A5041D_u);
+        if (auto18A5041D_var == null) { break; }
+        lv_targetGroup = UnitGroup(null, gv_p01_USER, RegionCircle(UnitGetPosition(auto18A5041D_var), 7.0), UnitFilter(0, 0, (1 << c_targetFilterMissile) | (1 << c_targetFilterBuried) | (1 << c_targetFilterCloaked), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32)) | (1 << (c_targetFilterSummoned - 32))), 0);
+        if ((UnitGroupCount(lv_targetGroup, c_unitCountAlive) >= 1)) {
+            UnitIssueOrder(auto18A5041D_var, OrderTargetingPoint(AbilityCommand("TacNukeStrike", 0), UnitGetPosition(UnitGroupClosestToPoint(lv_targetGroup, UnitGetPosition(auto18A5041D_var)))), c_orderQueueReplace);
+            Wait(15.0, c_timeAI);
+            UnitBehaviorRemove(auto18A5041D_var, "GhostCloak", 1);
+            Wait(5.0, c_timeAI);
+            UnitIssueOrder(auto18A5041D_var, Order(AbilityCommand("GhostCloak", 1)), c_orderQueueReplace);
+            UnitSetPropertyFixed(auto18A5041D_var, c_unitPropEnergyPercent, 0.0);
+            AISetUnitScriptControlled(auto18A5041D_var, false);
+        }
+
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_GhostNukeOrder_Init () {
+    gt_GhostNukeOrder = TriggerCreate("gt_GhostNukeOrder_Func");
+    TriggerEnable(gt_GhostNukeOrder, false);
+    TriggerAddEventTimePeriodic(gt_GhostNukeOrder, 1.0, c_timeAI);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: Campaign Tips Q
 //--------------------------------------------------------------------------------------------------
 bool gt_CampaignTipsQ_Func (bool testConds, bool runActions) {
@@ -4531,8 +4696,13 @@ bool gt_VictoryDestroyOrlanCompleted_Func (bool testConds, bool runActions) {
     gv_gameOver = true;
     PingDestroy(gv_orlansFortressPing);
     libNtve_gf_ChangeUnitDamage(UnitFromId(90), libNtve_ge_UnitDamageTakenDealt_Damage_Take, libNtve_ge_UnitDamageChangeOption_No);
+    TriggerExecute(gt_MidTalents, true, true);
+    libB27CC4B1_gf_TalentTime(2, false, 0, 0);
+    libB27CC4B1_gf_CurseDifficultyModifier(3);
+    libB27CC4B1_gf_CurseDifficultyModifier(4);
     TriggerExecute(gt_ObjectiveBuyContractComplete, true, true);
     TriggerExecute(gt_ObjectiveDestroyOrlanComplete, true, true);
+    libB27CC4B1_gf_RogueEnding();
     libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
     return true;
 }
@@ -4962,6 +5132,7 @@ bool gt_ObjectiveFindContrabandUpdate_Func (bool testConds, bool runActions) {
 
     gv_contrabandRelicsFound += 1;
     TriggerExecute(gt_ObjectiveFindContrabandCreateQ, true, false);
+    libB27CC4B1_gf_TalentBonusObjectiveTrigger();
     UIAlertPoint("Trigger", gv_p01_USER, StringExternal("Param/Value/D16B38BA"), null, UnitGetPosition(EventUnit()));
     libWCMI_gf_DisplayMissionObjectiveRewardFloatingText(UnitGetPosition(EventUnit()), "THorner02_3");
     UnitKill(EventUnit());
@@ -4997,6 +5168,7 @@ bool gt_ObjectiveFindContrabandComplete_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
+    libB27CC4B1_gf_TalentTime(1, false, 0, 0);
     TriggerExecute(gt_ObjectiveFindContrabandCreateQ, true, false);
     libWCMI_gf_ZS_SetMissionObjectiveState("THorner02_3", libWoLC_ge_MissionObjectiveState_Completed);
     Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
@@ -5378,10 +5550,12 @@ bool gt_MidQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerQueueEnter();
+    TriggerExecute(libB27CC4B1_gt_TableButtonsHide, true, true);
     TriggerExecute(gt_MidSetup, true, true);
     TriggerExecute(gt_MidCinematic, true, true);
     TriggerExecute(gt_MidCinematicEnd, true, true);
     TriggerExecute(gt_MidCleanup, true, true);
+    TriggerExecute(libB27CC4B1_gt_TableButtonsShow, true, true);
     TriggerQueueExit();
     return true;
 }
@@ -5463,7 +5637,9 @@ bool gt_MidCinematic_Func (bool testConds, bool runActions) {
     for (;; autoCCE1CD7E_u -= 1) {
         autoCCE1CD7E_var = UnitGroupUnitFromEnd(autoCCE1CD7E_g, autoCCE1CD7E_u);
         if (autoCCE1CD7E_var == null) { break; }
-        libNtve_gf_RescueUnit(autoCCE1CD7E_var, gv_p01_USER, true);
+        libB27CC4B1_gf_RescueUnitWithUpgrades(autoCCE1CD7E_var);
+        UnitSetPropertyFixed(libB27CC4B1_gv_lastRescuedUnit, c_unitPropLifePercent, 100.0);
+        UnitSetPropertyFixed(libB27CC4B1_gv_lastRescuedUnit, c_unitPropEnergyPercent, 100.0);
     }
     // Transmission - SoundLink("THorner02Orlan00012", -1)
     libCamp_gf_SendTransmissionCampaign(null, SoundLink("THorner02Orlan00012", -1), c_transmissionDurationAdd, 0.0, true);
@@ -5546,7 +5722,9 @@ bool gt_MidCleanup_Func (bool testConds, bool runActions) {
             UnitRemove(auto05A7AB37_var);
         }
         else {
-            UnitSetOwner(auto05A7AB37_var, gv_p01_USER, true);
+            libB27CC4B1_gf_RescueUnitWithUpgrades(auto05A7AB37_var);
+            UnitSetPropertyFixed(libB27CC4B1_gv_lastRescuedUnit, c_unitPropLifePercent, 100.0);
+            UnitSetPropertyFixed(libB27CC4B1_gv_lastRescuedUnit, c_unitPropEnergyPercent, 100.0);
         }
     }
     GameTimeOfDayPause(false);
@@ -5584,6 +5762,7 @@ bool gt_VictoryQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerQueueEnter();
+    TriggerExecute(libB27CC4B1_gt_TableButtonsHide, true, true);
     TriggerExecute(gt_VictorySetup, true, true);
     TriggerExecute(gt_VictoryCinematic, true, true);
     TriggerExecute(gt_VictoryCinematicEnd, true, true);
@@ -5870,7 +6049,6 @@ void gt_VictoryScene_Init () {
 // Trigger Initialization
 //--------------------------------------------------------------------------------------------------
 void InitTriggers () {
-    gt_OnPlayer1GetUnit_Init();
     gt_Initialization_Init();
     gt_Init01Technology_Init();
     gt_Init02Players_Init();
@@ -5882,6 +6060,7 @@ void InitTriggers () {
     gt_IntroSequence_Init();
     gt_StartGameStage1_Init();
     gt_StartGameStage2_Init();
+    gt_MidTalents_Init();
     gt_IntroLanding_Init();
     gt_ChangeOwnerofIntroStructures_Init();
     gt_ChangeOwnerofPreplacedStructures_Init();
@@ -5949,6 +6128,9 @@ void InitTriggers () {
     gt_TransmissionOrlanAlmostDoneQ_Init();
     gt_TransmissionContractHalfFilledQ_Init();
     gt_TransmissionContractAlmostFilledQ_Init();
+    gt_SpawnGhosts_Init();
+    gt_ArmSilos_Init();
+    gt_GhostNukeOrder_Init();
     gt_CampaignTipsQ_Init();
     gt_MercenaryContractTipQ_Init();
     gt_NewUnitVultureTipQ_Init();

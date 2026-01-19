@@ -7,11 +7,11 @@
 //==================================================================================================
 include "TriggerLibs/NativeLib"
 include "TriggerLibs/LibertyLib"
-include "LibEA0820A1"
 include "LibCamp"
 include "LibWoLC"
 include "LibWCMI"
 include "LibWCUI"
+include "LibB27CC4B1"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -19,11 +19,11 @@ include "LibWCUI"
 void InitLibs () {
     libNtve_InitLib();
     libLbty_InitLib();
-    libEA0820A1_InitLib();
     libCamp_InitLib();
     libWoLC_InitLib();
     libWCMI_InitLib();
     libWCUI_InitLib();
+    libB27CC4B1_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -330,6 +330,7 @@ void gf_TerrorFleetWarpIn (int lp_count, abilcmd lp_trainCmd, fixed lp_radius, f
 
     // Implementation
     if ((lp_count >= 1)) {
+        lp_count = libB27CC4B1_gf_CurseAttackWaveModifier(lp_count);
         lv_unitInterval = (360.0 / IntToFixed(lp_count));
         lv_currentDegree = (lp_angleOffset + (lp_intervalOffsets * lv_unitInterval));
         auto107C7AF6_n = lp_count;
@@ -389,7 +390,7 @@ void gf_AIP02WaveWarpIn (int lp_count, abilcmd lp_trainCmd) {
     int auto6E2B3EC3_i;
 
     // Implementation
-    auto6E2B3EC3_n = lp_count;
+    auto6E2B3EC3_n = libB27CC4B1_gf_CurseAttackWaveModifier(lp_count);
     for (auto6E2B3EC3_i = 1; auto6E2B3EC3_i <= auto6E2B3EC3_n; auto6E2B3EC3_i += 1) {
         if ((gv_currentWaveSources != null) && (UnitGroupCount(gv_currentWaveSources, c_unitCountAlive) > 0)) {
             UnitIssueOrder(gv_superWarpGateP02, OrderTargetingPoint(lp_trainCmd, UnitGetPosition(UnitGroupRandomUnit(gv_currentWaveSources, c_unitCountAlive))), c_orderQueueReplace);
@@ -453,7 +454,6 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
 
     libWoLC_gf_ULoadCampaignData("THanson03A");
     TriggerExecute(gt_InitializePaths, true, true);
-    TriggerExecute(libEA0820A1_gt_Init00ReplaceUnit, true, true);
     TriggerExecute(gt_Init01Technology, true, true);
     TriggerExecute(gt_Init02Players, true, true);
     TriggerExecute(gt_Init03Units, true, true);
@@ -462,6 +462,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init06Difficulties, true, true);
     TriggerExecute(gt_Init07Help, true, true);
     libWoLC_gf_RegisterFootageRecording(gt_BriefingQ);
+    TriggerExecute(libB27CC4B1_gt_RogueInit, true, true);
     TriggerExecute(gt_IntroSequence, true, false);
     return true;
 }
@@ -519,7 +520,7 @@ bool gt_Init02Players_Func (bool testConds, bool runActions) {
     libNtve_gf_SetAlliance(gv_pLAYER04_PURIFIER, gv_pLAYER05_COLONISTSTRUCTURES, libNtve_ge_AllianceSetting_Neutral);
     libNtve_gf_SetAlliance(gv_pLAYER04_PURIFIER, gv_pLAYER06_TERRORFLEET, libNtve_ge_AllianceSetting_AllyWithSharedVisionAndPushable);
     libNtve_gf_SetAlliance(gv_pLAYER04_PURIFIER, gv_pLAYER07_RESOURCES, libNtve_ge_AllianceSetting_Neutral);
-    libNtve_gf_SetAlliance(gv_pLAYER06_TERRORFLEET, gv_pLAYER03_COLONIST, libNtve_ge_AllianceSetting_EnemyWithSharedVision);
+    libNtve_gf_SetAlliance(gv_pLAYER06_TERRORFLEET, gv_pLAYER03_COLONIST, libNtve_ge_AllianceSetting_Enemy);
     libNtve_gf_SetAlliance(gv_pLAYER06_TERRORFLEET, gv_pLAYER05_COLONISTSTRUCTURES, libNtve_ge_AllianceSetting_NeutralWithSharedVision);
     libNtve_gf_SetAlliance(gv_pLAYER06_TERRORFLEET, gv_pLAYER07_RESOURCES, libNtve_ge_AllianceSetting_Neutral);
     PlayerModifyPropertyInt(gv_pLAYER01_USER, c_playerPropMinerals, c_playerPropOperSetTo, 400);
@@ -852,8 +853,7 @@ bool gt_Init06Difficulties_Func (bool testConds, bool runActions) {
 
     gv_pOWER_UP_TIME = libNtve_gf_DifficultyValueFixed(90.0, 90.0, 60.0, 45.0);
     gv_pURIFIER_MAX_LIFE = libNtve_gf_DifficultyValueFixed(4000.0, 6000.0, 7000.0, 8000.0);
-    UnitSetPropertyFixed(gv_purifier, c_unitPropLifeMax, gv_pURIFIER_MAX_LIFE);
-    UnitSetPropertyFixed(gv_purifier, c_unitPropLifePercent, 100.0);
+    libB27CC4B1_gf_SetUnitHPDynamically(gv_purifier, gv_pURIFIER_MAX_LIFE, 100.0);
     UnitSetPropertyFixed(gv_purifier, c_unitPropShieldsMax, 0.0);
     gv_cOLONIST_SHIP_MAX_LIFE = libNtve_gf_DifficultyValueFixed(3000.0, 3000.0, 5000.0, 6000.0);
     auto8AE73090_g = UnitGroup("ColonistShip", c_playerAny, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
@@ -966,8 +966,10 @@ bool gt_StartGame_Func (bool testConds, bool runActions) {
     }
 
     gv_gameOn = true;
+    TriggerExecute(libB27CC4B1_gt_InitTableButtons, true, false);
     TriggerExecute(gt_ColonistsWander, true, false);
     Wait(4.0, c_timeGame);
+    libB27CC4B1_gf_ChallengeTime("ChallengeHanson3P");
     TriggerExecute(gt_ObjectiveDestroyNexusCreateQ, true, true);
     TriggerExecute(gt_TransmissionProtossNexusQ, true, false);
     Wait(1.0, c_timeGame);
@@ -1063,18 +1065,21 @@ bool gt_DestroyNexusPings_Func (bool testConds, bool runActions) {
         PingDestroy(gv_nexusPing1);
         UIAlertUnit("Trigger", gv_pLAYER01_USER, StringExternal("Param/Value/12560FC5"), null, EventUnit());
         AIToggleBulliesInRegion(gv_pLAYER02_PROTOSS, RegionFromId(20), false);
+        libB27CC4B1_gf_TalentTime(1, false, 0, 0);
     }
 
     if ((EventUnit() == UnitFromId(2915))) {
         PingDestroy(gv_nexusPing2);
         UIAlertUnit("Trigger", gv_pLAYER01_USER, StringExternal("Param/Value/861B84EA"), null, EventUnit());
         AIToggleBulliesInRegion(gv_pLAYER02_PROTOSS, RegionFromId(19), false);
+        libB27CC4B1_gf_CurseDifficultyModifier(2);
     }
 
     if ((EventUnit() == UnitFromId(2819))) {
         PingDestroy(gv_nexusPing3);
         UIAlertUnit("Trigger", gv_pLAYER01_USER, StringExternal("Param/Value/B08E2B6C"), null, EventUnit());
         AIToggleBulliesInRegion(gv_pLAYER02_PROTOSS, RegionFromId(7), false);
+        libB27CC4B1_gf_TalentTime(1, false, 0, 0);
     }
 
     return true;
@@ -1157,6 +1162,10 @@ bool gt_PURIFIERIntro_Func (bool testConds, bool runActions) {
     SoundtrackPlay(PlayerGroupAll(), c_soundtrackCategoryMusic, "THanson03AMusicEventA", c_soundtrackCueAny, c_soundtrackIndexAny, false);
     TriggerExecute(gt_TransmissionPurifierArrivedQ, true, false);
     TriggerExecute(gt_NewEnemyPurifierTipQ, true, false);
+    if ((libB27CC4B1_gf_TalentAcquired("ChallengeHanson3P") == true)) {
+        libNtve_gf_SetUpgradeLevelForPlayer(gv_pLAYER04_PURIFIER, "Hanson3BChallengeLaserDrill", 1);
+    }
+
     UnitIssueOrder(gv_purifier, Order(AbilityCommand("PurifierTogglePower", 1)), c_orderQueueReplace);
     libNtve_gf_ShareVisionofUnit(gv_purifier, true, gv_pLAYER01_USER);
     VisRevealArea(gv_pLAYER01_USER, RegionCircle(UnitGetPosition(gv_purifier), 6.0), 10.0, false);
@@ -1167,6 +1176,16 @@ bool gt_PURIFIERIntro_Func (bool testConds, bool runActions) {
     libNtve_gf_PauseUnit(gv_purifier, false);
     UnitBehaviorAdd(gv_purifier, "InvulnerabilityShield", gv_purifier, 1);
     libNtve_gf_AttachModelToUnit(gv_purifier, "MothershipTeleportOut", "Ref_Center");
+    if ((UnitIsAlive(UnitFromId(2915)) == false) && (UnitIsAlive(UnitFromId(2819)) == false) && (UnitIsAlive(UnitFromId(2466)) == false)) {
+        libWCUI_gf_ShowHideSingularBossBarVoidCampaign(true);
+        UnitBehaviorRemove(gv_purifier, "InvulnerabilityShield", 1);
+        libNtve_gf_MakeUnitInvulnerable(gv_purifier, false);
+        UnitSetPropertyFixed(gv_purifier, c_unitPropShields, 1000.0);
+        UnitSetPropertyFixed(gv_purifier, c_unitPropShieldsPercent, 0.0);
+        UnitSetPropertyFixed(gv_purifier, c_unitPropShieldsRegen, -30.0);
+        TriggerEnable(gt_PurifierUsesVortex, true);
+    }
+
     Wait(2.666, c_timeGame);
     libNtve_gf_CreatePingFacingAngle(PlayerGroupSingle(gv_pLAYER01_USER), "PingBoss", UnitGetPosition(gv_purifier), ColorWithAlpha(100.00, 0.00, 0.00, 0.00), 0.0, 270.0);
     PingSetUnit(PingLastCreated(), gv_purifier);
@@ -1847,9 +1866,9 @@ bool gt_PurifierAfterAlpha_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_WarpInBetaTerrorFleet, true, false);
     TriggerEnable(gt_TerrorFleetBetaDestroyed, true);
     TriggerEnable(gt_ColonistBehavioratBaseBeta, false);
-    Wait(20.0, c_timeGame);
+    Wait(20.0, c_timeAI);
     TriggerExecute(gt_SendBetaBaseTerrorFleet, true, false);
-    Wait(40.0, c_timeGame);
+    Wait(40.0, c_timeAI);
     TriggerExecute(gt_ShowPathtoBetaBase, true, false);
     UnitIssueOrder(gv_purifier, Order(AbilityCommand("PurifierTogglePower", 1)), c_orderQueueAddToEnd);
     UnitIssueOrder(gv_purifier, OrderTargetingPoint(AbilityCommand("move", 0), PointFromId(1061)), c_orderQueueReplace);
@@ -1894,10 +1913,10 @@ bool gt_PurifierAfterBeta_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_WarpInGammaTerrorFleet, true, false);
     TriggerEnable(gt_TerrorFleetGammaDestroyed, true);
     TriggerEnable(gt_ColonistBehavioratBaseGamma, false);
-    Wait(20.0, c_timeGame);
+    Wait(20.0, c_timeAI);
     TriggerEnable(gt_SendGammaBaseTerrorFleet, true);
     TriggerExecute(gt_SendGammaBaseTerrorFleet, true, false);
-    Wait(40.0, c_timeGame);
+    Wait(40.0, c_timeAI);
     TriggerExecute(gt_ShowPathtoGammaBase, true, false);
     UnitIssueOrder(gv_purifier, Order(AbilityCommand("PurifierTogglePower", 1)), c_orderQueueAddToEnd);
     UnitIssueOrder(gv_purifier, OrderTargetingPoint(AbilityCommand("move", 0), PointFromId(796)), c_orderQueueReplace);
@@ -1942,10 +1961,10 @@ bool gt_PurifierAfterGamma_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_WarpInOmegaTerrorFleet, true, false);
     TriggerEnable(gt_TerrorFleetOmegaDestroyed, true);
     TriggerEnable(gt_ColonistBehavioratBaseOmega, false);
-    Wait(20.0, c_timeGame);
+    Wait(20.0, c_timeAI);
     TriggerEnable(gt_SendOmegaBaseTerrorFleet, true);
     TriggerExecute(gt_SendOmegaBaseTerrorFleet, true, false);
-    Wait(40.0, c_timeGame);
+    Wait(40.0, c_timeAI);
     TriggerExecute(gt_ShowPathtoOmegaBase, true, false);
     UnitIssueOrder(gv_purifier, Order(AbilityCommand("PurifierTogglePower", 1)), c_orderQueueAddToEnd);
     UnitIssueOrder(gv_purifier, OrderTargetingPoint(AbilityCommand("move", 0), PointFromId(1083)), c_orderQueueReplace);
@@ -1986,7 +2005,7 @@ bool gt_PurifierAfterOmega_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     gv_colonyOutpostsSaved = 1;
-    Wait(20.0, c_timeGame);
+    Wait(20.0, c_timeAI);
     UnitIssueOrder(gv_purifier, Order(AbilityCommand("PurifierTogglePower", 1)), c_orderQueueAddToEnd);
     UnitIssueOrder(gv_purifier, OrderTargetingPoint(AbilityCommand("move", 0), RegionGetCenter(RegionFromId(22))), c_orderQueueReplace);
     gv_purifierMainTarget = RegionGetCenter(RegionFromId(22));
@@ -5258,7 +5277,12 @@ bool gt_VictoryPurifierDestroyed_Func (bool testConds, bool runActions) {
     libNtve_gf_ChangeUnitDamage(UnitFromId(2722), libNtve_ge_UnitDamageTakenDealt_Damage_Take, libNtve_ge_UnitDamageChangeOption_No);
     libNtve_gf_ChangeUnitDamage(UnitFromId(1678), libNtve_ge_UnitDamageTakenDealt_Damage_Take, libNtve_ge_UnitDamageChangeOption_No);
     libNtve_gf_ChangeUnitDamage(UnitFromId(1594), libNtve_ge_UnitDamageTakenDealt_Damage_Take, libNtve_ge_UnitDamageChangeOption_No);
+    libB27CC4B1_gv_rogueAllMissions[1] = true;
+    libB27CC4B1_gf_TalentTime(3, true, libB27CC4B1_gf_TalentUpgradetoIndex("SpecialHansonCure"), libB27CC4B1_gf_TalentUpgradetoIndex("SpecialPlanetCracker"));
+    libB27CC4B1_gf_CurseDifficultyModifier(3);
+    libB27CC4B1_gf_CurseDifficultyModifier(4);
     TriggerExecute(gt_ObjectiveDestroyPurifierComplete, true, true);
+    libB27CC4B1_gf_RogueEnding();
     libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
     return true;
 }
@@ -6428,6 +6452,7 @@ bool gt_VictoryQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerQueueEnter();
+    TriggerExecute(libB27CC4B1_gt_TableButtonsHide, true, true);
     TriggerExecute(gt_VictorySetup, true, true);
     TriggerExecute(gt_VictoryCinematic, true, true);
     TriggerExecute(gt_VictoryCinematicEnd, true, true);

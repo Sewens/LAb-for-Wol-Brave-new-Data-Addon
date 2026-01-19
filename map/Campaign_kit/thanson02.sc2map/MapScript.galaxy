@@ -2,16 +2,16 @@
 // 
 // Generated Map Script
 // 
-// Name:   Outbreak
+// Name:   ?????????
 // 
 //==================================================================================================
 include "TriggerLibs/NativeLib"
 include "TriggerLibs/LibertyLib"
-include "LibEA0820A1"
 include "LibCamp"
 include "LibWoLC"
 include "LibWCMI"
 include "LibWCUI"
+include "LibB27CC4B1"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -19,11 +19,11 @@ include "LibWCUI"
 void InitLibs () {
     libNtve_InitLib();
     libLbty_InitLib();
-    libEA0820A1_InitLib();
     libCamp_InitLib();
     libWoLC_InitLib();
     libWCMI_InitLib();
     libWCUI_InitLib();
+    libB27CC4B1_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -196,6 +196,7 @@ trigger gt_ShowRemainingInfestedStructures;
 trigger gt_RemoveInfestedStructurePing;
 trigger gt_InfestationFirstSight;
 trigger gt_ClearActoronInfestedBuilding;
+trigger gt_ChallengeInfestation;
 trigger gt_NightDefenderReaction;
 trigger gt_NightDefenderPing;
 trigger gt_NightDefenderReactionQ;
@@ -285,7 +286,7 @@ text gf_DebugUnitInfo (unit lp_u) {
     // Implementation
     lv_owner = UnitGetOwner(lp_u);
     lv_msg = StringExternal("Param/Value/1CC47A81");
-    lv_msg = (lv_msg + StringExternal("Param/Value/0D9A275B") + IntToText(lv_owner) + StringExternal("Param/Value/FD0D998F"));
+    lv_msg = (lv_msg + StringExternal("Param/Value/0D9A275B") + IntToText(lv_owner) + StringToText(""));
     lv_msg = (lv_msg + StringExternal("Param/Value/2A231D13"));
     lv_msg = (lv_msg + IntToText(PlayerGetPropertyInt(lv_owner, c_playerPropMinerals)) + StringExternal("Param/Value/BE10BB4A"));
     lv_msg = (lv_msg + StringExternal("Param/Value/562831B2"));
@@ -432,16 +433,16 @@ void gf_AttackWaveFromDirection (int lp_direction, int lp_delay, bool lp_waitOpt
     // Automatic Variable Declarations
     // Implementation
     gf_PrepareAttackDirection(lp_direction);
-    AIAttackWaveAddUnits4(lp_qty1, lp_qty1, lp_qty1, lp_qty1, "InfestedCivilian");
-    AIAttackWaveAddUnits4(lp_qty2, lp_qty2, lp_qty2, lp_qty2, "InfestedTerranCampaign");
-    AIAttackWaveAddUnits4(lp_qty3, lp_qty3, lp_qty3, lp_qty3, "InfestedAbomination");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(lp_qty1), libB27CC4B1_gf_CurseAttackWaveModifier(lp_qty1), libB27CC4B1_gf_CurseAttackWaveModifier(lp_qty1), libB27CC4B1_gf_CurseAttackWaveModifier(lp_qty1), "InfestedCivilian");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(lp_qty2), libB27CC4B1_gf_CurseAttackWaveModifier(lp_qty2), libB27CC4B1_gf_CurseAttackWaveModifier(lp_qty2), libB27CC4B1_gf_CurseAttackWaveModifier(lp_qty2), "InfestedTerranCampaign");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(lp_qty3), libB27CC4B1_gf_CurseAttackWaveModifier(lp_qty3), libB27CC4B1_gf_CurseAttackWaveModifier(lp_qty3), libB27CC4B1_gf_CurseAttackWaveModifier(lp_qty3), "InfestedAbomination");
     AIAttackWaveSend(gv_pLAYER_03_INFESTED_REFUGEES, lp_delay, lp_waitOption);
 }
 
 void gf_AddWaypointToExpansion () {
     // Automatic Variable Declarations
     // Implementation
-    if (((UnitGroupCount(UnitGroup("CommandCenter", gv_pLAYER_01_USER, RegionFromId(49), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) >= 1) || (UnitGroupCount(UnitGroup("CommandCenterFlying", gv_pLAYER_01_USER, RegionFromId(49), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) >= 1) || (UnitGroupCount(UnitGroup("OrbitalCommand", gv_pLAYER_01_USER, RegionFromId(49), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) >= 1) || (UnitGroupCount(UnitGroup("OrbitalCommandFlying", gv_pLAYER_01_USER, RegionFromId(49), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) >= 1) || (UnitGroupCount(UnitGroup("PlanetaryFortress", gv_pLAYER_01_USER, RegionFromId(49), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) >= 1) || (UnitGroupCount(UnitGroup("AutomatedRefinery", gv_pLAYER_01_USER, RegionFromId(49), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) >= 1) || (UnitGroupCount(UnitGroup("Refinery", gv_pLAYER_01_USER, RegionFromId(49), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) >= 1))) {
+    if (((UnitGroupCount(UnitGroup("CommandCenter", gv_pLAYER_01_USER, RegionFromId(49), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) >= 1) || (UnitGroupCount(UnitGroup("CommandCenterFlying", gv_pLAYER_01_USER, RegionFromId(49), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) >= 1) || (UnitGroupCount(UnitGroup("OrbitalCommand", gv_pLAYER_01_USER, RegionFromId(49), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) >= 1) || (UnitGroupCount(UnitGroup("OrbitalCommandFlying", gv_pLAYER_01_USER, RegionFromId(49), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) >= 1) || (UnitGroupCount(UnitGroup("PlanetaryFortress", gv_pLAYER_01_USER, RegionFromId(49), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) >= 1) || (UnitGroupCount(UnitGroup("AutomatedRefinery", gv_pLAYER_01_USER, RegionFromId(49), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) >= 1) || (UnitGroupCount(UnitGroup("RefineryRich", gv_pLAYER_01_USER, RegionFromId(49), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) >= 1) || (UnitGroupCount(UnitGroup("Refinery", gv_pLAYER_01_USER, RegionFromId(49), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) >= 1))) {
         AIAttackWaveAddWaypoint(gv_pLAYER_03_INFESTED_REFUGEES, PointFromId(859), false);
     }
 
@@ -483,7 +484,6 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     }
 
     libWoLC_gf_ULoadCampaignData("THanson02");
-    TriggerExecute(libEA0820A1_gt_Init00ReplaceUnit, true, false);
     TriggerExecute(gt_Init01Technology, true, false);
     TriggerExecute(gt_Init02Players, true, true);
     TriggerExecute(gt_Init03Units, true, true);
@@ -492,6 +492,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init06Difficulties, true, true);
     TriggerExecute(gt_Init07Help, true, true);
     libWoLC_gf_RegisterFootageRecording(gt_BriefingQ);
+    TriggerExecute(libB27CC4B1_gt_RogueInit, true, true);
     TriggerExecute(gt_IntroSequence, true, false);
     return true;
 }
@@ -762,6 +763,7 @@ bool gt_IntroSequence_Func (bool testConds, bool runActions) {
     libNtve_gf_GlobalCinematicSetting(false);
     libNtve_gf_SwooshCamera(gv_pLAYER_01_USER, ((CameraInfoGetValue(CameraInfoDefault(), c_cameraValueDistance)) + 8.0), CameraInfoGetValue(CameraInfoDefault(), c_cameraValueDistance), PointFromId(453), 1.5);
     CinematicFade(true, 1.5, c_fadeStyleNormal, ColorWithAlpha(0.00, 0.00, 0.00, 0.00), 0.0, true);
+    TriggerExecute(libB27CC4B1_gt_InitTableButtons, true, false);
     TriggerExecute(gt_StartGame, true, false);
     return true;
 }
@@ -789,12 +791,12 @@ bool gt_StartGame_Func (bool testConds, bool runActions) {
     gv_timeOfDay = ge_PRESET_TimeOfDay_Day;
     GameTimeOfDayPause(true);
     if ((libNtve_gf_DifficultyValueInt(1, 1, 0, 0) == 1)) {
-        TimerStart(gv_transitionToNight, 80.0, false, c_timeGame);
-        TimerStart(gv_mainTimer, 120.0, false, c_timeGame);
+        TimerStart(gv_transitionToNight, 80.0, false, c_timeAI);
+        TimerStart(gv_mainTimer, 120.0, false, c_timeAI);
     }
     else {
-        TimerStart(gv_transitionToNight, 50.0, false, c_timeGame);
-        TimerStart(gv_mainTimer, 90.0, false, c_timeGame);
+        TimerStart(gv_transitionToNight, 50.0, false, c_timeAI);
+        TimerStart(gv_mainTimer, 90.0, false, c_timeAI);
     }
     libWCUI_gf_TimerWindowCreate(TimerLastStarted(), StringExternal("Param/Value/494F6F23"), true, false);
     gv_mainTimerWindow = TimerWindowLastCreated();
@@ -805,6 +807,7 @@ bool gt_StartGame_Func (bool testConds, bool runActions) {
     TriggerEnable(gt_InfestedAreasClear, true);
     TriggerEnable(gt_InfestationFirstSight, true);
     Wait(3.0, c_timeReal);
+    libB27CC4B1_gf_ChallengeTime("ChallengeHanson2");
     TriggerExecute(gt_ObjectiveCleansetheInfestationCreateQ, true, true);
     Wait(5.0, c_timeGame);
     TriggerExecute(gt_CampaigntipsQ, true, false);
@@ -892,21 +895,21 @@ bool gt_InitialAttack_Func (bool testConds, bool runActions) {
     libNtve_gf_CreateUnitsAtPoint2(14, "InfestedCivilian", 0, gv_pLAYER_03_INFESTED_REFUGEES, RegionGetCenter(RegionFromId(4)));
     libNtve_gf_AddUnitGroupToUnitGroup(UnitLastCreatedGroup(), lv_attackersRight);
     UnitGroupIssueOrder(lv_attackersRight, Order(AbilityCommand("BurrowInfestedTerranCampaignUp", 0)), c_orderQueueReplace);
-    Wait(3.0, c_timeGame);
+    Wait(3.0, c_timeAI);
     lv_i = 1;
     for ( ; ( (auto31AF6971_ai >= 0 && lv_i <= auto31AF6971_ae) || (auto31AF6971_ai < 0 && lv_i >= auto31AF6971_ae) ) ; lv_i += auto31AF6971_ai ) {
         UnitIssueOrder(UnitGroupUnit(lv_attackersLeft, lv_i), OrderTargetingPoint(AbilityCommand("attack", 0), PointFromId(228)), c_orderQueueReplace);
         UnitIssueOrder(UnitGroupUnit(lv_attackersLeft, (lv_i + 7)), OrderTargetingPoint(AbilityCommand("attack", 0), PointFromId(228)), c_orderQueueReplace);
-        Wait(RandomFixed(0.5, 1.0), c_timeGame);
+        Wait(RandomFixed(0.5, 1.0), c_timeAI);
         UnitIssueOrder(UnitGroupUnit(lv_attackersRight, lv_i), OrderTargetingPoint(AbilityCommand("attack", 0), PointFromId(317)), c_orderQueueReplace);
         UnitIssueOrder(UnitGroupUnit(lv_attackersRight, (lv_i + 7)), OrderTargetingPoint(AbilityCommand("attack", 0), PointFromId(317)), c_orderQueueReplace);
-        Wait(RandomFixed(0.5, 1.0), c_timeGame);
+        Wait(RandomFixed(0.5, 1.0), c_timeAI);
     }
     while (!((UnitGroupCount(lv_attackersLeft, c_unitCountAlive) == UnitGroupCount(UnitGroup(null, gv_pLAYER_03_INFESTED_REFUGEES, RegionCircle(PointFromId(228), 10.0), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive)) && (UnitGroupCount(lv_attackersRight, c_unitCountAlive) == UnitGroupCount(UnitGroup(null, gv_pLAYER_03_INFESTED_REFUGEES, RegionCircle(PointFromId(317), 10.0), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive)))) {
         Wait(0.1, c_timeGame);
     }
     while (true) {
-        Wait(RandomFixed(0.5, 2.0), c_timeGame);
+        Wait(RandomFixed(0.5, 2.0), c_timeAI);
         if ((UnitGroupCount(lv_attackersLeft, c_unitCountAlive) == 0)) {
             break;
         }
@@ -916,7 +919,7 @@ bool gt_InitialAttack_Func (bool testConds, bool runActions) {
         UnitGroupRemove(lv_attackersLeft, lv_tempUnit);
     }
     while (true) {
-        Wait(RandomFixed(0.5, 2.0), c_timeGame);
+        Wait(RandomFixed(0.5, 2.0), c_timeAI);
         if ((UnitGroupCount(lv_attackersRight, c_unitCountAlive) == 0)) {
             break;
         }
@@ -1062,8 +1065,8 @@ bool gt_TimerCycling_Func (bool testConds, bool runActions) {
         TriggerExecute(gt_PlayNightMusic, true, false);
         UIDisplayMessage(PlayerGroupAll(), c_messageAreaSubtitle, StringExternal("Param/Value/103C91C4"));
         TriggerExecute(gt_TransmissionNightQ, true, false);
-        TimerStart(gv_transitionToDay, (gv_nIGHT_DURATION - 40.0), false, c_timeGame);
-        TimerStart(gv_mainTimer, gv_nIGHT_DURATION, false, c_timeGame);
+        TimerStart(gv_transitionToDay, (gv_nIGHT_DURATION - 40.0), false, c_timeAI);
+        TimerStart(gv_mainTimer, gv_nIGHT_DURATION, false, c_timeAI);
         TimerWindowSetTitle(gv_mainTimerWindow, TextReplaceWord(StringExternal("Param/Value/749F57BE"), StringExternal("Param/Value/7E7BF9AB"), IntToText(gv_night), c_stringReplaceAll, c_stringCase));
         libWCUI_gf_SetTimerWindowDangerThreshold(0.0);
         TimerWindowShow(gv_mainTimerWindow, PlayerGroupAll(), true);
@@ -1135,7 +1138,7 @@ bool gt_InfestorCycling_Func (bool testConds, bool runActions) {
         TriggerExecute(gt_TransmissionInfestorsAtNightQ, true, true);
     }
     else {
-        Wait(10.0, c_timeGame);
+        Wait(10.0, c_timeAI);
         TriggerExecute(gt_InfestorsBurrowUnburrow, true, false);
     }
     return true;
@@ -1530,7 +1533,7 @@ bool gt_TransitionToDay_Func (bool testConds, bool runActions) {
     }
 
     GameSetLighting("MeinhoffCampaignDay", 40.0);
-    Wait(10.0, c_timeGame);
+    Wait(10.0, c_timeAI);
     TriggerExecute(gt_TransmissionDayNightin30SecondsQ, true, false);
     return true;
 }
@@ -1559,7 +1562,7 @@ bool gt_TransitionToNight_Func (bool testConds, bool runActions) {
     }
 
     GameSetLighting("MeinhoffCampaignNight", 40.0);
-    Wait(10.0, c_timeGame);
+    Wait(10.0, c_timeAI);
     TriggerExecute(gt_TransmissionDayNightin30SecondsQ, true, false);
     return true;
 }
@@ -1740,7 +1743,7 @@ bool gt_InfestationSpawning_Func (bool testConds, bool runActions) {
 
     while (true) {
         TriggerExecute(gt_UpdateSpawnSettings, true, false);
-        Wait(IntToFixed(gv_spawnCooldown), c_timeGame);
+        Wait(IntToFixed(gv_spawnCooldown), c_timeAI);
         if ((UnitGroupCount(gv_infestedStructureGroup, c_unitCountAlive) == 0)) {
             return true;
         }
@@ -1843,7 +1846,7 @@ bool gt_ShowRemainingInfestedStructures_Func (bool testConds, bool runActions) {
 void gt_ShowRemainingInfestedStructures_Init () {
     gt_ShowRemainingInfestedStructures = TriggerCreate("gt_ShowRemainingInfestedStructures_Func");
     TriggerEnable(gt_ShowRemainingInfestedStructures, false);
-    TriggerAddEventTimePeriodic(gt_ShowRemainingInfestedStructures, 1.0, c_timeGame);
+    TriggerAddEventTimePeriodic(gt_ShowRemainingInfestedStructures, 1.0, c_timeAI);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1973,6 +1976,46 @@ void gt_ClearActoronInfestedBuilding_Init () {
     gt_ClearActoronInfestedBuilding = TriggerCreate("gt_ClearActoronInfestedBuilding_Func");
     TriggerEnable(gt_ClearActoronInfestedBuilding, false);
     TriggerAddEventUnitDied(gt_ClearActoronInfestedBuilding, UnitRefFromVariable("gv_firstSightInfestedStructure"));
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Challenge Infestation
+//--------------------------------------------------------------------------------------------------
+bool gt_ChallengeInfestation_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    unit lv_victim;
+    unitgroup lv_marinesCombine;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+    lv_marinesCombine = UnitGroupEmpty();
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    if ((RandomInt(1, 4) > 1)) {
+        return true;
+    }
+
+    lv_marinesCombine = UnitGroup("Marine", gv_pLAYER_01_USER, RegionPlayableMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+    UnitGroupAddUnitGroup(lv_marinesCombine, UnitGroup("WarPig", gv_pLAYER_01_USER, RegionPlayableMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0));
+    lv_victim = UnitGroupRandomUnit(lv_marinesCombine, c_unitCountAlive);
+    Wait(RandomFixed(5.0, 30.0), c_timeAI);
+    if ((UnitFilterMatch(lv_victim, 1, UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32)))) == true)) {
+        UnitKill(lv_victim);
+        UnitCreate(1, "InfestedTerranCampaign", 0, gv_pLAYER_03_INFESTED_REFUGEES, UnitGetPosition(lv_victim), libNtve_gf_RandomAngle());
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ChallengeInfestation_Init () {
+    gt_ChallengeInfestation = TriggerCreate("gt_ChallengeInfestation_Func");
+    TriggerEnable(gt_ChallengeInfestation, false);
+    TriggerAddEventTimePeriodic(gt_ChallengeInfestation, 1.0, c_timeAI);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2602,12 +2645,12 @@ bool gt_IntroHellions_Func (bool testConds, bool runActions) {
         Wait(0.1, c_timeGame);
     }
     libWoLC_gf_EnableCampaignTechUnit(true, "Hellion", gv_pLAYER_01_USER);
-    libNtve_gf_CreateUnitsAtPoint2(libNtve_gf_DifficultyValueInt(4, 4, 3, 3), "SquadHellion", 0, gv_pLAYER_08_SWANN, PointFromId(1385));
+    libNtve_gf_CreateUnitsAtPoint2(libNtve_gf_DifficultyValueInt(4, 4, 3, 3), "Hellion", 0, gv_pLAYER_01_USER, PointFromId(1385));
     UnitGroupAddUnitGroup(lv_introHellionGroup, UnitLastCreatedGroup());
     libCamp_gf_CreateDropPod(libCamp_ge_DropPodRace_Terran, PointFromId(930), UnitLastCreatedGroup(), true);
     libNtve_gf_RescueUnit2(lv_introHellionGroup, gv_pLAYER_01_USER, true);
     SoundtrackPlay(PlayerGroupAll(), c_soundtrackCategoryMusic, "THanson02MusicSwann", c_soundtrackCueAny, c_soundtrackIndexAny, false);
-    Wait(3.0, c_timeGame);
+    Wait(3.0, c_timeAI);
     if ((UnitGroupCount(UnitGroup(null, c_playerAny, RegionFromId(41), UnitFilter((1 << c_targetFilterStructure), 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) == 0)) {
         lv_pickedRegion = RegionFromId(41);
 
@@ -2625,7 +2668,7 @@ bool gt_IntroHellions_Func (bool testConds, bool runActions) {
 
     }
     if ((lv_pickedRegion == null)) {
-        libNtve_gf_CreateUnitsAtPoint2(1, "SquadFactoryFlying", 0, gv_pLAYER_08_SWANN, RegionGetCenter(RegionFromId(41)));
+        libNtve_gf_CreateUnitsAtPoint2(1, "FactoryFlying", 0, gv_pLAYER_01_USER, RegionGetCenter(RegionFromId(41)));
         lv_factory = UnitLastCreated();
         UnitSetPropertyFixed(lv_factory, c_unitPropHeight, 10.0);
         SoundPlay(SoundLink("Ghost_DropPodImpact", -1), PlayerGroupAll(), 100.0, 0.0);
@@ -2633,7 +2676,7 @@ bool gt_IntroHellions_Func (bool testConds, bool runActions) {
         Wait(2.0, c_timeGame);
     }
     else {
-        libNtve_gf_CreateUnitsAtPoint2(1, "SquadFactoryFlying", 0, gv_pLAYER_08_SWANN, RegionGetCenter(lv_pickedRegion));
+        libNtve_gf_CreateUnitsAtPoint2(1, "FactoryFlying", 0, gv_pLAYER_01_USER, RegionGetCenter(lv_pickedRegion));
         lv_factory = UnitLastCreated();
         UnitSetPropertyFixed(lv_factory, c_unitPropHeight, 10.0);
         SoundPlay(SoundLink("Ghost_DropPodImpact", -1), PlayerGroupAll(), 100.0, 0.0);
@@ -2665,7 +2708,7 @@ bool gt_ChangeOwnerofFactory_Func (bool testConds, bool runActions) {
             return false;
         }
 
-        if (!((UnitGetType(EventUnit()) == "SquadFactoryFlying"))) {
+        if (!((UnitGetType(EventUnit()) == "FactoryFlying"))) {
             return false;
         }
     }
@@ -2751,7 +2794,7 @@ bool gt_RefugeeBehavior_Func (bool testConds, bool runActions) {
 //--------------------------------------------------------------------------------------------------
 void gt_RefugeeBehavior_Init () {
     gt_RefugeeBehavior = TriggerCreate("gt_RefugeeBehavior_Func");
-    TriggerAddEventTimePeriodic(gt_RefugeeBehavior, 30.0, c_timeGame);
+    TriggerAddEventTimePeriodic(gt_RefugeeBehavior, 30.0, c_timeAI);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2783,7 +2826,7 @@ bool gt_DestroyBarricade_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     if ((UnitIsAlive(UnitFromId(17)) == true)) {
-        Wait((gv_nIGHT_DURATION - 60.0), c_timeGame);
+        Wait((gv_nIGHT_DURATION - 60.0), c_timeAI);
         while (!((gv_inCinematic == false))) {
             Wait(1.0, c_timeGame);
         }
@@ -3824,6 +3867,7 @@ bool gt_TransmissionDaytimeQ_Func (bool testConds, bool runActions) {
     Wait(5.0, c_timeGame);
     if ((gv_day == 1)) {
         TriggerQueueEnter();
+        libB27CC4B1_gf_CurseDifficultyModifier(2);
         libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
         libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
         // Transmission - SoundLink("THanson02Raynor00022", 0)
@@ -3960,11 +4004,16 @@ bool gt_TransmissionNightQ_Func (bool testConds, bool runActions) {
     Wait(5.0, c_timeGame);
     if ((gv_night == 1)) {
         TriggerQueueEnter();
+        libB27CC4B1_gf_TalentTime(1, false, 0, 0);
         libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
         libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
         // Transmission - SoundLink("THanson02Raynor00026", 0)
         libCamp_gf_SendTransmissionCampaign(null, SoundLink("THanson02Raynor00026", -1), c_transmissionDurationAdd, 0.0, true);
         libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Game);
+        if ((libB27CC4B1_gf_TalentAcquired("ChallengeHanson2") == true)) {
+            TriggerEnable(gt_ChallengeInfestation, true);
+        }
+
         TriggerQueueExit();
     }
 
@@ -4232,7 +4281,11 @@ bool gt_VictoryInfestationPurged_Func (bool testConds, bool runActions) {
     TimerPause(gv_mainTimer, true);
     TimerPause(gv_transitionToDay, true);
     TimerPause(gv_transitionToNight, true);
+    libB27CC4B1_gf_TalentTime(2, false, 0, 0);
+    libB27CC4B1_gf_CurseDifficultyModifier(3);
+    libB27CC4B1_gf_CurseDifficultyModifier(4);
     TriggerExecute(gt_ObjectiveCleansetheInfestationComplete, true, true);
+    libB27CC4B1_gf_RogueEnding();
     libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
     return true;
 }
@@ -4543,10 +4596,6 @@ bool gt_ResearchObjectiveKilltheInfestorsUpdate_Func (bool testConds, bool runAc
         if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
             return false;
         }
-
-        if (!(((UnitGetType(EventUnit()) == "Infestor") || (UnitGetType(EventUnit()) == "InfestorBurrowed")))) {
-            return false;
-        }
     }
 
     // Actions
@@ -4555,6 +4604,7 @@ bool gt_ResearchObjectiveKilltheInfestorsUpdate_Func (bool testConds, bool runAc
     }
 
     libWCMI_gf_DisplayMissionObjectiveRewardFloatingText(UnitGetPosition(EventUnit()), "THanson02_2");
+    libB27CC4B1_gf_TalentBonusObjectiveTrigger();
     TriggerExecute(gt_ResearchObjectiveKilltheInfestorsCreateQ, true, false);
     gv_infestorsKilled += 1;
     libWCMI_gf_SetMissionObjectiveProgress("THanson02_2", gv_infestorsKilled);
@@ -4569,7 +4619,8 @@ bool gt_ResearchObjectiveKilltheInfestorsUpdate_Func (bool testConds, bool runAc
 //--------------------------------------------------------------------------------------------------
 void gt_ResearchObjectiveKilltheInfestorsUpdate_Init () {
     gt_ResearchObjectiveKilltheInfestorsUpdate = TriggerCreate("gt_ResearchObjectiveKilltheInfestorsUpdate_Func");
-    TriggerAddEventUnitDied(gt_ResearchObjectiveKilltheInfestorsUpdate, null);
+    TriggerAddEventUnitDied(gt_ResearchObjectiveKilltheInfestorsUpdate, UnitRefFromUnit(UnitFromId(927)));
+    TriggerAddEventUnitDied(gt_ResearchObjectiveKilltheInfestorsUpdate, UnitRefFromUnit(UnitFromId(1110)));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -4591,6 +4642,7 @@ bool gt_ResearchObjectiveKilltheInfestorsComplete_Func (bool testConds, bool run
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ResearchObjectiveKilltheInfestorsCreateQ, true, false);
+    libB27CC4B1_gf_TalentTime(1, false, 0, 0);
     libWCMI_gf_ZS_SetMissionObjectiveState("THanson02_2", libWoLC_ge_MissionObjectiveState_Completed);
     return true;
 }
@@ -5233,6 +5285,7 @@ bool gt_VictoryQ_Func (bool testConds, bool runActions) {
 
     gv_gameOver = true;
     TriggerQueueEnter();
+    TriggerExecute(libB27CC4B1_gt_TableButtonsHide, true, true);
     TriggerExecute(gt_VictorySetup, true, true);
     TriggerExecute(gt_VictoryCinematic, true, true);
     TriggerExecute(gt_VictoryCinematicEnd, true, true);
@@ -5472,6 +5525,7 @@ void InitTriggers () {
     gt_RemoveInfestedStructurePing_Init();
     gt_InfestationFirstSight_Init();
     gt_ClearActoronInfestedBuilding_Init();
+    gt_ChallengeInfestation_Init();
     gt_NightDefenderReaction_Init();
     gt_NightDefenderPing_Init();
     gt_NightDefenderReactionQ_Init();

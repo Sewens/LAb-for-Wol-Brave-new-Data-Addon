@@ -2,7 +2,7 @@
 // 
 // Generated Map Script
 // 
-// Name:   Maw of the Void
+// Name:   ????????????
 // 
 //==================================================================================================
 include "TriggerLibs/NativeLib"
@@ -10,6 +10,7 @@ include "TriggerLibs/LibertyLib"
 include "LibCamp"
 include "LibWoLC"
 include "LibWCMI"
+include "LibB27CC4B1"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -20,6 +21,7 @@ void InitLibs () {
     libCamp_InitLib();
     libWoLC_InitLib();
     libWCMI_InitLib();
+    libB27CC4B1_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -87,6 +89,11 @@ unit gv_uNITDaMothership;
 unit gv_vortexTarget;
 unitgroup gv_gROUPPlayersStartingUNITS;
 unitgroup gv_eastLandPatrol;
+region gv_challengeRegion;
+unitgroup gv_challengeCarrier;
+unitgroup gv_challengeDestroyer;
+unitgroup gv_challengeTempest;
+unitgroup gv_challengeVoidRay;
 int gv_statRipFieldDeaths;
 int gv_statRipFieldEmittersDestroyed;
 int gv_protossStructuresRemaining2;
@@ -152,6 +159,10 @@ void InitGlobals () {
     gv_pINGMothership = c_invalidPingId;
     gv_gROUPPlayersStartingUNITS = UnitGroupEmpty();
     gv_eastLandPatrol = UnitGroupEmpty();
+    gv_challengeCarrier = UnitGroupEmpty();
+    gv_challengeDestroyer = UnitGroupEmpty();
+    gv_challengeTempest = UnitGroupEmpty();
+    gv_challengeVoidRay = UnitGroupEmpty();
     gv_objectiveClearLZ = c_invalidObjectiveId;
     gv_objectiveRetrieveArtifact = c_invalidObjectiveId;
     gv_objectiveRescuePrisoners = c_invalidObjectiveId;
@@ -176,6 +187,7 @@ void InitGlobals () {
 //--------------------------------------------------------------------------------------------------
 void gf_SetUnitMaxStats (unit lp_u, fixed lp_maxShields, fixed lp_maxLife);
 bool gf_PlayerIsInCombat (int lp_player);
+void gf_ChallengeCreateUnit (string lp_type);
 void gf_P03AttackWaveWaypointsRoute (int lp_player, bool lp_flank);
 
 //--------------------------------------------------------------------------------------------------
@@ -235,6 +247,8 @@ trigger gt_ResourcePickups;
 trigger gt_ResourcePickupDialogueQ;
 trigger gt_ResourcesLowDialogueQ;
 trigger gt_XelnagaVaultReticuleKiller;
+trigger gt_ChallengeSetArea;
+trigger gt_ChallengeSpawnUnits;
 trigger gt_TIPCampaignTipsQ;
 trigger gt_TIPBattlecruiserQ;
 trigger gt_TIPYamatoQ;
@@ -315,8 +329,7 @@ trigger gt_VictoryCleanup;
 void gf_SetUnitMaxStats (unit lp_u, fixed lp_maxShields, fixed lp_maxLife) {
     // Automatic Variable Declarations
     // Implementation
-    UnitSetPropertyFixed(lp_u, c_unitPropLifeMax, lp_maxLife);
-    UnitSetPropertyFixed(lp_u, c_unitPropLifePercent, 100.0);
+    libB27CC4B1_gf_SetUnitHPDynamically(lp_u, lp_maxLife, 100.0);
     UnitSetPropertyFixed(lp_u, c_unitPropShieldsMax, lp_maxShields);
     UnitSetPropertyFixed(lp_u, c_unitPropShieldsPercent, 100.0);
 }
@@ -329,6 +342,32 @@ bool gf_PlayerIsInCombat (int lp_player) {
     }
     else {
         return false;
+    }
+}
+
+void gf_ChallengeCreateUnit (string lp_type) {
+    // Automatic Variable Declarations
+    string auto74CC0927_val;
+
+    // Implementation
+    UnitCreate(1, lp_type, c_unitCreateIgnorePlacement, gv_pLAYER_02_ScriptedTOSS, RegionRandomPoint(RegionFromId(45)), 0.0);
+    UnitIssueOrder(UnitLastCreated(), OrderTargetingPoint(AbilityCommand("attack", 0), RegionRandomPoint(gv_challengeRegion)), c_orderQueueReplace);
+    UnitIssueOrder(UnitLastCreated(), OrderTargetingPoint(AbilityCommand("move", 1), RegionRandomPoint(gv_challengeRegion)), c_orderQueueAddToEnd);
+    auto74CC0927_val = lp_type;
+    if (auto74CC0927_val == "Carrier") {
+        UnitGroupAdd(gv_challengeCarrier, UnitLastCreated());
+    }
+    else if (auto74CC0927_val == "VoidRayTaldarim") {
+        UnitGroupAdd(gv_challengeDestroyer, UnitLastCreated());
+    }
+    else if (auto74CC0927_val == "Tempest") {
+        UnitGroupAdd(gv_challengeTempest, UnitLastCreated());
+    }
+    else if (auto74CC0927_val == "VoidRay") {
+        UnitGroupAdd(gv_challengeVoidRay, UnitLastCreated());
+    }
+    else {
+        UnitGroupAdd(gv_challengeVoidRay, UnitLastCreated());
     }
 }
 
@@ -366,6 +405,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init06Difficulties, true, true);
     TriggerExecute(gt_Init07Help, true, true);
     libWoLC_gf_RegisterFootageRecording(gt_BriefingQ);
+    TriggerExecute(libB27CC4B1_gt_RogueInit, true, true);
     TriggerExecute(gt_IntroQ, true, false);
     return true;
 }
@@ -432,8 +472,8 @@ bool gt_Init02Players_Func (bool testConds, bool runActions) {
     PlayerGroupAdd(gv_fORCEBADGUYS, gv_pLAYER_04_DarkTOSS);
     PlayerGroupAdd(gv_fORCEGOOD_GUYS, gv_pLAYER_01_USER);
     PlayerGroupAdd(gv_fORCEGOOD_GUYS, gv_pLAYER_06_VALERIAN);
-    PlayerModifyPropertyInt(gv_pLAYER_01_USER, c_playerPropMinerals, c_playerPropOperSetTo, 600);
-    PlayerModifyPropertyInt(gv_pLAYER_01_USER, c_playerPropVespene, c_playerPropOperSetTo, 400);
+    PlayerModifyPropertyInt(gv_pLAYER_01_USER, c_playerPropMinerals, c_playerPropOperSetTo, 0);
+    PlayerModifyPropertyInt(gv_pLAYER_01_USER, c_playerPropVespene, c_playerPropOperSetTo, 0);
     PlayerModifyPropertyInt(gv_pLAYER_02_ScriptedTOSS, c_playerPropMinerals, c_playerPropOperSetTo, 5000);
     PlayerModifyPropertyInt(gv_pLAYER_02_ScriptedTOSS, c_playerPropVespene, c_playerPropOperSetTo, 5000);
     PlayerModifyPropertyInt(gv_pLAYER_03_HighTOSS, c_playerPropMinerals, c_playerPropOperSetTo, 500);
@@ -505,6 +545,7 @@ bool gt_Init03Units_Func (bool testConds, bool runActions) {
     }
 
     libWCMI_gf_HandleMercCompound(UnitFromId(348));
+    UnitBehaviorAdd(UnitFromId(3), "AttributeMapBoss", UnitFromId(3), 1);
     gv_eastLandPatrol = UnitGroup(null, gv_pLAYER_02_ScriptedTOSS, RegionFromId(21), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     gv_gROUPRipFieldGeneratorResponse01 = UnitGroup(null, gv_pLAYER_02_ScriptedTOSS, RegionFromId(26), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     gv_gROUPRipFieldGeneratorResponse02 = UnitGroup("Carrier", gv_pLAYER_04_DarkTOSS, RegionFromId(27), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
@@ -851,6 +892,7 @@ bool gt_StartGameStage1_Func (bool testConds, bool runActions) {
 
     UIAlertUnit("Trigger", gv_pLAYER_01_USER, StringExternal("Param/Value/F325FA28"), null, UnitFromId(128));
     Wait(2.0, c_timeGame);
+    libB27CC4B1_gf_ChallengeTime("ChallengeArtifact5");
     TriggerExecute(gt_ObjectiveClearLZCreateQ, true, true);
     Wait(2.0, c_timeGame);
     TriggerExecute(gt_TIPBattlecruiserQ, true, true);
@@ -869,6 +911,9 @@ void gt_StartGameStage1_Init () {
 //--------------------------------------------------------------------------------------------------
 bool gt_StartGameStage2_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
+    const int autoE20D192D_n = 3;
+    int autoE20D192D_i;
+
     // Actions
     if (!runActions) {
         return true;
@@ -877,6 +922,15 @@ bool gt_StartGameStage2_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_StartWarpPrizmDrops, true, false);
     TriggerExecute(gt_ObjectiveArtifactCreateQ, true, true);
     TriggerEnable(gt_AchievementDestroyallenemystructures, true);
+    if ((libB27CC4B1_gf_TalentAcquired("ChallengeArtifact5") == true)) {
+        TriggerEnable(gt_ChallengeSetArea, true);
+        TriggerEnable(gt_ChallengeSpawnUnits, true);
+        TriggerExecute(gt_ChallengeSetArea, true, true);
+        for (autoE20D192D_i = 1; autoE20D192D_i <= autoE20D192D_n; autoE20D192D_i += 1) {
+            TriggerExecute(gt_ChallengeSpawnUnits, true, false);
+        }
+    }
+
     Wait(10.0, c_timeGame);
     TriggerExecute(gt_ResourcePickupDialogueQ, true, true);
     Wait(10.0, c_timeGame);
@@ -1525,10 +1579,8 @@ bool gt_Prisonrelease1_Func (bool testConds, bool runActions) {
     for (;; auto3BC1DEE1_u -= 1) {
         auto3BC1DEE1_var = UnitGroupUnitFromEnd(auto3BC1DEE1_g, auto3BC1DEE1_u);
         if (auto3BC1DEE1_var == null) { break; }
-        UnitBehaviorRemove(auto3BC1DEE1_var, "SuppressCloak", 1);
-        UnitSetState(auto3BC1DEE1_var, c_unitStateInvulnerable, false);
-        libNtve_gf_RescueUnit(auto3BC1DEE1_var, gv_pLAYER_01_USER, true);
-        UnitGroupAdd(gv_gROUPEscapees, auto3BC1DEE1_var);
+        libB27CC4B1_gf_RescueUnitWithUpgrades(auto3BC1DEE1_var);
+        UnitGroupAdd(gv_gROUPEscapees, libB27CC4B1_gv_lastRescuedUnit);
     }
     TriggerExecute(gt_PrisonDialogueQ, true, false);
     UIAlertPoint("Trigger", gv_pLAYER_01_USER, StringExternal("Param/Value/89CA9AB7"), null, RegionGetCenter(RegionFromId(6)));
@@ -1574,10 +1626,8 @@ bool gt_Prisonrelease2_Func (bool testConds, bool runActions) {
     for (;; autoC50B9DC9_u -= 1) {
         autoC50B9DC9_var = UnitGroupUnitFromEnd(autoC50B9DC9_g, autoC50B9DC9_u);
         if (autoC50B9DC9_var == null) { break; }
-        UnitBehaviorRemove(autoC50B9DC9_var, "SuppressCloak", 1);
-        UnitSetState(autoC50B9DC9_var, c_unitStateInvulnerable, false);
-        libNtve_gf_RescueUnit(autoC50B9DC9_var, gv_pLAYER_01_USER, true);
-        UnitGroupAdd(gv_gROUPEscapees, autoC50B9DC9_var);
+        libB27CC4B1_gf_RescueUnitWithUpgrades(autoC50B9DC9_var);
+        UnitGroupAdd(gv_gROUPEscapees, libB27CC4B1_gv_lastRescuedUnit);
     }
     TriggerExecute(gt_PrisonDialogueQ, true, false);
     UIAlertPoint("Trigger", gv_pLAYER_01_USER, StringExternal("Param/Value/A1F38A4A"), null, RegionGetCenter(RegionFromId(11)));
@@ -1623,10 +1673,8 @@ bool gt_Prisonrelease3_Func (bool testConds, bool runActions) {
     for (;; autoBE5341A9_u -= 1) {
         autoBE5341A9_var = UnitGroupUnitFromEnd(autoBE5341A9_g, autoBE5341A9_u);
         if (autoBE5341A9_var == null) { break; }
-        UnitBehaviorRemove(autoBE5341A9_var, "SuppressCloak", 1);
-        UnitSetState(autoBE5341A9_var, c_unitStateInvulnerable, false);
-        libNtve_gf_RescueUnit(autoBE5341A9_var, gv_pLAYER_01_USER, true);
-        UnitGroupAdd(gv_gROUPEscapees, autoBE5341A9_var);
+        libB27CC4B1_gf_RescueUnitWithUpgrades(autoBE5341A9_var);
+        UnitGroupAdd(gv_gROUPEscapees, libB27CC4B1_gv_lastRescuedUnit);
     }
     TriggerExecute(gt_PrisonDialogueQ, true, false);
     UIAlertPoint("Trigger", gv_pLAYER_01_USER, StringExternal("Param/Value/77854CB5"), null, RegionGetCenter(RegionFromId(9)));
@@ -1672,10 +1720,8 @@ bool gt_Prisonrelease4_Func (bool testConds, bool runActions) {
     for (;; autoE715E49F_u -= 1) {
         autoE715E49F_var = UnitGroupUnitFromEnd(autoE715E49F_g, autoE715E49F_u);
         if (autoE715E49F_var == null) { break; }
-        UnitBehaviorRemove(autoE715E49F_var, "SuppressCloak", 1);
-        UnitSetState(autoE715E49F_var, c_unitStateInvulnerable, false);
-        libNtve_gf_RescueUnit(autoE715E49F_var, gv_pLAYER_01_USER, true);
-        UnitGroupAdd(gv_gROUPEscapees, autoE715E49F_var);
+        libB27CC4B1_gf_RescueUnitWithUpgrades(autoE715E49F_var);
+        UnitGroupAdd(gv_gROUPEscapees, libB27CC4B1_gv_lastRescuedUnit);
     }
     TriggerExecute(gt_PrisonDialogueQ, true, false);
     UIAlertPoint("Trigger", gv_pLAYER_01_USER, StringExternal("Param/Value/4A58CA35"), null, RegionGetCenter(RegionFromId(19)));
@@ -2933,6 +2979,73 @@ void gt_XelnagaVaultReticuleKiller_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: Challenge Set Area
+//--------------------------------------------------------------------------------------------------
+bool gt_ChallengeSetArea_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    PointSet(PointFromId(535669231), Point(PointGetX(UnitGetPosition(UnitGroupClosestToPoint(UnitGroupAlliance(gv_pLAYER_01_USER, c_unitAllianceEnemy, RegionFromId(46), UnitFilter((1 << c_targetFilterStructure), 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), PointFromId(1042966841)))), PointGetY(PointFromId(535669231))));
+    gv_challengeRegion = RegionRect(PointGetX(PointFromId(751718785)), PointGetY(PointFromId(751718785)), PointGetX(PointFromId(535669231)), PointGetY(PointFromId(535669231)));
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ChallengeSetArea_Init () {
+    gt_ChallengeSetArea = TriggerCreate("gt_ChallengeSetArea_Func");
+    TriggerEnable(gt_ChallengeSetArea, false);
+    TriggerAddEventTimePeriodic(gt_ChallengeSetArea, 15.0, c_timeAI);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Challenge Spawn Units
+//--------------------------------------------------------------------------------------------------
+bool gt_ChallengeSpawnUnits_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    int lv_cOUNT;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+    lv_cOUNT = libNtve_gf_DifficultyValueInt(4, 5, 6, 8);
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    if ((UnitGroupCount(gv_challengeCarrier, c_unitCountAlive) < libB27CC4B1_gf_CurseAttackWaveModifier(lv_cOUNT))) {
+        gf_ChallengeCreateUnit("Carrier");
+    }
+
+    Wait(20.0, c_timeAI);
+    if ((UnitGroupCount(gv_challengeDestroyer, c_unitCountAlive) < libB27CC4B1_gf_CurseAttackWaveModifier((lv_cOUNT + lv_cOUNT)))) {
+        gf_ChallengeCreateUnit("VoidRayTaldarim");
+    }
+
+    Wait(20.0, c_timeAI);
+    if ((UnitGroupCount(gv_challengeTempest, c_unitCountAlive) < libB27CC4B1_gf_CurseAttackWaveModifier(lv_cOUNT))) {
+        gf_ChallengeCreateUnit("Tempest");
+    }
+
+    Wait(20.0, c_timeAI);
+    if ((UnitGroupCount(gv_challengeVoidRay, c_unitCountAlive) < libB27CC4B1_gf_CurseAttackWaveModifier((lv_cOUNT + lv_cOUNT)))) {
+        gf_ChallengeCreateUnit("VoidRay");
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ChallengeSpawnUnits_Init () {
+    gt_ChallengeSpawnUnits = TriggerCreate("gt_ChallengeSpawnUnits_Func");
+    TriggerEnable(gt_ChallengeSpawnUnits, false);
+    TriggerAddEventTimePeriodic(gt_ChallengeSpawnUnits, 80.0, c_timeAI);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: TIP-Campaign Tips Q
 //--------------------------------------------------------------------------------------------------
 bool gt_TIPCampaignTipsQ_Func (bool testConds, bool runActions) {
@@ -3326,7 +3439,17 @@ void gt_DefeatBaseDead_Init () {
 // Trigger: Defeat LZ Units Dead
 //--------------------------------------------------------------------------------------------------
 bool gt_DefeatLZUnitsDead_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    unitgroup lv_cattlebruisers;
+
     // Automatic Variable Declarations
+    unitgroup auto5EB46029_g;
+    int auto5EB46029_u;
+    unit auto5EB46029_var;
+
+    // Variable Initialization
+    lv_cattlebruisers = UnitGroupEmpty();
+
     // Conditions
     if (testConds) {
         if (!((gv_gameOver == false))) {
@@ -3337,7 +3460,7 @@ bool gt_DefeatLZUnitsDead_Func (bool testConds, bool runActions) {
             return false;
         }
 
-        if (!((UnitGroupCount(UnitGroup("Battlecruiser", gv_pLAYER_01_USER, null, UnitFilter(0, 0, 0, (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) == 0))) {
+        if (!((UnitGroupCount(UnitGroup("Battlecruiser", gv_pLAYER_01_USER, null, UnitFilter(0, 0, (1 << c_targetFilterStructure), (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) == 0))) {
             return false;
         }
     }
@@ -3347,6 +3470,22 @@ bool gt_DefeatLZUnitsDead_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    UnitCreate(1, "Battlecruiser", 0, gv_pLAYER_01_USER, PointFromId(280), 180.0);
+    UnitGroupAdd(lv_cattlebruisers, UnitLastCreated());
+    UnitCreate(1, "Battlecruiser", 0, gv_pLAYER_01_USER, PointFromId(483), 180.0);
+    UnitGroupAdd(lv_cattlebruisers, UnitLastCreated());
+    UnitCreate(1, "Battlecruiser", 0, gv_pLAYER_01_USER, PointFromId(335), 180.0);
+    UnitGroupAdd(lv_cattlebruisers, UnitLastCreated());
+    MinimapPing(PlayerGroupAll(), UnitGroupCenterOfGroup(lv_cattlebruisers), 2.0, Color(0.00, 0.00, 100.00));
+    auto5EB46029_g = lv_cattlebruisers;
+    auto5EB46029_u = UnitGroupCount(auto5EB46029_g, c_unitCountAll);
+    for (;; auto5EB46029_u -= 1) {
+        auto5EB46029_var = UnitGroupUnitFromEnd(auto5EB46029_g, auto5EB46029_u);
+        if (auto5EB46029_var == null) { break; }
+        UnitSetHeight(auto5EB46029_var, 10.0, 0.0);
+        UnitSetHeight(auto5EB46029_var, libNtve_gf_CatalogFieldValueGetAsReal(c_gameCatalogUnit, "Battlecruiser", "Height", gv_pLAYER_01_USER), 5.0);
+    }
+    return true;
     TriggerEnable(TriggerGetCurrent(), false);
     gv_gameOver = true;
     TriggerQueuePause(true);
@@ -3391,6 +3530,10 @@ bool gt_VictoryRetrieveArtifactCompleted_Func (bool testConds, bool runActions) 
     Wait(0.1, c_timeGame);
     libNtve_gf_CreateUnitsWithDefaultFacing(1, "ArtifactPiece5", c_unitCreateIgnorePlacement, gv_pLAYER_01_USER, PointFromId(321));
     gv_victoryArtifact = UnitLastCreated();
+    libB27CC4B1_gf_TalentTime(3, true, libB27CC4B1_gf_TalentUpgradetoIndex("SpecialArtifact"), libB27CC4B1_gf_TalentUpgradetoIndex("SpecialRipField"));
+    libB27CC4B1_gf_CurseDifficultyModifier(3);
+    libB27CC4B1_gf_CurseDifficultyModifier(4);
+    libB27CC4B1_gf_RogueEnding();
     TriggerExecute(gt_ObjectiveArtifactComplete, true, true);
     libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
     return true;
@@ -3909,28 +4052,28 @@ bool gt_P04AttackWavesMiddle_Func (bool testConds, bool runActions) {
 
     AIAttackWaveSetTargetPlayer(lv_thisAI, PlayerGroupSingle(gv_pLAYER_01_USER));
     Wait(60.0, c_timeAI);
-    AIAttackWaveAddUnits4(2, 2, 3, 4, "Zealot");
-    AIAttackWaveAddUnits4(1, 1, 2, 2, "Stalker");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(4), "Zealot");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Stalker");
     AIAttackWaveAddWaypoint(lv_thisAI, PointFromId(364), false);
     AIAttackWaveSend(lv_thisAI, 180, true);
-    AIAttackWaveAddUnits4(3, 3, 5, 5, "Zealot");
-    AIAttackWaveAddUnits4(1, 1, 2, 1, "Archon");
-    AIAttackWaveAddUnits4(0, 0, 0, 1, "Carrier");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(5), "Zealot");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Archon");
+    AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "Carrier");
     AIAttackWaveAddWaypoint(lv_thisAI, PointFromId(232), false);
     AIAttackWaveSend(lv_thisAI, 180, true);
     while (true) {
         Wait(30.0, c_timeAI);
-        AIAttackWaveAddUnits4(0, 0, 2, 0, "Scout");
-        AIAttackWaveAddUnits4(0, 0, 0, 2, "VoidRay");
+        AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(2), 0, "Scout");
+        AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(2), "VoidRay");
         AIAttackWaveAddWaypoint(lv_thisAI, PointFromId(350), false);
         AIAttackWaveSend(lv_thisAI, 180, false);
-        AIAttackWaveAddUnits4(2, 2, 3, 4, "Zealot");
-        AIAttackWaveAddUnits4(2, 2, 2, 4, "Stalker");
-        AIAttackWaveAddUnits4(2, 2, 0, 0, "Phoenix");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(4), "Zealot");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(4), "Stalker");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), 0, 0, "Phoenix");
         AIAttackWaveAddWaypoint(lv_thisAI, PointFromId(364), false);
         AIAttackWaveSend(lv_thisAI, 180, true);
-        AIAttackWaveAddUnits4(2, 2, 3, 4, "Zealot");
-        AIAttackWaveAddUnits4(2, 2, 3, 4, "Archon");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(4), "Zealot");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(4), "Archon");
         AIAttackWaveAddWaypoint(lv_thisAI, PointFromId(232), false);
         AIAttackWaveSend(lv_thisAI, 180, true);
     }
@@ -3969,72 +4112,72 @@ bool gt_P03AttackWavesLeft_Func (bool testConds, bool runActions) {
     TriggerStop(gt_P04AttackWavesMiddle);
     AIAttackWaveSetTargetPlayer(lv_thisAI, PlayerGroupSingle(gv_pLAYER_01_USER));
     Wait(90.0, c_timeAI);
-    AIAttackWaveAddUnits4(1, 1, 2, 2, "Scout");
-    AIAttackWaveAddUnits4(0, 0, 0, 1, "VoidRay");
-    AIAttackWaveAddUnits4(1, 1, 2, 2, "Carrier");
-    AIAttackWaveAddUnits4(0, 0, 0, 1, "Observer");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Scout");
+    AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "VoidRay");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Carrier");
+    AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "Observer");
     gf_P03AttackWaveWaypointsRoute(lv_thisAI, true);
     AIAttackWaveSend(lv_thisAI, 120, true);
     Wait(120.0, c_timeAI);
-    AIAttackWaveAddUnits4(4, 4, 4, 0, "Zealot");
-    AIAttackWaveAddUnits4(0, 0, 2, 3, "Stalker");
-    AIAttackWaveAddUnits4(0, 0, 2, 5, "Sentry");
-    AIAttackWaveAddUnits4(1, 1, 1, 2, "Colossus");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(4), 0, "Zealot");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Stalker");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(2), 5, "Sentry");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Colossus");
     gf_P03AttackWaveWaypointsRoute(lv_thisAI, false);
     AIAttackWaveSend(lv_thisAI, 120, false);
     Wait(60.0, c_timeAI);
-    AIAttackWaveAddUnits4(2, 2, 3, 4, "VoidRay");
-    AIAttackWaveAddUnits4(0, 0, 1, 1, "Observer");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(4), "VoidRay");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Observer");
     gf_P03AttackWaveWaypointsRoute(lv_thisAI, true);
     AIAttackWaveSend(lv_thisAI, 120, true);
     Wait(120.0, c_timeAI);
-    AIAttackWaveAddUnits4(2, 2, 3, 2, "Immortal");
-    AIAttackWaveAddUnits4(0, 0, 0, 2, "Sentry");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Immortal");
+    AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(2), "Sentry");
     gf_P03AttackWaveWaypointsRoute(lv_thisAI, false);
     AIAttackWaveSend(lv_thisAI, 120, false);
-    AIAttackWaveAddUnits4(1, 1, 2, 2, "Carrier");
-    AIAttackWaveAddUnits4(0, 0, 2, 3, "Phoenix");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Carrier");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Phoenix");
     gf_P03AttackWaveWaypointsRoute(lv_thisAI, true);
     AIAttackWaveSend(lv_thisAI, 120, true);
     Wait(60.0, c_timeAI);
-    AIAttackWaveAddUnits4(1, 1, 2, 3, "Scout");
-    AIAttackWaveAddUnits4(2, 2, 3, 3, "Colossus");
-    AIAttackWaveAddUnits4(0, 0, 0, 1, "Observer");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Scout");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Colossus");
+    AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "Observer");
     gf_P03AttackWaveWaypointsRoute(lv_thisAI, false);
     AIAttackWaveSend(lv_thisAI, 120, true);
     Wait(90.0, c_timeAI);
-    AIAttackWaveAddUnits4(2, 2, 3, 3, "Zealot");
-    AIAttackWaveAddUnits4(2, 2, 2, 2, "Stalker");
-    AIAttackWaveAddUnits4(0, 0, 2, 3, "Sentry");
-    AIAttackWaveAddUnits4(0, 0, 0, 1, "HighTemplar");
-    AIAttackWaveAddUnits4(0, 0, 1, 1, "Observer");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Zealot");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Stalker");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Sentry");
+    AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "HighTemplar");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Observer");
     gf_P03AttackWaveWaypointsRoute(lv_thisAI, false);
     AIAttackWaveSend(lv_thisAI, 120, false);
-    AIAttackWaveAddUnits4(1, 1, 2, 2, "Carrier");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Carrier");
     gf_P03AttackWaveWaypointsRoute(lv_thisAI, true);
     AIAttackWaveSend(lv_thisAI, 120, true);
     while (true) {
         Wait(90.0, c_timeAI);
-        AIAttackWaveAddUnits4(1, 1, 2, 2, "Scout");
-        AIAttackWaveAddUnits4(2, 2, 3, 4, "Carrier");
-        AIAttackWaveAddUnits4(0, 1, 1, 1, "Observer");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Scout");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(4), "Carrier");
+        AIAttackWaveAddUnits4(0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Observer");
         gf_P03AttackWaveWaypointsRoute(lv_thisAI, true);
         AIAttackWaveSend(lv_thisAI, 120, true);
         Wait(90.0, c_timeAI);
-        AIAttackWaveAddUnits4(2, 2, 3, 3, "Immortal");
-        AIAttackWaveAddUnits4(2, 2, 3, 3, "Colossus");
-        AIAttackWaveAddUnits4(0, 0, 0, 3, "Sentry");
-        AIAttackWaveAddUnits4(0, 0, 1, 2, "Stalker");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Immortal");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Colossus");
+        AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(3), "Sentry");
+        AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Stalker");
         gf_P03AttackWaveWaypointsRoute(lv_thisAI, false);
         AIAttackWaveSend(lv_thisAI, 120, true);
         Wait(60.0, c_timeAI);
-        AIAttackWaveAddUnits4(2, 2, 3, 5, "Zealot");
-        AIAttackWaveAddUnits4(0, 0, 2, 3, "Sentry");
-        AIAttackWaveAddUnits4(0, 0, 1, 1, "HighTemplar");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(5), "Zealot");
+        AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Sentry");
+        AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "HighTemplar");
         gf_P03AttackWaveWaypointsRoute(lv_thisAI, false);
         AIAttackWaveSend(lv_thisAI, 120, false);
-        AIAttackWaveAddUnits4(2, 2, 3, 3, "VoidRay");
-        AIAttackWaveAddUnits4(1, 1, 1, 1, "Observer");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), "VoidRay");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Observer");
         gf_P03AttackWaveWaypointsRoute(lv_thisAI, true);
         AIAttackWaveSend(lv_thisAI, 120, true);
     }
@@ -4413,6 +4556,7 @@ bool gt_ObjectivePrisonersUpdate_Func (bool testConds, bool runActions) {
 
     TriggerExecute(gt_ObjectivePrisonersCreateQ, true, false);
     libWCMI_gf_SetMissionObjectiveProgress("TTychus05_3", gv_iNTProtossRescued);
+    libB27CC4B1_gf_TalentBonusObjectiveTrigger();
     if ((gv_iNTProtossRescued == 4)) {
         TriggerExecute(gt_ObjectivePrisonersComplete, true, false);
     }
@@ -4444,6 +4588,7 @@ bool gt_ObjectivePrisonersComplete_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectivePrisonersCreateQ, true, false);
+    libB27CC4B1_gf_TalentTime(1, false, 0, 0);
     libWCMI_gf_ZS_SetMissionObjectiveState("TTychus05_3", libWoLC_ge_MissionObjectiveState_Completed);
     Wait(libWCMI_gv_campaignObjectiveDelay, c_timeReal);
     return true;
@@ -4785,6 +4930,7 @@ bool gt_IntroQ_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_IntroCinematic, true, true);
     TriggerExecute(gt_IntroCinematicEnd, true, true);
     TriggerExecute(gt_IntroCleanup, true, true);
+    TriggerExecute(libB27CC4B1_gt_InitTableButtons, true, true);
     TriggerQueueExit();
     return true;
 }
@@ -5010,10 +5156,12 @@ bool gt_BaseMidQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerQueueEnter();
+    TriggerExecute(libB27CC4B1_gt_TableButtonsHide, true, true);
     TriggerExecute(gt_BaseMidSetup, true, true);
     TriggerExecute(gt_BaseMidCinematic, true, true);
     TriggerExecute(gt_BaseMidCinematicEnd, true, true);
     TriggerExecute(gt_BaseMidCleanup, true, true);
+    TriggerExecute(libB27CC4B1_gt_TableButtonsShow, true, true);
     TriggerQueueExit();
     return true;
 }
@@ -5160,6 +5308,7 @@ bool gt_BaseMidCleanup_Func (bool testConds, bool runActions) {
     // Variable Declarations
     point lv_vespeneGeyserPoint;
     fixed lv_fadeDuration;
+    fixed lv_resource;
 
     // Automatic Variable Declarations
     unitgroup auto3A4E12C9_g;
@@ -5212,14 +5361,20 @@ bool gt_BaseMidCleanup_Func (bool testConds, bool runActions) {
         UnitRemove(auto88C70C9C_var);
     }
     lv_vespeneGeyserPoint = UnitGetPosition(UnitFromId(84));
+    lv_resource = UnitGetPropertyFixed(UnitFromId(84), c_unitPropResources, c_unitPropCurrent);
     UnitRemove(UnitFromId(84));
     if ((libWoLC_gf_WC_PerkStateCheck("ResearchP3_1", libWoLC_ge_WC_PerkState_Active) == true)) {
         libNtve_gf_CreateUnitsWithDefaultFacing(1, "AutomatedRefinery", 0, gv_pLAYER_01_USER, lv_vespeneGeyserPoint);
     }
     else {
-        libNtve_gf_CreateUnitsWithDefaultFacing(1, "Refinery", 0, gv_pLAYER_01_USER, lv_vespeneGeyserPoint);
+        if ((UserDataGetInt("RogueTalents", "Angel's Vespenes", "Acquired", 1) >= 1)) {
+            libNtve_gf_CreateUnitsWithDefaultFacing(1, "RefineryRich", 0, gv_pLAYER_01_USER, lv_vespeneGeyserPoint);
+        }
+        else {
+            libNtve_gf_CreateUnitsWithDefaultFacing(1, "Refinery", 0, gv_pLAYER_01_USER, lv_vespeneGeyserPoint);
+        }
     }
-    UnitSetPropertyFixed(UnitLastCreated(), c_unitPropResources, 1500.0);
+    UnitSetPropertyFixed(UnitLastCreated(), c_unitPropResources, lv_resource);
     auto6F437502_g = gv_gROUPUnitsnotinstart;
     auto6F437502_u = UnitGroupCount(auto6F437502_g, c_unitCountAll);
     for (;; auto6F437502_u -= 1) {
@@ -5253,8 +5408,8 @@ bool gt_BaseMidCleanup_Func (bool testConds, bool runActions) {
     Wait(0.1, c_timeGame);
     TriggerEnable(gt_DefeatBaseDead, true);
     UnitSetPropertyFixed(UnitFromId(228), c_unitPropEnergy, 50.0);
-    PlayerModifyPropertyInt(gv_pLAYER_01_USER, c_playerPropMinerals, c_playerPropOperSetTo, 600);
-    PlayerModifyPropertyInt(gv_pLAYER_01_USER, c_playerPropVespene, c_playerPropOperSetTo, 400);
+    PlayerModifyPropertyInt(gv_pLAYER_01_USER, c_playerPropMinerals, c_playerPropOperAdd, 600);
+    PlayerModifyPropertyInt(gv_pLAYER_01_USER, c_playerPropVespene, c_playerPropOperAdd, 400);
     VisRevealArea(gv_pLAYER_01_USER, RegionFromId(35), 0.5, false);
     UnitGroupIssueOrder(gv_gROUPPlayersStartingUNITS, Order(AbilityCommand("stop", 0)), c_orderQueueReplace);
     UnitSetPosition(gv_uNITCruiser01, PointFromId(110), false);
@@ -5437,10 +5592,12 @@ bool gt_PrisonersMidQ_Func (bool testConds, bool runActions) {
         Wait(0.2, c_timeGame);
     }
     TriggerQueueEnter();
+    TriggerExecute(libB27CC4B1_gt_TableButtonsHide, true, true);
     TriggerExecute(gt_PrisonersMidSetup, true, true);
     TriggerExecute(gt_PrisonersMidCinematic, true, true);
     TriggerExecute(gt_PrisonersMidCinematicEnd, true, true);
     TriggerExecute(gt_PrisonersMidCleanup, true, true);
+    TriggerExecute(libB27CC4B1_gt_TableButtonsShow, true, true);
     TriggerQueueExit();
     return true;
 }
@@ -5710,10 +5867,14 @@ bool gt_MothershipMidQ_Func (bool testConds, bool runActions) {
         Wait(0.2, c_timeGame);
     }
     TriggerQueueEnter();
+    libB27CC4B1_gf_TalentTime(1, false, 0, 0);
+    TriggerExecute(libB27CC4B1_gt_TableButtonsHide, true, true);
     TriggerExecute(gt_MothershipMidSetup, true, true);
     TriggerExecute(gt_MothershipMidCinematic, true, true);
     TriggerExecute(gt_MothershipMidCinematicEnd, true, true);
     TriggerExecute(gt_MothershipMidCleanup, true, true);
+    TriggerExecute(libB27CC4B1_gt_TableButtonsShow, true, true);
+    libB27CC4B1_gf_CurseDifficultyModifier(2);
     TriggerQueueExit();
     return true;
 }
@@ -6004,6 +6165,7 @@ bool gt_VictoryQ_Func (bool testConds, bool runActions) {
 
     gv_gameOver = true;
     TriggerQueueEnter();
+    TriggerExecute(libB27CC4B1_gt_TableButtonsHide, true, true);
     TriggerExecute(gt_VictorySetup, true, true);
     TriggerExecute(gt_VictoryCinematic, true, true);
     TriggerExecute(gt_VictoryCinematicEnd, true, true);
@@ -6249,6 +6411,8 @@ void InitTriggers () {
     gt_ResourcePickupDialogueQ_Init();
     gt_ResourcesLowDialogueQ_Init();
     gt_XelnagaVaultReticuleKiller_Init();
+    gt_ChallengeSetArea_Init();
+    gt_ChallengeSpawnUnits_Init();
     gt_TIPCampaignTipsQ_Init();
     gt_TIPBattlecruiserQ_Init();
     gt_TIPYamatoQ_Init();

@@ -2,7 +2,7 @@
 // 
 // Generated Map Script
 // 
-// Name:   The Moebius Factor
+// Name:   ??????????????????
 // 
 //==================================================================================================
 include "TriggerLibs/NativeLib"
@@ -11,6 +11,7 @@ include "LibCamp"
 include "LibWoLC"
 include "LibWCMI"
 include "LibWCUI"
+include "LibB27CC4B1"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -22,6 +23,7 @@ void InitLibs () {
     libWoLC_InitLib();
     libWCMI_InitLib();
     libWCUI_InitLib();
+    libB27CC4B1_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -35,6 +37,7 @@ const int gv_p05_ZERG_BASE = 5;
 const int gv_p06_MOEBIUS_SEC_FORCE = 6;
 const int gv_p07_ZERG_KERRIGAN = 7;
 const int gv_p08_NEUTRAL_CITY = 8;
+const int gv_clonesMAX = 12;
 
 //--------------------------------------------------------------------------------------------------
 // Global Variables
@@ -108,6 +111,11 @@ point[21] gv_sitePath3;
 int gv_site1PathLength;
 int gv_site2PathLength;
 int gv_site3PathLength;
+unitgroup gv_clones;
+unitgroup gv_clonesDefendBeta;
+unitgroup gv_clonesDefendOmega;
+unit[gv_clonesMAX + 1] gv_clone;
+int[gv_clonesMAX + 1] gv_clonePing;
 unit gv_medivac01;
 unit gv_medivac02;
 unitgroup gv_medivacUnits;
@@ -126,6 +134,8 @@ unitgroup gv_victoryHiddenUnitGroup;
 unit gv_briefingKerrigan;
 
 void InitGlobals () {
+    int init_i;
+
     gv_moebiusTargets = UnitGroupEmpty();
     gv_gROUPHydraPicketers = UnitGroupEmpty();
     gv_kerrigansETATIMER = TimerCreate();
@@ -142,6 +152,12 @@ void InitGlobals () {
     gv_gROUP_INITIALWAVE = UnitGroupEmpty();
     gv_gROUP_ZERG_SITE1_SHARKS = UnitGroupEmpty();
     gv_pathRevealdistance = 7.0;
+    gv_clones = UnitGroupEmpty();
+    gv_clonesDefendBeta = UnitGroupEmpty();
+    gv_clonesDefendOmega = UnitGroupEmpty();
+    for (init_i = 0; init_i <= gv_clonesMAX; init_i += 1) {
+        gv_clonePing[init_i] = c_invalidPingId;
+    }
     gv_medivacUnits = UnitGroupEmpty();
     gv_brutaliskPing = c_invalidPingId;
     gv_objectiveDestroyDataz = c_invalidObjectiveId;
@@ -163,6 +179,7 @@ void gf_CreateSitePing (string lp_model, unit lp_target);
 region gf_GetSmartNydusRegion ();
 void gf_OrderKerrigantoBladestormArea (region lp_area);
 int gf_CountTargetsOfCurrentStage ();
+void gf_CreateClone (int lp_defend);
 void gf_AddAirAttackWaypoints (int lp_player);
 
 //--------------------------------------------------------------------------------------------------
@@ -261,6 +278,10 @@ trigger gt_PathRemovePointUpdaterSite3;
 trigger gt_PathRemoveSaftey;
 trigger gt_UpdateSitePaths;
 trigger gt_UpdateSiteVisibilityAndPings;
+trigger gt_CloneController;
+trigger gt_CloneMovement;
+trigger gt_CloneAI;
+trigger gt_DestroyClonePing;
 trigger gt_StartAI;
 trigger gt_ZergP05AttackWavesBase;
 trigger gt_AIGiveMinerals;
@@ -320,9 +341,9 @@ void gf_CreateNydusWorm (int lp_player, point lp_location, region lp_target, int
     gv_createNydusWormPlayer = lp_player;
     gv_createNydusWormLocation = lp_location;
     gv_createNydusWormTarget = lp_target;
-    gv_createNydusWormQty1 = lp_qty1;
+    gv_createNydusWormQty1 = libB27CC4B1_gf_CurseAttackWaveModifier(lp_qty1);
     gv_createNydusWormType1 = lp_type1;
-    gv_createNydusWormQty2 = lp_qty2;
+    gv_createNydusWormQty2 = libB27CC4B1_gf_CurseAttackWaveModifier(lp_qty2);
     gv_createNydusWormType2 = lp_type2;
     gv_createNydusWormPeriod = lp_period;
     gv_createNydusWormMaxPacks = lp_maxPacks;
@@ -341,9 +362,9 @@ void gf_DropPod (int lp_player, point lp_location, region lp_target, int lp_qty1
     gv_dropPodPlayer = lp_player;
     gv_dropPodLocation = lp_location;
     gv_dropPodTarget = lp_target;
-    gv_dropPodQty1 = lp_qty1;
+    gv_dropPodQty1 = libB27CC4B1_gf_CurseAttackWaveModifier(lp_qty1);
     gv_dropPodType1 = lp_type1;
-    gv_dropPodQty2 = lp_qty2;
+    gv_dropPodQty2 = libB27CC4B1_gf_CurseAttackWaveModifier(lp_qty2);
     gv_dropPodType2 = lp_type2;
     TriggerExecute(gt_DropPod, true, false);
 }
@@ -381,8 +402,7 @@ void gf_SetMaxLifeOfUnitType (string lp_units, fixed lp_maxLife) {
     for (;; auto82F6E791_u -= 1) {
         lv_u = UnitGroupUnitFromEnd(auto82F6E791_g, auto82F6E791_u);
         if (lv_u == null) { break; }
-        UnitSetPropertyFixed(lv_u, c_unitPropLifeMax, lp_maxLife);
-        UnitSetPropertyFixed(lv_u, c_unitPropLifePercent, 100.0);
+        libB27CC4B1_gf_SetUnitHPDynamically(lv_u, lp_maxLife, 100.0);
     }
 }
 
@@ -476,6 +496,58 @@ int gf_CountTargetsOfCurrentStage () {
     return lv_targets;
 }
 
+void gf_CreateClone (int lp_defend) {
+    // Variable Declarations
+    int lv_i;
+    unit lv_kerriganClone;
+
+    // Automatic Variable Declarations
+    const int auto90A02232_ae = gv_clonesMAX;
+    const int auto90A02232_ai = 1;
+    int autoA8AD9AEE_val;
+
+    // Variable Initialization
+
+    // Implementation
+    UnitCreate(1, "KerriganClone", 0, gv_p02_ZERG, RegionRandomPoint(RegionFromId(95)), libNtve_gf_RandomAngle());
+    lv_kerriganClone = UnitLastCreated();
+    libWCMI_gf_CreateDropPod(libWCMI_ge_DropPodRace_Zerg, UnitGetPosition(lv_kerriganClone), libNtve_gf_ConvertUnitToUnitGroup(lv_kerriganClone), true, gv_p02_ZERG);
+    lv_i = 1;
+    for ( ; ( (auto90A02232_ai >= 0 && lv_i <= auto90A02232_ae) || (auto90A02232_ai < 0 && lv_i >= auto90A02232_ae) ) ; lv_i += auto90A02232_ai ) {
+        if ((UnitIsAlive(gv_clone[lv_i]) == false)) {
+            gv_clone[lv_i] = lv_kerriganClone;
+            if ((lp_defend == 1)) {
+                UnitGroupAdd(gv_clonesDefendBeta, lv_kerriganClone);
+                UnitIssueOrder(lv_kerriganClone, OrderTargetingPoint(AbilityCommand("attack", 0), RegionRandomPoint(RegionFromId(96))), c_orderQueueReplace);
+            }
+            else {
+                if ((lp_defend == 2)) {
+                    UnitGroupAdd(gv_clonesDefendOmega, lv_kerriganClone);
+                    UnitIssueOrder(lv_kerriganClone, OrderTargetingPoint(AbilityCommand("attack", 0), RegionRandomPoint(RegionFromId(97))), c_orderQueueReplace);
+                }
+                else {
+                    UnitIssueOrder(lv_kerriganClone, OrderTargetingPoint(AbilityCommand("attack", 0), RegionRandomPoint(RegionFromId(98))), c_orderQueueReplace);
+                }
+            }
+            autoA8AD9AEE_val = lp_defend;
+            if (autoA8AD9AEE_val == 1) {
+            }
+            else if (autoA8AD9AEE_val == 2) {
+            }
+            else {
+            }
+            UnitGroupAdd(gv_clones, lv_kerriganClone);
+            libNtve_gf_CreatePingFacingAngle(PlayerGroupAll(), "PingBoss", UnitGetPosition(lv_kerriganClone), ColorWithAlpha(100.00, 0.00, 0.00, 0.00), 0.0, 270.0);
+            gv_clonePing[lv_i] = PingLastCreated();
+            PingSetScale(PingLastCreated(), 0.75);
+            PingSetUnit(PingLastCreated(), lv_kerriganClone);
+            PingSetTooltip(PingLastCreated(), StringExternal("Param/Value/AD677F97"));
+            break;
+        }
+
+    }
+}
+
 void gf_AddAirAttackWaypoints (int lp_player) {
     // Automatic Variable Declarations
     // Implementation
@@ -503,6 +575,7 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init06Difficulties, true, true);
     TriggerExecute(gt_Init07Help, true, true);
     libWoLC_gf_RegisterFootageRecording(gt_BriefingQ);
+    TriggerExecute(libB27CC4B1_gt_RogueInit, true, true);
     TriggerExecute(gt_IntroSequence, true, false);
     return true;
 }
@@ -961,9 +1034,15 @@ bool gt_StartGame_Func (bool testConds, bool runActions) {
     }
 
     SoundtrackPlay(PlayerGroupAll(), c_soundtrackCategoryMusic, "TTychus03MusicIntro", c_soundtrackCueAny, c_soundtrackIndexAny, false);
+    TriggerExecute(libB27CC4B1_gt_InitTableButtons, true, true);
     Wait(2.0, c_timeGame);
+    libB27CC4B1_gf_ChallengeTime("ChallengeArtifact3");
     TriggerExecute(gt_ObjectiveDestroyDataCreateQ, true, false);
-    Wait(4.0, c_timeGame);
+    Wait(4.0, c_timeAI);
+    if ((libB27CC4B1_gf_TalentAcquired("ChallengeArtifact3") == true)) {
+        TriggerExecute(gt_CloneController, true, false);
+    }
+
     TriggerExecute(gt_KerriganInitiateTargetAcquisition, true, false);
     TriggerExecute(gt_TransmissionMissionStartQ, true, false);
     Wait(28.0, c_timeGame);
@@ -1112,17 +1191,7 @@ bool gt_IntroMedivacsFinished_Func (bool testConds, bool runActions) {
     for (;; autoF6137478_u -= 1) {
         autoF6137478_var = UnitGroupUnitFromEnd(autoF6137478_g, autoF6137478_u);
         if (autoF6137478_var == null) { break; }
-        libNtve_gf_RescueUnit(autoF6137478_var, gv_p01_USER, true);
-        if ((UnitGetType(autoF6137478_var) == "Medivac")) {
-            if ((libNtve_gf_DifficultyValueInt(1, 1, 0, 0) == 1)) {
-                UnitSetInfoText(autoF6137478_var, StringExternal("Param/Value/EB077EA5"), StringExternal("Param/Value/8595A3F1"), StringExternal("Param/Value/AE692EA9"));
-                UnitSetState(autoF6137478_var, c_unitStateTooltipable, true);
-            }
-            else {
-                UnitSetInfoText(autoF6137478_var, StringExternal("Param/Value/1D83D7CE"), StringToText(""), StringToText(""));
-            }
-        }
-
+        libB27CC4B1_gf_RescueUnitWithUpgrades(autoF6137478_var);
     }
     TriggerExecute(gt_TipNewUnitMedivacQ, true, true);
     TriggerExecute(gt_TipTransportQ, true, true);
@@ -1204,6 +1273,7 @@ bool gt_Site1DestructionComplete_Func (bool testConds, bool runActions) {
     gv_dataCoresDestroyed += 1;
     VisRevealerDestroy(gv_site1Revealer);
     TimerWindowShow(gv_kerrigansETAWINDOW, PlayerGroupAll(), false);
+    libB27CC4B1_gf_TalentTime(1, false, 0, 0);
     TriggerExecute(gt_ObjectiveDestroyDataUpdate, true, true);
     libNtve_gf_AddUnitGroupToUnitGroup(AIGetUnitsInWavesWithTarget(gv_p02_ZERG, AIWaveTargetPoint(PointFromId(100))), lv_guardUnits);
     libNtve_gf_AddUnitGroupToUnitGroup(AIGetUnitsInWavesWithTarget(gv_p02_ZERG, AIWaveTargetPoint(PointFromId(1))), lv_guardUnits);
@@ -1478,12 +1548,14 @@ bool gt_Site2DestructionComplete_Func (bool testConds, bool runActions) {
     gv_fLAG_SITE_2_ACTIVE = false;
     gv_dataCoresDestroyed += 1;
     VisRevealerDestroy(gv_site2Revealer);
+    UnitGroupClear(gv_clonesDefendBeta);
     TimerWindowShow(gv_kerrigansETAWINDOW, PlayerGroupAll(), false);
     AIToggleBulliesInRegion(gv_p05_ZERG_BASE, RegionFromId(12), false);
     TriggerExecute(gt_ObjectiveDestroyDataUpdate, true, false);
     TriggerExecute(gt_Site2HydraPicketline, true, false);
     PingDestroy(gv_pINGSite2);
     TriggerExecute(gt_BaseNydusRetaliationForSite2, true, false);
+    libB27CC4B1_gf_CurseDifficultyModifier(2);
     TriggerExecute(gt_TransmissionCoreIsDestroyedQ, true, true);
     TimerWindowShow(gv_kerrigansETAWINDOW, PlayerGroupAll(), true);
     TriggerExecute(gt_KerriganRecalculateTimer, true, false);
@@ -1751,6 +1823,7 @@ bool gt_Site3DestructionComplete_Func (bool testConds, bool runActions) {
     gv_fLAG_SITE_3_ACTIVE = false;
     gv_dataCoresDestroyed += 1;
     VisRevealerDestroy(gv_site3Revealer);
+    UnitGroupClear(gv_clonesDefendOmega);
     TimerWindowShow(gv_kerrigansETAWINDOW, PlayerGroupAll(), false);
     TriggerExecute(gt_ObjectiveDestroyDataUpdate, true, true);
     PingDestroy(gv_pINGSite3);
@@ -2449,7 +2522,7 @@ bool gt_KerriganMoveOut_Func (bool testConds, bool runActions) {
 
     gv_kerrigansTarget = RegionFromId(53);
     UnitIssueOrder(gv_uNIT_KERRIGAN, OrderTargetingPoint(AbilityCommand("attack", 0), RegionGetCenter(gv_kerrigansTarget)), c_orderQueueReplace);
-    TimerStart(gv_kerriganSearchTimer, gv_kerriganSearchTime, false, c_timeGame);
+    TimerStart(gv_kerriganSearchTimer, gv_kerriganSearchTime, false, c_timeAI);
     TriggerExecute(gt_KerriganRecalculateTimer, true, true);
     libWCUI_gf_TimerWindowCreate(gv_kerrigansETATIMER, StringExternal("Param/Value/F3451341"), true, false);
     TimerWindowSetFormat(TimerWindowLastCreated(), StringToText("<mintotal/>:<sec2/>"));
@@ -2572,7 +2645,7 @@ bool gt_KerriganTargetDone_Func (bool testConds, bool runActions) {
         gv_achievementKerriganFakeBuildingCounter += 1;
         TriggerDebugOutput(1, StringExternal("Param/Value/FABC331F"), false);
         gf_OrderKerrigantoBladestormArea(gv_kerrigansTarget);
-        TimerStart(gv_kerriganSearchTimer, gv_kerriganSearchTime, false, c_timeGame);
+        TimerStart(gv_kerriganSearchTimer, gv_kerriganSearchTime, false, c_timeAI);
         TriggerExecute(gt_KerriganPickNextTarget, true, false);
         TriggerExecute(gt_KerriganRecalculateTimer, true, false);
     }
@@ -2610,7 +2683,7 @@ bool gt_KerriganTargetDiesEarly_Func (bool testConds, bool runActions) {
         TriggerDebugOutput(1, StringExternal("Param/Value/9F0B2A76"), false);
         UnitBehaviorRemove(gv_uNIT_KERRIGAN, "ProgressBar", 1);
         gv_fLAGKerrigansearching = false;
-        TimerStart(gv_kerriganSearchTimer, gv_kerriganSearchTime, false, c_timeGame);
+        TimerStart(gv_kerriganSearchTimer, gv_kerriganSearchTime, false, c_timeAI);
         TriggerExecute(gt_KerriganPickNextTarget, true, false);
         TriggerExecute(gt_KerriganRecalculateTimer, true, false);
     }
@@ -2732,7 +2805,7 @@ bool gt_KerriganRecalculateTimer_Func (bool testConds, bool runActions) {
     lv_eTA = (gv_kerriganSearchTime * IntToFixed(gf_CountTargetsOfCurrentStage()));
     lv_eTA = (lv_eTA - (gv_kerriganSearchTime - TimerGetRemaining(gv_kerriganSearchTimer)));
     if ((lv_eTA > 0.0)) {
-        TimerStart(gv_kerrigansETATIMER, lv_eTA, false, c_timeGame);
+        TimerStart(gv_kerrigansETATIMER, lv_eTA, false, c_timeAI);
     }
 
     return true;
@@ -2821,7 +2894,7 @@ bool gt_KerriganMoveOutRepeater_Func (bool testConds, bool runActions) {
 void gt_KerriganMoveOutRepeater_Init () {
     gt_KerriganMoveOutRepeater = TriggerCreate("gt_KerriganMoveOutRepeater_Func");
     TriggerEnable(gt_KerriganMoveOutRepeater, false);
-    TriggerAddEventTimePeriodic(gt_KerriganMoveOutRepeater, 10.0, c_timeGame);
+    TriggerAddEventTimePeriodic(gt_KerriganMoveOutRepeater, 10.0, c_timeAI);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -3143,7 +3216,7 @@ bool gt_IntroMilitiaStartQ_Func (bool testConds, bool runActions) {
     for (;; autoF42710C8_u -= 1) {
         autoF42710C8_var = UnitGroupUnitFromEnd(autoF42710C8_g, autoF42710C8_u);
         if (autoF42710C8_var == null) { break; }
-        libNtve_gf_RescueUnit(autoF42710C8_var, gv_p01_USER, true);
+        libB27CC4B1_gf_RescueUnitWithUpgrades(autoF42710C8_var);
         gv_statRescuablesFound += 1;
     }
     TriggerExecute(gt_AchievementAllUnitsRescued, true, false);
@@ -3295,7 +3368,7 @@ bool gt_Site1MilitiaRescued_Func (bool testConds, bool runActions) {
         auto80C95A67_var = UnitGroupUnitFromEnd(auto80C95A67_g, auto80C95A67_u);
         if (auto80C95A67_var == null) { break; }
         gv_statRescuablesFound += 1;
-        libNtve_gf_RescueUnit(auto80C95A67_var, gv_p01_USER, true);
+        libB27CC4B1_gf_RescueUnitWithUpgrades(auto80C95A67_var);
     }
     TriggerExecute(gt_AchievementAllUnitsRescued, true, false);
     TriggerExecute(gt_TransmissionSite1MilitiaRescuedQ, true, false);
@@ -3415,7 +3488,7 @@ bool gt_TheWallRescued_Func (bool testConds, bool runActions) {
         auto2C4C9513_var = UnitGroupUnitFromEnd(auto2C4C9513_g, auto2C4C9513_u);
         if (auto2C4C9513_var == null) { break; }
         gv_statRescuablesFound += 1;
-        libNtve_gf_RescueUnit(auto2C4C9513_var, gv_p01_USER, true);
+        libB27CC4B1_gf_RescueUnitWithUpgrades(auto2C4C9513_var);
     }
     TriggerExecute(gt_AchievementAllUnitsRescued, true, false);
     TriggerExecute(gt_TransmissionTheWallRescuedQ, true, false);
@@ -3535,7 +3608,7 @@ bool gt_Site2MilitiaRescued_Func (bool testConds, bool runActions) {
         auto9EA41264_var = UnitGroupUnitFromEnd(auto9EA41264_g, auto9EA41264_u);
         if (auto9EA41264_var == null) { break; }
         gv_statRescuablesFound += 1;
-        libNtve_gf_RescueUnit(auto9EA41264_var, gv_p01_USER, true);
+        libB27CC4B1_gf_RescueUnitWithUpgrades(auto9EA41264_var);
     }
     TriggerExecute(gt_AchievementAllUnitsRescued, true, false);
     TriggerExecute(gt_TransmissionSite2MilitiaRescuedQ, true, false);
@@ -3659,7 +3732,7 @@ bool gt_AliveInsideRescued_Func (bool testConds, bool runActions) {
         auto84FA099F_var = UnitGroupUnitFromEnd(auto84FA099F_g, auto84FA099F_u);
         if (auto84FA099F_var == null) { break; }
         gv_statRescuablesFound += 1;
-        libNtve_gf_RescueUnit(auto84FA099F_var, gv_p01_USER, true);
+        libB27CC4B1_gf_RescueUnitWithUpgrades(auto84FA099F_var);
     }
     TriggerExecute(gt_AchievementAllUnitsRescued, true, false);
     TriggerExecute(gt_TransmissionAliveInsideRescuedQ, true, false);
@@ -3779,7 +3852,7 @@ bool gt_Site3MilitiaRescued_Func (bool testConds, bool runActions) {
         autoB2F67AC6_var = UnitGroupUnitFromEnd(autoB2F67AC6_g, autoB2F67AC6_u);
         if (autoB2F67AC6_var == null) { break; }
         gv_statRescuablesFound += 1;
-        libNtve_gf_RescueUnit(autoB2F67AC6_var, gv_p01_USER, true);
+        libB27CC4B1_gf_RescueUnitWithUpgrades(autoB2F67AC6_var);
     }
     TriggerExecute(gt_TransmissionSite3MilitiaRescuedQ, true, false);
     TriggerExecute(gt_AchievementAllUnitsRescued, true, false);
@@ -4719,6 +4792,173 @@ void gt_UpdateSiteVisibilityAndPings_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: Clone Controller
+//--------------------------------------------------------------------------------------------------
+bool gt_CloneController_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    int lv_cloneCount;
+    int lv_cloneCountBeta;
+    int lv_cloneCountOmega;
+    fixed lv_wait;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+    lv_cloneCount = libNtve_gf_DifficultyValueInt(4, 4, 6, 8);
+    lv_cloneCountBeta = libNtve_gf_DifficultyValueInt(1, 1, 2, 2);
+    lv_cloneCountOmega = libNtve_gf_DifficultyValueInt(2, 2, 3, 3);
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(gt_CloneMovement, true);
+    TriggerEnable(gt_CloneAI, true);
+    TriggerEnable(gt_DestroyClonePing, true);
+    lv_wait = 10.0;
+    while (true) {
+        Wait(lv_wait, c_timeAI);
+        if ((UnitGroupCount(gv_clones, c_unitCountAlive) < (lv_cloneCount + lv_cloneCountBeta + lv_cloneCountOmega))) {
+            if ((UnitGroupCount(gv_clonesDefendBeta, c_unitCountAlive) < lv_cloneCountBeta) && (UnitIsAlive(gv_sITE_2_BUILDING) == true)) {
+                gf_CreateClone(1);
+            }
+            else {
+                if ((UnitGroupCount(gv_clonesDefendOmega, c_unitCountAlive) < lv_cloneCountOmega) && (UnitIsAlive(gv_sITE_3_BUILDING) == true)) {
+                    gf_CreateClone(2);
+                }
+                else {
+                    gf_CreateClone(0);
+                }
+            }
+        }
+        else {
+            lv_wait = RandomFixed(30.0, 60.0);
+        }
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_CloneController_Init () {
+    gt_CloneController = TriggerCreate("gt_CloneController_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Clone Movement
+//--------------------------------------------------------------------------------------------------
+bool gt_CloneMovement_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetType(EventUnit()) == "KerriganClone"))) {
+            return false;
+        }
+
+        if (!((UnitGroupHasUnit(gv_clones, EventUnit()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    if ((UnitGroupHasUnit(gv_clonesDefendBeta, EventUnit()) == true)) {
+        UnitIssueOrder(EventUnit(), OrderTargetingPoint(AbilityCommand("attack", 0), RegionRandomPoint(RegionFromId(96))), c_orderQueueReplace);
+    }
+    else {
+        if ((UnitGroupHasUnit(gv_clonesDefendOmega, EventUnit()) == true)) {
+            UnitIssueOrder(EventUnit(), OrderTargetingPoint(AbilityCommand("attack", 0), RegionRandomPoint(RegionFromId(97))), c_orderQueueReplace);
+        }
+        else {
+            UnitIssueOrder(EventUnit(), OrderTargetingPoint(AbilityCommand("attack", 0), RegionRandomPoint(RegionFromId(98))), c_orderQueueReplace);
+        }
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_CloneMovement_Init () {
+    gt_CloneMovement = TriggerCreate("gt_CloneMovement_Func");
+    TriggerEnable(gt_CloneMovement, false);
+    TriggerAddEventUnitBecomesIdle(gt_CloneMovement, null, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Clone AI
+//--------------------------------------------------------------------------------------------------
+bool gt_CloneAI_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetType(EventUnitDamageSourceUnit()) == "KerriganClone"))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    if ((RandomInt(1, 2) == 1)) {
+        UnitIssueOrder(EventUnitDamageSourceUnit(), OrderTargetingUnit(AbilityCommand("MindBolt", 0), UnitGroupRandomUnit(UnitGroup(null, gv_p01_USER, RegionCircle(UnitGetPosition(EventUnitDamageSourceUnit()), 6.0), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32)) | (1 << (c_targetFilterInvulnerable - 32))), 0), c_unitCountAlive)), c_orderQueueReplace);
+    }
+    else {
+        UnitIssueOrder(EventUnitDamageSourceUnit(), OrderTargetingPoint(AbilityCommand("PsionicLift", 0), UnitGetPosition(UnitGroupRandomUnit(UnitGroup(null, gv_p01_USER, RegionCircle(UnitGetPosition(EventUnitDamageSourceUnit()), 6.0), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32)) | (1 << (c_targetFilterInvulnerable - 32))), 0), c_unitCountAlive))), c_orderQueueReplace);
+    }
+    Wait(2.0, c_timeAI);
+    TriggerEnable(TriggerGetCurrent(), true);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_CloneAI_Init () {
+    gt_CloneAI = TriggerCreate("gt_CloneAI_Func");
+    TriggerEnable(gt_CloneAI, false);
+    TriggerAddEventUnitDamageAbsorbed(gt_CloneAI, null, null);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Destroy Clone Ping
+//--------------------------------------------------------------------------------------------------
+bool gt_DestroyClonePing_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    const int autoC5F9F48D_ae = gv_clonesMAX;
+    int autoC5F9F48D_var;
+
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetType(EventUnit()) == "KerriganClone"))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    autoC5F9F48D_var = 1;
+    for ( ; autoC5F9F48D_var <= autoC5F9F48D_ae; autoC5F9F48D_var += 1 ) {
+        if ((EventUnit() == gv_clone[autoC5F9F48D_var])) {
+            PingDestroy(gv_clonePing[autoC5F9F48D_var]);
+        }
+
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_DestroyClonePing_Init () {
+    gt_DestroyClonePing = TriggerCreate("gt_DestroyClonePing_Func");
+    TriggerEnable(gt_DestroyClonePing, false);
+    TriggerAddEventUnitDied(gt_DestroyClonePing, null);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: Start AI
 //--------------------------------------------------------------------------------------------------
 bool gt_StartAI_Func (bool testConds, bool runActions) {
@@ -4764,16 +5004,16 @@ bool gt_ZergP05AttackWavesBase_Func (bool testConds, bool runActions) {
     AIAttackWaveSetTargetPlayer(gv_p05_ZERG_BASE, PlayerGroupSingle(gv_p01_USER));
     AIAttackWaveSetGatherPoint(gv_p05_ZERG_BASE, PointFromId(326));
     Wait(90.0, c_timeAI);
-    AIAttackWaveAddUnits4(0, 1, 2, 3, "Mutalisk");
+    AIAttackWaveAddUnits4(0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(3), "Mutalisk");
     gf_AddAirAttackWaypoints(gv_p05_ZERG_BASE);
     AIAttackWaveSend(gv_p05_ZERG_BASE, 120, true);
     Wait(60.0, c_timeAI);
-    AIAttackWaveAddUnits4(4, 4, 7, 10, "Zergling");
-    AIAttackWaveAddUnits4(1, 1, 2, 2, "Roach");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(7), libB27CC4B1_gf_CurseAttackWaveModifier(10), "Zergling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Roach");
     AIAttackWaveAddWaypoint(gv_p05_ZERG_BASE, PointFromId(870), false);
     AIAttackWaveSend(gv_p05_ZERG_BASE, 150, false);
     Wait(60.0, c_timeAI);
-    AIAttackWaveAddUnits4(3, 3, 3, 4, "Mutalisk");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(4), "Mutalisk");
     gf_AddAirAttackWaypoints(gv_p05_ZERG_BASE);
     AIAttackWaveAddWaypoint(gv_p05_ZERG_BASE, PointFromId(620), false);
     AIAttackWaveSend(gv_p05_ZERG_BASE, 105, false);
@@ -4782,8 +5022,8 @@ bool gt_ZergP05AttackWavesBase_Func (bool testConds, bool runActions) {
     gf_AddUpgradeForEnemies(libNtve_gf_DifficultyValueInt(0, 0, 1, 0), "ZergFlyerArmorsLevel1");
     Wait(30.0, c_timeAI);
     Wait(60.0, c_timeAI);
-    AIAttackWaveAddUnits4(10, 10, 14, 18, "Zergling");
-    AIAttackWaveAddUnits4(1, 1, 1, 2, "Hydralisk");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(10), libB27CC4B1_gf_CurseAttackWaveModifier(10), libB27CC4B1_gf_CurseAttackWaveModifier(14), libB27CC4B1_gf_CurseAttackWaveModifier(18), "Zergling");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Hydralisk");
     AIAttackWaveAddWaypoint(gv_p05_ZERG_BASE, PointFromId(870), false);
     AIAttackWaveSend(gv_p05_ZERG_BASE, 150, false);
     Wait(120.0, c_timeAI);
@@ -4792,10 +5032,10 @@ bool gt_ZergP05AttackWavesBase_Func (bool testConds, bool runActions) {
     gf_AddUpgradeForEnemies(libNtve_gf_DifficultyValueInt(0, 0, 0, 1), "ZergGroundArmorsLevel2");
     Wait(30.0, c_timeAI);
     Wait(90.0, c_timeAI);
-    AIAttackWaveAddUnits4(5, 5, 6, 5, "Mutalisk");
-    AIAttackWaveAddUnits4(0, 0, 0, 1, "Corruptor");
-    AIAttackWaveAddUnits4(0, 0, 0, 1, "BroodLord");
-    AIAttackWaveAddUnits4(0, 0, 1, 1, "Overseer");
+    AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(6), libB27CC4B1_gf_CurseAttackWaveModifier(5), "Mutalisk");
+    AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "Corruptor");
+    AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "BroodLord");
+    AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Overseer");
     gf_AddAirAttackWaypoints(gv_p05_ZERG_BASE);
     AIAttackWaveAddWaypoint(gv_p05_ZERG_BASE, PointFromId(620), false);
     AIAttackWaveSend(gv_p05_ZERG_BASE, 150, false);
@@ -4806,20 +5046,20 @@ bool gt_ZergP05AttackWavesBase_Func (bool testConds, bool runActions) {
     Wait(30.0, c_timeAI);
     while (true) {
         Wait(90.0, c_timeAI);
-        AIAttackWaveAddUnits4(8, 8, 10, 12, "Zergling");
-        AIAttackWaveAddUnits4(0, 0, 1, 2, "Hydralisk");
-        AIAttackWaveAddUnits4(1, 1, 1, 0, "Roach");
-        AIAttackWaveAddUnits4(3, 3, 4, 5, "Mutalisk");
-        AIAttackWaveAddUnits4(0, 0, 0, 1, "Infestor");
-        AIAttackWaveAddUnits4(0, 0, 1, 2, "Corruptor");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(8), libB27CC4B1_gf_CurseAttackWaveModifier(10), libB27CC4B1_gf_CurseAttackWaveModifier(12), "Zergling");
+        AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Hydralisk");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), 0, "Roach");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(3), libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(5), "Mutalisk");
+        AIAttackWaveAddUnits4(0, 0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), "Infestor");
+        AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), "Corruptor");
         AIAttackWaveAddWaypoint(gv_p05_ZERG_BASE, PointFromId(870), false);
         AIAttackWaveSend(gv_p05_ZERG_BASE, 150, true);
         Wait(90.0, c_timeAI);
         gf_AddUpgradeForEnemies(libNtve_gf_DifficultyValueInt(0, 0, 0, 1), "ZergMissileWeaponsLevel3");
         gf_AddUpgradeForEnemies(libNtve_gf_DifficultyValueInt(0, 0, 0, 1), "ZergFlyerWeaponsLevel3");
-        AIAttackWaveAddUnits4(4, 4, 5, 5, "Mutalisk");
-        AIAttackWaveAddUnits4(0, 0, 1, 2, "BroodLord");
-        AIAttackWaveAddUnits4(0, 0, 1, 1, "Overseer");
+        AIAttackWaveAddUnits4(libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(4), libB27CC4B1_gf_CurseAttackWaveModifier(5), libB27CC4B1_gf_CurseAttackWaveModifier(5), "Mutalisk");
+        AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(2), "BroodLord");
+        AIAttackWaveAddUnits4(0, 0, libB27CC4B1_gf_CurseAttackWaveModifier(1), libB27CC4B1_gf_CurseAttackWaveModifier(1), "Overseer");
         gf_AddAirAttackWaypoints(gv_p05_ZERG_BASE);
         AIAttackWaveAddWaypoint(gv_p05_ZERG_BASE, PointFromId(620), false);
         AIAttackWaveSend(gv_p05_ZERG_BASE, 150, true);
@@ -5517,6 +5757,10 @@ bool gt_VictoryDestroyCoresCompleted_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerEnable(gt_DefeatPrimaryObjectiveFailedCheck, false);
+    libB27CC4B1_gf_TalentTime(2, false, 0, 0);
+    libB27CC4B1_gf_CurseDifficultyModifier(3);
+    libB27CC4B1_gf_CurseDifficultyModifier(4);
+    libB27CC4B1_gf_RogueEnding();
     TriggerExecute(gt_ObjectiveDestroyDataComplete, true, true);
     libWCMI_gf_RunMissionVictorySequence(gt_VictoryQ);
     return true;
@@ -5933,6 +6177,10 @@ bool gt_ResearchObjectiveKilltheBrutaliskUpdateQ_Func (bool testConds, bool runA
             return false;
         }
 
+        if (!((UnitGetOwner(EventUnit()) == gv_p02_ZERG))) {
+            return false;
+        }
+
         if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
             return false;
         }
@@ -5947,6 +6195,8 @@ bool gt_ResearchObjectiveKilltheBrutaliskUpdateQ_Func (bool testConds, bool runA
     PingDestroy(gv_brutaliskPing);
     gv_statBrutaliskKilled += 1;
     gv_researchEarned += 3;
+    libB27CC4B1_gf_TalentBonusObjectiveTrigger();
+    libB27CC4B1_gf_TalentTime(1, false, 0, 0);
     libWCMI_gf_DisplayMissionObjectiveRewardFloatingText(UnitGetPosition(EventUnit()), "TTychus03_3");
     TriggerExecute(gt_ResearchObjectiveKilltheBrutaliskCreateQ, true, false);
     libWCMI_gf_ZS_SetMissionObjectiveState("TTychus03_3", libWoLC_ge_MissionObjectiveState_Completed);
@@ -5998,6 +6248,7 @@ bool gt_VictoryQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerQueueEnter();
+    TriggerExecute(libB27CC4B1_gt_TableButtonsHide, true, true);
     TriggerExecute(gt_VictorySetup, true, true);
     TriggerExecute(gt_VictoryCinematic, true, true);
     TriggerExecute(gt_VictoryCinematicEnd, true, true);
@@ -6088,7 +6339,7 @@ bool gt_VictoryCinematic_Func (bool testConds, bool runActions) {
     for (;; autoFAB23EE7_u -= 1) {
         autoFAB23EE7_var = UnitGroupUnitFromEnd(autoFAB23EE7_g, autoFAB23EE7_u);
         if (autoFAB23EE7_var == null) { break; }
-        if ((UnitGetType(autoFAB23EE7_var) != "Refinery") && (UnitGetType(autoFAB23EE7_var) != "AutomatedRefinery")) {
+        if ((UnitGetType(autoFAB23EE7_var) != "Refinery") && (UnitGetType(autoFAB23EE7_var) != "RefineryRich") && (UnitGetType(autoFAB23EE7_var) != "AutomatedRefinery")) {
             lv_tYPE = UnitGetType(autoFAB23EE7_var);
             lv_pOINT = UnitGetPosition(autoFAB23EE7_var);
             UnitRemove(autoFAB23EE7_var);
@@ -6776,6 +7027,10 @@ void InitTriggers () {
     gt_PathRemoveSaftey_Init();
     gt_UpdateSitePaths_Init();
     gt_UpdateSiteVisibilityAndPings_Init();
+    gt_CloneController_Init();
+    gt_CloneMovement_Init();
+    gt_CloneAI_Init();
+    gt_DestroyClonePing_Init();
     gt_StartAI_Init();
     gt_ZergP05AttackWavesBase_Init();
     gt_AIGiveMinerals_Init();
