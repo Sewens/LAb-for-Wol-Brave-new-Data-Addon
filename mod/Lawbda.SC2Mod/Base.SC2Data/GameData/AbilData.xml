@@ -70,6 +70,115 @@
         <Flags index="Transient" value="1"/>
         <PointsPerLevel value="1"/>
     </CAbilLearn>
+    <CAbilTrain id="SquadTychusHerosTrain">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <Activity value="UI/Deploying"/>
+        <Range value="5"/>
+        <InfoArray index="Train1">
+            <Charge CountMax="4" CountUse="1" Location="Player"/>
+            <Button DefaultButtonFace="TychusMedic" Requirements="CanBuildTychusMedic"/>
+            <Unit value="TychusMedic"/>
+        </InfoArray>
+        <InfoArray index="Train2">
+            <Charge CountMax="4" CountUse="1" Location="Player"/>
+            <Button DefaultButtonFace="TychusFirebat" Requirements="CanBuildTychusFirebat"/>
+            <Unit value="TychusFirebat"/>
+        </InfoArray>
+        <InfoArray index="Train3">
+            <Charge CountMax="4" CountUse="1" Location="Player"/>
+            <Button DefaultButtonFace="TychusGhost" Requirements="CanBuildTychusGhost"/>
+            <Unit value="TychusGhost"/>
+        </InfoArray>
+        <InfoArray index="Train4">
+            <Charge CountMax="4" CountUse="1" Location="Player"/>
+            <Button DefaultButtonFace="TychusReaper" Requirements="CanBuildTychusReaper"/>
+            <Unit value="TychusReaper"/>
+        </InfoArray>
+        <InfoArray index="Train5">
+            <Charge CountMax="4" CountUse="1" Location="Player"/>
+            <Button DefaultButtonFace="TychusMarauder" Requirements="CanBuildTychusMarauder"/>
+            <Unit value="TychusMarauder"/>
+        </InfoArray>
+        <InfoArray index="Train6">
+            <Charge CountMax="4" CountUse="1" Location="Player"/>
+            <Button DefaultButtonFace="TychusSpectre" Requirements="CanBuildTychusSpectre"/>
+            <Unit value="TychusSpectre"/>
+        </InfoArray>
+    </CAbilTrain>
+    <CAbilTrain id="SquadTychusFakeReviveTrain">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <SharedFlags index="IgnoreProduceLimit" value="1"/>
+        <Activity value="UI/Deploying"/>
+        <Flags index="IgnoreUnitCost" value="1"/>
+        <InfoArray index="Train1" Time="25">
+            <Resource index="Minerals" value="250"/>
+            <Button DefaultButtonFace="TychusReviveTychus" Requirements="TychusCanReviveTychus"/>
+            <Unit value="TychusCoop"/>
+        </InfoArray>
+        <InfoArray index="Train2" Time="25">
+            <Resource index="Minerals" value="250"/>
+            <Button DefaultButtonFace="TychusReviveReaper" Requirements="TychusCanReviveReaper"/>
+            <Unit value="TychusReaper"/>
+        </InfoArray>
+        <InfoArray index="Train3" Time="25">
+            <Resource index="Minerals" value="250"/>
+            <Button DefaultButtonFace="TychusReviveWarhound" Requirements="TychusCanReviveWarhound"/>
+            <Unit value="TychusWarhound"/>
+        </InfoArray>
+        <InfoArray index="Train4" Time="25">
+            <Resource index="Minerals" value="250"/>
+            <Button DefaultButtonFace="TychusReviveFirebat" Requirements="TychusCanReviveFirebat"/>
+            <Unit value="TychusFirebat"/>
+        </InfoArray>
+        <InfoArray index="Train5" Time="25">
+            <Resource index="Minerals" value="250"/>
+            <Button DefaultButtonFace="TychusReviveMarauder" Requirements="TychusCanReviveMarauder"/>
+            <Unit value="TychusMarauder"/>
+        </InfoArray>
+        <InfoArray index="Train6" Time="25">
+            <Resource index="Minerals" value="250"/>
+            <Button DefaultButtonFace="TychusReviveHERC" Requirements="TychusCanReviveHERC"/>
+            <Unit value="TychusHERC"/>
+        </InfoArray>
+        <InfoArray index="Train7" Time="25">
+            <Resource index="Minerals" value="250"/>
+            <Button DefaultButtonFace="TychusReviveGhost" Requirements="TychusCanReviveGhost"/>
+            <Unit value="TychusGhost"/>
+        </InfoArray>
+        <InfoArray index="Train8" Time="25">
+            <Resource index="Minerals" value="250"/>
+            <Button DefaultButtonFace="TychusReviveSpectre" Requirements="TychusCanReviveSpectre"/>
+            <Unit value="TychusSpectre"/>
+        </InfoArray>
+        <InfoArray index="Train9" Time="25">
+            <Resource index="Minerals" value="250"/>
+            <Button DefaultButtonFace="TychusReviveMedic" Requirements="TychusCanReviveMedic"/>
+            <Unit value="TychusMedic"/>
+        </InfoArray>
+    </CAbilTrain>
+    <CAbilQueue id="SquadTychusHerosQueue">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <CmdButtonArray index="CancelLast">
+            <Flags index="IgnoreUser" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="CancelSlot">
+            <Flags index="IgnoreUser" value="1"/>
+        </CmdButtonArray>
+        <QueueSize value="5"/>
+    </CAbilQueue>
+    <CAbilRevive id="SquadTychusReviveHeroes">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <SharedFlags index="IgnoreProduceLimit" value="1"/>
+        <Activity value="UI/Deploying"/>
+        <CmdButtonArray index="Revive1" DefaultButtonFace="KerriganRevive">
+            <ValidatorArray value="IsDead"/>
+        </CmdButtonArray>
+        <Flags index="OverrideAlertIcon" value="1"/>
+        <BaseInfo Time="25">
+            <Resource index="Minerals" value="250"/>
+        </BaseInfo>
+        <VitalArray index="Life" value="Maximum"/>
+    </CAbilRevive>
     <CAbilEffectTarget id="SquadNovaDomination">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Effect index="0" value="SquadNovaDominationPersistent"/>
