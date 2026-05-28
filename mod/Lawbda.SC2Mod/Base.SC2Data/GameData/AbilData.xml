@@ -2303,20 +2303,6 @@
         <IgnoreFilters value="-;Enemy"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="Enband"/>
     </CAbilEffectTarget>
-    <CAbilRevive id="CaptainExcavatorRevive">
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <SharedFlags index="DisableWhileDead" value="0"/>
-        <CmdButtonArray index="Revive1" DefaultButtonFace="SquadReviveStandard"/>
-        <CmdButtonArray index="ReviveAtTarget1" DefaultButtonFace="SquadRevivePlacement"/>
-        <Flags index="UnitOrderQueue" value="1"/>
-        <BaseInfo>
-            <Cooldown TimeUse="30"/>
-        </BaseInfo>
-        <Effect value="KerriganReviveHeal"/>
-        <Offset value="0,0"/>
-        <Range value="10"/>
-        <SelfReviveCmd value="Revive1"/>
-    </CAbilRevive>
     <CAbilBehavior id="ExcavatorGatherModeSwitch">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <CmdButtonArray index="On" DefaultButtonFace="ExcavatorHarvestDropPoint">
@@ -2329,20 +2315,6 @@
         <Flags index="Transient" value="1"/>
         <BehaviorArray value="ExcavatorGatherMode"/>
     </CAbilBehavior>
-    <CAbilRevive id="CaptainFreemanRevive">
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <SharedFlags index="DisableWhileDead" value="0"/>
-        <CmdButtonArray index="Revive1" DefaultButtonFace="SquadReviveStandard"/>
-        <CmdButtonArray index="ReviveAtTarget1" DefaultButtonFace="SquadRevivePlacement"/>
-        <Flags index="UnitOrderQueue" value="1"/>
-        <BaseInfo>
-            <Cooldown TimeUse="30"/>
-        </BaseInfo>
-        <Effect value="KerriganReviveHeal"/>
-        <Offset value="0,0"/>
-        <Range value="10"/>
-        <SelfReviveCmd value="Revive1"/>
-    </CAbilRevive>
     <CAbilRally id="SquadProgressRally">
         <EditorCategories value="Race:Neutral,AbilityorEffectType:Structures"/>
         <CmdButtonArray index="Rally1" DefaultButtonFace="SquadSetRallyPoint"/>
@@ -4935,6 +4907,9 @@
         <InfoArray index="Build22" Unit="SquadBunkerVanilla" Time="45">
             <Button DefaultButtonFace="BuildSquadBunkerVanilla"/>
         </InfoArray>
+        <InfoArray index="Build23" Unit="SquadTychusResearchCenter" Time="45">
+            <Button DefaultButtonFace="BuildSquadHeroCamp"/>
+        </InfoArray>
         <InfoArray index="Build28" Unit="SquadTechlab" Time="25">
             <Button DefaultButtonFace="BuildSquadTechLab" Requirements="HaveSquadBarracks"/>
         </InfoArray>
@@ -5247,7 +5222,6 @@
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadChronoBeam"/>
     </CAbilEffectTarget>
     <CAbilAttack id="SquadHealAttack">
-        <TargetMessage value="Abil/TargetMessage/SquadHealAttack"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="SquadHealAttack"/>
         <CmdButtonArray index="Towards" DefaultButtonFace="SquadHealAttackTowards"/>
         <CmdButtonArray index="Barrage" DefaultButtonFace="SquadHealAttackGround"/>

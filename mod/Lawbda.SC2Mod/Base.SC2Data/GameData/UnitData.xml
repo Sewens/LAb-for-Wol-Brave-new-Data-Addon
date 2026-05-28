@@ -37,10 +37,6 @@
         <RepairTime value="40"/>
         <AttackTargetPriority value="11"/>
         <AbilArray Link="BuildInProgress"/>
-        <AbilArray Link="TychusResearchCenterResearch"/>
-        <AbilArray Link="SquadTychusHerosTrain"/>
-        <AbilArray Link="TychusFactoryTrain2"/>
-        <AbilArray Link="TychusStarportTrain2"/>
         <AbilArray Link="Rally"/>
         <AbilArray Link="SquadTychusReviveHeroes"/>
         <AbilArray Link="SquadTychusFakeReviveTrain"/>
@@ -51,37 +47,6 @@
             <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
             <LayoutButtons Face="Rally" Type="AbilCmd" AbilCmd="Rally,Rally1" Row="1" Column="4"/>
             <LayoutButtons Face="Halt" Type="AbilCmd" AbilCmd="BuildInProgress,Halt" Row="2" Column="3"/>
-            <LayoutButtons Face="TychusReaper" Type="AbilCmd" AbilCmd="SquadTychusHerosTrain,255" Row="0" Column="1"/>
-            <LayoutButtons Face="TychusReviveReaper" Type="AbilCmd" AbilCmd="SquadTychusFakeReviveTrain,255" Row="0" Column="1"/>
-            <LayoutButtons Face="TychusReaperPassive" Type="Passive" Requirements="TychusReaperOwned" Row="0" Column="1"/>
-            <LayoutButtons Face="TychusWarhoundLocked" Type="Passive" Requirements="TychusLevel06HeroesNotMaxed" Row="0" Column="2"/>
-            <LayoutButtons Face="TychusWarhound" Type="AbilCmd" AbilCmd="TychusFactoryTrain2,3" Row="0" Column="2"/>
-            <LayoutButtons Face="TychusReviveWarhound" Type="AbilCmd" AbilCmd="SquadTychusFakeReviveTrain,255" Row="0" Column="2"/>
-            <LayoutButtons Face="TychusWarhoundPassive" Type="Passive" Requirements="TychusWarhoundOwned" Row="0" Column="2"/>
-            <LayoutButtons Face="TychusHERCLocked" Type="Passive" Requirements="TychusLevel08HeroesNotMaxed" Row="1" Column="1"/>
-            <LayoutButtons Face="TychusHERC" Type="AbilCmd" AbilCmd="TychusFactoryTrain2,1" Row="1" Column="1"/>
-            <LayoutButtons Face="TychusReviveHERC" Type="AbilCmd" AbilCmd="SquadTychusFakeReviveTrain,255" Row="1" Column="1"/>
-            <LayoutButtons Face="TychusHERCPassive" Type="Passive" Requirements="TychusHERCOwned" Row="1" Column="1"/>
-            <LayoutButtons Face="TychusGhostLocked" Type="Passive" Requirements="TychusLevel10HeroesNotMaxed" Row="2" Column="0"/>
-            <LayoutButtons Face="TychusGhost" Type="AbilCmd" AbilCmd="SquadTychusHerosTrain,255" Row="2" Column="0"/>
-            <LayoutButtons Face="TychusReviveGhost" Type="AbilCmd" AbilCmd="SquadTychusFakeReviveTrain,255" Row="2" Column="0"/>
-            <LayoutButtons Face="TychusGhostPassive" Type="Passive" Requirements="TychusGhostOwned" Row="2" Column="0"/>
-            <LayoutButtons Face="TychusMedic" Type="AbilCmd" AbilCmd="SquadTychusHerosTrain,255" Row="2" Column="2"/>
-            <LayoutButtons Face="TychusReviveMedic" Type="AbilCmd" AbilCmd="SquadTychusFakeReviveTrain,255" Row="2" Column="2"/>
-            <LayoutButtons Face="TychusMedicPassive" Type="Passive" Requirements="TychusMedicOwned" Row="2" Column="2"/>
-            <LayoutButtons Face="TychusMarauderLocked" Type="Passive" Requirements="TychusLevel04HeroesNotMaxed" Row="1" Column="2"/>
-            <LayoutButtons Face="TychusMarauder" Type="AbilCmd" AbilCmd="SquadTychusHerosTrain,255" Row="1" Column="2"/>
-            <LayoutButtons Face="TychusReviveMarauder" Type="AbilCmd" AbilCmd="SquadTychusFakeReviveTrain,255" Row="1" Column="2"/>
-            <LayoutButtons Face="TychusMarauderPassive" Type="Passive" Requirements="TychusMarauderOwned" Row="1" Column="2"/>
-            <LayoutButtons Face="TychusSpectre" Type="AbilCmd" AbilCmd="SquadTychusHerosTrain,255" Row="2" Column="1"/>
-            <LayoutButtons Face="TychusReviveSpectre" Type="AbilCmd" AbilCmd="SquadTychusFakeReviveTrain,255" Row="2" Column="1"/>
-            <LayoutButtons Face="TychusSpectrePassive" Type="Passive" Requirements="TychusSpectreOwned" Row="2" Column="1"/>
-            <LayoutButtons Face="TychusFirebat" Type="AbilCmd" AbilCmd="SquadTychusHerosTrain,255" Row="1" Column="0"/>
-            <LayoutButtons Face="TychusReviveFirebat" Type="AbilCmd" AbilCmd="SquadTychusFakeReviveTrain,255" Row="1" Column="0"/>
-            <LayoutButtons Face="TychusFirebatPassive" Type="Passive" Requirements="TychusFirebatOwned" Row="1" Column="0"/>
-            <LayoutButtons Face="TychusACHero" Type="AbilCmd" AbilCmd="TychusStarportTrain2,0" Row="0" Column="0"/>
-            <LayoutButtons Face="TychusReviveTychus" Type="AbilCmd" AbilCmd="SquadTychusFakeReviveTrain,255" Row="0" Column="0"/>
-            <LayoutButtons Face="TychusACHero" Type="Passive" Row="0" Column="0"/>
         </CardLayouts>
         <Radius value="1.5"/>
         <SeparationRadius value="1.5"/>
@@ -285,11 +250,13 @@
             <ChanceArray index="Anim" value="10"/>
             <ChanceArray index="Idle" value="90"/>
         </Fidget>
+        <DeathTime value="-1"/>
+        <ReviveInfoBase Time="30"/>
     </CUnit>
     <CUnit id="SquadOdinAntiAirMissile" parent="MISSILE">
         <Race value="Terr"/>
         <Mover value="ThorAA"/>
-        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
     </CUnit>
     <CUnit id="SquadStetmannUltraHealGunMissile" parent="MISSILE_INVULNERABLE">
         <Race value="Terr"/>
@@ -321,6 +288,7 @@
         <AttackTargetPriority value="20"/>
         <AbilArray Link="stop"/>
         <AbilArray Link="attack"/>
+        <BehaviorArray Link="FirebatImmolationArmor"/>
         <WeaponArray Link="SquadSwannFlamingBettyFlamethrower" Turret="SquadSwannFlamingBettyTurret"/>
         <CardLayouts>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
@@ -336,12 +304,11 @@
         <ScoreKill value="150"/>
         <SubgroupPriority value="12"/>
         <MinimapRadius value="0.75"/>
-        <EditorCategories value="ObjectType:Hero,ObjectFamily:Campaign"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Campaign"/>
         <TacticalAI value="DutchTurret"/>
         <GlossaryCategory value="Unit/Category/TerranUnits"/>
         <GlossaryPriority value="360"/>
         <HotkeyCategory value="Unit/Category/Lawbda"/>
-        <BehaviorArray Link="FirebatImmolationArmor"/>
     </CUnit>
     <CUnit id="SquadFuturesExchange">
         <Description value="Button/Tooltip/Biodome"/>
@@ -1068,7 +1035,7 @@
         <InnerRadius value="1"/>
         <SubgroupPriority value="199"/>
         <MinimapRadius value="1"/>
-        <EditorCategories value="ObjectFamily:Campaign,ObjectType:Unit"/>
+        <EditorCategories value="ObjectFamily:Campaign,ObjectType:Hero"/>
         <HotkeyAlias value="GaryStetmann"/>
         <TechAliasArray value="Alias_Gary"/>
         <HotkeyCategory value="Unit/Category/Lawbda"/>
@@ -1148,6 +1115,7 @@
             <ChanceArray index="Turn" value="33"/>
         </Fidget>
         <AlliedPushPriority value="11"/>
+        <DeathTime value="-1"/>
     </CUnit>
     <CUnit id="SiegeTankJumpJetPlaceholder" parent="PLACEHOLDER">
         <DeathRevealRadius value="3"/>
@@ -1258,6 +1226,7 @@
         <TauntDuration index="Dance" value="5"/>
     </CUnit>
     <CUnit id="SquadMeatWagon">
+        <DeathTime value="-1"/>
         <DeathRevealRadius value="3"/>
         <FlagArray index="UseLineOfSight" value="1"/>
         <FlagArray index="TurnBeforeMove" value="1"/>
@@ -1321,9 +1290,10 @@
         <ScoreKill value="700"/>
         <SubgroupPriority value="20"/>
         <MinimapRadius value="1"/>
-        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
+        <EditorCategories value="ObjectType:Hero,ObjectFamily:Campaign"/>
         <LeaderAlias value=""/>
         <HotkeyAlias value=""/>
+        <ReviveInfoBase Time="30"/>
     </CUnit>
     <CUnit id="SquadArtilleryMengsk">
         <DeathRevealRadius value="3"/>
@@ -3404,7 +3374,6 @@
         <AbilArray Link="SquadExcavatorGather"/>
         <AbilArray Link="BehemothAfterburner"/>
         <AbilArray Link="ExcavatorGatherModeSwitch"/>
-        <AbilArray Link="CaptainExcavatorRevive"/>
         <BehaviorArray Link="ExcavatorRecycleStructureCauseDropPickup"/>
         <BehaviorArray Link="SquadFireSuppressionSystem"/>
         <BehaviorArray Link="Frenzy"/>
@@ -3438,10 +3407,11 @@
         <EditorCategories value="Race:Terran,ObjectType:Hero,ObjectFamily:Campaign"/>
         <SelectAlias value="Thor"/>
         <HotkeyCategory value="Unit/Category/Lawbda"/>
-        <ReviveInfoBase>
+        <ReviveInfoBase Time="30">
             <Charge Link="CaptainExcavatorRevive/Revive"/>
             <Cooldown Link="CaptainExcavatorRevive/Revive"/>
         </ReviveInfoBase>
+        <DeathTime value="-1"/>
     </CUnit>
     <CUnit id="SquadPylon">
         <DeathRevealRadius value="3"/>
@@ -4741,9 +4711,9 @@
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
     </CUnit>
     <CUnit id="CaptainPredator">
+        <DeathTime value="-1"/>
         <DeathRevealRadius value="3"/>
-        <ReviveType value=""/>
-        <Race value="Terran"/>
+        <Race value="Terr"/>
         <Mob value="Campaign"/>
         <FlagArray index="PreventDestroy" value="1"/>
         <FlagArray index="UseLineOfSight" value="1"/>
@@ -4823,9 +4793,8 @@
         <GlossaryWeakArray value="Thor"/>
         <HotkeyCategory value="Unit/Category/Lawbda"/>
         <AIEvaluateAlias value="Predator"/>
-        <ReviveInfoBase>
+        <ReviveInfoBase Time="30">
             <Charge Link="Predator/Revive"/>
-            <Cooldown Link="Predator/Revive"/>
         </ReviveInfoBase>
     </CUnit>
     <CUnit id="LawbdaCore">
@@ -6244,7 +6213,7 @@
             <LayoutButtons Face="BuildSquadFusionCore" Type="AbilCmd" AbilCmd="SquadTerranBuild,Build16" Row="2" Column="1"/>
             <LayoutButtons Face="CancelBuilding" Type="CancelSubmenu" Row="2" Column="4"/>
             <LayoutButtons Face="BuildLawbdaCore" Type="AbilCmd" AbilCmd="SquadTerranBuild,Build13" Row="2" Column="2"/>
-            <LayoutButtons Face="BuildSquadMercCompound" Type="AbilCmd" AbilCmd="SquadTerranBuild,Build15" Row="0" Column="1"/>
+            <LayoutButtons Face="BuildSquadHeroCamp" Type="AbilCmd" AbilCmd="SquadTerranBuild,Build23" Row="0" Column="1"/>
             <LayoutButtons Face="BuildSquadFutureExchange" Type="AbilCmd" AbilCmd="SquadTerranBuild,Build21" Row="0" Column="2"/>
         </CardLayouts>
         <CardLayouts CardId="TBl3">
@@ -6282,7 +6251,7 @@
     <CUnit id="CaptainFreeman">
         <DeathTime value="-1"/>
         <DeathRevealRadius value="3"/>
-        <Race value="Terran"/>
+        <Race value="Terr"/>
         <Mob value="Campaign"/>
         <FlagArray index="UseLineOfSight" value="1"/>
         <FlagArray index="ArmySelect" value="1"/>
@@ -6319,7 +6288,6 @@
         <AbilArray Link="SquadInfantry"/>
         <AbilArray Link="QueueMagazine"/>
         <AbilArray Link="DisbandSquad"/>
-        <AbilArray Link="CaptainFreemanRevive"/>
         <BehaviorArray Link="HeroLevelUpTo10"/>
         <BehaviorArray Link="SquadShooterAura"/>
         <WeaponArray Link="FreemanGaussRifle"/>
@@ -6372,7 +6340,7 @@
             <ChanceArray index="Idle" value="33"/>
             <ChanceArray index="Turn" value="33"/>
         </Fidget>
-        <ReviveInfoBase>
+        <ReviveInfoBase Time="30">
             <Charge Link="CaptainFreemanRevive/Revive"/>
             <Cooldown Link="CaptainFreemanRevive/Revive"/>
         </ReviveInfoBase>
@@ -6381,6 +6349,9 @@
         <Name value="Unit/Name/SquadSCVJumper"/>
         <Description value="Button/Tooltip/SquadSCVJumper"/>
         <Mover value="CliffJumper"/>
+        <CardLayouts index="2" CardId="TBl2">
+            <LayoutButtons index="7" Face="BuildSquadMercCompound" Type="AbilCmd" AbilCmd="SquadTerranBuild,Build15" Row="0" Column="1"/>
+        </CardLayouts>
     </CUnit>
     <CUnit id="SquadSupplyDepotLowered">
         <DeathRevealRadius value="3"/>
@@ -7604,7 +7575,7 @@
         <EnergyStart value="75"/>
         <EnergyMax value="250"/>
         <EnergyRegenRate value="0.5625"/>
-        <ShieldArmorName value="Unit/ShieldArmorName/SquadToshShields"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/ProtossPlasmaShields"/>
         <Speed value="3"/>
         <Acceleration value="1000"/>
         <LateralAcceleration value="46.0625"/>
@@ -7656,6 +7627,8 @@
             <ChanceArray index="Idle" value="33"/>
             <ChanceArray index="Turn" value="33"/>
         </Fidget>
+        <DeathTime value="-1"/>
+        <ReviveInfoBase Time="30"/>
     </CUnit>
     <CUnit id="SquadBansheeConsumeStructure" parent="MISSILE_INVULNERABLE">
         <Race value="Terr"/>
@@ -7746,6 +7719,8 @@
             <ChanceArray index="Idle" value="33"/>
             <ChanceArray index="Turn" value="33"/>
         </Fidget>
+        <DeathTime value="-1"/>
+        <ReviveInfoBase Time="30"/>
     </CUnit>
     <CUnit id="SquadTychusTossGrenadeMissile" parent="MISSILE">
         <Race value="Terr"/>
@@ -7818,6 +7793,8 @@
         <GlossaryCategory value="Unit/Category/TerranUnits"/>
         <GlossaryPriority value="320"/>
         <HotkeyCategory value="Unit/Category/Lawbda"/>
+        <DeathTime value="-1"/>
+        <ReviveInfoBase Time="30"/>
     </CUnit>
     <CUnit id="SquadSwannConcussiveGrenadeMissile" parent="MISSILE">
         <Race value="Terr"/>
@@ -7897,6 +7874,8 @@
             <ChanceArray index="Idle" value="33"/>
             <ChanceArray index="Turn" value="33"/>
         </Fidget>
+        <DeathTime value="-1"/>
+        <ReviveInfoBase Time="30"/>
     </CUnit>
     <CUnit id="SquadZeratul">
         <DeathRevealRadius value="3"/>
@@ -7970,6 +7949,8 @@
         <GlossaryWeakArray value="SporeCrawler"/>
         <HotkeyCategory value="Unit/Category/Lawbda"/>
         <AlliedPushPriority value="11"/>
+        <DeathTime value="-1"/>
+        <ReviveInfoBase Time="30"/>
     </CUnit>
     <CUnit id="SquadZeratulPhaseMineBlastWeapon" parent="MISSILE">
         <Race value="Prot"/>

@@ -21,7 +21,177 @@
         <Flags index="Wait" value="0"/>
         <Priority value="24"/>
     </CModel>
-    <CModel id="TychusResearchCenter2" parent="Building" Race="Terran">
+    <!-- tychus coop-->
+    <CModel id="SquadTychusChaingunAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Terran\MarineWeaponImpact\MarineWeaponImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="SquadTychusChaingunAttackLaunch" parent="LaunchFX">
+        <Model value="Assets\Effects\Terran\MarineWeaponLaunch\MarineWeaponLaunch.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="SquadTychusGrenadeWeapon" parent="MissileFX">
+        <Model value="Assets\Effects\Terran\PodMissile\PodMissile.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <ScaleMax value="0.600000,0.600000,0.600000"/>
+        <ScaleMin value="0.600000,0.600000,0.600000"/>
+        <SelectionRadius value="0.833200"/>
+        <ShadowRadius value="0.833200"/>
+    </CModel>
+    <CModel id="SquadTychusTossGrenade" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Terran\PodMissile\PodMissile.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <ScaleMax value="0.600000,0.600000,0.600000"/>
+        <ScaleMin value="0.600000,0.600000,0.600000"/>
+        <SelectionRadius value="0.833200"/>
+        <ShadowRadius value="0.833200"/>
+    </CModel>
+    <CModel id="SquadTychusCoop" parent="Unit" Race="Terran">
+        <Model value="Assets\COOP\Tychus\Units\Tychus_Heavens_COOP\Tychus_Heavens_COOP.m3"/>
+        <Events>
+            <Anim value="Walk,00"/>
+            <Name value="TychusCoop_FS_Walk_Foley"/>
+            <Type value="Sound"/>
+            <Time value="0.002000"/>
+            <Payload value="TychusCoop_FS_Walk_Foley"/>
+        </Events>
+        <Events>
+            <Anim value="Walk,00"/>
+            <Name value="TychusCoop_FS_Walk_Foley"/>
+            <Type value="Sound"/>
+            <Time value="0.335000"/>
+            <Payload value="TychusCoop_FS_Walk_Foley"/>
+        </Events>
+        <Events>
+            <Anim value="Death,02"/>
+            <Name value="TychusCoop_Death02_Pt1"/>
+            <Type value="Sound"/>
+            <Time value="0.041000"/>
+            <Payload value="TychusCoop_Death02_Pt1"/>
+        </Events>
+        <Events>
+            <Anim value="Death,02"/>
+            <Name value="TychusCoop_Death02_Pt2"/>
+            <Type value="Sound"/>
+            <Time value="2.009000"/>
+            <Payload value="TychusCoop_Death02_Pt2"/>
+        </Events>
+        <Events>
+            <Anim value="Death,02"/>
+            <Name value="TychusCoop_Death_Eviscerate"/>
+            <Type value="Sound"/>
+            <Time value="0.121000"/>
+            <Payload value="TychusCoop_Death_Eviscerate"/>
+        </Events>
+        <Events>
+            <Anim value="Death,02"/>
+            <Name value="Blood_Spurt"/>
+            <Type value="Sound"/>
+            <Time value="0.383000"/>
+            <Payload value="Blood_Spurt"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,Unpowered,Start,00"/>
+            <Name value="TychusCoop_StandUnpowered_Start_Pt1"/>
+            <Type value="Sound"/>
+            <Payload value="TychusCoop_StandUnpowered_Start_Pt1"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,Unpowered,Start,00"/>
+            <Name value="TychusCoop_StandUnpowered_Start_Pt2"/>
+            <Type value="Sound"/>
+            <Time value="1.708000"/>
+            <Payload value="TychusCoop_StandUnpowered_Start_Pt2"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,Unpowered,End,00"/>
+            <Name value="TychusCoop_StandUnpowered_End"/>
+            <Type value="Sound"/>
+            <Time value="0.348000"/>
+            <Payload value="TychusCoop_StandUnpowered_End"/>
+        </Events>
+        <Events>
+            <Anim value="Spell,00"/>
+            <Name value="TychusCoop_Spell_Pt1_01"/>
+            <Type value="Sound"/>
+            <Time value="0.053000"/>
+            <Payload value="TychusCoop_Spell_Pt1_01"/>
+        </Events>
+        <Events>
+            <Anim value="Spell,00"/>
+            <Name value="TychusCoop_Spell_Pt2_01"/>
+            <Type value="Sound"/>
+            <Time value="0.531000"/>
+            <Payload value="TychusCoop_Spell_Pt2_01"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,Left,00"/>
+            <Name value="TychusCoop_FS_Walk_Foley"/>
+            <Type value="Sound"/>
+            <Time value="0.007000"/>
+            <Payload value="TychusCoop_FS_Walk_Foley"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,Left,00"/>
+            <Name value="TychusCoop_FS_Walk_Foley"/>
+            <Type value="Sound"/>
+            <Time value="0.531000"/>
+            <Payload value="TychusCoop_FS_Walk_Foley"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,Right,00"/>
+            <Name value="TychusCoop_FS_Walk_Foley"/>
+            <Type value="Sound"/>
+            <Time value="0.634000"/>
+            <Payload value="TychusCoop_FS_Walk_Foley"/>
+        </Events>
+        <Radius value="0.450000"/>
+    </CModel>
+    <CModel id="SquadTychusCoopDeath" parent="UnitDeath" Race="Terran">
+        <Model value="Assets\COOP\Tychus\Units\Tychus_Heavens_COOP_Death\Tychus_Heavens_COOP_Death.m3"/>
+        <LowQualityModel value="TerranSmallUnitDeathLow"/>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Uni_DeathFXincidentallFire"/>
+            <Type value="Sound"/>
+            <Time value="0.950000"/>
+            <Payload value="Uni_DeathFXincidentallFire"/>
+        </Events>
+        <Events>
+            <Anim value="Death,Blast"/>
+            <Name value="Uni_DeathFXincidentallFire"/>
+            <Type value="Sound"/>
+            <Time value="0.950000"/>
+            <Payload value="Uni_DeathFXincidentallFire"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Tychus_Hero_HeavensDeath"/>
+            <Type value="Sound"/>
+            <Time value="0.995000"/>
+            <Payload value="Tychus_Hero_HeavensDeath"/>
+        </Events>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="SquadTychusCoopDeathRagdoll" parent="UnitDeathRagdoll" Race="Terran">
+        <Model value="Assets\COOP\Tychus\Units\Tychus_Heavens_COOP_DeathRagdoll\Tychus_Heavens_COOP_DeathRagdoll.m3"/>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Tychus_Hero_HeavensDeath"/>
+            <Type value="Sound"/>
+            <Time value="0.995000"/>
+            <Payload value="Tychus_Hero_HeavensDeath"/>
+        </Events>
+    </CModel>
+    <CModel id="SquadTychusHeavensCOOPPortrait" parent="FXAPortrait" Race="Terran">
+        <Model value="Assets\Portraits\Terran\TychusPortrait\TychusPortrait.m3"/>
+        <RequiredAnims value="Assets\Portraits\Terran\TychusPortrait_RequiredAnims\TychusPortrait_RequiredAnims.m3a"/>
+        <FacialController value="LocalizedData\Facial\TychusPortrait.fxa"/>
+        <Image value="Assets\Textures\TychusPortrait_Static.dds"/>
+        <Lighting value="TychusPortrait"/>
+    </CModel>
+    <!-- hero camp-->
+    <CModel id="SquadTychusResearchCenter" parent="Building" Race="Terran">
         <Model value="Assets\Buildings\Terran\MercHaven\MercHaven.m3"/>
         <Radius value="1.500000"/>
         <SelectionLayer value="2"/>
@@ -55,7 +225,7 @@
     <CModel id="SquadTychusResearchCenterPlacement" parent="Placement" Race="Terran">
         <Model value="Assets\Buildings\Terran\MercHavenPlacement\MercHavenPlacement.m3"/>
     </CModel>
-    <CModel id="TychusResearchCenterSplat2" parent="Splat">
+    <CModel id="SquadTychusResearchCenterSplat" parent="Splat">
         <Model value="Assets\Splats\Splat_MercHaven\Splat_MercHaven.m3"/>
         <EditorCategories value="Race:Terran"/>
     </CModel>
@@ -112,7 +282,7 @@
         <Model value="Assets\Effects\Terran\FireImpact\FireImpact.m3"/>
         <EditorCategories value="Race:Terran"/>
     </CModel>
-    <CModel id="K5KerriganBurrowedSplat2" parent="Splat">
+    <CModel id="SquadK5KerriganBurrowedSplat" parent="Splat">
         <Model value="Assets\Splats\Splat_ZerglingBurrowed\Splat_ZerglingBurrowed.m3"/>
         <EditorCategories value="Race:Zerg"/>
         <VariationCount value="3"/>
@@ -359,7 +529,7 @@
     <CModel id="SquadMedivacMengskDeathRagdoll" parent="UnitDeath_COOP" COOP="Mengsk" Race="Terran">
         <Model value="Assets\COOP\Mengsk\Units\Medivac_Mengsk_COOP_DeathRagdoll\Medivac_Mengsk_COOP_DeathRagdoll.m3"/>
     </CModel>
-    <CModel id="MedivacMengskHealBeam" parent="PersistentSpellFX">
+    <CModel id="SquadMedivacMengskHealBeam" parent="PersistentSpellFX">
         <Model value="Assets\Effects\Terran\MedivacBeam\MedivacBeam.m3"/>
         <EditorCategories value="Race:Terran"/>
         <RadiusLoose value="1.000000"/>
@@ -450,7 +620,7 @@
         <ScaleMax value="0.500000,0.500000,1.000000"/>
         <ScaleMin value="0.500000,0.500000,1.000000"/>
     </CModel>
-    <CModel id="GhostMengskNukeExplode2" parent="OneShotSpellFX">
+    <CModel id="SquadGhostMengskNukeExplode" parent="OneShotSpellFX">
         <Model value="Assets\COOP\Mengsk\Effects\Ghost_Mengsk_COOP_MiniNuke_Impact\Ghost_Mengsk_COOP_MiniNuke_Impact.m3"/>
         <AnimSpeed value="2.000000"/>
         <EditorCategories value="Race:Terran"/>
@@ -490,7 +660,7 @@
         <ScaleMax value="1.150000,1.150000,1.150000"/>
         <ScaleMin value="1.150000,1.150000,1.150000"/>
     </CModel>
-    <CModel id="VoidSentryBlackHoleCursorSplat2" parent="UI">
+    <CModel id="SquadVoidSentryBlackHoleCursorSplat" parent="UI">
         <Model value="Assets\UI\Cursors\Taldarim_Mothership_Black_Hole_Cursor\Taldarim_Mothership_Black_Hole_Cursor.m3"/>
         <EditorCategories value="Race:Protoss"/>
         <ScaleMax value="0.220000,0.220000,0.220000"/>
