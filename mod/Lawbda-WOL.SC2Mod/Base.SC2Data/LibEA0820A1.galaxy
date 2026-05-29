@@ -88,6 +88,81 @@ void libEA0820A1_gf_CU_GPInitRayor (int lp_player) {
 
 // Triggers
 //--------------------------------------------------------------------------------------------------
+// Trigger: Armory Cheat
+//--------------------------------------------------------------------------------------------------
+bool libEA0820A1_gt_ArmoryCheat_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    string lv_testCode;
+    int lv_triggeringPlayer;
+
+    // Automatic Variable Declarations
+    string autoCFF00400_val;
+
+    // Variable Initialization
+    lv_testCode = "";
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lv_testCode = EventChatMessage(false);
+    lv_triggeringPlayer = EventPlayer();
+    autoCFF00400_val = lv_testCode;
+    if (autoCFF00400_val == "tech000") {
+        libNtve_gf_SetUpgradeLevelForPlayer(lv_triggeringPlayer, "MarineCombatShield", 1);
+    }
+    else {
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libEA0820A1_gt_ArmoryCheat_Init () {
+    libEA0820A1_gt_ArmoryCheat = TriggerCreate("libEA0820A1_gt_ArmoryCheat_Func");
+    TriggerAddEventChatMessage(libEA0820A1_gt_ArmoryCheat, c_playerAny, "tech", false);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Lab Cheat
+//--------------------------------------------------------------------------------------------------
+bool libEA0820A1_gt_LabCheat_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    string lv_testCode;
+    int lv_triggeringPlayer;
+
+    // Automatic Variable Declarations
+    string auto6DEC53D0_val;
+
+    // Variable Initialization
+    lv_testCode = "";
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lv_testCode = EventChatMessage(false);
+    lv_triggeringPlayer = EventPlayer();
+    auto6DEC53D0_val = lv_testCode;
+    if (auto6DEC53D0_val == "labp00") {
+        libNtve_gf_SetUpgradeLevelForPlayer(lv_triggeringPlayer, "AdvanceMilitarySupport", 1);
+    }
+    else if (auto6DEC53D0_val == "labp01") {
+        libNtve_gf_SetUpgradeLevelForPlayer(lv_triggeringPlayer, "HightechMilitarySupport", 1);
+    }
+    else {
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libEA0820A1_gt_LabCheat_Init () {
+    libEA0820A1_gt_LabCheat = TriggerCreate("libEA0820A1_gt_LabCheat_Func");
+    TriggerAddEventChatMessage(libEA0820A1_gt_LabCheat, c_playerAny, "lab", false);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: Init 00 ReplaceUnit
 //--------------------------------------------------------------------------------------------------
 bool libEA0820A1_gt_Init00ReplaceUnit_Func (bool testConds, bool runActions) {
@@ -299,6 +374,8 @@ void libEA0820A1_gt_Init00ReplaceUnit_Init () {
 }
 
 void libEA0820A1_InitTriggers () {
+    libEA0820A1_gt_ArmoryCheat_Init();
+    libEA0820A1_gt_LabCheat_Init();
     libEA0820A1_gt_Init00ReplaceUnit_Init();
 }
 
