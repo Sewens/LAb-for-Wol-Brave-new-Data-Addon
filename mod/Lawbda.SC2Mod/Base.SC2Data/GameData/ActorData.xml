@@ -367,6 +367,108 @@
     <CActorUnit id="Reactor">
         <SoundArray index="Construction" value="SquadTerranConstructionWhat"/>
     </CActorUnit>
+    <CActorUnit id="SquadScarab" parent="GenericUnitStandard" unitName="SquadScarab">
+        <DeathArray index="Normal" ModelLink="ScarabAttackImpact" SoundLink=""/>
+        <BarOffset value="25"/>
+        <BarWidth value="36"/>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-interceptor.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SoundArray index="Birth" value=""/>
+        <SoundArray index="Movement" value="InterceptorWeaponBirth"/>
+        <StatusBarFlags index="Shields" value="0"/>
+        <StatusBarFlags index="Life" value="0"/>
+        <StatusBarFlags index="Energy" value="0"/>
+        <StatusBarFlags index="Cargo" value="0"/>
+        <StatusBarFlags index="Progress" value="0"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-interceptor.dds"/>
+    </CActorUnit>
+    <CActorUnit id="SquadReaver" parent="GenericUnitStandard" unitName="SquadReaver">
+        <Aliases value="_UnitLarge"/>
+        <Aliases value="_UnitLarge"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <Macros value="PhysicsDeathsSwarmGround"/>
+        <Macros value="PhysicsDeathsVoidGround"/>
+        <On Terms="WeaponStart.SquadScarabsLaunch.AttackStart; AnimPlaying Birth" Send="AnimClear Birth"/>
+        <On Terms="Effect.SquadScarabLM.Start; At Caster" Send="AnimPlay Attack Attack"/>
+        <On Terms="Effect.SquadScarabLaunchPersistentInitial.Start; At Caster" Send="AnimBracketStart Cover Cover,Start Cover Cover,End"/>
+        <On Terms="Effect.SquadScarabLaunchPersistentInitial.Start; At Caster" Send="TimerKill CoverDelay"/>
+        <On Terms="Effect.SquadScarabLaunchPersistentInitial.Start; At Caster" Send="TimerSet 5.000000 CoverDelay"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create Reaver_Land"/>
+        <On Terms="Effect.SquadScarabLaunchPersistentInitial.Start; At Caster" Send="StatusSet Cover 1"/>
+        <On Terms="TimerExpired; TimerName CoverDelay" Send="AnimBracketStop Cover"/>
+        <On Terms="Upgrade.PurifierProtoss.Add" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="UnitBirth; ValidateUnit HasPurifierProtoss" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Signal.*.PurifierHack" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="UnitBirth.ReaverBurrowed" Send="Create"/>
+        <On Terms="UnitRevive.ReaverBurrowed" Send="Create"/>
+        <On Terms="UnitBirth.ReaverBurrowed" Send="AnimBracketStart Burrow Burrow IGNORE Unburrow ClosingFull,OpeningPlayForever,Instant"/>
+        <On Terms="UnitRevive.ReaverBurrowed" Send="AnimBracketStart Burrow Burrow IGNORE Unburrow ClosingFull,OpeningPlayForever,Instant"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo Reaver" Send="TerrainSquibActivateGroup RippleStandard"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo ReaverBurrowed" Send="TerrainSquibDeactivate"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom Reaver; MorphTo ReaverBurrowed" Send="AnimClear Burrow"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo Reaver; MorphFrom ReaverBurrowed" Send="AnimBracketStop Burrow"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo Reaver; MorphFrom ReaverBurrowed" Send="AnimClear Burrow"/>
+        <Model value="Reaver"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="ReaverWarpIn"/>
+        <DeathArray index="Normal" ModelLink="ReaverDeath" SoundLink="Reaver_Death"/>
+        <DeathCustoms ModelLink="ProtossLargeUnitDeathLow" Name="AntiGravProtoss"/>
+        <DeathCustoms ModelLink="ReaverDeathRagdoll" Name="RagdollBasic">
+            <BodySquibs Name="Basic" Model="ProtossRobotSquibDeathRagdoll"/>
+            <BodySquibs Name="BloodReduced" Model="ProtossRobotBloodSquibDeathRagdoll"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollSiegeTank" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollBaneling" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollUltraUnburrow" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <PlacementModel value="ReaverPlacement"/>
+        <PortraitModel value="ReaverPortrait"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="0.600000"/>
+            <RangeDown value="1.000000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleImmortal"/>
+        </TerrainSquibs>
+        <WalkAnimMoveSpeed value="1.875"/>
+        <BarOffset value="70"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\wireframe-protoss-reaver.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\BTN-Unit-Protoss-Immortal.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SoundArray index="Ready" value="Reaver_Ready"/>
+        <SoundArray index="Help" value="Reaver_Help"/>
+        <SoundArray index="What" value="Reaver_What"/>
+        <SoundArray index="Yes" value="Reaver_Yes"/>
+        <SoundArray index="Attack" value="Reaver_Attack"/>
+        <SoundArray index="Pissed" value="Reaver_Pissed"/>
+        <SoundArray index="Movement" value="Reaver_moveStart"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-reaver.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-protoss-reaver.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\wireframe-protoss-reaver-shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-protoss-reaver-shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-protoss-reaver-shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
     <CActorUnit id="Refinery">
         <SoundArray index="Construction" value="SquadTerranConstructionWhat"/>
     </CActorUnit>
@@ -388,12 +490,18 @@
     <CActorUnit id="SJMercStarport">
         <SoundArray index="Construction" value="SquadTerranConstructionWhat"/>
     </CActorUnit>
-    <!--                                                                                         -->
-    <!-- Sensor Tower .......................................................................... -->
-    <!--                                                                                         -->
-    <CActorUnit id="SensorTower">
-        <SoundArray index="Construction" value="SquadTerranConstructionWhat"/>
-    </CActorUnit>
+    <CActorAction id="SquadScarabAttack" parent="GenericAttack" effectImpact="SquadScarabExplodeTargetDamage" effectLaunch="SquadScarabLM">
+        <LaunchAssets Sound="Reaver_AttackLaunch"/>
+        <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeStandard SOpForwardLaunchGuide"/>
+        <ImpactMap index="None" Model="ScarabAttackImpact" Sound="Reaver_ScarabExplode"/>
+        <ImpactPhysics Name="Explosion" MatchKeys="Basic" Physics="ScarabExplosionForce"/>
+        <ShieldFlashType value="Header"/>
+    </CActorAction>
+    <CActorMissile id="SquadScarabAttackMissile" parent="GenericAttackMissileWithDeathAnim" unitName="SquadScarabWeapon">
+        <Macros value="GlobalLoopMacro"/>
+        <Model value="ScarabWeapon"/>
+        <DeathArray index="Normal" ModelLink="ScarabWeapon"/>
+    </CActorMissile>
     <CActorUnit id="ShadowShieldGenerator">
         <SoundArray index="Construction" value="SquadTerranConstructionWhat"/>
     </CActorUnit>

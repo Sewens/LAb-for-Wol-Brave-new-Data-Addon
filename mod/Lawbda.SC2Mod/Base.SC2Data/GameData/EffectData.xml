@@ -41,6 +41,62 @@
         <AttributeBonus index="Biological" value="2"/>
         <Amount value="2"/>
     </CEffectDamage>
+    <CEffectApplyBehavior id="SquadScarabApplyReveal">
+        <Behavior value="SquadScarabReveal"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="SquadScarabExplode">
+        <ValidatorArray value="CasterIsNotHidden"/>
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="SquadScarabExplodeTargetDamage"/>
+        <EffectArray value="Suicide"/>
+    </CEffectSet>
+    <CEffectDamage id="SquadScarabExplodeTargetDamage" parent="DU_WEAP">
+        <AttributeBonus index="Structure" value="50"/>
+        <Kind value="Ranged"/>
+        <KindSplash value="Splash"/>
+        <Amount value="100"/>
+        <Death value="Blast"/>
+        <AreaArray Radius="0.25" Fraction="0.8"/>
+        <AreaArray Radius="0.5" Fraction="0.6"/>
+        <AreaArray Radius="1" Fraction="0.5"/>
+        <AreaArray Radius="1.5" Fraction="0.25"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="SquadScarabLM">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactEffect value="SquadScarabExplode"/>
+        <AmmoUnit value="SquadScarabWeapon"/>
+        <ImpactRange value="1"/>
+    </CEffectLaunchMissile>
+    <CEffectCreatePersistent id="SquadScarabLaunchPersistent">
+        <ValidatorArray value="ScarabNotArmed"/>
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="Channeled" value="1"/>
+        <PeriodCount value="1"/>
+        <PeriodicValidator value="CasterNotDead"/>
+        <PeriodicEffectArray value="SquadScarabLaunchSet"/>
+        <PeriodicPeriodArray value="0.75"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="SquadScarabLaunchPersistentInitial">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="SquadScarabLaunchPersistent"/>
+    </CEffectSet>
+    <CEffectSet id="SquadScarabLaunchSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="SquadScarabApplyReveal"/>
+        <EffectArray value="SquadScarabUM"/>
+        <EffectArray value="SquadScarabLM"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="SquadScarabTimedLife">
+        <EditorCategories value="Race:Protoss"/>
+    </CEffectApplyBehavior>
+    <CEffectUseMagazine id="SquadScarabUM">
+        <EditorCategories value="Race:Protoss"/>
+        <AmmoEffect value="SquadScarabTimedLife"/>
+    </CEffectUseMagazine>
     <CEffectEnumArea id="SensorTowerMiniWorldSearchArea">
         <EditorCategories value="Race:Terran"/>
         <SearchFilters value="Visible;Player,Ally,Neutral,Missile,Dead"/>

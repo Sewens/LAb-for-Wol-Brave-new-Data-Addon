@@ -179,6 +179,7 @@ Abil/Name/SquadRavenPlaceAutoTurret=Squad Raven Place Auto Turret
 Abil/Name/SquadRavenPlacePointDefenseDrone=Squad Raven Place Point Defense Drone
 Abil/Name/SquadRavenSeekerMissile=Squad Raven Seeker Missile
 Abil/Name/SquadReaperVoidStasis=Squad Reaper Void Stasis
+Abil/Name/SquadReaverHangar=Squad Reaver Hangar
 Abil/Name/SquadRefineryToAutomatedRefinery=Squad Refinery To Automated Refinery
 Abil/Name/SquadRepairRedirect=Squad Repair Redirect
 Abil/Name/SquadSCVGather=Squad SCV Gather
@@ -695,6 +696,8 @@ Button/Name/SquadChronoBeam=Squad Chrono Beam
 Button/Name/SquadCloak=Squad Cloak
 Button/Name/SquadConfusion=Squad Confusion
 Button/Name/SquadCorpseExplosion=Squad Corpse Explosion
+Button/Name/SquadCreateScarab=Squad Create Scarab
+Button/Name/SquadCreateScarab2=Squad Create Scarab
 Button/Name/SquadCrossSpectrumDampeners=Squad Cross-Spectrum Dampeners
 Button/Name/SquadDeathCoil=Squad Death Coil
 Button/Name/SquadDecloak=Squad Decloak
@@ -1142,6 +1145,8 @@ Button/Tooltip/SquadCloak=Cloaks the unit, preventing enemy units from seeing or
 Button/Tooltip/SquadCommandCenter=Primary structure. Used to receive gathered resources. Can use the Lift Off ability and can upgrade into an Orbital Command.<n/><n/><c val="ffff8a">Enables:</c><n/>- SCVs
 Button/Tooltip/SquadCommandCenterFlying=Primary structure. Used to train SCVs and receive gathered resources. Can upgrade into an Orbital Command or Planetary Fortress.
 Button/Tooltip/SquadConfusion=Forces enemy units in the target area to attack each other for <d ref="Behavior,DarkArchonConfusion,Duration"/> seconds.<n/><n/><c val="#ColorAttackInfo">Heroic units are immune.</c>
+Button/Tooltip/SquadCreateScarab=Builds Scarabs that automatically launch at the Reaver's target and explode for area damage.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/SquadCreateScarab2=Builds Scarabs that automatically launch at the Reaver's target and explode for area damage.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/SquadCrossSpectrumDampeners=Banshee can remain cloaked twice as long.
 Button/Tooltip/SquadDecloak=Decloaks the selected unit, making it visible to enemies.
 Button/Tooltip/SquadDiamondback=Fast, high-damage hovertank. Rail Gun can fire while the Diamondback is moving.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
@@ -1281,6 +1286,7 @@ Button/Tooltip/SquadReaperCombatDrugs=Regenerates life quickly while out of comb
 Button/Tooltip/SquadReaperJetPack=Reapers can jump up and down cliffs.  
 Button/Tooltip/SquadReaperResearchCombatDrugs=Allows <c val="ffff8a">Reapers</c> to regenerate life while out of combat.
 Button/Tooltip/SquadReaperResearchNitroPacks=Increases the movement speed of Reapers.
+Button/Tooltip/SquadReaver=Aiur Faction<n/>Area damage siege unit. Builds and launches Scarabs for high burst damage.<n/><n/><c val="ffff8a">Can attack ground units.</c>
 Button/Tooltip/SquadRefinery=Built over a Vespene Geyser to allow harvesting of vespene gas.
 Button/Tooltip/SquadRefineryMicroFiltering=This refinery is producing Vespene gas 25% faster
 Button/Tooltip/SquadRefineryRich=Built over a Vespene Geyser to allow harvesting of vespene gas.
@@ -2435,6 +2441,15 @@ Effect/Name/SquadSCVDeathResponseChain=Squad SCV Death Response Chain
 Effect/Name/SquadSCVUnitTrackerApply=Squad SCV Unit Tracker Apply
 Effect/Name/SquadSCVUnitTrackerRemove=Squad SCV Unit Tracker Remove
 Effect/Name/SquadSalvageDeath=Squad Salvage Death
+Effect/Name/SquadScarabApplyReveal=Squad Scarab Apply Reveal
+Effect/Name/SquadScarabExplode=Squad Scarab Explode
+Effect/Name/SquadScarabExplodeTargetDamage=Squad Scarab Explode Target Damage
+Effect/Name/SquadScarabLM=Squad Scarab LM
+Effect/Name/SquadScarabLaunchPersistent=Squad Scarab Launch Persistent
+Effect/Name/SquadScarabLaunchPersistentInitial=Squad Scarab Launch Persistent Initial
+Effect/Name/SquadScarabLaunchSet=Squad Scarab Launch Set
+Effect/Name/SquadScarabTimedLife=Squad Scarab Timed Life
+Effect/Name/SquadScarabUM=Squad Scarab UM
 Effect/Name/SquadShockwaveMissile=Squad Shockwave Missile
 Effect/Name/SquadShockwaveMissileImpactSet=Squad Shockwave Missile Impact Set
 Effect/Name/SquadShooterAuraSearch=Squad Shooter Aura Search
@@ -3079,10 +3094,13 @@ Unit/Name/SquadRavenHunterSeekerWeapon=Squad Raven Hunter Seeker Weapon
 Unit/Name/SquadReactor=Squad Reactor
 Unit/Name/SquadReaper=Squad Reaper
 Unit/Name/SquadReaperD8Charge=Squad Reaper D8 Charge
+Unit/Name/SquadReaver=Squad Reaver
 Unit/Name/SquadRefinery=Squad Refinery
 Unit/Name/SquadRefineryRich=Squad Refinery Rich
 Unit/Name/SquadSCV=Squad SCV
 Unit/Name/SquadSCVJumper=Squad SCV Jumper
+Unit/Name/SquadScarab=Squad Scarab
+Unit/Name/SquadScarabWeapon=Squad Scarab Weapon
 Unit/Name/SquadScienceVessel=Squad Science Vessel
 Unit/Name/SquadSensorTower=Squad Sensor Tower
 Unit/Name/SquadShockWaveMissile=Squad Shock Wave Missile
@@ -3318,6 +3336,7 @@ Weapon/Name/SquadPredatorTitaniumClaws=Squad Predator Titanium Claws
 Weapon/Name/SquadProtossBlastZealotSolariteReaper=Squad Protoss Blast Zealot Solarite Reaper
 Weapon/Name/SquadReaperD8Charge=Squad Reaper D8 Charge
 Weapon/Name/SquadReaperP45GaussPistol=Squad Reaper P-45 Gauss Pistol
+Weapon/Name/SquadScarabsLaunch=Squad Scarabs Launch
 Weapon/Name/SquadSiegeTank90mmCannons=Squad Siege Tank 90mm Cannons
 Weapon/Name/SquadSiegeTankChargingCannons=Squad Siege Tank Charging Cannons
 Weapon/Name/SquadSiegeTankCrucioShockCannon=Squad Siege Tank Crucio Shock Cannon
